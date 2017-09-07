@@ -102,6 +102,7 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 @ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_13 = -DSC_DISABLE_VCD_SCOPES
 subdir = src/tlm_utils
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -118,7 +119,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libtlm_utils_la_LIBADD =
-am__objects_1 = instance_specific_extensions.lo
+am__objects_1 = convenience_socket_bases.lo \
+	instance_specific_extensions.lo
 am_libtlm_utils_la_OBJECTS = $(am__objects_1)
 libtlm_utils_la_OBJECTS = $(am_libtlm_utils_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -374,12 +376,14 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12)
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_13)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
 EXTRA_DIST = README.txt
 H_FILES = \
+	convenience_socket_bases.h \
 	instance_specific_extensions.h \
 	instance_specific_extensions_int.h \
 	multi_passthrough_initiator_socket.h \
@@ -393,6 +397,7 @@ H_FILES = \
 	tlm_quantumkeeper.h
 
 CXX_FILES = \
+	convenience_socket_bases.cpp \
 	instance_specific_extensions.cpp
 
 localincludedir = $(includedir)/tlm_utils
@@ -455,6 +460,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convenience_socket_bases.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/instance_specific_extensions.Plo@am__quote@
 
 .cpp.o:

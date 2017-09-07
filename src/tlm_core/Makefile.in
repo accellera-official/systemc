@@ -102,6 +102,7 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 @ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_13 = -DSC_DISABLE_VCD_SCOPES
 subdir = src/tlm_core
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -377,7 +378,8 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12)
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_13)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 

@@ -761,7 +761,9 @@ uninstall-am: uninstall-nobase_buildexamplesDATA
 	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
 	         -e 's#@'TEST'@#$*#' \
 	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
-	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
+	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' \
+	         -e 's#@'TESTFILTER'@#$($(shell echo '$(*D)' | sed -e 's:[^A-Za-z0-9_\@]:_:g')_FILTER)#' \
+	    $(TESTSCRIPT_IN) > $@ ; \
 	  chmod a+x $@
 
 @SEPARATE_BUILD_TREE_TRUE@all-local: copy-check-data

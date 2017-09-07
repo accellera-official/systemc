@@ -98,8 +98,9 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.examples \
 	$(srcdir)/2.1/scx_mutex_w_policy/test.am \
 	$(srcdir)/2.1/specialized_signals/test.am \
 	$(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am \
-	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(top_srcdir)/config/depcomp $(top_srcdir)/config/test-driver
+	$(srcdir)/2.3/simple_async/test.am $(srcdir)/Makefile.in \
+	$(srcdir)/Makefile.am $(top_srcdir)/config/depcomp \
+	$(top_srcdir)/config/test-driver
 @WANT_DEBUG_TRUE@am__append_1 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_2 = $(DEBUG_CXXFLAGS)
 @WANT_DEBUG_TRUE@am__append_3 = $(DEBUG_CXXFLAGS)
@@ -137,7 +138,7 @@ am__EXEEXT_1 = fft/fft_flpt/test$(EXEEXT) fft/fft_fxpt/test$(EXEEXT) \
 	2.1/sc_report/test$(EXEEXT) 2.1/scx_barrier/test$(EXEEXT) \
 	2.1/scx_mutex_w_policy/test$(EXEEXT) \
 	2.1/specialized_signals/test$(EXEEXT) 2.3/sc_rvd/test$(EXEEXT) \
-	2.3/sc_ttd/test$(EXEEXT)
+	2.3/sc_ttd/test$(EXEEXT) 2.3/simple_async/test$(EXEEXT)
 am__objects_1 =
 am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_2 = 2.1/dpipe/2_1_dpipe_test-main.$(OBJEXT)
@@ -207,59 +208,66 @@ am_2_3_sc_ttd_test_OBJECTS = $(am__objects_1) $(am__objects_11)
 2_3_sc_ttd_test_OBJECTS = $(am_2_3_sc_ttd_test_OBJECTS)
 2_3_sc_ttd_test_LDADD = $(LDADD)
 2_3_sc_ttd_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_12 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
+am__objects_12 =  \
+	2.3/simple_async/2_3_simple_async_test-main.$(OBJEXT)
+am_2_3_simple_async_test_OBJECTS = $(am__objects_1) $(am__objects_12)
+2_3_simple_async_test_OBJECTS = $(am_2_3_simple_async_test_OBJECTS)
+2_3_simple_async_test_LDADD = $(LDADD)
+2_3_simple_async_test_DEPENDENCIES =  \
+	$(top_builddir)/src/libsystemc.la
+am__objects_13 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-main.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-sink.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-source.$(OBJEXT)
-am_fft_fft_flpt_test_OBJECTS = $(am__objects_1) $(am__objects_12)
+am_fft_fft_flpt_test_OBJECTS = $(am__objects_1) $(am__objects_13)
 fft_fft_flpt_test_OBJECTS = $(am_fft_fft_flpt_test_OBJECTS)
 fft_fft_flpt_test_LDADD = $(LDADD)
 fft_fft_flpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_13 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
+am__objects_14 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-main.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-sink.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-source.$(OBJEXT)
-am_fft_fft_fxpt_test_OBJECTS = $(am__objects_1) $(am__objects_13)
+am_fft_fft_fxpt_test_OBJECTS = $(am__objects_1) $(am__objects_14)
 fft_fft_fxpt_test_OBJECTS = $(am_fft_fft_fxpt_test_OBJECTS)
 fft_fft_fxpt_test_LDADD = $(LDADD)
 fft_fft_fxpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_14 = fir/fir_test-stimulus.$(OBJEXT) \
+am__objects_15 = fir/fir_test-stimulus.$(OBJEXT) \
 	fir/fir_test-display.$(OBJEXT)
-am__objects_15 = fir/fir_test-fir.$(OBJEXT) \
+am__objects_16 = fir/fir_test-fir.$(OBJEXT) \
 	fir/fir_test-main.$(OBJEXT)
-am_fir_test_OBJECTS = $(am__objects_1) $(am__objects_14) \
-	$(am__objects_15)
+am_fir_test_OBJECTS = $(am__objects_1) $(am__objects_15) \
+	$(am__objects_16)
 fir_test_OBJECTS = $(am_fir_test_OBJECTS)
 fir_test_LDADD = $(LDADD)
 fir_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_16 = fir/stimulus.$(OBJEXT) fir/display.$(OBJEXT)
-am__objects_17 = fir/fir_fsm.$(OBJEXT) fir/fir_data.$(OBJEXT) \
+am__objects_17 = fir/stimulus.$(OBJEXT) fir/display.$(OBJEXT)
+am__objects_18 = fir/fir_fsm.$(OBJEXT) fir/fir_data.$(OBJEXT) \
 	fir/main_rtl.$(OBJEXT)
-am_fir_test_rtl_OBJECTS = $(am__objects_1) $(am__objects_16) \
-	$(am__objects_17)
+am_fir_test_rtl_OBJECTS = $(am__objects_1) $(am__objects_17) \
+	$(am__objects_18)
 fir_test_rtl_OBJECTS = $(am_fir_test_rtl_OBJECTS)
 fir_test_rtl_LDADD = $(LDADD)
 fir_test_rtl_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_18 = pipe/pipe_test-display.$(OBJEXT) \
+am__objects_19 = pipe/pipe_test-display.$(OBJEXT) \
 	pipe/pipe_test-main.$(OBJEXT) pipe/pipe_test-numgen.$(OBJEXT) \
 	pipe/pipe_test-stage1.$(OBJEXT) \
 	pipe/pipe_test-stage2.$(OBJEXT) \
 	pipe/pipe_test-stage3.$(OBJEXT)
-am_pipe_test_OBJECTS = $(am__objects_1) $(am__objects_18)
+am_pipe_test_OBJECTS = $(am__objects_1) $(am__objects_19)
 pipe_test_OBJECTS = $(am_pipe_test_OBJECTS)
 pipe_test_LDADD = $(LDADD)
 pipe_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_19 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
+am__objects_20 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-main.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-receiver.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-sender.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-switch.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-switch_clk.$(OBJEXT)
-am_pkt_switch_test_OBJECTS = $(am__objects_1) $(am__objects_19)
+am_pkt_switch_test_OBJECTS = $(am__objects_1) $(am__objects_20)
 pkt_switch_test_OBJECTS = $(am_pkt_switch_test_OBJECTS)
 pkt_switch_test_LDADD = $(LDADD)
 pkt_switch_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_20 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
+am__objects_21 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-dcache.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-decode.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-exec.$(OBJEXT) \
@@ -270,16 +278,16 @@ am__objects_20 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-mmxu.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-paging.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-pic.$(OBJEXT)
-am_risc_cpu_test_OBJECTS = $(am__objects_1) $(am__objects_20)
+am_risc_cpu_test_OBJECTS = $(am__objects_1) $(am__objects_21)
 risc_cpu_test_OBJECTS = $(am_risc_cpu_test_OBJECTS)
 risc_cpu_test_LDADD = $(LDADD)
 risc_cpu_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_21 = rsa/rsa_test-rsa.$(OBJEXT)
-am_rsa_test_OBJECTS = $(am__objects_1) $(am__objects_21)
+am__objects_22 = rsa/rsa_test-rsa.$(OBJEXT)
+am_rsa_test_OBJECTS = $(am__objects_1) $(am__objects_22)
 rsa_test_OBJECTS = $(am_rsa_test_OBJECTS)
 rsa_test_LDADD = $(LDADD)
 rsa_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_22 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
+am__objects_23 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_arbiter.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_main.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_master_blocking.$(OBJEXT) \
@@ -287,17 +295,17 @@ am__objects_22 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_master_non_blocking.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_types.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_tools.$(OBJEXT)
-am_simple_bus_test_OBJECTS = $(am__objects_1) $(am__objects_22)
+am_simple_bus_test_OBJECTS = $(am__objects_1) $(am__objects_23)
 simple_bus_test_OBJECTS = $(am_simple_bus_test_OBJECTS)
 simple_bus_test_LDADD = $(LDADD)
 simple_bus_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_23 = simple_fifo/simple_fifo_test-simple_fifo.$(OBJEXT)
-am_simple_fifo_test_OBJECTS = $(am__objects_1) $(am__objects_23)
+am__objects_24 = simple_fifo/simple_fifo_test-simple_fifo.$(OBJEXT)
+am_simple_fifo_test_OBJECTS = $(am__objects_1) $(am__objects_24)
 simple_fifo_test_OBJECTS = $(am_simple_fifo_test_OBJECTS)
 simple_fifo_test_LDADD = $(LDADD)
 simple_fifo_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_24 = simple_perf/simple_perf_test-simple_perf.$(OBJEXT)
-am_simple_perf_test_OBJECTS = $(am__objects_1) $(am__objects_24)
+am__objects_25 = simple_perf/simple_perf_test-simple_perf.$(OBJEXT)
+am_simple_perf_test_OBJECTS = $(am__objects_1) $(am__objects_25)
 simple_perf_test_OBJECTS = $(am_simple_perf_test_OBJECTS)
 simple_perf_test_LDADD = $(LDADD)
 simple_perf_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
@@ -360,12 +368,12 @@ SOURCES = $(2_1_dpipe_test_SOURCES) $(2_1_forkjoin_test_SOURCES) \
 	$(2_1_scx_mutex_w_policy_test_SOURCES) \
 	$(2_1_specialized_signals_test_SOURCES) \
 	$(2_3_sc_rvd_test_SOURCES) $(2_3_sc_ttd_test_SOURCES) \
-	$(fft_fft_flpt_test_SOURCES) $(fft_fft_fxpt_test_SOURCES) \
-	$(fir_test_SOURCES) $(fir_test_rtl_SOURCES) \
-	$(pipe_test_SOURCES) $(pkt_switch_test_SOURCES) \
-	$(risc_cpu_test_SOURCES) $(rsa_test_SOURCES) \
-	$(simple_bus_test_SOURCES) $(simple_fifo_test_SOURCES) \
-	$(simple_perf_test_SOURCES)
+	$(2_3_simple_async_test_SOURCES) $(fft_fft_flpt_test_SOURCES) \
+	$(fft_fft_fxpt_test_SOURCES) $(fir_test_SOURCES) \
+	$(fir_test_rtl_SOURCES) $(pipe_test_SOURCES) \
+	$(pkt_switch_test_SOURCES) $(risc_cpu_test_SOURCES) \
+	$(rsa_test_SOURCES) $(simple_bus_test_SOURCES) \
+	$(simple_fifo_test_SOURCES) $(simple_perf_test_SOURCES)
 DIST_SOURCES = $(2_1_dpipe_test_SOURCES) $(2_1_forkjoin_test_SOURCES) \
 	$(2_1_reset_signal_is_test_SOURCES) \
 	$(2_1_sc_export_test_SOURCES) $(2_1_sc_report_test_SOURCES) \
@@ -373,12 +381,12 @@ DIST_SOURCES = $(2_1_dpipe_test_SOURCES) $(2_1_forkjoin_test_SOURCES) \
 	$(2_1_scx_mutex_w_policy_test_SOURCES) \
 	$(2_1_specialized_signals_test_SOURCES) \
 	$(2_3_sc_rvd_test_SOURCES) $(2_3_sc_ttd_test_SOURCES) \
-	$(fft_fft_flpt_test_SOURCES) $(fft_fft_fxpt_test_SOURCES) \
-	$(fir_test_SOURCES) $(fir_test_rtl_SOURCES) \
-	$(pipe_test_SOURCES) $(pkt_switch_test_SOURCES) \
-	$(risc_cpu_test_SOURCES) $(rsa_test_SOURCES) \
-	$(simple_bus_test_SOURCES) $(simple_fifo_test_SOURCES) \
-	$(simple_perf_test_SOURCES)
+	$(2_3_simple_async_test_SOURCES) $(fft_fft_flpt_test_SOURCES) \
+	$(fft_fft_fxpt_test_SOURCES) $(fir_test_SOURCES) \
+	$(fir_test_rtl_SOURCES) $(pipe_test_SOURCES) \
+	$(pkt_switch_test_SOURCES) $(risc_cpu_test_SOURCES) \
+	$(rsa_test_SOURCES) $(simple_bus_test_SOURCES) \
+	$(simple_fifo_test_SOURCES) $(simple_perf_test_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -597,7 +605,7 @@ am__EXEEXT_2 = fft/fft_flpt/test.sh fft/fft_fxpt/test.sh fir/test.sh \
 	2.1/sc_export/test.sh 2.1/sc_report/test.sh \
 	2.1/scx_barrier/test.sh 2.1/scx_mutex_w_policy/test.sh \
 	2.1/specialized_signals/test.sh 2.3/sc_rvd/test.sh \
-	2.3/sc_ttd/test.sh
+	2.3/sc_ttd/test.sh 2.3/simple_async/test.sh
 am__EXEEXT_3 = $(am__EXEEXT_2)
 TEST_SUITE_LOG = test-suite.log
 TEST_EXTENSIONS = @EXEEXT@ .test
@@ -839,7 +847,9 @@ examples_FILES = README.txt fft/README $(fft_fft_flpt_H_FILES) \
 	$(2_3_sc_rvd_CXX_FILES) $(2_3_sc_rvd_BUILD) \
 	$(2_3_sc_rvd_EXTRA) $(2_3_sc_ttd_H_FILES) \
 	$(2_3_sc_ttd_CXX_FILES) $(2_3_sc_ttd_BUILD) \
-	$(2_3_sc_ttd_EXTRA)
+	$(2_3_sc_ttd_EXTRA) $(2_3_simple_async_H_FILES) \
+	$(2_3_simple_async_CXX_FILES) $(2_3_simple_async_BUILD) \
+	$(2_3_simple_async_EXTRA)
 examples_INPUT = input.txt
 examples_GOLDEN = golden.log
 examples_BUILD = $(fft_fft_flpt_BUILD) $(fft_fft_fxpt_BUILD) \
@@ -850,7 +860,7 @@ examples_BUILD = $(fft_fft_flpt_BUILD) $(fft_fft_fxpt_BUILD) \
 	$(2_1_sc_export_BUILD) $(2_1_sc_report_BUILD) \
 	$(2_1_scx_barrier_BUILD) $(2_1_scx_mutex_w_policy_BUILD) \
 	$(2_1_specialized_signals_BUILD) $(2_3_sc_rvd_BUILD) \
-	$(2_3_sc_ttd_BUILD)
+	$(2_3_sc_ttd_BUILD) $(2_3_simple_async_BUILD)
 examples_CLEAN = fft/fft_flpt/run.log \
 	fft/fft_flpt/expected_trimmed.log fft/fft_flpt/run_trimmed.log \
 	fft/fft_flpt/diff.log fft/fft_flpt/out_real \
@@ -896,14 +906,16 @@ examples_CLEAN = fft/fft_flpt/run.log \
 	2.3/sc_rvd/expected_trimmed.log 2.3/sc_rvd/run_trimmed.log \
 	2.3/sc_rvd/diff.log 2.3/sc_ttd/run.log \
 	2.3/sc_ttd/expected_trimmed.log 2.3/sc_ttd/run_trimmed.log \
-	2.3/sc_ttd/diff.log
+	2.3/sc_ttd/diff.log 2.3/simple_async/run.log \
+	2.3/simple_async/expected_trimmed.log \
+	2.3/simple_async/run_trimmed.log 2.3/simple_async/diff.log
 examples_TESTS = fft/fft_flpt/test fft/fft_fxpt/test fir/test \
 	fir/test_rtl pipe/test pkt_switch/test risc_cpu/test rsa/test \
 	simple_bus/test simple_fifo/test simple_perf/test \
 	2.1/dpipe/test 2.1/forkjoin/test 2.1/reset_signal_is/test \
 	2.1/sc_export/test 2.1/sc_report/test 2.1/scx_barrier/test \
 	2.1/scx_mutex_w_policy/test 2.1/specialized_signals/test \
-	2.3/sc_rvd/test 2.3/sc_ttd/test
+	2.3/sc_rvd/test 2.3/sc_ttd/test 2.3/simple_async/test
 fft_fft_flpt_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
@@ -1471,6 +1483,26 @@ simple_perf_EXTRA = \
 	2.3/sc_ttd/sc_ttd.vcxproj \
 	2.3/sc_ttd/Makefile
 
+2_3_simple_async_test_CPPFLAGS = $(AM_CPPFLAGS) -I \
+	$(srcdir)/2.3/simple_async/../include
+2_3_simple_async_test_SOURCES = \
+	$(2_3_simple_async_H_FILES) \
+	$(2_3_simple_async_CXX_FILES)
+
+2_3_simple_async_H_FILES = \
+	2.3/simple_async/async_event.h
+
+2_3_simple_async_CXX_FILES = \
+	2.3/simple_async/main.cpp
+
+2_3_simple_async_BUILD = \
+	2.3/simple_async/golden.log
+
+2_3_simple_async_EXTRA = \
+	2.3/simple_async/simple_async.sln \
+	2.3/simple_async/simple_async.vcxproj \
+	2.3/simple_async/Makefile
+
 
 # install examples?
 @SEPARATE_INSTALL_TREE_TRUE@nobase_syscexamples_DATA = \
@@ -1480,7 +1512,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cpp .lo .log .o .obj .test .test$(EXEEXT) .trs
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -1501,7 +1533,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am:
+$(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -1659,6 +1691,19 @@ clean-checkPROGRAMS:
 2.3/sc_ttd/test$(EXEEXT): $(2_3_sc_ttd_test_OBJECTS) $(2_3_sc_ttd_test_DEPENDENCIES) $(EXTRA_2_3_sc_ttd_test_DEPENDENCIES) 2.3/sc_ttd/$(am__dirstamp)
 	@rm -f 2.3/sc_ttd/test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(2_3_sc_ttd_test_OBJECTS) $(2_3_sc_ttd_test_LDADD) $(LIBS)
+2.3/simple_async/$(am__dirstamp):
+	@$(MKDIR_P) 2.3/simple_async
+	@: > 2.3/simple_async/$(am__dirstamp)
+2.3/simple_async/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) 2.3/simple_async/$(DEPDIR)
+	@: > 2.3/simple_async/$(DEPDIR)/$(am__dirstamp)
+2.3/simple_async/2_3_simple_async_test-main.$(OBJEXT):  \
+	2.3/simple_async/$(am__dirstamp) \
+	2.3/simple_async/$(DEPDIR)/$(am__dirstamp)
+
+2.3/simple_async/test$(EXEEXT): $(2_3_simple_async_test_OBJECTS) $(2_3_simple_async_test_DEPENDENCIES) $(EXTRA_2_3_simple_async_test_DEPENDENCIES) 2.3/simple_async/$(am__dirstamp)
+	@rm -f 2.3/simple_async/test$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(2_3_simple_async_test_OBJECTS) $(2_3_simple_async_test_LDADD) $(LIBS)
 fft/fft_flpt/$(am__dirstamp):
 	@$(MKDIR_P) fft/fft_flpt
 	@: > fft/fft_flpt/$(am__dirstamp)
@@ -1900,6 +1945,7 @@ mostlyclean-compile:
 	-rm -f 2.1/specialized_signals/*.$(OBJEXT)
 	-rm -f 2.3/sc_rvd/*.$(OBJEXT)
 	-rm -f 2.3/sc_ttd/*.$(OBJEXT)
+	-rm -f 2.3/simple_async/*.$(OBJEXT)
 	-rm -f fft/fft_flpt/*.$(OBJEXT)
 	-rm -f fft/fft_fxpt/*.$(OBJEXT)
 	-rm -f fir/*.$(OBJEXT)
@@ -1928,6 +1974,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@2.3/sc_ttd/$(DEPDIR)/2_3_sc_ttd_test-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@fft/fft_flpt/$(DEPDIR)/fft_fft_flpt_test-fft.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@fft/fft_flpt/$(DEPDIR)/fft_fft_flpt_test-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@fft/fft_flpt/$(DEPDIR)/fft_fft_flpt_test-sink.Po@am__quote@
@@ -2199,6 +2246,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.3/sc_ttd/main.cpp' object='2.3/sc_ttd/2_3_sc_ttd_test-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_sc_ttd_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.3/sc_ttd/2_3_sc_ttd_test-main.obj `if test -f '2.3/sc_ttd/main.cpp'; then $(CYGPATH_W) '2.3/sc_ttd/main.cpp'; else $(CYGPATH_W) '$(srcdir)/2.3/sc_ttd/main.cpp'; fi`
+
+2.3/simple_async/2_3_simple_async_test-main.o: 2.3/simple_async/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_simple_async_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.3/simple_async/2_3_simple_async_test-main.o -MD -MP -MF 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Tpo -c -o 2.3/simple_async/2_3_simple_async_test-main.o `test -f '2.3/simple_async/main.cpp' || echo '$(srcdir)/'`2.3/simple_async/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Tpo 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.3/simple_async/main.cpp' object='2.3/simple_async/2_3_simple_async_test-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_simple_async_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.3/simple_async/2_3_simple_async_test-main.o `test -f '2.3/simple_async/main.cpp' || echo '$(srcdir)/'`2.3/simple_async/main.cpp
+
+2.3/simple_async/2_3_simple_async_test-main.obj: 2.3/simple_async/main.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_simple_async_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.3/simple_async/2_3_simple_async_test-main.obj -MD -MP -MF 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Tpo -c -o 2.3/simple_async/2_3_simple_async_test-main.obj `if test -f '2.3/simple_async/main.cpp'; then $(CYGPATH_W) '2.3/simple_async/main.cpp'; else $(CYGPATH_W) '$(srcdir)/2.3/simple_async/main.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Tpo 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.3/simple_async/main.cpp' object='2.3/simple_async/2_3_simple_async_test-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_simple_async_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.3/simple_async/2_3_simple_async_test-main.obj `if test -f '2.3/simple_async/main.cpp'; then $(CYGPATH_W) '2.3/simple_async/main.cpp'; else $(CYGPATH_W) '$(srcdir)/2.3/simple_async/main.cpp'; fi`
 
 fft/fft_flpt/fft_fft_flpt_test-fft.o: fft/fft_flpt/fft.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(fft_fft_flpt_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT fft/fft_flpt/fft_fft_flpt_test-fft.o -MD -MP -MF fft/fft_flpt/$(DEPDIR)/fft_fft_flpt_test-fft.Tpo -c -o fft/fft_flpt/fft_fft_flpt_test-fft.o `test -f 'fft/fft_flpt/fft.cpp' || echo '$(srcdir)/'`fft/fft_flpt/fft.cpp
@@ -2859,6 +2920,7 @@ clean-libtool:
 	-rm -rf 2.1/specialized_signals/.libs 2.1/specialized_signals/_libs
 	-rm -rf 2.3/sc_rvd/.libs 2.3/sc_rvd/_libs
 	-rm -rf 2.3/sc_ttd/.libs 2.3/sc_ttd/_libs
+	-rm -rf 2.3/simple_async/.libs 2.3/simple_async/_libs
 	-rm -rf fft/fft_flpt/.libs fft/fft_flpt/_libs
 	-rm -rf fft/fft_fxpt/.libs fft/fft_fxpt/_libs
 	-rm -rf fir/.libs fir/_libs
@@ -3234,6 +3296,13 @@ simple_perf/test.sh.log: simple_perf/test.sh
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+2.3/simple_async/test.sh.log: 2.3/simple_async/test.sh
+	@p='2.3/simple_async/test.sh'; \
+	b='2.3/simple_async/test.sh'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -3339,6 +3408,8 @@ distclean-generic:
 	-rm -f 2.3/sc_rvd/$(am__dirstamp)
 	-rm -f 2.3/sc_ttd/$(DEPDIR)/$(am__dirstamp)
 	-rm -f 2.3/sc_ttd/$(am__dirstamp)
+	-rm -f 2.3/simple_async/$(DEPDIR)/$(am__dirstamp)
+	-rm -f 2.3/simple_async/$(am__dirstamp)
 	-rm -f fft/fft_flpt/$(DEPDIR)/$(am__dirstamp)
 	-rm -f fft/fft_flpt/$(am__dirstamp)
 	-rm -f fft/fft_fxpt/$(DEPDIR)/$(am__dirstamp)
@@ -3369,7 +3440,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf 2.1/dpipe/$(DEPDIR) 2.1/forkjoin/$(DEPDIR) 2.1/reset_signal_is/$(DEPDIR) 2.1/sc_export/$(DEPDIR) 2.1/sc_report/$(DEPDIR) 2.1/scx_barrier/$(DEPDIR) 2.1/scx_mutex_w_policy/$(DEPDIR) 2.1/specialized_signals/$(DEPDIR) 2.3/sc_rvd/$(DEPDIR) 2.3/sc_ttd/$(DEPDIR) fft/fft_flpt/$(DEPDIR) fft/fft_fxpt/$(DEPDIR) fir/$(DEPDIR) pipe/$(DEPDIR) pkt_switch/$(DEPDIR) risc_cpu/$(DEPDIR) rsa/$(DEPDIR) simple_bus/$(DEPDIR) simple_fifo/$(DEPDIR) simple_perf/$(DEPDIR)
+	-rm -rf 2.1/dpipe/$(DEPDIR) 2.1/forkjoin/$(DEPDIR) 2.1/reset_signal_is/$(DEPDIR) 2.1/sc_export/$(DEPDIR) 2.1/sc_report/$(DEPDIR) 2.1/scx_barrier/$(DEPDIR) 2.1/scx_mutex_w_policy/$(DEPDIR) 2.1/specialized_signals/$(DEPDIR) 2.3/sc_rvd/$(DEPDIR) 2.3/sc_ttd/$(DEPDIR) 2.3/simple_async/$(DEPDIR) fft/fft_flpt/$(DEPDIR) fft/fft_fxpt/$(DEPDIR) fir/$(DEPDIR) pipe/$(DEPDIR) pkt_switch/$(DEPDIR) risc_cpu/$(DEPDIR) rsa/$(DEPDIR) simple_bus/$(DEPDIR) simple_fifo/$(DEPDIR) simple_perf/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -3415,7 +3486,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf 2.1/dpipe/$(DEPDIR) 2.1/forkjoin/$(DEPDIR) 2.1/reset_signal_is/$(DEPDIR) 2.1/sc_export/$(DEPDIR) 2.1/sc_report/$(DEPDIR) 2.1/scx_barrier/$(DEPDIR) 2.1/scx_mutex_w_policy/$(DEPDIR) 2.1/specialized_signals/$(DEPDIR) 2.3/sc_rvd/$(DEPDIR) 2.3/sc_ttd/$(DEPDIR) fft/fft_flpt/$(DEPDIR) fft/fft_fxpt/$(DEPDIR) fir/$(DEPDIR) pipe/$(DEPDIR) pkt_switch/$(DEPDIR) risc_cpu/$(DEPDIR) rsa/$(DEPDIR) simple_bus/$(DEPDIR) simple_fifo/$(DEPDIR) simple_perf/$(DEPDIR)
+	-rm -rf 2.1/dpipe/$(DEPDIR) 2.1/forkjoin/$(DEPDIR) 2.1/reset_signal_is/$(DEPDIR) 2.1/sc_export/$(DEPDIR) 2.1/sc_report/$(DEPDIR) 2.1/scx_barrier/$(DEPDIR) 2.1/scx_mutex_w_policy/$(DEPDIR) 2.1/specialized_signals/$(DEPDIR) 2.3/sc_rvd/$(DEPDIR) 2.3/sc_ttd/$(DEPDIR) 2.3/simple_async/$(DEPDIR) fft/fft_flpt/$(DEPDIR) fft/fft_fxpt/$(DEPDIR) fir/$(DEPDIR) pipe/$(DEPDIR) pkt_switch/$(DEPDIR) risc_cpu/$(DEPDIR) rsa/$(DEPDIR) simple_bus/$(DEPDIR) simple_fifo/$(DEPDIR) simple_perf/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -3458,7 +3529,9 @@ uninstall-am: uninstall-nobase_syscexamplesDATA
 	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
 	         -e 's#@'TEST'@#$*#' \
 	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
-	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
+	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' \
+	         -e 's#@'TESTFILTER'@#$($(shell echo '$(*D)' | sed -e 's:[^A-Za-z0-9_\@]:_:g')_FILTER)#' \
+	    $(TESTSCRIPT_IN) > $@ ; \
 	  chmod a+x $@
 
 @SEPARATE_BUILD_TREE_TRUE@all-local: copy-check-data
@@ -3477,64 +3550,46 @@ all:
 	@echo "   make check "
 
 #fft_fft_flpt_FILTER = 
-#export fft_fft_flpt_FILTER
 
 #fft_fft_fxpt_FILTER = 
-#export fft_fft_fxpt_FILTER
 
 #fir_FILTER = 
-#export fir_FILTER
 
 #pipe_FILTER = 
-#export pipe_FILTER
 
 #pkt_switch_FILTER = 
-#export pkt_switch_FILTER
 
 #risc_cpu_FILTER = 
-#export risc_cpu_FILTER
 
 #rsa_FILTER = 
-#export rsa_FILTER
 
 #simple_bus_FILTER = 
-#export simple_bus_FILTER
 
 #simple_fifo_FILTER = 
-#export simple_fifo_FILTER
 
 #simple_perf_FILTER = 
-#export simple_perf_FILTER
 
 #2_1_dpipe_FILTER = 
-#export 2_1_dpipe_FILTER
 
 #2_1_forkjoin_FILTER = 
-#export 2_1_forkjoin_FILTER
 
 #2_1_reset_signal_is_FILTER = 
-#export 2_1_reset_signal_is_FILTER
 
 #2_1_sc_export_FILTER = 
-#export 2_1_sc_export_FILTER
 
 #2_1_sc_report_FILTER = 
-#export 2_1_sc_report_FILTER
 
 #2_1_scx_barrier_FILTER = 
-#export 2_1_scx_barrier_FILTER
 
 #2_1_scx_mutex_w_policy_FILTER = 
-#export 2_1_scx_mutex_w_policy_FILTER
 
 #2_1_specialized_signals_FILTER = 
-#export 2_1_specialized_signals_FILTER
 
 #2_3_sc_rvd_FILTER = 
-#export 2_3_sc_rvd_FILTER
 
 #2_3_sc_ttd_FILTER = 
-#export 2_3_sc_ttd_FILTER
+
+#2_3_simple_async_FILTER = 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

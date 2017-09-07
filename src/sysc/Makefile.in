@@ -105,6 +105,7 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 @ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_13 = -DSC_DISABLE_VCD_SCOPES
 subdir = src/sysc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_check_define.m4 \
@@ -535,7 +536,8 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12)
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_13)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
@@ -548,7 +550,7 @@ SUBDIRS = \
 	packages/boost \
 	$(QT_SUBDIR)
 
-H_FILES = kernel/sc_attribute.h kernel/sc_boost.h kernel/sc_cmnhdr.h \
+H_FILES = kernel/sc_attribute.h kernel/sc_cmnhdr.h \
 	kernel/sc_constants.h kernel/sc_cor.h \
 	kernel/sc_dynamic_processes.h kernel/sc_event.h \
 	kernel/sc_except.h kernel/sc_externs.h kernel/sc_join.h \
@@ -565,7 +567,8 @@ H_FILES = kernel/sc_attribute.h kernel/sc_boost.h kernel/sc_cmnhdr.h \
 	communication/sc_event_finder.h communication/sc_event_queue.h \
 	communication/sc_export.h communication/sc_fifo.h \
 	communication/sc_fifo_ifs.h communication/sc_fifo_ports.h \
-	communication/sc_host_mutex.h communication/sc_interface.h \
+	communication/sc_host_mutex.h \
+	communication/sc_host_semaphore.h communication/sc_interface.h \
 	communication/sc_mutex.h communication/sc_mutex_if.h \
 	communication/sc_port.h communication/sc_prim_channel.h \
 	communication/sc_semaphore.h communication/sc_semaphore_if.h \

@@ -102,8 +102,9 @@ DIST_COMMON = $(top_srcdir)/config/Make-rules.sysc \
 @ENABLE_CALLBACKS_TRUE@am__append_10 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS
 @ENABLE_CALLBACKS_TRACING_TRUE@am__append_11 = -DSC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING
 @WANT_PTHREADS_THREADS_TRUE@am__append_12 = -DSC_USE_PTHREADS
-@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = qtmdc.c
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_14 = \
+@DISABLE_VCD_SCOPES_TRUE@am__append_13 = -DSC_DISABLE_VCD_SCOPES
+@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__append_14 = qtmdc.c
+@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_15 = \
 @SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	 $(QT_ARCH_IMPL)
 
 subdir = src/sysc/packages/qt
@@ -367,10 +368,11 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12)
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_13)
 
 # initialize some useful variables (filled later)
-CLEANFILES = $(QT_ARCH_FILES) configuration $(am__append_14)
+CLEANFILES = $(QT_ARCH_FILES) configuration $(am__append_15)
 EXTRA_DIST = CHANGES config INSTALL Makefile.base README README.MISC \
 	README.PORT b.h meas.c stp.c stp.h time/assim time/cswap \
 	time/go time/init time/prim time/raw time/README.time \
@@ -385,6 +387,7 @@ NO_H_FILES = \
 	qt.h \
 	qtmd.h \
 	\
+	md/aarch64.h \
 	md/axp.h \
 	md/hppa.h \
 	md/i386.h \
@@ -410,6 +413,7 @@ NO_C_FILES = \
 	md/powerpc.c
 
 NO_S_FILES = \
+	md/aarch64.s \
 	md/axp_b.s \
 	md/axp.s \
 	md/hppa_b.s \
@@ -452,7 +456,8 @@ NO_S_FILES = \
 
 
 # only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
-@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = qtmds.s $(am__append_13)
+@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = qtmds.s $(am__append_14)
+@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/aarch64.s
 @QT_ARCH_HPPA_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/hppa.s
 @QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
 @QT_ARCH_SPARC_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/sparc.s

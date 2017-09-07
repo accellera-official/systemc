@@ -659,8 +659,12 @@ QT_ARCH_POWERPC_MACOSX_FALSE
 QT_ARCH_POWERPC_MACOSX_TRUE
 QT_ARCH_X86_64_FALSE
 QT_ARCH_X86_64_TRUE
+QT_ARCH_AARCH64_FALSE
+QT_ARCH_AARCH64_TRUE
 QT_ARCH_X86_FALSE
 QT_ARCH_X86_TRUE
+DISABLE_VCD_SCOPES_FALSE
+DISABLE_VCD_SCOPES_TRUE
 ENABLE_CALLBACKS_TRACING_FALSE
 ENABLE_CALLBACKS_TRACING_TRUE
 ENABLE_CALLBACKS_FALSE
@@ -836,6 +840,7 @@ enable_optimize
 enable_async_updates
 enable_pthreads
 enable_phase_callbacks
+enable_vcd_scopes
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1489,6 +1494,7 @@ Optional Features:
   --enable-phase-callbacks
                           enable simulation phase callbacks (experimental)
                           [yes|tracing|no(=default)]
+  --enable-vcd-scopes     enable vcd scopes [yes(=default)|no]
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2332,7 +2338,7 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-TLM_PACKAGE_VERSION=2.0.3
+TLM_PACKAGE_VERSION=2.0.4
 
 
 
@@ -5057,18 +5063,22 @@ case ${TARGET_ARCH} in #(
          x86_64|amd64) :
              TARGET_ARCH="${TARGET_ARCH}64"
           QT_ARCH="x86_64"
-          CPU_ARCH=64 ;; #(
+          CPU_ARCH="-m64" ;; #(
   x*86|i*86) :
              QT_ARCH="iX86"
-          CPU_ARCH=32 ;; #(
+          CPU_ARCH="-m32" ;; #(
+  aarch64) :
+             TARGET_ARCH="linuxaarch64"
+          QT_ARCH="aarch64"
+          CPU_ARCH="" ;; #(
   *) :
     as_fn_error $? "\"sorry...architecture not supported\"" "$LINENO" 5 ;;
 esac
 
      # check compiler
      if test "x$GXX" = xyes; then :
-         EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -m${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -m${CPU_ARCH}"
+         EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} ${CPU_ARCH}"
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} ${CPU_ARCH}"
 else
   as_fn_error $? "\"sorry...compiler not supported\"" "$LINENO" 5
 fi
@@ -16555,12 +16565,47 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_phase_callbacks" >&5
 $as_echo "$enable_phase_callbacks" >&6; }
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable VCD scopes by default" >&5
+$as_echo_n "checking whether to enable VCD scopes by default... " >&6; }
+# Check whether --enable-vcd-scopes was given.
+if test "${enable_vcd_scopes+set}" = set; then :
+  enableval=$enable_vcd_scopes; case "${enableval}" in #(
+      yes|default) :
+    enable_vcd_scopes=yes ;; #(
+  no) :
+    enable_vcd_scopes=no ;; #(
+  *) :
+    as_fn_error $? "bad value ${enableval} for --enable-vcd-scopes" "$LINENO" 5 ;;
+esac
+else
+  enable_vcd_scopes=yes
+fi
+
+ if                test x"$enable_vcd_scopes" = xno; then
+  DISABLE_VCD_SCOPES_TRUE=
+  DISABLE_VCD_SCOPES_FALSE='#'
+else
+  DISABLE_VCD_SCOPES_TRUE='#'
+  DISABLE_VCD_SCOPES_FALSE=
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_vcd_scopes" >&5
+$as_echo "$enable_vcd_scopes" >&6; }
+
  if  test "${QT_ARCH}" = "iX86" ; then
   QT_ARCH_X86_TRUE=
   QT_ARCH_X86_FALSE='#'
 else
   QT_ARCH_X86_TRUE='#'
   QT_ARCH_X86_FALSE=
+fi
+
+ if  test "${QT_ARCH}" = "aarch64" ; then
+  QT_ARCH_AARCH64_TRUE=
+  QT_ARCH_AARCH64_FALSE='#'
+else
+  QT_ARCH_AARCH64_TRUE='#'
+  QT_ARCH_AARCH64_FALSE=
 fi
 
  if  test "${QT_ARCH}" = "x86_64" ; then
@@ -16955,8 +17000,16 @@ if test -z "${ENABLE_CALLBACKS_TRACING_TRUE}" && test -z "${ENABLE_CALLBACKS_TRA
   as_fn_error $? "conditional \"ENABLE_CALLBACKS_TRACING\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
+if test -z "${DISABLE_VCD_SCOPES_TRUE}" && test -z "${DISABLE_VCD_SCOPES_FALSE}"; then
+  as_fn_error $? "conditional \"DISABLE_VCD_SCOPES\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${QT_ARCH_X86_TRUE}" && test -z "${QT_ARCH_X86_FALSE}"; then
   as_fn_error $? "conditional \"QT_ARCH_X86\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${QT_ARCH_AARCH64_TRUE}" && test -z "${QT_ARCH_AARCH64_FALSE}"; then
+  as_fn_error $? "conditional \"QT_ARCH_AARCH64\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${QT_ARCH_X86_64_TRUE}" && test -z "${QT_ARCH_X86_64_FALSE}"; then
@@ -19388,6 +19441,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable compiler optimizations  : $enable_optimize
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
+   Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
  ${sysc_additional}

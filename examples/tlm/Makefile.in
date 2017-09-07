@@ -1125,7 +1125,7 @@ lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/docs/lt_mixed_endian_example.pdf \
 	lt_mixed_endian/docs/lt_mixed_endian_example.ppt
 
-lt_mixed_endian_FILTER = "'::'"
+lt_mixed_endian_FILTER = "::"
 lt_temporal_decouple_test_CPPFLAGS = \
 	-I$(srcdir)/lt_temporal_decouple/include \
 	$(CPPFLAGS_TLMTESTS)
@@ -2695,7 +2695,9 @@ uninstall-am: uninstall-nobase_tlmexamplesDATA
 	  $(SED) -e 's#@'SHELL'@#@SHELL@#' \
 	         -e 's#@'TEST'@#$*#' \
 	         -e 's#@'TESTINPUT'@#$(examples_INPUT)#' \
-	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' $(TESTSCRIPT_IN) > $@ ; \
+	         -e 's#@'TESTGOLDEN'@#$(examples_GOLDEN)#' \
+	         -e 's#@'TESTFILTER'@#$($(shell echo '$(*D)' | sed -e 's:[^A-Za-z0-9_\@]:_:g')_FILTER)#' \
+	    $(TESTSCRIPT_IN) > $@ ; \
 	  chmod a+x $@
 
 @SEPARATE_BUILD_TREE_TRUE@all-local: copy-check-data
@@ -2714,38 +2716,27 @@ all:
 	@echo "   make check "
 
 #at_1_phase_FILTER = 
-#export at_1_phase_FILTER
 
 #at_2_phase_FILTER =
-#export at_2_phase_FILTER
 
 #at_4_phase_FILTER = 
-#export at_4_phase_FILTER
 
 #at_extension_optional_FILTER = 
-#export at_extension_optional_FILTER
 
 $(at_extension_optional_SHARED_CXX_FILES) :
 	$(AM_V_GEN)$(INSTALL_DATA) $(srcdir)/common/src/$(@F) $@
 
 #at_mixed_targets_FILTER = 
-#export at_mixed_targets_FILTER
 
 #at_ooo_FILTER = 
-#export at_ooo_FILTER
 
 #lt_FILTER = 
-#export lt_FILTER
 
 #lt_dmi_FILTER = 
-#export lt_dmi_FILTER
 
 #lt_extension_mandatory_FILTER = 
-#export lt_extension_mandatory_FILTER
-export lt_mixed_endian_FILTER
 
 #lt_temporal_decouple_FILTER = 
-#export lt_temporal_decouple_FILTER
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
