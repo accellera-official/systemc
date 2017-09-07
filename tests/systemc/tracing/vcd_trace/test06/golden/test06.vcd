@@ -14,13 +14,9 @@ All initial values are dumped below at time 0 sec = 0 timescale units.
 $end
 
 $dumpvars
-r0 aaaaa
-r0 aaaab
-$end
-
-#0
 r12.34500026702881 aaaaa
 r-13.5678923 aaaab
+$end
 
 #10000
 r-182634880 aaaaa
@@ -98,3 +94,4 @@ r-13.5678923 aaaab
 r-182634880 aaaaa
 r1672357.298346 aaaab
 
+#200000
