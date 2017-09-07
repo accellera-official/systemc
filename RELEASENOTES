@@ -113,6 +113,9 @@ RELEASENOTES.
   - Improve robustness of non-standard SC_WAIT macros to avoid
     giving wrong information when mixed with non-macro wait() calls
 
+  - Fix timestamps when enabling tracing of delta cycles,
+    improved tracing implementation
+
   - Catch unexpected calls to sc_start (e.g. from within a SystemC process)
 
   - Properly clean up (terminated) processes, releasing their resources
@@ -314,6 +317,16 @@ Note: These features partly add functionality beyond the current
     Note: For logic vectors, the bit-references still need to be
           converted to bool explicitly (e.g. via the "to_bool()"
           function.
+
+
+  - [2.3.2] Support for scoped names in VCD trace files
+
+    In VCD trace files, traced variables are now automatically
+    grouped in hierarchical scopes (according to the '.'
+    separators in the trace names).
+
+    This feature can be disabled at compile-time or runtime.
+    See INSTALL.
 
 
   - [2.3.1] Enhanced Autoconf/Automake build system
@@ -658,6 +671,8 @@ Changes compared to SystemC 2.0.1
   - removing a conversion ambiguity by marking some constructors of
     sc_fxval[_fast] classes as 'explicit'
 
+  - sc_fxnum::to_{integer} fully defined and accurate
+
 Compile-time macro SC_INCLUDE_FX must be defined in order to build
 applications that use fixed point types. You can specify a compiler
 flag, e.g., g++ -DSC_INCLUDE_FX ... or use a define statement before
@@ -723,6 +738,17 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
 
    All error checking on the convenience sockets now consistently report
    the affected socket name (and kind) to help tracking down their origin.
+
+
+ - tlm_utils::simple_target_socket: only spawn b2nb_thread, if needed
+
+   The blocking-to-nonblocking conversion thread is only spawned in
+   case there is no b_transport callback but only an nb_transport callback
+   registered.
+
+   Note: With this change, classes inheriting from simple_target_socket
+         need to call the base class' start_of_simulation() callback
+         in case it is overridden in the derived class.
 
 
  - Fix regression introduced in 2.0.3 to allow using the optional sc_port_policy

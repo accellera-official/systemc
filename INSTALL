@@ -633,6 +633,14 @@ settings to all build configurations.
    Note: Only effective during library build.
 
 
+ * SC_DISABLE_VCD_SCOPES -
+   Disable grouping of VCD trace variables in hierarchical scopes
+   by default
+
+   Note: Only effective during library build.
+   See : Environment variable SC_VCD_SCOPES
+
+
  * SC_DISABLE_VIRTUAL_BIND -
    Keep the "bind" function of sc_ports non-virtual
 
@@ -841,6 +849,11 @@ and influence the SystemC library's behaviour:
  3) SC_DEPRECATION_WARNINGS=DISABLE
     Do not issue warnings about using deprecated features as of
     IEEE 1666-2011.
+
+ 4) SC_VCD_SCOPES=DISABLE, SC_VCD_SCOPES=ENABLE
+    Run-time configuration of hierarchically scoped names in VCD
+    trace files (see SC_DISABLE_VCD_SCOPES).
+
 
 Usually, it is not recommended to use any of these variables in new or
 on-going projects.  They have been added to simplify the transition of
