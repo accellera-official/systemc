@@ -526,6 +526,9 @@ endif (QT_ARCH)
 ###############################################################################
 # Configure Pthreads or Fiber if necessary.
 ###############################################################################
+if (WIN32 AND ENABLE_PTHREADS)
+  message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
+endif (WIN32 AND ENABLE_PTHREADS)
 
 if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
   set (THREADS_PREFER_PTHREAD_FLAG ON)
