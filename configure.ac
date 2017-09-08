@@ -430,9 +430,9 @@ AC_ARG_ENABLE([pthreads],
 
 AS_IF([test x"$enable_pthreads" = xyes],[dnl
   AS_CASE(["${TARGET_ARCH}"],dnl
-    dnl pthread not supported in win32/win64 
-	[mingw*|msvc*],dnl
-	[AC_MSG_ERROR([pthread processes not supported on target architecture ${target}])dnl
+    dnl pthread not supported in win32/win64
+    [mingw*|msvc*],dnl
+      [AC_MSG_ERROR([pthread processes not supported on target architecture ${target}])dnl
   ])dnl
 ])
 
