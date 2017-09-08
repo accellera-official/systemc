@@ -4,7 +4,9 @@ $timescale
 $end
 
 $scope module SystemC $end
-$var wire   32  aaaaa  test_top.sig [31:0]  $end
+$scope module test_top $end
+$var wire   32  aaaaa  sig [31:0]  $end
+$upscope $end
 $upscope $end
 $enddefinitions  $end
 
