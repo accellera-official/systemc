@@ -325,9 +325,12 @@ Note for (key) developers:
   In case you have changed the `configure.ac' file or one of the
   `Makefile.am' files:
 
-  - Use the `config/distclean' script to remove the generated `configure'
-    script, the generated `aclocal.m4' file and the generated `Makefile.in'
-    files.
+  - Use 
+
+        > gmake distclean
+
+    to remove the generated `configure' script, the generated `aclocal.m4' 
+    file and the generated `Makefile.in' files.
 
   - Use the `config/bootstrap' script to generate the `configure' script
     and the necessary `Makefile.in' files. This script makes use of the
