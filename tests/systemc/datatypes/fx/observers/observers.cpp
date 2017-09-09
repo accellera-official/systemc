@@ -21,6 +21,10 @@
 #define SC_INCLUDE_FX
 #include "systemc.h"
 
+#if SC_CPLUSPLUS < 201103L
+# define override /* empty */
+#endif // SC_CPLUSPLUS >= 201103L
+
 template<typename Observed, typename Base>
 class observer: public Base {
     virtual void construct(const Observed&) override {
