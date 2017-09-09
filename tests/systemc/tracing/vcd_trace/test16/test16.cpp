@@ -69,6 +69,8 @@ SC_MODULE(module)
     wait(1, SC_NS);
     event.notify(1, SC_NS); // t == 8ns
     time = sc_time_stamp();
+
+    wait(2, SC_NS);
   }
 
   void consumer()
