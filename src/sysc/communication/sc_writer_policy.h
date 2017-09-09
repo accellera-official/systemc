@@ -40,6 +40,11 @@
 
 #include "sysc/kernel/sc_process_handle.h"
 
+#if defined(_MSC_VER) && _MSC_VER < 1800
+# pragma warning(push)
+# pragma warning(disable:4512) // assignment operator could not be generated
+#endif // _MSC_VER < 1800
+
 namespace sc_core {
 
 class sc_object;
@@ -146,6 +151,9 @@ struct SC_API sc_writer_policy_check<SC_UNCHECKED_WRITERS>
 
 } // namespace sc_core
 
-#endif
+#if defined(_MSC_VER) && _MSC_VER < 1800
+# pragma warning(pop)
+#endif // _MSC_VER < 1800
 
+#endif // SC_WRITER_POLICY_H_INCLUDED_
 // Taf!

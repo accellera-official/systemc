@@ -236,7 +236,7 @@ sc_trace_file_base::has_low_units() const {
 int
 sc_trace_file_base::low_units_len() const {
     sc_assert(has_low_units());
-    unit_type max_low_units = kernel_unit_fs / trace_unit_fs;
+    double max_low_units = static_cast<double>(kernel_unit_fs / trace_unit_fs);
     return static_cast<int>(log10(max_low_units));
 }
 
