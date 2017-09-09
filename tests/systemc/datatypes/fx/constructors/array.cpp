@@ -54,14 +54,14 @@ class converter {
   From val;
 public:
   converter(From val): val(val) {}
-  operator int()    { return val.to_int();    }
-  operator uint()   { return val.to_uint();   }
-  operator short()  { return val.to_short();  }
-  operator ushort() { return val.to_ushort(); }
-  operator long()   { return val.to_long();   }
-  operator ulong()  { return val.to_ulong();  }
-  operator float()  { return val.to_float();  }
-  operator double() { return val.to_double(); }
+  operator int() const            { return val.to_int();    }
+  operator unsigned int() const   { return val.to_uint();   }
+  operator short() const          { return val.to_short();  }
+  operator unsigned short() const { return val.to_ushort(); }
+  operator long() const           { return val.to_long();   }
+  operator unsigned long() const  { return val.to_ulong();  }
+  operator float() const          { return val.to_float();  }
+  operator double() const         { return val.to_double(); }
 };
 
 template <typename To, typename From>
