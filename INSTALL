@@ -230,6 +230,10 @@ To install SystemC on a UNIX system, do the following steps:
      See the section on the general usage of the configure script and
      "../configure --help" for more information.
 
+     Note: When linking against a static library of SystemC with asynchronous
+           update support enabled, you may need to explicitly link against the
+           pthread library as well (-lpthread).
+
      Note: If you change the configuration after having compiled the
            package already, you should run a "gmake clean" before
            recompiling.
@@ -631,6 +635,12 @@ settings to all build configurations.
    symbol can be used to manually build the library with this feature.
 
    Note: Only effective during library build.
+
+   Note: Enabling the asynchronous update support (default) may add a
+         dependency on the pthread library on non-Windows systems.
+         When linking an application against a static SystemC library,
+         you may need to explicitly link against the pthread library
+         as well (-lpthread).
 
 
  * SC_DISABLE_VCD_SCOPES -
