@@ -123,7 +123,7 @@
 #   define SC_CPLUSPLUS __cplusplus
 
 # endif // not _MSC_VER
-#endif // SC_CPLUSCPLUS
+#endif // SC_CPLUSPLUS
 
 // SystemC adds some features under C++11 already (see RELEASENOTES)
 #define SC_CPLUSPLUS_BASE_ 201103L
@@ -132,7 +132,7 @@
 // checking for availability of SystemC features relying on specific
 // C++ standard versions.
 //
-// IEEE_1666_CPLUSPLUS = min(SC_CPLUSCPLUS, SC_CPLUSPLUS_BASE_)
+// IEEE_1666_CPLUSPLUS = min(SC_CPLUSPLUS, SC_CPLUSPLUS_BASE_)
 #if SC_CPLUSPLUS >= SC_CPLUSPLUS_BASE_
 # define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS_BASE_
 #else
