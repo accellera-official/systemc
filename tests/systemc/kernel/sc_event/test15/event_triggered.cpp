@@ -51,6 +51,14 @@
 # define CHECK(expr) sc_assert(expr)
 #endif
 
+#ifndef UINT64_C
+#if defined(_WIN32) && !defined(__MINGW32__)
+# define UINT64_C(v) v ## ui64
+#else
+# define UINT64_C(v) v ## ULL
+#endif
+#endif // UINT64_C
+
 using namespace sc_core;
 
 SC_MODULE( module )
@@ -176,7 +184,8 @@ private:
 
   unsigned lcg_rng()
   {
-    m_rng_state = 2862933555777941757 * m_rng_state + 3037000493;
+    m_rng_state = UINT64_C(2862933555777941757) * m_rng_state
+                + UINT64_C(3037000493);
     return ( m_rng_state >> 48 );
   }
 
