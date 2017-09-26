@@ -140,6 +140,19 @@
 #endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------
+// (no) exception specifiers
+
+#ifndef SC_NOEXCEPT_
+#if SC_CPLUSPLUS >= 201103L && !(defined(_MSV_VER) && _MSC_VER < 1900)
+# define SC_NOEXCEPT_            noexcept
+# define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
+#else
+# define SC_NOEXCEPT_            throw()
+# define SC_NOEXCEPT_EXPR_(expr) /* nothing */
+#endif
+#endif // SC_NOEXCEPT_
+
+// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>

@@ -56,12 +56,12 @@ sc_unwind_exception::clear() const
 }
 
 const char*
-sc_unwind_exception::what() const throw()
+sc_unwind_exception::what() const SC_NOEXCEPT_
 {
   return ( m_is_reset ) ? "RESET" : "KILL";
 }
 
-sc_unwind_exception::~sc_unwind_exception() throw()
+sc_unwind_exception::~sc_unwind_exception() SC_NOEXCEPT_
 {
   if( active() ) {
       // can't throw an exception, since we're already throwing
