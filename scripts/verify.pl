@@ -553,7 +553,7 @@ sub get_systemc_arch
                     $arch = "msvc14";
                 }
                 elsif ( $v_string =~ /.+Version 19\.10/) {   # 2017
-                    $arch = "msvc141";
+                    $arch = "msvc14"; # reuse msvc14 identifier for now
                 }
                 else {
                     die "Error: unsupported compiler '$cxx' ($v_string)\n";
