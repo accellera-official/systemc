@@ -17,16 +17,16 @@ as described in the IEEE 1666-2011 Language Reference Manual.
 
     o 64-bit Linux (x86_64)
       (RedHat Enterprise 6; SuSE Enterprise Linux 11; Debian 9)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-6.3.0
-      - Clang C++ compiler version clang-3.8
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-7.2.0
+      - Clang C++ compiler versions clang-3.4 through clang-5.0
       - Intel C++ Compiler (ICC 15.0.0)
 
     o 64-bit Linux (x86_64) with 32-bit compiler (--host=i686-linux-gnu)
       (SuSE Enterprise Linux 11)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-6.1.0
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-7.2.0
       - Intel C++ Compiler (ICC 15.0.0)
 
-   o 64-bit Linux (aarch64)
+    o 64-bit Linux (aarch64)
       (Ubuntu 16.04)
       - GNU C++ compiler version gcc-4.5.0
 
@@ -40,6 +40,10 @@ as described in the IEEE 1666-2011 Language Reference Manual.
       - Microsoft Visual Studio 2010 (10.0) (Win32 and x64)
       - Microsoft Visual Studio 2013 (12.0) (Win32 and x64)
       - Microsoft Visual Studio 2015 (14.0) (Win32 and x64)
+      - Microsoft Visual Studio 2017 (14.1) (Win32 and x64)
+
+      Warning: The fixed-point datatypes are not working as defined on
+               MSVC 2015/2017 (x64) in Release mode.  See RELEASENOTES.
 
     o Windows Server 2008 (WoW64), Msys 1.0.17(0.48/3/2)
       - MinGW-w64 GNU C++ compiler version 4.9.2 (x86_64)
