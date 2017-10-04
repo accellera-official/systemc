@@ -329,6 +329,16 @@ Note: These features partly add functionality beyond the current
     See INSTALL.
 
 
+  - [2.3.2] Add VCD tracing support for sc_time and sc_event
+
+    The VCD format supports tracing of "time" and "event"
+    variables by default.  Added new overloads to sc_trace
+    and a corresponding implementation for VCD:
+
+      void sc_trace( sc_trace_file* tf, const sc_time&, const std::string& );
+      void sc_trace( sc_trace_file* tf, const sc_event&, const std::string& );
+
+
   - [2.3.1] Enhanced Autoconf/Automake build system
     - better control of the installation directories
     - improved libtool library dependency detection, especially
@@ -653,6 +663,12 @@ Note: Some of these features are not enabled in the default library
     standard.
 
 
+  - The fixed-point implementation is not working correctly on MSVC 2015 (64-bit)
+    or later, when built with optimization enabled (Release mode).  On this
+    compiler/platform, optimization needs to be disabled when using the
+    fixed-point library (for all SystemC versions before and including 2.3.2).
+
+
   - Some paths in this release are longer than the historical 99 character
     limit of tar archives, and several Windows archivers (e.g. WinZip)
     have been reported to trip over this.  The open source archiver 7-zip
@@ -779,8 +795,3 @@ b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
    time both types of notifications emerge from the PEQ in the same evaluation
    phase. This is wrong immediate notifications should overtake delta
    notifications.
-
-c. The multi_passthrough_target_socket<> currently not properly honors the
-   port policy SC_ZERO_OR_MORE_BOUND, allowing the socket to stay unbound
-   (see http://forums.accellera.org/topic/5661-unbound-multi_passthrough/).
-   This issue has been inadvertedly introduced in 2.3.1.
