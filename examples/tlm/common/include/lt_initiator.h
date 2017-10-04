@@ -68,7 +68,8 @@ public:
 public:
   
    typedef tlm::tlm_generic_payload  *gp_ptr;        // generic payload
-   tlm_utils::simple_initiator_socket<lt_initiator> initiator_socket;
+   tlm_utils::simple_initiator_socket<lt_initiator>          initiator_socket;
+   tlm_utils::simple_initiator_socket_optional<lt_initiator> initiator_socket_opt;
  
    sc_core::sc_port<sc_core::sc_fifo_in_if  <gp_ptr> > request_in_port;  
    sc_core::sc_port<sc_core::sc_fifo_out_if <gp_ptr> > response_out_port;

@@ -269,5 +269,18 @@ protected:
   typename callback_binder_bw<TYPES>::dmi_func_type m_dmi_f;
 };
 
+template <typename MODULE,
+          unsigned int BUSWIDTH = 32,
+          typename TYPES = tlm::tlm_base_protocol_types,
+          unsigned int N=0>
+class multi_passthrough_initiator_socket_optional
+  : public multi_passthrough_initiator_socket<MODULE,BUSWIDTH,TYPES,N,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef multi_passthrough_initiator_socket<MODULE,BUSWIDTH,TYPES,N,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  multi_passthrough_initiator_socket_optional() : socket_b() {}
+  explicit multi_passthrough_initiator_socket_optional(const char* name) : socket_b(name) {}
+};
+
 } // namespace tlm_utils
 #endif // TLM_UTILS_MULTI_PASSTHROUGH_INITIATOR_SOCKET_H_INCLUDED_

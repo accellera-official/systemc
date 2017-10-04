@@ -17,34 +17,33 @@
 
  *****************************************************************************/
 
-#ifndef __SIMPLE_INITIATOR_SOCKET_H__
-#define __SIMPLE_INITIATOR_SOCKET_H__
+#ifndef TLM_UTILS_SIMPLE_INITIATOR_SOCKET_H_INCLUDED_
+#define TLM_UTILS_SIMPLE_INITIATOR_SOCKET_H_INCLUDED_
 
 #include <tlm>
 #include "tlm_utils/convenience_socket_bases.h"
 
 namespace tlm_utils {
 
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class simple_initiator_socket
-  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class simple_initiator_socket_b
+  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, 1, POL>
   , protected simple_socket_base
 {
 public:
-  typedef typename TYPES::tlm_payload_type              transaction_type;
-  typedef typename TYPES::tlm_phase_type                phase_type;
-  typedef tlm::tlm_sync_enum                            sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
-  typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
+  typedef typename TYPES::tlm_payload_type                transaction_type;
+  typedef typename TYPES::tlm_phase_type                  phase_type;
+  typedef tlm::tlm_sync_enum                              sync_enum_type;
+  typedef tlm::tlm_fw_transport_if<TYPES>                 fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<TYPES>                 bw_interface_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH,TYPES,1,POL> base_type;
 
 public:
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("simple_initiator_socket"); }
 
-  explicit simple_initiator_socket(const char* n = default_name())
+  explicit simple_initiator_socket_b(const char* n = default_name())
     : base_type(n)
     , m_process(this)
   {
@@ -139,28 +138,50 @@ private:
   process m_process;
 };
 
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_initiator_socket
+  : public simple_initiator_socket_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef simple_initiator_socket_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  simple_initiator_socket() : socket_b() {}
+  explicit simple_initiator_socket(const char* name) : socket_b(name) {}
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_initiator_socket_optional
+  : public simple_initiator_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef simple_initiator_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  simple_initiator_socket_optional() : socket_b() {}
+  explicit simple_initiator_socket_optional(const char* name) : socket_b(name) {}
+};
+
+
 // Tagged version
 
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class simple_initiator_socket_tagged
-  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class simple_initiator_socket_tagged_b
+  : public tlm::tlm_initiator_socket<BUSWIDTH, TYPES, 1, POL>
   , protected simple_socket_base
 {
 public:
-  typedef typename TYPES::tlm_payload_type              transaction_type;
-  typedef typename TYPES::tlm_phase_type                phase_type;
-  typedef tlm::tlm_sync_enum                            sync_enum_type;
-  typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
-  typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_initiator_socket<BUSWIDTH, TYPES>    base_type;
+  typedef typename TYPES::tlm_payload_type                transaction_type;
+  typedef typename TYPES::tlm_phase_type                  phase_type;
+  typedef tlm::tlm_sync_enum                              sync_enum_type;
+  typedef tlm::tlm_fw_transport_if<TYPES>                 fw_interface_type;
+  typedef tlm::tlm_bw_transport_if<TYPES>                 bw_interface_type;
+  typedef tlm::tlm_initiator_socket<BUSWIDTH,TYPES,1,POL> base_type;
 
 public:
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("simple_initiator_socket_tagged"); }
 
-  explicit simple_initiator_socket_tagged(const char* n = default_name())
+  explicit simple_initiator_socket_tagged_b(const char* n = default_name())
     : base_type(n)
     , m_process(this)
   {
@@ -208,7 +229,7 @@ private:
       , m_invalidate_direct_mem_user_id(0)
     {
     }
-  
+
     void set_transport_user_id(int id) { m_transport_user_id = id; }
     void set_invalidate_dmi_user_id(int id) { m_invalidate_direct_mem_user_id = id; }
 
@@ -269,6 +290,27 @@ private:
   process m_process;
 };
 
-}
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_initiator_socket_tagged
+  : public simple_initiator_socket_tagged_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef simple_initiator_socket_tagged_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  simple_initiator_socket_tagged() : socket_b() {}
+  explicit simple_initiator_socket_tagged(const char* name) : socket_b(name) {}
+};
 
-#endif
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_initiator_socket_tagged_optional
+  : public simple_initiator_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef simple_initiator_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  simple_initiator_socket_tagged_optional() : socket_b() {}
+  explicit simple_initiator_socket_tagged_optional(const char* name) : socket_b(name) {}
+};
+
+} // namespace tlm_utils
+#endif // TLM_UTILS_SIMPLE_INITIATOR_SOCKET_H_INCLUDED_
