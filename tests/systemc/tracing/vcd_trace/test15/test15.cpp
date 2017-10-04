@@ -39,10 +39,12 @@
 
 SC_MODULE(trace_delta_test)
 {
-    sc_signal <int> sig{"sig",0};
+    sc_signal <int> sig;
     sc_inout<int > iport;
 
-    SC_CTOR(trace_delta_test) {
+    SC_CTOR(trace_delta_test)
+      : sig("sig",0)
+    {
         iport.bind(sig);
         iport.initialize(1);
         SC_THREAD(test_thread);
