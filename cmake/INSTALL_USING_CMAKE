@@ -146,8 +146,6 @@ variables offered to the user in the CMake console and GUI (ccmake and
 cmake-gui, respectively). Each variable is annotated with a brief
 documentation string. The most important variables are:
 
-BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
-
 BUILD_SHARED_LIBS             Build shared instead of static libraries
                               (default: ON if not targetting Windows).
 
@@ -230,7 +228,7 @@ clicking on "Generate".
 6.) Compile, test, and install the libraries using make or the IDE:
 
   $ make
-  $ make test
+  $ make check
   $ sudo make install
 
 More documentation on using CMake is available from the the CMake Wiki
@@ -422,12 +420,6 @@ target_link_libraries(simple_perf SystemC::systemc)
 
   - The CMake build scripts don't yet configure and install systemc.pc and
     tlm.pc for pkg-config.
-
-  - Depending on the build type and the platform, the tests 5 (sc_report) and
-    32 (lt_mixed_endian) from the SystemC/TLM examples are failing. It seems
-    that the output of both tests is platform dependent and the current
-    test runner does not yet allow platform-dependent golden files as the
-    SystemC regression test suite does.
 
 
 6. Ressources

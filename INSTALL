@@ -230,6 +230,10 @@ To install SystemC on a UNIX system, do the following steps:
      See the section on the general usage of the configure script and
      "../configure --help" for more information.
 
+     Note: When linking against a static library of SystemC with asynchronous
+           update support enabled, you may need to explicitly link against the
+           pthread library as well (-lpthread).
+
      Note: If you change the configuration after having compiled the
            package already, you should run a "gmake clean" before
            recompiling.
@@ -325,9 +329,12 @@ Note for (key) developers:
   In case you have changed the `configure.ac' file or one of the
   `Makefile.am' files:
 
-  - Use the `config/distclean' script to remove the generated `configure'
-    script, the generated `aclocal.m4' file and the generated `Makefile.in'
-    files.
+  - Use 
+
+        > gmake distclean
+
+    to remove the generated `configure' script, the generated `aclocal.m4' 
+    file and the generated `Makefile.in' files.
 
   - Use the `config/bootstrap' script to generate the `configure' script
     and the necessary `Makefile.in' files. This script makes use of the
@@ -632,6 +639,20 @@ settings to all build configurations.
 
    Note: Only effective during library build.
 
+   Note: Enabling the asynchronous update support (default) may add a
+         dependency on the pthread library on non-Windows systems.
+         When linking an application against a static SystemC library,
+         you may need to explicitly link against the pthread library
+         as well (-lpthread).
+
+
+ * SC_DISABLE_VCD_SCOPES -
+   Disable grouping of VCD trace variables in hierarchical scopes
+   by default
+
+   Note: Only effective during library build.
+   See : Environment variable SC_VCD_SCOPES
+
 
  * SC_DISABLE_VIRTUAL_BIND -
    Keep the "bind" function of sc_ports non-virtual
@@ -841,6 +862,11 @@ and influence the SystemC library's behaviour:
  3) SC_DEPRECATION_WARNINGS=DISABLE
     Do not issue warnings about using deprecated features as of
     IEEE 1666-2011.
+
+ 4) SC_VCD_SCOPES=DISABLE, SC_VCD_SCOPES=ENABLE
+    Run-time configuration of hierarchically scoped names in VCD
+    trace files (see SC_DISABLE_VCD_SCOPES).
+
 
 Usually, it is not recommended to use any of these variables in new or
 on-going projects.  They have been added to simplify the transition of

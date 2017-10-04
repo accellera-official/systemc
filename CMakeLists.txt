@@ -90,8 +90,6 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
-# BUILD_EXAMPLES                Build the SystemC examples (default: OFF).
-#
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON if not targetting Windows).
 #
@@ -205,6 +203,7 @@
 
 
 cmake_minimum_required (VERSION 3.1)
+cmake_policy(SET CMP0001 NEW)
 
 project (SystemCLanguage CXX C)
 
@@ -291,10 +290,6 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
-option (BUILD_EXAMPLES "Build SystemC and TLM examples." OFF)
-if (BUILD_EXAMPLES)
-  enable_testing ()
-endif (BUILD_EXAMPLES)
 
 option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
 
@@ -526,6 +521,9 @@ endif (QT_ARCH)
 ###############################################################################
 # Configure Pthreads or Fiber if necessary.
 ###############################################################################
+if (WIN32 AND ENABLE_PTHREADS)
+  message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
+endif (WIN32 AND ENABLE_PTHREADS)
 
 if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
   set (THREADS_PREFER_PTHREAD_FLAG ON)
@@ -633,7 +631,6 @@ endif ("${isSystemDir}" STREQUAL "-1")
 message (STATUS "========================================================================")
 message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemCLanguage_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
-message (STATUS "BUILD_EXAMPLES = ${BUILD_EXAMPLES}")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")

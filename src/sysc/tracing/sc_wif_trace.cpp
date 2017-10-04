@@ -1580,7 +1580,7 @@ void wif_trace_file::do_initialize()
     std::fprintf(fp, "init ;\n\n");
 
     //timescale:
-    std::sprintf(buf,"%d", static_cast<int>(log10(trace_unit_fs)));
+    std::sprintf(buf,"%d", static_cast<int>(log10(static_cast<double>(trace_unit_fs))));
     std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
     std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n"
@@ -1633,6 +1633,18 @@ void wif_trace_file::trace( sc_trace_file* ) const {
 #endif // SC_TRACING_PHASE_CALLBACKS_
 
 // ----------------------------------------------------------------------------
+
+void wif_trace_file::trace(const sc_event&, const std::string& name) {
+    std::stringstream msg;
+    msg << "sc_events are not supported by WIF trace: " << name;
+    SC_REPORT_ERROR(SC_ID_TRACING_OBJECT_IGNORED_, msg.str().c_str() );
+}
+
+void wif_trace_file::trace(const sc_time&, const std::string& name) {
+    std::stringstream msg;
+    msg << "sc_time is not supported by WIF trace: " << name;
+    SC_REPORT_ERROR(SC_ID_TRACING_OBJECT_IGNORED_, msg.str().c_str() );
+}
 
 #define DEFN_TRACE_METHOD(tp)                                                 \
 void                                                                          \

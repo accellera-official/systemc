@@ -25,11 +25,10 @@
 
 namespace tlm_utils {
 
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class passthrough_target_socket
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class passthrough_target_socket_b
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, 1, POL>
   , protected passthrough_socket_base
 {
 public:
@@ -38,20 +37,20 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH,TYPES,1,POL>  base_type;
 
 public:
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("passthrough_target_socket"); }
 
-  explicit passthrough_target_socket(const char* n = default_name())
+  explicit passthrough_target_socket_b(const char* n = default_name())
     : base_type(n)
     , m_process(this)
   {
     bind(m_process);
   }
 
-  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+  using base_type::bind;
 
   // REGISTER_XXX
   void register_nb_transport_fw(MODULE* mod,
@@ -213,12 +212,33 @@ private:
   process m_process;
 };
 
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class passthrough_target_socket
+  : public passthrough_target_socket_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef passthrough_target_socket_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  passthrough_target_socket() : socket_b() {}
+  explicit passthrough_target_socket(const char* name) : socket_b(name) {}
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class passthrough_target_socket_optional
+  : public passthrough_target_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef passthrough_target_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  passthrough_target_socket_optional() : socket_b() {}
+  explicit passthrough_target_socket_optional(const char* name) : socket_b(name) {}
+};
+
 //ID Tagged version
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class passthrough_target_socket_tagged
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class passthrough_target_socket_tagged_b
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, 1, POL>
   , protected passthrough_socket_base
 {
 public:
@@ -227,20 +247,20 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH,TYPES,1,POL>  base_type;
 
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("passthrough_target_socket_tagged"); }
 
 public:
-  explicit passthrough_target_socket_tagged(const char* n = default_name())
+  explicit passthrough_target_socket_tagged_b(const char* n = default_name())
     : base_type(n)
     , m_process(this)
   {
     bind(m_process);
   }
 
-  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+  using base_type::bind;
 
   // REGISTER_XXX
   void register_nb_transport_fw(MODULE* mod,
@@ -429,6 +449,28 @@ private:
   const sc_core::sc_object* get_socket() const { return this; }
 private:
   process m_process;
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class passthrough_target_socket_tagged
+  : public passthrough_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef passthrough_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  passthrough_target_socket_tagged() : socket_b() {}
+  explicit passthrough_target_socket_tagged(const char* name) : socket_b(name) {}
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class passthrough_target_socket_tagged_optional
+  : public passthrough_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef passthrough_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  passthrough_target_socket_tagged_optional() : socket_b() {}
+  explicit passthrough_target_socket_tagged_optional(const char* name) : socket_b(name) {}
 };
 
 } // namespace tlm_utils

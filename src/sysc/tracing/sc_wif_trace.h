@@ -84,6 +84,10 @@ protected:
     // These are all virtual functions in sc_trace_file and
     // they need to be defined here.
 
+    // Trace sc_time, sc_event
+    virtual void trace(const sc_time& object, const std::string& name);
+    virtual void trace(const sc_event& object, const std::string& name);
+
     // Trace a boolean object (single bit)
      void trace(const bool& object, const std::string& name);
 

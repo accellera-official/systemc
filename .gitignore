@@ -1,0 +1,75 @@
+# ignore common patterns
+.*.sw?
+.#*
+*~
+*.exe
+*.l[oa]
+*.[oa]
+*.Plo
+*.so
+
+# ignore autoconf files
+/aclocal.m4
+/autom4te.cache/
+/config/compile
+# config.guess is patched locally to detect properly
+# ppc, ppc64, i386, and x86_64 on Mac OS X
+#/config/config.guess
+#/config/config.sub
+/config/ar-lib
+/config/depcomp
+/config/distclean
+/config/install-sh
+/config/libtool.m4
+/config/ltmain.sh
+/config/lt~obsolete.m4
+/config/ltoptions.m4
+/config/ltsugar.m4
+/config/ltversion.m4
+/config/missing
+/config/mkinstalldirs
+/config/test-driver
+/configure
+
+Makefile
+Makefile.in
+
+# ignore recommended build directory and variants
+/build*/
+/objdir*/
+
+# ignore in-tree installation
+/include/
+/lib-*/
+
+# ignore MSVC build files
+*.suo
+*.ncb
+*.vcproj.*
+*.vcxproj.*
+*.old
+*.tmp
+*.sdf
+*.XML
+*.opensdf
+*.db
+
+Release/
+Debug/
+DebugDLL/
+ReleaseDLL/
+_UpgradeReport_Files/
+
+#/msvc*/SystemC/SystemC.suo
+#/msvc*/SystemC/SystemC.ncb
+#/msvc*/SystemC/SystemC.vcproj.*
+#/msvc*/SystemC/Release/
+#/msvc*/SystemC/Debug/
+#/msvc*/SystemC/ReleaseDLL/
+#/msvc*/SystemC/DebugDLL/
+#/msvc*/SystemC/_UpgradeReport_Files/
+
+
+# ignore Doxygen documentation
+/docs/*/doxygen/html/
+/docs/*/doxygen/*.tag

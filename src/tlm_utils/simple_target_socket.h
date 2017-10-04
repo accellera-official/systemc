@@ -44,11 +44,10 @@
 
 namespace tlm_utils {
 
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class simple_target_socket
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class simple_target_socket_b
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, 1, POL>
   , protected simple_socket_base
 {
   friend class fw_process;
@@ -59,13 +58,13 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH,TYPES,1,POL>  base_type;
 
 public:
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("simple_target_socket"); }
 
-  explicit simple_target_socket(const char* n = default_name())
+  explicit simple_target_socket_b(const char* n = default_name())
     : base_type(n)
     , m_fw_process(this)
     , m_bw_process(this)
@@ -73,7 +72,7 @@ public:
     bind(m_fw_process);
   }
 
-  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+  using base_type::bind;
 
   // bw transport must come thru us.
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &m_bw_process;}
@@ -135,7 +134,7 @@ private:
   class bw_process : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
-    bw_process(simple_target_socket *p_own) : m_owner(p_own)
+    bw_process(simple_target_socket_b *p_own) : m_owner(p_own)
     {
     }
 
@@ -173,7 +172,7 @@ private:
     }
 
   private:
-    simple_target_socket *m_owner;
+    simple_target_socket_b *m_owner;
   };
 
   class fw_process : public tlm::tlm_fw_transport_if<TYPES>,
@@ -189,7 +188,7 @@ private:
     typedef bool (MODULE::*GetDirectMemPtr)(transaction_type&,
                                             tlm::tlm_dmi&);
 
-    fw_process(simple_target_socket *p_own) :
+    fw_process(simple_target_socket_b *p_own) :
       m_owner(p_own),
       m_mod(0),
       m_nb_transport_ptr(0),
@@ -531,7 +530,7 @@ private:
     };
 
   private:
-    simple_target_socket *m_owner;
+    simple_target_socket_b *m_owner;
     MODULE* m_mod;
     NBTransportPtr m_nb_transport_ptr;
     BTransportPtr m_b_transport_ptr;
@@ -552,12 +551,33 @@ private:
   transaction_type* m_current_transaction;
 };
 
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_target_socket
+  : public simple_target_socket_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef simple_target_socket_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  simple_target_socket() : socket_b() {}
+  explicit simple_target_socket(const char* name) : socket_b(name) {}
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_target_socket_optional
+  : public simple_target_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef simple_target_socket_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  simple_target_socket_optional() : socket_b() {}
+  explicit simple_target_socket_optional(const char* name) : socket_b(name) {}
+};
+
 //ID Tagged version
-template <typename MODULE,
-          unsigned int BUSWIDTH = 32,
-          typename TYPES = tlm::tlm_base_protocol_types>
-class simple_target_socket_tagged
-  : public tlm::tlm_target_socket<BUSWIDTH, TYPES>
+template< typename MODULE, unsigned int BUSWIDTH, typename TYPES
+        , sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND >
+class simple_target_socket_tagged_b
+  : public tlm::tlm_target_socket<BUSWIDTH, TYPES, 1, POL>
   , protected simple_socket_base
 {
   friend class fw_process;
@@ -568,13 +588,13 @@ public:
   typedef tlm::tlm_sync_enum                            sync_enum_type;
   typedef tlm::tlm_fw_transport_if<TYPES>               fw_interface_type;
   typedef tlm::tlm_bw_transport_if<TYPES>               bw_interface_type;
-  typedef tlm::tlm_target_socket<BUSWIDTH, TYPES>       base_type;
+  typedef tlm::tlm_target_socket<BUSWIDTH,TYPES,1,POL>  base_type;
 
 public:
   static const char* default_name()
     { return sc_core::sc_gen_unique_name("simple_target_socket_tagged"); }
 
-  explicit simple_target_socket_tagged(const char* n = default_name())
+  explicit simple_target_socket_tagged_b(const char* n = default_name())
     : base_type(n)
     , m_fw_process(this)
     , m_bw_process(this)
@@ -582,7 +602,7 @@ public:
     bind(m_fw_process);
   }
 
-  using tlm::tlm_target_socket<BUSWIDTH, TYPES>::bind;
+  using base_type::bind;
 
   // bw transport must come thru us.
   tlm::tlm_bw_transport_if<TYPES> * operator ->() {return &m_bw_process;}
@@ -656,7 +676,7 @@ private:
   class bw_process : public tlm::tlm_bw_transport_if<TYPES>
   {
   public:
-    bw_process(simple_target_socket_tagged *p_own) : m_owner(p_own)
+    bw_process(simple_target_socket_tagged_b *p_own) : m_owner(p_own)
     {
     }
 
@@ -692,7 +712,7 @@ private:
     }
 
   private:
-    simple_target_socket_tagged *m_owner;
+    simple_target_socket_tagged_b *m_owner;
   };
 
   class fw_process : public tlm::tlm_fw_transport_if<TYPES>,
@@ -712,7 +732,7 @@ private:
                                             transaction_type&,
                                             tlm::tlm_dmi&);
 
-    fw_process(simple_target_socket_tagged *p_own) :
+    fw_process(simple_target_socket_tagged_b *p_own) :
       m_owner(p_own),
       m_mod(0),
       m_nb_transport_ptr(0),
@@ -1061,7 +1081,7 @@ private:
     };
 
   private:
-    simple_target_socket_tagged *m_owner;
+    simple_target_socket_tagged_b *m_owner;
     MODULE* m_mod;
     NBTransportPtr m_nb_transport_ptr;
     BTransportPtr m_b_transport_ptr;
@@ -1084,6 +1104,28 @@ private:
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
   transaction_type* m_current_transaction;
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_target_socket_tagged
+  : public simple_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES>
+{
+  typedef simple_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES> socket_b;
+public:
+  simple_target_socket_tagged() : socket_b() {}
+  explicit simple_target_socket_tagged(const char* name) : socket_b(name) {}
+};
+
+template< typename MODULE, unsigned int BUSWIDTH = 32
+        , typename TYPES = tlm::tlm_base_protocol_types >
+class simple_target_socket_tagged_optional
+  : public simple_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND>
+{
+  typedef simple_target_socket_tagged_b<MODULE,BUSWIDTH,TYPES,sc_core::SC_ZERO_OR_MORE_BOUND> socket_b;
+public:
+  simple_target_socket_tagged_optional() : socket_b() {}
+  explicit simple_target_socket_tagged_optional(const char* name) : socket_b(name) {}
 };
 
 } // namespace tlm_utils
