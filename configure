@@ -16492,6 +16492,15 @@ else
 fi
 
 
+if test x"$enable_pthreads" = xyes; then :
+    case "${TARGET_ARCH}" in #(
+          mingw*|msvc*) :
+          as_fn_error $? "pthread processes not supported on target architecture ${target}" "$LINENO" 5   ;; #(
+  *) :
+     ;;
+esac
+fi
+
 if test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno; then :
     if test x"$ax_pthread_ok" = xyes; then :
       enable_pthreads=yes
