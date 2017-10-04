@@ -76,9 +76,14 @@ static sc_report_handler::msg_def_items items = {
     texts, sizeof(texts)/sizeof(*texts), false, 0
 };
 
+static int initialize();
+static int forty_two = initialize();
+
 static
 int initialize()
 {
+    (void)forty_two; /* avoid unused variable warning */
+
     sc_report_handler::add_static_msg_types(&items);
 
     // PROCESS ANY ENVIRONMENTAL OVERRIDES:
@@ -91,8 +96,6 @@ int initialize()
     }
     return 42;
 }
-
-static int forty_two = initialize();
 
 } // namespace sc_core
 

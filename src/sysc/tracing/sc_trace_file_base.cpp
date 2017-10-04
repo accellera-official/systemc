@@ -38,6 +38,7 @@
  *****************************************************************************/
 
 #include <ctime>
+#include <sstream>
 
 #include "sysc/tracing/sc_trace_file_base.h"
 #include "sysc/kernel/sc_simcontext.h"
@@ -47,7 +48,13 @@
 #  include "sysc/kernel/sc_object_int.h"
 #endif
 
-#include <sstream>
+#ifndef UINT64_C
+#if defined(_WIN32) && !defined(__MINGW32__)
+# define UINT64_C(v) v ## ui64
+#else
+# define UINT64_C(v) v ## ULL
+#endif
+#endif // UINT64_C
 
 namespace sc_core {
 
@@ -273,12 +280,12 @@ sc_trace_file_base::unit_to_fs(sc_time_unit tu)
 {
     switch ( tu )
     {
-        case SC_FS: return 1;
-        case SC_PS: return 1000;
-        case SC_NS: return 1000000;
-        case SC_US: return 1000000000;
-        case SC_MS: return 1000000000000;
-        case SC_SEC:return 1000000000000000;
+        case SC_FS: return UINT64_C(1);
+        case SC_PS: return UINT64_C(1000);
+        case SC_NS: return UINT64_C(1000000);
+        case SC_US: return UINT64_C(1000000000);
+        case SC_MS: return UINT64_C(1000000000000);
+        case SC_SEC:return UINT64_C(1000000000000000);
         default:
             sc_assert(0);
             return 0;
@@ -290,24 +297,24 @@ sc_trace_file_base::fs_unit_to_str(sc_trace_file_base::unit_type tu)
 {
     switch (tu)
     {
-        case 1: return "1 fs";
-        case 10: return "10 fs";
-        case 100: return "100 fs";
-        case 1000: return "1 ps";
-        case 10000: return "10 ps";
-        case 100000: return "100 ps";
-        case 1000000: return "1 ns";
-        case 10000000: return "10 ns";
-        case 100000000: return "100 ns";
-        case 1000000000: return "1 us";
-        case 10000000000: return "10 us";
-        case 100000000000: return "100 us";
-        case 1000000000000: return "1 ms";
-        case 10000000000000: return "10 ms";
-        case 100000000000000: return "100 ms";
-        case 1000000000000000: return "1 sec";
-        case 10000000000000000: return "10 sec";
-        case 100000000000000000: return "100 sec";
+        case UINT64_C(1): return "1 fs";
+        case UINT64_C(10): return "10 fs";
+        case UINT64_C(100): return "100 fs";
+        case UINT64_C(1000): return "1 ps";
+        case UINT64_C(10000): return "10 ps";
+        case UINT64_C(100000): return "100 ps";
+        case UINT64_C(1000000): return "1 ns";
+        case UINT64_C(10000000): return "10 ns";
+        case UINT64_C(100000000): return "100 ns";
+        case UINT64_C(1000000000): return "1 us";
+        case UINT64_C(10000000000): return "10 us";
+        case UINT64_C(100000000000): return "100 us";
+        case UINT64_C(1000000000000): return "1 ms";
+        case UINT64_C(10000000000000): return "10 ms";
+        case UINT64_C(100000000000000): return "100 ms";
+        case UINT64_C(1000000000000000): return "1 sec";
+        case UINT64_C(10000000000000000): return "10 sec";
+        case UINT64_C(100000000000000000): return "100 sec";
         default: sc_assert(0); return "";
     }
 }
