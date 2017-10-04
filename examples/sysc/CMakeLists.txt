@@ -39,6 +39,9 @@
 ###############################################################################
 
 
+set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set(TEST_FOLDER "examples/sysc" CACHE INTERNAL "" FORCE)
+
 add_subdirectory (2.1/dpipe)
 add_subdirectory (2.1/forkjoin)
 add_subdirectory (2.1/reset_signal_is)

@@ -43,6 +43,9 @@
 # Add the TLM examples.
 ###############################################################################
 
+set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set(TEST_FOLDER "examples/tlm" CACHE INTERNAL "" FORCE)
+
 add_subdirectory (at_1_phase)
 add_subdirectory (at_2_phase)
 add_subdirectory (at_4_phase)

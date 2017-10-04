@@ -79,7 +79,7 @@ void allocate_user_actions( )
 	}
 	// make sure we don't get the same usr action again and that it
 	// is really new
-	assert (usr!=SC_UNSPECIFIED && usr!=SC_DO_NOTHING && usr!=SC_THROW &&
+	sc_assert (usr!=SC_UNSPECIFIED && usr!=SC_DO_NOTHING && usr!=SC_THROW &&
 		usr!=SC_LOG         && usr!=SC_DISPLAY    && usr!=SC_CACHE_REPORT &&
 		usr!=SC_STOP        && usr!=SC_ABORT );
 	if ( n < num_usr_actions ) {
@@ -87,7 +87,7 @@ void allocate_user_actions( )
 	    usr_actions[n] = usr;
 	    for (unsigned int i=0; i<n; i++) {
 		// lso check that is is new
-		assert( usr!=usr_actions[i]);
+		sc_assert( usr!=usr_actions[i]);
 	    }
 	}
     }
@@ -193,6 +193,8 @@ void query_rules()
 
 int sc_main(int,char**)
 {
+    sc_actions check = SC_UNSPECIFIED;
+
     allocate_user_actions();
     sc_report_handler::set_handler( &dump_all_handler );
 
@@ -217,18 +219,22 @@ int sc_main(int,char**)
     cout << "temporarily suppress usr4\n";
     sc_start( 1,SC_NS );
     sc_report_handler::suppress( usr3 );
-    assert( sc_report_handler::suppress( usr4 ) == usr3 );
+    check = sc_report_handler::suppress( usr4 );
+    sc_assert( check == usr3 );
     query_rules( id1 );
-    assert( sc_report_handler::suppress() == usr4 );
+    check = sc_report_handler::suppress();
+    sc_assert( check == usr4 );
     query_rules( id1 );
 
     // temporarily force usr1: same checking as with suppress
     cout << "temporarily force usr1\n";
     sc_start( 1,SC_NS );
     sc_report_handler::force( usr2 );
-    assert( sc_report_handler::force( usr1 ) == usr2 );
+    check = sc_report_handler::force( usr1 );
+    sc_assert( check == usr2 );
     query_rules( id1 );
-    assert( sc_report_handler::force() == usr1 );
+    check = sc_report_handler::force();
+    sc_assert(  check == usr1 );
     query_rules( id1 );
 
     // temporarily force usr1: same checking as with suppress

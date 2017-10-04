@@ -38,11 +38,16 @@
 #
 ###############################################################################
 
+cmake_minimum_required (VERSION 3.0)
 
-if (NOT BUILD_EXAMPLES)
-  set_directory_properties (PROPERTIES EXCLUDE_FROM_ALL 1)
-endif (NOT BUILD_EXAMPLES)
+# Only built under "check" target
+#  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
+add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -C "${CMAKE_BUILD_TYPE}")
+enable_testing()
 
+set_property(GLOBAL PROPERTY USE_FOLDERS TRUE)
+set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
+set_target_properties(check PROPERTIES FOLDER "examples")
 
 ########################################################################
 # Common definitions for all examples.
@@ -93,24 +98,27 @@ else (DIFF_COMMAND MATCHES diff)
 endif (DIFF_COMMAND MATCHES diff)
 mark_as_advanced (DIFF_COMMAND DIFF_OPTIONS)
 
-# configure_and_add_test (NAME [INPUT] [GOLDEN])
-macro (configure_and_add_test TEST_PROG)
-  if (${ARGC} GREATER 3)
-    message (FATAL_ERROR "Wrong number of arguments for configure_and_add_test (NAME [INPUT] [GOLDEN]).")
-  endif (${ARGC} GREATER 3)
+# configure_and_add_test(<NAME> [INPUT <input-file>] [GOLDEN <golden-log>] [FILTER <filter>])
+function (configure_and_add_test TEST_PROG)
+  set (oneValueArgs INPUT GOLDEN FILTER FOLDER)
+  cmake_parse_arguments(TEST "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+
+  if (${TEST_UNPARSED_ARGS})
+    message (FATAL_ERROR "Invalid options passed to configure_and_add_test(<NAME> [INPUT <input-file>] [GOLDEN <golden-log>] [FILTER <filter>]): ${TEST_UNPARSED_ARGS}")
+  endif (${TEST_UNPARSED_ARGS})
+
   string (REPLACE "${CMAKE_SOURCE_DIR}/" "" TEST_NAME
                   "${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PROG}")
-  #string(REGEX REPLACE "[^A-Za-z0-9_]" "_" TEST_NAME ${TEST_NAME})
-  if (${ARGC} LESS 2)
-    unset (TEST_INPUT)
-  else (${ARGC} LESS 2)
-    set (TEST_INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV1})
+
+  if (NOT "${TEST_INPUT}" STREQUAL "")
+    set (TEST_INPUT ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_INPUT})
     if (NOT EXISTS ${TEST_INPUT})
       message (SEND_ERROR "The specified input file ${TEST_INPUT} for test ${TEST_NAME} does not exist.")
       unset (TEST_INPUT)
     endif (NOT EXISTS ${TEST_INPUT})
-  endif (${ARGC} LESS 2)
-  if (${ARGC} LESS 3)
+  endif (NOT "${TEST_INPUT}" STREQUAL "")
+
+  if ("${TEST_GOLDEN}" STREQUAL "")
     if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
       set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
     elseif (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/results/expected.log)
@@ -118,24 +126,28 @@ macro (configure_and_add_test TEST_PROG)
     else (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
       unset (TEST_GOLDEN)
     endif (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/golden.log)
-  else (${ARGC} LESS 3)
-    set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${ARGV2})
+  else ("${TEST_GOLDEN}" STREQUAL "")
+    set (TEST_GOLDEN ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_GOLDEN})
     if (NOT EXISTS ${TEST_GOLDEN})
       message (SEND_ERROR "The specified golden reference file ${TEST_GOLDEN} for test ${TEST_NAME} does not exist.")
       unset (TEST_GOLDEN)
     endif (NOT EXISTS ${TEST_GOLDEN})
-  endif (${ARGC} LESS 3)
+  endif ("${TEST_GOLDEN}" STREQUAL "")
+
   add_test (NAME ${TEST_NAME}
             COMMAND ${CMAKE_COMMAND} "-DTEST_EXE=$<TARGET_FILE:${TEST_PROG}>"
                                      "-DTEST_DIR=${CMAKE_CURRENT_BINARY_DIR}"
                                      "-DTEST_INPUT=${TEST_INPUT}"
                                      "-DTEST_GOLDEN=${TEST_GOLDEN}"
+                                     "-DTEST_FILTER=${TEST_FILTER}"
                                      "-DDIFF_COMMAND=${DIFF_COMMAND}"
                                      "-DDIFF_OPTIONS=${DIFF_OPTIONS}"
                                      -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake)
+  add_dependencies(check ${TEST_PROG})
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
-endmacro (configure_and_add_test)
+  set_target_properties(${TEST_PROG} PROPERTIES FOLDER "${TEST_FOLDER}")
+endfunction (configure_and_add_test)
 
 
 ########################################################################

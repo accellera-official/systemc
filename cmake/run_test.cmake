@@ -42,8 +42,11 @@ cmake_minimum_required (VERSION 2.8.11)
 
 if(NOT TEST_EXE)
   message(FATAL_ERROR "  Usage: cmake -DTEST_EXE=<executable> [-DTEST_INPUT=<input-file>] \\\n"
-                      "               [-DTEST_GOLDEN=<reference-output-file>] [-DDIFF_COMMAND=<diff-command>] \\\n"
-                      "               [-DDIFF_OPTIONS=<diff-options>] -P run_test.cmake")
+                      "               [-DTEST_GOLDEN=<reference-output-file>] \\\n"
+                      "               [-DTEST_FILTER=<pattern-to-filter-from-log>] \\\n"
+                      "               [-DDIFF_COMMAND=<diff-command>] \\\n"
+                      "               [-DDIFF_OPTIONS=<diff-options>] \\\n"
+                      "               -P run_test.cmake")
 endif(NOT TEST_EXE)
 
 if(NOT EXISTS ${TEST_EXE})
@@ -91,10 +94,14 @@ if(NOT TEST_GOLDEN)
 endif(NOT TEST_GOLDEN)
 
 # TODO: trim empty lines from run and expected log output
-# TODO: Implement filter functionality of config/test.sh.in
 
-file (READ ${TEST_DIR}/run.log RUN_LOG)
-string(REGEX REPLACE "^.*stopped by user.*$" "" RUN_TRIMMED_LOG "${RUN_LOG}")
+if ("${TEST_FILTER}" STREQUAL "")
+  file (READ ${TEST_DIR}/run.log RUN_LOG)
+else ("${TEST_FILTER}" STREQUAL "")
+  file (STRINGS ${TEST_DIR}/run.log RUN_FILTERED_LOG REGEX "^.*${TEST_FILTER}.*$" )
+  string(REPLACE ";" "\n"  RUN_LOG "${RUN_FILTERED_LOG}\n")
+endif ("${TEST_FILTER}" STREQUAL "")
+string(REGEX REPLACE "^.*stopped by user.*$" "" RUN_TRIMMED_LOG ${RUN_LOG})
 file(WRITE ${TEST_DIR}/run_trimmed.log "${RUN_TRIMMED_LOG}")
 
 file(READ ${TEST_GOLDEN} EXPECTED_LOG)
