@@ -1,3 +1,15 @@
+* SystemC 2.3.2
+  Release of SystemC 2.3.2
+  - Includes TLM 2.0.4
+  - Extended hierarchical name registry
+  - Improved synchronization mechanism with external processes
+  - Improved sc_time conversions and operations
+  - Improved error and exception handling
+  - Improved VCD tracing support, including hierarchical scopes, events and time values
+  - New template-independent interfaces for TLM-2.0 sockets
+  - New optionally bounds TLM-2.0 convenience sockets
+  - Bug fixes, code cleanup.
+
 * SystemC 2.3.2_pub_rev_20170223
   Public-review release of SystemC 2.3.2
   - Includes TLM 2.0.4_pub_rev_20170223
