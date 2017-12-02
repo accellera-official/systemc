@@ -223,9 +223,10 @@ public:
     std::map<unsigned int, tlm::tlm_bw_transport_if<TYPES>*>&  multi_binds=get_hierarch_bind()->get_multi_binds();
 
     // complete binding only if there has been a real bind
-    bool unbound = (binders.size() == 1 && m_export_callback_created);
+    bool locally_unbound = (binders.size() == 1 && m_export_callback_created);
     // no call to get_base_interface has consumed the export - ignore
-    if (unbound) return;
+    if (locally_unbound && !m_hierarch_bind)
+        return;
 
     // iterate over all binders
     for (unsigned int i=0; i<binders.size(); i++) {
