@@ -1,0 +1,10 @@
+SystemC Simulation
+Constructing parent_init.initiator
+Constructing parent_init
+Constructing parent_targ.target
+Constructing parent_targ
+Starting parent_init.initiator.thread
+Calling parent_targ.target->b_transport(0)
+Exiting parent_init.initiator.thread
+
+Info: /OSCI/SystemC: Simulation stopped by user.
