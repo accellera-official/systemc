@@ -106,6 +106,7 @@ class SC_API sc_process_handle {
     inline void kill(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
     inline const char* name() const;
+    inline const char* basename() const;
     inline sc_curr_proc_kind proc_kind() const;
     inline void reset(
         sc_descendant_inclusion_info descendants=SC_NO_DESCENDANTS );
@@ -362,6 +363,13 @@ inline void sc_process_handle::kill( sc_descendant_inclusion_info descendants )
 inline const char* sc_process_handle::name() const
 {
     return  m_target_p ? m_target_p->name() : "";
+}
+
+// return the basename of this object instance's target.
+
+inline const char* sc_process_handle::basename() const
+{
+    return  m_target_p ? m_target_p->basename() : "";
 }
 
 // return the process kind for this object instance's target.
