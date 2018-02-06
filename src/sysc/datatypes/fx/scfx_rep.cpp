@@ -2293,44 +2293,19 @@ void
 align( const scfx_rep& lhs, const scfx_rep& rhs, int& new_wp,
        int& len_mant, scfx_mant_ref& lhs_mant, scfx_mant_ref& rhs_mant )
 {
-    bool need_lhs = true;
-    bool need_rhs = true;
+    int lower_bound_lhs = lhs.m_lsw - lhs.m_wp;
+    int upper_bound_lhs = lhs.m_msw - lhs.m_wp;
+    int lower_bound_rhs = rhs.m_lsw - rhs.m_wp;
+    int upper_bound_rhs = rhs.m_msw - rhs.m_wp;
 
-    if( lhs.m_wp != rhs.m_wp || lhs.size() != rhs.size() )
-    {
-	int lower_bound_lhs = lhs.m_lsw - lhs.m_wp;
-	int upper_bound_lhs = lhs.m_msw - lhs.m_wp;
-	int lower_bound_rhs = rhs.m_lsw - rhs.m_wp;
-	int upper_bound_rhs = rhs.m_msw - rhs.m_wp;
+    int lower_bound = sc_min( lower_bound_lhs, lower_bound_rhs );
+    int upper_bound = sc_max( upper_bound_lhs, upper_bound_rhs );
 
-	int lower_bound = sc_min( lower_bound_lhs, lower_bound_rhs );
-	int upper_bound = sc_max( upper_bound_lhs, upper_bound_rhs );
+    new_wp   = -lower_bound;
+    len_mant = sc_max( min_mant, upper_bound - lower_bound + 1 ) + 1;
 
-	new_wp   = -lower_bound;
-	len_mant = sc_max( min_mant, upper_bound - lower_bound + 1 );
-
-	if( new_wp != lhs.m_wp || len_mant != lhs.size() )
-	{
-	    lhs_mant = lhs.resize( len_mant, new_wp );
-	    need_lhs = false;
-	}
-
-	if( new_wp != rhs.m_wp || len_mant != rhs.size() )
-        {
-	    rhs_mant = rhs.resize( len_mant, new_wp );
-	    need_rhs = false;
-	}
-    }
-
-    if( need_lhs )
-    {
-	lhs_mant = lhs.m_mant;
-    }
-
-    if( need_rhs )
-    {
-	rhs_mant = rhs.m_mant;
-    }
+    lhs_mant = lhs.resize( len_mant, new_wp );
+    rhs_mant = rhs.resize( len_mant, new_wp );
 }
 
 
