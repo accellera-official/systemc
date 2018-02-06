@@ -45,19 +45,19 @@ namespace sc_core {
 
 extern void pln();
 
-static int    argc_copy;	// Copy of argc value passed to sc_elab_and_sim.
-static char** argv_copy;	// Copy of argv value passed to sc_elab_and_sim.
+static int    argc_orig;  // Original argc value passed to sc_elab_and_sim.
+static char** argv_orig;  // Original argv value passed to sc_elab_and_sim.
 
 bool sc_in_action = false;
 
 int sc_argc()
 {
-    return argc_copy;
+    return argc_orig;
 }
 
 const char* const* sc_argv()
 {
-    return argv_copy;
+    return argv_orig;
 }
 
 
@@ -65,16 +65,16 @@ int
 sc_elab_and_sim( int argc, char* argv[] )
 {
     int status = 1;
-    argc_copy = argc;
-    argv_copy = argv;
+    argc_orig = argc;
+    argv_orig = argv;
 
     // Copy argv into a new structure to prevent sc_main from modifying the
     // result returned from sc_argv.
-    std::vector<char*> argv_call(argc + 1, static_cast<char*>(NULL));
+    std::vector<char*> argv_copy(argc + 1, static_cast<char*>(NULL));
     for ( int i = 0; i < argc; ++i ) {
         std::size_t size = std::strlen(argv[i]) + 1;
-        argv_call[i] = new char[size];
-        std::copy(argv[i], argv[i] + size, argv_call[i]);
+        argv_copy[i] = new char[size];
+        std::copy(argv[i], argv[i] + size, argv_copy[i]);
     }
 
     try
@@ -84,6 +84,8 @@ sc_elab_and_sim( int argc, char* argv[] )
         // Perform initialization here
         sc_in_action = true;
 
+        // copy array of pointers to keep allocated pointers for later release
+        std::vector<char*> argv_call = argv_copy;
         status = sc_main( argc, &argv_call[0] );
 
         // Perform cleanup here
@@ -105,7 +107,7 @@ sc_elab_and_sim( int argc, char* argv[] )
     }
 
     for ( int i = 0; i < argc; ++i ) {
-        delete[] argv_call[i];
+        delete[] argv_copy[i];
     }
 
     // IF DEPRECATION WARNINGS WERE ISSUED TELL THE USER HOW TO TURN THEM OFF
