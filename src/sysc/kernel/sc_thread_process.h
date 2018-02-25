@@ -470,7 +470,7 @@ sc_thread_process::trigger_static()
     //    (a) it is disabled
     //    (b) it is already queued for execution
     //    (c) it is waiting on a dynamic event
-    //    (d) its wait count is not satisfied
+    //    (d) its wait count is not satisfied and it is not currently in reset
 
     if ( (m_state & ps_bit_disabled) || is_runnable() ||
           m_trigger_type != STATIC )
@@ -484,7 +484,7 @@ sc_thread_process::trigger_static()
     }
 #endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
-    if ( m_wait_cycle_n > 0 )
+    if ( m_wait_cycle_n > 0 && THROW_NONE == m_throw_status )
     {
         --m_wait_cycle_n;
         return;
@@ -497,11 +497,10 @@ sc_thread_process::trigger_static()
     if ( m_state & ps_bit_suspended )
     {
         m_state = m_state | ps_bit_ready_to_run;
+        return;
     }
-    else
-    {
-	simcontext()->push_runnable_thread(this);
-    }
+
+    simcontext()->push_runnable_thread(this);
 }
 
 #undef DEBUG_MSG
