@@ -79,6 +79,7 @@ class sc_runnable;
 
 sc_cor* get_cor_pointer( sc_process_b* process_p );
 SC_API void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
+SC_API void wait( int, sc_simcontext* );
 SC_API void wait( sc_simcontext* );
 SC_API void wait( const sc_event&, sc_simcontext* );
 SC_API void wait( const sc_event_or_list&, sc_simcontext* );
@@ -105,6 +106,7 @@ class sc_thread_process : public sc_process_b {
     friend class sc_runnable;
     friend sc_cor* get_cor_pointer( sc_process_b* process_p );
 
+    friend void wait( int, sc_simcontext* );
     friend void wait( sc_simcontext* );
     friend void wait( const sc_event&, sc_simcontext* );
     friend void wait( const sc_event_or_list&, sc_simcontext* );

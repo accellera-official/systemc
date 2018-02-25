@@ -60,7 +60,7 @@ wait( sc_simcontext* simc )
     switch( cpi->kind ) {
     case SC_THREAD_PROC_:
     case SC_CTHREAD_PROC_: {
-	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_cycles();
+        reinterpret_cast<sc_thread_handle>( cpi->process_handle )->wait_cycles();
         break;
     }
     default:
