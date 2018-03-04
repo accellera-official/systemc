@@ -50,7 +50,8 @@ private:
 
     // In-class initialization of SC_CTHREAD, second parameter is clock edge,
     // third parameter is arbitrary initialization code
-    SC_CTHREAD_INST(adder_tester_cthread, clock.pos(),  { async_reset_signal_is(reset, true); } ) {
+    SC_CTHREAD_IMP(adder_tester_cthread, clock.pos(),
+                    { async_reset_signal_is(reset, true); } ) {
 
         wait();
 
@@ -103,7 +104,7 @@ private:
         adder_inst.din(din);
     }
 
-    SC_THREAD_INST(reset_thread, sensitive << clock.posedge_event();) {
+    SC_THREAD_IMP(reset_thread, sensitive << clock.posedge_event();) {
         reset = 1;
         wait();
         reset = 0;

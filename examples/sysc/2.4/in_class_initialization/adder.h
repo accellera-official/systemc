@@ -45,7 +45,7 @@ private:
     // In-class initialization of SC_METHOD
     // As a second parameter SC_METHOD_INST takes arbitrary code that can be used to initialize process
     // curly braces are optional
-    SC_METHOD_INST(add_method, { for(auto &d : din) sensitive << d; } ); // Body can be in or outside of class
+    SC_METHOD_IMP(add_method, { for(auto &d : din) sensitive << d; } ); // Body can be in or outside of class
 };
 
 template <typename T, int N_INPUTS>

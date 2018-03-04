@@ -38,30 +38,32 @@
 #include <utility>
 
 #define SC_INIT(object_name) \
-  sc_core::sc_initializer_function SC_CONCAT_HELPER_(object_name, _initialization_fn_lambda) { [&,this]() { \
+  sc_core::sc_initializer_function \
+  SC_CONCAT_HELPER_(object_name, _initialization_fn_lambda) { [this]() { \
   SC_CONCAT_HELPER_(object_name, _initialization_fn)(); \
   }};\
   void SC_CONCAT_HELPER_(object_name,_initialization_fn)()
 
 #define SC_NAMED_WITH_INIT(object_name,...) \
-  SC_NAMED(object_name,__VA_ARGS__); \
-  SC_INIT(object_name)
+  object_name { sc_initializer_function_name_fwd(SC_STRINGIFY_HELPER_(object_name), \
+   [this]{ SC_CONCAT_HELPER_(object_name,_initialization_fn)(); }), __VA_ARGS__ }; \
+  void SC_CONCAT_HELPER_(object_name,_initialization_fn)()
 
-#define SC_THREAD_INST(thread_name, ...) \
+#define SC_THREAD_IMP(thread_name, ...) \
   SC_INIT(thread_name) { \
     SC_THREAD(thread_name); \
     { __VA_ARGS__ } \
     } \
   void thread_name()
 
-#define SC_CTHREAD_INST(thread_name, edge, ...) \
+#define SC_CTHREAD_IMP(thread_name, edge, ...) \
   SC_INIT(thread_name) { \
     SC_CTHREAD(thread_name, edge); \
     { __VA_ARGS__ } \
     } \
   void thread_name()
 
-#define SC_METHOD_INST(method_name, ...) \
+#define SC_METHOD_IMP(method_name, ...) \
   SC_INIT(method_name) { \
     SC_METHOD(method_name); \
     { __VA_ARGS__ } \
@@ -92,6 +94,14 @@ struct sc_initializer_function {
         }
     }
 };
+
+template <class F>
+inline const char * sc_initializer_function_name_fwd (const char *name, F&& fn)
+{
+    sc_initializer_function(std::move(fn));
+    return name;
+}
+
 
 }
 
