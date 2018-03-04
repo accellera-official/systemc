@@ -45,7 +45,7 @@
   void SC_CONCAT_HELPER_(object_name,_initialization_fn)()
 
 #define SC_NAMED_WITH_INIT(object_name,...) \
-  object_name { sc_initializer_function_name_fwd(SC_STRINGIFY_HELPER_(object_name), \
+  object_name { sc_core::sc_initializer_function_name_fwd(SC_STRINGIFY_HELPER_(object_name), \
    [this]{ SC_CONCAT_HELPER_(object_name,_initialization_fn)(); }), __VA_ARGS__ }; \
   void SC_CONCAT_HELPER_(object_name,_initialization_fn)()
 
