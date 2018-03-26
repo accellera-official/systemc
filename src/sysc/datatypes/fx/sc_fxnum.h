@@ -79,12 +79,47 @@ namespace sc_dt
 {
 
 // classes defined in this module
+class sc_fxnum_bitref_r;
+class sc_fxnum_fast_bitref_r;
 class sc_fxnum_bitref;
 class sc_fxnum_fast_bitref;
+class sc_fxnum_subref_r;
+class sc_fxnum_fast_subref_r;
 class sc_fxnum_subref;
 class sc_fxnum_fast_subref;
 class sc_fxnum;
 class sc_fxnum_fast;
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_bitref_r
+//
+//  Read-only proxy class for bit-selection in class sc_fxnum
+// ----------------------------------------------------------------------------
+class SC_API sc_fxnum_bitref_r {
+    friend class sc_fxnum;
+    friend class sc_fxnum_fast_bitref;
+
+protected:
+
+    bool get() const;
+    sc_fxnum_bitref_r( sc_fxnum&, int );
+
+public:
+
+    sc_fxnum_bitref_r( const sc_fxnum_bitref_r& );
+
+    operator bool() const;
+
+    // print or dump content
+    void print( ::std::ostream& = ::std::cout ) const;
+    void dump( ::std::ostream& = ::std::cout ) const;
+
+protected:
+
+    sc_fxnum& m_num;
+    int       m_idx;
+};
 
 
 // ----------------------------------------------------------------------------
@@ -93,15 +128,11 @@ class sc_fxnum_fast;
 //  Proxy class for bit-selection in class sc_fxnum, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_fxnum_bitref
+class SC_API sc_fxnum_bitref : public sc_fxnum_bitref_r
 {
     friend class sc_fxnum;
-    friend class sc_fxnum_fast_bitref;
 
-
-    bool get() const;
     void set( bool );
-
 
     // constructor
 
@@ -135,26 +166,40 @@ public:
 #undef DECL_ASN_OP
 
 
-    // implicit conversion
+    void scan( ::std::istream& = ::std::cin );
+
+};
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_fast_bitref_r
+//
+//  Read-only proxy class for bit-selection in class sc_fxnum_fast
+// ----------------------------------------------------------------------------
+
+class SC_API sc_fxnum_fast_bitref_r
+{
+    friend class sc_fxnum_fast;
+    friend class sc_fxnum_bitref;
+
+protected:
+    bool get() const;
+    sc_fxnum_fast_bitref_r( sc_fxnum_fast&, int );
+
+public:
+
+    // copy constructor
+
+    sc_fxnum_fast_bitref_r( const sc_fxnum_fast_bitref_r& );
 
     operator bool() const;
 
-
-    // print or dump content
-
     void print( ::std::ostream& = ::std::cout ) const;
-    void scan( ::std::istream& = ::std::cin );
     void dump( ::std::ostream& = ::std::cout ) const;
 
-private:
+protected:
 
-    sc_fxnum& m_num;
-    int       m_idx;
-
-private:
-
-    // disabled
-    sc_fxnum_bitref();
+    sc_fxnum_fast& m_num;
+    int            m_idx;
 };
 
 
@@ -164,26 +209,17 @@ private:
 //  Proxy class for bit-selection in class sc_fxnum_fast, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_fxnum_fast_bitref
+class SC_API sc_fxnum_fast_bitref : public sc_fxnum_fast_bitref_r
 {
     friend class sc_fxnum_fast;
-    friend class sc_fxnum_bitref;
 
-
-    bool get() const;
     void set( bool );
-
-
-    // constructor
 
     sc_fxnum_fast_bitref( sc_fxnum_fast&, int );
 
 public:
 
-    // copy constructor
-
     sc_fxnum_fast_bitref( const sc_fxnum_fast_bitref& );
-
 
     // assignment operators
 
@@ -205,115 +241,49 @@ public:
 #undef DECL_ASN_OP_T
 #undef DECL_ASN_OP
 
-
-    // implicit conversion
-
-    operator bool() const;
-
-
-    // print or dump content
-
-    void print( ::std::ostream& = ::std::cout ) const;
     void scan( ::std::istream& = ::std::cin );
-    void dump( ::std::ostream& = ::std::cout ) const;
-
-private:
-
-    sc_fxnum_fast& m_num;
-    int            m_idx;
-
-private:
-
-    // disabled
-    sc_fxnum_fast_bitref();
 };
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_fxnum_subref
+//  CLASS : sc_fxnum_subref_r
 //
-//  Proxy class for part-selection in class sc_fxnum,
+//  Read-only proxy class for part-selection in class sc_fxnum,
 //  behaves like sc_bv_base.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_fxnum_subref
+class SC_API sc_fxnum_subref_r
 {
     friend class sc_fxnum;
-    friend class sc_fxnum_fast_subref;
+
+protected:
 
     bool get() const;
-    bool set();
 
-
-    // constructor
-
-    sc_fxnum_subref( sc_fxnum&, int, int );
+    sc_fxnum_subref_r( sc_fxnum&, int, int );
 
 public:
 
     // copy constructor
 
-    sc_fxnum_subref( const sc_fxnum_subref& );
+    sc_fxnum_subref_r( const sc_fxnum_subref_r& );
 
 
     // destructor
 
-    ~sc_fxnum_subref();
-
-
-    // assignment operators
-
-#define DECL_ASN_OP_T(tp)                                                     \
-    sc_fxnum_subref& operator = ( tp );
-
-    DECL_ASN_OP_T(const sc_fxnum_subref&)
-    DECL_ASN_OP_T(const sc_fxnum_fast_subref&)
-    DECL_ASN_OP_T(const sc_bv_base&)
-    DECL_ASN_OP_T(const sc_lv_base&)
-    DECL_ASN_OP_T(const char*)
-    DECL_ASN_OP_T(const bool*)
-    DECL_ASN_OP_T(const sc_signed&)
-    DECL_ASN_OP_T(const sc_unsigned&)
-    DECL_ASN_OP_T(const sc_int_base&)
-    DECL_ASN_OP_T(const sc_uint_base&)
-    DECL_ASN_OP_T(int64)
-    DECL_ASN_OP_T(uint64)
-    DECL_ASN_OP_T(int)
-    DECL_ASN_OP_T(unsigned int)
-    DECL_ASN_OP_T(long)
-    DECL_ASN_OP_T(unsigned long)
-    DECL_ASN_OP_T(char)
-
-#undef DECL_ASN_OP_T
-
-#define DECL_ASN_OP_T_A(op,tp)                                                \
-    sc_fxnum_subref& operator op ## = ( tp );
-
-#define DECL_ASN_OP_A(op)                                                     \
-    DECL_ASN_OP_T_A(op,const sc_fxnum_subref&)                                \
-    DECL_ASN_OP_T_A(op,const sc_fxnum_fast_subref&)                           \
-    DECL_ASN_OP_T_A(op,const sc_bv_base&)                                     \
-    DECL_ASN_OP_T_A(op,const sc_lv_base&)
-
-    DECL_ASN_OP_A(&)
-    DECL_ASN_OP_A(|)
-    DECL_ASN_OP_A(^)
-
-#undef DECL_ASN_OP_T_A
-#undef DECL_ASN_OP_A
-
+    ~sc_fxnum_subref_r();
 
     // relational operators
 
 #define DECL_REL_OP_T(op,tp)                                                  \
-    friend bool operator op ( const sc_fxnum_subref&, tp );                   \
-    friend bool operator op ( tp, const sc_fxnum_subref& );
+    friend bool operator op ( const sc_fxnum_subref_r&, tp );                 \
+    friend bool operator op ( tp, const sc_fxnum_subref_r& );
 
 #define DECL_REL_OP(op)                                                       \
-    friend bool operator op ( const sc_fxnum_subref&,                         \
-			      const sc_fxnum_subref& );                       \
-    friend bool operator op ( const sc_fxnum_subref&,                         \
-			      const sc_fxnum_fast_subref& );                  \
+    friend bool operator op ( const sc_fxnum_subref_r&,                       \
+                  const sc_fxnum_subref_r& );                       \
+    friend bool operator op ( const sc_fxnum_subref_r&,                       \
+                  const sc_fxnum_fast_subref_r& );                \
     DECL_REL_OP_T(op,const sc_bv_base&)                                       \
     DECL_REL_OP_T(op,const sc_lv_base&)                                       \
     DECL_REL_OP_T(op,const char*)                                             \
@@ -374,22 +344,197 @@ public:
     // print or dump content
 
     void print( ::std::ostream& = ::std::cout ) const;
-    void scan( ::std::istream& = ::std::cin );
     void dump( ::std::ostream& = ::std::cout ) const;
 
-private:
+protected:
 
     sc_fxnum& m_num;
     int       m_from;
     int       m_to;
 
     sc_bv_base& m_bv;
-
-private:
-
-    // disabled
-    sc_fxnum_subref();
 };
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_subref
+//
+//  Proxy class for part-selection in class sc_fxnum,
+//  behaves like sc_bv_base.
+// ----------------------------------------------------------------------------
+
+class SC_API sc_fxnum_subref : public sc_fxnum_subref_r
+{
+    friend class sc_fxnum;
+    friend class sc_fxnum_fast_subref;
+
+    bool set();
+
+    // constructor
+
+    sc_fxnum_subref( sc_fxnum&, int, int );
+
+public:
+
+    // copy constructor
+
+    sc_fxnum_subref( const sc_fxnum_subref& );
+
+    // assignment operators
+
+#define DECL_ASN_OP_T(tp)                                                     \
+    sc_fxnum_subref& operator = ( tp );
+
+    DECL_ASN_OP_T(const sc_fxnum_subref&)
+    DECL_ASN_OP_T(const sc_fxnum_fast_subref&)
+    DECL_ASN_OP_T(const sc_bv_base&)
+    DECL_ASN_OP_T(const sc_lv_base&)
+    DECL_ASN_OP_T(const char*)
+    DECL_ASN_OP_T(const bool*)
+    DECL_ASN_OP_T(const sc_signed&)
+    DECL_ASN_OP_T(const sc_unsigned&)
+    DECL_ASN_OP_T(const sc_int_base&)
+    DECL_ASN_OP_T(const sc_uint_base&)
+    DECL_ASN_OP_T(int64)
+    DECL_ASN_OP_T(uint64)
+    DECL_ASN_OP_T(int)
+    DECL_ASN_OP_T(unsigned int)
+    DECL_ASN_OP_T(long)
+    DECL_ASN_OP_T(unsigned long)
+    DECL_ASN_OP_T(char)
+
+#undef DECL_ASN_OP_T
+
+#define DECL_ASN_OP_T_A(op,tp)                                                \
+    sc_fxnum_subref& operator op ## = ( tp );
+
+#define DECL_ASN_OP_A(op)                                                     \
+    DECL_ASN_OP_T_A(op,const sc_fxnum_subref&)                                \
+    DECL_ASN_OP_T_A(op,const sc_fxnum_fast_subref&)                           \
+    DECL_ASN_OP_T_A(op,const sc_bv_base&)                                     \
+    DECL_ASN_OP_T_A(op,const sc_lv_base&)
+
+    DECL_ASN_OP_A(&)
+    DECL_ASN_OP_A(|)
+    DECL_ASN_OP_A(^)
+
+#undef DECL_ASN_OP_T_A
+#undef DECL_ASN_OP_A
+
+    void scan( ::std::istream& = ::std::cin );
+
+};
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_fast_subref_r
+//
+//  Read-only proxy class for part-selection in class sc_fxnum_fast,
+//  behaves like sc_bv_base.
+// ----------------------------------------------------------------------------
+
+class SC_API sc_fxnum_fast_subref_r
+{
+    friend class sc_fxnum_fast;
+
+protected:
+
+    bool get() const;
+
+    sc_fxnum_fast_subref_r( sc_fxnum_fast&, int, int );
+
+public:
+
+    // copy constructor
+
+    sc_fxnum_fast_subref_r( const sc_fxnum_fast_subref_r& );
+
+    // destructor
+
+    ~sc_fxnum_fast_subref_r();
+
+    // relational operators
+
+#define DECL_REL_OP_T(op,tp)                                                  \
+    friend bool operator op ( const sc_fxnum_fast_subref_r&, tp );            \
+    friend bool operator op ( tp, const sc_fxnum_fast_subref_r& );
+
+#define DECL_REL_OP(op)                                                       \
+    friend bool operator op ( const sc_fxnum_fast_subref_r&,                  \
+                  const sc_fxnum_fast_subref_r& );                \
+    friend bool operator op ( const sc_fxnum_fast_subref_r&,                  \
+                  const sc_fxnum_subref_r& );                     \
+    DECL_REL_OP_T(op,const sc_bv_base&)                                       \
+    DECL_REL_OP_T(op,const sc_lv_base&)                                       \
+    DECL_REL_OP_T(op,const char*)                                             \
+    DECL_REL_OP_T(op,const bool*)                                             \
+    DECL_REL_OP_T(op,const sc_signed&)                                        \
+    DECL_REL_OP_T(op,const sc_unsigned&)                                      \
+    DECL_REL_OP_T(op,int)                                                     \
+    DECL_REL_OP_T(op,unsigned int)                                            \
+    DECL_REL_OP_T(op,long)                                                    \
+    DECL_REL_OP_T(op,unsigned long)
+
+    DECL_REL_OP(==)
+    DECL_REL_OP(!=)
+
+#undef DECL_REL_OP_T
+#undef DECL_REL_OP
+
+
+    // reduce functions
+
+    bool and_reduce() const;
+    bool nand_reduce() const;
+    bool or_reduce() const;
+    bool nor_reduce() const;
+    bool xor_reduce() const;
+    bool xnor_reduce() const;
+
+
+    // query parameter
+
+    int length() const;
+
+
+    // explicit conversions
+
+    int           to_int() const;
+    unsigned int  to_uint() const;
+    long          to_long() const;
+    unsigned long to_ulong() const;
+    int64         to_int64() const;
+    uint64        to_uint64() const;
+
+#ifdef SC_DT_DEPRECATED
+    int           to_signed() const;
+    unsigned int  to_unsigned() const;
+#endif
+
+    const std::string to_string() const;
+    const std::string to_string( sc_numrep ) const;
+    const std::string to_string( sc_numrep, bool ) const;
+
+
+    // implicit conversion
+
+    operator sc_bv_base() const;
+
+
+    // print or dump content
+
+    void print( ::std::ostream& = ::std::cout ) const;
+    void dump( ::std::ostream& = ::std::cout ) const;
+
+protected:
+
+    sc_fxnum_fast& m_num;
+    int            m_from;
+    int            m_to;
+
+    sc_bv_base& m_bv;
+};
+
 
 
 // ----------------------------------------------------------------------------
@@ -399,14 +544,12 @@ private:
 //  behaves like sc_bv_base.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_fxnum_fast_subref
+class SC_API sc_fxnum_fast_subref : public sc_fxnum_fast_subref_r
 {
     friend class sc_fxnum_fast;
     friend class sc_fxnum_subref;
 
-    bool get() const;
     bool set();
-
 
     // constructor
 
@@ -417,11 +560,6 @@ public:
     // copy constructor
 
     sc_fxnum_fast_subref( const sc_fxnum_fast_subref& );
-
-
-    // destructor
-
-    ~sc_fxnum_fast_subref();
 
 
     // assignment operators
@@ -465,93 +603,7 @@ public:
 #undef DECL_ASN_OP_T_A
 #undef DECL_ASN_OP_A
 
-
-    // relational operators
-
-#define DECL_REL_OP_T(op,tp)                                                  \
-    friend bool operator op ( const sc_fxnum_fast_subref&, tp );              \
-    friend bool operator op ( tp, const sc_fxnum_fast_subref& );
-
-#define DECL_REL_OP(op)                                                       \
-    friend bool operator op ( const sc_fxnum_fast_subref&,                    \
-			      const sc_fxnum_fast_subref& );                  \
-    friend bool operator op ( const sc_fxnum_fast_subref&,                    \
-			      const sc_fxnum_subref& );                       \
-    DECL_REL_OP_T(op,const sc_bv_base&)                                       \
-    DECL_REL_OP_T(op,const sc_lv_base&)                                       \
-    DECL_REL_OP_T(op,const char*)                                             \
-    DECL_REL_OP_T(op,const bool*)                                             \
-    DECL_REL_OP_T(op,const sc_signed&)                                        \
-    DECL_REL_OP_T(op,const sc_unsigned&)                                      \
-    DECL_REL_OP_T(op,int)                                                     \
-    DECL_REL_OP_T(op,unsigned int)                                            \
-    DECL_REL_OP_T(op,long)                                                    \
-    DECL_REL_OP_T(op,unsigned long)
-
-    DECL_REL_OP(==)
-    DECL_REL_OP(!=)
-
-#undef DECL_REL_OP_T
-#undef DECL_REL_OP
-
-
-    // reduce functions
-
-    bool and_reduce() const;
-    bool nand_reduce() const;
-    bool or_reduce() const;
-    bool nor_reduce() const;
-    bool xor_reduce() const;
-    bool xnor_reduce() const;
-
-
-    // query parameter
-
-    int length() const;
-
-
-    // explicit conversions
-
-    int           to_int() const;
-    unsigned int  to_uint() const;
-    long          to_long() const;
-    unsigned long to_ulong() const;
-    int64         to_int64() const;
-    uint64        to_uint64() const;
-
-#ifdef SC_DT_DEPRECATED
-    int           to_signed() const;
-    unsigned int  to_unsigned() const;
-#endif
-
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
-
-
-    // implicit conversion
-
-    operator sc_bv_base() const;
-
-
-    // print or dump content
-
-    void print( ::std::ostream& = ::std::cout ) const;
     void scan( ::std::istream& = ::std::cin );
-    void dump( ::std::ostream& = ::std::cout ) const;
-
-private:
-
-    sc_fxnum_fast& m_num;
-    int            m_from;
-    int            m_to;
-
-    sc_bv_base& m_bv;
-
-private:
-
-    // disabled
-    sc_fxnum_fast_subref();
 };
 
 
@@ -566,7 +618,9 @@ class SC_API sc_fxnum
     friend class sc_fxval;
 
     friend class sc_fxnum_bitref;
+    friend class sc_fxnum_bitref_r;
     friend class sc_fxnum_subref;
+    friend class sc_fxnum_subref_r;
     friend class sc_fxnum_fast_bitref;
     friend class sc_fxnum_fast_subref;
 
@@ -854,26 +908,26 @@ public:
 
     // bit selection
 
-    const sc_fxnum_bitref operator [] ( int ) const;
+    sc_fxnum_bitref_r     operator [] ( int ) const;
     sc_fxnum_bitref       operator [] ( int );
 
-    const sc_fxnum_bitref bit( int ) const;
+    sc_fxnum_bitref_r     bit( int ) const;
     sc_fxnum_bitref       bit( int );
 
 
     // part selection
 
-    const sc_fxnum_subref operator () ( int, int ) const;
+    sc_fxnum_subref_r     operator () ( int, int ) const;
     sc_fxnum_subref       operator () ( int, int );
 
-    const sc_fxnum_subref range( int, int ) const;
+    sc_fxnum_subref_r     range( int, int ) const;
     sc_fxnum_subref       range( int, int );
 
 
-    const sc_fxnum_subref operator () () const;
+    sc_fxnum_subref_r     operator () () const;
     sc_fxnum_subref       operator () ();
 
-    const sc_fxnum_subref range() const;
+    sc_fxnum_subref_r     range() const;
     sc_fxnum_subref       range();
 
 
@@ -995,7 +1049,9 @@ class SC_API sc_fxnum_fast
     friend class sc_fxnum_bitref;
     friend class sc_fxnum_subref;
     friend class sc_fxnum_fast_bitref;
+    friend class sc_fxnum_fast_bitref_r;
     friend class sc_fxnum_fast_subref;
+    friend class sc_fxnum_fast_subref_r;
 
     friend class sc_core::vcd_sc_fxnum_fast_trace;
     friend class sc_core::wif_sc_fxnum_fast_trace;
@@ -1278,26 +1334,26 @@ public:
 
     // bit selection
 
-    const sc_fxnum_fast_bitref operator [] ( int ) const;
-    sc_fxnum_fast_bitref       operator [] ( int );
+    sc_fxnum_fast_bitref_r operator [] ( int ) const;
+    sc_fxnum_fast_bitref   operator [] ( int );
 
-    const sc_fxnum_fast_bitref bit( int ) const;
-    sc_fxnum_fast_bitref       bit( int );
+    sc_fxnum_fast_bitref_r bit( int ) const;
+    sc_fxnum_fast_bitref   bit( int );
 
 
     // part selection
 
-    const sc_fxnum_fast_subref operator () ( int, int ) const;
+    sc_fxnum_fast_subref_r     operator () ( int, int ) const;
     sc_fxnum_fast_subref       operator () ( int, int );
 
-    const sc_fxnum_fast_subref range( int, int ) const;
+    sc_fxnum_fast_subref_r     range( int, int ) const;
     sc_fxnum_fast_subref       range( int, int );
 
 
-    const sc_fxnum_fast_subref operator () () const;
+    sc_fxnum_fast_subref_r     operator () () const;
     sc_fxnum_fast_subref       operator () ();
 
-    const sc_fxnum_fast_subref range() const;
+    sc_fxnum_fast_subref_r     range() const;
     sc_fxnum_fast_subref       range();
 
 
@@ -1409,16 +1465,51 @@ private:
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_bitref_r
+// ----------------------------------------------------------------------------
+
+inline
+sc_fxnum_bitref_r::sc_fxnum_bitref_r(sc_fxnum& num_, int idx_ )
+    : m_num(num_) , m_idx(idx_)
+{ }
+
+inline
+sc_fxnum_bitref_r::sc_fxnum_bitref_r( const sc_fxnum_bitref_r& a )
+    : m_num( a.m_num ), m_idx ( a.m_idx )
+{}
+
+
+// implicit conversion
+
+inline
+sc_fxnum_bitref_r::operator bool() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    return get();
+}
+
+
+inline
+::std::ostream&
+operator << ( ::std::ostream& os, const sc_fxnum_bitref_r& a )
+{
+    a.print( os );
+    return os;
+}
+
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_fxnum_bitref
 //
 //  Proxy class for bit-selection in class sc_fxnum, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
+
 // constructor
 
 inline
 sc_fxnum_bitref::sc_fxnum_bitref( sc_fxnum& num_, int idx_ )
-    : m_num( num_ ), m_idx( idx_ )
+    : sc_fxnum_bitref_r ( num_ , idx_ )
 {}
 
 
@@ -1426,7 +1517,7 @@ sc_fxnum_bitref::sc_fxnum_bitref( sc_fxnum& num_, int idx_ )
 
 inline
 sc_fxnum_bitref::sc_fxnum_bitref( const sc_fxnum_bitref& a )
-    : m_num( a.m_num ), m_idx( a.m_idx )
+    : sc_fxnum_bitref_r( a )
 {}
 
 
@@ -1603,30 +1694,43 @@ sc_fxnum_bitref::operator ^= ( bool b )
 }
 
 
-// implicit conversion
-
-inline
-sc_fxnum_bitref::operator bool() const
-{
-    SC_FXNUM_OBSERVER_READ_( m_num )
-    return get();
-}
-
-
-inline
-::std::ostream&
-operator << ( ::std::ostream& os, const sc_fxnum_bitref& a )
-{
-    a.print( os );
-    return os;
-}
-
 inline
 ::std::istream&
 operator >> ( ::std::istream& is, sc_fxnum_bitref& a )
 {
     a.scan( is );
     return is;
+}
+
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_fast_bitref_r
+// ----------------------------------------------------------------------------
+
+inline
+sc_fxnum_fast_bitref_r::sc_fxnum_fast_bitref_r( sc_fxnum_fast& num_, int idx_ )
+    : m_num( num_ ), m_idx( idx_ )
+{}
+
+inline
+sc_fxnum_fast_bitref_r::sc_fxnum_fast_bitref_r( const sc_fxnum_fast_bitref_r& a )
+    : m_num( a.m_num ), m_idx( a.m_idx )
+{}
+
+inline
+sc_fxnum_fast_bitref_r::operator bool() const
+{
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
+    return get();
+}
+
+inline
+::std::ostream&
+operator << ( ::std::ostream& os, const sc_fxnum_fast_bitref_r& a )
+{
+    a.print( os );
+    return os;
 }
 
 
@@ -1640,7 +1744,7 @@ operator >> ( ::std::istream& is, sc_fxnum_bitref& a )
 
 inline
 sc_fxnum_fast_bitref::sc_fxnum_fast_bitref( sc_fxnum_fast& num_, int idx_ )
-    : m_num( num_ ), m_idx( idx_ )
+    : sc_fxnum_fast_bitref_r( num_ , idx_ )
 {}
 
 
@@ -1648,7 +1752,7 @@ sc_fxnum_fast_bitref::sc_fxnum_fast_bitref( sc_fxnum_fast& num_, int idx_ )
 
 inline
 sc_fxnum_fast_bitref::sc_fxnum_fast_bitref( const sc_fxnum_fast_bitref& a )
-    : m_num( a.m_num ), m_idx( a.m_idx )
+    : sc_fxnum_fast_bitref_r( a )
 {}
 
 
@@ -1825,30 +1929,229 @@ sc_fxnum_fast_bitref::operator ^= ( bool b )
 }
 
 
-// implicit conversion
-
-inline
-sc_fxnum_fast_bitref::operator bool() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    return get();
-}
-
-
-inline
-::std::ostream&
-operator << ( ::std::ostream& os, const sc_fxnum_fast_bitref& a )
-{
-    a.print( os );
-    return os;
-}
-
 inline
 ::std::istream&
 operator >> ( ::std::istream& is, sc_fxnum_fast_bitref& a )
 {
     a.scan( is );
     return is;
+}
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_subref_r
+// ----------------------------------------------------------------------------
+
+inline
+sc_fxnum_subref_r::sc_fxnum_subref_r( sc_fxnum& num_, int from_, int to_ )
+    : m_num( num_ ), m_from( from_ ), m_to( to_ ),
+      m_bv( *new sc_bv_base( sc_max( m_from, m_to ) -
+                 sc_min( m_from, m_to ) + 1 ) )
+{}
+
+
+inline
+sc_fxnum_subref_r::sc_fxnum_subref_r( const sc_fxnum_subref_r& a )
+    : m_num( a.m_num ), m_from( a.m_from ), m_to( a.m_to ),
+      m_bv( *new sc_bv_base( a.m_bv ) )
+{}
+
+inline
+sc_fxnum_subref_r::~sc_fxnum_subref_r()
+{
+    delete &m_bv;
+}
+
+// relational operators
+
+#define DEFN_REL_OP_T(op,tp)                                                  \
+inline                                                                        \
+bool                                                                          \
+operator op ( const sc_fxnum_subref_r& a, tp b )                                \
+{                                                                             \
+    return ( static_cast<sc_bv_base>( a ) op b );                             \
+}                                                                             \
+                                                                              \
+inline                                                                        \
+bool                                                                          \
+operator op ( tp a, const sc_fxnum_subref_r& b )                                \
+{                                                                             \
+    return ( static_cast<sc_bv_base>( b ) op a );                             \
+}
+
+#define DEFN_REL_OP(op)                                                       \
+inline                                                                        \
+bool                                                                          \
+operator op ( const sc_fxnum_subref_r& a, const sc_fxnum_subref_r& b )        \
+{                                                                             \
+    return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
+}                                                                             \
+                                                                              \
+inline                                                                        \
+bool                                                                          \
+operator op ( const sc_fxnum_subref_r& a, const sc_fxnum_fast_subref_r& b )   \
+{                                                                             \
+    return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
+}                                                                             \
+                                                                              \
+DEFN_REL_OP_T(op,const sc_bv_base&)                                           \
+DEFN_REL_OP_T(op,const sc_lv_base&)                                           \
+DEFN_REL_OP_T(op,const char*)                                                 \
+DEFN_REL_OP_T(op,const bool*)                                                 \
+DEFN_REL_OP_T(op,const sc_signed&)                                            \
+DEFN_REL_OP_T(op,const sc_unsigned&)                                          \
+DEFN_REL_OP_T(op,int)                                                         \
+DEFN_REL_OP_T(op,unsigned int)                                                \
+DEFN_REL_OP_T(op,long)                                                        \
+DEFN_REL_OP_T(op,unsigned long)
+
+DEFN_REL_OP(==)
+DEFN_REL_OP(!=)
+
+#undef DEFN_REL_OP_T
+#undef DEFN_REL_OP
+
+
+// reduce functions
+
+#define DEFN_RED_FNC(fnc)                                                     \
+inline                                                                        \
+bool                                                                          \
+sc_fxnum_subref_r::fnc() const                                                  \
+{                                                                             \
+    SC_FXNUM_OBSERVER_READ_( m_num )                                          \
+    get();                                                                    \
+    return static_cast<bool>( m_bv.fnc() );                                   \
+}
+
+DEFN_RED_FNC(and_reduce)
+DEFN_RED_FNC(nand_reduce)
+DEFN_RED_FNC(or_reduce)
+DEFN_RED_FNC(nor_reduce)
+DEFN_RED_FNC(xor_reduce)
+DEFN_RED_FNC(xnor_reduce)
+
+#undef DEFN_RED_FNC
+
+
+// query parameter
+
+inline
+int
+sc_fxnum_subref_r::length() const
+{
+    return m_bv.length();
+}
+
+
+// explicit conversions
+
+inline
+int
+sc_fxnum_subref_r::to_int() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_int();
+}
+
+inline
+int64
+sc_fxnum_subref_r::to_int64() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_int64();
+}
+
+inline
+unsigned int
+sc_fxnum_subref_r::to_uint() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_uint();
+}
+
+inline
+uint64
+sc_fxnum_subref_r::to_uint64() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_uint64();
+}
+
+inline
+long
+sc_fxnum_subref_r::to_long() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_long();
+}
+
+inline
+unsigned long
+sc_fxnum_subref_r::to_ulong() const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv.to_ulong();
+}
+
+
+#ifdef SC_DT_DEPRECATED
+
+inline
+int
+sc_fxnum_subref_r::to_signed() const
+{
+    return to_int();
+}
+
+inline
+unsigned int
+sc_fxnum_subref_r::to_unsigned() const
+{
+    return to_uint();
+}
+
+#endif
+
+
+inline
+const std::string
+sc_fxnum_subref_r::to_string() const
+{
+    get();
+    return m_bv.to_string();
+}
+
+inline
+const std::string
+sc_fxnum_subref_r::to_string( sc_numrep numrep ) const
+{
+    get();
+    return m_bv.to_string( numrep );
+}
+
+inline
+const std::string
+sc_fxnum_subref_r::to_string( sc_numrep numrep, bool w_prefix ) const
+{
+    get();
+    return m_bv.to_string( numrep, w_prefix );
+}
+
+// implicit conversion
+
+inline
+sc_fxnum_subref_r::operator sc_bv_base () const
+{
+    SC_FXNUM_OBSERVER_READ_( m_num )
+    get();
+    return m_bv;
 }
 
 
@@ -1863,9 +2166,7 @@ operator >> ( ::std::istream& is, sc_fxnum_fast_bitref& a )
 
 inline
 sc_fxnum_subref::sc_fxnum_subref( sc_fxnum& num_, int from_, int to_ )
-    : m_num( num_ ), m_from( from_ ), m_to( to_ ),
-      m_bv( *new sc_bv_base( sc_max( m_from, m_to ) -
-			     sc_min( m_from, m_to ) + 1 ) )
+    : sc_fxnum_subref_r (num_, from_, to_)
 {}
 
 
@@ -1873,18 +2174,9 @@ sc_fxnum_subref::sc_fxnum_subref( sc_fxnum& num_, int from_, int to_ )
 
 inline
 sc_fxnum_subref::sc_fxnum_subref( const sc_fxnum_subref& a )
-    : m_num( a.m_num ), m_from( a.m_from ), m_to( a.m_to ),
-      m_bv( *new sc_bv_base( a.m_bv ) )
+    : sc_fxnum_subref_r( a )
 {}
 
-
-// destructor
-
-inline
-sc_fxnum_subref::~sc_fxnum_subref()
-{
-    delete &m_bv;
-}
 
 
 // assignment operators
@@ -1991,19 +2283,60 @@ DEFN_ASN_OP(^)
 #undef DEFN_ASN_OP
 
 
+inline
+::std::ostream&
+operator << ( ::std::ostream& os, const sc_fxnum_subref& a )
+{
+    a.print( os );
+    return os;
+}
+
+inline
+::std::istream&
+operator >> ( ::std::istream& is, sc_fxnum_subref& a )
+{
+    a.scan( is );
+    return is;
+}
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_fxnum_fast_subref_r
+// ----------------------------------------------------------------------------
+
+inline
+sc_fxnum_fast_subref_r::sc_fxnum_fast_subref_r(sc_fxnum_fast & num_,
+                                               int from_, int to_)
+    : m_num(num_), m_from(from_), m_to(to_),
+      m_bv( *new sc_bv_base( sc_max( m_from, m_to ) -
+                             sc_min( m_from, m_to ) + 1 ) )
+{}
+
+inline
+sc_fxnum_fast_subref_r::sc_fxnum_fast_subref_r(const sc_fxnum_fast_subref_r & a)
+    : m_num( a.m_num ), m_from( a.m_from ), m_to( a.m_to ),
+      m_bv( *new sc_bv_base( a.m_bv ) )
+
+{}
+
+inline
+sc_fxnum_fast_subref_r::~sc_fxnum_fast_subref_r()
+{
+    delete &m_bv;
+}
+
 // relational operators
 
 #define DEFN_REL_OP_T(op,tp)                                                  \
 inline                                                                        \
 bool                                                                          \
-operator op ( const sc_fxnum_subref& a, tp b )                                \
+operator op ( const sc_fxnum_fast_subref_r& a, tp b )                         \
 {                                                                             \
     return ( static_cast<sc_bv_base>( a ) op b );                             \
 }                                                                             \
                                                                               \
 inline                                                                        \
 bool                                                                          \
-operator op ( tp a, const sc_fxnum_subref& b )                                \
+operator op ( tp a, const sc_fxnum_fast_subref_r& b )                         \
 {                                                                             \
     return ( static_cast<sc_bv_base>( b ) op a );                             \
 }
@@ -2011,14 +2344,15 @@ operator op ( tp a, const sc_fxnum_subref& b )                                \
 #define DEFN_REL_OP(op)                                                       \
 inline                                                                        \
 bool                                                                          \
-operator op ( const sc_fxnum_subref& a, const sc_fxnum_subref& b )            \
+operator op ( const sc_fxnum_fast_subref_r& a,                                \
+            const sc_fxnum_fast_subref_r& b )                                 \
 {                                                                             \
     return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
 }                                                                             \
                                                                               \
 inline                                                                        \
 bool                                                                          \
-operator op ( const sc_fxnum_subref& a, const sc_fxnum_fast_subref& b )       \
+operator op ( const sc_fxnum_fast_subref_r& a, const sc_fxnum_subref_r& b )   \
 {                                                                             \
     return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
 }                                                                             \
@@ -2046,9 +2380,9 @@ DEFN_REL_OP(!=)
 #define DEFN_RED_FNC(fnc)                                                     \
 inline                                                                        \
 bool                                                                          \
-sc_fxnum_subref::fnc() const                                                  \
+sc_fxnum_fast_subref_r::fnc() const                                             \
 {                                                                             \
-    SC_FXNUM_OBSERVER_READ_( m_num )                                          \
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )                                     \
     get();                                                                    \
     return static_cast<bool>( m_bv.fnc() );                                   \
 }
@@ -2067,7 +2401,7 @@ DEFN_RED_FNC(xnor_reduce)
 
 inline
 int
-sc_fxnum_subref::length() const
+sc_fxnum_fast_subref_r::length() const
 {
     return m_bv.length();
 }
@@ -2077,54 +2411,54 @@ sc_fxnum_subref::length() const
 
 inline
 int
-sc_fxnum_subref::to_int() const
+sc_fxnum_fast_subref_r::to_int() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_int();
 }
 
 inline
 int64
-sc_fxnum_subref::to_int64() const
+sc_fxnum_fast_subref_r::to_int64() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_int64();
 }
 
 inline
 unsigned int
-sc_fxnum_subref::to_uint() const
+sc_fxnum_fast_subref_r::to_uint() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_uint();
 }
 
 inline
 uint64
-sc_fxnum_subref::to_uint64() const
+sc_fxnum_fast_subref_r::to_uint64() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_uint64();
 }
 
 inline
 long
-sc_fxnum_subref::to_long() const
+sc_fxnum_fast_subref_r::to_long() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_long();
 }
 
 inline
 unsigned long
-sc_fxnum_subref::to_ulong() const
+sc_fxnum_fast_subref_r::to_ulong() const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv.to_ulong();
 }
@@ -2134,14 +2468,14 @@ sc_fxnum_subref::to_ulong() const
 
 inline
 int
-sc_fxnum_subref::to_signed() const
+sc_fxnum_fast_subref_r::to_signed() const
 {
     return to_int();
 }
 
 inline
 unsigned int
-sc_fxnum_subref::to_unsigned() const
+sc_fxnum_fast_subref_r::to_unsigned() const
 {
     return to_uint();
 }
@@ -2151,7 +2485,7 @@ sc_fxnum_subref::to_unsigned() const
 
 inline
 const std::string
-sc_fxnum_subref::to_string() const
+sc_fxnum_fast_subref_r::to_string() const
 {
     get();
     return m_bv.to_string();
@@ -2159,7 +2493,7 @@ sc_fxnum_subref::to_string() const
 
 inline
 const std::string
-sc_fxnum_subref::to_string( sc_numrep numrep ) const
+sc_fxnum_fast_subref_r::to_string( sc_numrep numrep ) const
 {
     get();
     return m_bv.to_string( numrep );
@@ -2167,7 +2501,7 @@ sc_fxnum_subref::to_string( sc_numrep numrep ) const
 
 inline
 const std::string
-sc_fxnum_subref::to_string( sc_numrep numrep, bool w_prefix ) const
+sc_fxnum_fast_subref_r::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     get();
     return m_bv.to_string( numrep, w_prefix );
@@ -2177,30 +2511,20 @@ sc_fxnum_subref::to_string( sc_numrep numrep, bool w_prefix ) const
 // implicit conversion
 
 inline
-sc_fxnum_subref::operator sc_bv_base () const
+sc_fxnum_fast_subref_r::operator sc_bv_base () const
 {
-    SC_FXNUM_OBSERVER_READ_( m_num )
+    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
     get();
     return m_bv;
 }
 
-
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_fxnum_subref& a )
+operator << ( ::std::ostream& os, const sc_fxnum_fast_subref_r& a )
 {
     a.print( os );
     return os;
 }
-
-inline
-::std::istream&
-operator >> ( ::std::istream& is, sc_fxnum_subref& a )
-{
-    a.scan( is );
-    return is;
-}
-
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_fxnum_fast_subref
@@ -2213,10 +2537,8 @@ operator >> ( ::std::istream& is, sc_fxnum_subref& a )
 
 inline
 sc_fxnum_fast_subref::sc_fxnum_fast_subref( sc_fxnum_fast& num_,
-					    int from_, int to_ )
-    : m_num( num_ ), m_from( from_ ), m_to( to_ ),
-      m_bv( *new sc_bv_base( sc_max( m_from, m_to ) -
-			     sc_min( m_from, m_to ) + 1 ) )
+                                            int from_, int to_ )
+    : sc_fxnum_fast_subref_r( num_ , from_ , to_ )
 {}
 
 
@@ -2224,18 +2546,8 @@ sc_fxnum_fast_subref::sc_fxnum_fast_subref( sc_fxnum_fast& num_,
 
 inline
 sc_fxnum_fast_subref::sc_fxnum_fast_subref( const sc_fxnum_fast_subref& a )
-    : m_num( a.m_num ), m_from( a.m_from ), m_to( a.m_to ),
-      m_bv( *new sc_bv_base( a.m_bv ) )
+    : sc_fxnum_fast_subref_r(a)
 {}
-
-
-// destructor
-
-inline
-sc_fxnum_fast_subref::~sc_fxnum_fast_subref()
-{
-    delete &m_bv;
-}
 
 
 // assignment operators
@@ -2341,208 +2653,6 @@ DEFN_ASN_OP(^)
 #undef DEFN_ASN_OP_T
 #undef DEFN_ASN_OP
 
-
-// relational operators
-
-#define DEFN_REL_OP_T(op,tp)                                                  \
-inline                                                                        \
-bool                                                                          \
-operator op ( const sc_fxnum_fast_subref& a, tp b )                           \
-{                                                                             \
-    return ( static_cast<sc_bv_base>( a ) op b );                             \
-}                                                                             \
-                                                                              \
-inline                                                                        \
-bool                                                                          \
-operator op ( tp a, const sc_fxnum_fast_subref& b )                           \
-{                                                                             \
-    return ( static_cast<sc_bv_base>( b ) op a );                             \
-}
-
-#define DEFN_REL_OP(op)                                                       \
-inline                                                                        \
-bool                                                                          \
-operator op ( const sc_fxnum_fast_subref& a, const sc_fxnum_fast_subref& b )  \
-{                                                                             \
-    return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
-}                                                                             \
-                                                                              \
-inline                                                                        \
-bool                                                                          \
-operator op ( const sc_fxnum_fast_subref& a, const sc_fxnum_subref& b )       \
-{                                                                             \
-    return ( static_cast<sc_bv_base>( a ) op static_cast<sc_bv_base>( b ) );  \
-}                                                                             \
-                                                                              \
-DEFN_REL_OP_T(op,const sc_bv_base&)                                           \
-DEFN_REL_OP_T(op,const sc_lv_base&)                                           \
-DEFN_REL_OP_T(op,const char*)                                                 \
-DEFN_REL_OP_T(op,const bool*)                                                 \
-DEFN_REL_OP_T(op,const sc_signed&)                                            \
-DEFN_REL_OP_T(op,const sc_unsigned&)                                          \
-DEFN_REL_OP_T(op,int)                                                         \
-DEFN_REL_OP_T(op,unsigned int)                                                \
-DEFN_REL_OP_T(op,long)                                                        \
-DEFN_REL_OP_T(op,unsigned long)
-
-DEFN_REL_OP(==)
-DEFN_REL_OP(!=)
-
-#undef DEFN_REL_OP_T
-#undef DEFN_REL_OP
-
-
-// reduce functions
-
-#define DEFN_RED_FNC(fnc)                                                     \
-inline                                                                        \
-bool                                                                          \
-sc_fxnum_fast_subref::fnc() const                                             \
-{                                                                             \
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )                                     \
-    get();                                                                    \
-    return static_cast<bool>( m_bv.fnc() );                                   \
-}
-
-DEFN_RED_FNC(and_reduce)
-DEFN_RED_FNC(nand_reduce)
-DEFN_RED_FNC(or_reduce)
-DEFN_RED_FNC(nor_reduce)
-DEFN_RED_FNC(xor_reduce)
-DEFN_RED_FNC(xnor_reduce)
-
-#undef DEFN_RED_FNC
-
-
-// query parameter
-
-inline
-int
-sc_fxnum_fast_subref::length() const
-{
-    return m_bv.length();
-}
-
-
-// explicit conversions
-
-inline
-int
-sc_fxnum_fast_subref::to_int() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_int();
-}
-
-inline
-int64
-sc_fxnum_fast_subref::to_int64() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_int64();
-}
-
-inline
-unsigned int
-sc_fxnum_fast_subref::to_uint() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_uint();
-}
-
-inline
-uint64
-sc_fxnum_fast_subref::to_uint64() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_uint64();
-}
-
-inline
-long
-sc_fxnum_fast_subref::to_long() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_long();
-}
-
-inline
-unsigned long
-sc_fxnum_fast_subref::to_ulong() const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv.to_ulong();
-}
-
-
-#ifdef SC_DT_DEPRECATED
-
-inline
-int
-sc_fxnum_fast_subref::to_signed() const
-{
-    return to_int();
-}
-
-inline
-unsigned int
-sc_fxnum_fast_subref::to_unsigned() const
-{
-    return to_uint();
-}
-
-#endif
-
-
-inline
-const std::string
-sc_fxnum_fast_subref::to_string() const
-{
-    get();
-    return m_bv.to_string();
-}
-
-inline
-const std::string
-sc_fxnum_fast_subref::to_string( sc_numrep numrep ) const
-{
-    get();
-    return m_bv.to_string( numrep );
-}
-
-inline
-const std::string
-sc_fxnum_fast_subref::to_string( sc_numrep numrep, bool w_prefix ) const
-{
-    get();
-    return m_bv.to_string( numrep, w_prefix );
-}
-
-
-// implicit conversion
-
-inline
-sc_fxnum_fast_subref::operator sc_bv_base () const
-{
-    SC_FXNUM_FAST_OBSERVER_READ_( m_num )
-    get();
-    return m_bv;
-}
-
-
-inline
-::std::ostream&
-operator << ( ::std::ostream& os, const sc_fxnum_fast_subref& a )
-{
-    a.print( os );
-    return os;
-}
 
 inline
 ::std::istream&
@@ -3308,11 +3418,11 @@ sc_fxnum::operator -- ()
 // bit selection
 
 inline
-const sc_fxnum_bitref
+sc_fxnum_bitref_r
 sc_fxnum::operator [] ( int i ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
-    return sc_fxnum_bitref( const_cast<sc_fxnum&>( *this ),
+    return sc_fxnum_bitref_r( const_cast<sc_fxnum&>( *this ),
 			    i - m_params.fwl() );
 }
 
@@ -3325,11 +3435,11 @@ sc_fxnum::operator [] ( int i )
 }
 
 inline
-const sc_fxnum_bitref
+sc_fxnum_bitref_r
 sc_fxnum::bit( int i ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
-    return sc_fxnum_bitref( const_cast<sc_fxnum&>( *this ),
+    return sc_fxnum_bitref_r( const_cast<sc_fxnum&>( *this ),
 			    i - m_params.fwl() );
 }
 
@@ -3345,13 +3455,13 @@ sc_fxnum::bit( int i )
 // part selection
 
 inline
-const sc_fxnum_subref
+sc_fxnum_subref_r
 sc_fxnum::operator () ( int i, int j ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
     SC_ERROR_IF_( j < 0 || j >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
 
-    return sc_fxnum_subref( const_cast<sc_fxnum&>( *this ),
+    return sc_fxnum_subref_r( const_cast<sc_fxnum&>( *this ),
 			    i - m_params.fwl(), j - m_params.fwl() );
 }
 
@@ -3366,13 +3476,13 @@ sc_fxnum::operator () ( int i, int j )
 }
 
 inline
-const sc_fxnum_subref
+sc_fxnum_subref_r
 sc_fxnum::range( int i, int j ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
     SC_ERROR_IF_( j < 0 || j >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
 
-    return sc_fxnum_subref( const_cast<sc_fxnum&>( *this ),
+    return sc_fxnum_subref_r( const_cast<sc_fxnum&>( *this ),
 			    i - m_params.fwl(), j - m_params.fwl() );
 }
 
@@ -3388,7 +3498,7 @@ sc_fxnum::range( int i, int j )
 
 
 inline
-const sc_fxnum_subref
+sc_fxnum_subref_r
 sc_fxnum::operator () () const
 {
     return this->operator () ( m_params.wl() - 1, 0 );
@@ -3402,7 +3512,7 @@ sc_fxnum::operator () ()
 }
 
 inline
-const sc_fxnum_subref
+sc_fxnum_subref_r
 sc_fxnum::range() const
 {
     return this->range( m_params.wl() - 1, 0 );
@@ -4426,11 +4536,11 @@ sc_fxnum_fast::operator -- ()
 // bit selection
 
 inline
-const sc_fxnum_fast_bitref
+sc_fxnum_fast_bitref_r
 sc_fxnum_fast::operator [] ( int i ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
-    return sc_fxnum_fast_bitref( const_cast<sc_fxnum_fast&>( *this ),
+    return sc_fxnum_fast_bitref_r( const_cast<sc_fxnum_fast&>( *this ),
 				 i - m_params.fwl() );
 }
 
@@ -4443,11 +4553,11 @@ sc_fxnum_fast::operator [] ( int i )
 }
 
 inline
-const sc_fxnum_fast_bitref
+sc_fxnum_fast_bitref_r
 sc_fxnum_fast::bit( int i ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
-    return sc_fxnum_fast_bitref( const_cast<sc_fxnum_fast&>( *this ),
+    return sc_fxnum_fast_bitref_r( const_cast<sc_fxnum_fast&>( *this ),
 				 i - m_params.fwl() );
 }
 
@@ -4463,13 +4573,13 @@ sc_fxnum_fast::bit( int i )
 // part selection
 
 inline
-const sc_fxnum_fast_subref
+sc_fxnum_fast_subref_r
 sc_fxnum_fast::operator () ( int i, int j ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
     SC_ERROR_IF_( j < 0 || j >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
 
-    return sc_fxnum_fast_subref( const_cast<sc_fxnum_fast&>( *this ),
+    return sc_fxnum_fast_subref_r( const_cast<sc_fxnum_fast&>( *this ),
 				 i - m_params.fwl(), j - m_params.fwl() );
 }
 
@@ -4485,13 +4595,13 @@ sc_fxnum_fast::operator () ( int i, int j )
 }
 
 inline
-const sc_fxnum_fast_subref
+sc_fxnum_fast_subref_r
 sc_fxnum_fast::range( int i, int j ) const
 {
     SC_ERROR_IF_( i < 0 || i >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
     SC_ERROR_IF_( j < 0 || j >= m_params.wl(), sc_core::SC_ID_OUT_OF_RANGE_ );
 
-    return sc_fxnum_fast_subref( const_cast<sc_fxnum_fast&>( *this ),
+    return sc_fxnum_fast_subref_r( const_cast<sc_fxnum_fast&>( *this ),
 				 i - m_params.fwl(), j - m_params.fwl() );
 }
 
@@ -4507,7 +4617,7 @@ sc_fxnum_fast::range( int i, int j )
 }
 
 inline
-const sc_fxnum_fast_subref
+sc_fxnum_fast_subref_r
 sc_fxnum_fast::operator () () const
 {
     return this->operator () ( m_params.wl() - 1, 0 );
@@ -4521,7 +4631,7 @@ sc_fxnum_fast::operator () ()
 }
 
 inline
-const sc_fxnum_fast_subref
+sc_fxnum_fast_subref_r
 sc_fxnum_fast::range() const
 {
     return this->range( m_params.wl() - 1, 0 );
