@@ -266,7 +266,11 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
 	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
 	    thread_h->m_timeout_event_p->cancel();
 	}
-        if ( m_event_p ) m_event_p->remove_dynamic( thread_h );
+        if ( m_event_p )
+        {
+            m_event_p->remove_dynamic( thread_h );
+            m_event_p = 0;
+        }
         if ( m_event_list_p )
         {
             m_event_list_p->remove_dynamic( thread_h, 0 );
@@ -280,7 +284,11 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
 	    method_h->m_timeout_event_p->remove_dynamic(method_h);
 	    method_h->m_timeout_event_p->cancel();
 	}
-        if ( m_event_p ) m_event_p->remove_dynamic( method_h );
+        if ( m_event_p )
+        {
+            m_event_p->remove_dynamic( method_h );
+            m_event_p = 0;
+        }
         if ( m_event_list_p )
         {
             m_event_list_p->remove_dynamic( method_h, 0 );
