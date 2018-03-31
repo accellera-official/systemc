@@ -31,12 +31,16 @@ int sc_main(int argc, char* argv[])
 
     // Ensure that modifying argv does not alter sc_argv
     argv[1][0] = '9';
-    free(argv[2]);
-    argv[2] = strdup("new-2");
+    argv[2] = strdup("new-2"); // overwrite with newly allocated memory
+    argv[3] = argv[4];         // override pointer (create duplicate)
+
+    sc_assert(strcmp(sc_argv()[3], "3") == 0);
     sc_assert(strcmp(sc_argv()[2], "2") == 0);
     sc_assert(strcmp(sc_argv()[1], "1") == 0);
 
-    cerr << "Program completed" << endl;
+    // release locally allocated memory, leave stale pointer in
+    free(argv[2]);
 
+    cerr << "Program completed" << endl;
     return 0;
 }
