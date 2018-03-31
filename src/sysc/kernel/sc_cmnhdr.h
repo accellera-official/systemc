@@ -97,7 +97,7 @@
 //   199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
 //   201103L (C++11, ISO/IEC 14882:2011)
 //   201402L (C++14, ISO/IEC 14882:2014)
-//   201703L (C++17, N4659: Working Draft, Standard for Programming Language C++)
+//   201703L (C++17, ISO/IEC 14882:2017)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
