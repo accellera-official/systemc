@@ -287,15 +287,12 @@ class sc_member_access
 template< typename ElementType
         , typename AccessPolicy = sc_direct_access<ElementType> >
 class sc_vector_iter
-  : public std::iterator< std::random_access_iterator_tag
-                        , typename AccessPolicy::type >
-  , private AccessPolicy
+  : private AccessPolicy
 {
   typedef ElementType  element_type;
   typedef typename AccessPolicy::policy            access_policy;
   typedef typename AccessPolicy::non_const_policy  non_const_policy;
   typedef typename AccessPolicy::const_policy      const_policy;
-  typedef typename access_policy::type access_type;
 
   typedef typename sc_meta::remove_const<ElementType>::type plain_type;
   typedef const plain_type                                  const_plain_type;
@@ -306,7 +303,6 @@ class sc_vector_iter
   template< typename, typename > friend class sc_vector_assembly;
   template< typename, typename > friend class sc_vector_iter;
 
-  typedef std::iterator< std::random_access_iterator_tag, access_type > base_type;
   typedef sc_vector_iter               this_type;
   typedef sc_vector<plain_type>        vector_type;
   typedef sc_vector_base::storage_type storage_type;
@@ -335,9 +331,11 @@ public:
   // interface for Random Access Iterator category,
   // see ISO/IEC 14882:2003(E), 24.1 [lib.iterator.requirements]
 
-  typedef typename base_type::difference_type difference_type;
-  typedef typename base_type::reference       reference;
-  typedef typename base_type::pointer         pointer;
+  typedef std::random_access_iterator_tag iterator_category;
+  typedef std::ptrdiff_t                  difference_type;
+  typedef typename access_policy::type    value_type;
+  typedef value_type &                    reference;
+  typedef value_type *                    pointer;
 
   sc_vector_iter() : access_policy(), it_() {}
 
