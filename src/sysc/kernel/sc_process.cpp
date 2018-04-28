@@ -553,7 +553,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_active_areset_n(0),
     m_active_reset_n(0),
     m_dont_init( false ),
-    m_dynamic_proc( simcontext()->elaboration_done() ),
+    m_dynamic_proc(),
     m_event_p(0),
     m_event_count(0),
     m_event_list_p(0),
@@ -583,6 +583,11 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_trigger_type(STATIC),
     m_unwinding(false)
 {
+    // Check spawn phase: m_ready_to_simulate is set *after* elaboration_done()
+    unsigned spawned = SPAWN_ELAB;
+    spawned += simcontext()->elaboration_done();  // -> SPAWN_START, if true
+    spawned += simcontext()->m_ready_to_simulate; // -> SPAWN_SIM, if true
+    m_dynamic_proc = static_cast<spawn_t>(spawned);
 
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
 

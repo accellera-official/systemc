@@ -372,7 +372,8 @@ sc_method_process::sc_method_process( const char* name_p,
 //------------------------------------------------------------------------------
 sc_method_process::~sc_method_process()
 {
-    if( !dynamic() ) {
+    // Remove from simcontext, if not spawned during simulation
+    if( m_dynamic_proc != SPAWN_SIM ) {
         simcontext()->remove_process(this);
     }
 }

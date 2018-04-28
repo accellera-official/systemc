@@ -480,7 +480,8 @@ sc_thread_process::~sc_thread_process()
         m_cor_p = 0;
     }
 
-    if( !dynamic() ) {
+    // Remove from simcontext, if not spawned during simulation
+    if( m_dynamic_proc != SPAWN_SIM ) {
         simcontext()->remove_process(this);
     }
 }
