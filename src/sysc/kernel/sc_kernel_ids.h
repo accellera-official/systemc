@@ -121,7 +121,8 @@ SC_DEFINE_MESSAGE(SC_ID_MODULE_NAME_STACK_EMPTY_     , 533,
 	"constructor?" )
 SC_DEFINE_MESSAGE(SC_ID_NAME_EXISTS_                 , 534,
 	"name already exists")
-// available message number 535
+SC_DEFINE_MESSAGE( SC_ID_WAIT_NEGATIVE_CYCLES_       , 535,
+         "wait(n) not allowed for n <= 0" )
 SC_DEFINE_MESSAGE( SC_ID_IMMEDIATE_SELF_NOTIFICATION_, 536,
          "immediate self-notification ignored as of IEEE 1666-2011" )
 SC_DEFINE_MESSAGE( SC_ID_WAIT_DURING_UNWINDING_      , 537,
