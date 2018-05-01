@@ -287,7 +287,8 @@ sc_trace_file_base::unit_to_fs(sc_time_unit tu)
         case SC_MS: return UINT64_C(1000000000000);
         case SC_SEC:return UINT64_C(1000000000000000);
         default:
-            sc_assert(0);
+            SC_REPORT_ERROR( SC_ID_TRACING_INVALID_TIMESCALE_UNIT_,
+                             "unknown unit value" );
             return 0;
     }
 }
@@ -315,8 +316,14 @@ sc_trace_file_base::fs_unit_to_str(sc_trace_file_base::unit_type tu)
         case UINT64_C(1000000000000000): return "1 sec";
         case UINT64_C(10000000000000000): return "10 sec";
         case UINT64_C(100000000000000000): return "100 sec";
-        default: sc_assert(0); return "";
+        default: /* fail below */ (void)0;
     }
+
+    std::stringstream ss;
+    ss << "not a power of ten: " << tu << " fs";
+    SC_REPORT_ERROR( SC_ID_TRACING_INVALID_TIMESCALE_UNIT_,
+                     ss.str().c_str() );
+    return "";
 }
 
 // obtain formatted time string

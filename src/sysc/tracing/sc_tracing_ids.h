@@ -51,7 +51,9 @@ SC_DEFINE_MESSAGE( SC_ID_TRACING_TIMESCALE_UNIT_,       703,
                    "tracing timescale unit set" )
 SC_DEFINE_MESSAGE( SC_ID_TRACING_VCD_DELTA_CYCLE_,      704,
    "VCD delta cycle tracing with pseudo timesteps (1 unit)" )
-/* unused IDs 705-709 */
+SC_DEFINE_MESSAGE( SC_ID_TRACING_INVALID_TIMESCALE_UNIT_, 705,
+   "invalid tracing timescale unit set" )
+/* unused IDs 706-709 */
 SC_DEFINE_MESSAGE( SC_ID_TRACING_OBJECT_IGNORED_,       710,
                    "object cannot not be traced" )
 SC_DEFINE_MESSAGE( SC_ID_TRACING_OBJECT_NAME_FILTERED_, 711,
