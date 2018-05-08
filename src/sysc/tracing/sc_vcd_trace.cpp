@@ -2137,7 +2137,7 @@ vcd_trace_file::obtain_name()
 vcd_trace_file::~vcd_trace_file()
 {
     unit_type now_units_high, now_units_low;
-    if (get_time_stamp(now_units_high,now_units_low)) {
+    if (is_initialized() && get_time_stamp(now_units_high,now_units_low)) {
         print_time_stamp(now_units_high, now_units_low);
     }
 
