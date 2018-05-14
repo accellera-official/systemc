@@ -43,7 +43,7 @@ struct adder : sc_module {
     SC_CTOR(adder){}
 private:
     // In-class initialization of SC_METHOD
-    // As a second parameter SC_METHOD_INST takes arbitrary code that can be used to initialize process
+    // As a second parameter SC_METHOD_IMP takes arbitrary code that can be used to initialize process
     // curly braces are optional
     SC_METHOD_IMP(add_method, { for(auto &d : din) sensitive << d; } ); // Body can be in or outside of class
 };
