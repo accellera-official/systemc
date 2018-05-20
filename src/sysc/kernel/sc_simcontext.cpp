@@ -600,6 +600,7 @@ sc_simcontext::crunch( bool once )
     // by '*m_error'.
 out:
     this->reset_curr_proc();
+    do_collect_processes();
     if( m_error ) throw *m_error; // re-throw propagated error
 }
 

@@ -172,7 +172,7 @@ void sc_process_b::delete_process()
 
     // Immediate deletion:
 
-    if ( this != sc_get_current_process_b() )
+    if ( NULL == sc_get_current_process_b() )
     {
         delete this;
     }
@@ -182,7 +182,7 @@ void sc_process_b::delete_process()
 
     else
     {
-	m_references_n = 1;
+        m_references_n = 1;
         detach();
         simcontext()->mark_to_collect_process( this );
     }
