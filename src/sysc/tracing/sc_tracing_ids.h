@@ -43,7 +43,7 @@
 #endif
 
 SC_DEFINE_MESSAGE( SC_ID_TRACING_FOPEN_FAILED_,         701,
-                   "cannot open tracefile for writing" )
+                   "cannot open trace file for writing" )
 
 SC_DEFINE_MESSAGE( SC_ID_TRACING_TIMESCALE_DEFAULT_,    702,
                   "default timescale unit used for tracing" )
@@ -63,7 +63,7 @@ SC_DEFINE_MESSAGE( SC_ID_TRACING_VCD_TIME_RESOLUTION_,  713,
 SC_DEFINE_MESSAGE( SC_ID_TRACING_REVERSED_TIME_,        714,
  "tracing cycle with duplicate or reversed time detected" )
 SC_DEFINE_MESSAGE( SC_ID_TRACING_CLOSE_EMPTY_FILE_,     715,
- "tracefile closed before any cycles were traced, file not written" )
+ "trace file closed before any cycles were traced, file not written" )
 /* unused IDs 716-719 */
 SC_DEFINE_MESSAGE( SC_ID_TRACING_ALREADY_INITIALIZED_,  720,
                    "sc_trace_file already initialized" )
