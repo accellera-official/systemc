@@ -63,42 +63,52 @@ public:
     // constructors
 
     sc_fifo_in()
-	: base_type()
-	{}
+      : base_type()
+      , m_written_finder_p()
+    {}
 
     explicit sc_fifo_in( const char* name_ )
-	: base_type( name_ )
-	{}
+      : base_type( name_ )
+      , m_written_finder_p()
+    {}
 
     explicit sc_fifo_in( in_if_type& interface_ )
-	: base_type( interface_ )
-	{}
+      : base_type( interface_ )
+      , m_written_finder_p()
+    {}
 
     sc_fifo_in( const char* name_, in_if_type& interface_ )
-	: base_type( name_, interface_ )
-	{}
+      : base_type( name_, interface_ )
+      , m_written_finder_p()
+    {}
 
     explicit sc_fifo_in( in_port_type& parent_ )
-	: base_type( parent_ )
-	{}
+      : base_type( parent_ )
+      , m_written_finder_p()
+    {}
 
     sc_fifo_in( const char* name_, in_port_type& parent_ )
-	: base_type( name_, parent_ )
-	{}
+      : base_type( name_, parent_ )
+      , m_written_finder_p()
+    {}
 
     sc_fifo_in( this_type& parent_ )
-	: base_type( parent_ )
-	{}
+      : base_type( parent_ )
+      , m_written_finder_p()
+    {}
 
     sc_fifo_in( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ )
-	{}
+      : base_type( name_, parent_ )
+      , m_written_finder_p()
+    {}
 
 
-    // destructor (does nothing)
+    // destructor
 
     virtual ~sc_fifo_in()
-	{}
+    {
+        delete m_written_finder_p;
+    }
 
 
     // interface access shortcut methods
@@ -134,14 +144,15 @@ public:
 
     sc_event_finder& data_written() const
     {
-	return *new sc_event_finder_t<in_if_type>(
-	    *this, &in_if_type::data_written_event );
+        return sc_event_finder::cached_create
+                ( m_written_finder_p, this,  &in_if_type::data_written_event );
     }
 
     virtual const char* kind() const
         { return "sc_fifo_in"; }
 
 private:
+    mutable sc_event_finder* m_written_finder_p;
 
     // disabled
     sc_fifo_in( const this_type& );
@@ -179,42 +190,52 @@ public:
     // constructors
 
     sc_fifo_out()
-	: base_type()
-	{}
+      : base_type()
+      , m_read_finder_p()
+    {}
 
     explicit sc_fifo_out( const char* name_ )
-	: base_type( name_ )
-	{}
+      : base_type( name_ )
+      , m_read_finder_p()
+    {}
 
     explicit sc_fifo_out( out_if_type& interface_ )
-	: base_type( interface_ )
-	{}
+      : base_type( interface_ )
+      , m_read_finder_p()
+    {}
 
     sc_fifo_out( const char* name_, out_if_type& interface_ )
-	: base_type( name_, interface_ )
-	{}
+      : base_type( name_, interface_ )
+      , m_read_finder_p()
+    {}
 
     explicit sc_fifo_out( out_port_type& parent_ )
-	: base_type( parent_ )
-	{}
+      : base_type( parent_ )
+      , m_read_finder_p()
+    {}
 
     sc_fifo_out( const char* name_, out_port_type& parent_ )
-	: base_type( name_, parent_ )
-	{}
+      : base_type( name_, parent_ )
+      , m_read_finder_p()
+    {}
 
     sc_fifo_out( this_type& parent_ )
-	: base_type( parent_ )
-	{}
+      : base_type( parent_ )
+      , m_read_finder_p()
+    {}
 
     sc_fifo_out( const char* name_, this_type& parent_ )
-	: base_type( name_, parent_ )
-	{}
+      : base_type( name_, parent_ )
+      , m_read_finder_p()
+    {}
 
 
-    // destructor (does nothing)
+    // destructor
 
     virtual ~sc_fifo_out()
-	{}
+    {
+        delete m_read_finder_p;
+    }
 
 
     // interface access shortcut methods
@@ -247,14 +268,15 @@ public:
 
     sc_event_finder& data_read() const
     {
-	return *new sc_event_finder_t<out_if_type>(
-	    *this, &out_if_type::data_read_event );
+        return sc_event_finder::cached_create
+                ( m_read_finder_p, this, &out_if_type::data_read_event );
     }
 
     virtual const char* kind() const
         { return "sc_fifo_out"; }
 
 private:
+    mutable sc_event_finder* m_read_finder_p;
 
     // disabled
     sc_fifo_out( const this_type& );
