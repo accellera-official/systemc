@@ -124,5 +124,21 @@ EXTRA_DIST += \
 localincludedir = $(includedir)/sysc/packages/boost
 nobase_localinclude_HEADERS = $(H_FILES)
 
+INCDIRS = \
+	bind \
+	config/compiler \
+	config/platform \
+	config/stdlib \
+	config \
+	detail \
+	mpl/aux_/config \
+	mpl/aux_ \
+	mpl \
+	utility
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
+	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(localincludedir)" )
 
 ## Taf!

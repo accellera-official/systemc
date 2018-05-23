@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_3_sc_ttd_BUILD) \
 	$(2_3_sc_ttd_EXTRA)
 
+examples_DIRS += 2.3/sc_ttd
+
 ## example-specific details
 
 2_3_sc_ttd_test_CPPFLAGS += \
@@ -84,6 +86,7 @@ examples_FILES += \
 2_3_sc_ttd_EXTRA = \
 	2.3/sc_ttd/sc_ttd.sln \
 	2.3/sc_ttd/sc_ttd.vcxproj \
+	2.3/sc_ttd/CMakeLists.txt \
 	2.3/sc_ttd/Makefile
 
 #2_3_sc_ttd_FILTER = 

@@ -62,6 +62,7 @@ examples_GOLDEN=golden.log
 examples_BUILD =
 examples_CLEAN =
 examples_TESTS =
+examples_DIRS  =
 
 ##
 ## list of SystemC examples
@@ -71,6 +72,8 @@ examples_TESTS =
 
 include fft/fft_flpt/test.am
 include fft/fft_fxpt/test.am
+examples_DIRS += fft
+
 include fir/test.am
 include pipe/test.am
 include pkt_switch/test.am
@@ -90,12 +93,15 @@ include 2.1/sc_report/test.am
 include 2.1/scx_barrier/test.am
 include 2.1/scx_mutex_w_policy/test.am
 include 2.1/specialized_signals/test.am
+examples_DIRS += 2.1
 
 ## 2.3 examples
 
 include 2.3/sc_rvd/test.am
 include 2.3/sc_ttd/test.am
 include 2.3/simple_async/test.am
+examples_DIRS += 2.3/include
+examples_DIRS += 2.3
 
 ## ************************************************************************
 
@@ -103,31 +109,17 @@ include 2.3/simple_async/test.am
 if SEPARATE_INSTALL_TREE
 nobase_syscexamples_DATA = \
 	$(examples_FILES)
-endif
+
+uninstall-hook:
+	test ! -d "$(syscexamplesdir)" || ( set -e ; cd "$(syscexamplesdir)" ; \
+	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(syscexamplesdir)" )
+
+endif # SEPARATE_INSTALL_TREE
 
 EXTRA_DIST += \
 	$(examples_FILES) \
-	CMakeLists.txt \
-	2.1/dpipe/CMakeLists.txt \
-	2.1/forkjoin/CMakeLists.txt \
-	2.1/reset_signal_is/CMakeLists.txt \
-	2.1/sc_export/CMakeLists.txt \
-	2.1/sc_report/CMakeLists.txt \
-	2.1/scx_barrier/CMakeLists.txt \
-	2.1/scx_mutex_w_policy/CMakeLists.txt \
-	2.1/specialized_signals/CMakeLists.txt \
-	2.3/sc_rvd/CMakeLists.txt \
-	2.3/sc_ttd/CMakeLists.txt \
-	fft/fft_flpt/CMakeLists.txt \
-	fft/fft_fxpt/CMakeLists.txt \
-	fir/CMakeLists.txt \
-	pipe/CMakeLists.txt \
-	pkt_switch/CMakeLists.txt \
-	risc_cpu/CMakeLists.txt \
-	rsa/CMakeLists.txt \
-	simple_bus/CMakeLists.txt \
-	simple_fifo/CMakeLists.txt \
-	simple_perf/CMakeLists.txt
+	CMakeLists.txt
 
 CLEANFILES += \
 	$(examples_CLEAN) \

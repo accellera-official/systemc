@@ -60,3 +60,6 @@ nobase_localinclude_HEADERS = $(H_FILES)
 
 noinst_LTLIBRARIES = libtlm_utils.la
 libtlm_utils_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || rmdir "$(localincludedir)"

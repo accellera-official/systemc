@@ -67,6 +67,8 @@ examples_FILES += \
 	$(simple_perf_BUILD) \
 	$(simple_perf_EXTRA)
 
+examples_DIRS += simple_perf
+
 ## example-specific details
 
 simple_perf_H_FILES =
@@ -81,6 +83,7 @@ simple_perf_CXX_FILES = \
 simple_perf_EXTRA = \
 	simple_perf/simple_perf.sln \
 	simple_perf/simple_perf.vcxproj \
+	simple_perf/CMakeLists.txt \
 	simple_perf/Makefile
 
 #simple_perf_FILTER = 

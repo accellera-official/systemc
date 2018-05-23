@@ -67,6 +67,8 @@ examples_FILES += \
 	$(pkt_switch_BUILD) \
 	$(pkt_switch_EXTRA)
 
+examples_DIRS += pkt_switch
+
 ## example-specific details
 
 pkt_switch_H_FILES = \
@@ -93,6 +95,7 @@ pkt_switch_CXX_FILES = \
 pkt_switch_EXTRA = \
 	pkt_switch/pkt_switch.sln \
 	pkt_switch/pkt_switch.vcxproj \
+	pkt_switch/CMakeLists.txt \
 	pkt_switch/Makefile \
 	pkt_switch/README
 

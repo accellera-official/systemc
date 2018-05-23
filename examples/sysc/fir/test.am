@@ -75,6 +75,8 @@ examples_FILES += \
 	$(fir_BUILD) \
 	$(fir_EXTRA)
 
+examples_DIRS += fir
+
 ## example-specific details
 
 fir_H_FILES = \
@@ -110,6 +112,7 @@ fir_EXTRA = \
 	fir/fir_common.vcxproj \
 	fir/fir.vcxproj \
 	fir/fir_rtl.vcxproj \
+	fir/CMakeLists.txt \
 	fir/Makefile \
 	fir/README
 

@@ -74,5 +74,8 @@ CXX_FILES += \
 	utils/sc_utils_ids.cpp \
 	utils/sc_vector.cpp
 
+INCDIRS += \
+  utils
+
 ## Taf!
 ## :vim:ft=automake:

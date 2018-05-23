@@ -68,6 +68,9 @@ examples_FILES += \
 	$(lt_temporal_decouple_BUILD) \
 	$(lt_temporal_decouple_EXTRA)
 
+examples_DIRS += \
+	lt_temporal_decouple/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 lt_temporal_decouple_H_FILES = \
@@ -86,6 +89,7 @@ lt_temporal_decouple_BUILD = \
 
 lt_temporal_decouple_EXTRA = \
 	lt_temporal_decouple/README \
+	lt_temporal_decouple/CMakeLists.txt \
 	lt_temporal_decouple/build-msvc/Makefile \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.sln \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcxproj \

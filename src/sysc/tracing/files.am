@@ -58,5 +58,8 @@ CXX_FILES += \
 	tracing/sc_vcd_trace.cpp \
 	tracing/sc_wif_trace.cpp
 
+INCDIRS += \
+  tracing
+
 ## Taf!
 ## :vim:ft=automake:

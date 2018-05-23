@@ -68,6 +68,8 @@ examples_FILES += \
 	$(2_1_forkjoin_BUILD) \
 	$(2_1_forkjoin_EXTRA)
 
+examples_DIRS += 2.1/forkjoin
+
 ## example-specific details
 
 2_1_forkjoin_H_FILES =
@@ -81,6 +83,7 @@ examples_FILES += \
 2_1_forkjoin_EXTRA = \
 	2.1/forkjoin/forkjoin.sln \
 	2.1/forkjoin/forkjoin.vcxproj \
+	2.1/forkjoin/CMakeLists.txt \
 	2.1/forkjoin/Makefile \
 	2.1/forkjoin/README.txt
 

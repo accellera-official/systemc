@@ -68,6 +68,8 @@ examples_FILES += \
 	$(2_1_sc_report_BUILD) \
 	$(2_1_sc_report_EXTRA)
 
+examples_DIRS += 2.1/sc_report
+
 ## example-specific details
 
 2_1_sc_report_H_FILES =
@@ -81,6 +83,7 @@ examples_FILES += \
 2_1_sc_report_EXTRA = \
 	2.1/sc_report/sc_report.sln \
 	2.1/sc_report/sc_report.vcxproj \
+	2.1/sc_report/CMakeLists.txt \
 	2.1/sc_report/Makefile \
 	2.1/sc_report/README.txt
 
