@@ -118,6 +118,8 @@ sc_bind_ef::~sc_bind_ef()
 
 struct sc_bind_info
 {
+    typedef std::vector<sc_bind_ef*> ef_vector;
+
     // constructor
     explicit sc_bind_info( int max_size_, 
 	sc_port_policy policy_=SC_ONE_OR_MORE_BOUND );
@@ -137,8 +139,8 @@ struct sc_bind_info
     bool                       is_leaf;
     bool                       complete;
 
-    std::vector<sc_bind_ef*>   thread_vec;
-    std::vector<sc_bind_ef*>   method_vec;
+    ef_vector                  thread_vec;
+    ef_vector                  method_vec;
 };
 
 
@@ -262,6 +264,7 @@ sc_port_base::sc_port_base(
 sc_port_base::~sc_port_base()
 {
     simcontext()->get_port_registry()->remove( this );
+    free_binding();
     delete m_bind_info;
 }
 
@@ -548,19 +551,30 @@ sc_port_base::complete_binding()
 
     // CLEAN UP: FREE BINDING STORAGE:
 
-    size = m_bind_info->method_vec.size();
+    free_binding();
+
+    m_bind_info->complete = true;
+}
+
+void
+sc_port_base::free_binding()
+{
+    if( !m_bind_info )
+        return;
+
+    int size = m_bind_info->method_vec.size();
     for( int k = 0; k < size; ++ k ) {
         delete m_bind_info->method_vec[k];
     }
-    m_bind_info->method_vec.resize(0);
+    // clear and release storage
+    sc_bind_info::ef_vector().swap(m_bind_info->method_vec);
 
     size = m_bind_info->thread_vec.size();
     for( int k = 0; k < size; ++ k ) {
         delete m_bind_info->thread_vec[k];
     }
-    m_bind_info->thread_vec.resize(0);
-
-    m_bind_info->complete = true;
+    // clear and release storage
+    sc_bind_info::ef_vector().swap(m_bind_info->thread_vec);
 }
 
 void
