@@ -1427,12 +1427,14 @@ sub find_it
             opendir( RT_DIR, "$rt_tests_dir/$tempdir" );
 
             # found test directory or matching file
-            if( grep( ( $_ eq $toplevel ) || ( ! -d $_ ),
-                      grep( /^$toplevel/, readdir( RT_DIR ) ) ) ) {
-                if( $tempdir =~ /^\.$/ ) {
-                    push( @found, "" );
-                } else {
-                    push( @found, "$tempdir/" );
+            my @dir_contents = grep( /^$toplevel/, readdir( RT_DIR ) );
+            foreach $dir_entry ( @dir_contents ) {
+                if( ( $dir_entry eq $toplevel ) || ( ! -d $dir_entry ) ) {
+                    if( $tempdir =~ /^\.$/ ) {
+                        push( @found, "" );
+                    } else {
+                        push( @found, "$tempdir/" );
+                    }
                 }
             }
 
