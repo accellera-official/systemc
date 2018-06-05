@@ -386,6 +386,9 @@ sc_thread_process::wait_cycles( int n )
     if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
+    if( n <= 0 )
+        SC_REPORT_ERROR( SC_ID_WAIT_NEGATIVE_CYCLES_, name() );
+
     m_wait_cycle_n = n-1;
     suspend_me();
 }
