@@ -95,6 +95,9 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
 
 sc_trace_file_base::~sc_trace_file_base()
 {
+    if( !is_initialized() )
+        SC_REPORT_WARNING( SC_ID_TRACING_CLOSE_EMPTY_FILE_, filename() );
+
     if( fp )
         fclose(fp);
 
@@ -123,6 +126,11 @@ sc_trace_file_base::simulation_phase_callback()
 #endif // SC_TRACING_PHASE_CALLBACKS_
 
 /*****************************************************************************/
+
+bool sc_trace_file_base::is_initialized() const
+{
+    return initialized_;
+}
 
 bool
 sc_trace_file_base::initialize()
