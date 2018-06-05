@@ -67,6 +67,8 @@ examples_FILES += \
 	$(risc_cpu_BUILD) \
 	$(risc_cpu_EXTRA)
 
+examples_DIRS += risc_cpu
+
 ## example-specific details
 
 risc_cpu_H_FILES = \
@@ -112,6 +114,7 @@ risc_cpu_EXTRA = \
 	risc_cpu/README_TYPESCRIPT \
 	risc_cpu/risc_cpu.sln \
 	risc_cpu/risc_cpu.vcxproj \
+	risc_cpu/CMakeLists.txt \
 	risc_cpu/Makefile
 
 #risc_cpu_FILTER = 

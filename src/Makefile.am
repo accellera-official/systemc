@@ -83,4 +83,9 @@ endif
 
 libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
 
+uninstall-hook:
+	test ! -d "$(includedir)"   || rmdir --ignore-fail-on-non-empty "$(includedir)"
+	test ! -d "$(pkgconfigdir)" || rmdir --ignore-fail-on-non-empty "$(pkgconfigdir)"
+	test ! -d "$(libarchdir)"   || rmdir --ignore-fail-on-non-empty "$(libarchdir)"
+
 ## Taf!

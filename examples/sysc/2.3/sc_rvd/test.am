@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_3_sc_rvd_BUILD) \
 	$(2_3_sc_rvd_EXTRA)
 
+examples_DIRS += 2.3/sc_rvd
+
 ## example-specific details
 
 2_3_sc_rvd_test_CPPFLAGS += \
@@ -84,6 +86,7 @@ examples_FILES += \
 2_3_sc_rvd_EXTRA = \
 	2.3/sc_rvd/sc_rvd.sln \
 	2.3/sc_rvd/sc_rvd.vcxproj \
+	2.3/sc_rvd/CMakeLists.txt \
 	2.3/sc_rvd/Makefile
 
 #2_3_sc_rvd_FILTER = 

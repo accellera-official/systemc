@@ -60,6 +60,8 @@ examples_FILES = \
 
 ## ************************************************************************
 
+TLM_EXAMPLE_SUBDIRS = {build-msvc,build-unix,docs,include,src,results,}
+
 ## shared build setup for TLM examples
 CPPFLAGS_TLMTESTS = -I$(srcdir)/common/include $(AM_CPPFLAGS)
 LDADD            += common/libtlm20examples.la
@@ -71,6 +73,7 @@ examples_GOLDEN=results/expected.log
 examples_BUILD =
 examples_CLEAN =
 examples_TESTS =
+examples_DIRS  =
 
 ##
 ## list of TLM examples
@@ -88,28 +91,28 @@ include lt_extension_mandatory/test.am
 include lt_mixed_endian/test.am
 include lt_temporal_decouple/test.am
 
+examples_DIRS += common/include/models
+examples_DIRS += common/include
+examples_DIRS += common/src
+examples_DIRS += common
+
 ## ************************************************************************
 
 # install examples?
 if SEPARATE_INSTALL_TREE
 nobase_tlmexamples_DATA = \
 	$(examples_FILES)
-endif
+
+uninstall-hook:
+	test ! -d "$(tlmexamplesdir)" || ( set -e ; cd "$(tlmexamplesdir)" ; \
+	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(tlmexamplesdir)" )
+
+endif # SEPARATE_INSTALL_TREE
 
 EXTRA_DIST += \
 	$(examples_FILES) \
-	CMakeLists.txt \
-	at_1_phase/CMakeLists.txt \
-	at_2_phase/CMakeLists.txt \
-	at_4_phase/CMakeLists.txt \
-	at_extension_optional/CMakeLists.txt \
-	at_mixed_targets/CMakeLists.txt \
-	at_ooo/CMakeLists.txt \
-	lt/CMakeLists.txt \
-	lt_dmi/CMakeLists.txt \
-	lt_extension_mandatory/CMakeLists.txt \
-	lt_mixed_endian/CMakeLists.txt \
-	lt_temporal_decouple/CMakeLists.txt
+	CMakeLists.txt
 
 CLEANFILES += \
 	$(examples_CLEAN) \

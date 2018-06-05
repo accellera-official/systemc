@@ -67,6 +67,8 @@ examples_FILES += \
 	$(fft_fft_fxpt_BUILD) \
 	$(fft_fft_fxpt_EXTRA)
 
+examples_DIRS += fft/fft_fxpt
+
 ## example-specific details
 
 examples_CLEAN += \
@@ -108,6 +110,7 @@ fft_fft_fxpt_BUILD = \
 fft_fft_fxpt_EXTRA = \
 	fft/fft_fxpt/fft_fxpt.sln \
 	fft/fft_fxpt/fft_fxpt.vcxproj \
+	fft/fft_fxpt/CMakeLists.txt \
 	fft/fft_fxpt/Makefile
 
 #fft_fft_fxpt_FILTER = 

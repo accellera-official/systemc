@@ -68,6 +68,9 @@ examples_FILES += \
 	$(lt_dmi_BUILD) \
 	$(lt_dmi_EXTRA)
 
+examples_DIRS += \
+	lt_dmi/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 lt_dmi_H_FILES = \
@@ -84,6 +87,7 @@ lt_dmi_BUILD = \
 
 lt_dmi_EXTRA = \
 	lt_dmi/README \
+	lt_dmi/CMakeLists.txt \
 	lt_dmi/build-msvc/Makefile \
 	lt_dmi/build-msvc/lt_dmi.sln \
 	lt_dmi/build-msvc/lt_dmi.vcxproj \

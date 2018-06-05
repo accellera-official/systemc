@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_1_scx_mutex_w_policy_BUILD) \
 	$(2_1_scx_mutex_w_policy_EXTRA)
 
+examples_DIRS += 2.1/scx_mutex_w_policy
+
 ## example-specific details
 
 2_1_scx_mutex_w_policy_H_FILES =
@@ -80,6 +82,7 @@ examples_FILES += \
 2_1_scx_mutex_w_policy_EXTRA = \
 	2.1/scx_mutex_w_policy/scx_mutex_w_policy.sln \
 	2.1/scx_mutex_w_policy/scx_mutex_w_policy.vcxproj \
+	2.1/scx_mutex_w_policy/CMakeLists.txt \
 	2.1/scx_mutex_w_policy/Makefile
 
 #2_1_scx_mutex_w_policy_FILTER = 

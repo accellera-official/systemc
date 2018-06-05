@@ -68,6 +68,9 @@ examples_FILES += \
 	$(at_extension_optional_BUILD) \
 	$(at_extension_optional_EXTRA)
 
+examples_DIRS += \
+	at_extension_optional/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 at_extension_optional_test_CPPFLAGS += \
@@ -90,6 +93,7 @@ at_extension_optional_BUILD = \
 	at_extension_optional/results/expected.log
 
 at_extension_optional_EXTRA = \
+	at_extension_optional/CMakeLists.txt \
 	at_extension_optional/build-msvc/Makefile \
 	at_extension_optional/build-msvc/at_extension_optional.sln \
 	at_extension_optional/build-msvc/at_extension_optional.vcxproj \

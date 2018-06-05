@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_1_scx_barrier_BUILD) \
 	$(2_1_scx_barrier_EXTRA)
 
+examples_DIRS += 2.1/scx_barrier
+
 ## example-specific details
 
 2_1_scx_barrier_H_FILES = \
@@ -81,6 +83,7 @@ examples_FILES += \
 2_1_scx_barrier_EXTRA = \
 	2.1/scx_barrier/scx_barrier.sln \
 	2.1/scx_barrier/scx_barrier.vcxproj \
+	2.1/scx_barrier/CMakeLists.txt \
 	2.1/scx_barrier/Makefile
 
 #2_1_scx_barrier_FILTER = 

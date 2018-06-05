@@ -127,5 +127,8 @@ CXX_COR_FILES = kernel/sc_cor_fiber.cpp
 endif
 endif # co-routine implementation
 
+INCDIRS += \
+  kernel
+
 ## Taf!
 ## :vim:ft=automake:

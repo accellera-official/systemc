@@ -47,6 +47,7 @@ SUBDIRS = \
 H_FILES =
 NO_H_FILES =
 CXX_FILES =
+INCDIRS =
 
 # include file lists for sub-directories
 include kernel/files.am
@@ -65,5 +66,13 @@ libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 # add dependent (package) libraries
 libsysc_la_LIBADD = \
        $(QT_LIB)
+
+INCDIRS += \
+	packages
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
+	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(localincludedir)" )
 
 ## Taf!

@@ -68,6 +68,9 @@ examples_FILES += \
 	$(lt_BUILD) \
 	$(lt_EXTRA)
 
+examples_DIRS += \
+	lt/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 lt_H_FILES = \
@@ -84,6 +87,7 @@ lt_BUILD = \
 
 lt_EXTRA = \
 	lt/README \
+	lt/CMakeLists.txt \
 	lt/build-msvc/Makefile \
 	lt/build-msvc/lt.sln \
 	lt/build-msvc/lt.vcxproj \
