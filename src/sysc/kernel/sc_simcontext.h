@@ -332,6 +332,7 @@ private:
     void do_sc_stop_action();
     void do_timestep( const sc_time& );
     void mark_to_collect_process( sc_process_b* zombie_p );
+    void do_collect_processes();
 
     sc_method_handle remove_process( sc_method_handle );
     sc_thread_handle remove_process( sc_thread_handle );
