@@ -135,6 +135,8 @@ public:
     sc_event_list& operator = ( const sc_event_list& );
 
     int size() const;
+    bool empty() const
+      { return size() == 0; }
 
 protected:
 
