@@ -69,15 +69,28 @@ Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
   - sc_trace: fix overflow check for tracing signed C integer types
 
+  - sc_trace: fix division by zero when closing an empty trace file
+
+  - sc_trace_file::set_time_unit: report error for invalid timescale units
+
   - sc_elab_and_sim: guard against modification of argv from sc_main
 
   - sc_event: remove dynamic sensitivity of processes in destructor
+
+  - Report error when calling wait/next_trigger on empty event lists
 
   - sc_vector_iter: avoid using std::iterator (deprecated in C++17)
 
   - Use proper bit in sc_signed_bitref::concat_set
 
   - Fix immediate triggering of reset during wait(n)
+
+  - Detect calling wait(n) with n <= 0 in (clocked) threads
+
+  - Fix memory corruption during simulation teardown when processes were
+    spawned during end_of_elaboration/start_of_simulation
+
+  - AArch64: fix stack corruption with optimizations disabled
 
 
 Following is the list of bug fixes and enhancements for the 2.3.2 release:
