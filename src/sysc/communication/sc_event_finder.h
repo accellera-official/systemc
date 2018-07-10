@@ -46,6 +46,14 @@ class SC_API sc_event_finder
   friend class sc_simcontext;
 
 public:
+    // helper to create an event finder on demand and cache in given pointer
+    //  - if cache_p is NULL, allocate a new sc_event_finder_t<IF>
+    //    for the given function, save allocated pointer in cache_p
+    //  - returns dereferenced cache_p pointer
+    template<typename IF>
+    static sc_event_finder&
+    cached_create( sc_event_finder*& cache_p, const sc_port_base& port_
+                 , const sc_event& (IF::*ef_p)() const );
 
     const sc_port_base& port() const
         { return m_port; }
@@ -116,6 +124,22 @@ private:
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
+
+template <class IF>
+inline
+sc_event_finder&
+sc_event_finder::cached_create( sc_event_finder*& cache_p
+                              , const sc_port_base& port_
+                              , const sc_event& (IF::*ef_p)() const )
+{
+    if( !cache_p ) {
+        cache_p = new sc_event_finder_t<IF>( port_, ef_p );
+    }
+    sc_assert( &port_ == &cache_p->port() );
+    return *cache_p;
+}
+
 
 template <class IF>
 inline
