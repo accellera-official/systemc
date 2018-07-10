@@ -181,6 +181,9 @@ private:
     // called after simulation ends
     void simulation_done();
 
+    // called from complete_binding or during destruction
+    void free_binding();
+
 protected:
 
     sc_bind_info* m_bind_info;
