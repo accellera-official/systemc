@@ -694,7 +694,7 @@ void
 sc_event_list::report_invalid_modification() const
 {
     SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_
-                   , "list modfied while being waited on" );
+                   , "list modified while being waited on" );
     // may continue, if suppressed
 }
 
