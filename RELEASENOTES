@@ -92,6 +92,9 @@ Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
   - AArch64: fix stack corruption with optimizations disabled
 
+  - sc_fifo_in/out: delete event finder objects
+
+  - sc_port_base: free bind info in destructor
 
 Following is the list of bug fixes and enhancements for the 2.3.2 release:
 
@@ -533,7 +536,7 @@ beyond ISO/IEC 14882:2003 (aka C++03):
      in the global namespace, unless the macro SC_BIND_IN_GLOBAL_NAMESPACE
      is explicitly defined to 0.
 
-   o On C++11-enabled platforms, SC_NAMED used uniform initialization
+   o On C++11-enabled platforms, SC_NAMED uses uniform initialization
      syntax (regular () form on C++03)
 
 In the future, further language features depending on modern C++ language
