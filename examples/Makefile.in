@@ -414,6 +414,10 @@ examples_FILES = \
 @SEPARATE_INSTALL_TREE_TRUE@nobase_buildexamples_DATA = \
 @SEPARATE_INSTALL_TREE_TRUE@	$(examples_FILES)
 
+@SEPARATE_INSTALL_TREE_TRUE@examples_DIRS = \
+@SEPARATE_INSTALL_TREE_TRUE@	build-unix \
+@SEPARATE_INSTALL_TREE_TRUE@	build-msvc
+
 all: all-recursive
 
 .SUFFIXES:
@@ -673,6 +677,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@SEPARATE_INSTALL_TREE_FALSE@uninstall-hook:
 clean: clean-recursive
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -738,8 +743,9 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-nobase_buildexamplesDATA
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
 	check check-am clean clean-generic clean-libtool cscopelist-am \
@@ -753,7 +759,7 @@ uninstall-am: uninstall-nobase_buildexamplesDATA
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-nobase_buildexamplesDATA
+	uninstall-am uninstall-hook uninstall-nobase_buildexamplesDATA
 
 
 %.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 
@@ -776,6 +782,11 @@ uninstall-am: uninstall-nobase_buildexamplesDATA
 @SEPARATE_BUILD_TREE_TRUE@	    $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
 @SEPARATE_BUILD_TREE_TRUE@		fi ; \
 @SEPARATE_BUILD_TREE_TRUE@	done
+
+@SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(buildexamplesdir)" || ( set -e ;  cd "$(buildexamplesdir)" ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir --ignore-fail-on-non-empty "$(buildexamplesdir)" )
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

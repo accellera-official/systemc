@@ -661,6 +661,8 @@ CXX_FILES = kernel/sc_attribute.cpp $(CXX_COR_FILES) \
 	utils/sc_mempool.cpp utils/sc_pq.cpp utils/sc_report.cpp \
 	utils/sc_report_handler.cpp utils/sc_stop_here.cpp \
 	utils/sc_string.cpp utils/sc_utils_ids.cpp utils/sc_vector.cpp
+INCDIRS = kernel communication datatypes/bit datatypes/fx \
+	datatypes/int datatypes/misc datatypes tracing utils packages
 @WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_fiber.cpp
 @WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_pthread.cpp
 
@@ -1379,8 +1381,9 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-nobase_localincludeHEADERS
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-am clean clean-generic clean-libtool \
@@ -1395,9 +1398,14 @@ uninstall-am: uninstall-nobase_localincludeHEADERS
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am \
+	tags tags-am uninstall uninstall-am uninstall-hook \
 	uninstall-nobase_localincludeHEADERS
 
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
+	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(localincludedir)" )
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

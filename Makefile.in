@@ -417,6 +417,7 @@ EXTRA_DIST = \
 	msvc10/SystemC/SystemC.sln \
 	msvc10/SystemC/SystemC.props \
 	msvc10/SystemC/SystemC.vcxproj \
+	msvc10/SystemC/SystemC.vcxproj.filters \
 	msvc10/SystemC/SystemC-core.vcxproj \
 	msvc10/SystemC/SystemC-core.vcxproj.filters
 
@@ -826,6 +827,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@SEPARATE_INSTALL_TREE_FALSE@uninstall-hook:
 clean: clean-recursive
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -895,8 +897,9 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-rootdocDATA
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am \
 	am--refresh check check-am clean clean-cscope clean-generic \
@@ -913,8 +916,12 @@ uninstall-am: uninstall-rootdocDATA
 	installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
-	uninstall-am uninstall-rootdocDATA
+	uninstall-am uninstall-hook uninstall-rootdocDATA
 
+
+@SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(docdir)" || rmdir --ignore-fail-on-non-empty "$(docdir)"
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(prefix)" || rmdir --ignore-fail-on-non-empty "$(prefix)"
 
 doxygen:
 	@(cd docs && $(MAKE) $@)

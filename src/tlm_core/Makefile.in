@@ -436,6 +436,22 @@ CXX_FILES = \
 	tlm_2/tlm_generic_payload/tlm_phase.cpp \
 	tlm_2/tlm_quantum/tlm_global_quantum.cpp
 
+INCDIRS = \
+	tlm_2/tlm_2_interfaces \
+	tlm_2/tlm_generic_payload \
+	tlm_2/tlm_quantum \
+	tlm_2/tlm_sockets \
+	tlm_2 \
+	tlm_1/tlm_analysis \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces \
+	tlm_1/tlm_req_rsp/tlm_adapters \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels \
+	tlm_1/tlm_req_rsp/tlm_channels \
+	tlm_1/tlm_req_rsp/tlm_ports \
+	tlm_1/tlm_req_rsp \
+	tlm_1
+
 localincludedir = $(includedir)/tlm_core
 nobase_localinclude_HEADERS = $(H_FILES)
 noinst_LTLIBRARIES = libtlm_core.la
@@ -775,8 +791,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-nobase_localincludeHEADERS
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-strip uninstall-am
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
@@ -791,8 +808,13 @@ uninstall-am: uninstall-nobase_localincludeHEADERS
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-nobase_localincludeHEADERS
+	uninstall-hook uninstall-nobase_localincludeHEADERS
 
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
+	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(localincludedir)" )
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

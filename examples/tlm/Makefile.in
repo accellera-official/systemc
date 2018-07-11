@@ -748,14 +748,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 # initialize some useful variables (filled later)
 CLEANFILES = $(am__append_9) $(at_extension_optional_SHARED_CXX_FILES) \
 	$(examples_CLEAN) $(check_SCRIPTS)
-EXTRA_DIST = $(examples_FILES) CMakeLists.txt \
-	at_1_phase/CMakeLists.txt at_2_phase/CMakeLists.txt \
-	at_4_phase/CMakeLists.txt at_extension_optional/CMakeLists.txt \
-	at_mixed_targets/CMakeLists.txt at_ooo/CMakeLists.txt \
-	lt/CMakeLists.txt lt_dmi/CMakeLists.txt \
-	lt_extension_mandatory/CMakeLists.txt \
-	lt_mixed_endian/CMakeLists.txt \
-	lt_temporal_decouple/CMakeLists.txt
+EXTRA_DIST = $(examples_FILES) CMakeLists.txt
 SYSTEMC_INC_DIR = $(top_srcdir)/src
 SYSTEMC_LIB_DIR = $(libdir)$(LIB_ARCH_SUFFIX)
 LDADD = $(top_builddir)/src/libsystemc.la common/libtlm20examples.la
@@ -789,6 +782,7 @@ examples_FILES = README.txt $(at_1_phase_H_FILES) \
 	$(lt_mixed_endian_EXTRA) $(lt_temporal_decouple_H_FILES) \
 	$(lt_temporal_decouple_CXX_FILES) \
 	$(lt_temporal_decouple_BUILD) $(lt_temporal_decouple_EXTRA)
+TLM_EXAMPLE_SUBDIRS = {build-msvc,build-unix,docs,include,src,results,}
 CPPFLAGS_TLMTESTS = -I$(srcdir)/common/include $(AM_CPPFLAGS)
 examples_INPUT = results/input.txt
 examples_GOLDEN = results/expected.log
@@ -828,6 +822,17 @@ examples_TESTS = at_1_phase/test at_2_phase/test at_4_phase/test \
 	at_extension_optional/test at_mixed_targets/test at_ooo/test \
 	lt/test lt_dmi/test lt_extension_mandatory/test \
 	lt_mixed_endian/test lt_temporal_decouple/test
+examples_DIRS = at_1_phase/$(TLM_EXAMPLE_SUBDIRS) \
+	at_2_phase/$(TLM_EXAMPLE_SUBDIRS) \
+	at_4_phase/$(TLM_EXAMPLE_SUBDIRS) \
+	at_extension_optional/$(TLM_EXAMPLE_SUBDIRS) \
+	at_mixed_targets/$(TLM_EXAMPLE_SUBDIRS) \
+	at_ooo/$(TLM_EXAMPLE_SUBDIRS) lt/$(TLM_EXAMPLE_SUBDIRS) \
+	lt_dmi/$(TLM_EXAMPLE_SUBDIRS) \
+	lt_extension_mandatory/$(TLM_EXAMPLE_SUBDIRS) \
+	lt_mixed_endian/$(TLM_EXAMPLE_SUBDIRS) \
+	lt_temporal_decouple/$(TLM_EXAMPLE_SUBDIRS) \
+	common/include/models common/include common/src common
 at_1_phase_test_CPPFLAGS = \
 	-I$(srcdir)/at_1_phase/include \
 	$(CPPFLAGS_TLMTESTS)
@@ -849,6 +854,7 @@ at_1_phase_BUILD = \
 	at_1_phase/results/expected.log
 
 at_1_phase_EXTRA = \
+	at_1_phase/CMakeLists.txt \
 	at_1_phase/build-msvc/Makefile \
 	at_1_phase/build-msvc/at_1_phase.sln \
 	at_1_phase/build-msvc/at_1_phase.vcxproj \
@@ -877,6 +883,7 @@ at_2_phase_BUILD = \
 	at_2_phase/results/expected.log
 
 at_2_phase_EXTRA = \
+	at_2_phase/CMakeLists.txt \
 	at_2_phase/build-msvc/Makefile \
 	at_2_phase/build-msvc/at_2_phase.sln \
 	at_2_phase/build-msvc/at_2_phase.vcxproj \
@@ -905,6 +912,7 @@ at_4_phase_BUILD = \
 	at_4_phase/results/expected.log
 
 at_4_phase_EXTRA = \
+	at_4_phase/CMakeLists.txt \
 	at_4_phase/build-msvc/Makefile \
 	at_4_phase/build-msvc/at_4_phase.sln \
 	at_4_phase/build-msvc/at_4_phase.vcxproj \
@@ -936,6 +944,7 @@ at_extension_optional_BUILD = \
 	at_extension_optional/results/expected.log
 
 at_extension_optional_EXTRA = \
+	at_extension_optional/CMakeLists.txt \
 	at_extension_optional/build-msvc/Makefile \
 	at_extension_optional/build-msvc/at_extension_optional.sln \
 	at_extension_optional/build-msvc/at_extension_optional.vcxproj \
@@ -967,6 +976,7 @@ at_mixed_targets_BUILD = \
 	at_mixed_targets/results/expected.log
 
 at_mixed_targets_EXTRA = \
+	at_mixed_targets/CMakeLists.txt \
 	at_mixed_targets/build-msvc/Makefile \
 	at_mixed_targets/build-msvc/at_mixed_targets.sln \
 	at_mixed_targets/build-msvc/at_mixed_targets.vcxproj \
@@ -997,6 +1007,7 @@ at_ooo_BUILD = \
 	at_ooo/results/expected.log
 
 at_ooo_EXTRA = \
+	at_ooo/CMakeLists.txt \
 	at_ooo/build-msvc/Makefile \
 	at_ooo/build-msvc/at_ooo.sln \
 	at_ooo/build-msvc/at_ooo.vcxproj \
@@ -1026,6 +1037,7 @@ lt_BUILD = \
 
 lt_EXTRA = \
 	lt/README \
+	lt/CMakeLists.txt \
 	lt/build-msvc/Makefile \
 	lt/build-msvc/lt.sln \
 	lt/build-msvc/lt.vcxproj \
@@ -1055,6 +1067,7 @@ lt_dmi_BUILD = \
 
 lt_dmi_EXTRA = \
 	lt_dmi/README \
+	lt_dmi/CMakeLists.txt \
 	lt_dmi/build-msvc/Makefile \
 	lt_dmi/build-msvc/lt_dmi.sln \
 	lt_dmi/build-msvc/lt_dmi.vcxproj \
@@ -1085,6 +1098,7 @@ lt_extension_mandatory_BUILD = \
 	lt_extension_mandatory/results/expected.log
 
 lt_extension_mandatory_EXTRA = \
+	lt_extension_mandatory/CMakeLists.txt \
 	lt_extension_mandatory/build-msvc/Makefile \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcxproj \
@@ -1117,6 +1131,7 @@ lt_mixed_endian_BUILD = \
 
 lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/README \
+	lt_mixed_endian/CMakeLists.txt \
 	lt_mixed_endian/build-msvc/Makefile \
 	lt_mixed_endian/build-msvc/README.txt \
 	lt_mixed_endian/build-msvc/lt_mixed_endian.sln \
@@ -1150,6 +1165,7 @@ lt_temporal_decouple_BUILD = \
 
 lt_temporal_decouple_EXTRA = \
 	lt_temporal_decouple/README \
+	lt_temporal_decouple/CMakeLists.txt \
 	lt_temporal_decouple/build-msvc/Makefile \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.sln \
 	lt_temporal_decouple/build-msvc/lt_temporal_decouple.vcxproj \
@@ -2600,6 +2616,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@SEPARATE_INSTALL_TREE_FALSE@uninstall-hook:
 clean: clean-recursive
 
 clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
@@ -2670,8 +2687,10 @@ ps: ps-recursive
 ps-am:
 
 uninstall-am: uninstall-nobase_tlmexamplesDATA
-
-.MAKE: $(am__recursive_targets) check-am install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) check-am install-am install-strip \
+	uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am all-local \
 	check check-TESTS check-am clean clean-checkPROGRAMS \
@@ -2687,7 +2706,8 @@ uninstall-am: uninstall-nobase_tlmexamplesDATA
 	installdirs-am maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am recheck tags tags-am \
-	uninstall uninstall-am uninstall-nobase_tlmexamplesDATA
+	uninstall uninstall-am uninstall-hook \
+	uninstall-nobase_tlmexamplesDATA
 
 
 %.sh: %$(EXEEXT) $(TESTSCRIPT_IN) 
@@ -2737,6 +2757,11 @@ $(at_extension_optional_SHARED_CXX_FILES) :
 #lt_extension_mandatory_FILTER = 
 
 #lt_temporal_decouple_FILTER = 
+
+@SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(tlmexamplesdir)" || ( set -e ; cd "$(tlmexamplesdir)" ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir "$(tlmexamplesdir)" )
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

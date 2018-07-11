@@ -336,6 +336,14 @@ DOC_FILES = sysc/README sysc/archived/README \
 @SEPARATE_INSTALL_TREE_TRUE@nobase_doc_DATA = $(DOC_FILES) \
 @SEPARATE_INSTALL_TREE_TRUE@	sysc/doxygen/Doxyfile \
 @SEPARATE_INSTALL_TREE_TRUE@	tlm/doxygen/Doxyfile
+@SEPARATE_INSTALL_TREE_TRUE@DOCDIRS = \
+@SEPARATE_INSTALL_TREE_TRUE@	sysc/archived \
+@SEPARATE_INSTALL_TREE_TRUE@	sysc/doxygen \
+@SEPARATE_INSTALL_TREE_TRUE@	sysc \
+@SEPARATE_INSTALL_TREE_TRUE@	tlm/doxygen \
+@SEPARATE_INSTALL_TREE_TRUE@	tlm/release \
+@SEPARATE_INSTALL_TREE_TRUE@	tlm
+
 all: all-am
 
 .SUFFIXES:
@@ -475,6 +483,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@SEPARATE_INSTALL_TREE_FALSE@uninstall-hook:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -540,8 +549,9 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-nobase_docDATA
-
-.MAKE: install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: install-am install-strip uninstall-am
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	cscopelist-am ctags-am distclean distclean-generic \
@@ -553,9 +563,14 @@ uninstall-am: uninstall-nobase_docDATA
 	install-ps-am install-strip installcheck installcheck-am \
 	installdirs maintainer-clean maintainer-clean-generic \
 	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags-am uninstall uninstall-am \
+	ps ps-am tags-am uninstall uninstall-am uninstall-hook \
 	uninstall-nobase_docDATA
 
+
+@SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(docdir)" || ( set -e ; cd "$(docdir)" ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  for dir in $(DOCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir --ignore-fail-on-non-empty "$(docdir)" )
 
 doxygen: sysc/doxygen/Doxyfile tlm/doxygen/Doxyfile
 	@(cd sysc/doxygen && $(DOXYGEN))

@@ -898,8 +898,9 @@ ps-am:
 
 uninstall-am: uninstall-libarchLTLIBRARIES \
 	uninstall-nobase_includeHEADERS uninstall-pkgconfigDATA
-
-.MAKE: $(am__recursive_targets) install-am install-strip
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
+.MAKE: $(am__recursive_targets) install-am install-strip uninstall-am
 
 .PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
 	check-am clean clean-generic clean-libarchLTLIBRARIES \
@@ -916,9 +917,14 @@ uninstall-am: uninstall-libarchLTLIBRARIES \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-libarchLTLIBRARIES uninstall-nobase_includeHEADERS \
-	uninstall-pkgconfigDATA
+	uninstall-hook uninstall-libarchLTLIBRARIES \
+	uninstall-nobase_includeHEADERS uninstall-pkgconfigDATA
 
+
+uninstall-hook:
+	test ! -d "$(includedir)"   || rmdir --ignore-fail-on-non-empty "$(includedir)"
+	test ! -d "$(pkgconfigdir)" || rmdir --ignore-fail-on-non-empty "$(pkgconfigdir)"
+	test ! -d "$(libarchdir)"   || rmdir --ignore-fail-on-non-empty "$(libarchdir)"
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
