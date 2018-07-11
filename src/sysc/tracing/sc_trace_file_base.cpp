@@ -95,6 +95,9 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
 
 sc_trace_file_base::~sc_trace_file_base()
 {
+    if( !is_initialized() )
+        SC_REPORT_WARNING( SC_ID_TRACING_CLOSE_EMPTY_FILE_, filename() );
+
     if( fp )
         fclose(fp);
 
@@ -123,6 +126,11 @@ sc_trace_file_base::simulation_phase_callback()
 #endif // SC_TRACING_PHASE_CALLBACKS_
 
 /*****************************************************************************/
+
+bool sc_trace_file_base::is_initialized() const
+{
+    return initialized_;
+}
 
 bool
 sc_trace_file_base::initialize()
@@ -287,7 +295,8 @@ sc_trace_file_base::unit_to_fs(sc_time_unit tu)
         case SC_MS: return UINT64_C(1000000000000);
         case SC_SEC:return UINT64_C(1000000000000000);
         default:
-            sc_assert(0);
+            SC_REPORT_ERROR( SC_ID_TRACING_INVALID_TIMESCALE_UNIT_,
+                             "unknown unit value" );
             return 0;
     }
 }
@@ -315,8 +324,14 @@ sc_trace_file_base::fs_unit_to_str(sc_trace_file_base::unit_type tu)
         case UINT64_C(1000000000000000): return "1 sec";
         case UINT64_C(10000000000000000): return "10 sec";
         case UINT64_C(100000000000000000): return "100 sec";
-        default: sc_assert(0); return "";
+        default: /* fail below */ (void)0;
     }
+
+    std::stringstream ss;
+    ss << "not a power of ten: " << tu << " fs";
+    SC_REPORT_ERROR( SC_ID_TRACING_INVALID_TIMESCALE_UNIT_,
+                     ss.str().c_str() );
+    return "";
 }
 
 // obtain formatted time string

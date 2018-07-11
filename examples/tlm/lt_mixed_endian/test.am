@@ -68,6 +68,9 @@ examples_FILES += \
 	$(lt_mixed_endian_BUILD) \
 	$(lt_mixed_endian_EXTRA)
 
+examples_DIRS += \
+	lt_mixed_endian/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 lt_mixed_endian_H_FILES = \
@@ -87,6 +90,7 @@ lt_mixed_endian_BUILD = \
 
 lt_mixed_endian_EXTRA = \
 	lt_mixed_endian/README \
+	lt_mixed_endian/CMakeLists.txt \
 	lt_mixed_endian/build-msvc/Makefile \
 	lt_mixed_endian/build-msvc/README.txt \
 	lt_mixed_endian/build-msvc/lt_mixed_endian.sln \

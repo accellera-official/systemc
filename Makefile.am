@@ -65,6 +65,7 @@ EXTRA_DIST = \
 	msvc10/SystemC/SystemC.sln \
 	msvc10/SystemC/SystemC.props \
 	msvc10/SystemC/SystemC.vcxproj \
+	msvc10/SystemC/SystemC.vcxproj.filters \
 	msvc10/SystemC/SystemC-core.vcxproj \
 	msvc10/SystemC/SystemC-core.vcxproj.filters
 
@@ -75,6 +76,10 @@ if SEPARATE_INSTALL_TREE
 
 rootdoc_DATA = \
 	$(DOC_FILES)
+
+uninstall-hook:
+	test ! -d "$(docdir)" || rmdir --ignore-fail-on-non-empty "$(docdir)"
+	test ! -d "$(prefix)" || rmdir --ignore-fail-on-non-empty "$(prefix)"
 
 endif # SEPARATE_INSTALL_TREE
 

@@ -68,6 +68,9 @@ examples_FILES += \
 	$(lt_extension_mandatory_BUILD) \
 	$(lt_extension_mandatory_EXTRA)
 
+examples_DIRS += \
+	lt_extension_mandatory/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 lt_extension_mandatory_H_FILES = \
@@ -85,6 +88,7 @@ lt_extension_mandatory_BUILD = \
 	lt_extension_mandatory/results/expected.log
 
 lt_extension_mandatory_EXTRA = \
+	lt_extension_mandatory/CMakeLists.txt \
 	lt_extension_mandatory/build-msvc/Makefile \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.sln \
 	lt_extension_mandatory/build-msvc/lt_extension_mandatory.vcxproj \

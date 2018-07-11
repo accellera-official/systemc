@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_3_simple_async_BUILD) \
 	$(2_3_simple_async_EXTRA)
 
+examples_DIRS += 2.3/simple_async
+
 ## example-specific details
 
 2_3_simple_async_test_CPPFLAGS += \
@@ -84,6 +86,7 @@ examples_FILES += \
 2_3_simple_async_EXTRA = \
 	2.3/simple_async/simple_async.sln \
 	2.3/simple_async/simple_async.vcxproj \
+	2.3/simple_async/CMakeLists.txt \
 	2.3/simple_async/Makefile
 
 #2_3_simple_async_FILTER = 

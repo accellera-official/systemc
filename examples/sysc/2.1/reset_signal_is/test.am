@@ -68,6 +68,8 @@ examples_FILES += \
 	$(2_1_reset_signal_is_BUILD) \
 	$(2_1_reset_signal_is_EXTRA)
 
+examples_DIRS += 2.1/reset_signal_is
+
 ## example-specific details
 
 2_1_reset_signal_is_H_FILES =
@@ -81,6 +83,7 @@ examples_FILES += \
 2_1_reset_signal_is_EXTRA = \
 	2.1/reset_signal_is/reset_signal_is.sln \
 	2.1/reset_signal_is/reset_signal_is.vcxproj \
+	2.1/reset_signal_is/CMakeLists.txt \
 	2.1/reset_signal_is/Makefile
 
 #2_1_reset_signal_is_FILTER = 

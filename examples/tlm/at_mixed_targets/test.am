@@ -68,6 +68,9 @@ examples_FILES += \
 	$(at_mixed_targets_BUILD) \
 	$(at_mixed_targets_EXTRA)
 
+examples_DIRS += \
+	at_mixed_targets/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 at_mixed_targets_H_FILES = \
@@ -83,6 +86,7 @@ at_mixed_targets_BUILD = \
 	at_mixed_targets/results/expected.log
 
 at_mixed_targets_EXTRA = \
+	at_mixed_targets/CMakeLists.txt \
 	at_mixed_targets/build-msvc/Makefile \
 	at_mixed_targets/build-msvc/at_mixed_targets.sln \
 	at_mixed_targets/build-msvc/at_mixed_targets.vcxproj \

@@ -68,6 +68,9 @@ examples_FILES += \
 	$(at_ooo_BUILD) \
 	$(at_ooo_EXTRA)
 
+examples_DIRS += \
+	at_ooo/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 at_ooo_H_FILES = \
@@ -85,6 +88,7 @@ at_ooo_BUILD = \
 	at_ooo/results/expected.log
 
 at_ooo_EXTRA = \
+	at_ooo/CMakeLists.txt \
 	at_ooo/build-msvc/Makefile \
 	at_ooo/build-msvc/at_ooo.sln \
 	at_ooo/build-msvc/at_ooo.vcxproj \

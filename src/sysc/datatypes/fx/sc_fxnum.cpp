@@ -60,13 +60,13 @@ namespace sc_dt
 {
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_fxnum_bitref
+//  CLASS : sc_fxnum_bitref / sc_fxnum_bitref_r
 //
 //  Proxy class for bit-selection in class sc_fxnum, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
 bool
-sc_fxnum_bitref::get() const
+sc_fxnum_bitref_r::get() const
 {
     return m_num.get_bit( m_idx );
 }
@@ -81,7 +81,7 @@ sc_fxnum_bitref::set( bool high )
 // print or dump content
 
 void
-sc_fxnum_bitref::print( ::std::ostream& os ) const
+sc_fxnum_bitref_r::print( ::std::ostream& os ) const
 {
     os << get();
 }
@@ -95,7 +95,7 @@ sc_fxnum_bitref::scan( ::std::istream& is )
 }
 
 void
-sc_fxnum_bitref::dump( ::std::ostream& os ) const
+sc_fxnum_bitref_r::dump( ::std::ostream& os ) const
 {
     os << "sc_fxnum_bitref" << ::std::endl;
     os << "(" << ::std::endl;
@@ -107,13 +107,13 @@ sc_fxnum_bitref::dump( ::std::ostream& os ) const
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_fxnum_fast_bitref
+//  CLASS : sc_fxnum_fast_bitref / sc_fxnum_fast_bitref_r
 //
 //  Proxy class for bit-selection in class sc_fxnum_fast, behaves like sc_bit.
 // ----------------------------------------------------------------------------
 
 bool
-sc_fxnum_fast_bitref::get() const
+sc_fxnum_fast_bitref_r::get() const
 {
     return m_num.get_bit( m_idx );
 }
@@ -128,7 +128,7 @@ sc_fxnum_fast_bitref::set( bool high )
 // print or dump content
 
 void
-sc_fxnum_fast_bitref::print( ::std::ostream& os ) const
+sc_fxnum_fast_bitref_r::print( ::std::ostream& os ) const
 {
     os << get();
 }
@@ -142,7 +142,7 @@ sc_fxnum_fast_bitref::scan( ::std::istream& is )
 }
 
 void
-sc_fxnum_fast_bitref::dump( ::std::ostream& os ) const
+sc_fxnum_fast_bitref_r::dump( ::std::ostream& os ) const
 {
     os << "sc_fxnum_fast_bitref" << ::std::endl;
     os << "(" << ::std::endl;
@@ -161,7 +161,7 @@ sc_fxnum_fast_bitref::dump( ::std::ostream& os ) const
 // ----------------------------------------------------------------------------
 
 bool
-sc_fxnum_subref::get() const
+sc_fxnum_subref_r::get() const
 {
     return m_num.get_slice( m_from, m_to, m_bv );
 }
@@ -176,7 +176,7 @@ sc_fxnum_subref::set()
 // print or dump content
 
 void
-sc_fxnum_subref::print( ::std::ostream& os ) const
+sc_fxnum_subref_r::print( ::std::ostream& os ) const
 {
     get();
     m_bv.print( os );
@@ -190,7 +190,7 @@ sc_fxnum_subref::scan( ::std::istream& is )
 }
 
 void
-sc_fxnum_subref::dump( ::std::ostream& os ) const
+sc_fxnum_subref_r::dump( ::std::ostream& os ) const
 {
     os << "sc_fxnum_subref" << ::std::endl;
     os << "(" << ::std::endl;
@@ -203,14 +203,14 @@ sc_fxnum_subref::dump( ::std::ostream& os ) const
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_fxnum_fast_subref
+//  CLASS : sc_fxnum_fast_subref / sc_fxnum_fast_subref_r
 //
 //  Proxy class for part-selection in class sc_fxnum_fast,
 //  behaves like sc_bv_base.
 // ----------------------------------------------------------------------------
 
 bool
-sc_fxnum_fast_subref::get() const
+sc_fxnum_fast_subref_r::get() const
 {
     return m_num.get_slice( m_from, m_to, m_bv );
 }
@@ -225,7 +225,7 @@ sc_fxnum_fast_subref::set()
 // print or dump content
 
 void
-sc_fxnum_fast_subref::print( ::std::ostream& os ) const
+sc_fxnum_fast_subref_r::print( ::std::ostream& os ) const
 {
     get();
     m_bv.print( os );
@@ -239,7 +239,7 @@ sc_fxnum_fast_subref::scan( ::std::istream& is )
 }
 
 void
-sc_fxnum_fast_subref::dump( ::std::ostream& os ) const
+sc_fxnum_fast_subref_r::dump( ::std::ostream& os ) const
 {
     os << "sc_fxnum_fast_subref" << ::std::endl;
     os << "(" << ::std::endl;

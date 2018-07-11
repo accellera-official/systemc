@@ -172,7 +172,7 @@ void sc_process_b::delete_process()
 
     // Immediate deletion:
 
-    if ( this != sc_get_current_process_b() )
+    if ( NULL == sc_get_current_process_b() )
     {
         delete this;
     }
@@ -182,7 +182,7 @@ void sc_process_b::delete_process()
 
     else
     {
-	m_references_n = 1;
+        m_references_n = 1;
         detach();
         simcontext()->mark_to_collect_process( this );
     }
@@ -266,7 +266,11 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
 	    thread_h->m_timeout_event_p->remove_dynamic(thread_h);
 	    thread_h->m_timeout_event_p->cancel();
 	}
-        if ( m_event_p ) m_event_p->remove_dynamic( thread_h );
+        if ( m_event_p )
+        {
+            m_event_p->remove_dynamic( thread_h );
+            m_event_p = 0;
+        }
         if ( m_event_list_p )
         {
             m_event_list_p->remove_dynamic( thread_h, 0 );
@@ -280,7 +284,11 @@ sc_process_b::remove_dynamic_events( bool skip_timeout )
 	    method_h->m_timeout_event_p->remove_dynamic(method_h);
 	    method_h->m_timeout_event_p->cancel();
 	}
-        if ( m_event_p ) m_event_p->remove_dynamic( method_h );
+        if ( m_event_p )
+        {
+            m_event_p->remove_dynamic( method_h );
+            m_event_p = 0;
+        }
         if ( m_event_list_p )
         {
             m_event_list_p->remove_dynamic( method_h, 0 );
@@ -545,7 +553,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_active_areset_n(0),
     m_active_reset_n(0),
     m_dont_init( false ),
-    m_dynamic_proc( simcontext()->elaboration_done() ),
+    m_dynamic_proc(),
     m_event_p(0),
     m_event_count(0),
     m_event_list_p(0),
@@ -575,6 +583,11 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_trigger_type(STATIC),
     m_unwinding(false)
 {
+    // Check spawn phase: m_ready_to_simulate is set *after* elaboration_done()
+    unsigned spawned = SPAWN_ELAB;
+    spawned += simcontext()->elaboration_done();  // -> SPAWN_START, if true
+    spawned += simcontext()->m_ready_to_simulate; // -> SPAWN_SIM, if true
+    m_dynamic_proc = static_cast<spawn_t>(spawned);
 
     // THIS OBJECT INSTANCE IS NOW THE LAST CREATED PROCESS:
 

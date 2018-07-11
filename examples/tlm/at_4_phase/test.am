@@ -68,6 +68,9 @@ examples_FILES += \
 	$(at_4_phase_BUILD) \
 	$(at_4_phase_EXTRA)
 
+examples_DIRS += \
+	at_4_phase/$(TLM_EXAMPLE_SUBDIRS)
+
 ## example-specific details
 
 at_4_phase_H_FILES = \
@@ -83,6 +86,7 @@ at_4_phase_BUILD = \
 	at_4_phase/results/expected.log
 
 at_4_phase_EXTRA = \
+	at_4_phase/CMakeLists.txt \
 	at_4_phase/build-msvc/Makefile \
 	at_4_phase/build-msvc/at_4_phase.sln \
 	at_4_phase/build-msvc/at_4_phase.vcxproj \

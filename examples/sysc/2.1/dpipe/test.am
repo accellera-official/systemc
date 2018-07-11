@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_1_dpipe_BUILD) \
 	$(2_1_dpipe_EXTRA)
 
+examples_DIRS += 2.1/dpipe
+
 ## example-specific details
 
 2_1_dpipe_H_FILES =
@@ -80,6 +82,7 @@ examples_FILES += \
 2_1_dpipe_EXTRA = \
 	2.1/dpipe/dpipe.sln \
 	2.1/dpipe/dpipe.vcxproj \
+	2.1/dpipe/CMakeLists.txt \
 	2.1/dpipe/Makefile
 
 #2_1_dpipe_FILTER = 

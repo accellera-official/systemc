@@ -83,13 +83,13 @@ class SC_API sc_unwind_exception : public std::exception
 
   public:
     virtual bool is_reset() const { return m_is_reset; }
-    virtual const char* what() const throw();
+    virtual const char* what() const SC_NOEXCEPT_;
 
   public:
 
     // enable catch by value
     sc_unwind_exception( const sc_unwind_exception& );
-    virtual ~sc_unwind_exception() throw();
+    virtual ~sc_unwind_exception() SC_NOEXCEPT_;
 
   protected:
     explicit

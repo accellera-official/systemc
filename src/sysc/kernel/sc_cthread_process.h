@@ -38,8 +38,6 @@ namespace sc_core {
 // friend function declarations:
 
 void SC_API halt( sc_simcontext* );
-void SC_API wait( int, sc_simcontext* );
-
 
 //==============================================================================
 // sc_cthread_process -
@@ -56,7 +54,6 @@ class sc_cthread_process : public sc_thread_process {
     friend void sc_cthread_cor_fn( void* );
 
     friend void halt( sc_simcontext* );
-    friend void wait( int, sc_simcontext* );
 
   public:
     sc_cthread_process( const char* name_p, bool free_host,

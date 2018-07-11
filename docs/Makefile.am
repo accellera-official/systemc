@@ -79,6 +79,19 @@ nobase_doc_DATA += \
 	sysc/doxygen/Doxyfile \
 	tlm/doxygen/Doxyfile
 
+DOCDIRS = \
+	sysc/archived \
+	sysc/doxygen \
+	sysc \
+	tlm/doxygen \
+	tlm/release \
+	tlm
+
+uninstall-hook:
+	test ! -d "$(docdir)" || ( set -e ; cd "$(docdir)" ; \
+	  for dir in $(DOCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir --ignore-fail-on-non-empty "$(docdir)" )
+
 endif # SEPARATE_INSTALL_TREE
 
 ## add documentation and CMake scripts to distribution

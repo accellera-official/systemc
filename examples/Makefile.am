@@ -59,7 +59,17 @@ if SEPARATE_INSTALL_TREE
 buildexamplesdir = $(examplesdir)
 nobase_buildexamples_DATA = \
 	$(examples_FILES)
-endif
+
+examples_DIRS = \
+	build-unix \
+	build-msvc
+
+uninstall-hook:
+	test ! -d "$(buildexamplesdir)" || ( set -e ;  cd "$(buildexamplesdir)" ; \
+	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir --ignore-fail-on-non-empty "$(buildexamplesdir)" )
+
+endif # SEPARATE_INSTALL_TREE
 
 EXTRA_DIST += \
 	CMakeLists.txt \

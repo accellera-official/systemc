@@ -85,7 +85,9 @@ public:
 protected:
     sc_trace_file_base( const char* name, const char* extension );
 
-    // returns true, iff initialization has been performed
+    // returns true, if trace file is already initialized
+    bool is_initialized() const;
+    // returns true, iff initialization has been performed in this call
     bool initialize();
     // ensure that file has been opened (needed for early write_comment())
     void open_fp();

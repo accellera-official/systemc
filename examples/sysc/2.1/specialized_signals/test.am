@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_1_specialized_signals_BUILD) \
 	$(2_1_specialized_signals_EXTRA)
 
+examples_DIRS += 2.1/specialized_signals
+
 ## example-specific details
 
 2_1_specialized_signals_H_FILES = \
@@ -88,6 +90,7 @@ examples_FILES += \
 2_1_specialized_signals_EXTRA = \
 	2.1/specialized_signals/specialized_signals.sln \
 	2.1/specialized_signals/specialized_signals.vcxproj \
+	2.1/specialized_signals/CMakeLists.txt \
 	2.1/specialized_signals/Makefile
 
 #2_1_specialized_signals_FILTER = 

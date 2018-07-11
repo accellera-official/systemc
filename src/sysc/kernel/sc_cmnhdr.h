@@ -97,7 +97,7 @@
 //   199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
 //   201103L (C++11, ISO/IEC 14882:2011)
 //   201402L (C++14, ISO/IEC 14882:2014)
-//   201703L (C++17, N4659: Working Draft, Standard for Programming Language C++)
+//   201703L (C++17, ISO/IEC 14882:2017)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
@@ -138,6 +138,19 @@
 #else
 # define IEEE_1666_CPLUSPLUS SC_CPLUSPLUS
 #endif // IEEE_1666_CPLUSPLUS
+
+// ----------------------------------------------------------------------------
+// (no) exception specifiers
+
+#ifndef SC_NOEXCEPT_
+#if SC_CPLUSPLUS >= 201103L && !(defined(_MSV_VER) && _MSC_VER < 1900)
+# define SC_NOEXCEPT_            noexcept
+# define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
+#else
+# define SC_NOEXCEPT_            throw()
+# define SC_NOEXCEPT_EXPR_(expr) /* nothing */
+#endif
+#endif // SC_NOEXCEPT_
 
 // ----------------------------------------------------------------------------
 

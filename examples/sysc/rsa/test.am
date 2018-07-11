@@ -67,6 +67,8 @@ examples_FILES += \
 	$(rsa_BUILD) \
 	$(rsa_EXTRA)
 
+examples_DIRS += rsa
+
 ## example-specific details
 
 rsa_H_FILES =
@@ -81,6 +83,7 @@ rsa_CXX_FILES = \
 rsa_EXTRA = \
 	rsa/rsa.sln \
 	rsa/rsa.vcxproj \
+	rsa/CMakeLists.txt \
 	rsa/Makefile \
 	rsa/README
 

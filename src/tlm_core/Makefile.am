@@ -90,8 +90,29 @@ EXTRA_DIST += \
 	tlm_1/README.txt \
 	tlm_2/README.txt
 
+INCDIRS = \
+	tlm_2/tlm_2_interfaces \
+	tlm_2/tlm_generic_payload \
+	tlm_2/tlm_quantum \
+	tlm_2/tlm_sockets \
+	tlm_2 \
+	tlm_1/tlm_analysis \
+	tlm_1/tlm_req_rsp/tlm_1_interfaces \
+	tlm_1/tlm_req_rsp/tlm_adapters \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_fifo \
+	tlm_1/tlm_req_rsp/tlm_channels/tlm_req_rsp_channels \
+	tlm_1/tlm_req_rsp/tlm_channels \
+	tlm_1/tlm_req_rsp/tlm_ports \
+	tlm_1/tlm_req_rsp \
+	tlm_1
+
 localincludedir = $(includedir)/tlm_core
 nobase_localinclude_HEADERS = $(H_FILES)
 
 noinst_LTLIBRARIES = libtlm_core.la
 libtlm_core_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
+
+uninstall-hook:
+	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
+	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
+	  cd - ; rmdir "$(localincludedir)" )

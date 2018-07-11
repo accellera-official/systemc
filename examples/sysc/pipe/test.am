@@ -67,6 +67,8 @@ examples_FILES += \
 	$(pipe_BUILD) \
 	$(pipe_EXTRA)
 
+examples_DIRS += pipe
+
 ## example-specific details
 
 pipe_H_FILES = \
@@ -91,6 +93,7 @@ pipe_CXX_FILES = \
 pipe_EXTRA = \
 	pipe/pipe.sln \
 	pipe/pipe.vcxproj \
+	pipe/CMakeLists.txt \
 	pipe/Makefile \
 	pipe/README
 

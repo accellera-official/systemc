@@ -133,5 +133,12 @@ CXX_FILES += \
 	datatypes/misc/sc_concatref.cpp \
 	datatypes/misc/sc_value_base.cpp
 
+INCDIRS += \
+  datatypes/bit \
+  datatypes/fx \
+  datatypes/int \
+  datatypes/misc \
+  datatypes
+
 ## Taf!
 ## :vim:ft=automake:

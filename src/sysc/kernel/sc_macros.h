@@ -30,6 +30,7 @@
 #ifndef SC_MACROS_H
 #define SC_MACROS_H
 
+#include "sysc/kernel/sc_cmnhdr.h" // SC_CPLUSPLUS
 
 namespace sc_dt {
 
@@ -71,8 +72,6 @@ sc_abs( const T& a )
 
 } // namespace sc_dt 
 
-namespace sc_core {
-
 // token stringification
 
 #define SC_STRINGIFY_HELPER_( Arg ) \
@@ -93,6 +92,10 @@ namespace sc_core {
 #define SC_CONCAT_UNDERSCORE_( a, b ) \
   SC_CONCAT_HELPER_( a, SC_CONCAT_HELPER_( _, b ) )
 
+
+// forced token expansion
+#define SC_EXPAND_HELPER_(x) x
+
 /*
  *  These help debugging --
  *  -- the user can find out at which location in their source file a process calls wait.
@@ -111,7 +114,38 @@ namespace sc_core {
 #define SC_WAIT_UNTIL(expr)                             \
   do { SC_WAIT(); } while( !(expr) )
 
-} // namespace sc_core
+// ----------------------------------------------------------------------------
+// SC_NAMED - helper macro to create named objects
+
+#define SC_NAMED(...) \
+  SC_NAMED_IMPL_(__VA_ARGS__)(__VA_ARGS__)
+
+#if SC_CPLUSPLUS >= 201103L // use uniform initialization in C++11 or later
+# define SC_NAMED_IMPL_ONE_(inst) \
+    inst { SC_STRINGIFY_HELPER_(inst) }
+# define SC_NAMED_IMPL_MORE_(inst, ...) \
+    inst { SC_STRINGIFY_HELPER_(inst), __VA_ARGS__ }
+#else // use regular init
+# define SC_NAMED_IMPL_ONE_(inst) \
+    inst ( SC_STRINGIFY_HELPER_(inst) )
+# define SC_NAMED_IMPL_MORE_(inst, ...) \
+    inst ( SC_STRINGIFY_HELPER_(inst), __VA_ARGS__ )
+#endif // SC_CPLUSPLUS
+
+#define SC_NAMED_IMPL_(...) \
+  SC_CONCAT_HELPER_(SC_NAMED_IMPL_, SC_NAMED_IMPL_EXPAND_(__VA_ARGS__))
+#define SC_NAMED_IMPL_EXPAND_(...) \
+  SC_EXPAND_HELPER_( SC_NAMED_IMPL_EXPAND_SEQ_( \
+    __VA_ARGS__,                                        \
+    MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
+    MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
+    MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
+    MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,ONE_, FAIL_ ) )
+#define SC_NAMED_IMPL_EXPAND_SEQ_( \
+   _1, _2, _3, _4, _5, _6, _7, _8, \
+   _9,_10,_11,_12,_13,_14,_15,_16, \
+  _17,_18,_19,_20,_21,_22,_23,_24, \
+  _25,_26,_27,_28,_29,_30,_31, N, ...) N
 
 // $Log: sc_macros.h,v $
 // Revision 1.5  2011/08/26 20:46:09  acg

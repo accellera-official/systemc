@@ -67,6 +67,8 @@ examples_FILES += \
 	$(simple_fifo_BUILD) \
 	$(simple_fifo_EXTRA)
 
+examples_DIRS += simple_fifo
+
 ## example-specific details
 
 simple_fifo_H_FILES =
@@ -80,6 +82,7 @@ simple_fifo_BUILD = \
 simple_fifo_EXTRA = \
 	simple_fifo/simple_fifo.sln \
 	simple_fifo/simple_fifo.vcxproj \
+	simple_fifo/CMakeLists.txt \
 	simple_fifo/Makefile
 
 

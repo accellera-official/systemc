@@ -60,7 +60,7 @@ wait( sc_simcontext* simc )
     switch( cpi->kind ) {
     case SC_THREAD_PROC_:
     case SC_CTHREAD_PROC_: {
-	reinterpret_cast<sc_cthread_handle>( cpi->process_handle )->wait_cycles();
+        reinterpret_cast<sc_thread_handle>( cpi->process_handle )->wait_cycles();
         break;
     }
     default:
@@ -99,6 +99,12 @@ wait( const sc_event& e, sc_simcontext* simc )
 SC_API void
 wait( const sc_event_or_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "wait() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_THREAD_PROC_: {
@@ -125,6 +131,12 @@ wait( const sc_event_or_list& el, sc_simcontext* simc )
 SC_API void
 wait( const sc_event_and_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "wait() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_THREAD_PROC_: {
@@ -197,6 +209,12 @@ wait( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 SC_API void
 wait( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "wait() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_THREAD_PROC_: {
@@ -221,6 +239,12 @@ wait( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc )
 SC_API void
 wait( const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "wait() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     switch( cpi->kind ) {
     case SC_THREAD_PROC_: {
@@ -275,6 +299,12 @@ next_trigger( const sc_event& e, sc_simcontext* simc )
 SC_API void
 next_trigger( const sc_event_or_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "next_trigger() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
 	reinterpret_cast<sc_method_handle>( cpi->process_handle )->next_trigger( el );
@@ -287,6 +317,12 @@ next_trigger( const sc_event_or_list& el, sc_simcontext* simc )
 SC_API void
 next_trigger( const sc_event_and_list& el, sc_simcontext* simc )
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "next_trigger() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
 	reinterpret_cast<sc_method_handle>( cpi->process_handle )->next_trigger( el );
@@ -323,6 +359,12 @@ next_trigger( const sc_time& t, const sc_event& e, sc_simcontext* simc )
 SC_API void
 next_trigger( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc)
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "next_trigger() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
 	reinterpret_cast<sc_method_handle>( cpi->process_handle )->next_trigger( t, el );
@@ -335,6 +377,12 @@ next_trigger( const sc_time& t, const sc_event_or_list& el, sc_simcontext* simc)
 SC_API void
 next_trigger(const sc_time& t, const sc_event_and_list& el, sc_simcontext* simc)
 {
+    if( el.empty() ) {
+        SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_,
+                         "next_trigger() on empty event list not allowed" );
+        // may continue, if suppressed
+    }
+
     sc_curr_proc_handle cpi = simc->get_curr_proc_info();
     if( cpi->kind == SC_METHOD_PROC_ ) {
 	reinterpret_cast<sc_method_handle>( cpi->process_handle )->next_trigger( t, el );

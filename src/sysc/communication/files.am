@@ -87,5 +87,8 @@ CXX_FILES += \
 	communication/sc_signal_resolved.cpp \
 	communication/sc_signal_resolved_ports.cpp
 
+INCDIRS += \
+  communication
+
 ## Taf!
 ## :vim:ft=automake:

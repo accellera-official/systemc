@@ -361,6 +361,15 @@ sc_event::~sc_event()
 	sc_object_manager* object_manager_p = m_simc->get_object_manager();
 	object_manager_p->remove_event( m_name );
     }
+
+    for(size_t i = 0; i < m_threads_dynamic.size(); ++i ) {
+        if( m_threads_dynamic[i]->m_event_p == this )
+            m_threads_dynamic[i]->m_event_p = 0;
+    }
+    for(size_t i = 0; i < m_methods_dynamic.size(); ++i ) {
+        if( m_methods_dynamic[i]->m_event_p == this )
+            m_methods_dynamic[i]->m_event_p = 0;
+    }
 }
 
 // +----------------------------------------------------------------------------
@@ -685,7 +694,7 @@ void
 sc_event_list::report_invalid_modification() const
 {
     SC_REPORT_ERROR( SC_ID_EVENT_LIST_FAILED_
-                   , "list modfied while being waited on" );
+                   , "list modified while being waited on" );
     // may continue, if suppressed
 }
 

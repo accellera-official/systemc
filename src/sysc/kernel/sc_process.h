@@ -278,6 +278,7 @@ class SC_API sc_process_b : public sc_object {
     friend class sc_process_table;   // Allow process_table to modify ref. count.
     friend class sc_thread_process;  // Child can access parent.
 
+    friend class sc_event;
     friend class sc_object;
     friend class sc_port_base;
     friend class sc_runnable;
@@ -330,6 +331,13 @@ class SC_API sc_process_b : public sc_object {
         AND_LIST_TIMEOUT
     };
 
+  protected:
+    enum spawn_t {
+      SPAWN_ELAB  = 0x0, // spawned during elaboration      (static process)
+      SPAWN_START = 0x1, // spawned during simulation start (dynamic process)
+      SPAWN_SIM   = 0x2  // spawned during simulation       (dynamic process)
+    };
+
   public:
     sc_process_b( const char* name_p, bool is_thread, bool free_host,
         SC_ENTRY_FUNC method_p, sc_process_host* host_p,
@@ -355,7 +363,7 @@ class SC_API sc_process_b : public sc_object {
   protected:
     virtual void add_child_object( sc_object* );
     void add_static_event( const sc_event& );
-    bool dynamic() const { return m_dynamic_proc; }
+    bool dynamic() const { return m_dynamic_proc != SPAWN_ELAB; }
     const char* gen_unique_name( const char* basename_, bool preserve_first );
     inline sc_report* get_last_report() { return m_last_report_p; }
     inline bool is_disabled() const;
@@ -417,7 +425,7 @@ class SC_API sc_process_b : public sc_object {
     int                          m_active_areset_n; // number of aresets active.
     int                          m_active_reset_n;  // number of resets active.
     bool                         m_dont_init;       // true: no initialize call.
-    bool                         m_dynamic_proc;    // true: after elaboration.
+    spawn_t                      m_dynamic_proc;    // SPAWN_ELAB, SPAWN_START, SPAWN_SIM
     const sc_event*              m_event_p;         // Dynamic event waiting on.
     int                          m_event_count;     // number of events.
     const sc_event_list*         m_event_list_p;    // event list waiting on.

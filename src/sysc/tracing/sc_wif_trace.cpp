@@ -62,6 +62,7 @@
 
 
 #include <cstdlib>
+#include <limits>
 #include <vector>
 
 #include "sysc/kernel/sc_simcontext.h"
@@ -247,7 +248,7 @@ public:
 protected:
     const sc_dt::int64& object;
     sc_dt::int64 old_value;
-    sc_dt::uint64 mask;
+    const unsigned rem_bits;
 };
 
 
@@ -256,11 +257,9 @@ wif_int64_trace::wif_int64_trace(const sc_dt::int64& object_,
                          const std::string& wif_name_,
                          int width_)
 : wif_trace(name_, wif_name_), object(object_), old_value(object_),
-  mask(static_cast<sc_dt::uint64>(-1))
+  rem_bits(64 - width_) 
 {
     bit_width = width_;
-    if (bit_width < static_cast<int>(sizeof(sc_dt::int64)*BITS_PER_BYTE))
-        mask = ~(mask << bit_width);
     wif_type = "BIT";
 }
 
@@ -277,7 +276,7 @@ void wif_int64_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((object & mask) != static_cast<sc_dt::uint64>(object))
+    if (((object << rem_bits) >> rem_bits) != object)
     {
         for (bitindex = 0; bitindex < bit_width; bitindex++)
         {
@@ -1126,7 +1125,7 @@ public:
 protected:
     const int& object;
     int old_value;
-    unsigned mask;
+    const unsigned rem_bits;
 };
 
 
@@ -1135,13 +1134,9 @@ wif_signed_int_trace::wif_signed_int_trace(const signed& object_,
 					   const std::string& wif_name_,
 					   int width_)
 : wif_trace(name_, wif_name_), object(object_), old_value(object_),
-  mask(~0U)
+  rem_bits(32 - width_)
 {
     bit_width = width_;
-    if (bit_width < 32) {
-        mask = ~(~0U << bit_width);
-    }
-
     wif_type = "BIT";
 }
 
@@ -1158,7 +1153,7 @@ void wif_signed_int_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((static_cast<unsigned>(object) & mask) != static_cast<unsigned>(object)) {
+    if (((object << rem_bits) >> rem_bits) != object) {
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
@@ -1189,7 +1184,7 @@ public:
 protected:
     const short& object;
     short old_value;
-    unsigned short mask;
+    const unsigned rem_bits;
 };
 
 
@@ -1197,13 +1192,9 @@ wif_signed_short_trace::wif_signed_short_trace(const short& object_,
 					   const std::string& name_,
 					   const std::string& wif_name_,
 					   int width_)
-: wif_trace(name_, wif_name_), object(object_), old_value(object_), mask(static_cast<unsigned short>(~0U))
+: wif_trace(name_, wif_name_), object(object_), old_value(object_), rem_bits(32 - width_) 
 {
     bit_width = width_;
-    if (bit_width < 16) {
-        mask = static_cast<unsigned short>(~(~0U << bit_width));
-    }
-
     wif_type = "BIT";
 }
 
@@ -1220,7 +1211,7 @@ void wif_signed_short_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((static_cast<unsigned short>(object) & mask) != static_cast<unsigned short>(object)) {
+    if (((object << rem_bits) >> rem_bits) != object) {
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
@@ -1251,7 +1242,7 @@ public:
 protected:
     const char& object;
     char old_value;
-    unsigned char mask;
+    const unsigned rem_bits;
 };
 
 
@@ -1259,13 +1250,9 @@ wif_signed_char_trace::wif_signed_char_trace(const char& object_,
 					     const std::string& name_,
 					     const std::string& wif_name_,
 					     int width_)
-: wif_trace(name_, wif_name_), object(object_), old_value(object_), mask(static_cast<unsigned char>(~0U))
+: wif_trace(name_, wif_name_), object(object_), old_value(object_), rem_bits(32 - width_) 
 {
     bit_width = width_;
-    if (bit_width < 8) {
-        mask = static_cast<unsigned char>(~(~0U << bit_width));
-    }
-
     wif_type = "BIT";
 }
 
@@ -1282,7 +1269,7 @@ void wif_signed_char_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((static_cast<unsigned char>(object) & mask) != static_cast<unsigned char>(object)) {
+    if (((object << rem_bits) >> rem_bits) != object) {
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }
@@ -1313,7 +1300,7 @@ public:
 protected:
     const long& object;
     long old_value;
-    unsigned long mask;
+    const unsigned rem_bits;
 };
 
 
@@ -1322,13 +1309,9 @@ wif_signed_long_trace::wif_signed_long_trace(const long& object_,
 					     const std::string& wif_name_,
 					     int width_)
 : wif_trace(name_, wif_name_), object(object_), old_value(object_),
-  mask(~0UL)
+  rem_bits(std::numeric_limits<unsigned long>::digits - width_)
 {
     bit_width = width_;
-    if (bit_width < static_cast<int>(sizeof(long)*BITS_PER_BYTE)) {
-        mask = ~(~0UL << bit_width);
-    }
-
     wif_type = "BIT";
 }
 
@@ -1345,7 +1328,7 @@ void wif_signed_long_trace::write(FILE* f)
     int bitindex;
 
     // Check for overflow
-    if ((static_cast<unsigned long>(object) & mask) != static_cast<unsigned long>(object)) {
+    if (((object << rem_bits) >> rem_bits) != object) {
         for (bitindex = 0; bitindex < bit_width; bitindex++) {
             buf[bitindex]='0';
         }

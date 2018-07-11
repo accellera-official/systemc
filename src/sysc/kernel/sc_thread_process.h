@@ -79,6 +79,7 @@ class sc_runnable;
 
 sc_cor* get_cor_pointer( sc_process_b* process_p );
 SC_API void sc_set_stack_size( sc_thread_handle thread_h, std::size_t size );
+SC_API void wait( int, sc_simcontext* );
 SC_API void wait( sc_simcontext* );
 SC_API void wait( const sc_event&, sc_simcontext* );
 SC_API void wait( const sc_event_or_list&, sc_simcontext* );
@@ -105,6 +106,7 @@ class sc_thread_process : public sc_process_b {
     friend class sc_runnable;
     friend sc_cor* get_cor_pointer( sc_process_b* process_p );
 
+    friend void wait( int, sc_simcontext* );
     friend void wait( sc_simcontext* );
     friend void wait( const sc_event&, sc_simcontext* );
     friend void wait( const sc_event_or_list&, sc_simcontext* );
@@ -384,6 +386,9 @@ sc_thread_process::wait_cycles( int n )
     if( m_unwinding )
         SC_REPORT_ERROR( SC_ID_WAIT_DURING_UNWINDING_, name() );
 
+    if( n <= 0 )
+        SC_REPORT_ERROR( SC_ID_WAIT_NEGATIVE_CYCLES_, name() );
+
     m_wait_cycle_n = n-1;
     suspend_me();
 }
@@ -468,7 +473,7 @@ sc_thread_process::trigger_static()
     //    (a) it is disabled
     //    (b) it is already queued for execution
     //    (c) it is waiting on a dynamic event
-    //    (d) its wait count is not satisfied
+    //    (d) its wait count is not satisfied and it is not currently in reset
 
     if ( (m_state & ps_bit_disabled) || is_runnable() ||
           m_trigger_type != STATIC )
@@ -482,7 +487,7 @@ sc_thread_process::trigger_static()
     }
 #endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
-    if ( m_wait_cycle_n > 0 )
+    if ( m_wait_cycle_n > 0 && THROW_NONE == m_throw_status )
     {
         --m_wait_cycle_n;
         return;
@@ -495,11 +500,10 @@ sc_thread_process::trigger_static()
     if ( m_state & ps_bit_suspended )
     {
         m_state = m_state | ps_bit_ready_to_run;
+        return;
     }
-    else
-    {
-	simcontext()->push_runnable_thread(this);
-    }
+
+    simcontext()->push_runnable_thread(this);
 }
 
 #undef DEBUG_MSG

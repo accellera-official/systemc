@@ -67,6 +67,8 @@ examples_FILES += \
 	$(2_1_sc_export_BUILD) \
 	$(2_1_sc_export_EXTRA)
 
+examples_DIRS += 2.1/sc_export
+
 ## example-specific details
 
 2_1_sc_export_H_FILES =
@@ -80,6 +82,7 @@ examples_FILES += \
 2_1_sc_export_EXTRA = \
 	2.1/sc_export/sc_export.sln \
 	2.1/sc_export/sc_export.vcxproj \
+	2.1/sc_export/CMakeLists.txt \
 	2.1/sc_export/Makefile \
 	2.1/sc_export/README.txt
 

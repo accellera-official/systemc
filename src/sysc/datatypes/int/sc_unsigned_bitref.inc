@@ -123,29 +123,29 @@ sc_unsigned_bitref::operator ^= ( bool b )
 void sc_unsigned_bitref::concat_set(int64 src, int low_i)
 {
 	bool value = 1 & ((low_i < 64) ? (src >> low_i) : (src >> 63));
-    m_obj_p->set(low_i, value);
+    m_obj_p->set(m_index, value);
 }
 
 void sc_unsigned_bitref::concat_set(const sc_signed& src, int low_i)
 {
     if ( low_i < src.length() )
-        m_obj_p->set(low_i, src.test(low_i));
+        m_obj_p->set(m_index, src.test(low_i));
     else
-        m_obj_p->set(low_i, src<0);
+        m_obj_p->set(m_index, src<0);
 }
 
 void sc_unsigned_bitref::concat_set(const sc_unsigned& src, int low_i)
 {       
     if ( low_i < src.nbits )
-        m_obj_p->set(low_i, src.test(low_i));
+        m_obj_p->set(m_index, src.test(low_i));
     else
-        m_obj_p->set(low_i, 0);
+        m_obj_p->set(m_index, 0);
 }
 
 void sc_unsigned_bitref::concat_set(uint64 src, int low_i)
 {
 	bool value = ((low_i < 64) ? (src >> low_i)&1 : 0);
-    m_obj_p->set(low_i, value);
+    m_obj_p->set(m_index, value);
 }
 
 // other methods
