@@ -1,10 +1,15 @@
-Development process of the Accellera SystemC implementation
-===========================================================
-v1.1, August 2015
-
+How to Contribute
+=================
+v2.1, August 2018
 *An HTML-rendered copy of this document can be found at
- <https://github.com/OSCI-WG/systemc/blob/master/docs/DEVELOPMENT.md>.*
+ <https://github.com/OSCI-WG/systemc/blob/master/CONTRIBUTING.md>.*
 
+This repository is the publicly readable Proof of Concept implementation of SystemC. The SystemC LWG meets on a regular basis (normally monthly) to develop the SystemC language. Part of their activity is to accept pull requests, make releases and maintain this Proof of Concept implementation. Contributions to the Proof of Concept implementation will only be accepted from Accellera Members. If you would like to join Accellera please visit : http://www.accellera.org/about/join. If your company is already a member, you can request to join the SystemC LWG. Otherwise, please raise issues and make suggestions on this repository.
+
+
+---------------------------------------------------------------------
+Development process of the Accellera SystemC implementation
+---------------------------------------------------------------------
 
 In this document, the internal development process for Accellera's SystemC
 Language Working Group (and TLM Working Group) is described.  This mostly
@@ -479,5 +484,6 @@ Authors
 
   * Philipp A. Hartmann <philipp.a.hartmann@intel.com>
   * Torsten Maehne      <torsten.maehne@bfh.ch>
+  * Mark Burton         <mark@greensocs.com>
   * Minor cosmetics edits, Lynn Bannister <lynn@accellera.org>
 
