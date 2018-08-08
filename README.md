@@ -1,6 +1,7 @@
+<p align="center">
+  <img src="http://www.accellera.org/images/about/policies/logos/logo_systemc.gif">
+</p>
 
-<center>![SystemC](http://www.accellera.org/images/about/policies/logos/logo_systemc.gif)
-</center>
 About SystemC
 =======
 
@@ -12,13 +13,11 @@ This version of SystemC is the Proof of Concept implementation provided by Accel
 
 About Accellera
 ---------------
-<div style="float:right">
-![Accellera](http://www.accellera.org/images/about/policies/logos/logo_color_200x111.png)
-</div>
+<img align="right" src=http://www.accellera.org/images/about/policies/logos/logo_color_200x111.png>
 
 Accellera Systems Initiative is an independent, not-for profit organization dedicated to create, support, promote, and advance system-level design, modeling, and verification standards for use by the worldwide electronics industry. We are composed of a broad range of members that fully support the work of our technical committee to develop technology standards that are balanced, open, and benefit the worldwide electronics industry. Leading companies and semiconductor manufacturers around the world are using our electronic design automation (EDA) and intellectual property (IP) standards in a wide range of projects in numerous application areas to develop consumer, mobile, wireless, automotive, and other “smart” electronic devices. Through an ongoing partnership with the IEEE, standards and technical implementations developed by Accellera Systems Initiative are contributed to the IEEE for formal standardization and ongoing governance.
 
-####If you would like to controbute to this repository, please check the [CONTRIBUTION](CONTRIBUTION.md) file.
+**If you would like to contribute to this repository, please check the [CONTRIBUTING](CONTRIBUTING.md) file.**
 
 
 
@@ -72,8 +71,6 @@ SystemC Class Library
    degree of severity. We cannot fix those bugs. Please report them
    to the compiler vendor._
 
-<font size=1>
-Authors: Mark Burton (mark&#64;greensocs.com)
-Version: 1.1 August 2018
-</font>
+<sub>Version: 1.1 August 2018, Authors: Mark Burton (mark&#64;greensocs.com)</sub>
+
 
