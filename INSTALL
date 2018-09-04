@@ -13,12 +13,12 @@ CONTENTS
 1) Installation Notes for Unix
 ==============================
 
-All you have to do is unpack the systemc_regressions-2.3.2.tgz file in the
+All you have to do is unpack the systemc_regressions-2.3.3.tgz file in the
 directory of your choice, .e.g,
 
-  > gtar zxvf systemc_regressions-2.3.2.tgz
+  > gtar zxvf systemc_regressions-2.3.3.tgz
 
-This will create the directory systemc_regressions-2.3.2 containing the test
+This will create the directory systemc_regressions-2.3.3 containing the test
 source code and scripts.
 
 Refer to the README file on how to run the regression tests.
