@@ -96,6 +96,8 @@ Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
   - sc_port_base: free bind info in destructor
 
+  - sc_host_mutex/semaphore: use C++11, if available
+
 Following is the list of bug fixes and enhancements for the 2.3.2 release:
 
   - Adding support for modern compilers and related cleanups
@@ -787,6 +789,8 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
 
  - [2.0.5] Fixed a regression introduced in 2.0.4, now allowing hierarchical
    binding of multi_passthrough_target_sockets again.
+
+ - [2.0.5] tlm_req_rsp_channel: remove erroneous private inheritance
 
 
  - [2.0.4] A new base interface `tlm_socket_base_if` has been added to the TLM
