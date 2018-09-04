@@ -39,13 +39,13 @@ dnl
 dnl Initialization.
 dnl
 AC_INIT([SystemC],
-        [2.3.2],
+        [2.3.3],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
         [http://accellera.org/],
 )
 dnl version of the included TLM library
-TLM_PACKAGE_VERSION=2.0.4
+TLM_PACKAGE_VERSION=2.0.5
 AC_SUBST(TLM_PACKAGE_VERSION)
 
 AC_CONFIG_SRCDIR([NEWS])

@@ -1,7 +1,7 @@
-                Release Notes for SystemC 2.3.2
+                Release Notes for SystemC 2.3.3
                 ===============================
 
-        Andrew C. Goodrich,  Forte Design Systems
+        Andrew C. Goodrich,  Cadence Design Systems
         Philipp A. Hartmann, Intel Corporation
 
 CONTENTS
@@ -54,8 +54,7 @@ Compared to the 2.3.0 release, this release has the following new items:
 2) Bug fixes and enhancements
 =============================
 
-Following is the list of bug fixes and enhancements for this release.
-For bug fixes added in 2.3.1 already, please refer to the previous
+For bug fixes added in 2.3.1 (or before) already, please refer to the previous
 RELEASENOTES.
 
   - For fixes and enhancements of the embedded TLM-2.0 implementation,
@@ -63,6 +62,43 @@ RELEASENOTES.
 
   - Additional changes and cleanups leading to incompatibilities with
     earlier versions of SystemC are described in section 4.
+
+Following is the list of bug fixes and enhancements for the 2.3.3 release:
+
+  - sc_fxval: consider carry bit during addition/subtraction
+
+  - sc_trace: fix overflow check for tracing signed C integer types
+
+  - sc_trace: fix division by zero when closing an empty trace file
+
+  - sc_trace_file::set_time_unit: report error for invalid timescale units
+
+  - sc_elab_and_sim: guard against modification of argv from sc_main
+
+  - sc_event: remove dynamic sensitivity of processes in destructor
+
+  - Report error when calling wait/next_trigger on empty event lists
+
+  - sc_vector_iter: avoid using std::iterator (deprecated in C++17)
+
+  - Use proper bit in sc_signed_bitref::concat_set
+
+  - Fix immediate triggering of reset during wait(n)
+
+  - Detect calling wait(n) with n <= 0 in (clocked) threads
+
+  - Fix memory corruption during simulation teardown when processes were
+    spawned during end_of_elaboration/start_of_simulation
+
+  - AArch64: fix stack corruption with optimizations disabled
+
+  - sc_fifo_in/out: delete event finder objects
+
+  - sc_port_base: free bind info in destructor
+
+  - sc_host_mutex/semaphore: use C++11, if available
+
+Following is the list of bug fixes and enhancements for the 2.3.2 release:
 
   - Adding support for modern compilers and related cleanups
     (MSVC 2015, recent GCC/Clang versions)
@@ -88,9 +124,8 @@ RELEASENOTES.
 
   - Guard against self-assignment of sc_(and|or)_event_list objects
 
-  - Fix incomplete time advance under the SC_RUN_TO_TIME starvation
-    policy, causing incorrect sc_signal::event() values in some
-    corner cases
+  - Fix incomplete time advance under the SC_RUN_TO_TIME starvation policy,
+    causing incorrect sc_signal::event() values in some corner cases
 
   - Fix memory corruption when starting processes in asynchronous
     reset state (async_reset_signal_is asserted at startup)
@@ -126,9 +161,8 @@ RELEASENOTES.
   - When using pthreads for SystemC thread processes, create them in
     the "detached" state to reduce resource pressure
 
-  - In the default report handler, close the current and open a new
-    logfile when calling sc_report_handler::set_log_file_name during
-    simulation.
+  - In the default report handler, close the current and open a new logfile
+    when calling sc_report_handler::set_log_file_name during simulation
 
   - Fix non-standard sc_simcontext::reset
      - properly handle sc_reset::reconcile_resets
@@ -142,11 +176,31 @@ RELEASENOTES.
 3) New features
 ===============
 
-Here is an overview of changes in 2.3.2 and 2.3.1 compared to 2.3.0.
+Here is an overview of changes in 2.3.x compared to 2.3.0.
 
 Note: These features partly add functionality beyond the current
       IEEE Std. 1666-2011.
 
+  - [2.3.3] SC_NAMED, a convenience macro for named entities
+
+    The new macro SC_NAMED(var,args...)  can be used to construct a variable
+    with a SystemC matching name. It passes the identifier converted to a
+    string literal as (first) constructor parameter.  Additional arguments
+    are passed unmodified.  Example:
+
+      SC_MODULE(module)
+      {
+        SC_CTOR(module)
+          : SC_NAMED(port_i)    // works in C++03
+          , SC_NAMED(sig, true) // supports multiple parameters
+        {}
+        sc_in<bool>  port_i;
+        sc_out<bool> SC_NAMED(port_o); // in-class member init., requires C++11
+        sc_signal<bool> sig;
+      };
+
+
+  - [2.3.3] Add sc_process_handle::basename() function
 
   - [2.3.2] Extend hierarchical name registry
 
@@ -457,7 +511,7 @@ Currently supported versions are:
  - 199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
  - 201103L (C++11, ISO/IEC 14882:2011)
  - 201402L (C++14, ISO/IEC 14882:2014)
- - 201703L (C++17, N4659: Working Draft, Standard for Programming Language C++)
+ - 201703L (C++17, ISO/IEC 14882:2017)
 
 
 The following features currently require a dedicated C++ standard version
@@ -484,6 +538,8 @@ beyond ISO/IEC 14882:2003 (aka C++03):
      in the global namespace, unless the macro SC_BIND_IN_GLOBAL_NAMESPACE
      is explicitly defined to 0.
 
+   o On C++11-enabled platforms, SC_NAMED uses uniform initialization
+     syntax (regular () form on C++03)
 
 In the future, further language features depending on modern C++ language
 constructs may be added.
@@ -689,6 +745,8 @@ Changes compared to SystemC 2.0.1
 
   - sc_fxnum::to_{integer} fully defined and accurate
 
+  - read-only fixed-point bitrefs/subrefs returned from const values
+
 Compile-time macro SC_INCLUDE_FX must be defined in order to build
 applications that use fixed point types. You can specify a compiler
 flag, e.g., g++ -DSC_INCLUDE_FX ... or use a define statement before
@@ -729,8 +787,14 @@ Parts of the TLM implementation are now linked into the kernel library.
 
 Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed:
 
- - A new base interface `tlm_socket_base_if` has been added to the TLM socket
-   classes, providing a non-templated access to some socket information:
+ - [2.0.5] Fixed a regression introduced in 2.0.4, now allowing hierarchical
+   binding of multi_passthrough_target_sockets again.
+
+ - [2.0.5] tlm_req_rsp_channel: remove erroneous private inheritance
+
+
+ - [2.0.4] A new base interface `tlm_socket_base_if` has been added to the TLM
+   socket classes, providing a non-templated access to some socket information:
 
     o querying of protocol types (returning an `sc_type_index`, see above)
     o querying of socket category
@@ -739,7 +803,7 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
     o querying bus width
 
 
- - Move parts of TLM-2.0 library into prebuilt SystemC (shared) library
+ - [2.0.4] Move parts of TLM-2.0 library into prebuilt SystemC (shared) library
 
    By moving the TLM extension and phase registries and the global quantum
    handling into the prebuilt SystemC library, the global variables in these
@@ -750,13 +814,13 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
          be used in conjunction with the matching SystemC kernel sources.
 
 
- - Improved error handling in convenience sockets
+ - [2.0.4] Improved error handling in convenience sockets
 
    All error checking on the convenience sockets now consistently report
    the affected socket name (and kind) to help tracking down their origin.
 
 
- - tlm_utils::simple_target_socket: only spawn b2nb_thread, if needed
+ - [2.0.4] tlm_utils::simple_target_socket: only spawn b2nb_thread, if needed
 
    The blocking-to-nonblocking conversion thread is only spawned in
    case there is no b_transport callback but only an nb_transport callback
@@ -767,17 +831,18 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
          in case it is overridden in the derived class.
 
 
- - Fix regression introduced in 2.0.3 to allow using the optional sc_port_policy
-   SC_ZERO_OR_MORE_BOUND for tlm_utils::multi_passthrough_target_socket again.
+ - [2.0.4] Fix regression introduced in 2.0.3 to allow using the optional
+   sc_port_policy SC_ZERO_OR_MORE_BOUND for
+   tlm_utils::multi_passthrough_target_socket again.
 
- - Fix memory corruption in tlm::circular_buffer<T>::clear.
+ - [2.0.4] Fix memory corruption in tlm::circular_buffer<T>::clear.
 
- - Prefer using `sc_assert' over plain `assert'.
+ - [2.0.4] Prefer using `sc_assert' over plain `assert'.
 
- - Hide warnings on some compilers about hidden overloads of virtual
+ - [2.0.4] Hide warnings on some compilers about hidden overloads of virtual
    bind functions in TLM target socket.
 
- - Minor cleanups and improved compiler support.
+ - [2.0.4] Minor cleanups and improved compiler support.
 
 
 9.3) Known issues
