@@ -65,11 +65,11 @@ namespace tlm
 
 #define TLM_VERSION_MAJOR                   2           ///< version major level ( numeric )
 #define TLM_VERSION_MINOR                   0           ///< version minor level ( numeric )
-#define TLM_VERSION_PATCH                   4           ///< version patch level ( numeric )
+#define TLM_VERSION_PATCH                   5           ///< version patch level ( numeric )
 #define TLM_VERSION_ORIGINATOR              "Accellera" ///< TLM creator string
 #define TLM_VERSION_SEPARATOR               "."         ///< version string separator
 
-#define TLM_IS_PRERELEASE                   0           ///< pre-release flag ( 1 / 0 )
+#define TLM_IS_PRERELEASE                   1           ///< pre-release flag ( 1 / 0 )
 
 #if TLM_IS_PRERELEASE
 #    define TLM_VERSION_PRERELEASE          "pub_rev"   ///< pre-release version string
@@ -78,8 +78,8 @@ namespace tlm
 #endif
 
 #define TLM_VERSION_RELEASE_YEAR            "2018"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "02"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "06"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_MONTH           "09"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY             "04"        ///< release day   ( DD )
 
 #define TLM_COPYRIGHT \
   "Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \

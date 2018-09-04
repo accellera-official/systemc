@@ -29,15 +29,20 @@
 #ifndef SC_HOST_SEMAPHORE_H_INCLUDED_
 #define SC_HOST_SEMAPHORE_H_INCLUDED_
 
-#ifndef SC_INCLUDE_WINDOWS_H
-#  define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
-#endif
-#include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/kernel/sc_cmnhdr.h" // SC_CPLUSPLUS
 #include "sysc/communication/sc_semaphore_if.h"
 
-#if !defined(WIN32) && !defined(_WIN32) // use POSIX semaphore
-#include <semaphore.h>
-#endif
+#if SC_CPLUSPLUS >= 201103L
+# include <mutex>
+# include <condition_variable>
+#elif !defined(WIN32) && !defined(_WIN32) // use POSIX semaphore
+# include <semaphore.h>
+#else // use Windows semaphore
+# ifndef SC_INCLUDE_WINDOWS_H
+#   define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
+#   include "sysc/kernel/sc_cmnhdr.h"
+# endif
+#endif // SC_CPLUSPLUS
 
 namespace sc_core {
 
@@ -49,7 +54,41 @@ namespace sc_core {
 
 class SC_API sc_host_semaphore : public sc_semaphore_if
 {
-#if defined(WIN32) || defined(_WIN32) // use Windows Semaphore
+#if SC_CPLUSPLUS >= 201103L
+
+    struct underlying_type
+    {
+      std::mutex mtx;
+      std::condition_variable cond_var;
+      int value;
+    };
+
+    void do_init(int init) { m_sem.value = init; }
+    void do_wait()
+    {
+      std::unique_lock<std::mutex> lock(m_sem.mtx);
+      while (m_sem.value <= 0) {
+        m_sem.cond_var.wait(lock);
+      }
+      --m_sem.value;
+    }
+    bool do_trywait()
+    {
+      std::unique_lock<std::mutex> lock(m_sem.mtx);
+      if (m_sem.value <= 0)
+        return false;
+      --m_sem.value;
+      return true;
+    }
+    void do_post()
+    {
+      std::unique_lock<std::mutex> lock(m_sem.mtx);
+      ++m_sem.value;
+      m_sem.cond_var.notify_one();
+    }
+    void do_destroy() { /* no-op */ }
+
+#elif defined(WIN32) || defined(_WIN32) // use Windows Semaphore
 
     typedef HANDLE underlying_type;
 
@@ -71,11 +110,15 @@ class SC_API sc_host_semaphore : public sc_semaphore_if
 
     typedef sem_t underlying_type;
 
-    void do_init(int init) { sem_init( &m_sem, 0, init ); }
+    void do_init(int init)
+    {
+      int semaphore_initialized = sem_init( &m_sem, 0, init );
+      sc_assert(semaphore_initialized == 0);
+    }
     void do_wait()         { sem_wait( &m_sem ); }
     bool do_trywait()      { return ( sem_trywait( &m_sem ) == 0 ); }
     void do_post()         { sem_post( &m_sem ); }
-    void do_destroy()      { sem_close( &m_sem ); }
+    void do_destroy()      { sem_destroy( &m_sem ); }
 
 #endif // platform-specific implementation
 

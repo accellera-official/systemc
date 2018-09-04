@@ -145,7 +145,7 @@ public:
     sc_event_finder& data_written() const
     {
         return sc_event_finder::cached_create
-                ( m_written_finder_p, this,  &in_if_type::data_written_event );
+                ( m_written_finder_p, *this,  &in_if_type::data_written_event );
     }
 
     virtual const char* kind() const
@@ -269,7 +269,7 @@ public:
     sc_event_finder& data_read() const
     {
         return sc_event_finder::cached_create
-                ( m_read_finder_p, this, &out_if_type::data_read_event );
+                ( m_read_finder_p, *this, &out_if_type::data_read_event );
     }
 
     virtual const char* kind() const

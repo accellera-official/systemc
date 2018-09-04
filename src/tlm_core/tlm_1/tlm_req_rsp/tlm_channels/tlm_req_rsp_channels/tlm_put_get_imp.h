@@ -30,8 +30,8 @@ namespace tlm {
 
 template < typename PUT_DATA , typename GET_DATA>
 class tlm_put_get_imp :
-  private virtual tlm_put_if< PUT_DATA > ,
-  private virtual tlm_get_peek_if< GET_DATA >
+  public virtual tlm_put_if< PUT_DATA > ,
+  public virtual tlm_get_peek_if< GET_DATA >
 {
 public:
   tlm_put_get_imp( tlm_put_if<PUT_DATA> &p ,
