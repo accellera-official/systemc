@@ -1,10 +1,35 @@
 How to Contribute
 =================
-<sup><sub>v2.1, August 2018</sub></sup>
-<!--An HTML-rendered copy of this document can be found at <https://github.com/OSCI-WG/systemc/blob/master/CONTRIBUTING.md>.-->
+<sup>v2.1, August 2018</sup>
+<!--An HTML-rendered copy of this document can be found at <https://github.com/osci-wg/systemc/blob/master/CONTRIBUTING.md>.-->
 
-This repository is the publicly readable Proof of Concept implementation of SystemC. The SystemC LWG meets on a regular basis (normally monthly) to develop the SystemC language. Part of their activity is to accept pull requests, make releases and maintain this Proof of Concept implementation. Contributions to the Proof of Concept implementation will only be accepted from Accellera Members. If you would like to join Accellera please visit : http://www.accellera.org/about/join. If your company is already a member, you can request to join the SystemC LWG. Otherwise, please raise issues and make suggestions on this repository.
 
+ This repository is owned by the [Accellera Systems Initiative][1] and
+ is maintained by the [SystemC Language Working Group][2] (LWG) according
+ to the [Accellera Policies and Procedures][3].
+
+**Contributions to this Proof of Concept implementation can only be
+accepted from Accellera Members.**
+
+### Join the Accellera SystemC Language Working Group
+
+If you would like to contribute to the development of SystemC and/or this
+proof-of-concept implementation, **join Accellera** and its working groups.
+Find out more information at http://www.accellera.org/about/join. 
+If your company is already an Accellera member, you can request to
+[join the SystemC Language Working Group here][4].
+
+### Join the SystemC community
+
+If you are not an Accellera member, please join the **[SystemC community][5]
+forum** to provide feedback, report bugs and join the general discussion
+around the evolution of SystemC.
+
+[1]: https://www.accellera.org
+[2]: https://accellera.org/activities/working-groups/systemc-language
+[3]: http://accellera.org/about/policies
+[4]: http://workspace.accellera.org/apps/org/workgroup/lwg/
+[5]: https://forums.accellera.org/forum/9-systemc/
 
 ---------------------------------------------------------------------
 Development process of the Accellera SystemC implementation
@@ -24,35 +49,43 @@ Repository organization
 ---------------------------------------------------------------------
 
 The central source code repository of the Accellera SystemC implementation is
-hosted in two [Git] [1] repositories at [GitHub](http://github.com).  The
-repositories are private to the `OSCI-WG` organization and can be found at:
+hosted in two [Git][6] repositories at [GitHub](http://github.com).  The main
+repositories are **private** to the [`OSCI-WG` organization][7] and can be
+found at:
 
- * <https://github.com/OSCI-WG/systemc>             (core SystemC library)
- * <https://github.com/OSCI-WG/systemc-regressions> (regression test suite)
+ * https://github.com/OSCI-WG/systemc             (core SystemC library)
+ * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
 
-Members of the `OSCI-WG` organization with the necessary access rights can
-clone the repositories via SSH from the locations
+A read-only, **public** copy of these repositories can be found at
+
+* https://github.com/accellera/systemc             (core SystemC library)
+* https://github.com/accellera/systemc-regressions (regression test suite)
+
+Members of the GitHub [`OSCI-WG` organization][7] with the necessary access
+rights can clone the repositories via SSH from the locations
 
      git clone -o osci-wg git@github.com:OSCI-WG/systemc.git
      git clone -o osci-wg git@github.com:OSCI-WG/systemc-regressions.git
 
-respectively.  To obtain access to the repositories and the GitHub
-organization in general, LWG members can contact the LWG chairs at
-<mailto:lwg-chair@lists.accellera.org> including their GitHub account name.
+respectively.
+
+To obtain access to the repositories and the GitHub organization in general,
+LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>
+including their GitHub account name.
 
 >  *Note:*
 >  Using an explicit name of the 'remote' (`-o osci-wg`) is recommended
 >  to allow using the default remote name `origin` for a personal fork
 >  where you can push your changes by default, see [below](#basic-branch-setup).
 
-Comprehensive documentation about [Git] [1], a distributed version control
-system, can be found in the [Pro Git book] [2], also available online.
+Comprehensive documentation about [Git][6], a distributed version control
+system, can be found in the [Pro Git book][8], also available online.
 Since Git is 'distributed', it is a very natural choice for the distributed
 development process needed for the collaboratively evolving proof-of-concept
 implementation of SystemC.
 
 In order to contribute changes to the different repositories, it is
-recommended to create personal (or company-based) [forks] [3] of the
+recommended to create personal (or company-based) [forks][9] of the
 repositories on GitHub and push the proposed changes (bugfixes,
 features, ...) there.  These forks are also only accessible to members
 of the OSCI-WG organization. Details of the intended work-flow are
@@ -77,12 +110,13 @@ Any changes can then be pushed to GitHub using:
    remote branches to the repository.
 
 A basic cheat sheet containing the an overview of the general
-Git commands and workflow can be found [online] [4].
+Git commands and workflow can be found [online][10].
 
-[1]: http://git-scm.com "Git version control system"
-[2]: http://git-scm.com/book "Pro Git Book"
-[3]: https://help.github.com/articles/fork-a-repo
-[4]: http://zrusin.blogspot.de/2007/09/git-cheat-sheet.html "Git Cheat Sheet"
+ [6]: http://git-scm.com "Git version control system"
+ [7]: https://github.com/osci-wg "Accellera WG GitHub organization"
+ [8]: http://git-scm.com/book "Pro Git Book"
+ [9]: https://help.github.com/articles/fork-a-repo
+[10]: http://zrusin.blogspot.de/2007/09/git-cheat-sheet.html "Git Cheat Sheet"
 
 
 ---------------------------------------------------------------------
@@ -100,10 +134,16 @@ one for the releases.
   The latest and greatest `HEAD` of the LWG development.
   This is, were all the new features and fixes go.
 
+* **public**
+
+  The latest revision pushed to the public repository of SystemC.
+  This may also include changes, that are not yet part of an
+  official release package.
+
 * **release**
 
-  This branch is used to create the release tarballs, both
-  internal and public snapshots.
+  This branch is used to create the release tarballs, both internal
+  and public snapshots, typically based on the `public` branch.
 
 For the **regressions**, the `release` branch is more or less just a pointer
 to the latest revision of a snapshot (or release).  It is still useful
@@ -151,13 +191,13 @@ additional `public` branch could be used to mark the branching
 point for the last `release`.
 
 If more sophisticated version branches are needed, a development
-model similar to the well-known ["successful branching model"] [5]
+model similar to the well-known ["successful branching model"][11]
 can be deployed.  Not all aspects of this model are expected to
 be needed for the SystemC implementation, as we usually
 maintain only a single (i.e., the latest) public release of the
 kernel.
 
-[5]: http://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
+[11]: http://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
 
 
 ### Adding a feature (set)
@@ -190,7 +230,7 @@ repository on GitHub:
 
       git push <your-github-fork-remote-name> <company>-<feature-xyz>
 
-Then, send a [pull request] either manually or via [GitHub] [6] to
+Then, send a [pull request][12] either manually or via [GitHub][12] to
 initiate the code review by the working group members.  The summary
 can be manually generated by
 
@@ -200,7 +240,7 @@ can be manually generated by
 to be sent to the LWG reflector.
 
 To review the proposed contributions, one can either browse the
-repository at [GitHub] [6], or add the remote location to a local
+repository at GitHub, or add the remote location to a local
 clone of the repository
 
       # add the fork to your set of "remotes"
@@ -232,22 +272,21 @@ feature branch in the local and Github fork may be deleted.
       git branch -d <company-feature-xyz>      # delete local branch
       git push  origin :<company-feature-xyz>  # delete remote branch
 
-[6]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
-
+[12]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
 
 ### Maintaining a private (set of) branches
 
-*TODO*: Outline maintenance of an in-house forking model, seamlessly
-        integrated with the LWG's flow.
+*TODO*: Outline maintenance of an in-house forking model,
+        seamlessly integrated with the LWG's flow.
 
 Vendors may be interested in maintaining their own, in-house flow
 to align the internal development of a derived SystemC implementation,
-while being able to pick fixes from the Accellera Working Group's tree (and hopefully)
-contributing fixes and features back to the proof-of-concept
+while being able to pick fixes from the Accellera Working Group's tree
+(and hopefully) contributing fixes and features back to the proof-of-concept
 implementation.
 
 For this purpose members may employ the already mentioned ["successful
-branching model"] [4] by Vincent Driessen. The vendor can branch its
+branching model"][11] by Vincent Driessen. The vendor can branch its
 own development branch, e.g., `develop-<vendor>` from the already
 tracked working group development branch `master` in his clone of the WG
 repository. The vendor is then able to integrate commits on the WG
@@ -325,14 +364,14 @@ performed by the maintainer
 
 0. **Prepare the release in the `master` branch**
 
-  Before creating a release snapshot, the documentation and version
-  information in the package should be updated within the `master`
-  branch.  This includes files like
-  - `ChangeLog`, `RELEASENOTES`, `README`, `INSTALL`
-  - [Version headers](#versioning-scheme)
+   Before creating a release snapshot, the documentation and version
+   information in the package should be updated within the `master`
+   branch.  This includes files like
+   - `ChangeLog`, `RELEASENOTES`, `README`, `INSTALL`
+   - [Version headers](#versioning-scheme)
 
-  During the release preparation phase, other functional changes
-  should not be added/merged to the `master` branch.
+   During the release preparation phase, other functional changes
+   should not be added/merged to the `master` branch.
 
 1. **Update the `release` branch**
 
@@ -354,48 +393,48 @@ performed by the maintainer
 
 3. **Tag the release revision**
 
-  In order to keep track of the release snapshots, the revisions used
-  for creating the release tarballs should be marked with an *annotated*
-  and optionally signed Git tag.
+   In order to keep track of the release snapshots, the revisions used
+   for creating the release tarballs should be marked with an *annotated*
+   and optionally signed Git tag.
 
         # git tag -a -m "<package> <version>" <version> <refspec>
         git tag -a -m "SystemC 2.3.0" 2.3.0 release
 
-  The tagname should contain the `<version>`, following the versioning rules
-  in IEEE 1666-2011.  There are three standard formats:
-  * `x.x.x_beta_<isodate>` for beta/internal versions
-  * `x.x.x_pub_rev_<isodate>` for public review versions, and
-  * `x.x.x` for public release versions.
+   The tagname should contain the `<version>`, following the versioning rules
+   in IEEE 1666-2011.  There are three standard formats:
+   * `x.x.x_beta_<isodate>` for beta/internal versions
+   * `x.x.x_pub_rev_<isodate>` for public review versions, and
+   * `x.x.x` for public release versions.
 
-> *NOTE:* The tag should be on the `release` branch, to enable the
-> automated tarball creation in the next step.
+   > *NOTE:* The tag should be on the `release` branch, to enable the
+   > automated tarball creation in the next step.
 
 4. **Create the release tarball**
 
-  `git archive` can then be used to create the release tarball.
-  `git describe` can be used to obtain the correct tarball name
-  based on the current tag.
+   `git archive` can then be used to create the release tarball.
+   `git describe` can be used to obtain the correct tarball name
+   based on the current tag.
 
-        PACKAGE="`basename $(git rev-parse --show-toplevel)`" # or direcly 'systemc'
+        PACKAGE="`basename $(git rev-parse --show-toplevel)`" # or directly 'systemc'
         VERSION="`git describe release`"
         git archive -o ${PACKAGE}-${VERSION}.tgz \
                     --prefix=${PACKAGE}-${VERSION}/ release
 
-> *NOTE:* Even without a tag, a quick-shot release of the
->         release branch can be generated this way.
+   > *NOTE:* Even without a tag, a quick-shot release of the
+   >         release branch can be generated this way.
 
 5. **Publish the release**
 
-  Upload the archive to the LWG area for internal review
-  and push the changes to GitHub.
+   Upload the archive to the LWG area for internal review
+   and push the changes to GitHub.
 
         git push osci-wg master release <version>
 
-> *NOTE:* The tag needs to be pushed explicitly.
+   > *NOTE:* The tag needs to be pushed explicitly.
 
-> *NOTE:* For each tag pushed to the GitHub repository, the corresponding
-          release archive can be downloaded from GitHub directly via
-          `https://github.com/osci-wg/systemc/releases/tag/<version>`.
+   > *NOTE:* For each tag pushed to the GitHub repository, the corresponding
+             release archive can be downloaded from GitHub directly via
+             `https://github.com/osci-wg/systemc/releases/tag/<version>`.
 
 ---------------------------------------------------------------------
 Issue tracking
@@ -461,20 +500,22 @@ assigned.
 Changelog
 ---------------------------------------------------------------------
 
-* v1.1 (2015-08-23)
+* v2.1 (2018-09-15)
+  * Move to `CONTRIBUTING.md`
+  * Prepare information about contribution and public repos
+  * Formatting fixes and cleanups
 
- * Add versioning scheme section
- * Dropped obsolete `pristine-tar` section
- * Changed "ASI" to Accellera throughout the document
- * Updated contact information
+* v1.1 (2015-08-23)
+  * Add versioning scheme section
+  * Dropped obsolete `pristine-tar` section
+  * Changed "ASI" to Accellera throughout the document
+  * Updated contact information
 
 * v1.0 - Development flow implemented at GitHub (2013-06-20)
-
- * Issue tracking documented
-
+  * Issue tracking documented
+  
 * v0.9 - Initial proposal to the Accellera SystemC LWG (2012-09-25)
-
- * To be discussed during the October LWG phone conference
+  * To be discussed during the October LWG phone conference
 
 
 ---------------------------------------------------------------------
