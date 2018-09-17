@@ -38,7 +38,6 @@
 
 #include "systemc.h"
 #include "fft.h"
-#include "math.h"
 
 void fft::entry()
 { float sample[16][2];
