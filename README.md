@@ -5,13 +5,17 @@ SystemC Class Library
 About SystemC
 -------------
 
-  SystemC is an ANSI C++ class library for system and hardware design for use by
-  designers and architects who need to address complex systems that are a hybrid
-  between hardware and software.  The SystemC API and its semantics are
-  developed by the [Accellera Systems Initiative][1] and formally standardized
-  and governed by the IEEE in the [IEEE Std. 1666-2011][2] standard.
+  SystemC addresses the need for a system design and verification language that
+  spans hardware and software.  It is a language built as an ANSI C++ class
+  library created for design and verification.  Users worldwide are applying
+  SystemC to system-level modeling, abstract analog/mixed-signal modeling,
+  architectural exploration, performance modeling, software development,
+  functional verification, and high-level synthesis.  The SystemC API and
+  its semantics are developed by the [Accellera Systems Initiative][1] and
+  formally standardized and governed by the IEEE in the
+  [IEEE Std. 1666-2011][2] standard.
 
-  This version of SystemC is the **Proof of Concept implementation** provided by
+  This version of SystemC is the **reference implementation** provided by
   the [Accellera Systems Initiative][1] and is mainly developed by the following
   Accellera Working Groups
 
@@ -26,9 +30,6 @@ About SystemC
   **If you would like to contribute to this repository,
     please check the [CONTRIBUTING](CONTRIBUTING.md) file.**
 
-  **For details about this release, please see the separate
-    [RELEASENOTES](RELEASENOTES) file.**
-
 -------------------------------------------------------------------------------
 
 ### Licensing and Copyright
@@ -40,8 +41,8 @@ About SystemC
 
   The main documentation of SystemC is the _[IEEE Std. 1666-2011][2]
   Standard SystemC Language Reference Manual_.
-  You can find some additional documentation for this release in the
-  [docs](docs) directory. some of which refers to older versions.
+  You can find additional documentation for this release in the
+  [docs](docs) directory, some of which refers to older versions.
 
 ### Installation
 
@@ -53,31 +54,13 @@ About SystemC
   See the separate [RELEASENOTES](RELEASENOTES) file that provides
   up-to-date information about this release of SystemC.
 
-### Additional information
+### SystemC Community
 
-  SystemC has a web site at https://www.accellera.org
+  * SystemC community website  
+    https://accellera.org/community/systemc/
 
-  Community discussion forum: https://forums.accellera.org/forum/9-systemc/
-
-  You can post the bugs and suggestions of general interest to the forum.
-  When reporting bugs please specify the following information
-  (if applicable):
-
-  1. SystemC version
-  2. platform, compiler, flags
-  3. description of the problem
-  4. steps to reproduce the problem
-  5. compile/runtime warnings and errors
-  6. code sample, not more than 100 lines to demonstrate the problem
-
-  > **Note**  
-  >  All bugs will only be tested against the latest publicly available
-  >  version of the product.
-
-  > **Note**  
-  >  All C++ compilers that SystemC supports have bugs of different
-  >  degree of severity. We cannot fix those bugs.
-  >  Please report them to the compiler vendor.
+  * Community discussion forum  
+    https://forums.accellera.org/forum/9-systemc/
 
 About Accellera SystemC Working Groups
 --------------------------------------
