@@ -143,7 +143,7 @@
 // (no) exception specifiers
 
 #ifndef SC_NOEXCEPT_
-#if SC_CPLUSPLUS >= 201103L && !(defined(_MSV_VER) && _MSC_VER < 1900)
+#if SC_CPLUSPLUS >= 201103L && !(defined(_MSC_VER) && _MSC_VER < 1900)
 # define SC_NOEXCEPT_            noexcept
 # define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
 #else
