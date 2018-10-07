@@ -98,6 +98,8 @@ Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
   - sc_host_mutex/semaphore: use C++11, if available
 
+  - sc_start(): detect delta event notifications as activity
+
 Following is the list of bug fixes and enhancements for the 2.3.2 release:
 
   - Adding support for modern compilers and related cleanups
