@@ -145,7 +145,11 @@ struct Top: sc_module
      count = 14;
      wait(ev);
      sc_assert( sc_delta_count() == 17 );
- 
+
+    count = 15;
+    wait(ev);
+    sc_assert( sc_delta_count() == 18 );
+
     last_time = sc_time_stamp();
     reached_end = true;
     sc_stop();
@@ -153,7 +157,7 @@ struct Top: sc_module
   
   void M()
   {
-    cout << "M() awoke at " << sc_time_stamp() << endl;
+    cout << "M() awoke at " << sc_time_stamp() << " @ " << sc_delta_count() << endl;
     switch (count)
     {
       case  0: sc_assert( false ); break;
@@ -173,6 +177,7 @@ struct Top: sc_module
       case 12: sc_assert( sc_delta_count() == 15 ); break;
       case 13: sc_assert( sc_delta_count() == 16 ); break;
       case 14: sc_assert( sc_delta_count() == 17 ); break;
+      case 15: sc_assert( sc_delta_count() == 18 ); break;
     }
   }
     
@@ -236,6 +241,14 @@ int sc_main(int argc, char* argv[])
   sc_assert( top.last_time == sc_time_stamp() );
   
   sc_assert( sc_get_status() == SC_PAUSED );
+
+  top.ev.notify(SC_ZERO_TIME);  // Wake from 6th pause on delta notification
+  sc_start(SC_ZERO_TIME);       // nothing happens, except for event processing
+  sc_assert( sc_delta_count() == 17 );
+  sc_assert( top.last_time == sc_time_stamp() );
+  sc_start(SC_ZERO_TIME);       // now process is triggered
+  sc_assert( sc_delta_count() == 18 );
+  sc_assert( top.last_time == sc_time_stamp() );
 
   top.ev.notify(1, SC_NS);   // Future notification before calling sc_stop
   sc_start(2, SC_NS);

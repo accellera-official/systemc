@@ -119,6 +119,7 @@ int sc_main(int, char*[])
   sc_assert( sc_time_to_pending_activity()
              == sc_max_time() - sc_time_stamp() );
 
+  sc_event        event("event");
   sc_signal<bool> toggle("toggle");
   echo dut("echo");
 
@@ -151,9 +152,22 @@ int sc_main(int, char*[])
 #   endif // EXPLICIT_DELTA
   }
 
-  // force one empty evaluate (w/ non-empty update)
+  sc_assert( !sc_pending_activity() );
+  sc_assert( sc_time_to_pending_activity()
+             == sc_max_time() - sc_time_stamp() );
+
+  // force one empty evaluate (w/ non-empty delta events)
+  event.notify( SC_ZERO_TIME );
+  sc_assert( sc_pending_activity_at_current_time() );
+  sc_start( SC_ZERO_TIME );
+
+  sc_assert( !sc_pending_activity() );
+  sc_assert( sc_time_to_pending_activity()
+             == sc_max_time() - sc_time_stamp() );
+
+  // force one empty evaluate (w/ non-empty update phase)
   toggle.write( !toggle.read() );
-  sc_assert(  sc_pending_activity_at_current_time() );
+  sc_assert( sc_pending_activity_at_current_time() );
   sc_start( SC_ZERO_TIME );
 
   sc_assert( !sc_pending_activity() );
