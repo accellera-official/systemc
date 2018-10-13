@@ -1709,7 +1709,8 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         return;
     }
 
-    if ( context_p->m_prim_channel_registry->pending_updates() )
+    if ( context_p->m_prim_channel_registry->pending_updates()
+         || ! context_p->m_delta_events.empty() )
         init_delta_or_pending_updates = true;
 
     // If the simulation status is good perform the simulation:
