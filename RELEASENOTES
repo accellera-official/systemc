@@ -46,13 +46,13 @@ as described in the IEEE 1666-2011 Language Reference Manual.
 
    * 64-bit Linux (x86_64)
       (RedHat Enterprise 6; SuSE Enterprise Linux 11; Debian 9)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-7.2.0
-      - Clang C++ compiler versions clang-3.4 through clang-5.0
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
+      - Clang C++ compiler versions clang-3.4 through clang-6.0
       - Intel C++ Compiler (ICC 15.0.0)
 
    * 64-bit Linux (x86_64) with 32-bit compiler (--host=i686-linux-gnu)
       (SuSE Enterprise Linux 11)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-7.2.0
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
       - Intel C++ Compiler (ICC 15.0.0)
 
    * 64-bit Linux (aarch64)
@@ -182,6 +182,8 @@ Following is the list of bug fixes and enhancements for the 2.3.3 release:
   - sc_port_base: free bind info in destructor
 
   - sc_host_mutex/semaphore: use C++11, if available
+
+  - sc_start(): detect delta event notifications as activity
 
 Following is the list of bug fixes and enhancements for the 2.3.2 release:
 

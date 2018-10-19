@@ -43,6 +43,11 @@
 # endif
 #endif // SC_CPLUSPLUS
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(push)
+# pragma warning(disable: 4251) // DLL import for std::mutex
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -127,6 +132,10 @@ private:
 };
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+# pragma warning(pop)
+#endif
 
 /*****************************************************************************
 
