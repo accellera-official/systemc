@@ -39,14 +39,17 @@ enum tlm_socket_category
 class tlm_base_socket_if
 {
 public:
-  virtual sc_core::sc_port_base &         get_port_base() = 0;
-  virtual sc_core::sc_port_base const &   get_port_base() const = 0;
-  virtual sc_core::sc_export_base &       get_export_base() = 0;
-  virtual sc_core::sc_export_base const & get_export_base() const = 0;
+  virtual sc_core::sc_port_base &         get_base_port() = 0;
+  virtual sc_core::sc_port_base const &   get_base_port() const = 0;
+  virtual sc_core::sc_export_base &       get_base_export() = 0;
+  virtual sc_core::sc_export_base const & get_base_export() const = 0;
+  virtual sc_core::sc_interface &         get_base_interface() = 0;
+  virtual sc_core::sc_interface const &   get_base_interface() const = 0;
+
   virtual unsigned int                    get_bus_width() const = 0;
   virtual sc_core::sc_type_index          get_protocol_types() const = 0;
   virtual tlm_socket_category             get_socket_category() const = 0;
-  
+
 protected:
   virtual ~tlm_base_socket_if() {}
 };
