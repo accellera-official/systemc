@@ -40,6 +40,7 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
+#include "sysc/kernel/sc_macros.h"
 #include "sysc/utils/sc_list.h"
 
 #if SC_CPLUSPLUS >= 201103L
@@ -401,8 +402,22 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
     struct user_module_name : ::sc_core::sc_module
 
 #if SC_CPLUSPLUS >= 201103L
-    #define SC_CTOR(user_module_name)                                         \
-            user_module_name( ::sc_core::sc_module_name )
+
+// ----------------------------------------------------------------------------
+    #define SC_CTOR(...)                                                      \
+        SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
+
+    // SC_CTOR( user_module_name )
+    #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
+        user_module_name( ::sc_core::sc_module_name )
+
+    // SC_CTOR( user_module_name , ... )
+    #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
+        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
+
+    #define SC_CTOR_IMPL_(...)                                                \
+      SC_CONCAT_HELPER_(SC_CTOR_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
+// ----------------------------------------------------------------------------
 
     // Can be deprecated in next SystemC standard
     #define SC_HAS_PROCESS(user_module_name)
