@@ -129,6 +129,12 @@ sc_vector_do_operator_paren( Container & cont
                            , ArgumentIterator  last
                            , typename Container::iterator from );
 
+enum sc_vector_init_policy
+{
+    SC_VECTOR_LOCK_AFTER_INIT,
+    SC_VECTOR_ALLOW_EMPLACE
+};
+
 class sc_vector_element;  // opaque pointer
 
 class SC_API sc_vector_base
@@ -152,6 +158,10 @@ public:
   size_type size() const
     { return vec_.size(); }
 
+  void lock() { locked = true; };
+
+  bool is_locked() const { return locked; }
+
 protected:
 
   // begin implementation defined
@@ -165,7 +175,10 @@ protected:
     : sc_object( prefix )
     , vec_()
     , objs_vec_(0)
-  {}
+    , locked(false)
+  {
+      init_lock_cb();
+  }
 
   ~sc_vector_base()
     { delete objs_vec_; }
@@ -185,6 +198,7 @@ protected:
   void push_back( void* item )
     { vec_.push_back( static_cast<handle_type>(item) ); }
 
+  bool check_locked() const;
   void check_index( size_type i ) const;
   bool check_init( size_type n )  const;
 
@@ -209,12 +223,17 @@ protected:
     ~context_scope();
   };
 
+  void init_lock_cb();
+
+  void simulation_phase_callback(); // override callback
+
 public: 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
 
 private:
   storage_type vec_;
   mutable std::vector< sc_object* >* objs_vec_;
+  bool locked;
 
   // disabled
   sc_vector_base( const sc_vector_base& );
@@ -418,15 +437,19 @@ public:
     : base_type( prefix )
   {}
 
-  explicit sc_vector( const char* prefix, size_type n )
-    : base_type( prefix )
-    { init(n); }
-
-  template< typename Creator >
-  sc_vector( const char* prefix, size_type n, Creator creator )
+  sc_vector( const char* prefix, size_type n,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT)
     : base_type( prefix )
   {
-    init( n, creator );
+    init(n, init_pol);
+  }
+
+  template< typename Creator >
+  sc_vector( const char* prefix, size_type n, Creator creator,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT )
+    : base_type( prefix )
+  {
+    init( n, creator, init_pol );
   }
 
   virtual ~sc_vector();
@@ -443,11 +466,24 @@ public:
   const element_type& at( size_type i ) const
     { check_index(i); return (*this)[i]; }
 
-  void init( size_type n )
-    { init( n, &this_type::create_element ); }
+  void init( size_type n,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT )
+    { init( n, &this_type::create_element, init_pol ); }
 
   template< typename Creator >
-  void init( size_type n, Creator c );
+  void init( size_type n, Creator c,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT);
+
+#if SC_CPLUSPLUS >= 201103L
+  // Append element with automatically generated name
+  // T(generated_name, args...)
+  template< typename... Args >
+  void emplace_back( Args&&... args );
+
+  // Append element with user-defined name
+  template< typename... Args >
+  void emplace_back_with_name(Args &&... args);
+#endif
 
   static element_type * create_element( const char* prefix, size_type index );
 
@@ -669,7 +705,7 @@ sc_vector<T>::create_element( const char* name, size_type /* idx */ )
 template< typename T >
 template< typename Creator >
 void
-sc_vector<T>::init( size_type n, Creator c )
+sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
 {
   if ( base_type::check_init(n) )
   {
@@ -694,8 +730,37 @@ sc_vector<T>::init( size_type n, Creator c )
       clear();
       throw;
     }
+
+    if (init_pol == SC_VECTOR_LOCK_AFTER_INIT)
+        base_type::lock();
+
   }
 }
+
+#if SC_CPLUSPLUS >= 201103L
+
+template< typename T >
+template< typename... Args >
+void sc_vector<T>::emplace_back( Args&&... args ) {
+  if (check_locked()) {
+    sc_vector_base::context_scope scope( this );
+    T* p = new T( make_name( basename(), size()).c_str() ,
+                  std::forward<Args>(args)...);
+    base_type::push_back(p);
+  }
+}
+
+template< typename T >
+template< typename... Args >
+void sc_vector<T>::emplace_back_with_name(Args &&... args) {
+  if (check_locked()) {
+    sc_vector_base::context_scope scope(this);
+    T *p = new T(std::forward<Args>(args)...);
+    base_type::push_back(p);
+  }
+}
+
+#endif
 
 template< typename T >
 void
