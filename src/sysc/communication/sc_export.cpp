@@ -169,7 +169,7 @@ sc_export_registry::insert( sc_export_base* export_ )
     }
 #endif
 
-    sc_module* curr_module = m_simc->hierarchy_curr();
+    sc_module* curr_module = static_cast<sc_module*>(sc_get_current_object());
     if( curr_module == 0 ) {
         export_->report_error( SC_ID_EXPORT_OUTSIDE_MODULE_ );
         return;

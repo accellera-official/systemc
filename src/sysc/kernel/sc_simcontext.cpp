@@ -1041,21 +1041,24 @@ sc_simcontext::end()
 }
 
 void
-sc_simcontext::hierarchy_push( sc_module* mod )
+sc_simcontext::hierarchy_push( sc_object* obj )
 {
-    m_object_manager->hierarchy_push( mod );
+    sc_assert( !obj || dynamic_cast<sc_module*>(obj)
+                 || dynamic_cast<sc_process_b*>(obj) );
+
+    m_object_manager->hierarchy_push( obj );
 }
 
-sc_module*
+sc_object*
 sc_simcontext::hierarchy_pop()
 {
-	return static_cast<sc_module*>( m_object_manager->hierarchy_pop() );
+    return m_object_manager->hierarchy_pop();
 }
 
-sc_module*
+sc_object*
 sc_simcontext::hierarchy_curr() const
 {
-    return static_cast<sc_module*>( m_object_manager->hierarchy_curr() );
+    return m_object_manager->hierarchy_curr();
 }
 
 sc_object*
@@ -1567,19 +1570,21 @@ SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
-    sc_module* curr_module = simc->hierarchy_curr();
-    if( curr_module != 0 ) {
-	return curr_module->gen_unique_name( basename_, preserve_first );
+    sc_object* curr_obj = sc_get_current_object();
+
+    if( sc_module * curr_module = dynamic_cast<sc_module*>(curr_obj) ) {
+
+        return curr_module->gen_unique_name( basename_, preserve_first );
+
+    } else if (sc_process_b * curr_proc_p =
+                              dynamic_cast<sc_process_b*>(curr_obj)) {
+
+        return curr_proc_p->gen_unique_name( basename_, preserve_first );
+
     } else {
-        sc_process_b* curr_proc_p = sc_get_current_process_b();
-	if ( curr_proc_p )
-	{
-	    return curr_proc_p->gen_unique_name( basename_, preserve_first );
-	}
-	else
-	{
-	    return simc->gen_unique_name( basename_, preserve_first );
-	}
+
+        return simc->gen_unique_name( basename_, preserve_first );
+
     }
 }
 

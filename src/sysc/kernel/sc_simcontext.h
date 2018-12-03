@@ -207,9 +207,6 @@ public:
 
     sc_object* active_object();
 
-    void hierarchy_push( sc_module* );
-    sc_module* hierarchy_pop();
-    sc_module* hierarchy_curr() const;
     sc_object* first_object();
     sc_object* next_object();
     sc_object* find_object( const char* name );
@@ -294,6 +291,9 @@ public:
     bool pending_activity_at_current_time() const;
 
 private:
+    void hierarchy_push( sc_object* );
+    sc_object* hierarchy_pop();
+    sc_object* hierarchy_curr() const;
 
     void add_child_event( sc_event* );
     void add_child_object( sc_object* );

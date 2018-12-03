@@ -66,6 +66,11 @@ class SC_API sc_object
     friend class sc_runnable;
     friend class sc_simcontext;
     friend class sc_trace_file_base;
+    template<typename T>
+    friend class sc_optional;
+    friend class sc_export_base;
+    friend class sc_port_base;
+    friend class sc_prim_channel;
 
 public:
     typedef unsigned phase_cb_mask;
@@ -135,9 +140,22 @@ protected:
     phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
 
-    class hierarchy_scope;
 
 private:
+    class hierarchy_scope
+    {
+    public:
+        explicit hierarchy_scope(sc_object* obj);
+        explicit hierarchy_scope(sc_module* mod);
+        ~hierarchy_scope();
+
+    private:
+        sc_object* scope_;
+
+    private:
+        hierarchy_scope( hierarchy_scope const & other ) /* = delete */;
+        hierarchy_scope& operator=(hierarchy_scope const&) /* = delete */;
+    };
             void do_simulation_phase_callback();
     virtual void simulation_phase_callback();
 

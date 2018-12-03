@@ -48,6 +48,7 @@ H_FILES += \
 	utils/sc_list.h \
 	utils/sc_machine.h \
 	utils/sc_mempool.h \
+	utils/sc_optional.h \
 	utils/sc_pq.h \
 	utils/sc_pvector.h \
 	utils/sc_report.h \
@@ -66,6 +67,7 @@ CXX_FILES += \
 	utils/sc_hash.cpp \
 	utils/sc_list.cpp \
 	utils/sc_mempool.cpp \
+	utils/sc_optional.cpp \
 	utils/sc_pq.cpp \
 	utils/sc_report.cpp \
 	utils/sc_report_handler.cpp \

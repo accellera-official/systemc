@@ -465,6 +465,50 @@ sc_object::simulation_phase_callback()
 }
 
 
+// ----------------------------------------------------------------------------
+// sc_object::hierarchy_scope
+
+sc_object::hierarchy_scope::hierarchy_scope( sc_object* obj )
+        : scope_(0)
+{
+    // optimization for common case
+    if ( obj == sc_get_current_object() )
+        return;
+
+    if ( !obj ) {
+
+        scope_->simcontext()->hierarchy_push(NULL);
+
+    } else {
+
+        scope_ = dynamic_cast<sc_module*>(obj);
+
+        if (!scope_)
+            scope_ = dynamic_cast<sc_process_b*>(obj);
+
+        if (!scope_)
+            scope_ = obj->get_parent_object();
+
+        scope_->simcontext()->hierarchy_push(scope_);
+    }
+
+}
+
+
+sc_object::hierarchy_scope::hierarchy_scope( sc_module* mod )
+        : scope_(mod)
+{
+    if( scope_ )
+        scope_->simcontext()->hierarchy_push(scope_);
+}
+
+
+sc_object::hierarchy_scope::~hierarchy_scope()
+{
+    if( scope_ )
+        scope_->simcontext()->hierarchy_pop();
+}
+
 } // namespace sc_core
 
 /*****************************************************************************
