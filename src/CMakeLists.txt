@@ -120,6 +120,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_method_process.cpp
                      sysc/kernel/sc_module.cpp
                      sysc/kernel/sc_module_name.cpp
+                     sysc/kernel/sc_initializer_function.h
                      sysc/kernel/sc_module_registry.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp

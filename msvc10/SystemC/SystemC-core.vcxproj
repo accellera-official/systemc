@@ -477,6 +477,7 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_method_process.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_module.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_module_name.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_initializer_function.h " />    
     <ClInclude Include="..\..\src\sysc\kernel\sc_module_registry.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_name_gen.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_object.h" />
