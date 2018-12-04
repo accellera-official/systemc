@@ -73,8 +73,8 @@
 
 namespace sc_core {
 
-struct sc_initializer_function {
-
+class sc_initializer_function {
+public:
     template<class F>
     explicit sc_initializer_function(F&& fn) {
 
