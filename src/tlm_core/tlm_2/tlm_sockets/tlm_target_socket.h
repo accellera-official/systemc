@@ -30,13 +30,17 @@ template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
           typename BW_IF = tlm_bw_transport_if<> >
 class tlm_base_target_socket_b
+  : public tlm_base_socket_if
 {
 public:
   virtual ~tlm_base_target_socket_b() {}
 
-  virtual sc_core::sc_port_b<BW_IF> & get_base_port() = 0;
-  virtual sc_core::sc_export<FW_IF> & get_base_export() = 0;
-  virtual                    FW_IF  & get_base_interface() = 0;
+  virtual sc_core::sc_port_b<BW_IF> &       get_base_port() = 0;
+  virtual sc_core::sc_port_b<BW_IF> const & get_base_port() const = 0;
+  virtual sc_core::sc_export<FW_IF> &       get_base_export() = 0;
+  virtual sc_core::sc_export<FW_IF> const & get_base_export() const = 0;
+  virtual                    FW_IF  &       get_base_interface() = 0;
+  virtual                    FW_IF  const & get_base_interface() const = 0;
 };
 
 template <unsigned int BUSWIDTH,
@@ -54,8 +58,7 @@ template <unsigned int BUSWIDTH = 32,
           typename BW_IF = tlm_bw_transport_if<>,
           int N = 1,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
-class tlm_base_target_socket : public tlm_base_socket_if,
-                               public tlm_base_target_socket_b<BUSWIDTH, FW_IF, BW_IF>,
+class tlm_base_target_socket : public tlm_base_target_socket_b<BUSWIDTH, FW_IF, BW_IF>,
                                public sc_core::sc_export<FW_IF>
 {
 public:
@@ -174,14 +177,6 @@ public:
   }
 
   // Implementation of tlm_base_socket_if functions
-  virtual sc_core::sc_port_base &         get_port_base()
-    { return m_port; }
-  virtual sc_core::sc_port_base const &   get_port_base() const
-    { return m_port; }
-  virtual sc_core::sc_export_base &       get_export_base()
-    { return *this; }
-  virtual sc_core::sc_export_base const & get_export_base() const
-    { return *this; }
   virtual unsigned int                    get_bus_width() const
     { return BUSWIDTH; }
   virtual sc_core::sc_type_index          get_protocol_types() const
