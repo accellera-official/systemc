@@ -1,0 +1,23 @@
+Large portion of SystemC designs are implemented as header-only libraries.
+This is especially true for parameterizable synthesizable modules, which
+are often implemented as templates. Support for in-class initialization
+may even further motivate SystemC users to implement modules as header-only
+classes.
+
+Unfortunately, implementing everything in headers removes benefit of separate
+compilation: fast incremental builds. While compile time is not always an issue,
+it can become a real problem when working with large systems.
+
+Here are two advices:
+
+1) Use a precompiled header (PCH) for <systemc.h>. It includes large portion of C++
+standard library, so it is a very good candidate for PCH for every SystemC project.
+(With C++14 it is already ~80000 lines of code after preprocessing)
+
+2) Use a PImpl idiom to break dependencies on large header-only libraries.
+In SystemC interface of a module is usually defined by ports and exports, everything
+else can be hidden.
+
+Example of PImpl for template specialization:
+   adder_int_5_pimpl.cpp
+   adder_int_5_pimpl.h

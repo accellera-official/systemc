@@ -85,7 +85,7 @@ class SC_API sc_module
     friend class sc_port_registry;
 	friend class sc_process_b;
     friend class sc_simcontext;
-
+    friend class sc_initializer_function;
 public:
 
     sc_simcontext* sc_get_curr_simcontext()
@@ -301,6 +301,8 @@ protected:
     int append_port( sc_port_base* );
 
 private:
+    void finalize_module();
+
     sc_module( const sc_module& );
     const sc_module& operator = ( const sc_module& );
 

@@ -72,6 +72,7 @@
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_initializer_function.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_ver.h"

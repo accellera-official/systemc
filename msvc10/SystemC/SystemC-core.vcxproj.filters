@@ -408,6 +408,9 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_module_name.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sysc\kernel\sc_initializer_function.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\sysc\kernel\sc_module_registry.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
