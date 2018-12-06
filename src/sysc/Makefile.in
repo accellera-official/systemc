@@ -555,7 +555,8 @@ H_FILES = kernel/sc_attribute.h kernel/sc_cmnhdr.h \
 	kernel/sc_dynamic_processes.h kernel/sc_event.h \
 	kernel/sc_except.h kernel/sc_externs.h kernel/sc_join.h \
 	kernel/sc_kernel_ids.h kernel/sc_macros.h kernel/sc_module.h \
-	kernel/sc_module_name.h kernel/sc_object.h kernel/sc_process.h \
+	kernel/sc_module_name.h kernel/sc_initializer_function.h \
+	kernel/sc_object.h kernel/sc_process.h \
 	kernel/sc_process_handle.h kernel/sc_runnable.h \
 	kernel/sc_sensitive.h kernel/sc_spawn.h \
 	kernel/sc_spawn_options.h kernel/sc_status.h \
