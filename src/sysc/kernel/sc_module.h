@@ -45,7 +45,6 @@
 namespace sc_core {
 
 class sc_name_gen;
-class sc_initializer_function;
 template<class T> class sc_in;
 template<class T> class sc_inout;
 template<class T> class sc_out;
