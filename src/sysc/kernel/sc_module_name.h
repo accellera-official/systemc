@@ -42,6 +42,11 @@
 #include <functional>
 #endif
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
+
 namespace sc_core {
 
 class sc_module;
@@ -110,6 +115,10 @@ inline void sc_module_name::set_module( sc_module* module_p )
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // Revision 1.4  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.
