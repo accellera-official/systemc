@@ -42,6 +42,10 @@
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/utils/sc_list.h"
 
+#if SC_CPLUSPLUS >= 201103L
+# include <type_traits> // std::remove_reference
+#endif
+
 namespace sc_core {
 
 class sc_name_gen;
@@ -398,13 +402,27 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#define SC_CTOR(user_module_name)                                             \
-    typedef user_module_name SC_CURRENT_USER_MODULE;                          \
-    user_module_name( ::sc_core::sc_module_name )
+#if SC_CPLUSPLUS >= 201103L
+    #define SC_CTOR(user_module_name)                                         \
+            user_module_name( ::sc_core::sc_module_name )
 
-// the SC_HAS_PROCESS macro call must be followed by a ;
-#define SC_HAS_PROCESS(user_module_name)                                      \
-    typedef user_module_name SC_CURRENT_USER_MODULE
+    // Can be deprecated in next SystemC standard
+    #define SC_HAS_PROCESS(user_module_name)
+    // _Pragma( "message \"SC_HAS_PROCESS has been deprecated\"")
+
+    #define SC_CURRENT_USER_MODULE_TYPE \
+        std::remove_reference<decltype(*this)>::type
+#else
+    #define SC_CTOR(user_module_name)                                         \
+        typedef user_module_name SC_CURRENT_USER_MODULE;                      \
+        user_module_name( ::sc_core::sc_module_name )
+
+    // the SC_HAS_PROCESS macro call must be followed by a ;
+    #define SC_HAS_PROCESS(user_module_name)                                  \
+        typedef user_module_name SC_CURRENT_USER_MODULE
+
+    #define SC_CURRENT_USER_MODULE_TYPE SC_CURRENT_USER_MODULE
+#endif
 
 // The this-> construct on sensitive operators in the macros below is
 // required for gcc 4.x when a templated class has a templated parent that is
@@ -449,20 +467,20 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_CTHREAD(func, edge)                                                \
     declare_cthread_process( func ## _handle,                                 \
                              #func,                                           \
-                             SC_CURRENT_USER_MODULE,                          \
+                             SC_CURRENT_USER_MODULE_TYPE,                     \
                              func,                                            \
                              edge )
 
 #define SC_METHOD(func)                                                       \
     declare_method_process( func ## _handle,                                  \
                             #func,                                            \
-                            SC_CURRENT_USER_MODULE,                           \
+                            SC_CURRENT_USER_MODULE_TYPE,                      \
                             func )
 
 #define SC_THREAD(func)                                                       \
     declare_thread_process( func ## _handle,                                  \
                             #func,                                            \
-                            SC_CURRENT_USER_MODULE,                           \
+                            SC_CURRENT_USER_MODULE_TYPE,                      \
                             func )
 
 
