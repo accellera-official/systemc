@@ -343,6 +343,36 @@ sc_module::end_module()
     }
 }
 
+// create processes via SC_METHOD, SC_THREAD, SC_CTHREAD
+
+void
+sc_module::declare_method_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_method_process( name, false, func, this, 0 );
+    sensitive << handle;
+    sensitive_pos << handle;
+    sensitive_neg << handle;
+}
+
+void
+sc_module::declare_thread_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_thread_process( name, false, func, this, 0 );
+    sensitive << handle;
+    sensitive_pos << handle;
+    sensitive_neg << handle;
+}
+
+sc_process_handle
+sc_module::declare_cthread_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_cthread_process( name, false, func, this, 0 );
+    return handle;
+    // sensitivity is handled in template function
+}
 
 // to prevent initialization for SC_METHODs and SC_THREADs
 
