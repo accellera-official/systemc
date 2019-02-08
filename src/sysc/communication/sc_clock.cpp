@@ -46,6 +46,7 @@
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_dynamic_processes.h"
 #include "sysc/kernel/sc_spawn.h"
 #include "sysc/utils/sc_utils_ids.h"
 
@@ -201,53 +202,6 @@ sc_clock::sc_clock( const char* name_,
     }
 }
 
-
-//------------------------------------------------------------------------------
-//"sc_clock::before_end_of_elaboration"
-//
-// This callback is used to spawn the edge processes for this object instance.
-// The processes are created here rather than the constructor for the object
-// so that the processes are registered with the global simcontext rather
-// than the scope of the clock's parent.
-//------------------------------------------------------------------------------
-#if ( defined(_MSC_VER) && _MSC_VER < 1300 ) //VC++6.0 doesn't support sc_spawn with functor.
-#   define sc_clock_posedge_callback(ptr) sc_clock_posedge_callback
-
-#   define sc_clock_negedge_callback(ptr) sc_clock_negedge_callback
-
-#   define sc_spawn(a,b,c) { \
-        sc_process_handle result(new sc_spawn_object<a>(a(this),b,c)); \
-    }
-#endif // ( defined(_MSC_VER) && _MSC_VER < 1300 )
-
-void sc_clock::before_end_of_elaboration()
-{
-    std::string gen_base;
-    sc_spawn_options posedge_options;	// Options for posedge process.
-    sc_spawn_options negedge_options;	// Options for negedge process.
-
-    posedge_options.spawn_method();
-    posedge_options.dont_initialize();
-    posedge_options.set_sensitivity(&m_next_posedge_event);
-    gen_base = basename();
-    gen_base += "_posedge_action";
-    sc_spawn(sc_clock_posedge_callback(this),
-	sc_gen_unique_name( gen_base.c_str() ), &posedge_options);
-
-    negedge_options.spawn_method();
-    negedge_options.dont_initialize();
-    negedge_options.set_sensitivity(&m_next_negedge_event);
-    gen_base = basename();
-    gen_base += "_negedge_action";
-    sc_spawn( sc_clock_negedge_callback(this),
-    	sc_gen_unique_name( gen_base.c_str() ), &negedge_options );
-}
-
-//clear VC++6.0 macros
-#undef sc_clock_posedge_callback
-#undef sc_clock_negedge_callback
-#undef sc_spawn
-
 // destructor (does nothing)
 
 sc_clock::~sc_clock()
@@ -292,6 +246,24 @@ sc_clock::report_error( const char* id, const char* add_msg ) const
     SC_REPORT_ERROR( id, msg.str().c_str() );
 }
 
+void
+sc_clock::spawn_edge_method( bool edge )
+{
+    sc_spawn_options edge_options;	// Options for edge process.
+      edge_options.spawn_method();
+      edge_options.dont_initialize();
+      edge_options.set_sensitivity( edge ? &m_next_posedge_event
+                                         : &m_next_negedge_event );
+
+    std::string gen_base = basename();
+    gen_base += edge ? "_posedge_action" : "_negedge_action";
+
+    void (sc_clock::*action)() = edge ? &sc_clock::posedge_action
+                                      : &sc_clock::negedge_action;
+
+    sc_spawn( sc_bind( action, this )
+            , sc_gen_unique_name( gen_base.c_str() ), &edge_options );
+}
 
 void
 sc_clock::init( const sc_time& period_,
@@ -336,6 +308,8 @@ sc_clock::init( const sc_time& period_,
 
     m_start_time = start_time_;
 
+    spawn_edge_method(true);
+    spawn_edge_method(false);
 }
 
 } // namespace sc_core
