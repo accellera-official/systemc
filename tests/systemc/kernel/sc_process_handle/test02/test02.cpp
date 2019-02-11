@@ -41,7 +41,7 @@ SC_MODULE(DUT)
     SC_CTOR(DUT)
     {
         SC_CTHREAD(cthread_target,m_clk.pos());
-        SC_THREAD(thread_target)
+        SC_THREAD(thread_target);
         sensitive << m_clk.pos();
         SC_CTHREAD(watcher,m_clk.pos());
     }

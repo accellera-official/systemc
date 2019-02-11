@@ -50,7 +50,7 @@ public:
     socket.register_nb_transport_fw(this, &ExplicitATTarget::myNBTransport);
     socket.register_transport_dbg(this, &ExplicitATTarget::transport_dbg);
 
-    SC_THREAD(beginResponse)
+    SC_THREAD(beginResponse);
   }
 
   sync_enum_type myNBTransport(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)

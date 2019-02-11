@@ -18,7 +18,7 @@ SC_MODULE(WRITE_LEAF)
 {
     SC_CTOR(WRITE_LEAF)
     {
-		SC_METHOD(sync)
+		SC_METHOD(sync);
 		sensitive << clk.pos();
     }
 	void sync()

@@ -4,9 +4,9 @@ SC_MODULE(TB)
 {
 	SC_CTOR(TB)
 	{
-		SC_METHOD(method)
+		SC_METHOD(method);
 		sensitive << m_flipper;
-		SC_THREAD(thread)
+		SC_THREAD(thread);
 	}
 	void method()
 	{
