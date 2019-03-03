@@ -33,7 +33,7 @@ Issue reporting
 ---------------------------------------------------------------------
 
 You can post the bugs and suggestions of general interest to the
-[SystemC Community Forum][5].  When reporting bugs please specify
+[SystemC Community Forum][5].  When reporting bugs, please specify
 the following information (if applicable):
 
   1. SystemC version
