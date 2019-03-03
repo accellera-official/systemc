@@ -10,11 +10,12 @@ How to Contribute
 
 ### Join the Accellera SystemC Language Working Group
 
- If you would like to contribute to the development of SystemC and/or
- this reference implementation, **join Accellera** and its working groups.
+ If you would like to contribute to the development of SystemC and/or this
+ reference implementation, have your company, organization, or university
+ join Accellera and its working groups.
  Find out more information at http://www.accellera.org/about/join.
- If your company is already an Accellera member, you can request to
- [join the SystemC Language Working Group here][4].
+ If your company, organization or university is already an Accellera member,
+ you can request to [join the SystemC Language Working Group here][4].
 
 ### Join the SystemC community
 
