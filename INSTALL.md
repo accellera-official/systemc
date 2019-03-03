@@ -290,8 +290,8 @@ In addition, a copy of the example code resides in the directory
 examples at the highest level of the installation (or in the
 shared documentation install directory).
 
-Use the makefiles provided in  the `examples` directory as templates
-for makefiles you need for compiling your own examples.
+Use the Makefiles provided in  the `examples` directory as templates
+for Makefiles you need for compiling your own examples.
 
 
 ### Using the Configure Script
@@ -319,7 +319,7 @@ definitions if needed. Then, it creates the following files:
 If you need to use other commands to successfully compile the package
 on your system, please try to determine if the configure script can be used
 for these commands. Then, send either a diff file or instructions about
-the commands you used to the email address provided in the README file.
+the commands you used to the e-mail address provided in the README file.
 This information will be used to improve the installation process in
 the next release.
 
@@ -449,7 +449,7 @@ Note: _If you experience spurious errors about missing files in the
  Some paths in the SystemC archive are longer than the historical
       99 character limit, and several Windows archivers (e.g. WinZip)
       have been reported to trip over this.  The open source archiver
-      7-zip (http://7-zip.org) is known to work.
+      [7-zip](http://7-zip.org/) is known to work.
 
 
 
@@ -505,7 +505,7 @@ Creating SystemC Applications
    the Project menu.
 
 5. From the C/C++ tab, select the Language properties and set
-   'Enable Run-Time Type Info' to Yes
+   'Enable Run-Time Type Info' to Yes.
 
 6. From the C/C++ tab, select the Command Line properties and add `/vmg`
    to the 'Additional Options:' box.
@@ -513,7 +513,7 @@ Creating SystemC Applications
 7. From the Linker tab, select the Input properties and type `systemc.lib`
    in the 'Additional Dependencies' box.
 
-8. Click OK
+8. Click OK.
 
 
 Also make sure that the compiler and linker can find the SystemC header
@@ -546,7 +546,7 @@ project only:
    the SystemC library:   ...\systemc-2.3.2\msvc10\systemc\debug
    in the 'Additional Library Directories:' box.
 
-9. Click OK
+9. Click OK.
 
 
 Building against a SystemC DLL
@@ -718,7 +718,7 @@ settings to all build configurations.
    sc_set_time_resolution( 1, SC_NS ); // OK, with this extension
    ```
    The time resolution will still be fixed, once you have explicitly or
-   implicitly relied on the physical value (i.e. the relation to seconds)
+   implicitly relied on the physical value (i.e., the relation to seconds)
    of any sc_time object.
 
    Note: _Only effective during library build._
@@ -726,7 +726,7 @@ settings to all build configurations.
 
  * `SC_ENABLE_SIMULATION_PHASE_CALLBACKS`  
    `SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING`  
-   Enable a generic simulation phase callback mechanism (experimental).
+   Enable a generic simulation phase callback mechanism (experimental)
 
    This option is usually set by the `configure` option  
      `--enable-phase-callbacks`, or  
@@ -739,6 +739,7 @@ settings to all build configurations.
 
    Note: _Setting tracing flag includes the generic phase callback
      infrastructure automatically._  
+
    Note: _Only effective during library build._
 
 

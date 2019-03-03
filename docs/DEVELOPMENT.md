@@ -42,7 +42,7 @@ including their GitHub account name.
 Comprehensive documentation about [Git][6], a distributed version control
 system, can be found in the [Pro Git book][8], also available online.
 Since Git is 'distributed', it is a very natural choice for the distributed
-development process needed for the collaboratively evolving preference
+development process needed for collaboratively evolving the reference
 implementation of SystemC.
 
 In order to contribute changes to the different repositories, it is
