@@ -7,26 +7,111 @@
 CONTENTS
 ========
 
-  1) What's new in this release?
+  1) IMPORTANT
+  
+  2) What's new in this release?
 
-  2) Bug fixes and enhancements
+  3) Bug fixes and enhancements
 
-  3) New features
+  4) New features
 
-  4) Incompatibitilies with previous releases
+  5) Incompatibitilies with previous releases
 
-  5) Initial support for C++11/14
+  6) Initial support for C++11/14
 
-  6) Experimental features
+  7) Experimental features
 
-  7) Known problems
+  8) Known problems
 
-  8) Fixed-point library
+  9) Fixed-point library
 
-  9) TLM Release Notes
+  10) TLM Release Notes
 
 
-1) What's new in this release?
+IMPORTANT
+---------
+
+This is the release of the SystemC 2.3.3 Class Library.
+This release includes TLM 2.0.5 (Transaction Level Modeling) code,
+as described in the IEEE 1666-2011 Language Reference Manual.
+
+-------------------------------------------------------------------------------
+
+
+1. This is the release of SystemC 2.3.3. This release contains bug fixes
+   for SystemC 2.3.2 (and earlier) as well as adding some minor features.
+
+2. This release is supported on the following platform combinations for
+   which it has been tested:
+
+   * 64-bit Linux (x86_64)
+      (RedHat Enterprise 6; SuSE Enterprise Linux 11; Debian 9)
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
+      - Clang C++ compiler versions clang-3.4 through clang-6.0
+      - Intel C++ Compiler (ICC 15.0.0)
+
+   * 64-bit Linux (x86_64) with 32-bit compiler (--host=i686-linux-gnu)
+      (SuSE Enterprise Linux 11)
+      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
+      - Intel C++ Compiler (ICC 15.0.0)
+
+   * 64-bit Linux (aarch64)
+      (Ubuntu 16.04)
+      - GNU C++ compiler version gcc-4.5.0
+
+   * 64-bit Mac OS X (x86_64)
+      (10.12 Sierra)
+      - Apple LLVM version 8.0 (clang-800.0.42.1)
+      - GNU C++ compiler (MacPorts) versions gcc-4.9.0, gcc-5.4.0, gcc-6.3.0
+
+   * Microsoft Windows
+      (Windows Server 2008, Windows 10 Enterprise)
+      - Microsoft Visual Studio 2010 (10.0) (Win32 and x64)
+      - Microsoft Visual Studio 2013 (12.0) (Win32 and x64)
+      - Microsoft Visual Studio 2015 (14.0) (Win32 and x64)
+      - Microsoft Visual Studio 2017 (14.1) (Win32 and x64)
+
+   Warning: The fixed-point datatypes are not working as defined on
+   MSVC 2015/2017 (x64) in Release mode.  See RELEASENOTES.
+
+   * Windows Server 2008 (WoW64), Msys 1.0.17(0.48/3/2)
+      - MinGW-w64 GNU C++ compiler version 4.9.2 (x86_64)
+
+
+  This release has not yet been tested or is known not to work as expected
+  on the following formerly supported platforms:
+
+   * GNU C++ compiler versions prior to 4.2.x (all platforms)
+   * FreeBSD 9.0 or later (x86, x86_64) with GNU C++ compiler
+   * HP-UX 11.00 or later with GNU C++ or HP C++ compiler
+   * Sun/Oracle Solaris, with GNU C++ or Sun/Solaris Studio compiler
+   * Mac OS X prior to 10.12 (Sierra) and/or on the x86, PowerPC architectures
+   * Microsoft Visual C++ versions prior to 10.0 (2010)
+   * Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
+   * Msys/MinGW32 GNU C++ compiler
+
+3. (In)compatibility note
+
+  While it is possible to build SystemC as a shared library (both on
+  ELF-based systems and well as a DLL on Windows), there is no explicitly
+  defined binary interface across different
+
+    - SystemC implementations (e.g. from multiple vendors)
+    - SystemC library versions
+    - Compilers or compiler versions
+    - Operating systems or OS versions
+
+  Some differences might be caught at link time, while other incompatibilities
+  could just sliently lead to undefined behavior during simulation.  Please
+  carefully ensure a consistent build configuration, when integrating binary
+  SystemC models built from separate sources.
+
+
+-------------------------------------------------------------------------------
+
+
+
+2) What's new in this release?
 ==============================
 
 This version of SystemC contains the "Proof of Concept" simulator
@@ -51,7 +136,7 @@ Compared to the 2.3.0 release, this release has the following new items:
   - Updated platform support, see the README.
 
 
-2) Bug fixes and enhancements
+3) Bug fixes and enhancements
 =============================
 
 For bug fixes added in 2.3.1 (or before) already, please refer to the previous
@@ -175,7 +260,7 @@ Following is the list of bug fixes and enhancements for the 2.3.2 release:
      - Avoid referencing deprecated 'std::gets' on C++11
 
 
-3) New features
+4) New features
 ===============
 
 Here is an overview of changes in 2.3.x compared to 2.3.0.
@@ -423,7 +508,7 @@ Note: These features partly add functionality beyond the current
     - see cmake/INSTALL_USING_CMAKE
 
 
-4) Incompatibilities with previous releases
+5) Incompatibilities with previous releases
 ===========================================
 
 Here is a list of known incompatibilities between this release and 2.3.1
@@ -482,7 +567,7 @@ Here is a list of known incompatibilities between this release and 2.2.0:
     support for the sc_start() function introduced with IEEE 1666_2011.
 
 
-5) Initial support for C++11/14
+6) Initial support for C++11/14
 ===============================
 
 This package includes an initial implementation of the C++11/14 proposal,
@@ -547,7 +632,7 @@ In the future, further language features depending on modern C++ language
 constructs may be added.
 
 
-6) Experimental features
+7) Experimental features
 ========================
 
 In this section the experimental features of this release are listed.
@@ -663,7 +748,7 @@ Note: Some of these features are not enabled in the default library
    examples/sysc/2.3/simple_async (requires C++11).
 
 
-7) Known Problems
+8) Known Problems
 =================
 
   - When building SystemC on Cygwin for the x86_64 platform with
@@ -733,7 +818,7 @@ Note: Some of these features are not enabled in the default library
     (http://7-zip.org) is known to work.
 
 
-8) Fixed-point library
+9) Fixed-point library
 ======================
 
 SystemC contains a fixed-point datatypes package.
@@ -766,7 +851,7 @@ reduced by defining compile-time macro SC_FX_EXCLUDE_OTHER (in addition
 to SC_INCLUDE_FX).
 
 
-9) TLM Release Notes
+10) TLM Release Notes
 ====================
 
 CONTENTS
@@ -777,14 +862,14 @@ CONTENTS
   3) Known issues
 
 
-9.1) Supported SystemC versions
+10.1) Supported SystemC versions
 ===============================
 
 Starting with the current release, only the bundled SystemC version is supported.
 Parts of the TLM implementation are now linked into the kernel library.
 
 
-9.2) What's changed in this kit?
+10.2) What's changed in this kit?
 ================================
 
 Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed:
@@ -847,7 +932,7 @@ Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed
  - [2.0.4] Minor cleanups and improved compiler support.
 
 
-9.3) Known issues
+10.3) Known issues
 =================
 
 a. The tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
