@@ -672,16 +672,6 @@ Note: Some of these features are not enabled in the default library
       ../configure --enable-pthreads ...
 
 
-  - When building the SystemC library with QuickThreads support, the
-    resulting shared library is marked as requiring an executable stack
-    by certain compilers/assemblers (or rather not marked as not needing
-    one).  As a result, some system security systems (like SELinux) might
-    refuse to load the library.  As a workaround for GNU (compatible)
-    assemblers, pass the assembler flags variable with the option
-      CCASFLAGS="-Wa,--noexecstack"
-    to the `configure' script call before building the SystemC library.
-
-
   - IEEE 1666-2011 does not explicitly define the behaviour in the corner
     cases of attempting to create sc_time objects smaller than the time
     resolution or bigger than sc_max_time().  This implementation currently
