@@ -1,0 +1,9 @@
+SystemC Simulation
+
+Info: thread_1: waiting
+
+Info: thread_2: waiting on sc_event_list
+
+Info: thread_1: killing other thread
+
+Info: thread_1: thread finished
