@@ -77,9 +77,9 @@ namespace tlm
 #    define TLM_VERSION_PRERELEASE          ""          ///< pre-release version string
 #endif
 
-#define TLM_VERSION_RELEASE_YEAR            "2018"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "12"        ///< release month ( MM )
-#define TLM_VERSION_RELEASE_DAY             "06"        ///< release day   ( DD )
+#define TLM_VERSION_RELEASE_YEAR            "2019"      ///< release year  ( YYYY )
+#define TLM_VERSION_RELEASE_MONTH           "03"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_DAY             "05"        ///< release day   ( DD )
 
 #define TLM_COPYRIGHT \
   "Copyright (c) 1996-" TLM_VERSION_RELEASE_YEAR " by all Contributors\n" \

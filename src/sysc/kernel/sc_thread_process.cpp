@@ -310,6 +310,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     {
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
+        remove_dynamic_events();
         simcontext()->preempt_with(this);
     }
 

@@ -56,7 +56,7 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_2_4_0
 
-#define SYSTEMC_VERSION       20190105
+#define SYSTEMC_VERSION       20190305
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
 #define SC_VERSION_MINOR      4
@@ -67,7 +67,7 @@ extern SC_API const std::string  sc_copyright_string;
 #define IEEE_1666_SYSTEMC     201101L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2018 by all Contributors,\n" \
+  "Copyright (c) 1996-2019 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
