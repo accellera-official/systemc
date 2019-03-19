@@ -721,12 +721,12 @@ add_subdirectory (examples)
 
 install (FILES AUTHORS
                ChangeLog
-               INSTALL
+               INSTALL.md
                cmake/INSTALL_USING_CMAKE
                LICENSE
                NEWS
                NOTICE
-               README
+               README.md
                RELEASENOTES
          DESTINATION ${CMAKE_INSTALL_DOCDIR}
          COMPONENT doc)
