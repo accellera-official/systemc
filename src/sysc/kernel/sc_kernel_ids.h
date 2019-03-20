@@ -204,6 +204,12 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
         "throw_it not allowed unless simulation is running " )
 SC_DEFINE_MESSAGE(SC_ID_CORRUPT_HIERARCHY_SCOPE_, 575,
         "corrupted sc_hierarchy_scope unwinding" )
+SC_DEFINE_MESSAGE(SC_ID_UNMATCHED_SUSPENDABLE_  , 576,
+        "Unmatched unsuspendable/suspendable request " )
+SC_DEFINE_MESSAGE(SC_ID_UNSUSPENDABLE_NOTHREAD_  , 577,
+        "unsuspendable/suspendable only valid inside a process" )
+SC_DEFINE_MESSAGE(SC_ID_UNBALANCED_UNSUSPENDALL_ , 578,
+        "Unmatched unsuspendall/suspendall" )
 
 /*****************************************************************************
 

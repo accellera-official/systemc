@@ -364,6 +364,8 @@ sc_simcontext::init()
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
     m_simulation_status = SC_ELABORATION;
+    m_suspend = 0;
+    m_unsuspendable = 0;
 }
 
 void
@@ -415,7 +417,8 @@ sc_simcontext::sc_simcontext() :
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
     m_simulation_status(SC_ELABORATION), m_start_of_simulation_called(false),
-    m_cor_pkg(0), m_cor(0), m_reset_finder_q(0)
+    m_cor_pkg(0), m_cor(0), m_reset_finder_q(0),
+    m_suspend(0), m_unsuspendable(0)
 {
     init();
 }
@@ -906,7 +909,6 @@ sc_simcontext::simulate( const sc_time& duration )
                     // requested simulation time completed or no external updates
                     goto exit_time;
                 }
-                // received external updates, continue simulation
                 break;
             }
 
@@ -1371,7 +1373,7 @@ sc_simcontext::is_running() const
 bool
 sc_simcontext::next_time( sc_time& result ) const
 {
-    while( m_timed_events->size() ) {
+    while( m_timed_events->size() && ( !m_suspend ||  m_unsuspendable ) ) {
 	sc_event_timed* et = m_timed_events->top();
 	if( et->event() != 0 ) {
 	    result = et->notify_time();
@@ -1865,6 +1867,81 @@ SC_API bool sc_is_unwinding()
 {
     return sc_get_current_process_handle().is_unwinding();
 }
+
+SC_API void sc_suspend_all(sc_simcontext* csc)
+{
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (!process_p->m_suspend_all_req) {
+            process_p->m_suspend_all_req=true;
+        } else {
+            return;
+        }
+    }
+    // Update the main simcontext counters
+    if (!csc) csc = sc_get_curr_simcontext();
+    csc->m_suspend++;
+}
+
+SC_API void sc_unsuspend_all(sc_simcontext* csc)
+{
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (process_p->m_suspend_all_req) {
+            process_p->m_suspend_all_req=false;
+        } else {
+            return;
+        }
+    }
+    // Update the main simcontext counters
+    if (!csc) csc = sc_get_curr_simcontext();
+    if ( csc->m_suspend ) {
+        csc->m_suspend--;
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNBALANCED_UNSUSPENDALL_, "");
+    }
+}
+
+SC_API void sc_suspendable()
+{
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (process_p->m_unsuspendable) {
+            process_p->m_unsuspendable=false;
+
+            if (sc_get_curr_simcontext()->m_unsuspendable > 0 ) {
+                sc_get_curr_simcontext()->m_unsuspendable--;
+            } else {
+                SC_REPORT_ERROR(SC_ID_UNMATCHED_SUSPENDABLE_, "");
+            }
+        }
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNSUSPENDABLE_NOTHREAD_, "");
+    }
+}
+
+SC_API void sc_unsuspendable()
+{
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (!process_p->m_unsuspendable) {
+            process_p->m_unsuspendable=true;
+
+            sc_get_curr_simcontext()->m_unsuspendable++;
+        }
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNSUSPENDABLE_NOTHREAD_, "");
+    }
+}
+
 
 // The IEEE 1666 Standard for 2011 designates that the treatment of
 // certain process control interactions as being "implementation dependent".
