@@ -1,0 +1,9 @@
+SystemC Simulation
+v = "some string"
+w = "some string"
+v = ""
+v = [1,true]
+w = [[1,true]]
+v = null
+v = {"copy":[1,true],"move":[1,true]}
+w = null

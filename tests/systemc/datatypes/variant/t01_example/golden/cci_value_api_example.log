@@ -1,0 +1,10 @@
+SystemC Simulation
+JSON (null)   : null
+JSON (bool)   : true
+JSON (int)    : 42
+JSON (sc_int) : 42
+JSON (double) : 42.0
+JSON (string) : "string"
+JSON (list)   : [12,34,"56",[[78],[9]],[0,null],"Z"]
+JSON (sc_time): [10,"ns"]
+JSON (map)    : {"value":10,"unit":"ns","scale":1}
