@@ -15,50 +15,49 @@
   implied.  See the License for the specific language governing
   permissions and limitations under the License.
 
- ****************************************************************************/
+ *****************************************************************************/
 
-#ifndef CCI_CORE_CCI_VALUE_ITERATOR_H_INCLUDED_
-#define CCI_CORE_CCI_VALUE_ITERATOR_H_INCLUDED_
+#ifndef SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_
+#define SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_
 
-#include <cci_core/cci_cmnhdr.h>
-#include <iterator> // std::iterator_traits, std::reverse_iterator
+#include "sysc/kernel/sc_cmnhdr.h"
+#include <iterator> // std::reverse_iterator
 
 /**
- * @file   cci_value_iterator.h
+ * @file   sc_variant_iterator.h
  * @author Philipp A. Hartmann, Intel
  */
 
-CCI_OPEN_NAMESPACE_
+namespace sc_dt {
 
 // forward declarations
-class cci_value;
-class cci_value_cref;
-class cci_value_ref;
-class cci_value_list_cref;
-class cci_value_list_ref;
-class cci_value_map_cref;
-class cci_value_map_ref;
-class cci_value_map_elem_ref;
-class cci_value_map_elem_cref;
-template<typename T> class cci_value_iterator;
+class sc_variant;
+class sc_variant_cref;
+class sc_variant_ref;
+class sc_variant_list_cref;
+class sc_variant_list_ref;
+class sc_variant_map_cref;
+class sc_variant_map_ref;
+class sc_variant_map_elem_ref;
+class sc_variant_map_elem_cref;
+template<typename T> class sc_variant_iterator;
 
-///@cond CCI_HIDDEN_FROM_DOXYGEN
-namespace cci_impl {
+namespace sc_variant_impl {
 
-/// helper class to avoid dangling pointers to cci_value reference objects
-template<typename T> struct value_ptr
+/// helper class to avoid dangling pointers to sc_variant reference objects
+template<typename T> struct proxy_ptr
 {
   typedef T element_type;
 
-  explicit value_ptr(const T& ref) : ref_(ref) {}
+  explicit proxy_ptr(const T& ref) : ref_(ref) {}
 
   T& operator*()  { return ref_; }
   T* operator->() { return ptr(); }
 
-  bool operator==(const value_ptr& that) const { return ref_.is_same() == (*that).is_same(); }
-  bool operator!=(const value_ptr& that) const { return !(*this == that); }
+  bool operator==(const proxy_ptr& that) const { return ref_.is_same() == (*that).is_same(); }
+  bool operator!=(const proxy_ptr& that) const { return !(*this == that); }
 
-  static value_ptr pointer_to(element_type& elem) { return value_ptr(elem); }
+  static proxy_ptr pointer_to(element_type& elem) { return pointer(elem); }
 
 private:
   // avoid addressof operator
@@ -66,13 +65,13 @@ private:
   T ref_; // extend lifetime of reference
 };
 
-/// helper class to implement a cci_value_iterator
-template<typename T> class value_iterator_impl
+/// helper class to implement a sc_variant_iterator
+template<typename T> class iterator_impl
 {
 public:
   // std::iterator_traits types
-  typedef T reference;  // return by value!
-  typedef value_ptr<T> pointer;    // return proxy pointer
+  typedef T reference;          // return by value!
+  typedef proxy_ptr<T> pointer; // return proxy pointer
   typedef typename T::value_type value_type; // "real" value type
   typedef std::ptrdiff_t difference_type;
   typedef std::random_access_iterator_tag iterator_category;
@@ -80,7 +79,7 @@ public:
 protected:
   typedef void* impl_type; //  type-punned pointer for now
 
-  value_iterator_impl(impl_type r = NULL)
+  iterator_impl(impl_type r = NULL)
     : impl_(r) {}
 
   void increment(difference_type n = 1) { update(advance(n));  }
@@ -101,31 +100,30 @@ private:
   impl_type  impl_; // underlying iterator,
 };
 
-} // namespace cci_impl
-///@endcond
+} // namespace sc_variant_impl
 
 /**
- * @brief Generic iterator impementation for \ref cci_value lists and maps
+ * @brief Generic iterator impementation for \ref sc_variant lists and maps
  *
- * @see cci_value_list, cci_value_map
+ * @see sc_variant_list, sc_variant_map
  */
 template<typename T>
-class cci_value_iterator
-  : protected cci_impl::value_iterator_impl<T>
+class sc_variant_iterator
+  : protected sc_variant_impl::iterator_impl<T>
 {
-  typedef cci_impl::value_iterator_impl<T> impl;
-  typedef cci_value_iterator<typename T::const_reference> const_type;
-  typedef cci_value_iterator<typename T::reference>       nonconst_type;
+  typedef sc_variant_impl::iterator_impl<T> impl;
+  typedef sc_variant_iterator<typename T::const_reference> const_type;
+  typedef sc_variant_iterator<typename T::reference>       nonconst_type;
 
-  friend class cci_value_list_cref;
-  friend class cci_value_list_ref;
-  friend class cci_value_map_cref;
-  friend class cci_value_map_ref;
-  template<typename U> friend class cci_value_iterator;
+  friend class sc_variant_list_cref;
+  friend class sc_variant_list_ref;
+  friend class sc_variant_map_cref;
+  friend class sc_variant_map_ref;
+  template<typename U> friend class sc_variant_iterator;
 
 private:
   /// internal constructor
-  cci_value_iterator(typename impl::impl_type r) : impl(r) {}
+  sc_variant_iterator(typename impl::impl_type r) : impl(r) {}
 
 public:
   /// @name C++ standard iterator types
@@ -138,26 +136,32 @@ public:
   ///@}
 
   /// constructs an invalid iterator (non-dereferencable, non-incrementable)
-  cci_value_iterator() : impl() {}
+  sc_variant_iterator() : impl() {}
   /// constructs an iterator from a potentially less \c const iterator
-  cci_value_iterator(const nonconst_type & that)
+  sc_variant_iterator(const nonconst_type & that)
     : impl(that.raw()) {}
 
   /// @name Unary increment/decrement operators
   ///@{
-  cci_value_iterator& operator++(){ impl::increment(); return *this; }
-  cci_value_iterator& operator--(){ impl::decrement(); return *this; }
-  cci_value_iterator  operator++(int){ cci_value_iterator old(*this); impl::increment(); return old; }
-  cci_value_iterator  operator--(int){ cci_value_iterator old(*this); impl::decrement(); return old; }
+  sc_variant_iterator& operator++(){ impl::increment(); return *this; }
+  sc_variant_iterator& operator--(){ impl::decrement(); return *this; }
+  sc_variant_iterator  operator++(int)
+    { sc_variant_iterator old(*this); impl::increment(); return old; }
+  sc_variant_iterator  operator--(int)
+    { sc_variant_iterator old(*this); impl::decrement(); return old; }
   ///@}
 
   /// @name Binary increment/decrement operators
   ///@{
-  cci_value_iterator  operator+( difference_type n ) const { return cci_value_iterator( impl::advance(n) ); }
-  cci_value_iterator  operator-( difference_type n ) const { return cci_value_iterator( impl::advance(-n) ); }
+  sc_variant_iterator  operator+( difference_type n ) const
+    { return sc_variant_iterator( impl::advance(n) ); }
+  sc_variant_iterator  operator-( difference_type n ) const
+    { return sc_variant_iterator( impl::advance(-n) ); }
 
-  cci_value_iterator& operator+=( difference_type n ) { impl::increment(n); return *this; }
-  cci_value_iterator& operator-=( difference_type n ) { impl::decrement(n); return *this; }
+  sc_variant_iterator& operator+=( difference_type n )
+    { impl::increment(n); return *this; }
+  sc_variant_iterator& operator-=( difference_type n )
+    { impl::decrement(n); return *this; }
   ///@}
 
   /** @name Comparison between iterators
@@ -181,10 +185,11 @@ public:
   ///@}
 
   /// Computing the distance between two iterators (from the same range)
-  difference_type operator-( const_type that ) const { return impl::distance(that.raw()); }
+  difference_type operator-( const_type that ) const
+    { return impl::distance(that.raw()); }
 
-}; // class cci_value_iterator
+}; // class sc_variant_iterator
 
-CCI_CLOSE_NAMESPACE_
+} // namespace sc_dt
 
-#endif // CCI_CORE_CCI_VALUE_ITERATOR_H_INCLUDED_
+#endif // SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_

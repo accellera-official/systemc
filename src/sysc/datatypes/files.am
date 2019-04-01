@@ -91,7 +91,12 @@ H_FILES += \
 	datatypes/int/sc_unsigned.h \
 	\
 	datatypes/misc/sc_concatref.h \
-	datatypes/misc/sc_value_base.h
+	datatypes/misc/sc_value_base.h \
+	\
+	datatypes/var/sc_variant.h \
+	datatypes/var/sc_variant_ids.h \
+	datatypes/var/sc_variant_iterator.h \
+	datatypes/var/sc_variant_converter.h
 
 NO_H_FILES += \
 	datatypes/int/sc_nbcommon.inc \
@@ -101,7 +106,10 @@ NO_H_FILES += \
 	datatypes/int/sc_unsigned_bitref.inc \
 	datatypes/int/sc_unsigned_subref.inc \
 	\
-	datatypes/fx/scfx_pow10.h
+	datatypes/fx/scfx_pow10.h \
+	\
+	datatypes/var/sc_rapidjson.h
+
 
 CXX_FILES += \
 	datatypes/bit/sc_bit.cpp \
@@ -131,13 +139,17 @@ CXX_FILES += \
 	datatypes/int/sc_unsigned.cpp \
 	\
 	datatypes/misc/sc_concatref.cpp \
-	datatypes/misc/sc_value_base.cpp
+	datatypes/misc/sc_value_base.cpp \
+	\
+	datatypes/var/sc_variant.cpp \
+	datatypes/var/sc_variant_converter.cpp
 
 INCDIRS += \
   datatypes/bit \
   datatypes/fx \
   datatypes/int \
   datatypes/misc \
+  datatypes/var \
   datatypes
 
 ## Taf!

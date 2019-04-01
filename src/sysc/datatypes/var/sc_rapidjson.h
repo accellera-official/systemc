@@ -16,38 +16,36 @@
   permissions and limitations under the License.
 
  ****************************************************************************/
+#ifndef SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
+#define SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
 
 /**
- * @file   rapidjson.h
+ * @file   sc_rapidjson.h
  * @brief  internal include file for the RapidJSON library
  * @author Philipp A. Hartmann, OFFIS/Intel
  *
  * This file provides a local indirection to include RapidJSON from within
- * the CCI library.  RapidJSON is used for serialization from/to
- * @ref cci_value.
+ * the SystemC library.  RapidJSON is used for serialization from/to
+ * @ref sc_dt::sc_variant.
  *
  * @note This file is @b not part of the public API!
  */
 
-#ifndef CCI_CORE_RAPIDJSON_H_INCLUDED_
-#define CCI_CORE_RAPIDJSON_H_INCLUDED_
-
-///@cond CCI_HIDDEN_FROM_DOXYGEN
-
-#include "cci_core/cci_cmnhdr.h"
-
 #include <stdexcept>
 #include <iosfwd>
+
+#include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/datatypes/var/sc_variant_ids.h" // SC_REPORT_ERROR
 
 // --------------------------------------------------------------------------
 // configure RapidJSON
 
 #define RAPIDJSON_NAMESPACE \
-  CCI_NAMESPACE::cci_impl::json
+  sc_dt::sc_rapidjson
 #define RAPIDJSON_NAMESPACE_BEGIN \
-  CCI_OPEN_NAMESPACE_ namespace cci_impl { namespace json {
+  namespace sc_dt { namespace sc_rapidjson {
 #define RAPIDJSON_NAMESPACE_END \
-  } } CCI_CLOSE_NAMESPACE_
+  } }
 
 // enable support for std::string
 #define RAPIDJSON_HAS_STD_STRING 1
@@ -59,33 +57,12 @@
 // don't use explicit member iterator class
 #define RAPIDJSON_NOMEMBERITERATORCLASS 1
 
-RAPIDJSON_NAMESPACE_BEGIN
-
-struct AssertException
-  : std::logic_error
-{
-  AssertException( const char* msg )
-    : std::logic_error(msg) {}
-};
-
-// throw on failing assertions
+// report error on failing assertions
 #define RAPIDJSON_ASSERT( expr ) \
-  ((void)(( expr ) ? 0 : \
-    ( throw ::RAPIDJSON_NAMESPACE::AssertException( #expr ), 0 )))
+  ((void)(( SC_LIKELY_(expr) ) ? 0 : \
+    ( SC_REPORT_ERROR( ::sc_core::SC_ID_VARIANT_ASSERTION_FAILED_, #expr ), 0 )))
 
-RAPIDJSON_NAMESPACE_END
-
-#include "rapidjson/rapidjson.h"
-
-#ifdef __GNUC__
-RAPIDJSON_DIAG_PUSH
-#if __GNUC__ >= 6
-RAPIDJSON_DIAG_OFF( terminate ) // ignore throwing assertions
-#endif
-#if __GNUC__ >= 8
-RAPIDJSON_DIAG_OFF( class-memaccess ) // ignore raw access to class memory
-#endif
-#endif
+#include "sysc/packages/rapidjson/include/rapidjson/rapidjson.h"
 
 // throw exception by default
 #define RAPIDJSON_PARSE_ERROR_EARLY_RETURN( what ) \
@@ -93,11 +70,11 @@ RAPIDJSON_DIAG_OFF( class-memaccess ) // ignore raw access to class memory
 #define RAPIDJSON_PARSE_ERROR_NORETURN(parseErrorCode,offset) \
   throw ::RAPIDJSON_NAMESPACE::ParseException( \
                ::RAPIDJSON_NAMESPACE::parseErrorCode, \
-               #parseErrorCode,offset \
+               #parseErrorCode, offset \
   )
 
-#include "rapidjson/error/error.h"
-#include "rapidjson/error/en.h"
+#include "sysc/packages/rapidjson/include/rapidjson/error/error.h"
+#include "sysc/packages/rapidjson/include/rapidjson/error/en.h"
 
 RAPIDJSON_NAMESPACE_BEGIN
 
@@ -105,7 +82,7 @@ struct ParseException
   : std::runtime_error, ParseResult
 {
   ParseException( ParseErrorCode code, const char* msg, size_t offset )
-     : std::runtime_error(msg), ParseResult(code,offset) {}
+     : std::runtime_error(GetParseError_En(code)), ParseResult(code,offset) {}
 };
 
 struct StringOutputStream
@@ -128,13 +105,9 @@ private:
 
 RAPIDJSON_NAMESPACE_END
 
-#include "rapidjson/document.h"
-#include "rapidjson/istreamwrapper.h"
-#include "rapidjson/ostreamwrapper.h"
-#include "rapidjson/writer.h"
+#include "sysc/packages/rapidjson/include/rapidjson/document.h"
+#include "sysc/packages/rapidjson/include/rapidjson/istreamwrapper.h"
+#include "sysc/packages/rapidjson/include/rapidjson/ostreamwrapper.h"
+#include "sysc/packages/rapidjson/include/rapidjson/writer.h"
 
-#ifdef __GNUC__
-RAPIDJSON_DIAG_POP
-#endif
-///@endcond
-#endif // CCI_CORE_RAPIDJSON_H_INCLUDED_
+#endif // SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
