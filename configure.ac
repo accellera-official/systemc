@@ -561,7 +561,6 @@ AC_OUTPUT(
  src/systemc.pc
  src/tlm.pc
  src/sysc/Makefile 
- src/sysc/packages/boost/Makefile 
  src/sysc/packages/qt/Makefile 
  src/tlm_core/Makefile
  src/tlm_utils/Makefile

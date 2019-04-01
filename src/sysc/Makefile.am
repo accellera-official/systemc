@@ -39,9 +39,8 @@ QT_LIB    = packages/qt/libqt.la
 QT_SUBDIR = packages/qt
 endif
 
-# only build external packages separately
+# only build external QT package separately
 SUBDIRS = \
-	packages/boost \
 	$(QT_SUBDIR)
 
 H_FILES =
@@ -55,6 +54,7 @@ include communication/files.am
 include datatypes/files.am
 include tracing/files.am
 include utils/files.am
+include packages/files.am
 
 localincludedir = $(includedir)/sysc
 nobase_localinclude_HEADERS = $(H_FILES)
@@ -66,9 +66,6 @@ libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 # add dependent (package) libraries
 libsysc_la_LIBADD = \
        $(QT_LIB)
-
-INCDIRS += \
-	packages
 
 uninstall-hook:
 	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
