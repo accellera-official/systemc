@@ -518,6 +518,7 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_list.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_machine.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_meta.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pq.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pvector.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_report.h" />
