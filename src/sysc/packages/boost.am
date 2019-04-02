@@ -17,8 +17,8 @@
 ##
 ## ****************************************************************************
 ##
-##  src/sysc/packages/files.am --
-##  Included from a Makefile.am to provide directory-specific information
+##  src/sysc/packages/boost.am --
+##  Included from a Makefile.am to provide package-specific information
 ##
 ##  Original Author: Philipp A Hartmann, Intel
 ##
@@ -33,7 +33,7 @@
 ## ****************************************************************************
 
 ## Generic directory setup
-## (should be kept in sync among all files.am files)
+## (should be kept in sync among all files/<package>.am files)
 ##
 ## Note: Recent Automake versions (>1.13) support relative placeholders for
 ##       included files (%D%,%C%).  To support older versions, use explicit
