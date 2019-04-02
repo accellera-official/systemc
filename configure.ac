@@ -131,6 +131,9 @@ OPT_CXXFLAGS="-O3"
 EXPLICIT_LPTHREAD="-lpthread"
 LDFLAG_RPATH="-Wl,-rpath="
 
+dnl Run assembler with pre-processor on GCC-compatible compilers
+AS_VAR_IF([GXX],[yes],[EXTRA_ASFLAGS="-xassembler-with-cpp"])
+
 dnl
 dnl Prepare architecture alias (to be refined later)
 dnl

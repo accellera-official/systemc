@@ -138,7 +138,7 @@ inline void sc_runnable::init()
     if ( !m_methods_push_head )
     {
         m_methods_push_head = new sc_method_process("methods_push_head", true, 
-	                                           (sc_entry_func)0, 0, 0);
+                                                    sc_entry_func(), 0, 0);
         m_methods_push_head->dont_initialize(true);
 	m_methods_push_head->detach();
     }
@@ -149,7 +149,7 @@ inline void sc_runnable::init()
     if ( !m_threads_push_head )
     {
         m_threads_push_head = new sc_thread_process("threads_push_head", true, 
-	                                            (sc_entry_func)0, 0, 0);
+                                                    sc_entry_func(), 0, 0);
         m_threads_push_head->dont_initialize(true);
 	m_threads_push_head->detach();
     }
