@@ -117,89 +117,22 @@ class SC_API sc_process_monitor {
 };
 inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 
-//------------------------------------------------------------------------------
-// PROCESS INVOCATION METHOD OR FUNCTION:
+//-----------------------------------------------------------------------------
+// PROCESS INVOCATION FUNCTION:
 //
-//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers
-//  to implement process dispatch. Otherwise, we'll use a hack that involves
-//  creating a templated invocation object which will invoke the member
-//  function. This should not be necessary, but some compilers (e.g., VC++)
-//  do not allow the conversion from `void (callback_tag::*)()' to
-//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the
-//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion",
-//  clause 7: a pointer to member of derived class type may be explicitly
-//  converted to a pointer to member of an unambiguous non-virtual base class
-//  type.
+//  We use member function pointers to implement process dispatch.
+//  The required conversion from  `void (callback_tag::*)()' to
+//  `void (sc_process_host::*)()' is supposed to be OK as long as the
+//  dynamic type is correct.
+//
+//  C++ Standard 5.4 "Explicit type conversion", clause 7:
+//    A pointer to member of derived class type may be explicitly converted to
+//    a pointer to member of an unambiguous non-virtual base class type.
 //-----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
-#if ( _MSC_VER > 1200 )
-#   define SC_USE_MEMBER_FUNC_PTR
-#endif
-#else
-#   define SC_USE_MEMBER_FUNC_PTR
-#endif
-
-
-// COMPILER DOES SUPPORT CAST TO void (sc_process_host::*)() from (T::*)():
-
-#if defined(SC_USE_MEMBER_FUNC_PTR)
-
-    typedef void (sc_process_host::*SC_ENTRY_FUNC)();
-#   define SC_DECL_HELPER_STRUCT(callback_tag, func) /*EMPTY*/
-#   define SC_MAKE_FUNC_PTR(callback_tag, func) \
-        static_cast<sc_core::SC_ENTRY_FUNC>(&callback_tag::func)
-
-
-// COMPILER NOT DOES SUPPORT CAST TO void (sc_process_host::*)() from (T::*)():
-
-#else // !defined(SC_USE_MEMBER_FUNC_PTR)
-    class SC_API sc_process_call_base {
-      public:
-        inline sc_process_call_base()
-        {
-        }
-
-        virtual ~sc_process_call_base()
-        {
-        }
-
-        virtual void invoke(sc_process_host* host_p)
-        {
-        }
-    };
-    extern sc_process_call_base sc_process_defunct;
-
-    template<class T>
-    class sc_process_call : public sc_process_call_base {
-      public:
-        sc_process_call( void (T::*method_p)() ) :
-            sc_process_call_base()
-        {
-             m_method_p = method_p;
-        }
-
-        virtual ~sc_process_call()
-        {
-        }
-
-        virtual void invoke(sc_process_host* host_p)
-        {
-            (((T*)host_p)->*m_method_p)();
-        }
-
-      protected:
-        void (T::*m_method_p)();  // Method implementing the process.
-    };
-
-    typedef sc_process_call_base* SC_ENTRY_FUNC;
-#   define SC_DECL_HELPER_STRUCT(callback_tag, func) /*EMPTY*/
-#   define SC_MAKE_FUNC_PTR(callback_tag, func) \
-        (::sc_core::SC_ENTRY_FUNC) (new \
-        ::sc_core::sc_process_call<callback_tag>(&callback_tag::func))
-
-#endif // !defined(SC_USE_MEMBER_FUNC_PTR)
-
+typedef void (sc_process_host::*sc_entry_func)();
+#define SC_MAKE_FUNC_PTR(callback_tag, func) \
+    static_cast<sc_core::sc_entry_func>(&callback_tag::func)
 
 extern SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 
@@ -340,7 +273,7 @@ class SC_API sc_process_b : public sc_object {
 
   public:
     sc_process_b( const char* name_p, bool is_thread, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+        sc_entry_func method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
   protected:
@@ -443,7 +376,7 @@ class SC_API sc_process_b : public sc_object {
     sc_event*                    m_resume_event_p;  // resume event.
     sc_process_b*                m_runnable_p;      // sc_runnable link
     sc_process_host*             m_semantics_host_p;   // host for semantics.
-    SC_ENTRY_FUNC                m_semantics_method_p; // method for semantics.
+    sc_entry_func                m_semantics_method_p; // method for semantics.
     int                          m_state;           // process state.
     std::vector<const sc_event*> m_static_events;   // static events waiting on.
     bool                         m_sticky_reset;    // see note 3 above.
@@ -679,11 +612,7 @@ inline void sc_process_b::semantics()
 
     // Dispatch the actual semantics for the process:
 
-#   ifndef SC_USE_MEMBER_FUNC_PTR
-        m_semantics_method_p->invoke( m_semantics_host_p );
-#   else
-        (m_semantics_host_p->*m_semantics_method_p)();
-#   endif
+    (m_semantics_host_p->*m_semantics_method_p)();
 }
 
 

@@ -158,6 +158,12 @@ protected:
     // this must be called by user-defined modules
     void end_module();
 
+    void declare_method_process( sc_entry_func func, const char* name );
+    void declare_thread_process( sc_entry_func func, const char* name );
+    sc_process_handle declare_cthread_process( sc_entry_func func, const char* name );
+    template<typename EdgeType>
+    void declare_cthread_process( sc_entry_func func,const char* name, EdgeType& edge )
+      { sensitive( declare_cthread_process(func, name), edge ); }
 
     // to prevent initialization for SC_METHODs and SC_THREADs
     void dont_initialize();
@@ -438,65 +444,25 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 
 // ----------------------------------------------------------------------------
 
-// The this-> construct on sensitive operators in the macros below is
-// required for gcc 4.x when a templated class has a templated parent that is
-// derived from sc_module:
+// The this-> construct in the macros below is required when a templated class
+// has a templated parent that is derived from sc_module:
 //
 // template<typename X>
 // class B : public sc_module;
 // template<typename X>
 // class A : public B<X>
 
-#define declare_method_process(handle, name, host_tag, func)        \
-    {		                                                    \
-        ::sc_core::sc_process_handle handle =                      \
-	    sc_core::sc_get_curr_simcontext()->create_method_process( \
-		name,  false, SC_MAKE_FUNC_PTR( host_tag, func ), \
-		this, 0 ); \
-        this->sensitive << handle;                                        \
-        this->sensitive_pos << handle;                                    \
-        this->sensitive_neg << handle;                                    \
-    }
-
-#define declare_thread_process(handle, name, host_tag, func)        \
-    {                                                               \
-        ::sc_core::sc_process_handle handle =                      \
-	     sc_core::sc_get_curr_simcontext()->create_thread_process( \
-                 name,  false,           \
-                 SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        this->sensitive << handle;                                        \
-        this->sensitive_pos << handle;                                    \
-        this->sensitive_neg << handle;                                    \
-    }
-
-#define declare_cthread_process(handle, name, host_tag, func, edge) \
-    {                                                               \
-        ::sc_core::sc_process_handle handle =                     \
-	     sc_core::sc_get_curr_simcontext()->create_cthread_process( \
-            name,  false,          \
-                     SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        this->sensitive.operator() ( handle, edge );\
-    }
-
 #define SC_CTHREAD(func, edge)                                                \
-    declare_cthread_process( func ## _handle,                                 \
-                             #func,                                           \
-                             SC_CURRENT_USER_MODULE_TYPE,                     \
-                             func,                                            \
-                             edge )
+    this->declare_cthread_process                                             \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func, edge );
 
 #define SC_METHOD(func)                                                       \
-    declare_method_process( func ## _handle,                                  \
-                            #func,                                            \
-                            SC_CURRENT_USER_MODULE_TYPE,                      \
-                            func )
+    this->declare_method_process                                              \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func );
 
 #define SC_THREAD(func)                                                       \
-    declare_thread_process( func ## _handle,                                  \
-                            #func,                                            \
-                            SC_CURRENT_USER_MODULE_TYPE,                      \
-                            func )
-
+    this->declare_thread_process                                              \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func );
 
 
 // ----------------------------------------------------------------------------
