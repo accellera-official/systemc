@@ -25,6 +25,7 @@
  * @author Philipp A. Hartmann, OFFIS/Intel
  */
 
+#include "sysc/utils/sc_meta.h"
 #include "sysc/utils/sc_string_view.h"
 #include "sysc/datatypes/int/sc_nbdefs.h" // sc_dt::(u)int64, potentially strip out
 #include "sysc/datatypes/var/sc_variant_ids.h"
@@ -39,6 +40,7 @@
 
 namespace sc_dt {
 
+namespace sc_meta = sc_core::sc_meta;
 using sc_core::sc_string_view;
 using sc_core::sc_zstring_view;
 
@@ -56,6 +58,20 @@ class sc_variant_map_elem_ref;
 class sc_variant_map_elem_cref;
 
 template<typename T> struct sc_variant_converter;
+template<typename T> struct sc_variant_has_pack;
+template<typename T> struct sc_variant_has_unpack;
+
+#ifndef SC_DOXYGEN_IS_RUNNING
+# define SC_VARIANT_REQUIRES_PACK_(Type,ReturnType) \
+  typename sc_meta::enable_if<sc_variant_has_pack<T>::value,ReturnType>::type
+# define SC_VARIANT_REQUIRES_UNPACK_(Type,ReturnType) \
+  typename sc_meta::enable_if<sc_variant_has_unpack<T>::value,ReturnType>::type
+#else
+# define SC_VARIANT_REQUIRES_PACK_(Type,ReturnType)   ReturnType
+# define SC_VARIANT_REQUIRES_UNPACK_(Type,ReturnType) ReturnType
+#endif // SC_DOXYGEN_IS_RUNNING
+
+// --------------------------------------------------------------------------
 
 /**
  *  Enumeration for @ref sc_variant data type categories
@@ -70,17 +86,6 @@ enum sc_variant_category
   SC_VARIANT_LIST,
   SC_VARIANT_MAP
 };
-
-#ifndef SC_DOXYGEN_IS_RUNNING
-# define SC_VARIANT_CONVERTER_(Type) \
-    typename sc_variant_converter<Type>::type
-#define SC_VARIANT_CHECKED_CONVERTER_(Type) \
-    SC_VARIANT_CONVERTER_(Type) *
-# define SC_VARIANT_REQUIRES_CONVERTER_(Type) \
-    SC_VARIANT_CHECKED_CONVERTER_(Type) = 0
-#else
-# define SC_VARIANT_CONVERTER_(Type) Type
-#endif // SC_DOXYGEN_IS_RUNNING
 
 /// @ref sc_variant comparisons
 bool operator==( sc_variant_cref const &, sc_variant_cref const & );
@@ -179,17 +184,47 @@ public:
 
   /** @name Get arbitrarily typed value */
   //@{
-  /// try to get a value of a @ref sc_variant_converter enabled type
+  /**
+   * @brief Try to get a value of a conversion-enabled type
+   * @param[out] dst store converted value in given reference
+   * @return @c true, iff conversion was successful
+   *
+   * Type conversion from @ref sc_variant is defined by an unqualified free
+   * function call of @c sc_variant_unpack with the following signature:
+   * @code
+   *  bool sc_variant_unpack(T&, sc_variant::const_reference);
+   * @endcode
+   *
+   * For custom types, this function can be overloaded.
+   * If no such function is available for a type T, the
+   * @ref sc_variant_ref::get function will not participate
+   * in the overload resolution.
+   *
+   * @see get, sc_variant_unpack, sc_variant_converter
+   */
   template<typename T>
-  bool  try_get( T& dst
-#ifndef SC_DOXYGEN_IS_RUNNING
-               , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-               ) const;
+  SC_VARIANT_REQUIRES_UNPACK_(T,bool) try_get( T& dst ) const;
 
-  /// get a value of a @ref sc_variant_converter enabled type
+  /**
+   * @brief Get a value of a conversion-enabled type
+   * @return converted value
+   * @throw  SC_REPORT_ERROR - if conversion was not successful
+   *
+   * Type conversion from @ref sc_variant is defined by an unqualified free
+   * function call of @c sc_variant_unpack with the following signature:
+   * @code
+   *  bool sc_variant_unpack(T&, sc_variant::const_reference);
+   * @endcode
+   *
+   * For custom types, this function can be overloaded.
+   * If no such function is available for a type T, the
+   * @ref sc_variant_ref::try_get function will not participate
+   * in the overload resolution.
+   *
+   * @see try_get, sc_variant_unpack, sc_variant_converter
+   */
   template<typename T>
-  SC_VARIANT_CONVERTER_(T) get() const;
+  SC_VARIANT_REQUIRES_UNPACK_(T,T) get() const;
   //@}
 
   /// convert value to JSON
@@ -219,19 +254,15 @@ private:
 };
 
 template<typename T>
-bool
-sc_variant_cref::try_get( T& dst
-#ifndef SC_DOXYGEN_IS_RUNNING
-                        , SC_VARIANT_CHECKED_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                       ) const
+SC_VARIANT_REQUIRES_UNPACK_( T, bool )
+sc_variant_cref::try_get( T& dst ) const
 {
-  typedef sc_variant_converter<T> converter;
-  return converter::unpack( dst, *this );
+  return sc_variant_unpack( dst, *this );
 }
 
 template<typename T>
-SC_VARIANT_CONVERTER_(T) sc_variant_cref::get() const
+SC_VARIANT_REQUIRES_UNPACK_( T, T )
+sc_variant_cref::get() const
 {
   T result;
   if( !try_get(result) ) {
@@ -325,20 +356,45 @@ public:
 
   /** @name Set arbitrarily typed value */
   //@{
-  /// set value to sc_variant_converter enabled type
+  /**
+   * @brief Set value to conversion-enabled type
+   * @return reference to itself
+   * @throw  SC_REPORT_ERROR - if conversion was not successful
+   *
+   * Type conversion to @ref sc_variant is defined by an unqualified free
+   * function call of @c sc_variant_pack with the following signature:
+   * @code
+   *  bool sc_variant_pack(sc_variant::reference, const T&);
+   * @endcode
+   *
+   * For custom types, this function can be overloaded.
+   * If no such function is available for a type T, the
+   * @ref sc_variant_ref::set function will not participate
+   * in the overload resolution.
+   *
+   * @see try_set, sc_variant_pack, sc_variant_converter
+   */
   template<typename T>
-  sc_variant_ref set(T const & dst
-#ifndef SC_DOXYGEN_IS_RUNNING
-                   , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                   );
-  /// try to set value to sc_variant_converter enabled type
+  SC_VARIANT_REQUIRES_PACK_(T,sc_variant_ref) set(T const & dst );
+  /**
+   * @brief Set value to conversion-enabled type
+   * @return @c true, iff conversion was successful
+   *
+   * Type conversion to @ref sc_variant is defined by an unqualified free
+   * function call of @c sc_variant_pack with the following signature:
+   * @code
+   *  bool sc_variant_pack(sc_variant::reference, const T&);
+   * @endcode
+   *
+   * For custom types, this function can be overloaded.
+   * If no such function is available for a type T, the
+   * @ref sc_variant_ref::try_set function will not participate
+   * in the overload resolution.
+   *
+   * @see set, sc_variant_pack, sc_variant_converter
+   */
   template<typename T>
-  bool try_set(T const & dst
-#ifndef SC_DOXYGEN_IS_RUNNING
-              , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-              );
+  SC_VARIANT_REQUIRES_PACK_(T,bool) try_set(T const & dst );
   ///@}
 
   /// @copydoc sc_variant_cref::operator&
@@ -350,24 +406,15 @@ sc_variant_ref::operator=( const this_type & that )
   { return *this = base_type(that); }
 
 template<typename T>
-bool
-sc_variant_ref::try_set( T const & src
-#ifndef SC_DOXYGEN_IS_RUNNING
-                       , SC_VARIANT_CHECKED_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                       )
+SC_VARIANT_REQUIRES_PACK_( T, bool )
+sc_variant_ref::try_set( T const & src )
 {
-  typedef sc_variant_converter<T> conv;
-  return conv::pack( *this, src );
+  return sc_variant_pack( *this, src );
 }
 
 template<typename T>
-sc_variant_ref
-sc_variant_ref::set( T const& src
-#ifndef SC_DOXYGEN_IS_RUNNING
-                  , SC_VARIANT_CHECKED_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                  )
+SC_VARIANT_REQUIRES_PACK_(T,sc_variant_ref)
+sc_variant_ref::set( T const& src )
 {
   if( !try_set(src) ) {
     SC_REPORT_ERROR( sc_core::SC_ID_VARIANT_CONVERSION_FAILED_,
@@ -567,11 +614,7 @@ public:
 #endif // rvalue refs - C++11
   /// append arbitrary sc_variant_converter enabled value
   template<typename T>
-  this_type push_back( const T & v
-#ifndef SC_DOXYGEN_IS_RUNNING
-                     , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                     );
+  SC_VARIANT_REQUIRES_PACK_(T,this_type) push_back( const T & v );
   //@}
 
   /** @name insert elements into the list */
@@ -886,11 +929,8 @@ public:
 
   /// add an arbitrary sc_variant_converter enabled value
   template<typename T>
-  this_type push_entry( sc_string_view key, const T & value
-#ifndef SC_DOXYGEN_IS_RUNNING
-                      , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif
-                      );
+  SC_VARIANT_REQUIRES_PACK_(T,this_type)
+  push_entry( sc_string_view key, const T & value );
   //@}
 
   /** @name erase elements from the map */
@@ -915,6 +955,47 @@ sc_variant_map_ref::operator=( base_type const & that )
 inline sc_variant_map_ref
 sc_variant_ref::get_map()
   { return sc_variant_map_ref( base_type::get_map().pimpl_ ); }
+
+} // namespace sc_dt
+
+// --------------------------------------------------------------------------
+
+namespace sc_variant_no_adl {
+
+typedef bool yes_type;
+typedef bool no_type[2];
+
+const no_type& sc_variant_pack(...);   // catch-all overload
+const no_type& sc_variant_unpack(...); // catch-all overload
+
+template<typename T>
+class has_pack_impl
+{
+    static sc_dt::sc_variant_ref make_ref();
+    template<typename U> static U& make();
+public:
+    static const bool value = sizeof(sc_variant_pack(make_ref(),make<T>())) == sizeof(yes_type);
+};
+
+template<typename T>
+class has_unpack_impl
+{
+    static sc_dt::sc_variant_cref make_ref();
+    template<typename U> static U& make();
+public:
+    static const bool value = sizeof(sc_variant_unpack(make<T>(),make_ref())) == sizeof(yes_type);
+};
+
+} // namespace sc_variant_no_adl
+
+namespace sc_dt {
+
+template<typename T>
+struct sc_variant_has_pack
+  : sc_meta::bool_constant< sc_variant_no_adl::has_pack_impl<T>::value > {};
+template<typename T>
+struct sc_variant_has_unpack
+  : sc_meta::bool_constant< sc_variant_no_adl::has_unpack_impl<T>::value > {};
 
 // --------------------------------------------------------------------------
 
@@ -979,7 +1060,7 @@ public:
   explicit
   sc_variant( T const & src
 #ifndef SC_DOXYGEN_IS_RUNNING
-           , SC_VARIANT_REQUIRES_CONVERTER_(T)
+           , SC_VARIANT_REQUIRES_PACK_(T,void)* = 0
 #endif // SC_DOXYGEN_IS_RUNNING
            );
 
@@ -1003,11 +1084,7 @@ public:
   //@{
   /// set to arbitrary sc_variant_traits enabled value
   template< typename T >
-  reference  set( T const & v
-#ifndef SC_DOXYGEN_IS_RUNNING
-                , SC_VARIANT_REQUIRES_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                )
+  SC_VARIANT_REQUIRES_PACK_(T,reference) set( T const & v )
     { init(); return reference::set(v); }
 
   /// @copydoc sc_variant_ref::set_null
@@ -1075,7 +1152,7 @@ private:
 template<typename T>
 sc_variant::sc_variant( T const & v
 #ifndef SC_DOXYGEN_IS_RUNNING
-                      , SC_VARIANT_CHECKED_CONVERTER_(T)
+                      , SC_VARIANT_REQUIRES_PACK_(T,void)*
 #endif // SC_DOXYGEN_IS_RUNNING
                     )
   : sc_variant_ref(), own_pimpl_()
@@ -1129,23 +1206,15 @@ sc_variant_list_ref::insert( const_iterator pos, InputIt first, InputIt last )
 }
 
 template<typename T>
-sc_variant_list_ref::this_type
-sc_variant_list_ref::push_back( const T& value
-#ifndef SC_DOXYGEN_IS_RUNNING
-                              , SC_VARIANT_CHECKED_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                              )
+SC_VARIANT_REQUIRES_PACK_( T, sc_variant_list_ref::this_type )
+sc_variant_list_ref::push_back( const T& value )
 {
   return push_back( sc_variant(value) );
 }
 
 template<typename T>
-sc_variant_map_ref
-sc_variant_map_ref::push_entry( sc_string_view key, const T& value
-#ifndef SC_DOXYGEN_IS_RUNNING
-                              , SC_VARIANT_CHECKED_CONVERTER_(T)
-#endif // SC_DOXYGEN_IS_RUNNING
-                              )
+SC_VARIANT_REQUIRES_PACK_( T, sc_variant_map_ref::this_type )
+sc_variant_map_ref::push_entry( sc_string_view key, const T& value )
 {
   return push_entry( key, sc_variant(value) );
 }
@@ -1306,9 +1375,8 @@ sc_variant_map::operator=( this_type const & that )
 
 } // namespace sc_dt
 
-#undef SC_VARIANT_CONVERTER_
-#undef SC_VARIANT_CHECKED_CONVERTER_
-#undef SC_VARIANT_REQUIRES_CONVERTER_
+#undef SC_VARIANT_REQUIRES_PACK_
+#undef SC_VARIANT_REQUIRES_UNPACK_
 
 #endif // SC_DATATYPES_VARIANT_H_INCLUDED_
 // Taf!

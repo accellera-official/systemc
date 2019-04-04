@@ -21,6 +21,10 @@
 #pragma warning(disable: 4231) // extern template
 #endif // _MSC_VER
 
+#define SC_VARIANT_HAS_CONVERTER_(Type) \
+  template<> struct sc_variant_has_converter<Type> \
+    : sc_meta::true_type {}
+
 // --------------------------------------------------------------------------
 #ifndef SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_
 #define SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_
@@ -40,13 +44,32 @@ namespace sc_core { class sc_time; }
 namespace sc_dt {
 
 /**
+ * @brief opt-in for @ref sc_variant_converter conversion
+ *
+ * To use the sc_variant_converter based type conversion
+ * for custom types to and from sc_variant, specialize
+ * this class via
+ * @code
+ * class my_type; // can be incomplete
+ * namespace sc_dt {
+ *   template<> struct sc_variant_has_converter<my_type>
+ *     : sc_meta::true_type {};
+ * } // namespace sc_dt
+ * @endcode
+ *
+ * @see sc_variant_converter, sc_variant_pack, sc_variant_unpack
+ */
+template<typename T>
+struct sc_variant_has_converter : sc_meta::false_type {};
+
+/**
  * @class sc_variant_converter
  * @brief traits class for sc_variant conversions
  * @tparam T C++ datatype to convert to/from @ref sc_variant
  *
- * Whenever a C++ type @c T is used in conjunction with a sc_variant,
- * the requireed value conversion is performed by this traits class,
- * providing the two conversion functions @ref pack and @ref unpack.
+ * Value conversion from a specific C++ type to and from @ref sc_variant
+ * can be implemented by this traits class, providing the two conversion
+ * functions @ref pack and @ref unpack.
  * Both functions return @c true upon success and @c false otherwise.
  * In case of a failing conversion, it is recommended to leave the given
  * destination object @c dst untouched.
@@ -54,11 +77,16 @@ namespace sc_dt {
  * @note By default, the primary template is not implemented to
  *       enable instantiations with incomplete types.
  *
- * You only need to implement the two functions @ref pack / @ref unpack
- * to enable conversion support for your custom datatype:
+ * @note To enable type conversion via the sc_variant_converter class,
+ *       an opt-in via a specialization of @ref sc_variant_has_converter
+ *       is required.
+ *
+ * @b Example
  * @code
  * struct my_int { int value; };
  *
+ * namespace sc_dt {
+ * template<> struct sc_variant_has_converter<my_int> : sc_meta::true_type {};
  * template<> bool
  * sc_variant_converter<my_int>::pack( sc_variant::reference dst, type const & src )
  * {
@@ -72,6 +100,7 @@ namespace sc_dt {
  *    dst.value  = src.get_int();
  *    return true;
  * }
+ * } // namespace sc_dt
  * @endcode
  *
  * To @em disable conversion support for a given type, you can refer
@@ -82,7 +111,7 @@ namespace sc_dt {
  *     @c bool, @c (unsigned) @c char, @c (unsigned) @c short,
  *     @c (unsigned) @c int, @c (unsigned) @c long,
  *     @c float, @c double
- * @li @c std::string
+ * @li @c std::string, @c sc_core::sc_string_view
  * @li SystemC data types:
  *     @c sc_dt::int64, @c sc_dt::uint64, @c sc_dt::sc_logic,
  *     @c sc_dt::sc_int_base, @c sc_dt::sc_uint_base,
@@ -97,6 +126,8 @@ template<typename T>
 struct sc_variant_converter
 {
   typedef T type; ///< common type alias
+  /// enable conversion via sc_variant_converter
+  static const bool enabled = sc_variant_has_converter<T>::value;
   /// convert from \ref type value to a sc_variant
   static bool pack( sc_variant::reference dst, type const & src );
   /// convert from sc_variant to a \ref type value
@@ -113,38 +144,77 @@ struct sc_variant_converter
  * the specialization of sc_variant_converter:
  * @code
  * struct my_type { ... };
+ * namespace sc_dt {
  * template<>
  * struct sc_variant_converter<my_type>
  *   : sc_variant_converter_disabled<my_type> {};
+ * } // namespace sc_dt
  * @endcode
- *
- * \note In order to disable support for a given type at @em compile-time,
- *       the specialization of sc_variant_converter can be left empty.
  */
 template< typename T >
 struct sc_variant_converter_disabled
 {
   typedef T type;
-  static bool pack( sc_variant::reference, T const & ) { return false; }
+  static const bool enabled = true;
+  static bool pack( sc_variant::reference, T const & )      { return false; }
   static bool unpack( type &, sc_variant::const_reference ) { return false; }
 };
 
-#ifndef SC_DOXYGEN_IS_RUNNING
-
 // ---------------------------------------------------------------------------
-// disallowed implementation as a safety guard
 
-template<typename T> struct sc_variant_converter<T*>         { /* disallowed */ };
+#ifndef SC_DOXYGEN_IS_RUNNING
+# define SC_VARIANT_REQUIRES_CONVERTER_(T) \
+   typename sc_meta::enable_if< sc_variant_converter<T>::enabled, bool>::type
+#else
+# define SC_VARIANT_REQUIRES_CONVERTER_(T) bool
+#endif // SC_HIDDEN_FROM_DOXYGEN
 
-template<> struct sc_variant_converter<sc_variant>           { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_cref>      { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_ref>       { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_list>      { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_list_cref> { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_list_ref>  { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_map>       { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_map_cref>  { /* disallowed */ };
-template<> struct sc_variant_converter<sc_variant_map_ref>   { /* disallowed */ };
+/**
+ * @brief Try converting from a typed value to @ref sc_variant::reference
+ *
+ * This function implements the @ref sc_variant_converter based
+ * conversion from typed values to @ref sc_variant.
+ *
+ * @note Only participates in overload resolution, iff
+ *       @ref sc_variant_has_converter inherits from @c true_type.
+ *
+ * To add support for custom types, models can either specialize
+ * @ref sc_variant_has_converter and implement the required
+ * functions in @ref sc_variant_converter, or add a custom overload
+ * for @c sc_variant_pack directly.
+ *
+ * @see sc_variant::set, sc_variant_converter, sc_variant_has_converter
+ */
+template<typename T>
+inline
+SC_VARIANT_REQUIRES_CONVERTER_(T)
+sc_variant_pack( sc_variant::reference dst, T const & src )
+  { return sc_variant_converter<T>::pack( dst, src ); }
+
+/**
+ * @brief Try converting from an @ref sc_variant::const_reference to a typed value
+ *
+ * This function implements the @ref sc_variant_converter based
+ * conversion from @ref sc_variant and typed values.
+ *
+ * @note Only participates in overload resolution, iff
+ *       @ref sc_variant_has_converter inherits from @c true_type.
+ *
+ * To add support for custom types, models can either specialize
+ * @ref sc_variant_has_converter and implement the required
+ * functions in @ref sc_variant_converter, or add a custom overload
+ * for @c sc_variant_unpack directly.
+ *
+ * @see sc_variant::get, sc_variant_converter, sc_variant_has_converter
+ */
+template<typename T>
+inline
+SC_VARIANT_REQUIRES_CONVERTER_(T)
+sc_variant_unpack( T& dst, sc_variant::const_reference src )
+  { return sc_variant_converter<T>::unpack( dst, src ); }
+
+#undef SC_VARIANT_REQUIRES_CONVERTER_
+//@cond SC_HIDDEN_FROM_DOXYGEN
 
 // ---------------------------------------------------------------------------
 /// helper to convert compatible types (implementation artefact)
@@ -153,6 +223,8 @@ struct sc_variant_delegate_converter
 {
   typedef T type;
   typedef sc_variant_converter<U> traits_type;
+
+  static const bool enabled = traits_type::enabled;
 
   static bool pack( sc_variant::reference dst, type const & src )
   {
@@ -171,6 +243,14 @@ struct sc_variant_delegate_converter
 
 // C++ builtin types
 
+SC_VARIANT_HAS_CONVERTER_(bool);
+SC_VARIANT_HAS_CONVERTER_(int);
+SC_VARIANT_HAS_CONVERTER_(int64);
+SC_VARIANT_HAS_CONVERTER_(unsigned);
+SC_VARIANT_HAS_CONVERTER_(uint64);
+SC_VARIANT_HAS_CONVERTER_(double);
+SC_VARIANT_HAS_CONVERTER_(std::string);
+
 #ifndef SC_BUILD_VARIANT // defined in sc_variant_converter.cpp
 SC_TPLEXTERN_ template struct sc_variant_converter<bool>;
 SC_TPLEXTERN_ template struct sc_variant_converter<int>;
@@ -183,11 +263,11 @@ SC_TPLEXTERN_ template struct sc_variant_converter<std::string>;
 
 // related numerical types
 // (without range checks for now)
-
 #define SC_VARIANT_CONVERTER_DERIVED_( UnderlyingType, SpecializedType ) \
   template<> \
   struct sc_variant_converter<SpecializedType> \
     : sc_variant_delegate_converter<SpecializedType, UnderlyingType > {}
+
 
 SC_VARIANT_CONVERTER_DERIVED_( int, char );
 SC_VARIANT_CONVERTER_DERIVED_( int, signed char );
@@ -198,7 +278,6 @@ SC_VARIANT_CONVERTER_DERIVED_( int64, long );
 SC_VARIANT_CONVERTER_DERIVED_( uint64, unsigned long );
 SC_VARIANT_CONVERTER_DERIVED_( double, float );
 
-#undef SC_VARIANT_CONVERTER_DERIVED_
 #endif // SC_DOXYGEN_IS_RUNNING
 
 // ----------------------------------------------------------------------------
@@ -208,6 +287,8 @@ template<int N>
 struct sc_variant_converter<char[N]>
 {
   typedef char type[N]; ///< common type alias
+  static const bool enabled = true;
+
   static bool pack( sc_variant::reference dst, type const & src )
   {
     dst.set_string( src );
@@ -237,6 +318,8 @@ template<typename T, int N>
 struct sc_variant_converter<T[N]>
 {
   typedef T type[N]; ///< common type alias
+  static const bool enabled = true;
+
   static bool pack( sc_variant::reference dst, type const & src )
   {
     sc_variant_list ret;
@@ -260,14 +343,6 @@ struct sc_variant_converter<T[N]>
   }
 };
 
-template<typename T, int N>
-struct sc_variant_converter<const T[N]> : sc_variant_converter<T[N]>
-{
-  typedef const T type[N]; ///< common type alias
-  // deliberately not implemented
-  static bool unpack( type & dst, sc_variant::const_reference src );
-};
-
 // ----------------------------------------------------------------------------
 // std::vector<T, Alloc>
 
@@ -275,6 +350,8 @@ template< typename T, typename Alloc >
 struct sc_variant_converter< std::vector<T,Alloc> >
 {
   typedef std::vector<T,Alloc> type; ///< common type alias
+  static const bool enabled = true;
+
   static bool pack( sc_variant::reference dst, type const & src )
   {
     sc_variant_list ret;
@@ -305,6 +382,7 @@ struct sc_variant_converter< std::vector<T,Alloc> >
 // ----------------------------------------------------------------------------
 // SystemC builtin types
 
+class sc_bit;
 class sc_logic;
 class sc_int_base;
 class sc_uint_base;
@@ -319,8 +397,23 @@ template<int N> class sc_biguint;
 template<int N> class sc_bv;
 template<int N> class sc_lv;
 
+SC_VARIANT_HAS_CONVERTER_(sc_core::sc_string_view);
+SC_VARIANT_HAS_CONVERTER_(sc_core::sc_time);
+SC_VARIANT_HAS_CONVERTER_(sc_bit);
+SC_VARIANT_HAS_CONVERTER_(sc_logic);
+SC_VARIANT_HAS_CONVERTER_(sc_int_base);
+SC_VARIANT_HAS_CONVERTER_(sc_uint_base);
+SC_VARIANT_HAS_CONVERTER_(sc_signed);
+SC_VARIANT_HAS_CONVERTER_(sc_unsigned);
+SC_VARIANT_HAS_CONVERTER_(sc_bv_base);
+SC_VARIANT_HAS_CONVERTER_(sc_lv_base);
+
+SC_VARIANT_CONVERTER_DERIVED_( sc_core::sc_string_view, sc_core::sc_zstring_view );
+
 #ifndef SC_BUILD_VARIANT // defined in sc_variant_converter.cpp
+SC_TPLEXTERN_ template struct sc_variant_converter<sc_core::sc_string_view>;
 SC_TPLEXTERN_ template struct sc_variant_converter<sc_core::sc_time>;
+SC_TPLEXTERN_ template struct sc_variant_converter<sc_bit>;
 SC_TPLEXTERN_ template struct sc_variant_converter<sc_logic>;
 SC_TPLEXTERN_ template struct sc_variant_converter<sc_int_base>;
 SC_TPLEXTERN_ template struct sc_variant_converter<sc_uint_base>;
@@ -379,6 +472,7 @@ struct sc_variant_converter< sc_lv<N> >
 };
 
 } // namespace sc_dt
+
 #endif // SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_
 
 #if defined(SC_INCLUDE_FX) && !defined(SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_FX_)
@@ -398,6 +492,13 @@ template<int W, int I, sc_q_mode Q, sc_o_mode O, int N > class sc_fixed;
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N > class sc_fixed_fast;
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N > class sc_ufixed;
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N > class sc_ufixed_fast;
+
+SC_VARIANT_HAS_CONVERTER_(sc_fxval);
+SC_VARIANT_HAS_CONVERTER_(sc_fxval_fast);
+SC_VARIANT_HAS_CONVERTER_(sc_fix);
+SC_VARIANT_HAS_CONVERTER_(sc_fix_fast);
+SC_VARIANT_HAS_CONVERTER_(sc_ufix);
+SC_VARIANT_HAS_CONVERTER_(sc_ufix_fast);
 
 #ifndef SC_BUILD_VARIANT // defined in sc_variant_converter.cpp
 SC_TPLEXTERN_ template struct sc_variant_converter<sc_fxval>;
@@ -438,6 +539,13 @@ struct sc_variant_converter< sc_ufixed_fast<W,I,Q,O,N> >
 
 } // namespace sc_dt
 #endif // SC_INCLUDE_FX && ! SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_FX_
+
+#ifdef SC_VARIANT_CONVERTER_DERIVED_
+# undef SC_VARIANT_CONVERTER_DERIVED_
+#endif // SC_VARIANT_CONVERTER_DERIVED_
+#ifdef SC_VARIANT_HAS_CONVERTER_
+# undef SC_VARIANT_HAS_CONVERTER_
+#endif // SC_VARIANT_HAS_CONVERTER_
 
 #ifdef _MSC_VER
 #pragma warning(pop)

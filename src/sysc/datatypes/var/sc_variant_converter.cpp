@@ -91,12 +91,14 @@ DEFINE_UNPACK_(std::string)
 // ----------------------------------------------------------------------------
 // SystemC builtin types
 
+DEFINE_BUILTIN_( sc_core::sc_string_view, string );
+
 DEFINE_PACK_( sc_core::sc_time )
 {
   sc_core::sc_time_tuple tp = src;
   dst.set_list()
     .push_back( tp.value() )
-    .push_back<std::string>( tp.unit_symbol() );
+    .push_back<sc_string_view>( tp.unit_symbol() );
   return true;
 }
 
@@ -311,6 +313,7 @@ template struct sc_variant_converter<uint64>;
 template struct sc_variant_converter<double>;
 template struct sc_variant_converter<std::string>;
 
+template struct sc_variant_converter<sc_core::sc_string_view>;
 template struct sc_variant_converter<sc_core::sc_time>;
 template struct sc_variant_converter<sc_logic>;
 template struct sc_variant_converter<sc_int_base>;
