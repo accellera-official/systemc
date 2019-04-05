@@ -1082,10 +1082,15 @@ public:
    * \see sc_variant_ref
    */
   //@{
-  /// set to arbitrary sc_variant_traits enabled value
+  /// @copydoc sc_variant_ref::set
   template< typename T >
   SC_VARIANT_REQUIRES_PACK_(T,reference) set( T const & v )
     { init(); return reference::set(v); }
+
+  /// @copydoc sc_variant_ref::try_set
+  template< typename T >
+  SC_VARIANT_REQUIRES_PACK_(T,bool) try_set( T const & v )
+    { init(); return reference::try_set(v); }
 
   /// @copydoc sc_variant_ref::set_null
   reference set_null()
