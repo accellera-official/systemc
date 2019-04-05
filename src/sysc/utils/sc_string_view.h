@@ -34,15 +34,18 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include <string>
+#if SC_CPLUSPLUS >= 201103L
+#include <type_traits> // std::enable_if, std::is_convertible
+#endif
 
 #if SC_CPLUSPLUS >= 201402L && defined(__has_include)
 #  if SC_CPLUSPLUS > 201402L && __has_include(<string_view>) /* since C++17 */
-#    define SC_STRING_VIEW_NS_ std
 #    include <string_view>
+#    define SC_STRING_VIEW_NS_ std
    /*  available in Library Fundamentals, ISO/IEC TS 19568:2015 */
 #  elif __has_include(<experimental/string_view>)
-#    define SC_STRING_VIEW_NS_ std::experimental
 #    include <experimental/string_view>
+#    define SC_STRING_VIEW_NS_ std::experimental
 #  endif
 #else
 // TODO: other ways to detect availability of std::(experimental::)string_view?
@@ -62,6 +65,19 @@ class SC_API sc_string_view
   : public SC_STRING_VIEW_NS_::string_view
 {
   typedef SC_STRING_VIEW_NS_::string_view base_type;
+#if SC_CPLUSPLUS >= 201103L
+  template<typename T> struct enable_if_convertible
+    : std::enable_if<std::is_convertible<T,base_type>::value > {};
+public:
+    // inherit constructors from base class
+    using base_type::base_type;
+
+    // allow same conversions as base class
+    template<typename T>
+    /* constexpr */ sc_string_view( const T& s
+                                  , typename enable_if_convertible<T>::type* = 0)
+      : base_type(s) {}
+#else
 public:
   /* constexpr */ sc_string_view() /* noexcept */
     : base_type() {}
@@ -73,6 +89,7 @@ public:
     : base_type(s, sz) {}
   /* constexpr */ sc_string_view(const std::string& s) /* noexcept */
     : base_type(s.data(), s.size()) {}
+#endif // C++11
 
   // pre-C++11 helper function to create an explicit string copy
   inline std::string str() const
