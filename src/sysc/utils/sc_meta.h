@@ -46,40 +46,52 @@ namespace sc_meta {
   using std::is_same;
   using std::is_const;
 
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    static const Type Value
+  using std::integral_constant;
+#if SC_CPLUSPLUS >= 201703L
+  using std::bool_constant;
+#else
+  template<bool B> using bool_constant = integral_constant<bool,B>;
+#endif // C++17
+  using std::true_type;
+  using std::false_type;
 
 #else // use Boost/local implementation for type traits
+
+  template<typename T, T v>
+  struct integral_constant
+  {
+    typedef integral_constant type;
+    typedef T value_type;
+    SC_BOOST_STATIC_CONSTANT(value_type, value = v);
+    operator value_type() const { return v; }
+  };
+  template<bool v> struct bool_constant : integral_constant<bool,v> {};
+  typedef bool_constant<true>  true_type;
+  typedef bool_constant<false> false_type;
+
   template<bool Cond, typename T = void>
   struct enable_if : sc_boost::enable_if_c<Cond, T> {};
-
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    SC_BOOST_STATIC_CONSTANT(Type,Value)
 
   // simplistic version to reduce Boost usage
   template< typename T > struct remove_const          { typedef T type; };
   template< typename T > struct remove_const<const T> { typedef T type; };
 
-  template< typename T, typename U >
-  struct is_same      { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_same<T,T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
+  template< typename T, typename U > struct is_same : false_type {};
+  template< typename T > struct is_same<T,T>        : true_type {};
 
-  template< typename T >
-  struct is_const           { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_const< const T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
+  template< typename T > struct is_const           : false_type {};
+  template< typename T > struct is_const< const T> : true_type {};
 
 #endif // type traits
 
   template< typename CT, typename T >
-  struct is_more_const {
-    SC_STATIC_CONSTANT_( bool, value
-       = ( is_same< typename remove_const<CT>::type
+  struct is_more_const
+    : bool_constant<
+          is_same< typename remove_const<CT>::type
                  , typename remove_const<T>::type
                  >::value
-          && ( is_const<CT>::value >= is_const<T>::value ) ) );
-  };
+          && ( is_const<CT>::value >= is_const<T>::value )
+      > {};
 
   struct special_result {};
   template< typename T > struct remove_special_fptr {};
@@ -90,6 +102,5 @@ namespace sc_meta {
 } // namespace sc_meta
 } // namespace sc_core
 
-#undef SC_STATIC_CONSTANT_
 #endif // SC_META_H_INCLUDED_
 // Taf!
