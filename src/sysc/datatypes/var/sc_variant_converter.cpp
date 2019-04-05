@@ -35,7 +35,7 @@
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 
-#ifndef SC_DOXYGEN_IS_RUNNING
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_dt {
 
 #define DEFINE_PACK_( Type )                                                  \
@@ -333,5 +333,5 @@ template struct sc_variant_converter<sc_ufix_fast>;
 #endif // SC_INCLUDE_FX
 
 } // namespace sc_dt
-#endif // SC_DOXYGEN_IS_RUNNING
+//@endcond
 // Taf!

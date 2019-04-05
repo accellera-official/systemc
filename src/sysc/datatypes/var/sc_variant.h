@@ -343,7 +343,7 @@ public:
   /** @name Get composite value
    *
    * The functions return a reference to a (mutable) @ref sc_variant object
-   * of the corresponding composite value type ( list, map).
+   * of the corresponding composite value type (list, map).
    */
 
   ///@{
@@ -425,7 +425,7 @@ sc_variant_ref::set( T const& src )
 
 // --------------------------------------------------------------------------
 
-///@cond SC_HIDDEN_FROM_DOXYGEN
+//@cond SC_HIDDEN_FROM_DOXYGEN
 // iterator implementations in sc_variant.cpp
 namespace sc_variant_impl {
 SC_TPLEXTERN_ template class iterator_impl<sc_variant_cref>;
@@ -710,7 +710,7 @@ protected:
   sc_variant_map_elem_ref(impl_type i = NULL);
 };
 
-///@cond SC_HIDDEN_FROM_DOXYGEN
+//@cond SC_HIDDEN_FROM_DOXYGEN
 // iterator implementations in sc_variant.cpp
 namespace sc_variant_impl {
 SC_TPLEXTERN_ template class iterator_impl<sc_variant_map_elem_cref>;
@@ -718,7 +718,7 @@ SC_TPLEXTERN_ template class iterator_impl<sc_variant_map_elem_ref>;
 } // namespace sc_variant_impl
 SC_TPLEXTERN_ template class sc_variant_iterator<sc_variant_map_elem_cref>;
 SC_TPLEXTERN_ template class sc_variant_iterator<sc_variant_map_elem_ref>;
-///@endcond
+//@endcond
 
 // --------------------------------------------------------------------------
 
@@ -960,6 +960,7 @@ sc_variant_ref::get_map()
 
 // --------------------------------------------------------------------------
 
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_variant_no_adl {
 
 typedef bool yes_type;
@@ -987,6 +988,7 @@ public:
 };
 
 } // namespace sc_variant_no_adl
+//@endcond SC_HIDDEN_FROM_DOXYGEN
 
 namespace sc_dt {
 

@@ -37,6 +37,8 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/datatypes/var/sc_variant_ids.h" // SC_REPORT_ERROR
 
+//@cond SC_HIDDEN_FROM_DOXYGEN
+
 // --------------------------------------------------------------------------
 // configure RapidJSON
 
@@ -109,5 +111,7 @@ RAPIDJSON_NAMESPACE_END
 #include "sysc/packages/rapidjson/include/rapidjson/istreamwrapper.h"
 #include "sysc/packages/rapidjson/include/rapidjson/ostreamwrapper.h"
 #include "sysc/packages/rapidjson/include/rapidjson/writer.h"
+
+//@endcond
 
 #endif // SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_

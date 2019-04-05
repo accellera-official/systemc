@@ -34,7 +34,7 @@ using namespace sc_core;
 
 namespace sc_dt {
 
-///@cond SC_HIDDEN_FROM_DOXYGEN
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace /* anonymous */ {
 
 typedef rapidjson::CrtAllocator allocator_type;
@@ -99,6 +99,7 @@ impl_type* impl_pool::free_list_;
     SC_REPORT_ERROR( sc_core::SC_ID_VARIANT_ACCESS_FAILED_, \
       Msg "\nFailing condition: " #Cond ); \
   } while( false )
+//@endcond SC_HIDDEN_FROM_DOXYGEN
 
 // ----------------------------------------------------------------------------
 // sc_variant_cref
@@ -377,7 +378,7 @@ std::istream& operator>>( std::istream& is, sc_variant_ref v )
 
 // ----------------------------------------------------------------------------
 
-///@cond SC_HIDDEN_FROM_DOXYGEN
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_variant_impl {
 
 struct iterator_list_tag {};

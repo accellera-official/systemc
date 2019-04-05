@@ -278,8 +278,6 @@ SC_VARIANT_CONVERTER_DERIVED_( int64, long );
 SC_VARIANT_CONVERTER_DERIVED_( uint64, unsigned long );
 SC_VARIANT_CONVERTER_DERIVED_( double, float );
 
-#endif // SC_DOXYGEN_IS_RUNNING
-
 // ----------------------------------------------------------------------------
 // C++ string literals
 
@@ -471,6 +469,7 @@ struct sc_variant_converter< sc_lv<N> >
   typedef sc_lv<N> type;
 };
 
+//@endcond
 } // namespace sc_dt
 
 #endif // SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_
@@ -480,6 +479,7 @@ struct sc_variant_converter< sc_lv<N> >
 
 #include "sysc/datatypes/fx/sc_fxdefs.h"
 
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_dt {
 
 class sc_fxval;
@@ -538,6 +538,7 @@ struct sc_variant_converter< sc_ufixed_fast<W,I,Q,O,N> >
 };
 
 } // namespace sc_dt
+//@endcond
 #endif // SC_INCLUDE_FX && ! SC_DATATYPES_VARIANT_CONVERTER_H_INCLUDED_FX_
 
 #ifdef SC_VARIANT_CONVERTER_DERIVED_

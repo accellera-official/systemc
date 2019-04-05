@@ -42,6 +42,7 @@ class sc_variant_map_elem_ref;
 class sc_variant_map_elem_cref;
 template<typename T> class sc_variant_iterator;
 
+//@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_variant_impl {
 
 /// helper class to avoid dangling pointers to sc_variant reference objects
@@ -101,6 +102,7 @@ private:
 };
 
 } // namespace sc_variant_impl
+//@endcond
 
 /**
  * @brief Generic iterator impementation for \ref sc_variant lists and maps
