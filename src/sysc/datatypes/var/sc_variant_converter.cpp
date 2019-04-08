@@ -35,6 +35,12 @@
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 
+#ifdef SC_INCLUDE_FX
+#include "sysc/datatypes/fx/sc_fxval.h"
+#include "sysc/datatypes/fx/sc_fix.h"
+#include "sysc/datatypes/fx/sc_ufix.h"
+#endif // SC_INCLUDE_FX
+
 //@cond SC_HIDDEN_FROM_DOXYGEN
 namespace sc_dt {
 
@@ -302,6 +308,99 @@ DEFINE_UNPACK_( sc_lv_base )
   return true;
 }
 
+// ----------------------------------------------------------------------------
+#ifdef SC_INCLUDE_FX
+
+template<typename FxType>
+static bool
+sc_variant_unpack_fx( FxType& dst, sc_variant::const_reference src )
+{
+  if( src.is_int64() ) {
+    dst = src.get_int64();
+    return true;
+  }
+  if( src.is_uint64() ) {
+    dst = src.get_uint64();
+    return true;
+  }
+  if( src.is_double() ) {
+    dst = src.get_double();
+    return true;
+  }
+  if( src.is_string() ) {
+    dst = src.get_string().c_str();
+    return true;
+  }
+  return false;
+}
+
+DEFINE_PACK_( sc_fxval )
+{
+  dst.set_string( src.to_string() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_fxval )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+DEFINE_PACK_( sc_fxval_fast )
+{
+  dst.set_double( src.to_double() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_fxval_fast )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+DEFINE_PACK_( sc_fix )
+{
+  dst.set_string( src.to_string() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_fix )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+DEFINE_PACK_( sc_fix_fast )
+{
+  dst.set_double( src.to_double() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_fix_fast )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+DEFINE_PACK_( sc_ufix )
+{
+  dst.set_string( src.to_string() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_ufix )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+DEFINE_PACK_( sc_ufix_fast )
+{
+  dst.set_double( src.to_double() );
+  return true;
+}
+
+DEFINE_UNPACK_( sc_ufix_fast )
+{
+  return sc_variant_unpack_fx(dst,src);
+}
+
+#endif // SC_INCLUDE_FX
 // ----------------------------------------------------------------------------
 // explicit template instantiations
 

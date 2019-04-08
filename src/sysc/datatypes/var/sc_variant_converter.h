@@ -114,13 +114,15 @@ struct sc_variant_has_converter : sc_meta::false_type {};
  * @li @c std::string, @c sc_core::sc_string_view
  * @li SystemC data types:
  *     @c sc_dt::int64, @c sc_dt::uint64, @c sc_dt::sc_logic,
+ *     @c sc_dt::sc_bv_base, @c sc_dt::sc_lv_base,
  *     @c sc_dt::sc_int_base, @c sc_dt::sc_uint_base,
- *     @c sc_dt::sc_signed, @c sc_dt::sc_unsigned, @c sc_dt::sc_bv_base
- *     @c sc_dt::sc_lv_base and their templated variants
+ *     @c sc_dt::sc_signed, @c sc_dt::sc_unsigned,
+ *     @c sc_dt::sc_fxval, @c sc_dt::sc_fxval_fast,
+ *     @c sc_dt::sc_fix, @c sc_dt::sc_fix_fast,
+ *     @c sc_dt::sc_ufix, @c sc_dt::sc_ufix_fast,
+ *     and their templated variants
  * @li SystemC time (@c sc_core::sc_time)
  * @li Fixed-size C++ arrays and @c std::vector<T> of supported types
- *
- * @note SystemC fixpoint type support is prepared, but not yet implemented.
  */
 template<typename T>
 struct sc_variant_converter
