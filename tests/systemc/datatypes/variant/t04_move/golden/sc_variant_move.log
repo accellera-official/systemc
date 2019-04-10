@@ -1,7 +1,7 @@
 SystemC Simulation
 v = "some string"
 w = "some string"
-v = ""
+v = null
 v = [1,true]
 w = [[1,true]]
 v = null

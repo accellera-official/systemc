@@ -18,37 +18,36 @@
  ****************************************************************************/
 
 /**
- * @file   cci_value_move.cpp
+ * @file   sc_variant_move.cpp
  * @author Philipp A. Hartmann, Intel
- * @brief  Test of the cci_value move semantics
+ * @brief  Test of the sc_variant move semantics
  */
 
-#include <cci_configuration>
+#include <systemc>
 #include <iostream>
 
-using cci::cci_value;
+using sc_dt::sc_variant;
 
 #define DUMP(v) \
-  std::cout << CCI_STRINGIFY_HELPER_(v) << " = " << (v).to_json() << std::endl;
+  std::cout << SC_STRINGIFY_HELPER_(v) << " = " << (v).to_json() << std::endl;
 
 int sc_main( int, char*[] )
 {
   // manual move checks (still copies root node in C++03)
   {
-    cci_value v("some string");
+    sc_variant v("some string");
     DUMP(v);
 
     sc_assert( v.is_string() );
     sc_assert( v.get_string() == "some string" );
-    std::string str = v.get_string();
+    std::string str( v.get_string() );
 
-    // manual move (copies internally, still empties source)
-    cci_value w( v.get_string().move() );
+    // manual move
+    sc_variant w( v.move() );
 
     DUMP(w);
     DUMP(v);
-    sc_assert( v.is_string() );
-    sc_assert( v.get_string().length() == 0u );
+    sc_assert( v.is_null() );
     sc_assert( w.is_string() );
     sc_assert( w.get_string() == str );
 

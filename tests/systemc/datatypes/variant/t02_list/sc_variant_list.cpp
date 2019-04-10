@@ -18,32 +18,32 @@
  ****************************************************************************/
 
 /**
- * @file   cci_value_list.cpp
+ * @file   sc_variant_list.cpp
  * @author Philipp A. Hartmann, Intel
- * @brief  Test of the cci_value list interface
+ * @brief  Test of the sc_variant list interface
  */
 
-#include <cci_configuration>
-
+#include <systemc>
 #include <iostream>
 #include <algorithm>
 
-using cci::cci_value;
-using cci::cci_value_list;
+using sc_core::sc_string_view;
+using sc_dt::sc_variant;
+using sc_dt::sc_variant_list;
 
 struct value_int_compare
 {
-  bool operator()(cci_value::const_reference a, cci_value::const_reference b) const
+  bool operator()(sc_variant::const_reference a, sc_variant::const_reference b) const
     { return a.get_int64() < b.get_int64(); }
 };
 
 int sc_main( int, char*[] )
 {
-  cci_value_list orig;
+  sc_variant_list orig;
   {
-    cci_value_list list; // empty
-    cci_value::list_reference lref = list;
-    cci_value::const_reference v = list;
+    sc_variant_list list; // empty
+    sc_variant::list_reference lref = list;
+    sc_variant::const_reference v = list;
 
     lref.reserve(10);
     sc_assert( lref.capacity() == 10u );
@@ -74,13 +74,13 @@ int sc_main( int, char*[] )
       // at() checks out-of-bounds access
       lref.at( list.size() );
     } catch( const sc_core::sc_report& rpt ) {
-      sc_assert( cci::CCI_VALUE_FAILURE ==
-                 cci::cci_handle_exception( cci::CCI_VALUE_FAILURE ) );
+      sc_assert( sc_string_view(rpt.get_msg_type())
+                 == sc_core::SC_ID_VARIANT_ACCESS_FAILED_ );
       has_thrown = true;
     }
     sc_assert( has_thrown );
 
-    sc_assert( lref.end() - lref.cbegin() == lref.size() );
+    sc_assert( lref.end() - lref.cbegin() == lref.ssize() );
     sc_assert( lref.end() > lref.cbegin() );
     sc_assert( lref.cend()-1 > lref.begin() );
     sc_assert( ++lref.begin() <= --lref.end() );
@@ -95,16 +95,16 @@ int sc_main( int, char*[] )
     sc_assert( lref.rbegin().base() == lref.cend() );
     sc_assert( lref.cbegin() == lref.rend().base() );
     sc_assert( lref.end() == lref.crbegin().base() );
-    sc_assert( lref.rend() - lref.crbegin() == lref.size() );
+    sc_assert( lref.rend() - lref.crbegin() == lref.ssize() );
 
     sc_assert( *lref.crbegin() == lref.back() );
 
     std::copy( lref.cbegin(), lref.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
 
     std::copy( lref.crbegin(), lref.crend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
 
     lref.swap(orig);
@@ -113,28 +113,28 @@ int sc_main( int, char*[] )
     sc_assert( orig[0].is_true() );
   }
   {
-    cci_value_list list = orig; // copy
+    sc_variant_list list = orig; // copy
 
-    cci_value_list::const_iterator it = std::find(list.begin(), list.end(), cci_value(42) );
+    sc_variant_list::const_iterator it = std::find(list.begin(), list.end(), sc_variant(42) );
 
     sc_assert( it != list.end() );
     sc_assert( it->get_int() == 42 );
 
-    it = list.insert( it, 3, cci_value() );
+    it = list.insert( it, 3, sc_variant() );
 
     sc_assert( list.size() == 6u );
     sc_assert( (it + 2)->is_null() );
     sc_assert( it - list.begin() == 1 );
 
     std::copy( list.cbegin(), list.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
 
     // erase-remove idiom
-    it = list.erase( std::remove(list.begin(), list.end(), cci_value() ), list.end() );
+    it = list.erase( std::remove(list.begin(), list.end(), sc_variant() ), list.end() );
 
     std::copy( list.cbegin(), list.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
 
     sc_assert( list.size() == 3u );
@@ -149,7 +149,7 @@ int sc_main( int, char*[] )
     sc_assert( list.back().is_true() );
   }
   {
-    cci_value_list list = orig; // copy
+    sc_variant_list list = orig; // copy
 
     list.clear();
     sc_assert( list.size() == 0u );
@@ -159,30 +159,30 @@ int sc_main( int, char*[] )
     sc_assert( list.size() == sizeof(values)/sizeof(*values) );
 
     std::copy( list.cbegin(), list.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
 
     std::sort( list.begin(), list.end(), value_int_compare() );
 
     std::copy( list.cbegin(), list.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
   }
   {
     const int v1[] = { 1, 5 };
     const int v2[] = { 0, 2, 3, 4, 6 };
 
-    cci_value value( v1 ); // deserialize from array
+    sc_variant value( v1 ); // deserialize from array
     sc_assert( value.is_list() );
 
-    cci_value::list_reference list = value.get_list();
-    cci_value::list_reference::const_iterator it = list.end();
+    sc_variant::list_reference list = value.get_list();
+    sc_variant::list_reference::const_iterator it = list.end();
     sc_assert( list.size() == 2u );
 
     it = list.insert( list.begin(), v2, v2 + 1 ); // 0
     sc_assert( list.size() == 3u );
     sc_assert( it == list.begin() );
-    sc_assert( *it == cci_value(0) );
+    sc_assert( *it == sc_variant(0) );
 
     it = list.insert( list.begin() + 2, v2 + 1, v2 + 4 ); // 2,3,4
     sc_assert( list.size() == 6u );
@@ -191,10 +191,10 @@ int sc_main( int, char*[] )
     it = list.insert( list.end(), v2 + 4, v2 + 5 ); // 6
     sc_assert( list.size() == 7u );
     sc_assert( *it == *list.rbegin() );
-    sc_assert( *it == cci_value(6) );
+    sc_assert( *it == sc_variant(6) );
 
     std::copy( list.cbegin(), list.cend()
-             , std::ostream_iterator<cci_value::const_reference>(std::cout," ") );
+             , std::ostream_iterator<sc_variant::const_reference>(std::cout," ") );
     std::cout << std::endl;
   }
 

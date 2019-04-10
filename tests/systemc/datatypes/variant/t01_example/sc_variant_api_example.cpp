@@ -18,28 +18,27 @@
  ****************************************************************************/
 
 /**
- * @file   cci_value_api_example.cpp
+ * @file   sc_variant_api_example.cpp
  * @author Philipp A. Hartmann, OFFIS/Intel
- * @brief  Simple example of the new cci_value interface
+ * @brief  Simple example of the new sc_variant interface
  */
 
-#include "cci_core/cci_value.h"
-#include "cci_core/cci_value_converter.h"
+#include <systemc>
 
-using cci::cci_value;
-using cci::cci_value_list;
-using cci::cci_value_map;
+using sc_dt::sc_variant;
+using sc_dt::sc_variant_list;
+using sc_dt::sc_variant_map;
 
 int sc_main( int, char*[] )
 {
   std::string json;
   {
-    cci_value v;
+    sc_variant v;
 
     sc_assert( v.is_null() );
     json = v.to_json();
     std::cout << "JSON (null)   : " << json << std::endl;
-    v = cci::cci_value::from_json(json);
+    v = sc_variant::from_json(json);
 
     v.set_bool( true );
     sc_assert( v.is_bool() );
@@ -47,16 +46,16 @@ int sc_main( int, char*[] )
     sc_assert( !v.is_false() );
     json = v.to_json();
     std::cout << "JSON (bool)   : " << json << std::endl;
-    v = cci::cci_value::from_json(json);
+    v = sc_variant::from_json(json);
   }
   {
-    cci_value i;
+    sc_variant i;
 
     i.set<char>(42);
     sc_assert( i.is_int() );
     json = i.to_json();
     std::cout << "JSON (int)    : " << json << std::endl;
-    i = cci::cci_value::from_json(json);
+    i = sc_variant::from_json(json);
 
     sc_assert( i.get_int() == 42 );
     sc_assert( i.get<long>() == 42 );
@@ -66,13 +65,13 @@ int sc_main( int, char*[] )
   }
   {
     sc_dt::sc_int<17> i( "0b0101010" );
-    cci_value v;
+    sc_variant v;
     v.set( i );
 
     sc_assert( v.is_int() );
     json = v.to_json();
     std::cout << "JSON (sc_int) : " << json << std::endl;
-    v = cci::cci_value::from_json(json);
+    v = sc_variant::from_json(json);
 
     sc_dt::sc_int_base ib( i.length() );
     sc_assert( v.try_get(ib) );
@@ -80,7 +79,7 @@ int sc_main( int, char*[] )
     sc_assert( ib == i );
   }
   {
-    cci_value v(1.5);
+    sc_variant v(1.5);
     sc_assert( v.is_double() );
     sc_assert( v.get<float>() == 1.5f );
     v.set_null();
@@ -89,22 +88,22 @@ int sc_main( int, char*[] )
 
     json = v.to_json();
     std::cout << "JSON (double) : " << json << std::endl;
-    v = cci::cci_value::from_json(json);
+    v = sc_variant::from_json(json);
   }
   {
     std::string str("string");
-    cci_value v( "string" ), w( str );
+    sc_variant v( "string" ), w( str );
 
     sc_assert( v.is_string() && w.is_string() );
     sc_assert( str == v.get_string() );
-    sc_assert( w == v.get_string() );
+    sc_assert( w.get_string() == v.get_string() );
     json = v.to_json();
     std::cout << "JSON (string) : " << json << std::endl;
-    v = cci::cci_value::from_json(json);
+    v = sc_variant::from_json(json);
   }
   {
     const char json[] = "[12,34]";
-    cci_value v = cci_value::from_json( json );
+    sc_variant v = sc_variant::from_json( json );
 
     sc_assert( v.is_list() );
     sc_assert( v.to_json() == json );
@@ -114,16 +113,16 @@ int sc_main( int, char*[] )
       .push_back("56")
       .push_back( seq ) // array of std::vector
       .push_back(
-        cci_value_list()
+        sc_variant_list()
           .push_back( 0ul )
-          .push_back( cci_value() )
+          .push_back( sc_variant() )
         )
       .push_back( sc_dt::SC_LOGIC_Z );
 
     sc_assert( v.get_list()[3].is_list() );
     sc_assert( v.get_list()[4].get_list().size() == 2 );
 
-    cci_value::list_reference vl = v.get_list()[3].get_list();
+    sc_variant::list_reference vl = v.get_list()[3].get_list();
     sc_assert( vl.size() == 2 );
     vl[0].get_list().push_back(78);
     vl[1].get_list().push_back(9);
@@ -133,7 +132,7 @@ int sc_main( int, char*[] )
   }
   {
     const char json[] = "{\"value\":10,\"unit\":\"ns\"}";
-    cci_value_map v = cci_value::from_json( json ).get_map();
+    sc_variant_map v = sc_variant::from_json( json ).get_map();
 
     sc_assert( v.is_map() );
     sc_assert( v.has_entry("value") );
@@ -142,7 +141,7 @@ int sc_main( int, char*[] )
 
     sc_core::sc_time t;
     sc_assert( v.try_get(t) );
-    std::cout << "JSON (sc_time): " << cci_value(t).to_json() << std::endl;
+    std::cout << "JSON (sc_time): " << sc_variant(t).to_json() << std::endl;
 
     sc_assert( v.to_json() == json );
     v.push_entry( "scale", 1 );
