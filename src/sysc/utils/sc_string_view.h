@@ -91,14 +91,16 @@ public:
     : base_type(s.data(), s.size()) {}
 #endif // C++11
 
-  // pre-C++11 helper function to create an explicit string copy
+  // helper function to create an explicit string copy
   inline std::string str() const
     { return std::string( data(), size() ); }
 
-#if SC_CPLUSPLUS >= 201103L && SC_CPLUSPLUS < 201703L
-  inline explicit operator std::string() const
+#if SC_CPLUSPLUS < 201703L
+  // pre-C++17 does not support creation of/assignment to std::string from string_view,
+  // add implicit conversion for convenience
+  inline operator std::string() const
     { return str(); }
-#endif // after C++11, before C++17
+#endif // before C++17
 
 #if SC_CPLUSPLUS <= 201703L // before C++20
   /* constexpr */ bool starts_with(base_type sv) const /* noexcept */
