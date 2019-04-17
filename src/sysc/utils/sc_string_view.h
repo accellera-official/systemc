@@ -130,7 +130,7 @@ public:
     : base_type(SC_LIKELY_(s) ? s : "") {}
 
   sc_zstring_view(const std::string& s) /* noexcept */
-    : base_type(s) {}
+    : base_type(s.c_str()) {} // enforce ending string at first \0 character
 
   /* constexpr */ void swap(sc_zstring_view& s) /* noexcept */
     { base_type::swap(s); }
