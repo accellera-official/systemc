@@ -393,6 +393,9 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sysc\utils\sc_meta.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\sysc\kernel\sc_macros.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
