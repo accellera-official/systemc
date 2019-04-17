@@ -1,0 +1,4 @@
+[submodule "rapidjson"]
+	path = src/sysc/packages/rapidjson
+	url = https://github.com/tencent/rapidjson.git
+	branch = master
