@@ -1,0 +1,148 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  src/sysc/packages/boost.am --
+##  Included from a Makefile.am to provide package-specific information
+##
+##  Original Author: Philipp A Hartmann, Intel
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ****************************************************************************
+
+## Generic directory setup
+## (should be kept in sync among all files/<package>.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: packages
+##   %C%: packages
+
+H_FILES += \
+	packages/boost/bind.hpp \
+	packages/boost/config.hpp \
+	packages/boost/get_pointer.hpp \
+	packages/boost/mem_fn.hpp \
+	packages/boost/non_type.hpp \
+	packages/boost/ref.hpp \
+	packages/boost/type.hpp \
+	\
+	packages/boost/bind/apply.hpp \
+	packages/boost/bind/arg.hpp \
+	packages/boost/bind/bind_cc.hpp \
+	packages/boost/bind/bind_mf_cc.hpp \
+	packages/boost/bind/bind_template.hpp \
+	packages/boost/bind/make_adaptable.hpp \
+	packages/boost/bind/mem_fn_cc.hpp \
+	packages/boost/bind/mem_fn_template.hpp \
+	packages/boost/bind/mem_fn_vw.hpp \
+	packages/boost/bind/placeholders.hpp \
+	packages/boost/bind/protect.hpp \
+	\
+	packages/boost/config/compiler/borland.hpp \
+	packages/boost/config/compiler/comeau.hpp \
+	packages/boost/config/compiler/common_edg.hpp \
+	packages/boost/config/compiler/compaq_cxx.hpp \
+	packages/boost/config/compiler/digitalmars.hpp \
+	packages/boost/config/compiler/gcc.hpp \
+	packages/boost/config/compiler/greenhills.hpp \
+	packages/boost/config/compiler/hp_acc.hpp \
+	packages/boost/config/compiler/intel.hpp \
+	packages/boost/config/compiler/kai.hpp \
+	packages/boost/config/compiler/metrowerks.hpp \
+	packages/boost/config/compiler/mpw.hpp \
+	packages/boost/config/compiler/sgi_mipspro.hpp \
+	packages/boost/config/compiler/sunpro_cc.hpp \
+	packages/boost/config/compiler/vacpp.hpp \
+	packages/boost/config/compiler/visualc.hpp \
+	packages/boost/config/platform/aix.hpp \
+	packages/boost/config/platform/amigaos.hpp \
+	packages/boost/config/platform/beos.hpp \
+	packages/boost/config/platform/bsd.hpp \
+	packages/boost/config/platform/cygwin.hpp \
+	packages/boost/config/platform/hpux.hpp \
+	packages/boost/config/platform/irix.hpp \
+	packages/boost/config/platform/linux.hpp \
+	packages/boost/config/platform/macos.hpp \
+	packages/boost/config/platform/solaris.hpp \
+	packages/boost/config/platform/win32.hpp \
+	packages/boost/config/posix_features.hpp \
+	packages/boost/config/select_compiler_config.hpp \
+	packages/boost/config/select_platform_config.hpp \
+	packages/boost/config/select_stdlib_config.hpp \
+	packages/boost/config/stdlib/dinkumware.hpp \
+	packages/boost/config/stdlib/libcomo.hpp \
+	packages/boost/config/stdlib/libstdcpp3.hpp \
+	packages/boost/config/stdlib/modena.hpp \
+	packages/boost/config/stdlib/msl.hpp \
+	packages/boost/config/stdlib/roguewave.hpp \
+	packages/boost/config/stdlib/sgi.hpp \
+	packages/boost/config/stdlib/stlport.hpp \
+	packages/boost/config/stdlib/vacpp.hpp \
+	packages/boost/config/suffix.hpp \
+	packages/boost/config/user.hpp \
+	\
+	packages/boost/detail/endian.hpp \
+	packages/boost/detail/workaround.hpp \
+	\
+	packages/boost/mpl/aux_/adl_barrier.hpp \
+	packages/boost/mpl/aux_/config/adl.hpp \
+	packages/boost/mpl/aux_/config/gcc.hpp \
+	packages/boost/mpl/aux_/config/intel.hpp \
+	packages/boost/mpl/aux_/config/msvc.hpp \
+	packages/boost/mpl/aux_/config/static_constant.hpp \
+	packages/boost/mpl/aux_/config/workaround.hpp \
+	packages/boost/mpl/bool.hpp \
+	packages/boost/mpl/bool_fwd.hpp \
+	packages/boost/mpl/integral_c_tag.hpp \
+	\
+	packages/boost/utility/addressof.hpp \
+	packages/boost/utility/enable_if.hpp \
+	packages/boost/utility/string_view.hpp \
+	packages/boost/utility/string_view_fwd.hpp
+
+EXTRA_DIST += \
+	packages/boost/LICENSE_1_0.txt
+
+INCDIRS += \
+	packages/boost/bind \
+	packages/boost/config/compiler \
+	packages/boost/config/platform \
+	packages/boost/config/stdlib \
+	packages/boost/config \
+	packages/boost/detail \
+	packages/boost/mpl/aux_/config \
+	packages/boost/mpl/aux_ \
+	packages/boost/mpl \
+	packages/boost/utility \
+	packages/boost \
+	packages
+
+
+## Taf!
+## :vim:ft=automake:

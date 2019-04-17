@@ -17,10 +17,10 @@
 ##
 ## ****************************************************************************
 ##
-##  src/sysc/Makefile.am --
-##  Process this file with automake to produce a Makefile.in file.
+##  src/sysc/packages/qt.am --
+##  Included from a Makefile.am to provide package-specific information
 ##
-##  Original Author: Martin Janssen, Synopsys, Inc., 2001-05-21
+##  Original Author: Philipp A Hartmann, Intel
 ##
 ## ****************************************************************************
 ##
@@ -32,41 +32,23 @@
 ##
 ## ****************************************************************************
 
-include $(top_srcdir)/config/Make-rules.sysc
+## Generic directory setup
+## (should be kept in sync among all files/<package>.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##       included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: packages
+##   %C%: packages
 
-SUBDIRS =
-H_FILES =
-NO_H_FILES =
-CXX_FILES =
-INCDIRS =
-LIBADD =
+QT_LIB    = packages/qt/libqt.la
+QT_SUBDIR = packages/qt
 
-# include file lists for sub-directories
-include kernel/files.am
-include communication/files.am
-include datatypes/files.am
-include tracing/files.am
-include utils/files.am
-
-# include individual third-party packages
-include packages/boost.am
-if WANT_QT_THREADS
-include packages/qt.am
-endif
-
-localincludedir = $(includedir)/sysc
-nobase_localinclude_HEADERS = $(H_FILES)
-
-noinst_LTLIBRARIES = libsysc.la
-
-libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
-
-# add dependent (package) libraries
-libsysc_la_LIBADD = $(LIBADD)
-
-uninstall-hook:
-	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \
-	  for dir in $(INCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-	  cd - ; rmdir "$(localincludedir)" )
+# build external QT package separately
+SUBDIRS += $(QT_SUBDIR)
+LIBADD  += $(QT_LIB)
 
 ## Taf!
+## :vim:ft=automake:
