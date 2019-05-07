@@ -398,8 +398,16 @@ public:
 
 };
 
+// backwards-compatibility: allow (some) macros without trailing semicolon
+#ifdef SC_ALLOW_MACROS_WITHOUT_SEMICOLON
+#   define SC_SEMICOLON_ ;
+#else
+#   define SC_SEMICOLON_ /* nothing */
+#endif // SC_ALLOW_MACROS_WITHOUT_SEMICOLON
+
 extern SC_API sc_module* sc_module_dynalloc(sc_module*);
-#define SC_NEW(x)  ::sc_core::sc_module_dynalloc(new x);
+#define SC_NEW(x) \
+  ::sc_core::sc_module_dynalloc(new x) SC_SEMICOLON_
 
 
 // -----------------------------------------------------------------------------
@@ -454,15 +462,18 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 
 #define SC_CTHREAD(func, edge)                                                \
     this->declare_cthread_process                                             \
-      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func, edge );
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func, edge )    \
+    SC_SEMICOLON_
 
 #define SC_METHOD(func)                                                       \
     this->declare_method_process                                              \
-      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func );
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
+    SC_SEMICOLON_
 
 #define SC_THREAD(func)                                                       \
     this->declare_thread_process                                              \
-      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func );
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
+    SC_SEMICOLON_
 
 
 // ----------------------------------------------------------------------------
