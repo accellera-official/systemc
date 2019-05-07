@@ -114,7 +114,7 @@ public:
     // Initiator thread
     SC_THREAD(run);
 
-    SC_METHOD(endResponse)
+    SC_METHOD(endResponse);
     sensitive << mEndResponseEvent;
     dont_initialize();
   }

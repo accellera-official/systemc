@@ -50,11 +50,11 @@ public:
     // register nb_transport method
     socket.register_nb_transport_fw(this, &SimpleATTarget2::myNBTransport);
 
-    SC_METHOD(beginResponse)
+    SC_METHOD(beginResponse);
     sensitive << mBeginResponseEvent;
     dont_initialize();
 
-    SC_METHOD(endResponse)
+    SC_METHOD(endResponse);
     sensitive << mEndResponseEvent;
     dont_initialize();
   }

@@ -19,7 +19,7 @@ SC_MODULE(WRITE_LEAF)
     SC_CTOR(WRITE_LEAF) : out("out"), clk("clk")
     {
                 my_export(out);
-		SC_METHOD(sync)
+		SC_METHOD(sync);
 		sensitive << clk.pos();
     }
 	void sync()

@@ -41,7 +41,7 @@ SC_MODULE(DUT)
 {
     SC_CTOR(DUT)
     {
-        SC_THREAD(thread)
+        SC_THREAD(thread);
         sensitive << m_clk.pos();
         dont_initialize();
         SC_METHOD(cascade0_monitor);

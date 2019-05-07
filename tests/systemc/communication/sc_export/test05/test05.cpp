@@ -45,7 +45,7 @@ SC_MODULE(Reader)
 {
     SC_CTOR(Reader)
     {
-        SC_METHOD(extract)
+        SC_METHOD(extract);
         sensitive << m_clk.pos();
         dont_initialize();
     }
@@ -67,7 +67,7 @@ SC_MODULE(Writer)
 {
     SC_CTOR(Writer)
     {
-        SC_METHOD(insert)
+        SC_METHOD(insert);
         sensitive << m_clk.pos();
         m_counter = 0;
     }

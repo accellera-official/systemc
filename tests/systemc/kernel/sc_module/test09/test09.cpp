@@ -58,9 +58,9 @@ class NonModuleDerived : public ModuleBase
 	SC_HAS_PROCESS(NonModuleDerived);
 	NonModuleDerived(sc_module_name name_) : ModuleBase(name_)
 	{
-		SC_METHOD(base_method)
+		SC_METHOD(base_method);
 		sensitive << m_clk;
-		SC_METHOD(derived_method)
+		SC_METHOD(derived_method);
 		sensitive << m_clk;
 	}
 	void derived_method()
@@ -81,7 +81,7 @@ SC_MODULE(ModuleDerived), public NonModuleBase
 {
 	SC_CTOR(ModuleDerived) : NonModuleBase()
 	{
-		SC_METHOD(derived_method)
+		SC_METHOD(derived_method);
 		sensitive << m_clk;
 	}
 	void derived_method()

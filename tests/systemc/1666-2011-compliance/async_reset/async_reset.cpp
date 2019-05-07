@@ -59,7 +59,7 @@ struct Top: sc_module
     opt.set_sensitivity( &clk );
     m = sc_spawn(sc_bind(&Top::M, this), "M", &opt);
     
-    SC_CTHREAD(CT2, clk_port.pos())
+    SC_CTHREAD(CT2, clk_port.pos());
       async_reset_signal_is(areset1, true);
       async_reset_signal_is(areset2, true);
       async_reset_signal_is(areset3, true);
@@ -69,7 +69,7 @@ struct Top: sc_module
       ct2 = sc_get_current_process_handle();
       ct2.disable();
     
-    SC_THREAD(T2)
+    SC_THREAD(T2);
       sensitive << clk_port.pos();
       async_reset_signal_is(areset1, true);
       async_reset_signal_is(areset2, true);

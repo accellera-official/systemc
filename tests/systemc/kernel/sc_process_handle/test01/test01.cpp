@@ -45,7 +45,7 @@ SC_MODULE(DUT)
     SC_CTOR(DUT)
     {
         SC_CTHREAD(process_a, m_clk.pos());
-        SC_THREAD(process_b)
+        SC_THREAD(process_b);
         sensitive << m_clk.pos();
     }
     void process_a()

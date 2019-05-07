@@ -74,7 +74,7 @@ SC_MODULE( mod_a)
  
   SC_CTOR( mod_a ) 
     {
-      SC_THREAD(main_action)
+      SC_THREAD(main_action);
 	sensitive << clk.pos();
      }
 };
