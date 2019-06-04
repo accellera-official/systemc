@@ -83,12 +83,11 @@ subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(top_srcdir)/docs/sysc/doxygen/Doxyfile.in \
-	$(top_srcdir)/docs/tlm/doxygen/Doxyfile.in AUTHORS ChangeLog \
-	INSTALL NEWS README config/ar-lib config/compile \
-	config/config.guess config/config.sub config/depcomp \
-	config/install-sh config/missing config/ltmain.sh \
-	$(top_srcdir)/config/ar-lib $(top_srcdir)/config/compile \
-	$(top_srcdir)/config/config.guess \
+	$(top_srcdir)/docs/tlm/doxygen/Doxyfile.in config/ar-lib \
+	config/compile config/config.guess config/config.sub \
+	config/depcomp config/install-sh config/missing \
+	config/ltmain.sh $(top_srcdir)/config/ar-lib \
+	$(top_srcdir)/config/compile $(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
 	$(top_srcdir)/config/missing
@@ -393,13 +392,12 @@ SUBDIRS = \
 	examples
 
 DOC_FILES = \
-	AUTHORS \
+	AUTHORS.md \
 	NOTICE \
-	ChangeLog \
-	INSTALL \
+	CONTRIBUTING.md \
+	INSTALL.md \
 	LICENSE \
-	NEWS \
-	README \
+	README.md \
 	RELEASENOTES \
 	cmake/INSTALL_USING_CMAKE
 
