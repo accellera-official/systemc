@@ -1,8 +1,8 @@
-                Release Notes for SystemC 2.3.3
+                Release Notes for SystemC 2.3.4
                 ===============================
 
-        Andrew C. Goodrich,  Cadence Design Systems
         Philipp A. Hartmann, Intel Corporation
+        Andrew C. Goodrich
 
 CONTENTS
 ========
@@ -31,15 +31,15 @@ CONTENTS
 IMPORTANT
 ---------
 
-This is the release of the SystemC 2.3.3 Class Library.
-This release includes TLM 2.0.5 (Transaction Level Modeling) code,
+This is a public review release of the SystemC 2.3.4 Class Library.
+This release includes TLM 2.0.6 (Transaction Level Modeling) code,
 as described in the IEEE 1666-2011 Language Reference Manual.
 
 -------------------------------------------------------------------------------
 
 
-1. This is the release of SystemC 2.3.3. This release contains bug fixes
-   for SystemC 2.3.2 (and earlier) as well as adding some minor features.
+1. This is a public review release of SystemC. This release contains bug fixes
+   for SystemC 2.3.3 (and earlier).
 
 2. This release is supported on the following platform combinations for
    which it has been tested:
@@ -120,20 +120,20 @@ for the IEEE 1666-2011 SystemC standard. Please consult the IEEE Std
 current SystemC standard.
 
 TLM-2.0 is merged into the main SystemC release since 2.3.0.
-Please see section 9) below for more details related to TLM.
+Please see section 10) below for more details related to TLM.
 
 Compared to the 2.3.0 release, this release has the following new items:
 
   - New features, partially beyond the current IEEE 1666-2011 standard,
-    see section 3.
+    see section 4.
 
   - Experimental features (some disabled by default), see section 5.
     Testing and feedback welcome via the Accellera SystemC forums
     at http://forums.accellera.org/forum/9-systemc/.
 
-  - Bug fixes, see section 2.
+  - Bug fixes, see section 3.
 
-  - Updated platform support, see the README.
+  - Updated platform support, see the README.md.
 
 
 3) Bug fixes and enhancements
@@ -143,10 +143,19 @@ For bug fixes added in 2.3.1 (or before) already, please refer to the previous
 RELEASENOTES.
 
   - For fixes and enhancements of the embedded TLM-2.0 implementation,
-    please see section 9.
+    please see section 10.
 
   - Additional changes and cleanups leading to incompatibilities with
     earlier versions of SystemC are described in section 4.
+
+Following is the list of bug fixes and enhancements for the 2.3.4 release:
+
+  - sc_thread_process: remove dynamic sensitivity before dying
+
+  - sc_cor_qt::stack_protect: don't try to add PROC_EXEC
+
+  - Mark QuickThreads stack non-executable on supported platforms
+
 
 Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
@@ -863,6 +872,12 @@ Parts of the TLM implementation are now linked into the kernel library.
 ================================
 
 Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed:
+
+ - [2.0.6] tlm_fifo_get_if: resolve nb_peek ambiguity
+
+ - [2.0.6] tlm_base_*_socket: implement get_protocol_types()
+
+ - [2.0.6] tlm_base_socket_if: match existing functions in tlm_base_*_socket_b
 
  - [2.0.5] Fixed a regression introduced in 2.0.4, now allowing hierarchical
    binding of multi_passthrough_target_sockets again.
