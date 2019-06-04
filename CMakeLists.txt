@@ -719,7 +719,7 @@ add_subdirectory (examples)
 # Install README files
 ###############################################################################
 
-install (FILES AUTHORS
+install (FILES AUTHORS.md
                INSTALL.md
                cmake/INSTALL_USING_CMAKE
                LICENSE
