@@ -39,16 +39,16 @@ dnl
 dnl Initialization.
 dnl
 AC_INIT([SystemC],
-        [2.3.3],
+        [2.3.4],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
         [http://accellera.org/],
 )
 dnl version of the included TLM library
-TLM_PACKAGE_VERSION=2.0.5
+TLM_PACKAGE_VERSION=2.0.6
 AC_SUBST(TLM_PACKAGE_VERSION)
 
-AC_CONFIG_SRCDIR([NEWS])
+AC_CONFIG_SRCDIR([README.md])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
 
@@ -130,6 +130,9 @@ DEBUG_CXXFLAGS="-g"
 OPT_CXXFLAGS="-O3"
 EXPLICIT_LPTHREAD="-lpthread"
 LDFLAG_RPATH="-Wl,-rpath="
+
+dnl Run assembler with pre-processor on GCC-compatible compilers
+AS_VAR_IF([GXX],[yes],[EXTRA_ASFLAGS="-xassembler-with-cpp"])
 
 dnl
 dnl Prepare architecture alias (to be refined later)
