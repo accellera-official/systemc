@@ -58,7 +58,6 @@ DOC_FILES += \
 ##   find tlm -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 ##
 DOC_FILES += \
-	tlm/ChangeLog \
 	tlm/release/TLM_2_0_requirements.pdf \
 	tlm/release/TLM_2_0_white_paper.pdf \
 	tlm/release/README.txt \

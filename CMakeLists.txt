@@ -720,11 +720,9 @@ add_subdirectory (examples)
 ###############################################################################
 
 install (FILES AUTHORS
-               ChangeLog
                INSTALL.md
                cmake/INSTALL_USING_CMAKE
                LICENSE
-               NEWS
                NOTICE
                README.md
                RELEASENOTES
