@@ -41,7 +41,7 @@ SUBDIRS = \
 	examples
 
 DOC_FILES = \
-	AUTHORS \
+	AUTHORS.md \
 	NOTICE \
 	CONTRIBUTING.md \
 	INSTALL.md \
