@@ -296,6 +296,7 @@ struct M2: sc_module
         }
       }
       catch (const sc_unwind_exception& ex) {
+        sc_assert( t1.is_unwinding() );
         sc_assert( sc_is_unwinding() );
         sc_assert( ex.is_reset() );
         throw ex;
