@@ -665,6 +665,7 @@ sc_simcontext::elaborate()
     m_module_registry->elaboration_done();
     SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets(m_reset_finder_q);
+    m_reset_finder_q = NULL;
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
