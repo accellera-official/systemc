@@ -571,7 +571,10 @@ class SC_API sc_int_base : public sc_value_base
 #ifdef DEBUG_SYSTEMC
 	    check_value();
 #endif
-	    m_val = ( m_val << m_ulen >> m_ulen );
+	    // cast to unsigned type before left-shift to avoid C++ undefined behavior;
+	    // cast back to signed type for arithmetic right shift (implementation-defined,
+	    // but all supported platforms implement signed right-shift arithmetically)
+	    m_val = (int_type(uint_type(m_val) << m_ulen) >> m_ulen);
 	}
 
 public:
