@@ -151,6 +151,12 @@
     <ClCompile Include="..\..\src\sysc\kernel\sc_wait_cthread.cpp">
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value.cpp">
+      <Filter>Source Files\sc_dt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.cpp">
+      <Filter>Source Files\sc_dt</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
@@ -246,6 +252,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value.h">
+      <Filter>Header Files\sc_dt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.h">
+      <Filter>Header Files\sc_dt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_ids.h">
+      <Filter>Header Files\sc_dt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_iterator.h">
+      <Filter>Header Files\sc_dt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_rapidjson.h">
+      <Filter>Header Files\sc_dt</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_bigint.h">
       <Filter>Header Files\sc_dt</Filter>
     </ClInclude>
