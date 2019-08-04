@@ -80,7 +80,7 @@ public:
 protected:
   typedef void* impl_type; //  type-punned pointer for now
 
-  iterator_impl(impl_type r = NULL)
+  explicit iterator_impl(impl_type r = NULL)
     : impl_(r) {}
 
   void increment(difference_type n = 1) { update(advance(n));  }
@@ -125,7 +125,7 @@ class sc_any_value_iterator
 
 private:
   /// internal constructor
-  sc_any_value_iterator(typename impl::impl_type r) : impl(r) {}
+  explicit sc_any_value_iterator(typename impl::impl_type r) : impl(r) {}
 
 public:
   /// @name C++ standard iterator types
