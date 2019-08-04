@@ -20,6 +20,8 @@
 #ifndef TLM_CORE_TLM_BASE_SOCKET_IF_H_INCLUDED_
 #define TLM_CORE_TLM_BASE_SOCKET_IF_H_INCLUDED_
 
+#include "sysc/communication/sc_export.h"
+#include "sysc/communication/sc_port.h"
 #include "sysc/utils/sc_typeindex.h"
 
 namespace tlm {
@@ -43,8 +45,14 @@ public:
   virtual sc_core::sc_port_base const &   get_base_port() const = 0;
   virtual sc_core::sc_export_base &       get_base_export() = 0;
   virtual sc_core::sc_export_base const & get_base_export() const = 0;
+
+#ifdef SC_ENABLE_COVARIANT_VIRTUAL_BASE
+  // co-variant return types don't mix with virtual base classes
+  // (like sc_interface) on Microsoft Visual C++ compilers
+  // -> keep all APIs depending on this as an opt-in for now
   virtual sc_core::sc_interface &         get_base_interface() = 0;
   virtual sc_core::sc_interface const &   get_base_interface() const = 0;
+#endif // SC_ENABLE_COVARIANT_VIRTUAL_BASE
 
   virtual unsigned int                    get_bus_width() const = 0;
   virtual sc_core::sc_type_index          get_protocol_types() const = 0;
