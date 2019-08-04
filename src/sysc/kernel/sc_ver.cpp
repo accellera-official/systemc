@@ -163,11 +163,15 @@ SC_API SC_API_VERSION_STRING
 ::SC_API_VERSION_STRING
 (
   sc_writer_policy default_writer_policy
+, bool             has_covariant_virtual_base
 )
 {
   SC_API_PERFORM_CHECK_( sc_writer_policy
-                          , default_writer_policy
-                          , "SC_DEFAULT_WRITER_POLICY" );
+                       , default_writer_policy
+                       , "SC_DEFAULT_WRITER_POLICY" );
+  SC_API_PERFORM_CHECK_( bool
+                       , has_covariant_virtual_base
+                       , "SC_ENABLE_COVARIANT_VIRTUAL_BASE" );
 }
 
 } // namespace sc_core

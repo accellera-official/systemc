@@ -26,7 +26,6 @@
  NO AUTOMATIC CHANGE LOG IS GENERATED, EXPLICIT CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-
 #ifndef SC_VER_H
 #define SC_VER_H
 
@@ -159,8 +158,19 @@ struct SC_API_VERSION_STRING
     (
        // SC_DEFAULT_WRITER_POLICY
        sc_writer_policy default_writer_policy
+       // SC_ENABLE_COVARIANT_VIRTUAL_BASE
+    ,  bool has_covariant_virtual_base
     );
 };
+
+// co-variant return types don't mix with virtual base classes
+// (like sc_interface) on Microsoft Visual C++ compilers
+// -> keep all APIs depending on this as an opt-in for now
+#ifdef SC_ENABLE_COVARIANT_VIRTUAL_BASE
+# define SC_HAS_COVARIANT_VIRTUAL_BASE_ true
+#else
+# define SC_HAS_COVARIANT_VIRTUAL_BASE_ false
+#endif // SC_ENABLE_COVARIANT_VIRTUAL_BASE
 
 #if !defined(SC_BUILD)
 // import explicitly instantiated template
@@ -179,6 +189,7 @@ SC_API_VERSION_STRING
 api_version_check
 (
   SC_DEFAULT_WRITER_POLICY
+, SC_HAS_COVARIANT_VIRTUAL_BASE_
 );
 #endif // SC_DISABLE_API_VERSION_CHECK
 #endif // SC_BUILD
@@ -197,4 +208,4 @@ api_version_check
   Description of Modification:
 
  *****************************************************************************/
-#endif
+#endif // SC_VER_H
