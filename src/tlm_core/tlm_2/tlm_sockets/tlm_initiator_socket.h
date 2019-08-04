@@ -196,22 +196,18 @@ class tlm_initiator_socket :
                                tlm_bw_transport_if<TYPES>,
                                N, POL>
 {
+  typedef tlm_base_initiator_socket<BUSWIDTH,
+                                    tlm_fw_transport_if<TYPES>,
+                                    tlm_bw_transport_if<TYPES>,
+                                    N, POL> base_socket_type;
 public:
-  tlm_initiator_socket() :
-    tlm_base_initiator_socket<BUSWIDTH,
-                         tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES>,
-                         N, POL>()
-  {
-  }
+  tlm_initiator_socket()
+    : base_socket_type()
+  {}
 
-  explicit tlm_initiator_socket(const char* name) :
-    tlm_base_initiator_socket<BUSWIDTH,
-                         tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES>,
-                         N, POL>(name)
-  {
-  }
+  explicit tlm_initiator_socket(const char* name)
+    : base_socket_type(name)
+  {}
 
   virtual const char* kind() const
   {
