@@ -18,9 +18,9 @@
  ****************************************************************************/
 
 /**
- * @file   sc_variant_map.cpp
+ * @file   sc_any_value_map.cpp
  * @author Philipp A. Hartmann, Intel
- * @brief  Test of the sc_variant map interface
+ * @brief  Test of the sc_any_value map interface
  */
 
 #include <systemc>
@@ -28,11 +28,11 @@
 #include <algorithm>
 
 using sc_core::sc_string_view;
-using sc_dt::sc_variant;
-using sc_dt::sc_variant_map;
+using sc_dt::sc_any_value;
+using sc_dt::sc_any_value_map;
 
 namespace sc_dt {
-std::ostream& operator<<( std::ostream& os, sc_variant_map::const_element_reference e )
+std::ostream& operator<<( std::ostream& os, sc_any_value_map::const_element_reference e )
 {
   return os << e.key << "=" << e.value;
 }
@@ -40,12 +40,12 @@ std::ostream& operator<<( std::ostream& os, sc_variant_map::const_element_refere
 
 int sc_main( int, char*[] )
 {
-  sc_variant_map orig;
+  sc_any_value_map orig;
   {
-    sc_variant_map map; // empty
-    sc_variant::map_reference mref = map;
-    sc_variant::const_map_reference cref = map;
-    sc_variant::const_reference v = map;
+    sc_any_value_map map; // empty
+    sc_any_value::map_reference mref = map;
+    sc_any_value::const_map_reference cref = map;
+    sc_any_value::const_reference v = map;
 
     sc_assert( map.size() == 0u );
 
@@ -56,17 +56,17 @@ int sc_main( int, char*[] )
     bool has_thrown = false;
     try {
       // at() cannot be used for insertion
-      map.at("s") = sc_variant();
+      map.at("s") = sc_any_value();
     } catch( const sc_core::sc_report& rpt ) {
       sc_assert( sc_string_view(rpt.get_msg_type())
-                 == sc_core::SC_ID_VARIANT_ACCESS_FAILED_ );
+                 == sc_core::SC_ID_ANY_VALUE_ACCESS_FAILED_ );
       has_thrown = true;
     }
     sc_assert( has_thrown );
 
     // inserting element access
     sc_assert( mref["s"].is_null() );
-    mref["s"] = sc_variant("SystemC");
+    mref["s"] = sc_any_value("SystemC");
 
     sc_assert( mref.size() == 3u );
     sc_assert( v.get_map().size() == 3u );
@@ -97,12 +97,12 @@ int sc_main( int, char*[] )
     sc_assert( mref.crbegin()->value == (--mref.end())->value );
 
     std::copy( mref.cbegin(), mref.cend()
-             , std::ostream_iterator<sc_variant_map::const_element_reference>
+             , std::ostream_iterator<sc_any_value_map::const_element_reference>
                 (std::cout," ") );
     std::cout << std::endl;
 
     std::copy( mref.crbegin(), mref.crend()
-             , std::ostream_iterator<sc_variant_map::const_element_reference>
+             , std::ostream_iterator<sc_any_value_map::const_element_reference>
                 (std::cout," ") );
     std::cout << std::endl;
 
@@ -112,10 +112,10 @@ int sc_main( int, char*[] )
 
     mref.push_entry( "u", 1u);
     mref.push_entry( "v", 2u);
-    mref.push_entry( "w", sc_variant());
+    mref.push_entry( "w", sc_any_value());
 
     std::copy( mref.cbegin(), mref.cend()
-             , std::ostream_iterator<sc_variant_map::const_element_reference>
+             , std::ostream_iterator<sc_any_value_map::const_element_reference>
                 (std::cout," ") );
     std::cout << std::endl;
 
@@ -132,7 +132,7 @@ int sc_main( int, char*[] )
     sc_assert( erased == 4u ); // all duplicate entries removed
 
     std::copy( mref.cbegin(), mref.cend()
-             , std::ostream_iterator<sc_variant_map::const_element_reference>
+             , std::ostream_iterator<sc_any_value_map::const_element_reference>
                 (std::cout," ") );
     std::cout << std::endl;
 
@@ -143,10 +143,10 @@ int sc_main( int, char*[] )
     sc_assert( orig.at("w").is_null() );
   }
   {
-    sc_variant_map map = orig; // copy
+    sc_any_value_map map = orig; // copy
 
-    sc_variant_map::const_iterator it0 = map.find("u");
-    sc_variant_map::const_iterator it1 = map.end() - 1;
+    sc_any_value_map::const_iterator it0 = map.find("u");
+    sc_any_value_map::const_iterator it1 = map.end() - 1;
 
     sc_assert( it0 != map.end() );
     sc_assert( it0->value.get_int() == 1 );
@@ -154,11 +154,11 @@ int sc_main( int, char*[] )
     sc_assert( it1->value.is_null() );
     sc_assert( it1 - it0 == 2 );
 
-    sc_variant_map::iterator it2 = map.erase(it0, it1);
+    sc_any_value_map::iterator it2 = map.erase(it0, it1);
     sc_assert( it2 != map.end() );
 
     std::copy( map.cbegin(), map.cend()
-             , std::ostream_iterator<sc_variant_map::const_element_reference>
+             , std::ostream_iterator<sc_any_value_map::const_element_reference>
                 (std::cout," ") );
     std::cout << std::endl;
   }

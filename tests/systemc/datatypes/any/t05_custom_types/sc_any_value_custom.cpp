@@ -18,14 +18,14 @@
  ****************************************************************************/
 
 /**
- * @file   sc_variant_custom.cpp
+ * @file   sc_any_value_custom.cpp
  * @author Philipp A. Hartmann, Intel
- * @brief  Test for custom type support in sc_variant
+ * @brief  Test for custom type support in sc_any_value
  */
 
 #include <systemc>
 
-using sc_dt::sc_variant;
+using sc_dt::sc_any_value;
 
 // -----------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ struct supported_type
 };
 
 // ADL-based conversion
-bool sc_variant_pack(sc_variant::reference dst, const supported_type& src)
+bool sc_any_value_pack(sc_any_value::reference dst, const supported_type& src)
 {
   dst.set_list()
      .push_back(src.name)
@@ -48,11 +48,11 @@ bool sc_variant_pack(sc_variant::reference dst, const supported_type& src)
   return true;
 }
 
-bool sc_variant_unpack(supported_type& dst, sc_variant::const_reference src)
+bool sc_any_value_unpack(supported_type& dst, sc_any_value::const_reference src)
 {
   if (!src.is_list())
     return false;
-  sc_variant::const_list_reference list = src.get_list();
+  sc_any_value::const_list_reference list = src.get_list();
   return list.size() == 2 &&
          list[0].try_get(dst.name) &&
          list[1].try_get(dst.id);
@@ -67,7 +67,7 @@ using my_ns::supported_type;
 
 struct packable_type { bool x; };
 
-bool sc_variant_pack(sc_variant::reference dst, const packable_type& src)
+bool sc_any_value_pack(sc_any_value::reference dst, const packable_type& src)
 {
   dst.set_bool(src.x);
   return true;
@@ -77,7 +77,7 @@ bool sc_variant_pack(sc_variant::reference dst, const packable_type& src)
 
 struct unpackable_type { double x; };
 
-bool sc_variant_unpack(unpackable_type& dst, sc_variant::const_reference src)
+bool sc_any_value_unpack(unpackable_type& dst, sc_any_value::const_reference src)
 {
   if (!src.is_number())
     return false;
@@ -90,8 +90,8 @@ bool sc_variant_unpack(unpackable_type& dst, sc_variant::const_reference src)
 struct disabled_type { int x; };
 
 namespace sc_dt {
-template<> struct sc_variant_converter<disabled_type>
-  : sc_variant_converter_disabled<disabled_type> {};
+template<> struct sc_any_value_converter<disabled_type>
+  : sc_any_value_converter_disabled<disabled_type> {};
 } // namespace sc_dt
 
 // -----------------------------------------------------------------------
@@ -100,19 +100,19 @@ int sc_main( int, char*[] )
   {
     // unsupported conversion
 #if SC_CPLUSPLUS >= 201103L
-    static_assert( sc_dt::sc_variant_has_pack<unsupported_type>::value == false
-                 , "unsupported_type has sc_variant_pack function" );
-    static_assert( sc_dt::sc_variant_has_unpack<unsupported_type>::value == false
-                 , "unsupported_type has sc_variant_unpack function" );
-    static_assert( sc_dt::sc_variant_has_converter<unsupported_type>::value == false
-                 , "unsupported_type has sc_variant_converter support" );
+    static_assert( sc_dt::sc_any_value_has_pack<unsupported_type>::value == false
+                 , "unsupported_type has sc_any_value_pack function" );
+    static_assert( sc_dt::sc_any_value_has_unpack<unsupported_type>::value == false
+                 , "unsupported_type has sc_any_value_unpack function" );
+    static_assert( sc_dt::sc_any_value_has_converter<unsupported_type>::value == false
+                 , "unsupported_type has sc_any_value_converter support" );
 #endif // C++11
 
     std::cout
       << "unsupported_type: " << std::boolalpha
-      << "has_pack=" << sc_dt::sc_variant_has_pack<unsupported_type>::value
-      << ", has_unpack=" << sc_dt::sc_variant_has_unpack<unsupported_type>::value
-      << ", has_converter=" << sc_dt::sc_variant_has_converter<unsupported_type>::value
+      << "has_pack=" << sc_dt::sc_any_value_has_pack<unsupported_type>::value
+      << ", has_unpack=" << sc_dt::sc_any_value_has_unpack<unsupported_type>::value
+      << ", has_converter=" << sc_dt::sc_any_value_has_converter<unsupported_type>::value
       << std::endl;
 
     // doesn't compile:
@@ -122,23 +122,23 @@ int sc_main( int, char*[] )
   {
    // supported conversion
 #if SC_CPLUSPLUS >= 201103L
-    static_assert( sc_dt::sc_variant_has_pack<supported_type>::value == true
-                 , "supported_type has no sc_variant_pack function" );
-    static_assert( sc_dt::sc_variant_has_unpack<supported_type>::value == true
-                 , "supported_type has no sc_variant_unpack function" );
-    static_assert( sc_dt::sc_variant_has_converter<supported_type>::value == false
-                 , "supported_type has sc_variant_converter support" );
+    static_assert( sc_dt::sc_any_value_has_pack<supported_type>::value == true
+                 , "supported_type has no sc_any_value_pack function" );
+    static_assert( sc_dt::sc_any_value_has_unpack<supported_type>::value == true
+                 , "supported_type has no sc_any_value_unpack function" );
+    static_assert( sc_dt::sc_any_value_has_converter<supported_type>::value == false
+                 , "supported_type has sc_any_value_converter support" );
 #endif // C++11
 
     std::cout
       << "supported_type: " << std::boolalpha
-      << "has_pack=" << sc_dt::sc_variant_has_pack<supported_type>::value
-      << ", has_unpack=" << sc_dt::sc_variant_has_unpack<supported_type>::value
-      << ", has_converter=" << sc_dt::sc_variant_has_converter<supported_type>::value
+      << "has_pack=" << sc_dt::sc_any_value_has_pack<supported_type>::value
+      << ", has_unpack=" << sc_dt::sc_any_value_has_unpack<supported_type>::value
+      << ", has_converter=" << sc_dt::sc_any_value_has_converter<supported_type>::value
       << std::endl;
 
     std::string json = "[\"check\",1]";
-    sc_variant var = sc_variant::from_json( json );
+    sc_any_value var = sc_any_value::from_json( json );
 
     sc_assert( var.is_list() );
     sc_assert( var.to_json() == json );
@@ -162,23 +162,23 @@ int sc_main( int, char*[] )
     std::cout << "supported_type: json=" << var.to_json() << std::endl;
   }
   {
-    sc_variant var;
+    sc_any_value var;
 
     // only "packable" conversion
 #if SC_CPLUSPLUS >= 201103L
-    static_assert( sc_dt::sc_variant_has_pack<packable_type>::value == true
-                 , "packable_type has no sc_variant_pack function" );
-    static_assert( sc_dt::sc_variant_has_unpack<packable_type>::value == false
-                 , "packable_type has sc_variant_unpack function" );
-    static_assert( sc_dt::sc_variant_has_converter<packable_type>::value == false
-                 , "packable_type has sc_variant_converter support" );
+    static_assert( sc_dt::sc_any_value_has_pack<packable_type>::value == true
+                 , "packable_type has no sc_any_value_pack function" );
+    static_assert( sc_dt::sc_any_value_has_unpack<packable_type>::value == false
+                 , "packable_type has sc_any_value_unpack function" );
+    static_assert( sc_dt::sc_any_value_has_converter<packable_type>::value == false
+                 , "packable_type has sc_any_value_converter support" );
 #endif // C++11
 
     std::cout
       << "packable_type: " << std::boolalpha
-      << "has_pack=" << sc_dt::sc_variant_has_pack<packable_type>::value
-      << ", has_unpack=" << sc_dt::sc_variant_has_unpack<packable_type>::value
-      << ", has_converter=" << sc_dt::sc_variant_has_converter<packable_type>::value
+      << "has_pack=" << sc_dt::sc_any_value_has_pack<packable_type>::value
+      << ", has_unpack=" << sc_dt::sc_any_value_has_unpack<packable_type>::value
+      << ", has_converter=" << sc_dt::sc_any_value_has_converter<packable_type>::value
       << std::endl;
 
     packable_type p = { true };
@@ -190,23 +190,23 @@ int sc_main( int, char*[] )
     // sc_assert( var.try_get(p) == false ); // doesn't compile
   }
   {
-    sc_variant var;
+    sc_any_value var;
 
     // only "unpackable" conversion
 #if SC_CPLUSPLUS >= 201103L
-    static_assert( sc_dt::sc_variant_has_pack<unpackable_type>::value == false
-                 , "unpackable_type has sc_variant_pack function" );
-    static_assert( sc_dt::sc_variant_has_unpack<unpackable_type>::value == true
-                 , "unpackable_type has no sc_variant_unpack function" );
-    static_assert( sc_dt::sc_variant_has_converter<unpackable_type>::value == false
-                 , "unpackable_type has sc_variant_converter support" );
+    static_assert( sc_dt::sc_any_value_has_pack<unpackable_type>::value == false
+                 , "unpackable_type has sc_any_value_pack function" );
+    static_assert( sc_dt::sc_any_value_has_unpack<unpackable_type>::value == true
+                 , "unpackable_type has no sc_any_value_unpack function" );
+    static_assert( sc_dt::sc_any_value_has_converter<unpackable_type>::value == false
+                 , "unpackable_type has sc_any_value_converter support" );
 #endif // C++11
 
     std::cout
       << "unpackable_type: " << std::boolalpha
-      << "has_pack=" << sc_dt::sc_variant_has_pack<unpackable_type>::value
-      << ", has_unpack=" << sc_dt::sc_variant_has_unpack<unpackable_type>::value
-      << ", has_converter=" << sc_dt::sc_variant_has_converter<unpackable_type>::value
+      << "has_pack=" << sc_dt::sc_any_value_has_pack<unpackable_type>::value
+      << ", has_unpack=" << sc_dt::sc_any_value_has_unpack<unpackable_type>::value
+      << ", has_converter=" << sc_dt::sc_any_value_has_converter<unpackable_type>::value
       << std::endl;
 
     unpackable_type u = {};
@@ -219,25 +219,25 @@ int sc_main( int, char*[] )
     // sc_assert( var.try_set(u) == false ); // doesn't compile
   }
   {
-    sc_variant var;
+    sc_any_value var;
 
     // disabled conversion
     disabled_type d = { 42 };
 
 #if SC_CPLUSPLUS >= 201103L
-    static_assert( sc_dt::sc_variant_has_pack<disabled_type>::value == true
-                 , "disabled_type has no sc_variant_pack function" );
-    static_assert( sc_dt::sc_variant_has_unpack<disabled_type>::value == true
-                 , "disabled_type has no sc_variant_unpack function" );
-    static_assert( sc_dt::sc_variant_has_converter<disabled_type>::value == false
-                 , "disabled_type has sc_variant_converter specialization" );
+    static_assert( sc_dt::sc_any_value_has_pack<disabled_type>::value == true
+                 , "disabled_type has no sc_any_value_pack function" );
+    static_assert( sc_dt::sc_any_value_has_unpack<disabled_type>::value == true
+                 , "disabled_type has no sc_any_value_unpack function" );
+    static_assert( sc_dt::sc_any_value_has_converter<disabled_type>::value == false
+                 , "disabled_type has sc_any_value_converter specialization" );
 #endif // C++11
 
     std::cout
       << "disabled_type: " << std::boolalpha
-      << "has_pack=" << sc_dt::sc_variant_has_pack<disabled_type>::value
-      << ", has_unpack=" << sc_dt::sc_variant_has_unpack<disabled_type>::value
-      << ", has_converter=" << sc_dt::sc_variant_has_converter<disabled_type>::value
+      << "has_pack=" << sc_dt::sc_any_value_has_pack<disabled_type>::value
+      << ", has_unpack=" << sc_dt::sc_any_value_has_unpack<disabled_type>::value
+      << ", has_converter=" << sc_dt::sc_any_value_has_converter<disabled_type>::value
       << std::endl;
 
     sc_assert( var.is_null() );

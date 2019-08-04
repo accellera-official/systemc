@@ -18,15 +18,15 @@
  ****************************************************************************/
 
 /**
- * @file   sc_variant_move.cpp
+ * @file   sc_any_value_move.cpp
  * @author Philipp A. Hartmann, Intel
- * @brief  Test of the sc_variant move semantics
+ * @brief  Test of the sc_any_value move semantics
  */
 
 #include <systemc>
 #include <iostream>
 
-using sc_dt::sc_variant;
+using sc_dt::sc_any_value;
 
 #define DUMP(v) \
   std::cout << SC_STRINGIFY_HELPER_(v) << " = " << (v).to_json() << std::endl;
@@ -35,7 +35,7 @@ int sc_main( int, char*[] )
 {
   // manual move checks (still copies root node in C++03)
   {
-    sc_variant v("some string");
+    sc_any_value v("some string");
     DUMP(v);
 
     sc_assert( v.is_string() );
@@ -43,7 +43,7 @@ int sc_main( int, char*[] )
     std::string str( v.get_string() );
 
     // manual move
-    sc_variant w( v.move() );
+    sc_any_value w( v.move() );
 
     DUMP(w);
     DUMP(v);
