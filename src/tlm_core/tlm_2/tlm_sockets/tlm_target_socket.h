@@ -219,22 +219,18 @@ class tlm_target_socket :
                             tlm_bw_transport_if<TYPES>,
                             N, POL>
 {
+  typedef tlm_base_target_socket<BUSWIDTH,
+                                 tlm_fw_transport_if<TYPES>,
+                                 tlm_bw_transport_if<TYPES>,
+                                 N, POL> base_socket_type;
 public:
-  tlm_target_socket() :
-    tlm_base_target_socket<BUSWIDTH,
-                      tlm_fw_transport_if<TYPES>,
-                      tlm_bw_transport_if<TYPES>,
-                      N, POL>()
-  {
-  }
+  tlm_target_socket()
+    : base_socket_type()
+  {}
 
-  explicit tlm_target_socket(const char* name) :
-    tlm_base_target_socket<BUSWIDTH,
-                      tlm_fw_transport_if<TYPES>,
-                      tlm_bw_transport_if<TYPES>,
-                      N, POL>(name)
-  {
-  }
+  explicit tlm_target_socket(const char* name)
+    : base_socket_type(name)
+  {}
 
   virtual const char* kind() const
   {
