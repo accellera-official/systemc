@@ -16,8 +16,8 @@
   permissions and limitations under the License.
 
  ****************************************************************************/
-#ifndef SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
-#define SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
+#ifndef SC_DATATYPES_ANY_VALUE_RAPIDJSON_H_INCLUDED_
+#define SC_DATATYPES_ANY_VALUE_RAPIDJSON_H_INCLUDED_
 
 /**
  * @file   sc_rapidjson.h
@@ -26,7 +26,7 @@
  *
  * This file provides a local indirection to include RapidJSON from within
  * the SystemC library.  RapidJSON is used for serialization from/to
- * @ref sc_dt::sc_variant.
+ * @ref sc_dt::sc_any_value.
  *
  * @note This file is @b not part of the public API!
  */
@@ -35,7 +35,7 @@
 #include <iosfwd>
 
 #include "sysc/kernel/sc_cmnhdr.h"
-#include "sysc/datatypes/var/sc_variant_ids.h" // SC_REPORT_ERROR
+#include "sysc/datatypes/any/sc_any_value_ids.h" // SC_REPORT_ERROR
 
 //@cond SC_HIDDEN_FROM_DOXYGEN
 
@@ -62,7 +62,7 @@
 // report error on failing assertions
 #define RAPIDJSON_ASSERT( expr ) \
   ((void)(( SC_LIKELY_(expr) ) ? 0 : \
-    ( SC_REPORT_ERROR( ::sc_core::SC_ID_VARIANT_ASSERTION_FAILED_, #expr ), 0 )))
+    ( SC_REPORT_ERROR( ::sc_core::SC_ID_ANY_VALUE_ASSERTION_FAILED_, #expr ), 0 )))
 
 #include "sysc/packages/rapidjson/include/rapidjson/rapidjson.h"
 
@@ -114,4 +114,4 @@ RAPIDJSON_NAMESPACE_END
 
 //@endcond
 
-#endif // SC_DATATYPES_VAR_RAPIDJSON_H_INCLUDED_
+#endif // SC_DATATYPES_ANY_VALUE_RAPIDJSON_H_INCLUDED_

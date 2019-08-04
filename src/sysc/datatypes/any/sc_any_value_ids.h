@@ -17,8 +17,8 @@
 
  *****************************************************************************/
 
-#ifndef SC_DATATYPES_VARIANT_IDS_H_INCLUDED_
-#define SC_DATATYPES_VARIANT_IDS_H_INCLUDED_
+#ifndef SC_DATATYPES_ANY_VALUE_IDS_H_INCLUDED_
+#define SC_DATATYPES_ANY_VALUE_IDS_H_INCLUDED_
 
 #include "sysc/utils/sc_report.h"
 
@@ -33,14 +33,14 @@
     namespace sc_core { extern const char id[]; }
 #endif
 
-SC_DEFINE_MESSAGE( SC_ID_VARIANT_ACCESS_FAILED_,     500,
-                   "sc_variant access failed" )
-SC_DEFINE_MESSAGE( SC_ID_VARIANT_CONVERSION_FAILED_, 501,
-                   "sc_variant conversion failed" )
-SC_DEFINE_MESSAGE( SC_ID_VARIANT_PARSING_FAILED_,    502,
-                   "sc_variant JSON parsing failed" )
-SC_DEFINE_MESSAGE( SC_ID_VARIANT_ASSERTION_FAILED_,  503,
-                   "sc_variant assertion failed" )
+SC_DEFINE_MESSAGE( SC_ID_ANY_VALUE_ACCESS_FAILED_,     500,
+                   "sc_var access failed" )
+SC_DEFINE_MESSAGE( SC_ID_ANY_VALUE_CONVERSION_FAILED_, 501,
+                   "sc_var conversion failed" )
+SC_DEFINE_MESSAGE( SC_ID_ANY_VALUE_PARSING_FAILED_,    502,
+                   "sc_var JSON parsing failed" )
+SC_DEFINE_MESSAGE( SC_ID_ANY_VALUE_ASSERTION_FAILED_,  503,
+                   "sc_var assertion failed" )
 
-#endif // SC_DATATYPES_VARIANT_H_INCLUDED_
+#endif // SC_DATATYPES_ANY_VALUE_H_INCLUDED_
 // Taf!

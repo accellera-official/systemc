@@ -267,18 +267,18 @@ using sc_dt::sc_logic_Z;
 using sc_dt::sc_logic_X;
 // #endif
 
-using sc_dt::sc_variant;
-using sc_dt::sc_variant_category;
-using sc_dt::sc_variant_converter;
-using sc_dt::sc_variant_list;
-using sc_dt::sc_variant_map;
-using sc_dt::SC_VARIANT_NULL;
-using sc_dt::SC_VARIANT_BOOL;
-using sc_dt::SC_VARIANT_INT;
-using sc_dt::SC_VARIANT_REAL;
-using sc_dt::SC_VARIANT_STRING;
-using sc_dt::SC_VARIANT_LIST;
-using sc_dt::SC_VARIANT_MAP;
+using sc_dt::sc_any_value;
+using sc_dt::sc_any_value_category;
+using sc_dt::sc_any_value_converter;
+using sc_dt::sc_any_value_list;
+using sc_dt::sc_any_value_map;
+using sc_dt::SC_ANY_VALUE_NULL;
+using sc_dt::SC_ANY_VALUE_BOOL;
+using sc_dt::SC_ANY_VALUE_INT;
+using sc_dt::SC_ANY_VALUE_REAL;
+using sc_dt::SC_ANY_VALUE_STRING;
+using sc_dt::SC_ANY_VALUE_LIST;
+using sc_dt::SC_ANY_VALUE_MAP;
 
 #ifdef SC_INCLUDE_FX
     using sc_dt::sc_fxnum;

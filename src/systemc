@@ -106,9 +106,9 @@
 
 #include "sysc/datatypes/misc/sc_concatref.h"
 
-#include "sysc/datatypes/var/sc_variant.h"
-#include "sysc/datatypes/var/sc_variant_converter.h"
-#include "sysc/datatypes/var/sc_variant_iterator.h"
+#include "sysc/datatypes/any/sc_any_value.h"
+#include "sysc/datatypes/any/sc_any_value_converter.h"
+#include "sysc/datatypes/any/sc_any_value_iterator.h"
 
 #ifdef SC_INCLUDE_FX
 #   include "sysc/datatypes/fx/fx.h"

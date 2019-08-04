@@ -18,12 +18,12 @@
  ****************************************************************************/
 
 /**
- * @file   sc_variant.cpp
+ * @file   sc_any_value.cpp
  * @author Philipp A. Hartmann, OFFIS/Intel
  */
 
-#include "sysc/datatypes/var/sc_variant.h"
-#include "sysc/datatypes/var/sc_rapidjson.h"
+#include "sysc/datatypes/any/sc_any_value.h"
+#include "sysc/datatypes/any/sc_rapidjson.h"
 
 #include <algorithm> // std::swap
 #include <sstream> //std::stringstream
@@ -94,18 +94,18 @@ impl_type* impl_pool::free_list_;
 #define THIS \
   (PIMPL(*this))
 
-#define VARIANT_ASSERT( Cond, Msg ) \
+#define ANY_VALUE_ASSERT( Cond, Msg ) \
   do { if( SC_UNLIKELY_(!(Cond)) ) \
-    SC_REPORT_ERROR( sc_core::SC_ID_VARIANT_ACCESS_FAILED_, \
+    SC_REPORT_ERROR( sc_core::SC_ID_ANY_VALUE_ACCESS_FAILED_, \
       Msg "\nFailing condition: " #Cond ); \
   } while( false )
 //@endcond SC_HIDDEN_FROM_DOXYGEN
 
 // ----------------------------------------------------------------------------
-// sc_variant_cref
+// sc_any_value_cref
 
 bool
-operator == ( sc_variant_cref const & left, sc_variant_cref const & right )
+operator == ( sc_any_value_cref const & left, sc_any_value_cref const & right )
 {
   if( PIMPL(left) == PIMPL(right) )
     return true;
@@ -119,123 +119,123 @@ operator == ( sc_variant_cref const & left, sc_variant_cref const & right )
   return DEREF(left) == DEREF(right);
 }
 
-sc_variant_category sc_variant_cref::category() const
+sc_any_value_category sc_any_value_cref::category() const
 {
   if (!THIS)
-    return SC_VARIANT_NULL;
+    return SC_ANY_VALUE_NULL;
 
   switch(THIS->GetType())
   {
   case rapidjson::kFalseType:
   case rapidjson::kTrueType:
-    return SC_VARIANT_BOOL;
+    return SC_ANY_VALUE_BOOL;
 
   case rapidjson::kNumberType:
-    return THIS->IsDouble() ? SC_VARIANT_REAL : SC_VARIANT_INT;
+    return THIS->IsDouble() ? SC_ANY_VALUE_REAL : SC_ANY_VALUE_INT;
 
   case rapidjson::kStringType:
-    return SC_VARIANT_STRING;
+    return SC_ANY_VALUE_STRING;
 
   case rapidjson::kArrayType:
-    return SC_VARIANT_LIST;
+    return SC_ANY_VALUE_LIST;
 
   case rapidjson::kObjectType:
-    return SC_VARIANT_MAP;
+    return SC_ANY_VALUE_MAP;
 
   case rapidjson::kNullType:
   default:
-    return SC_VARIANT_NULL;
+    return SC_ANY_VALUE_NULL;
   }
 }
 
-bool sc_variant_cref::is_null() const
+bool sc_any_value_cref::is_null() const
   { return !THIS || THIS->IsNull(); }
 
-bool sc_variant_cref::is_bool() const
+bool sc_any_value_cref::is_bool() const
   { return THIS && THIS->IsBool(); }
 
-bool sc_variant_cref::is_int() const
+bool sc_any_value_cref::is_int() const
   { return THIS && THIS->IsInt(); }
 
-bool sc_variant_cref::is_int64() const
+bool sc_any_value_cref::is_int64() const
   { return THIS && THIS->IsInt64(); }
 
-bool sc_variant_cref::is_uint() const
+bool sc_any_value_cref::is_uint() const
   { return THIS && THIS->IsUint(); }
 
-bool sc_variant_cref::is_uint64() const
+bool sc_any_value_cref::is_uint64() const
   { return THIS && THIS->IsUint64(); }
 
-bool sc_variant_cref::is_double() const
+bool sc_any_value_cref::is_double() const
   { return THIS && THIS->IsDouble(); }
 
-bool sc_variant_cref::is_string() const
+bool sc_any_value_cref::is_string() const
   { return THIS && THIS->IsString(); }
 
-bool sc_variant_cref::is_list() const
+bool sc_any_value_cref::is_list() const
   { return THIS && THIS->IsArray(); }
 
-bool sc_variant_cref::is_map() const
+bool sc_any_value_cref::is_map() const
   { return THIS && THIS->IsObject(); }
 
 #define ASSERT_TYPE( Cond ) \
-  VARIANT_ASSERT( Cond, "invalid type" )
+  ANY_VALUE_ASSERT( Cond, "invalid type" )
 
-bool sc_variant_cref::get_bool() const
+bool sc_any_value_cref::get_bool() const
 {
   ASSERT_TYPE(is_bool());
   return THIS->GetBool();
 }
 
-int sc_variant_cref::get_int() const
+int sc_any_value_cref::get_int() const
 {
   ASSERT_TYPE(is_int());
   return THIS->GetInt();
 }
 
-unsigned sc_variant_cref::get_uint() const
+unsigned sc_any_value_cref::get_uint() const
 {
   ASSERT_TYPE(is_uint());
   return THIS->GetUint();
 }
 
-int64 sc_variant_cref::get_int64() const
+int64 sc_any_value_cref::get_int64() const
 {
   ASSERT_TYPE(is_int64());
   return THIS->GetInt64();
 }
 
-uint64 sc_variant_cref::get_uint64() const
+uint64 sc_any_value_cref::get_uint64() const
 {
   ASSERT_TYPE(is_uint64());
   return THIS->GetUint64();
 }
 
-double sc_variant_cref::get_double() const
+double sc_any_value_cref::get_double() const
 {
   ASSERT_TYPE(is_number());
   return THIS->GetDouble();
 }
 
-sc_zstring_view sc_variant_cref::get_string() const
+sc_zstring_view sc_any_value_cref::get_string() const
 {
   ASSERT_TYPE(is_string());
   return sc_zstring_view(THIS->GetString());
 }
 
-sc_variant_list_cref sc_variant_cref::get_list() const
+sc_any_value_list_cref sc_any_value_cref::get_list() const
 {
   ASSERT_TYPE(is_list());
-  return sc_variant_list_cref(pimpl_);
+  return sc_any_value_list_cref(pimpl_);
 }
 
-sc_variant_map_cref sc_variant_cref::get_map() const
+sc_any_value_map_cref sc_any_value_cref::get_map() const
 {
   ASSERT_TYPE(is_map());
-  return sc_variant_map_cref(pimpl_);
+  return sc_any_value_map_cref(pimpl_);
 }
 
-std::ostream& operator<<( std::ostream& os, sc_variant_cref const& v )
+std::ostream& operator<<( std::ostream& os, sc_any_value_cref const& v )
 {
   if( v.is_null() ) {
     os << "null";
@@ -248,26 +248,26 @@ std::ostream& operator<<( std::ostream& os, sc_variant_cref const& v )
 }
 
 // ----------------------------------------------------------------------------
-// sc_variant_ref
+// sc_any_value_ref
 
-sc_variant
-sc_variant_ref::move()
+sc_any_value
+sc_any_value_ref::move()
 {
-  sc_variant ret;
+  sc_any_value ret;
   ret.init();         // ensure target validity
   DEREF(ret) = *THIS; // RapidJSON has move semantics upon plain assignment
   return ret;
 }
 
 void
-sc_variant_ref::swap( sc_variant_ref& that )
+sc_any_value_ref::swap( sc_any_value_ref& that )
 {
-  VARIANT_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
+  ANY_VALUE_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
   THIS->Swap( DEREF(that) );
 }
 
-sc_variant_ref
-sc_variant_ref::operator=( const sc_variant_cref& that )
+sc_any_value_ref
+sc_any_value_ref::operator=( const sc_any_value_cref& that )
 {
   if( that.is_null() )
     set_null();
@@ -278,86 +278,86 @@ sc_variant_ref::operator=( const sc_variant_cref& that )
   return *this;
 }
 
-sc_variant_ref
-sc_variant_ref::set_null()
+sc_any_value_ref
+sc_any_value_ref::set_null()
 {
   if( THIS ) THIS->SetNull();
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_bool(bool v)
+sc_any_value_ref
+sc_any_value_ref::set_bool(bool v)
 {
   sc_assert( THIS );
   THIS->SetBool(v);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_int(int v)
+sc_any_value_ref
+sc_any_value_ref::set_int(int v)
 {
   sc_assert( THIS );
   THIS->SetInt(v);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_uint(unsigned v)
+sc_any_value_ref
+sc_any_value_ref::set_uint(unsigned v)
 {
   sc_assert( THIS );
   THIS->SetUint(v);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_int64(int64 v)
+sc_any_value_ref
+sc_any_value_ref::set_int64(int64 v)
 {
   sc_assert( THIS );
   THIS->SetInt64(v);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_uint64(uint64 v)
+sc_any_value_ref
+sc_any_value_ref::set_uint64(uint64 v)
 {
   sc_assert( THIS );
   THIS->SetUint64(v);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_double(double d)
+sc_any_value_ref
+sc_any_value_ref::set_double(double d)
 {
   sc_assert( THIS );
   THIS->SetDouble(d);
   return this_type( THIS );
 }
 
-sc_variant_ref
-sc_variant_ref::set_string( sc_string_view s )
+sc_any_value_ref
+sc_any_value_ref::set_string( sc_string_view s )
 {
   sc_assert( THIS );
   THIS->SetString(s.data(), static_cast<rapidjson::SizeType>(s.size()), json_allocator);
   return this_type( THIS );
 }
 
-sc_variant_list_ref
-sc_variant_ref::set_list()
+sc_any_value_list_ref
+sc_any_value_ref::set_list()
 {
   sc_assert( THIS );
   THIS->SetArray();
-  return sc_variant_list_ref( THIS );
+  return sc_any_value_list_ref( THIS );
 }
 
-sc_variant_map_ref
-sc_variant_ref::set_map()
+sc_any_value_map_ref
+sc_any_value_ref::set_map()
 {
   sc_assert( THIS );
   THIS->SetObject();
-  return sc_variant_map_ref( THIS );
+  return sc_any_value_map_ref( THIS );
 }
 
-std::istream& operator>>( std::istream& is, sc_variant_ref v )
+std::istream& operator>>( std::istream& is, sc_any_value_ref v )
 {
   sc_assert( PIMPL(v) );
   json_document d;
@@ -370,7 +370,7 @@ std::istream& operator>>( std::istream& is, sc_variant_ref v )
   }
   catch ( rapidjson::ParseException const& ex )
   {
-    SC_REPORT_WARNING( sc_core::SC_ID_VARIANT_PARSING_FAILED_, ex.what() );
+    SC_REPORT_WARNING( sc_core::SC_ID_ANY_VALUE_PARSING_FAILED_, ex.what() );
     is.setstate( std::istream::failbit );
   }
   return is;
@@ -379,16 +379,16 @@ std::istream& operator>>( std::istream& is, sc_variant_ref v )
 // ----------------------------------------------------------------------------
 
 //@cond SC_HIDDEN_FROM_DOXYGEN
-namespace sc_variant_impl {
+namespace sc_any_value_impl {
 
 struct iterator_list_tag {};
 struct iterator_map_tag {};
 
 template<typename T> struct iterator_tag;
-template<> struct iterator_tag<sc_variant_cref> : iterator_list_tag {};
-template<> struct iterator_tag<sc_variant_ref>  : iterator_list_tag {};
-template<> struct iterator_tag<sc_variant_map_elem_cref> : iterator_map_tag {};
-template<> struct iterator_tag<sc_variant_map_elem_ref>  : iterator_map_tag {};
+template<> struct iterator_tag<sc_any_value_cref> : iterator_list_tag {};
+template<> struct iterator_tag<sc_any_value_ref>  : iterator_list_tag {};
+template<> struct iterator_tag<sc_any_value_map_elem_cref> : iterator_map_tag {};
+template<> struct iterator_tag<sc_any_value_map_elem_ref>  : iterator_map_tag {};
 
 template<typename T>
 struct iterator_impl_json
@@ -428,59 +428,59 @@ typename iterator_impl<T>::difference_type
 iterator_impl<T>::distance(impl_type that_impl) const
   { return iterator_impl_json<T>::distance( that_impl, impl_, iterator_tag<T>() ); }
 
-template class iterator_impl<sc_variant_cref>;
-template class iterator_impl<sc_variant_ref>;
-template class iterator_impl<sc_variant_map_elem_cref>;
-template class iterator_impl<sc_variant_map_elem_ref>;
-} // namespace sc_variant_impl
+template class iterator_impl<sc_any_value_cref>;
+template class iterator_impl<sc_any_value_ref>;
+template class iterator_impl<sc_any_value_map_elem_cref>;
+template class iterator_impl<sc_any_value_map_elem_ref>;
+} // namespace sc_any_value_impl
 ///@endcond
 
-template class sc_variant_iterator<sc_variant_cref>;
-template class sc_variant_iterator<sc_variant_ref>;
-template class sc_variant_iterator<sc_variant_map_elem_cref>;
-template class sc_variant_iterator<sc_variant_map_elem_ref>;
+template class sc_any_value_iterator<sc_any_value_cref>;
+template class sc_any_value_iterator<sc_any_value_ref>;
+template class sc_any_value_iterator<sc_any_value_map_elem_cref>;
+template class sc_any_value_iterator<sc_any_value_map_elem_ref>;
 
 // ----------------------------------------------------------------------------
-// sc_variant_list_cref
+// sc_any_value_list_cref
 
-sc_variant_list_cref::size_type
-sc_variant_list_cref::size() const
+sc_any_value_list_cref::size_type
+sc_any_value_list_cref::size() const
   { return THIS->Size(); }
 
-sc_variant_list_cref::difference_type
-sc_variant_list_cref::ssize() const
+sc_any_value_list_cref::difference_type
+sc_any_value_list_cref::ssize() const
   { return static_cast<difference_type>(THIS->Size()); }
 
-sc_variant_list_cref::size_type
-sc_variant_list_cref::capacity() const
+sc_any_value_list_cref::size_type
+sc_any_value_list_cref::capacity() const
   { return THIS->Capacity(); }
 
-sc_variant_cref
-sc_variant_list_cref::at( size_type index ) const
+sc_any_value_cref
+sc_any_value_list_cref::at( size_type index ) const
 {
-  VARIANT_ASSERT( index < size(), "index out of bounds" );
-  return sc_variant_cref( &(*THIS)[static_cast<rapidjson::SizeType>(index)] );
+  ANY_VALUE_ASSERT( index < size(), "index out of bounds" );
+  return sc_any_value_cref( &(*THIS)[static_cast<rapidjson::SizeType>(index)] );
 }
 
-sc_variant_cref
-sc_variant_list_cref::operator[]( size_type index ) const
-  { return sc_variant_cref( &(*THIS)[static_cast<rapidjson::SizeType>(index)] ); }
+sc_any_value_cref
+sc_any_value_list_cref::operator[]( size_type index ) const
+  { return sc_any_value_cref( &(*THIS)[static_cast<rapidjson::SizeType>(index)] ); }
 
-sc_variant_list_cref::const_iterator
-sc_variant_list_cref::cbegin() const
+sc_any_value_list_cref::const_iterator
+sc_any_value_list_cref::cbegin() const
   { return const_iterator(THIS->Begin()); }
 
-sc_variant_list_cref::const_iterator
-sc_variant_list_cref::cend() const
+sc_any_value_list_cref::const_iterator
+sc_any_value_list_cref::cend() const
   { return const_iterator(THIS->End()); }
 
 // ----------------------------------------------------------------------------
-// sc_variant_list_ref
+// sc_any_value_list_ref
 
-sc_variant
-sc_variant_list_ref::move()
+sc_any_value
+sc_any_value_list_ref::move()
 {
-  sc_variant ret;
+  sc_any_value ret;
   ret.set_list();
   DEREF(ret) = *THIS; // RapidJSON has move semantics upon plain assignment
   THIS->SetArray();
@@ -488,29 +488,29 @@ sc_variant_list_ref::move()
 }
 
 void
-sc_variant_list_ref::swap(this_type & that)
+sc_any_value_list_ref::swap(this_type & that)
 {
-  VARIANT_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
+  ANY_VALUE_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
   THIS->Swap( DEREF(that) );
 }
 
-sc_variant_list_ref
-sc_variant_list_ref::clear()
+sc_any_value_list_ref
+sc_any_value_list_ref::clear()
 {
   THIS->Clear();
   return *this;
 }
 
-sc_variant_list_ref
-sc_variant_list_ref::reserve( size_type new_capacity )
+sc_any_value_list_ref
+sc_any_value_list_ref::reserve( size_type new_capacity )
 {
   THIS->Reserve( static_cast<rapidjson::SizeType>(new_capacity)
                , json_allocator );
   return *this;
 }
 
-sc_variant_list_ref
-sc_variant_list_ref::push_back( const_reference value )
+sc_any_value_list_ref
+sc_any_value_list_ref::push_back( const_reference value )
 {
   json_value v;
   if( PIMPL(value) )
@@ -520,8 +520,8 @@ sc_variant_list_ref::push_back( const_reference value )
 }
 
 #if SC_CPLUSPLUS >= 201103L // rvalue refs - C++11
-sc_variant_list_ref
-sc_variant_list_ref::push_back( sc_variant&& value )
+sc_any_value_list_ref
+sc_any_value_list_ref::push_back( sc_any_value&& value )
 {
   json_value v;
   if( PIMPL(value) )
@@ -531,28 +531,28 @@ sc_variant_list_ref::push_back( sc_variant&& value )
 }
 #endif // rvalue refs - C++11
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::begin()
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::begin()
   { return iterator(THIS->Begin()); }
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::end()
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::end()
   { return iterator(THIS->End()); }
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::insert( const_iterator pos, const_reference value )
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::insert( const_iterator pos, const_reference value )
 {
   return insert(pos, 1u, value);
 }
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::insert( const_iterator pos, size_type count, const_reference value )
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::insert( const_iterator pos, size_type count, const_reference value )
 {
   // RapidJSON doesn't support Insert, yet
   json_value_iter json_pos = static_cast<json_value_iter>(pos.raw());
   size_type       offset   = json_pos - THIS->Begin();
 
-  VARIANT_ASSERT( offset <= THIS->Size(), "invalid insertion position" );
+  ANY_VALUE_ASSERT( offset <= THIS->Size(), "invalid insertion position" );
 
   if (!count) // nothing to insert
     return iterator(json_pos);
@@ -578,15 +578,15 @@ sc_variant_list_ref::insert( const_iterator pos, size_type count, const_referenc
   return iterator(THIS->Begin() + offset); // iterator to first inserted element
 }
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::erase(const_iterator pos)
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::erase(const_iterator pos)
 {
   json_value_iter json_pos = static_cast<json_value_iter>(pos.raw());
   return iterator( THIS->Erase(json_pos) );
 }
 
-sc_variant_list_ref::iterator
-sc_variant_list_ref::erase(const_iterator first, const_iterator last)
+sc_any_value_list_ref::iterator
+sc_any_value_list_ref::erase(const_iterator first, const_iterator last)
 {
   json_value_iter json_first = static_cast<json_value_iter>(first.raw());
   json_value_iter json_last  = static_cast<json_value_iter>(last.raw());
@@ -594,29 +594,29 @@ sc_variant_list_ref::erase(const_iterator first, const_iterator last)
 }
 
 void
-sc_variant_list_ref::pop_back()
+sc_any_value_list_ref::pop_back()
   { THIS->PopBack(); }
 
 // ----------------------------------------------------------------------------
-// sc_variant_map_cref
+// sc_any_value_map_cref
 
-sc_variant_map_elem_cref::sc_variant_map_elem_cref(void* raw)
+sc_any_value_map_elem_cref::sc_any_value_map_elem_cref(void* raw)
   : key  ( static_cast<json_member*>(raw)->name.GetString() )
   , value( &static_cast<json_member*>(raw)->value )
   , pimpl_(raw)
 {}
 
-sc_variant_map_cref::size_type
-sc_variant_map_cref::size() const
+sc_any_value_map_cref::size_type
+sc_any_value_map_cref::size() const
   { return THIS->MemberCount(); }
 
-sc_variant_map_cref::difference_type
-sc_variant_map_cref::ssize() const
+sc_any_value_map_cref::difference_type
+sc_any_value_map_cref::ssize() const
   { return static_cast<difference_type>(THIS->MemberCount()); }
 
-sc_variant_cref::impl_type
-sc_variant_map_cref::do_lookup( sc_string_view key
-                              , lookup_mode mode /* = KEY_REQUIRED */ ) const
+sc_any_value_cref::impl_type
+sc_any_value_map_cref::do_lookup( sc_string_view key
+                          , lookup_mode mode /* = KEY_REQUIRED */ ) const
 {
   json_value kv( rapidjson::StringRef(key.data(), key.size()) );
   json_value::ConstMemberIterator it = THIS->FindMember(kv);
@@ -638,38 +638,38 @@ sc_variant_map_cref::do_lookup( sc_string_view key
   }
 
   std::stringstream ss;
-  ss << "sc_variant map has no element with key '" << key << "'";
-  SC_REPORT_ERROR( sc_core::SC_ID_VARIANT_ACCESS_FAILED_, ss.str().c_str() );
+  ss << "sc_any_value map has no element with key '" << key << "'";
+  SC_REPORT_ERROR( sc_core::SC_ID_ANY_VALUE_ACCESS_FAILED_, ss.str().c_str() );
   return NULL;
 }
 
-sc_variant_map_cref::const_iterator
-sc_variant_map_cref::find(sc_string_view key) const
+sc_any_value_map_cref::const_iterator
+sc_any_value_map_cref::find(sc_string_view key) const
 {
   return const_iterator(THIS->FindMember(rapidjson::StringRef(key.data(), key.size())));
 }
 
-sc_variant_map_cref::const_iterator
-sc_variant_map_cref::cbegin() const
+sc_any_value_map_cref::const_iterator
+sc_any_value_map_cref::cbegin() const
   { return const_iterator(THIS->MemberBegin()); }
 
-sc_variant_map_cref::const_iterator
-sc_variant_map_cref::cend() const
+sc_any_value_map_cref::const_iterator
+sc_any_value_map_cref::cend() const
   { return const_iterator(THIS->MemberEnd()); }
 
 // ----------------------------------------------------------------------------
-// sc_variant_map_ref
+// sc_any_value_map_ref
 
-sc_variant_map_elem_ref::sc_variant_map_elem_ref(void* raw)
+sc_any_value_map_elem_ref::sc_any_value_map_elem_ref(void* raw)
   : key  ( static_cast<json_member*>(raw)->name.GetString() )
   , value( &static_cast<json_member*>(raw)->value )
   , pimpl_(raw)
 {}
 
-sc_variant
-sc_variant_map_ref::move()
+sc_any_value
+sc_any_value_map_ref::move()
 {
-  sc_variant ret;
+  sc_any_value ret;
   ret.set_map();
   DEREF(ret) = *THIS; // RapidJSON has move semantics upon plain assignment
   THIS->SetObject();
@@ -677,22 +677,22 @@ sc_variant_map_ref::move()
 }
 
 void
-sc_variant_map_ref::swap(this_type & that)
+sc_any_value_map_ref::swap(this_type & that)
 {
-  VARIANT_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
+  ANY_VALUE_ASSERT( pimpl_ && that.pimpl_, "swap with invalid value failed" );
   THIS->Swap( DEREF(that) );
 }
 
-sc_variant_map_ref
-sc_variant_map_ref::clear()
+sc_any_value_map_ref
+sc_any_value_map_ref::clear()
 {
   THIS->RemoveAllMembers();
   return *this;
 }
 
-sc_variant_map_ref
-sc_variant_map_ref::push_entry( sc_string_view key
-                              , sc_variant::const_reference  value )
+sc_any_value_map_ref
+sc_any_value_map_ref::push_entry( sc_string_view key
+                          , sc_any_value::const_reference value )
 {
   json_value k( key.data(), static_cast<rapidjson::SizeType>(key.size()), json_allocator );
   json_value v;
@@ -703,8 +703,8 @@ sc_variant_map_ref::push_entry( sc_string_view key
 }
 
 #if SC_CPLUSPLUS >= 201103L // rvalue refs - C++11
-sc_variant_map_ref
-sc_variant_map_ref::push_entry( sc_string_view key, sc_variant&& value )
+sc_any_value_map_ref
+sc_any_value_map_ref::push_entry( sc_string_view key, sc_any_value&& value )
 {
   json_value k( key.data(), static_cast<rapidjson::SizeType>(key.size()), json_allocator );
   json_value v;
@@ -715,16 +715,16 @@ sc_variant_map_ref::push_entry( sc_string_view key, sc_variant&& value )
 }
 #endif // rvalue refs - C++11
 
-sc_variant_map_ref::iterator
-sc_variant_map_ref::begin()
+sc_any_value_map_ref::iterator
+sc_any_value_map_ref::begin()
   { return iterator(THIS->MemberBegin()); }
 
-sc_variant_map_ref::iterator
-sc_variant_map_ref::end()
+sc_any_value_map_ref::iterator
+sc_any_value_map_ref::end()
   { return iterator(THIS->MemberEnd()); }
 
-sc_variant_map_ref::size_type
-sc_variant_map_ref::erase(sc_string_view key)
+sc_any_value_map_ref::size_type
+sc_any_value_map_ref::erase(sc_string_view key)
 {
   json_value json_key(rapidjson::StringRef(key.data(), key.size()));
   size_type  count = 0;
@@ -737,15 +737,15 @@ sc_variant_map_ref::erase(sc_string_view key)
   return count;
 }
 
-sc_variant_map_ref::iterator
-sc_variant_map_ref::erase(const_iterator pos)
+sc_any_value_map_ref::iterator
+sc_any_value_map_ref::erase(const_iterator pos)
 {
   json_member_iter json_pos = static_cast<json_member_iter>(pos.raw());
   return iterator( THIS->EraseMember(json_pos) );
 }
 
-sc_variant_map_ref::iterator
-sc_variant_map_ref::erase(const_iterator first, const_iterator last)
+sc_any_value_map_ref::iterator
+sc_any_value_map_ref::erase(const_iterator first, const_iterator last)
 {
   json_member_iter json_first = static_cast<json_member_iter>(first.raw());
   json_member_iter json_last  = static_cast<json_member_iter>(last.raw());
@@ -753,25 +753,25 @@ sc_variant_map_ref::erase(const_iterator first, const_iterator last)
 }
 
 // ----------------------------------------------------------------------------
-// sc_variant(, _list, _map ) -- owning wrapper implementations
+// sc_any_value(, _list, _map ) -- owning wrapper implementations
 
 #define WRAPPER_ASSIGN_PRECOND_(Kind) \
   WRAPPER_ASSIGN_PRECOND_FOR_ ## Kind
-#define WRAPPER_ASSIGN_PRECOND_FOR_sc_variant \
+#define WRAPPER_ASSIGN_PRECOND_FOR_sc_any_value \
     if( that.is_null() ) { set_null(); return *this; } \
     init()
-#define WRAPPER_ASSIGN_PRECOND_FOR_sc_variant_list \
+#define WRAPPER_ASSIGN_PRECOND_FOR_sc_any_value_list \
   sc_assert( is_list() && that.is_list() )
-#define WRAPPER_ASSIGN_PRECOND_FOR_sc_variant_map \
+#define WRAPPER_ASSIGN_PRECOND_FOR_sc_any_value_map \
   sc_assert( is_map() && that.is_map() )
 
 #define WRAPPER_DO_INIT_(Kind) \
   WRAPPER_DO_INIT_ ## Kind
-#define WRAPPER_DO_INIT_sc_variant \
+#define WRAPPER_DO_INIT_sc_any_value \
   ((void)0)
-#define WRAPPER_DO_INIT_sc_variant_list \
+#define WRAPPER_DO_INIT_sc_any_value_list \
   (THIS)->SetArray()
-#define WRAPPER_DO_INIT_sc_variant_map \
+#define WRAPPER_DO_INIT_sc_any_value_map \
   (THIS)->SetObject()
 
 #define DEFINE_WRAPPER_(Kind)                          \
@@ -805,21 +805,21 @@ sc_variant_map_ref::erase(const_iterator first, const_iterator last)
     impl_pool::deallocate(impl_cast(own_pimpl_));      \
   }
 
-DEFINE_WRAPPER_(sc_variant)
-DEFINE_WRAPPER_(sc_variant_list)
-DEFINE_WRAPPER_(sc_variant_map)
+DEFINE_WRAPPER_(sc_any_value)
+DEFINE_WRAPPER_(sc_any_value_list)
+DEFINE_WRAPPER_(sc_any_value_map)
 
 #if SC_CPLUSPLUS >= 201103L // rvalue refs - C++11
 
-sc_variant::sc_variant( this_type && that )
-  : sc_variant_ref(std::move(that.pimpl_))
+sc_any_value::sc_any_value( this_type && that )
+  : sc_any_value_ref(std::move(that.pimpl_))
   , own_pimpl_(std::move(that.own_pimpl_))
 {
   that.pimpl_ = NULL;
   that.own_pimpl_ = NULL;
 }
 
-sc_variant::sc_variant( sc_variant_list && that )
+sc_any_value::sc_any_value( sc_any_value_list && that )
   : own_pimpl_()
 {
   do_init();
@@ -827,7 +827,7 @@ sc_variant::sc_variant( sc_variant_list && that )
   DEREF(that).SetArray();
 }
 
-sc_variant_list::sc_variant_list( this_type && that )
+sc_any_value_list::sc_any_value_list( this_type && that )
   : own_pimpl_()
 {
   do_init();
@@ -835,7 +835,7 @@ sc_variant_list::sc_variant_list( this_type && that )
   DEREF(that).SetArray();
 }
 
-sc_variant::sc_variant( sc_variant_map && that )
+sc_any_value::sc_any_value( sc_any_value_map && that )
   : own_pimpl_()
 {
   do_init();
@@ -843,7 +843,7 @@ sc_variant::sc_variant( sc_variant_map && that )
   DEREF(that).SetObject();
 }
 
-sc_variant_map::sc_variant_map( this_type && that )
+sc_any_value_map::sc_any_value_map( this_type && that )
   : own_pimpl_()
 {
   do_init();
@@ -851,7 +851,7 @@ sc_variant_map::sc_variant_map( this_type && that )
   DEREF(that).SetObject();
 }
 
-sc_variant& sc_variant::operator=( this_type && that )
+sc_any_value& sc_any_value::operator=( this_type && that )
 {
   if (own_pimpl_ == that.own_pimpl_) return *this;
   impl_pool::deallocate(impl_cast(own_pimpl_));
@@ -860,7 +860,7 @@ sc_variant& sc_variant::operator=( this_type && that )
   return *this;
 }
 
-sc_variant& sc_variant::operator=( sc_variant_list && that )
+sc_any_value& sc_any_value::operator=( sc_any_value_list && that )
 {
   init();
   *THIS = std::move(DEREF(that));
@@ -868,7 +868,7 @@ sc_variant& sc_variant::operator=( sc_variant_list && that )
   return *this;
 }
 
-sc_variant_list& sc_variant_list::operator=(this_type && that)
+sc_any_value_list& sc_any_value_list::operator=(this_type && that)
 {
   if (own_pimpl_ == that.own_pimpl_) return *this;
   *THIS = std::move(DEREF(that));
@@ -876,7 +876,7 @@ sc_variant_list& sc_variant_list::operator=(this_type && that)
   return *this;
 }
 
-sc_variant& sc_variant::operator=(sc_variant_map && that)
+sc_any_value& sc_any_value::operator=(sc_any_value_map && that)
 {
   init();
   *THIS = std::move(DEREF(that));
@@ -884,7 +884,7 @@ sc_variant& sc_variant::operator=(sc_variant_map && that)
   return *this;
 }
 
-sc_variant_map& sc_variant_map::operator=(this_type && that)
+sc_any_value_map& sc_any_value_map::operator=(this_type && that)
 {
   if (own_pimpl_ == that.own_pimpl_) return *this;
   *THIS = std::move(DEREF(that));
@@ -898,7 +898,7 @@ sc_variant_map& sc_variant_map::operator=(this_type && that)
 // JSON (de)serialize
 
 std::string
-sc_variant_cref::to_json() const
+sc_any_value_cref::to_json() const
 {
   std::string dst;
   rapidjson::StringOutputStream str(dst);
@@ -908,14 +908,14 @@ sc_variant_cref::to_json() const
   } else {
     THIS->Accept(writer);
   }
-  VARIANT_ASSERT(writer.IsComplete(), "incomplete JSON sequence");
+  ANY_VALUE_ASSERT(writer.IsComplete(), "incomplete JSON sequence");
   return dst;
 }
 
-sc_variant
-sc_variant::from_json( sc_string_view json )
+sc_any_value
+sc_any_value::from_json( sc_string_view json )
 {
-  sc_variant v;
+  sc_any_value v;
   json_document doc;
   try
   {
@@ -925,7 +925,7 @@ sc_variant::from_json( sc_string_view json )
   }
   catch ( rapidjson::ParseException const & ex )
   {
-    SC_REPORT_ERROR( sc_core::SC_ID_VARIANT_PARSING_FAILED_, ex.what() );
+    SC_REPORT_ERROR( sc_core::SC_ID_ANY_VALUE_PARSING_FAILED_, ex.what() );
   }
   return v;
 }

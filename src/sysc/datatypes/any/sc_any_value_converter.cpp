@@ -18,13 +18,13 @@
  ****************************************************************************/
 
 /**
- * @file   sc_variant_converter.cpp
- * @brief  conversions from and to a @ref sc_variant (common types)
+ * @file   sc_any_value_converter.cpp
+ * @brief  conversions from and to a @ref sc_any_value (common types)
  * @author Philipp A. Hartmann, OFFIS/Intel
  */
 
-#define SC_BUILD_VARIANT
-#include "sysc/datatypes/var/sc_variant_converter.h"
+#define SC_BUILD_ANY_VALUE
+#include "sysc/datatypes/any/sc_any_value_converter.h"
 
 #include "sysc/kernel/sc_time.h"
 #include "sysc/datatypes/bit/sc_logic.h"
@@ -46,11 +46,11 @@ namespace sc_dt {
 
 #define DEFINE_PACK_( Type )                                                  \
   template<> bool                                                             \
-  sc_variant_converter<Type>::pack( sc_variant::reference dst, type const & src )
+  sc_any_value_converter<Type>::pack( sc_any_value::reference dst, type const & src )
 
 #define DEFINE_UNPACK_(Type)                                                  \
   template<> bool                                                             \
-  sc_variant_converter<Type>::unpack( type & dst, sc_variant::const_reference src )
+  sc_any_value_converter<Type>::unpack( type & dst, sc_any_value::const_reference src )
 
 
 // ----------------------------------------------------------------------------
@@ -117,18 +117,18 @@ DEFINE_UNPACK_( sc_core::sc_time )
     return true;
   }
 
-  sc_variant value, unit;
+  sc_any_value value, unit;
   // encoded as ordered (value,unit) tuple
   if( src.is_list() && src.get_list().size() == 2 )
   {
-    sc_variant::const_list_reference l = src.get_list();
+    sc_any_value::const_list_reference l = src.get_list();
       value = l[0];
       unit  = l[1];
   }
   // encoded as map: "value"=, "unit"=
   else if( src.is_map() && src.get_map().size() == 2 )
   {
-    sc_variant::const_map_reference m = src.get_map();
+    sc_any_value::const_map_reference m = src.get_map();
     if( m.has_entry("value") && m.has_entry("unit") )
     {
       value = m.at("value");
@@ -313,7 +313,7 @@ DEFINE_UNPACK_( sc_lv_base )
 
 template<typename FxType>
 static bool
-sc_variant_unpack_fx( FxType& dst, sc_variant::const_reference src )
+sc_any_value_unpack_fx( FxType& dst, sc_any_value::const_reference src )
 {
   if( src.is_int64() ) {
     dst = src.get_int64();
@@ -342,7 +342,7 @@ DEFINE_PACK_( sc_fxval )
 
 DEFINE_UNPACK_( sc_fxval )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 DEFINE_PACK_( sc_fxval_fast )
@@ -353,7 +353,7 @@ DEFINE_PACK_( sc_fxval_fast )
 
 DEFINE_UNPACK_( sc_fxval_fast )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 DEFINE_PACK_( sc_fix )
@@ -364,7 +364,7 @@ DEFINE_PACK_( sc_fix )
 
 DEFINE_UNPACK_( sc_fix )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 DEFINE_PACK_( sc_fix_fast )
@@ -375,7 +375,7 @@ DEFINE_PACK_( sc_fix_fast )
 
 DEFINE_UNPACK_( sc_fix_fast )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 DEFINE_PACK_( sc_ufix )
@@ -386,7 +386,7 @@ DEFINE_PACK_( sc_ufix )
 
 DEFINE_UNPACK_( sc_ufix )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 DEFINE_PACK_( sc_ufix_fast )
@@ -397,38 +397,38 @@ DEFINE_PACK_( sc_ufix_fast )
 
 DEFINE_UNPACK_( sc_ufix_fast )
 {
-  return sc_variant_unpack_fx(dst,src);
+  return sc_any_value_unpack_fx(dst,src);
 }
 
 #endif // SC_INCLUDE_FX
 // ----------------------------------------------------------------------------
 // explicit template instantiations
 
-template struct sc_variant_converter<bool>;
-template struct sc_variant_converter<int>;
-template struct sc_variant_converter<int64>;
-template struct sc_variant_converter<unsigned>;
-template struct sc_variant_converter<uint64>;
-template struct sc_variant_converter<double>;
-template struct sc_variant_converter<std::string>;
+template struct sc_any_value_converter<bool>;
+template struct sc_any_value_converter<int>;
+template struct sc_any_value_converter<int64>;
+template struct sc_any_value_converter<unsigned>;
+template struct sc_any_value_converter<uint64>;
+template struct sc_any_value_converter<double>;
+template struct sc_any_value_converter<std::string>;
 
-template struct sc_variant_converter<sc_core::sc_string_view>;
-template struct sc_variant_converter<sc_core::sc_time>;
-template struct sc_variant_converter<sc_logic>;
-template struct sc_variant_converter<sc_int_base>;
-template struct sc_variant_converter<sc_uint_base>;
-template struct sc_variant_converter<sc_signed>;
-template struct sc_variant_converter<sc_unsigned>;
-template struct sc_variant_converter<sc_bv_base>;
-template struct sc_variant_converter<sc_lv_base>;
+template struct sc_any_value_converter<sc_core::sc_string_view>;
+template struct sc_any_value_converter<sc_core::sc_time>;
+template struct sc_any_value_converter<sc_logic>;
+template struct sc_any_value_converter<sc_int_base>;
+template struct sc_any_value_converter<sc_uint_base>;
+template struct sc_any_value_converter<sc_signed>;
+template struct sc_any_value_converter<sc_unsigned>;
+template struct sc_any_value_converter<sc_bv_base>;
+template struct sc_any_value_converter<sc_lv_base>;
 
 #ifdef SC_INCLUDE_FX
-template struct sc_variant_converter<sc_fxval>;
-template struct sc_variant_converter<sc_fxval_fast>;
-template struct sc_variant_converter<sc_fix>;
-template struct sc_variant_converter<sc_fix_fast>;
-template struct sc_variant_converter<sc_ufix>;
-template struct sc_variant_converter<sc_ufix_fast>;
+template struct sc_any_value_converter<sc_fxval>;
+template struct sc_any_value_converter<sc_fxval_fast>;
+template struct sc_any_value_converter<sc_fix>;
+template struct sc_any_value_converter<sc_fix_fast>;
+template struct sc_any_value_converter<sc_ufix>;
+template struct sc_any_value_converter<sc_ufix_fast>;
 #endif // SC_INCLUDE_FX
 
 } // namespace sc_dt

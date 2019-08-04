@@ -17,35 +17,35 @@
 
  *****************************************************************************/
 
-#ifndef SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_
-#define SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_
+#ifndef SC_DATATYPES_ANY_VALUE_ITERATOR_H_INCLUDED_
+#define SC_DATATYPES_ANY_VALUE_ITERATOR_H_INCLUDED_
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include <iterator> // std::reverse_iterator
 
 /**
- * @file   sc_variant_iterator.h
+ * @file   sc_any_value_iterator.h
  * @author Philipp A. Hartmann, Intel
  */
 
 namespace sc_dt {
 
 // forward declarations
-class sc_variant;
-class sc_variant_cref;
-class sc_variant_ref;
-class sc_variant_list_cref;
-class sc_variant_list_ref;
-class sc_variant_map_cref;
-class sc_variant_map_ref;
-class sc_variant_map_elem_ref;
-class sc_variant_map_elem_cref;
-template<typename T> class sc_variant_iterator;
+class sc_any_value;
+class sc_any_value_cref;
+class sc_any_value_ref;
+class sc_any_value_list_cref;
+class sc_any_value_list_ref;
+class sc_any_value_map_cref;
+class sc_any_value_map_ref;
+class sc_any_value_map_elem_ref;
+class sc_any_value_map_elem_cref;
+template<typename T> class sc_any_value_iterator;
 
 //@cond SC_HIDDEN_FROM_DOXYGEN
-namespace sc_variant_impl {
+namespace sc_any_value_impl {
 
-/// helper class to avoid dangling pointers to sc_variant reference objects
+/// helper class to avoid dangling pointers to sc_any_value reference objects
 template<typename T> struct proxy_ptr
 {
   typedef T element_type;
@@ -66,7 +66,7 @@ private:
   T ref_; // extend lifetime of reference
 };
 
-/// helper class to implement a sc_variant_iterator
+/// helper class to implement a sc_any_value_iterator
 template<typename T> class iterator_impl
 {
 public:
@@ -101,31 +101,31 @@ private:
   impl_type  impl_; // underlying iterator,
 };
 
-} // namespace sc_variant_impl
+} // namespace sc_any_value_impl
 //@endcond
 
 /**
- * @brief Generic iterator impementation for \ref sc_variant lists and maps
+ * @brief Generic iterator impementation for \ref sc_any_value lists and maps
  *
- * @see sc_variant_list, sc_variant_map
+ * @see sc_any_value_list, sc_any_value_map
  */
 template<typename T>
-class sc_variant_iterator
-  : protected sc_variant_impl::iterator_impl<T>
+class sc_any_value_iterator
+  : protected sc_any_value_impl::iterator_impl<T>
 {
-  typedef sc_variant_impl::iterator_impl<T> impl;
-  typedef sc_variant_iterator<typename T::const_reference> const_type;
-  typedef sc_variant_iterator<typename T::reference>       nonconst_type;
+  typedef sc_any_value_impl::iterator_impl<T> impl;
+  typedef sc_any_value_iterator<typename T::const_reference> const_type;
+  typedef sc_any_value_iterator<typename T::reference>       nonconst_type;
 
-  friend class sc_variant_list_cref;
-  friend class sc_variant_list_ref;
-  friend class sc_variant_map_cref;
-  friend class sc_variant_map_ref;
-  template<typename U> friend class sc_variant_iterator;
+  friend class sc_any_value_list_cref;
+  friend class sc_any_value_list_ref;
+  friend class sc_any_value_map_cref;
+  friend class sc_any_value_map_ref;
+  template<typename U> friend class sc_any_value_iterator;
 
 private:
   /// internal constructor
-  sc_variant_iterator(typename impl::impl_type r) : impl(r) {}
+  sc_any_value_iterator(typename impl::impl_type r) : impl(r) {}
 
 public:
   /// @name C++ standard iterator types
@@ -138,31 +138,31 @@ public:
   ///@}
 
   /// constructs an invalid iterator (non-dereferencable, non-incrementable)
-  sc_variant_iterator() : impl() {}
+  sc_any_value_iterator() : impl() {}
   /// constructs an iterator from a potentially less \c const iterator
-  sc_variant_iterator(const nonconst_type & that)
+  sc_any_value_iterator(const nonconst_type & that)
     : impl(that.raw()) {}
 
   /// @name Unary increment/decrement operators
   ///@{
-  sc_variant_iterator& operator++(){ impl::increment(); return *this; }
-  sc_variant_iterator& operator--(){ impl::decrement(); return *this; }
-  sc_variant_iterator  operator++(int)
-    { sc_variant_iterator old(*this); impl::increment(); return old; }
-  sc_variant_iterator  operator--(int)
-    { sc_variant_iterator old(*this); impl::decrement(); return old; }
+  sc_any_value_iterator& operator++(){ impl::increment(); return *this; }
+  sc_any_value_iterator& operator--(){ impl::decrement(); return *this; }
+  sc_any_value_iterator  operator++(int)
+    { sc_any_value_iterator old(*this); impl::increment(); return old; }
+  sc_any_value_iterator  operator--(int)
+    { sc_any_value_iterator old(*this); impl::decrement(); return old; }
   ///@}
 
   /// @name Binary increment/decrement operators
   ///@{
-  sc_variant_iterator  operator+( difference_type n ) const
-    { return sc_variant_iterator( impl::advance(n) ); }
-  sc_variant_iterator  operator-( difference_type n ) const
-    { return sc_variant_iterator( impl::advance(-n) ); }
+  sc_any_value_iterator  operator+( difference_type n ) const
+    { return sc_any_value_iterator( impl::advance(n) ); }
+  sc_any_value_iterator  operator-( difference_type n ) const
+    { return sc_any_value_iterator( impl::advance(-n) ); }
 
-  sc_variant_iterator& operator+=( difference_type n )
+  sc_any_value_iterator& operator+=( difference_type n )
     { impl::increment(n); return *this; }
-  sc_variant_iterator& operator-=( difference_type n )
+  sc_any_value_iterator& operator-=( difference_type n )
     { impl::decrement(n); return *this; }
   ///@}
 
@@ -190,8 +190,8 @@ public:
   difference_type operator-( const_type that ) const
     { return impl::distance(that.raw()); }
 
-}; // class sc_variant_iterator
+}; // class sc_any_value_iterator
 
 } // namespace sc_dt
 
-#endif // SC_DATATYPES_VARIANT_ITERATOR_H_INCLUDED_
+#endif // SC_DATATYPES_ANY_VALUE_ITERATOR_H_INCLUDED_
