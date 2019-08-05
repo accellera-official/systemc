@@ -461,7 +461,7 @@ void wif_sc_unsigned_trace::write(FILE* f)
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < static_cast<size_t>(object.length()) ) {
+    if ( buf.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
@@ -517,7 +517,7 @@ void wif_sc_signed_trace::write(FILE* f)
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < static_cast<size_t>(object.length()) ) {
+    if ( buf.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
@@ -768,7 +768,7 @@ wif_sc_fxnum_trace::write( FILE* f )
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < static_cast<size_t>(object.wl()) ) {
+    if ( buf.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
@@ -837,8 +837,8 @@ wif_sc_fxnum_fast_trace::write( FILE* f )
     static std::vector<char> buf(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( buf.size() < static_cast<size_t>(object.wl()) ) {
-      size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
+    if ( buf.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
+        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( buf ); // resize without copying values
     }
     char *buf_ptr = &buf[0];
