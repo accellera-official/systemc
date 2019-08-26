@@ -357,6 +357,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_mempool.h
                      sysc/utils/sc_meta.h
                      sysc/utils/sc_pq.h
+                     sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h
                      sysc/utils/sc_report.h
                      sysc/utils/sc_report_handler.h

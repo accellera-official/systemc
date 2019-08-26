@@ -285,7 +285,6 @@ class SC_API sc_process_b : public sc_object {
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
     std::string dump_state() const;
-    const ::std::vector<sc_object*>& get_child_objects() const;
     inline sc_curr_proc_kind proc_kind() const;
     sc_event& reset_event();
     sc_event& terminated_event();
@@ -295,6 +294,10 @@ class SC_API sc_process_b : public sc_object {
 
   protected:
     virtual void add_child_object( sc_object* );
+    virtual void add_child_event( sc_event* );
+    virtual bool remove_child_object( sc_object* );
+    virtual bool remove_child_event( sc_event* );
+
     void add_static_event( const sc_event& );
     bool dynamic() const { return m_dynamic_proc != SPAWN_ELAB; }
     const char* gen_unique_name( const char* basename_, bool preserve_first );
@@ -302,7 +305,6 @@ class SC_API sc_process_b : public sc_object {
     inline bool is_disabled() const;
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
-    virtual bool remove_child_object( sc_object* );
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
@@ -392,14 +394,13 @@ class SC_API sc_process_b : public sc_object {
     static sc_process_b* m_last_created_process_p; // Last process created.
 };
 
-typedef sc_process_b sc_process_b;  // For compatibility.
-
 
 //------------------------------------------------------------------------------
 //"sc_process_b::XXXX_child_YYYYY"
 //
-// These methods provide child object support.
+// These methods provide child object/event support.
 //------------------------------------------------------------------------------
+
 inline void
 sc_process_b::add_child_object( sc_object* object_p )
 {
@@ -407,25 +408,32 @@ sc_process_b::add_child_object( sc_object* object_p )
     reference_increment();
 }
 
+inline void
+sc_process_b::add_child_event( sc_event* event_p )
+{
+    sc_object::add_child_event( event_p );
+    reference_increment();
+}
+
 inline bool
 sc_process_b::remove_child_object( sc_object* object_p )
 {
     if ( sc_object::remove_child_object( object_p ) ) {
-	    reference_decrement();
-            return true;
+        reference_decrement();
+        return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
-inline const ::std::vector<sc_object*>&
-sc_process_b::get_child_objects() const
+inline bool
+sc_process_b::remove_child_event( sc_event* event_p )
 {
-    return m_child_objects;
+    if ( sc_object::remove_child_event( event_p ) ) {
+        reference_decrement();
+        return true;
+    }
+    return false;
 }
-
 
 //------------------------------------------------------------------------------
 //"sc_process_b::initially_in_reset"
