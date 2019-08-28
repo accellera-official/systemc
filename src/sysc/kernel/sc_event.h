@@ -50,6 +50,7 @@ class sc_event_list;
 class sc_event_or_list;
 class sc_event_and_list;
 class sc_object;
+class sc_object_host;
 class sc_signal_channel;
 
 // friend function declarations
@@ -257,7 +258,7 @@ class SC_API sc_event
     friend class sc_event_list;
     friend class sc_event_timed;
     friend class sc_simcontext;
-    friend class sc_object;
+    friend class sc_object_host;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_method_process;
@@ -339,8 +340,8 @@ private:
     mutable std::vector<sc_thread_handle> m_threads_static;
     mutable std::vector<sc_thread_handle> m_threads_dynamic;
 
-    std::string            m_name;     // name of the event
-    sc_ptr_flag<sc_object> m_parent_p; // parent object of the event,
+    std::string                 m_name;     // name of the event
+    sc_ptr_flag<sc_object_host> m_parent_p; // parent object of the event,
     // extra flag is set to true, if event is registered in hierarchy
 
 private:

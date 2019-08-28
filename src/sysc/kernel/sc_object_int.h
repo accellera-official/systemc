@@ -36,6 +36,24 @@
 
 namespace sc_core {
 
+inline
+sc_object_host::sc_object_host()
+ : sc_object()
+ , m_child_events()
+ , m_child_objects()
+ , m_name_gen_p()
+{}
+
+inline
+sc_object_host::sc_object_host(const char* nm)
+ : sc_object(nm)
+ , m_child_events()
+ , m_child_objects()
+ , m_name_gen_p()
+{}
+
+// -----------------------------------------------------------------------
+
 class sc_object::hierarchy_scope
 {
 public:

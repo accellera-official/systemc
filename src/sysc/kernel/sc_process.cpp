@@ -29,7 +29,9 @@
  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-#include "sysc/kernel/sc_name_gen.h"
+
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_cthread_process.h"
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
@@ -227,18 +229,6 @@ std::string sc_process_b::dump_state() const
     return result;
 }
 
-
-//------------------------------------------------------------------------------
-//"sc_process_b::gen_unique_name"
-//
-// This method generates a unique name within this object instance's namespace.
-//------------------------------------------------------------------------------
-const char* sc_process_b::gen_unique_name( const char* basename_,
-    bool preserve_first )
-{
-    if ( ! m_name_gen_p ) m_name_gen_p = new sc_name_gen;
-    return m_name_gen_p->gen_unique_name( basename_, preserve_first );
-}
 
 //------------------------------------------------------------------------------
 //"sc_process_b::remove_dynamic_events"
@@ -546,7 +536,7 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
      sc_entry_func method_p, sc_process_host* host_p,
      const sc_spawn_options* /* opt_p  */
 ) :
-    sc_object( name_p ),
+    sc_object_host( name_p ),
     file(0),
     lineno(0),
     proc_id( simcontext()->next_proc_id()),
@@ -563,7 +553,6 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_has_stack(false),
     m_is_thread(is_thread),
     m_last_report_p(0),
-    m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
     m_references_n(1),
     m_resets(),
@@ -602,12 +591,6 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
 //------------------------------------------------------------------------------
 sc_process_b::~sc_process_b()
 {
-
-    // REDIRECT ANY CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
-
-    orphan_child_objects();
-
-
     // DELETE SEMANTICS OBJECTS IF NEED BE:
 
     if ( m_free_host ) delete m_semantics_host_p;
@@ -615,13 +598,11 @@ sc_process_b::~sc_process_b()
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 
     delete m_last_report_p;
-    delete m_name_gen_p;
     delete m_reset_event_p;
     delete m_resume_event_p;
     delete m_term_event_p;
     delete m_throw_helper_p;
     delete m_timeout_event_p;
-
 }
 
 //------------------------------------------------------------------------------

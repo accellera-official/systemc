@@ -32,15 +32,14 @@
 #define SC_MODULE_H
 
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_macros.h"
 #include "sysc/kernel/sc_module_name.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_sensitive.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/kernel/sc_wait.h"
 #include "sysc/kernel/sc_wait_cthread.h"
-#include "sysc/kernel/sc_process.h"
-#include "sysc/kernel/sc_process_handle.h"
-#include "sysc/kernel/sc_macros.h"
 #include "sysc/utils/sc_list.h"
 
 #if SC_CPLUSPLUS >= 201103L
@@ -82,7 +81,7 @@ extern SC_API const sc_bind_proxy SC_BIND_PROXY_NIL;
 // ----------------------------------------------------------------------------
 
 class SC_API sc_module
-: public sc_object, public sc_process_host
+: public sc_object_host, public sc_process_host
 {
     friend class sc_module_name;
     friend class sc_module_registry;
@@ -151,10 +150,7 @@ public:
 
     // operator() is declared at the end of the class.
 
-    const ::std::vector<sc_object*>& get_child_objects() const;
-
 protected:
-
     // this must be called by user-defined modules
     void end_module();
 

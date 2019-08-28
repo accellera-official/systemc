@@ -169,14 +169,13 @@ sc_vector_base::context_scope::context_scope( sc_vector_base* owner )
   sc_simcontext* simc = owner->simcontext();
   sc_assert( simc == sc_get_curr_simcontext() );
 
-  sc_object* parent = owner->get_parent_object();
-  sc_object* active = simc->active_object();
+  sc_object_host* parent = static_cast<sc_object_host*>( owner->get_parent_object() );
+  sc_object_host* active = simc->active_object();
 
   if (parent != active) // override object creation context
   {
     owner_ = owner;
-    owner->simcontext()->get_object_manager()
-      ->hierarchy_push( owner_->get_parent_object() );
+    simc->get_object_manager()->hierarchy_push( parent );
   }
 }
 
@@ -184,7 +183,7 @@ sc_vector_base::context_scope::~context_scope()
 {
   if (owner_) // restore current object context
   {
-    sc_object* obj = owner_->simcontext()->get_object_manager()->hierarchy_pop();
+    sc_object* obj = owner_->simcontext()->hierarchy_pop();
     sc_assert( obj == owner_->get_parent_object() );
   }
 }

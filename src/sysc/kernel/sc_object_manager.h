@@ -71,7 +71,7 @@ protected:
 
 public:
     typedef std::map<std::string,table_entry> instance_table_t;
-    typedef std::vector<sc_object*>           object_vector_t;
+    typedef std::vector<sc_object_host*>      object_vector_t;
 
     sc_object_manager();
     ~sc_object_manager();
@@ -85,15 +85,15 @@ public:
     sc_object* first_object();
     sc_object* next_object();
 
-    void hierarchy_push(sc_object* mdl);
-    sc_object* hierarchy_pop();
-    sc_object* hierarchy_curr();
+    void hierarchy_push(sc_object_host* mdl);
+    sc_object_host* hierarchy_pop();
+    sc_object_host* hierarchy_curr();
     int hierarchy_size();
 
     void push_module_name(sc_module_name* mod_name);
     sc_module_name* pop_module_name();
-    sc_module_name* top_of_module_name_stack();
-
+    sc_module_name* top_of_module_name_stack() const;
+    const char*     top_of_module_name_stack_name() const;
 
 private:
     std::string create_name( const char* leaf_name );

@@ -42,11 +42,15 @@ namespace sc_core {
 
 class SC_API sc_event;
 class SC_API sc_module;
+class sc_name_gen;
+class SC_API sc_object_host;
 class sc_phase_callback_registry;
 class sc_runnable;
 class SC_API sc_simcontext;
 class SC_API sc_trace_file;
 class SC_API sc_trace_file_base;
+
+SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -54,12 +58,13 @@ class SC_API sc_trace_file_base;
 //  Abstract base class of all SystemC `simulation' objects.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_object 
+class SC_API sc_object
 {
     friend class sc_event;
     friend class sc_module;
     friend struct sc_invoke_method;
     friend class sc_module_dynalloc_list;
+    friend class sc_object_host;
     friend class sc_object_manager;
     friend class sc_phase_callback_registry;
     friend class sc_process_b;
@@ -107,30 +112,20 @@ public:
           sc_attr_cltn& attr_cltn();
     const sc_attr_cltn& attr_cltn() const;
 
-    virtual const std::vector<sc_event*>& get_child_events() const
-        { return m_child_events; }
-
-    virtual const std::vector<sc_object*>& get_child_objects() const
-        { return m_child_objects; }
+    virtual const std::vector<sc_event*>&  get_child_events() const;
+    virtual const std::vector<sc_object*>& get_child_objects() const;
 
     sc_object* get_parent() const;
-    sc_object* get_parent_object() const { return m_parent; }
+    sc_object* get_parent_object() const;
 
 protected:
-
     sc_object();
     sc_object(const char* nm);
 
     sc_object( const sc_object& );
     sc_object& operator=( const sc_object& );
 
-
     virtual ~sc_object();
-
-    virtual void add_child_event( sc_event* event_p );
-    virtual void add_child_object( sc_object* object_p );
-    virtual bool remove_child_event( sc_event* event_p );
-    virtual bool remove_child_object( sc_object* object_p );
 
     phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
@@ -142,23 +137,18 @@ private:
     virtual void simulation_phase_callback();
 
     void detach();
-    virtual void orphan_child_events();
-    virtual void orphan_child_objects();
     void sc_object_init(const char* nm);
 
 private:
 
     /* Each simulation object is associated with a simulation context */ 
     mutable sc_attr_cltn*   m_attr_cltn_p;   // attributes for this object.
-    std::vector<sc_event*>  m_child_events;  // list of child events.
-    std::vector<sc_object*> m_child_objects; // list of child objects.
     std::string             m_name;          // name of this object.
-    sc_object*              m_parent;        // parent for this object.
+    sc_object_host*         m_parent;        // parent for this object.
     sc_simcontext*          m_simc;          // simcontext ptr / empty indicator
 };
 
-inline
-sc_object&
+inline sc_object&
 sc_object::operator=( sc_object const & )
 {
   // deliberately do nothing
@@ -166,15 +156,68 @@ sc_object::operator=( sc_object const & )
 }
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_object_host
+//
+//  Abstract (implementation-defined) base class of all SystemC objects, that
+//  can hold child objects/events (i.e. _modules and processes)
+// ----------------------------------------------------------------------------
+
+class SC_API sc_object_host : public sc_object
+{
+    friend class sc_event;
+    friend class sc_module;
+    friend class sc_object;
+    friend class sc_process_b;
+    friend SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
+protected:
+    sc_object_host();
+    sc_object_host(const char* nm);
+    virtual ~sc_object_host();
+
+public:
+    virtual const std::vector<sc_event*>& get_child_events() const
+        { return m_child_events; }
+
+    virtual const std::vector<sc_object*>& get_child_objects() const
+        { return m_child_objects; }
+
+private:
+    virtual void add_child_event( sc_event* event_p );
+    virtual void add_child_object( sc_object* object_p );
+    virtual bool remove_child_event( sc_event* event_p );
+    virtual bool remove_child_object( sc_object* object_p );
+
+    void orphan_child_events();
+    void orphan_child_objects();
+
+    const char* gen_unique_name( const char* basename_, bool preserve_first );
+
+private:
+    // disabled copying and assignment
+    sc_object_host(const sc_object_host&) /*= delete*/;
+    sc_object_host& operator=(const sc_object_host&) /*= delete*/;
+
+private:
+    std::vector<sc_event*>  m_child_events;  // list of child events.
+    std::vector<sc_object*> m_child_objects; // list of child objects.
+    sc_name_gen*            m_name_gen_p;    // sub-object name generator
+};
+
+// ----------------------------------------------------------------------------
 
 extern const char SC_HIERARCHY_CHAR;
 extern bool sc_enable_name_checking;
 
+inline sc_object*
+sc_object::get_parent_object() const
+{
+    return m_parent;
+}
 
-inline 
-sc_object* sc_get_parent( const sc_object* obj_p ) 
-{ 
-	return obj_p->get_parent_object(); 
+inline sc_object*
+sc_get_parent( const sc_object* obj_p )
+{
+    return obj_p->get_parent_object();
 }
 
 } // namespace sc_core

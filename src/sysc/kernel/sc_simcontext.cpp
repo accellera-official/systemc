@@ -431,15 +431,12 @@ sc_simcontext::~sc_simcontext()
 // | stack if it is non-empty, or it will be the active process, or NULL
 // | if there is no active process.
 // +----------------------------------------------------------------------------
-sc_object*
+sc_object_host*
 sc_simcontext::active_object()
 {
-    sc_object* result_p; // pointer to return.
-
-    result_p = m_object_manager->hierarchy_curr();
-    if ( !result_p )
-        result_p = (sc_object*)get_curr_proc_info()->process_handle;
-    return result_p;
+    if( m_object_manager->hierarchy_size() > 0 )
+        return m_object_manager->hierarchy_curr();
+    return get_curr_proc_info()->process_handle;
 }
 
 // +----------------------------------------------------------------------------
@@ -1568,20 +1565,11 @@ SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
-    sc_module* curr_module = simc->hierarchy_curr();
-    if( curr_module != 0 ) {
-	return curr_module->gen_unique_name( basename_, preserve_first );
-    } else {
-        sc_process_b* curr_proc_p = sc_get_current_process_b();
-	if ( curr_proc_p )
-	{
-	    return curr_proc_p->gen_unique_name( basename_, preserve_first );
-	}
-	else
-	{
-	    return simc->gen_unique_name( basename_, preserve_first );
-	}
-    }
+    sc_object_host* curr_scope = simc->active_object();
+    if( curr_scope != NULL )
+        return curr_scope->gen_unique_name( basename_, preserve_first );
+
+    return simc->gen_unique_name( basename_, preserve_first );
 }
 
 // Get a handle for the current process

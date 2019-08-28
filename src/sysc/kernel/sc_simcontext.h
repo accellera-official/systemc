@@ -56,6 +56,7 @@ class sc_module_name;
 class sc_module_registry;
 class sc_name_gen;
 class sc_object;
+class sc_object_host;
 class sc_object_manager;
 class sc_phase_callback_registry;
 class sc_process_handle;
@@ -148,6 +149,7 @@ class SC_API sc_simcontext
     friend class sc_event;
     friend class sc_module;
     friend class sc_object;
+    friend class sc_object_host;
     friend class sc_time;
     friend class sc_time_tuple;
     friend class sc_clock;
@@ -205,7 +207,7 @@ public:
 
     inline sc_status get_status() const;
 
-    sc_object* active_object();
+    sc_object_host* active_object();
 
     void hierarchy_push( sc_module* );
     sc_module* hierarchy_pop();

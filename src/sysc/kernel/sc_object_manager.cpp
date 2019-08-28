@@ -276,13 +276,10 @@ sc_object_manager::first_object()
 // | This method returns the current object in the object hierarchy or NULL
 // | if it does not exist.
 // +----------------------------------------------------------------------------
-sc_object*
+sc_object_host*
 sc_object_manager::hierarchy_curr()
 {
-    std::size_t hierarchy_n;  // current size of the hierarchy.
-
-    hierarchy_n = m_object_stack.size();
-    return hierarchy_n ? m_object_stack[hierarchy_n-1] : 0;
+    return !m_object_stack.empty() ? m_object_stack.back() : NULL;
 }
 
 // +----------------------------------------------------------------------------
@@ -291,16 +288,12 @@ sc_object_manager::hierarchy_curr()
 // | This method pops the current object off the object hierarchy and returns
 // | it.
 // +----------------------------------------------------------------------------
-sc_object*
+sc_object_host*
 sc_object_manager::hierarchy_pop()
 {
-    std::size_t hierarchy_n;  // current size of the hierarchy.
-    sc_object*  result_p;     // object to return.
-
-    hierarchy_n = m_object_stack.size();
-    if ( hierarchy_n == 0 ) return NULL;
-    hierarchy_n--;
-    result_p = m_object_stack[hierarchy_n];
+    if ( m_object_stack.empty() )
+        return NULL;
+    sc_object_host* result_p = m_object_stack.back();
     m_object_stack.pop_back();
     return result_p;
 }
@@ -315,7 +308,7 @@ sc_object_manager::hierarchy_pop()
 // |     object_p -> object to become the new current object in the hierarchy.
 // +----------------------------------------------------------------------------
 void
-sc_object_manager::hierarchy_push(sc_object* object_p)
+sc_object_manager::hierarchy_push(sc_object_host* object_p)
 {
     m_object_stack.push_back(object_p);
 }
@@ -329,7 +322,7 @@ sc_object_manager::hierarchy_push(sc_object* object_p)
 int
 sc_object_manager::hierarchy_size()
 {
-    return m_object_stack.size();
+    return static_cast<int>( m_object_stack.size() );
 }
 
 // +----------------------------------------------------------------------------
@@ -452,17 +445,26 @@ sc_object_manager::push_module_name(sc_module_name* mod_name_p)
 
 // +----------------------------------------------------------------------------
 // |"sc_object_manager::top_of_module_name_stack"
-// | 
-// | This method returns the module name that is on the top of the module
-// | name stack.
+// |
+// | This method returns the module name object that is on the top of the module
+// | name stack, NULL if stack is empty.
 // +----------------------------------------------------------------------------
 sc_module_name*
-sc_object_manager::top_of_module_name_stack()
+sc_object_manager::top_of_module_name_stack() const
 {
-    if( m_module_name_stack == 0 ) {
-	SC_REPORT_ERROR( SC_ID_MODULE_NAME_STACK_EMPTY_, 0 );
-    }
     return m_module_name_stack;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_manager::top_of_module_name_stack_name"
+// |
+// | This method returns the module name string that is on the top of the
+// | module name stack, NULL if stack is empty.
+// +----------------------------------------------------------------------------
+const char*
+sc_object_manager::top_of_module_name_stack_name() const
+{
+    return ( m_module_name_stack != NULL ) ? *m_module_name_stack : NULL;
 }
 
 // +----------------------------------------------------------------------------
