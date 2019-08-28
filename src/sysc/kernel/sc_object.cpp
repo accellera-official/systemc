@@ -58,6 +58,69 @@ const char SC_HIERARCHY_CHAR = '.';
    problems. */
 bool sc_enable_name_checking = true;
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_hierarchy_scope
+//
+//  Scoped manipulation of the current SystemC object hierarchy
+// ----------------------------------------------------------------------------
+
+const sc_hierarchy_scope::root_tag sc_hierarchy_scope::root;
+
+sc_hierarchy_scope::sc_hierarchy_scope( root_tag )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_scoped_top(NULL)
+{
+    if( m_simc->active_object() == NULL ) {
+        m_simc = NULL; // nothing to do
+    } else {
+        // explicitly push NULL to object hierarchy
+        m_simc->hierarchy_push( m_scoped_top );
+    }
+}
+
+#if SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::sc_hierarchy_scope(sc_hierarchy_scope&& that)
+  : m_simc(that.m_simc)
+  , m_scoped_top(that.m_scoped_top)
+{
+    that.m_simc = nullptr;
+}
+
+#else // SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::sc_hierarchy_scope(move_tag from)
+  : m_simc(from.simc)
+  , m_scoped_top(from.scope)
+{}
+
+sc_hierarchy_scope::move_tag::move_tag( sc_hierarchy_scope& s )
+  : simc( s.m_simc )
+  , scope( s.m_scoped_top )
+{
+  s.m_simc = NULL;
+}
+
+sc_hierarchy_scope::move_tag
+sc_hierarchy_scope::move()
+{
+  return move_tag( *this );
+}
+
+#endif // SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false)
+{
+    if (m_simc)
+    {
+        if( SC_UNLIKELY_(m_simc->active_object() != m_scoped_top) )
+        {
+            SC_REPORT_ERROR("TODO: add ID", "corrupt hierarchy scope");
+            sc_abort();
+        }
+        m_simc->hierarchy_pop();
+    }
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -334,6 +397,13 @@ sc_object::get_parent() const
     return get_parent_object();
 }
 
+sc_object::hierarchy_scope
+sc_object::restore_hierarchy()
+{
+    sc_object_host* parent = static_cast<sc_object_host*>( get_parent_object() );
+    return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), parent ).move();
+}
+
 // ----------------------------------------------------------------------------
 // simulation phase callbacks
 
@@ -497,6 +567,12 @@ sc_object_host::gen_unique_name( const char* basename_, bool preserve_first )
     if ( ! m_name_gen_p )
         m_name_gen_p = new sc_name_gen;
     return m_name_gen_p->gen_unique_name( basename_, preserve_first );
+}
+
+sc_object::hierarchy_scope
+sc_object_host::restore_hierarchy()
+{
+    return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), this ).move();
 }
 
 } // namespace sc_core

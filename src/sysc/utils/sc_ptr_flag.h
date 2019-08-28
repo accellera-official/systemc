@@ -53,7 +53,7 @@ public:
       : m_data(reinterpret_cast<uintptr_type>(p))
     {
 #if SC_CPLUSPLUS < 201103L
-        sc_assert( m_data & flag_mask == 0x0 );
+        sc_assert( ( m_data & flag_mask ) == 0x0 );
 #endif // C++03
         set_flag(f);
     }
@@ -71,7 +71,7 @@ public:
     void reset(pointer p)
     {
 #if SC_CPLUSPLUS < 201103L
-        sc_assert( reinterpret_cast<uintptr_type>(p) & flag_mask == 0x0 );
+        sc_assert( ( reinterpret_cast<uintptr_type>(p) & flag_mask ) == 0x0 );
 #endif // C++03
         m_data = reinterpret_cast<uintptr_type>(p) | get_flag();
     }

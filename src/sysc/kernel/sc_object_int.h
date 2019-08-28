@@ -54,52 +54,39 @@ sc_object_host::sc_object_host(const char* nm)
 
 // -----------------------------------------------------------------------
 
-class sc_object::hierarchy_scope
-{
-public:
-    explicit hierarchy_scope(sc_object* obj);
-    explicit hierarchy_scope(sc_module* mod);
-    ~hierarchy_scope();
-
-private:
-    sc_module * scope_;
-
-private:
-    hierarchy_scope( hierarchy_scope const & other ) /* = delete */;
-    hierarchy_scope& operator=(hierarchy_scope const&) /* = delete */;
-};
-
-
 inline
-sc_object::hierarchy_scope::hierarchy_scope( sc_object* obj )
-  : scope_(0)
+sc_hierarchy_scope::sc_hierarchy_scope( kernel_tag, sc_object* obj )
+  : m_simc( (obj) ? obj->simcontext() : sc_get_curr_simcontext() )
+  , m_scoped_top()
 {
-    if( !obj ) return;
+  if( obj == m_simc->hierarchy_curr() ) {
+    m_simc = NULL;
+    return; // scope already matches
+  }
 
-    scope_ = dynamic_cast<sc_module*>(obj);
-    if( !scope_ )
-        scope_ = dynamic_cast<sc_module*>(obj->get_parent_object());
-    if( scope_ )
-        scope_->simcontext()->hierarchy_push(scope_);
+  if( obj == NULL ) { // new root scope
+      m_simc->hierarchy_push(NULL);
+      return;
+  }
+
+  m_scoped_top = dynamic_cast<sc_object_host*>(obj);
+  if( m_scoped_top == NULL )
+    m_scoped_top = static_cast<sc_object_host*>(obj->get_parent_object());
+  m_simc->hierarchy_push(m_scoped_top);
 }
 
-
 inline
-sc_object::hierarchy_scope::hierarchy_scope( sc_module* mod )
-  : scope_(mod)
+sc_hierarchy_scope::sc_hierarchy_scope( kernel_tag, sc_object_host* objh )
+  : m_simc( (objh) ? objh->simcontext() : sc_get_curr_simcontext() )
+  , m_scoped_top(objh)
 {
-    if( scope_ )
-        scope_->simcontext()->hierarchy_push(scope_);
+  if( objh == m_simc->hierarchy_curr() ) {
+    m_simc = NULL;
+    return; // scope already matches
+  }
+
+  m_simc->hierarchy_push(m_scoped_top);
 }
-
-
-inline
-sc_object::hierarchy_scope::~hierarchy_scope()
-{
-    if( scope_ )
-        scope_->simcontext()->hierarchy_pop();
-}
-
 
 // -----------------------------------------------------------------------
 
@@ -108,8 +95,6 @@ sc_object::do_simulation_phase_callback()
 {
     simulation_phase_callback();
 }
-
-// -----------------------------------------------------------------------
 
 } // namespace sc_core
 

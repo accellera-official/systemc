@@ -163,31 +163,6 @@ sc_vector_base::make_name( const char* prefix, size_type /* idx */ )
   return sc_gen_unique_name( prefix );
 }
 
-sc_vector_base::context_scope::context_scope( sc_vector_base* owner )
-  : owner_(NULL)
-{
-  sc_simcontext* simc = owner->simcontext();
-  sc_assert( simc == sc_get_curr_simcontext() );
-
-  sc_object_host* parent = static_cast<sc_object_host*>( owner->get_parent_object() );
-  sc_object_host* active = simc->active_object();
-
-  if (parent != active) // override object creation context
-  {
-    owner_ = owner;
-    simc->get_object_manager()->hierarchy_push( parent );
-  }
-}
-
-sc_vector_base::context_scope::~context_scope()
-{
-  if (owner_) // restore current object context
-  {
-    sc_object* obj = owner_->simcontext()->hierarchy_pop();
-    sc_assert( obj == owner_->get_parent_object() );
-  }
-}
-
 } // namespace sc_core
 
 // $Log: sc_vector.cpp,v $

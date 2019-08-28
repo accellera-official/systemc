@@ -223,8 +223,9 @@ sc_notify_time_compare( const void* p1, const void* p2 )
 // | CLASS sc_invoke_method - class to invoke sc_method's to support
 // |                          sc_simcontext::preempt_with().
 // +============================================================================
-SC_MODULE(sc_invoke_method)
+class sc_invoke_method : public sc_module
 {
+public:
     SC_CTOR(sc_invoke_method)
     {
       // remove from object hierarchy
@@ -248,6 +249,7 @@ SC_MODULE(sc_invoke_method)
 	invokers_n = m_invokers.size();
 	if ( invokers_n == 0 )
 	{
+	    sc_hierarchy_scope scope( restore_hierarchy() );
 	    sc_spawn_options options;
 	    options.dont_initialize();
 	    options.set_stack_size(0x100000);
@@ -1039,21 +1041,21 @@ sc_simcontext::end()
 }
 
 void
-sc_simcontext::hierarchy_push( sc_module* mod )
+sc_simcontext::hierarchy_push( sc_object_host* objh )
 {
-    m_object_manager->hierarchy_push( mod );
+    m_object_manager->hierarchy_push( objh );
 }
 
-sc_module*
+sc_object_host*
 sc_simcontext::hierarchy_pop()
 {
-	return static_cast<sc_module*>( m_object_manager->hierarchy_pop() );
+	return m_object_manager->hierarchy_pop();
 }
 
-sc_module*
+sc_object_host*
 sc_simcontext::hierarchy_curr() const
 {
-    return static_cast<sc_module*>( m_object_manager->hierarchy_curr() );
+    return m_object_manager->hierarchy_curr();
 }
 
 sc_object*

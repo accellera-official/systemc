@@ -153,6 +153,21 @@
 #endif // SC_NOEXCEPT_
 
 // ----------------------------------------------------------------------------
+// indicate, that a function result shall not be discarded
+
+#ifndef SC_NODISCARD_
+#if SC_CPLUSPLUS >= 201703L
+# define SC_NODISCARD_ [[nodiscard]]
+#elif (SC_CPLUSPLUS >= 201103L) && defined(__has_cpp_attribute) && __has_cpp_attribute(nodiscard)
+# define SC_NODISCARD_ [[nodiscard]]
+#elif defined(__has_attribute) && __has_attribute(warn_unused_result)
+# define SC_NODISCARD_ __attribute__((warn_unused_result))
+#else
+# define SC_NODISCARD_ /* nothing */
+#endif
+#endif // SC_NODISCARD_
+
+// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>

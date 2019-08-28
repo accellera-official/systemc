@@ -43,6 +43,7 @@ namespace sc_core {
 class SC_API sc_event;
 class SC_API sc_module;
 class sc_name_gen;
+class SC_API sc_object;
 class SC_API sc_object_host;
 class sc_phase_callback_registry;
 class sc_runnable;
@@ -53,6 +54,63 @@ class SC_API sc_trace_file_base;
 SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_hierarchy_scope
+//
+//  Scoped manipulation of the current SystemC object hierarchy
+// ----------------------------------------------------------------------------
+
+class SC_API sc_hierarchy_scope
+{
+    friend class sc_object;
+    friend class sc_object_host;
+    friend class sc_module;
+
+    struct root_tag {};
+    struct kernel_tag {};
+
+#if SC_CPLUSPLUS < 201103L
+    struct move_tag // manual "move" support
+    {
+        move_tag( sc_hierarchy_scope& );
+        sc_simcontext*  simc;
+        sc_object_host* scope;
+    };
+    SC_NODISCARD_ move_tag move();
+#else
+    SC_NODISCARD_ sc_hierarchy_scope move()
+      { return std::move(*this); }
+#endif // C++03
+
+    sc_hierarchy_scope(kernel_tag, sc_object*);
+    sc_hierarchy_scope(kernel_tag, sc_object_host*);
+public:
+    static const root_tag root;
+
+    // open explicit root scope
+    sc_hierarchy_scope( root_tag );
+    ~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false);
+
+#if SC_CPLUSPLUS >= 201103L
+    sc_hierarchy_scope(sc_hierarchy_scope&&);
+#else
+    sc_hierarchy_scope(move_tag);
+#endif // SC_CPLUSPLUS >= 201103L
+
+private:
+    // disable copying and assignment
+    sc_hierarchy_scope(const sc_hierarchy_scope&) /* = delete */;
+    sc_hierarchy_scope& operator=(const sc_hierarchy_scope&) /* = delete */;
+    // disallow dynamic allocation
+    void* operator new(std::size_t) /* = delete */;
+    void* operator new[](std::size_t) /* = delete */;
+
+private:
+    sc_simcontext*  m_simc;
+    sc_object_host* m_scoped_top;
+}; // class sc_hierarchy_scope
+
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_object
 //
 //  Abstract base class of all SystemC `simulation' objects.
@@ -61,8 +119,8 @@ SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
 class SC_API sc_object
 {
     friend class sc_event;
+    friend class sc_invoke_method;
     friend class sc_module;
-    friend struct sc_invoke_method;
     friend class sc_module_dynalloc_list;
     friend class sc_object_host;
     friend class sc_object_manager;
@@ -71,6 +129,12 @@ class SC_API sc_object
     friend class sc_runnable;
     friend class sc_simcontext;
     friend class sc_trace_file_base;
+
+#if SC_CPLUSPLUS >= 201103L
+    typedef sc_hierarchy_scope hierarchy_scope;
+#else
+    typedef sc_hierarchy_scope::move_tag hierarchy_scope;
+#endif // SC_CPLUSPLUS >= 201103L
 
 public:
     typedef unsigned phase_cb_mask;
@@ -130,7 +194,8 @@ protected:
     phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
 
-    class hierarchy_scope;
+    // restore SystemC hierarchy to current object's hierarchical scope
+    virtual hierarchy_scope restore_hierarchy();
 
 private:
             void do_simulation_phase_callback();
@@ -180,6 +245,10 @@ public:
 
     virtual const std::vector<sc_object*>& get_child_objects() const
         { return m_child_objects; }
+
+protected:
+    // restore SystemC hierarchy to current object's hierarchical scope
+    virtual hierarchy_scope restore_hierarchy();
 
 private:
     virtual void add_child_event( sc_event* event_p );
