@@ -36,6 +36,60 @@
 
 namespace sc_core {
 
+inline
+sc_object_host::sc_object_host()
+ : sc_object()
+ , m_child_events()
+ , m_child_objects()
+ , m_name_gen_p()
+{}
+
+inline
+sc_object_host::sc_object_host(const char* nm)
+ : sc_object(nm)
+ , m_child_events()
+ , m_child_objects()
+ , m_name_gen_p()
+{}
+
+// -----------------------------------------------------------------------
+
+inline
+sc_hierarchy_scope::sc_hierarchy_scope( kernel_tag, sc_object* obj )
+  : m_simc( (obj) ? obj->simcontext() : sc_get_curr_simcontext() )
+  , m_scoped_top()
+{
+  if( obj == m_simc->hierarchy_curr() ) {
+    m_simc = NULL;
+    return; // scope already matches
+  }
+
+  if( obj == NULL ) { // new root scope
+      m_simc->hierarchy_push(NULL);
+      return;
+  }
+
+  m_scoped_top = dynamic_cast<sc_object_host*>(obj);
+  if( m_scoped_top == NULL )
+    m_scoped_top = static_cast<sc_object_host*>(obj->get_parent_object());
+  m_simc->hierarchy_push(m_scoped_top);
+}
+
+inline
+sc_hierarchy_scope::sc_hierarchy_scope( kernel_tag, sc_object_host* objh )
+  : m_simc( (objh) ? objh->simcontext() : sc_get_curr_simcontext() )
+  , m_scoped_top(objh)
+{
+  if( objh == m_simc->hierarchy_curr() ) {
+    m_simc = NULL;
+    return; // scope already matches
+  }
+
+  m_simc->hierarchy_push(m_scoped_top);
+}
+
+// -----------------------------------------------------------------------
+
 inline void
 sc_object::do_simulation_phase_callback()
 {

@@ -84,7 +84,7 @@ public:
         if (simctx->elaboration_done())
             SC_REPORT_ERROR(SC_ID_INSERT_INITIALIZER_FN_, "after elaboration done");
         else {
-            auto curr_module = static_cast<sc_core::sc_module*>(simctx->hierarchy_curr());
+            auto curr_module = static_cast<sc_module*>( simctx->hierarchy_curr() );
             if (curr_module == nullptr)
                 SC_REPORT_ERROR(SC_ID_INSERT_INITIALIZER_FN_, "outside of module hierarchy");
             else {

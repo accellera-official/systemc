@@ -35,68 +35,12 @@
 #include <algorithm> // std::swap
 
 #include "sysc/kernel/sc_object.h"
-
-#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
-# include <type_traits>
-#else // use Boost for type traits
-# include "sysc/packages/boost/config.hpp"
-# include "sysc/packages/boost/utility/enable_if.hpp"
-#endif // type traits
+#include "sysc/utils/sc_meta.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::vector
 #endif
-
-namespace sc_core {
-namespace sc_meta {
-
-#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
-  using std::enable_if;
-  using std::remove_const;
-  using std::is_same;
-  using std::is_const;
-
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    static const Type Value
-
-#else // use Boost/local implementation for type traits
-  template<bool Cond, typename T = void>
-  struct enable_if : sc_boost::enable_if_c<Cond, T> {};
-
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    SC_BOOST_STATIC_CONSTANT(Type,Value)
-
-  // simplistic version to reduce Boost usage
-  template< typename T > struct remove_const          { typedef T type; };
-  template< typename T > struct remove_const<const T> { typedef T type; };
-
-  template< typename T, typename U >
-  struct is_same      { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_same<T,T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
-
-  template< typename T >
-  struct is_const           { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_const< const T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
-
-#endif // type traits
-
-  template< typename CT, typename T >
-  struct is_more_const {
-    SC_STATIC_CONSTANT_( bool, value
-       = ( is_same< typename remove_const<CT>::type
-                 , typename remove_const<T>::type
-                 >::value
-          && ( is_const<CT>::value >= is_const<T>::value ) ) );
-  };
-
-  struct special_result {};
-  template< typename T > struct remove_special_fptr {};
-  template< typename T > 
-  struct remove_special_fptr< special_result& (*)( T ) >
-    { typedef T type; };
 
 #define SC_RPTYPE_(Type)                                   \
   ::sc_core::sc_meta::remove_special_fptr         \
@@ -106,8 +50,7 @@ namespace sc_meta {
   typename ::sc_core::sc_meta::enable_if                   \
     < SC_RPTYPE_(Cond) >::type * = NULL
 
-} // namespace sc_meta
-
+namespace sc_core {
 // forward declarations
 template< typename T >              class sc_vector;
 template< typename T, typename MT > class sc_vector_assembly;
@@ -215,16 +158,7 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-  class SC_API context_scope
-  {
-    sc_vector_base* owner_;
-  public:
-    explicit context_scope(sc_vector_base* owner);
-    ~context_scope();
-  };
-
   void init_lock_cb();
-
   void simulation_phase_callback(); // override callback
 
 public: 
@@ -709,10 +643,10 @@ sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
 {
   if ( base_type::check_init(n) )
   {
-    // restore SystemC hierarchy context, if needed
-    sc_vector_base::context_scope scope( this );
-
     base_type::reserve( n );
+
+    // restore SystemC hierarchy context, if needed
+    sc_hierarchy_scope scope( restore_hierarchy() );
     try
     {
       for ( size_type i = 0; i<n; ++i )
@@ -743,7 +677,7 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back( Args&&... args ) {
   if (check_locked()) {
-    sc_vector_base::context_scope scope( this );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     T* p = new T( make_name( basename(), size()).c_str() ,
                   std::forward<Args>(args)...);
     base_type::push_back(p);
@@ -754,13 +688,13 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back_with_name(Args &&... args) {
   if (check_locked()) {
-    sc_vector_base::context_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     T *p = new T(std::forward<Args>(args)...);
     base_type::push_back(p);
   }
 }
 
-#endif
+#endif // SC_CPLUSPLUS >= 201103L
 
 template< typename T >
 void
@@ -834,7 +768,6 @@ sc_vector_assembly<T,MT>::get_elements() const
 
 } // namespace sc_core
 
-#undef SC_STATIC_CONSTANT_
 #undef SC_RPTYPE_
 #undef SC_ENABLE_IF_
 

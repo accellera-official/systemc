@@ -48,7 +48,7 @@ dnl version of the included TLM library
 TLM_PACKAGE_VERSION=2.0.6
 AC_SUBST(TLM_PACKAGE_VERSION)
 
-AC_CONFIG_SRCDIR([NEWS])
+AC_CONFIG_SRCDIR([README.md])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([config])
 
@@ -564,7 +564,6 @@ AC_OUTPUT(
  src/systemc.pc
  src/tlm.pc
  src/sysc/Makefile 
- src/sysc/packages/boost/Makefile 
  src/sysc/packages/qt/Makefile 
  src/tlm_core/Makefile
  src/tlm_utils/Makefile

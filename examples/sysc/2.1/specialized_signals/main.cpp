@@ -54,7 +54,7 @@ SC_MODULE(DUT)
 {
 	SC_CTOR(DUT)
 	{
-		SC_THREAD(exec)
+		SC_THREAD(exec);
 		sensitive << m_clk.pos();
 
         // CONNECT PORTS TO THEIR BACKING SIGNALS:

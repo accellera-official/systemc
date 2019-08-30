@@ -719,12 +719,10 @@ add_subdirectory (examples)
 # Install README files
 ###############################################################################
 
-install (FILES AUTHORS
-               ChangeLog
+install (FILES AUTHORS.md
                INSTALL.md
                cmake/INSTALL_USING_CMAKE
                LICENSE
-               NEWS
                NOTICE
                README.md
                RELEASENOTES

@@ -62,18 +62,18 @@ at GitHub, as described [here][6].
 Repository organization
 ---------------------------------------------------------------------
 
-The central source code repository of the Accellera SystemC implementation is
-hosted in two repositories at [GitHub](http://github.com).  The main
-repositories are **private** to the [`OSCI-WG` organization][7] and can be
-found at:
+The central source code repository of the Accellera SystemC implementation
+is hosted in two repositories at [GitHub](http://github.com).  The main
+repositories are **private** to the [`OSCI-WG` GitHub organization][7] and
+can be found at:
 
  * https://github.com/OSCI-WG/systemc             (core SystemC library)
  * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
 
 A read-only, **public** copy of these repositories can be found at
 
- * https://github.com/accellera/systemc             (core SystemC library)
- * https://github.com/accellera/systemc-regressions (regression test suite)
+ * https://github.com/accellera-official/systemc             (core SystemC library)
+ * https://github.com/accellera-official/systemc-regressions (regression test suite)
 
 To obtain access to the repositories and the GitHub organization in general,
 LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>

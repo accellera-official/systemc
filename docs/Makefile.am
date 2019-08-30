@@ -38,7 +38,8 @@ DOXYGEN=doxygen
 
 ## Core documentation (see also root directory)
 
-DOC_FILES =
+DOC_FILES = \
+	DEVELOPMENT.md
 
 ##
 ## SystemC documentation
@@ -58,7 +59,6 @@ DOC_FILES += \
 ##   find tlm -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 ##
 DOC_FILES += \
-	tlm/ChangeLog \
 	tlm/release/TLM_2_0_requirements.pdf \
 	tlm/release/TLM_2_0_white_paper.pdf \
 	tlm/release/README.txt \

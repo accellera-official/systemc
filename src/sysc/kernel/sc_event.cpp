@@ -44,7 +44,6 @@ namespace sc_core {
 
 using std::malloc;
 using std::strrchr;
-using std::strncmp;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event
@@ -254,11 +253,12 @@ sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false
 
     if ( !is_kernel_event )
     {
-	object_manager->insert_event(m_name, this);
-	if ( m_parent_p )
-	    m_parent_p->add_child_event( this );
-	else
-	    m_simc->add_child_event( this );
+        m_parent_p.set_flag( true );
+        object_manager->insert_event(m_name, this);
+        if ( m_parent_p != NULL )
+            m_parent_p->add_child_event( this );
+        else
+            m_simc->add_child_event( this );
     }
 }
 
@@ -284,18 +284,18 @@ sc_event::reset()
 // | Arguments:
 // |     name = name of the event.
 // +----------------------------------------------------------------------------
-sc_event::sc_event( const char* name ) :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event( const char* name )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_p(NULL)
 {
     register_event( name );
 }
@@ -307,18 +307,18 @@ sc_event::sc_event( const char* name ) :
 // | If this is during elaboration create a name and add it to the object
 // | hierarchy.
 // +----------------------------------------------------------------------------
-sc_event::sc_event() :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event()
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_p(NULL)
 {
     register_event( NULL );
 }
@@ -330,18 +330,18 @@ sc_event::sc_event() :
 // | If this is during elaboration create an implementation-defined name and
 // | do NOT add it to the object hierarchy.
 // +----------------------------------------------------------------------------
-sc_event::sc_event( kernel_tag, const char* name ) :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event( kernel_tag, const char* name )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_p(NULL)
 {
     register_event( name, /* is_kernel_event = */ true );
 }
@@ -356,10 +356,15 @@ sc_event::sc_event( kernel_tag, const char* name ) :
 sc_event::~sc_event()
 {
     cancel();
-    if ( m_name.length() != 0 )
+    if( in_hierarchy() )
     {
-	sc_object_manager* object_manager_p = m_simc->get_object_manager();
-	object_manager_p->remove_event( m_name );
+        sc_object_manager* object_manager_p = m_simc->get_object_manager();
+        object_manager_p->remove_event( m_name );
+
+        if ( m_parent_p != NULL )
+            m_parent_p->remove_child_event( this );
+        else
+            m_simc->remove_child_event( this );
     }
 
     for(size_t i = 0; i < m_threads_dynamic.size(); ++i ) {

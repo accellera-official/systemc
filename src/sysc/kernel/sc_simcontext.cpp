@@ -223,8 +223,9 @@ sc_notify_time_compare( const void* p1, const void* p2 )
 // | CLASS sc_invoke_method - class to invoke sc_method's to support
 // |                          sc_simcontext::preempt_with().
 // +============================================================================
-SC_MODULE(sc_invoke_method)
+class sc_invoke_method : public sc_module
 {
+public:
     SC_CTOR(sc_invoke_method)
     {
       // remove from object hierarchy
@@ -248,6 +249,7 @@ SC_MODULE(sc_invoke_method)
 	invokers_n = m_invokers.size();
 	if ( invokers_n == 0 )
 	{
+	    sc_hierarchy_scope scope( restore_hierarchy() );
 	    sc_spawn_options options;
 	    options.dont_initialize();
 	    options.set_stack_size(0x100000);
@@ -431,15 +433,12 @@ sc_simcontext::~sc_simcontext()
 // | stack if it is non-empty, or it will be the active process, or NULL
 // | if there is no active process.
 // +----------------------------------------------------------------------------
-sc_object*
+sc_object_host*
 sc_simcontext::active_object()
 {
-    sc_object* result_p; // pointer to return.
-
-    result_p = m_object_manager->hierarchy_curr();
-    if ( !result_p )
-        result_p = (sc_object*)get_curr_proc_info()->process_handle;
-    return result_p;
+    if( m_object_manager->hierarchy_size() > 0 )
+        return m_object_manager->hierarchy_curr();
+    return get_curr_proc_info()->process_handle;
 }
 
 // +----------------------------------------------------------------------------
@@ -665,6 +664,7 @@ sc_simcontext::elaborate()
     m_module_registry->elaboration_done();
     SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets(m_reset_finder_q);
+    m_reset_finder_q = NULL;
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -1041,21 +1041,18 @@ sc_simcontext::end()
 }
 
 void
-sc_simcontext::hierarchy_push( sc_object* obj )
+sc_simcontext::hierarchy_push( sc_object_host* objh )
 {
-    sc_assert( !obj || dynamic_cast<sc_module*>(obj)
-                 || dynamic_cast<sc_process_b*>(obj) );
-
-    m_object_manager->hierarchy_push( obj );
+    m_object_manager->hierarchy_push( objh );
 }
 
-sc_object*
+sc_object_host*
 sc_simcontext::hierarchy_pop()
 {
-    return m_object_manager->hierarchy_pop();
+	return m_object_manager->hierarchy_pop();
 }
 
-sc_object*
+sc_object_host*
 sc_simcontext::hierarchy_curr() const
 {
     return m_object_manager->hierarchy_curr();
@@ -1570,22 +1567,11 @@ SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
-    sc_object* curr_obj = sc_get_current_object();
+    sc_object_host* curr_scope = simc->active_object();
+    if( curr_scope != NULL )
+        return curr_scope->gen_unique_name( basename_, preserve_first );
 
-    if( sc_module * curr_module = dynamic_cast<sc_module*>(curr_obj) ) {
-
-        return curr_module->gen_unique_name( basename_, preserve_first );
-
-    } else if (sc_process_b * curr_proc_p =
-                              dynamic_cast<sc_process_b*>(curr_obj)) {
-
-        return curr_proc_p->gen_unique_name( basename_, preserve_first );
-
-    } else {
-
-        return simc->gen_unique_name( basename_, preserve_first );
-
-    }
+    return simc->gen_unique_name( basename_, preserve_first );
 }
 
 // Get a handle for the current process

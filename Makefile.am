@@ -41,13 +41,11 @@ SUBDIRS = \
 	examples
 
 DOC_FILES = \
-	AUTHORS \
+	AUTHORS.md \
 	NOTICE \
-	ChangeLog \
 	CONTRIBUTING.md \
 	INSTALL.md \
 	LICENSE \
-	NEWS \
 	README.md \
 	RELEASENOTES \
 	cmake/INSTALL_USING_CMAKE

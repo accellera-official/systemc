@@ -17,10 +17,10 @@
 ##
 ## ****************************************************************************
 ##
-##  src/sysc/utils/files.am --
-##  Included from a Makefile.am to provide directory-specific information
+##  src/sysc/packages/qt.am --
+##  Included from a Makefile.am to provide package-specific information
 ##
-##  Original Author: Philipp A. Hartmann, Intel, 2015-11-24
+##  Original Author: Philipp A Hartmann, Intel
 ##
 ## ****************************************************************************
 ##
@@ -33,53 +33,22 @@
 ## ****************************************************************************
 
 ## Generic directory setup
-## (should be kept in sync among all files.am files)
+## (should be kept in sync among all files/<package>.am files)
 ##
 ## Note: Recent Automake versions (>1.13) support relative placeholders for
 ##       included files (%D%,%C%).  To support older versions, use explicit
 ##       names for now.
 ##
 ## Local values:
-##   %D%: utils
-##   %C%: utils
+##   %D%: packages
+##   %C%: packages
 
-H_FILES += \
-	utils/sc_hash.h \
-	utils/sc_list.h \
-	utils/sc_machine.h \
-	utils/sc_mempool.h \
-	utils/sc_meta.h \
-	utils/sc_optional.h \
-	utils/sc_pq.h \
-	utils/sc_ptr_flag.h \
-	utils/sc_pvector.h \
-	utils/sc_report.h \
-	utils/sc_report_handler.h \
-	utils/sc_string.h \
-	utils/sc_string_view.h \
-	utils/sc_temporary.h \
-	utils/sc_typeindex.h \
-	utils/sc_utils_ids.h \
-	utils/sc_vector.h
+QT_LIB    = packages/qt/libqt.la
+QT_SUBDIR = packages/qt
 
-NO_H_FILES += \
-	utils/sc_stop_here.h
-
-CXX_FILES += \
-	utils/sc_hash.cpp \
-	utils/sc_list.cpp \
-	utils/sc_mempool.cpp \
-	utils/sc_optional.cpp \
-	utils/sc_pq.cpp \
-	utils/sc_report.cpp \
-	utils/sc_report_handler.cpp \
-	utils/sc_stop_here.cpp \
-	utils/sc_string.cpp \
-	utils/sc_utils_ids.cpp \
-	utils/sc_vector.cpp
-
-INCDIRS += \
-  utils
+# build external QT package separately
+SUBDIRS += $(QT_SUBDIR)
+LIBADD  += $(QT_LIB)
 
 ## Taf!
 ## :vim:ft=automake:
