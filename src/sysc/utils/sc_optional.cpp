@@ -21,14 +21,14 @@
 
 #if SC_CPLUSPLUS >= 201103L
 
-#include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_object.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
 
 sc_optional_base::sc_optional_base()
-: m_parent_with_flag(sc_get_current_object())
+  : m_parent_with_flag(sc_get_current_object())
 {}
 
 void sc_optional_base::report_double_init(const char* existing_obj_name) const
@@ -36,18 +36,15 @@ void sc_optional_base::report_double_init(const char* existing_obj_name) const
     SC_REPORT_ERROR( SC_ID_OPTIONAL_INIT_CALLED_TWICE_, existing_obj_name);
 }
 
-sc_object* sc_optional_base::get_parent_object() const
+sc_hierarchy_scope sc_optional_base::restore_hierarchy()
 {
-    sc_assert( (reinterpret_cast<const uintptr_t&>(m_parent_with_flag) & 0x1u) == 0x0 );
-    return m_parent_with_flag;
+    return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), m_parent_with_flag );
 }
-
-static_assert( alignof(sc_object) > 1,
-"Unsupported platform: sc_optional uses LSB of pointer to store has_value flag" );
 
 void sc_optional_base::set_has_value()
 {
-    reinterpret_cast<uintptr_t&>(m_parent_with_flag)  |= (uintptr_t)0x1;;
+    sc_assert( !has_value() );
+    m_parent_with_flag.set_flag( true );
 }
 
 } // namespace sc_core

@@ -40,6 +40,7 @@
 #if SC_CPLUSPLUS >= 201103L
 
 #include "sysc/kernel/sc_object.h"
+#include "sysc/utils/sc_ptr_flag.h"
 #include "sysc/utils/sc_report.h"
 #include <type_traits>
 #include <cstdint>
@@ -54,17 +55,17 @@ public:
     explicit operator bool() const;
 
 protected:
-    sc_object* get_parent_object() const;
+    sc_hierarchy_scope restore_hierarchy();
     void set_has_value();
     void report_double_init(const char* existing_obj_name) const;
 private:
     // has_value flag is stored in LSB of m_parent_with_flag
-    sc_object* m_parent_with_flag = nullptr;
+    sc_ptr_flag<sc_object> m_parent_with_flag;
 };
 
 inline bool sc_optional_base::has_value() const
 {
-    return (reinterpret_cast<uintptr_t>(m_parent_with_flag) & 0x1) == 1;
+    return m_parent_with_flag.get_flag();
 }
 
 inline sc_optional_base::operator bool() const
@@ -116,7 +117,7 @@ template<typename... Args>
 void sc_optional<T>::init(Args... args)
 {
     if (!has_value()) {
-        sc_object::hierarchy_scope guard{ get_parent_object() };
+        sc_hierarchy_scope scope{ restore_hierarchy() };
         new (&m_val) T(std::forward<Args>(args)...);
         set_has_value();
     } else {
@@ -161,6 +162,5 @@ inline const T &sc_optional<T>::operator*() const
 
 } // namespace sc_core
 
-#endif // C++11
-
-#endif //SC_OPTIONAL_H_INCLUDED_
+#endif // SC_CPLUSPLUS >= 201103L
+#endif // SC_OPTIONAL_H_INCLUDED_
