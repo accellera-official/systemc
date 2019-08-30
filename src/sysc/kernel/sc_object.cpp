@@ -34,6 +34,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cctype>
+#include <sstream>
 
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_kernel_ids.h"
@@ -98,7 +99,7 @@ sc_hierarchy_scope::move_tag::move_tag( sc_hierarchy_scope& s )
   : simc( s.m_simc )
   , scope( s.m_scoped_top )
 {
-  s.m_simc = NULL;
+    s.m_simc = NULL;
 }
 
 sc_hierarchy_scope::move_tag
@@ -113,9 +114,15 @@ sc_hierarchy_scope::~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false)
 {
     if (m_simc)
     {
-        if( SC_UNLIKELY_(m_simc->active_object() != m_scoped_top) )
+        sc_object* active = m_simc->active_object();
+        if( SC_UNLIKELY_(active != m_scoped_top) )
         {
-            SC_REPORT_ERROR("TODO: add ID", "corrupt hierarchy scope");
+            std::stringstream sstr;
+            sstr << "current scope: "
+                 << ((active) ? active->name() : "(root)" )
+                 << ", expected scope: "
+                 << ((m_scoped_top) ? m_scoped_top->name() : "(root)");
+            SC_REPORT_ERROR(SC_ID_CORRUPT_HIERARCHY_SCOPE_, sstr.str().c_str() );
             sc_abort();
         }
         m_simc->hierarchy_pop();

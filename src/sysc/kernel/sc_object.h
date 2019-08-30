@@ -97,10 +97,10 @@ public:
 #endif // SC_CPLUSPLUS >= 201103L
 
 private:
-    // disable copying and assignment
+    // disabled copying and assignment
     sc_hierarchy_scope(const sc_hierarchy_scope&) /* = delete */;
     sc_hierarchy_scope& operator=(const sc_hierarchy_scope&) /* = delete */;
-    // disallow dynamic allocation
+    // disabled dynamic allocation
     void* operator new(std::size_t) /* = delete */;
     void* operator new[](std::size_t) /* = delete */;
 
