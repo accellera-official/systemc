@@ -149,6 +149,20 @@ int sc_main( int, char*[] )
     sc_assert( v.has_entry("scale") );
     std::cout << "JSON (map)    : " << v.to_json() << std::endl;
   }
+  {
+    const char invalid_json[] = "{ \"incomplete\": true" /* missing closing } */;
+    sc_any_value v;
+    bool error = false;
+    try {
+      v = sc_any_value::from_json( invalid_json );
+    } catch ( const sc_core::sc_report& ex ) {
+      sc_core::sc_string_view msg_type = sc_core::SC_ID_ANY_VALUE_PARSING_FAILED_;
+      sc_assert( msg_type == ex.get_msg_type() );
+      error = true;
+      std::cout << "JSON (error)  : " << ex.get_msg() << std::endl;
+    }
+    sc_assert( error );
+  }
 
   return EXIT_SUCCESS;
 }
