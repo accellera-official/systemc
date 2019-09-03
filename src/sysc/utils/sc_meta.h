@@ -93,11 +93,13 @@ namespace sc_meta {
           && ( is_const<CT>::value >= is_const<T>::value )
       > {};
 
+//@cond SC_HIDDEN_FROM_DOXYGEN
   struct special_result {};
   template< typename T > struct remove_special_fptr {};
   template< typename T >
   struct remove_special_fptr< special_result& (*)( T ) >
     { typedef T type; };
+//@endcond
 
 } // namespace sc_meta
 } // namespace sc_core

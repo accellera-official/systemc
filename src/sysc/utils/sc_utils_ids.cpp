@@ -38,6 +38,7 @@ namespace sc_core {
 #include "sysc/utils/sc_utils_ids.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/communication/sc_communication_ids.h"
+#include "sysc/datatypes/any/sc_any_value_ids.h"
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/fx/sc_fx_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
@@ -57,6 +58,9 @@ static sc_msg_def texts[] = {
 
 #undef SC_COMMUNICATION_IDS_H
 #include "sysc/communication/sc_communication_ids.h"
+
+#undef sc_any_value_IDS_H
+#include "sysc/datatypes/any/sc_any_value_ids.h"
 
 #undef SC_BIT_IDS_H
 #include "sysc/datatypes/bit/sc_bit_ids.h"
