@@ -195,7 +195,7 @@ protected:
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
 
     // restore SystemC hierarchy to current object's hierarchical scope
-    virtual hierarchy_scope restore_hierarchy();
+    SC_NODISCARD_ virtual hierarchy_scope restore_hierarchy();
 
 private:
             void do_simulation_phase_callback();
@@ -248,7 +248,7 @@ public:
 
 protected:
     // restore SystemC hierarchy to current object's hierarchical scope
-    virtual hierarchy_scope restore_hierarchy();
+    SC_NODISCARD_ virtual hierarchy_scope restore_hierarchy();
 
 private:
     virtual void add_child_event( sc_event* event_p );
