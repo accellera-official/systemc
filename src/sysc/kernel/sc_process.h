@@ -343,6 +343,10 @@ class SC_API sc_process_b : public sc_object_host {
     inline void reference_decrement();
     inline void reference_increment();
 
+  private:
+    sc_process_b(const sc_process_b&) /* = delete */;
+    sc_process_b& operator=(const sc_process_b&) /* = delete */;
+
   protected:
     inline void semantics();
 
