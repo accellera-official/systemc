@@ -156,6 +156,7 @@ Following is the list of bug fixes and enhancements for the 2.3.4 release:
 
   - Mark QuickThreads stack non-executable on supported platforms
 
+  - tracing: fix buffer overflow for big datatypes
 
 Following is the list of bug fixes and enhancements for the 2.3.3 release:
 
