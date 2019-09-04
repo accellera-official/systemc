@@ -78,7 +78,7 @@ namespace tlm
 #endif
 
 #define TLM_VERSION_RELEASE_YEAR            "2019"      ///< release year  ( YYYY )
-#define TLM_VERSION_RELEASE_MONTH           "06"        ///< release month ( MM )
+#define TLM_VERSION_RELEASE_MONTH           "09"        ///< release month ( MM )
 #define TLM_VERSION_RELEASE_DAY             "04"        ///< release day   ( DD )
 
 #define TLM_COPYRIGHT \
