@@ -281,10 +281,13 @@ public:
 
     void cancel();
 
-    const char* name() const             { return m_name.c_str(); }
     const char* basename() const;
-    sc_object* get_parent_object() const { return m_parent_p; }
-    bool in_hierarchy() const            { return m_parent_p.get_flag() == true; }
+    const char* name() const
+      { return m_name.c_str(); }
+    sc_object* get_parent_object() const
+      { return m_parent_with_hierarchy_flag; }
+    bool in_hierarchy() const
+      { return m_parent_with_hierarchy_flag.get_flag() == true; }
 
     void notify();
     void notify( const sc_time& );
@@ -341,8 +344,8 @@ private:
     mutable std::vector<sc_thread_handle> m_threads_dynamic;
 
     std::string                 m_name;     // name of the event
-    sc_ptr_flag<sc_object_host> m_parent_p; // parent object of the event,
-    // extra flag is set to true, if event is registered in hierarchy
+    sc_ptr_flag<sc_object_host> m_parent_with_hierarchy_flag; // parent object of
+    // the event, extra flag is set to true, if event is registered in hierarchy
 
 private:
     static struct kernel_tag {} kernel_event;

@@ -486,7 +486,7 @@ sc_object_host::remove_child_event( sc_event* event_p )
     for( ; it != end; ++it  ) {
         if( *it == event_p )
         {
-            (*it)->m_parent_p = NULL;
+            (*it)->m_parent_with_hierarchy_flag = NULL;
             *it = events.back();
             events.pop_back();
             return true;
@@ -537,7 +537,7 @@ void sc_object_host::orphan_child_events()
             it  = events.begin(), end = events.end();
     for( ; it != end; ++it  )
     {
-        (*it)->m_parent_p = NULL;
+        (*it)->m_parent_with_hierarchy_flag = NULL;
         simcontext()->add_child_event(*it);
     }
     m_child_events.clear();

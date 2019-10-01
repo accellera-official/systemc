@@ -227,7 +227,7 @@ void
 sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false */ )
 {
     sc_object_manager* object_manager = m_simc->get_object_manager();
-    m_parent_p = m_simc->active_object();
+    m_parent_with_hierarchy_flag = m_simc->active_object();
 
     // No name provided, if we are not executing then create a name:
 
@@ -253,10 +253,10 @@ sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false
 
     if ( !is_kernel_event )
     {
-        m_parent_p.set_flag( true );
+        m_parent_with_hierarchy_flag.set_flag( true );
         object_manager->insert_event(m_name, this);
-        if ( m_parent_p != NULL )
-            m_parent_p->add_child_event( this );
+        if ( m_parent_with_hierarchy_flag != NULL )
+            m_parent_with_hierarchy_flag->add_child_event( this );
         else
             m_simc->add_child_event( this );
     }
@@ -295,7 +295,7 @@ sc_event::sc_event( const char* name )
   , m_threads_static()
   , m_threads_dynamic()
   , m_name()
-  , m_parent_p(NULL)
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( name );
 }
@@ -318,7 +318,7 @@ sc_event::sc_event()
   , m_threads_static()
   , m_threads_dynamic()
   , m_name()
-  , m_parent_p(NULL)
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( NULL );
 }
@@ -341,7 +341,7 @@ sc_event::sc_event( kernel_tag, const char* name )
   , m_threads_static()
   , m_threads_dynamic()
   , m_name()
-  , m_parent_p(NULL)
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( name, /* is_kernel_event = */ true );
 }
@@ -361,8 +361,8 @@ sc_event::~sc_event()
         sc_object_manager* object_manager_p = m_simc->get_object_manager();
         object_manager_p->remove_event( m_name );
 
-        if ( m_parent_p != NULL )
-            m_parent_p->remove_child_event( this );
+        if ( m_parent_with_hierarchy_flag != NULL )
+            m_parent_with_hierarchy_flag->remove_child_event( this );
         else
             m_simc->remove_child_event( this );
     }

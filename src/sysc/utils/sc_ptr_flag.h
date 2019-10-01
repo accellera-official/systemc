@@ -73,14 +73,14 @@ public:
 #if SC_CPLUSPLUS < 201103L
         sc_assert( ( reinterpret_cast<uintptr_type>(p) & flag_mask ) == 0x0 );
 #endif // C++03
-        m_data = reinterpret_cast<uintptr_type>(p) | get_flag();
+        m_data = reinterpret_cast<uintptr_type>(p) | static_cast<uintptr_type>(get_flag());
     }
 
     bool get_flag() const
       { return ( m_data & flag_mask ) != 0x0; }
 
     void set_flag(bool f)
-      { m_data = ( m_data & pointer_mask ) | f; }
+      { m_data = ( m_data & pointer_mask ) | static_cast<uintptr_type>(f); }
 
 private:
     static const uintptr_type flag_mask     = 0x1;
