@@ -313,7 +313,7 @@ void sc_object::orphan_child_events()
 
     for( ; it != end; ++it  )
     {
-        (*it)->m_parent_p = NULL;
+        (*it)->m_parent_with_hierarchy_flag = NULL;
         simcontext()->add_child_event(*it);
     }
 }
