@@ -588,6 +588,9 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_pq.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sysc\utils\sc_ptr_flag.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int.h">
       <Filter>Header Files\sc_dt</Filter>
     </ClInclude>

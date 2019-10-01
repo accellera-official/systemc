@@ -271,6 +271,8 @@ private:
           process_handle_class * ph = m_process_handle.get_handle(&trans);
 
           if (!ph) { // create new dynamic process
+            sc_core::sc_hierarchy_scope scope( m_owner->restore_hierarchy() );
+
             ph = new process_handle_class(&trans);
             m_process_handle.put_handle(ph);
 

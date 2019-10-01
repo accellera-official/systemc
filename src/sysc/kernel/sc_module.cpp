@@ -37,7 +37,6 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_module_registry.h"
-#include "sysc/kernel/sc_name_gen.h"
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
@@ -172,18 +171,17 @@ sc_module::sc_module_init()
  */
 
 sc_module::sc_module()
-: sc_object(::sc_core::sc_get_curr_simcontext()
-                  ->get_object_manager()
-                  ->top_of_module_name_stack()
-                  ->operator const char*()),
-  sensitive(this),
-  sensitive_pos(this),
-  sensitive_neg(this),
-  m_end_module_called(false),
-  m_port_vec(),
-  m_port_index(0),
-  m_name_gen(0),
-  m_module_name_p(0)
+  : sc_object_host(sc_core::sc_get_curr_simcontext()
+                      ->get_object_manager()
+                      ->top_of_module_name_stack_name())
+  , sensitive(this)
+  , sensitive_pos(this)
+  , sensitive_neg(this)
+  , m_end_module_called(false)
+  , m_port_vec()
+  , m_port_index(0)
+  , m_name_gen(0)
+  , m_module_name_p(0)
 {
     /* When this form is used, we better have a fresh sc_module_name
        on the top of the stack */
@@ -199,18 +197,16 @@ sc_module::sc_module()
 }
 
 sc_module::sc_module( const sc_module_name& )
-: sc_object(::sc_core::sc_get_curr_simcontext()
-                  ->get_object_manager()
-                  ->top_of_module_name_stack()
-                  ->operator const char*()),
-  sensitive(this),
-  sensitive_pos(this),
-  sensitive_neg(this),
-  m_end_module_called(false),
-  m_port_vec(),
-  m_port_index(0),
-  m_name_gen(0),
-  m_module_name_p(0)
+  : sc_object_host(sc_core::sc_get_curr_simcontext()
+                      ->get_object_manager()
+                      ->top_of_module_name_stack_name())
+  , sensitive(this)
+  , sensitive_pos(this)
+  , sensitive_neg(this)
+  , m_end_module_called(false)
+  , m_port_vec()
+  , m_port_index(0)
+  , m_module_name_p(0)
 {
     /* For those used to the old style of passing a name to sc_module,
        this constructor will reduce the chance of making a mistake */
@@ -235,14 +231,13 @@ sc_module::sc_module( const sc_module_name& )
  *   sc_module( const std::string& )
  */
 sc_module::sc_module( const char* nm )
-: sc_object(nm),
+: sc_object_host(nm),
   sensitive(this),
   sensitive_pos(this),
   sensitive_neg(this),
   m_end_module_called(false),
   m_port_vec(),
   m_port_index(0),
-  m_name_gen(0),
   m_module_name_p(0)
 {
     SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, nm );
@@ -250,14 +245,13 @@ sc_module::sc_module( const char* nm )
 }
 
 sc_module::sc_module( const std::string& s )
-: sc_object( s.c_str() ),
+: sc_object_host( s.c_str() ),
   sensitive(this),
   sensitive_pos(this),
   sensitive_neg(this),
   m_end_module_called(false),
   m_port_vec(),
   m_port_index(0),
-  m_name_gen(0),
   m_module_name_p(0)
 {
     SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, s.c_str() );
@@ -269,21 +263,12 @@ sc_module::sc_module( const std::string& s )
 sc_module::~sc_module()
 {
     delete m_port_vec;
-    delete m_name_gen;
-    orphan_child_objects();
     if ( m_module_name_p )
     {
 	m_module_name_p->clear_module( this ); // must be before end_module()
     	end_module();
     }
     simcontext()->get_module_registry()->remove( *this );
-}
-
-
-const ::std::vector<sc_object*>&
-sc_module::get_child_objects() const
-{
-    return m_child_objects;
 }
 
 // set SC_THREAD asynchronous reset sensitivity
@@ -409,15 +394,6 @@ sc_module::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
 	sc_reset::reset_signal_is(false, iface, level);
 }
 
-// to generate unique names for objects in an MT-Safe way
-
-const char*
-sc_module::gen_unique_name( const char* basename_, bool preserve_first )
-{
-    if( !m_name_gen ) m_name_gen = new sc_name_gen;
-    return m_name_gen->gen_unique_name( basename_, preserve_first );
-}
-
 
 // called by construction_done 
 
@@ -431,7 +407,7 @@ sc_module::before_end_of_elaboration()
 void
 sc_module::construction_done()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     before_end_of_elaboration();
 }
 
@@ -457,7 +433,7 @@ sc_module::elaboration_done( bool& error_ )
         }
         error_ = true;
     }
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     end_of_elaboration();
 }
 
@@ -470,7 +446,7 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     start_of_simulation();
 }
 
@@ -483,7 +459,7 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     end_of_simulation();
 }
 

@@ -527,6 +527,7 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_meta.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pq.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_ptr_flag.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pvector.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_report.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_semaphore_if.h" />
