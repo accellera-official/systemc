@@ -64,7 +64,6 @@ class SC_API sc_hierarchy_scope
     friend class sc_object;
     friend class sc_object_host;
     friend class sc_module;
-    friend class sc_phase_callback_registry;
 
     struct root_tag {};
     struct kernel_tag {};

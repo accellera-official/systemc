@@ -65,7 +65,7 @@ bool sc_enable_name_checking = true;
 //  Scoped manipulation of the current SystemC object hierarchy
 // ----------------------------------------------------------------------------
 
-const sc_hierarchy_scope::root_tag sc_hierarchy_scope::root;
+const sc_hierarchy_scope::root_tag sc_hierarchy_scope::root = {};
 
 sc_hierarchy_scope::sc_hierarchy_scope( root_tag )
   : m_simc( sc_get_curr_simcontext() )
