@@ -2072,7 +2072,10 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
         }
     }
     // Put another newline after all values are printed
-    if(time_printed) std::fputc('\n', fp);
+    if(time_printed) {
+        std::fputc('\n', fp);
+        std::fflush(fp);
+    }
 }
 
 bool vcd_trace_file::get_time_stamp(sc_trace_file_base::unit_type &now_units_high,

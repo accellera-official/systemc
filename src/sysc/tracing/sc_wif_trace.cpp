@@ -1835,6 +1835,7 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
 
     if(time_printed) {
         std::fprintf(fp, "\n");     // Put another newline
+        std::fflush(fp);
         // We update previous_time_units only when we print time because
         // this field stores the previous time that was printed, not the
         // previous time this function was called
