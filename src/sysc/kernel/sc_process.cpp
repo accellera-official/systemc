@@ -543,7 +543,7 @@ void sc_process_b::reset_process( reset_type rt,
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
-     sc_entry_func method_p, sc_process_host* host_p,
+     SC_ENTRY_FUNC method_p, sc_process_host* host_p,
      const sc_spawn_options* /* opt_p  */
 ) :
     sc_object( name_p ),
@@ -611,6 +611,10 @@ sc_process_b::~sc_process_b()
     // DELETE SEMANTICS OBJECTS IF NEED BE:
 
     if ( m_free_host ) delete m_semantics_host_p;
+#   if !defined(SC_USE_MEMBER_FUNC_PTR) // Remove invocation object.
+        delete m_semantics_method_p;
+#   endif
+
 
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 

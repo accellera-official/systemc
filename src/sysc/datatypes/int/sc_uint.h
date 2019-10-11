@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -19,13 +19,16 @@
 
 /*****************************************************************************
 
-  sc_uint.h -- An unsigned integer whose length is less than 64 bits.
-
-               Unlike arbitrary precision, arithmetic and bitwise operations
-               are performed using the native types (hence capped at 64 bits).
-               The sc_uint integer is useful when the user does not need
-               arbitrary precision and the performance is superior to
-               sc_bigint/sc_biguint.
+  sc_uint.h -- A sc_uint is an unsigned integer whose length is less than the
+               machine's native integer length. We provide two implementations
+               (i) sc_uint with length between 1 - 64, and (ii) sc_uint with
+               length between 1 - 32. Implementation (i) is the default
+               implementation, while implementation (ii) can be used only if
+               compiled with -D_32BIT_. Unlike arbitrary precision, arithmetic
+               and bitwise operations are performed using the native types
+               (hence capped at 32/64 bits). The sc_uint integer is useful
+               when the user does not need arbitrary precision and the
+               performance is superior to sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
 
@@ -202,7 +205,21 @@ public:
     sc_uint<W>& operator = ( const sc_signed& a )
 	{ sc_uint_base::operator = ( a ); return *this; }
 
+    template<int W1>
+    inline
+    const sc_uint<W>& operator = ( const sc_bigint<W1>& a );
+
+    template<int W1>
+    inline
+    const sc_uint<W>& operator = ( const sc_biguint<W1>& a );
+
     sc_uint<W>& operator = ( const sc_unsigned& a )
+	{ sc_uint_base::operator = ( a ); return *this; }
+
+    sc_uint<W>& operator = ( const sc_signed_subref_r& a )
+	{ sc_uint_base::operator = ( a ); return *this; }
+
+    sc_uint<W>& operator = ( const sc_unsigned_subref_r& a )
 	{ sc_uint_base::operator = ( a ); return *this; }
 
 #ifdef SC_INCLUDE_FX

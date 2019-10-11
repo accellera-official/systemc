@@ -70,9 +70,7 @@ class tlm_slave_to_transport : public sc_core::sc_module
 {
 public:
 
-#if SC_CPLUSPLUS < 201103L
   SC_HAS_PROCESS( tlm_slave_to_transport );
-#endif // SC_CPLUSPLUS
 
   sc_core::sc_port< tlm_slave_if< REQ , RSP > > slave_port;
   sc_core::sc_port< tlm_transport_if< REQ , RSP > > initiator_port;

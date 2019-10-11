@@ -237,15 +237,15 @@ public:
 
     // process creation
     sc_process_handle create_cthread_process( 
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_method_process( 
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_thread_process( 
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_curr_proc_handle get_curr_proc_info();

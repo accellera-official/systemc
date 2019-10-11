@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -64,6 +64,9 @@ namespace sc_dt
 // classes defined in this module
 template <int W> class sc_biguint;
 
+// classes referenced by this module
+template <int W> class sc_bigint;
+
 // forward class declarations
 class sc_bv_base;
 class sc_lv_base;
@@ -87,95 +90,110 @@ template< int W >
 class sc_biguint
     : public sc_unsigned
 {
+public: // anonymous compile-type information about this type.
+    enum { 
+	ACTUAL_WIDTH = W+1,               // actual width.
+        DIGITS_N     = SC_DIGIT_COUNT(W), // number of digits in digit vector.
+        HOB          = SC_BIT_INDEX(W),   // bit index of high order bit.
+        HOD          = SC_DIGIT_INDEX(W), // digit index of high order bit.
+	SIGNED       = 0,                 // this type is unsigned.
+	WIDTH        = W                  // width as an enum.
+    };
+    typedef int HOD_TYPE;                 // type of high order sc_digit.
+
 public:
 
     // constructors
 
     sc_biguint()
-	: sc_unsigned( W )
+	: sc_unsigned( W, true )
 	{}
 
+    sc_biguint( bool flag )
+	: sc_unsigned( W, false )
+	{ *this = (int)flag; }
+
     sc_biguint( const sc_biguint<W>& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( const sc_unsigned& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( const sc_unsigned_subref& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     template< class T >
     sc_biguint( const sc_generic_base<T>& a )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ a->to_sc_unsigned(*this); }
 
     sc_biguint( const sc_signed& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( const sc_signed_subref& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( const char* v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; } 
 
     sc_biguint( int64 v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( uint64 v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( long v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( unsigned long v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( int v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; } 
 
     sc_biguint( unsigned int v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( double v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
   
     sc_biguint( const sc_bv_base& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     sc_biguint( const sc_lv_base& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
 #ifdef SC_INCLUDE_FX
 
     explicit sc_biguint( const sc_fxval& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxval_fast& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxnum& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxnum_fast& v )
-	: sc_unsigned( W )
+	: sc_unsigned( W, false )
 	{ *this = v; }
 
 #endif
@@ -189,12 +207,24 @@ public:
 	{}
 
 #endif
+    // unary operators:
+
+    inline const sc_bigint<W+1> operator - ();
+    inline const sc_bigint<W+1> operator ~ ();
  
 
     // assignment operators
 
+#if 0
     sc_biguint<W>& operator = ( const sc_biguint<W>& v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+        { sc_unsigned::operator = ( v ); return *this; }
+#endif
+
+    template<int WO>
+    sc_biguint<W>& operator = ( const sc_biguint<WO>& v );
+
+    template<int WO>
+    sc_biguint<W>& operator = ( const sc_bigint<WO>& v );
 
     sc_biguint<W>& operator = ( const sc_unsigned& v )
 	{ sc_unsigned::operator = ( v ); return *this; }
@@ -215,23 +245,17 @@ public:
     sc_biguint<W>& operator = ( const char* v ) 
 	{ sc_unsigned::operator = ( v ); return *this; }
 
-    sc_biguint<W>& operator = ( int64 v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( int64 v ) ; 
 
-    sc_biguint<W>& operator = ( uint64 v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( uint64 v ) ;
 
-    sc_biguint<W>& operator = ( long v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( long v ) ;
 
-    sc_biguint<W>& operator = ( unsigned long v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( unsigned long v ) ; 
 
-    sc_biguint<W>& operator = ( int v ) 
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( int v ) ;
 
-    sc_biguint<W>& operator = ( unsigned int v ) 
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( unsigned int v ) ; 
 
     sc_biguint<W>& operator = ( double v )
 	{ sc_unsigned::operator = ( v ); return *this; }
@@ -243,11 +267,9 @@ public:
     sc_biguint<W>& operator = ( const sc_lv_base& v )
 	{ sc_unsigned::operator = ( v ); return *this; }
 
-    sc_biguint<W>& operator = ( const sc_int_base& v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( const sc_int_base& v ) ;
 
-    sc_biguint<W>& operator = ( const sc_uint_base& v )
-	{ sc_unsigned::operator = ( v ); return *this; }
+    sc_biguint<W>& operator = ( const sc_uint_base& v ) ;
 
 #ifdef SC_INCLUDE_FX
 
@@ -264,6 +286,10 @@ public:
 	{ sc_unsigned::operator = ( v ); return *this; }
 
 #endif
+    void adjust_hod()
+    {
+        digit[HOD] &= ~((sc_digit)-1 << SC_BIT_INDEX(W));
+    }
 };
 
 } // namespace sc_dt

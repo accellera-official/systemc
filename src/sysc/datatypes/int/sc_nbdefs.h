@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -23,7 +23,7 @@
                  arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-
+  
  *****************************************************************************/
 
 /*****************************************************************************
@@ -75,7 +75,9 @@
 #  include <stdint.h>
 #endif
 
+#include "sysc/utils/sc_iostream.h"
 #include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
+#include "sysc/utils/sc_string.h"       // For sc_numrep
 
 // Activate support mixed operands for concatenation via the comma operator
 #define SC_DT_MIXED_COMMA_OPERATORS
@@ -83,29 +85,6 @@
 
 namespace sc_dt
 {
-
-// ----------------------------------------------------------------------------
-//  ENUM : sc_numrep
-//
-//  Enumeration of number representations for character string conversion.
-// ----------------------------------------------------------------------------
-
-enum sc_numrep
-{
-    SC_NOBASE = 0,
-    SC_BIN    = 2,
-    SC_OCT    = 8,
-    SC_DEC    = 10,
-    SC_HEX    = 16,
-    SC_BIN_US,
-    SC_BIN_SM,
-    SC_OCT_US,
-    SC_OCT_SM,
-    SC_HEX_US,
-    SC_HEX_SM,
-    SC_CSD
-};
-
 
 // Sign of a number:
 #define SC_NEG       -1     // Negative number
@@ -119,6 +98,8 @@ typedef unsigned char uchar;
 // better for alignment.
 typedef int small_type;
 
+#define SC_SMALL_VEC_DIGITS 40
+
 // Attributes of a byte.
 #define BITS_PER_BYTE   8
 #define BYTE_RADIX      256
@@ -128,17 +109,55 @@ typedef int small_type;
 // BITS_PER_BYTE is a power of 2.
 #define LOG2_BITS_PER_BYTE 3
 
-// Attributes of the unsigned long. These definitions are used mainly in
+// Attributes of the unsigned int. These definitions are used mainly in
 // the functions that are aware of the internal representation of
 // digits, e.g., get/set_packed_rep().
 #define BYTES_PER_DIGIT_TYPE  4
 #define BITS_PER_DIGIT_TYPE   32
 
-// Attributes of a digit, i.e., unsigned long less the overflow bits.
+// Support for "digit" vectors used to hold the values of sc_signed,
+// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used 
+// in the concatenation support. An sc_digit is currently an unsigned 32-bit 
+// quantity. The typedef used is an unsigned int, rather than an unsigned long,
+// since the unsigned long data type varies in size between 32-bit and 64-bit 
+// machines.
+
 #define BYTES_PER_DIGIT 4
-#define BITS_PER_DIGIT  30
-#define DIGIT_RADIX     (1ul << BITS_PER_DIGIT)
+// #define BITS_PER_DIGIT  30
+#define BITS_PER_DIGIT  32 
+
+typedef unsigned int sc_digit;        // type holding "digits" in big values.
+
+#define DIGIT_RADIX     ((sc_carry)1 << BITS_PER_DIGIT)
 #define DIGIT_MASK      (DIGIT_RADIX - 1)
+
+// If the number of valid bits in an sc_digit is the same as the number of
+// bits in the sc_digit optimize for that fact.
+//
+//   SC_BIT_INDEX   - return the index of this bit within its sc_digit.
+//   SC_DIGIT_INDEX - return the index within an sc_digit vector of the
+//                    supplied bit.
+//   SC_MASK_DIGIT  - mask the supplied sc_digit, keeping the valid bits
+//                    within an sc_digit.
+//   SC_BIT_MASK    - this is the mask for digits below the supplied bit
+//   SC_BIT_MASK1   - this is the mask for digits below, and including 
+//                    the supplied bit
+//   SC_DIGIT_COUNT - this is the number of digits required to accommodate
+//                    the supplied bit.
+
+#if BITS_PER_DIGIT == 32
+#   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
+#   define SC_DIGIT_INDEX(BIT) ((BIT)>>5)
+#   define SC_MASK_DIGIT(v) (v) 
+#else
+#   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
+#   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
+#   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
+#endif
+#define SC_BIT_MASK(BITS) ~( -1 << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK1(BITS) ~( -2 << SC_BIT_INDEX(BITS) )
+#define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
+
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
 
 // Similar attributes for the half of a digit. Note that
@@ -156,7 +175,7 @@ typedef int small_type;
 #define DIV_CEIL(x) DIV_CEIL2(x, BITS_PER_DIGIT)
 
 #ifdef SC_MAX_NBITS
-static const int MAX_NDIGITS = DIV_CEIL(SC_MAX_NBITS) + 2;
+extern const int MAX_NDIGITS;
 // Consider a number with x bits another with y bits. The maximum
 // number of bits happens when we multiply them. The result will have
 // (x + y) bits. Assume that x + y <= SC_MAX_NBITS. Then, DIV_CEIL(x) +
@@ -165,40 +184,31 @@ static const int MAX_NDIGITS = DIV_CEIL(SC_MAX_NBITS) + 2;
 // result of any operation.
 #endif
 
-// Support for "digit" vectors used to hold the values of sc_signed,
-// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used
-// in the concatenation support. An sc_digit is currently an unsigned 32-bit
-// quantity. The typedef used is an unsigned int, rather than an unsigned long,
-// since the unsigned long data type varies in size between 32-bit and 64-bit
-// machines.
-
-typedef unsigned int sc_digit;	// 32-bit unsigned integer
-
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
 #ifndef _WIN32
-#   if defined(__x86_64__) || defined(__aarch64__)
+#   if defined(__x86_64__) || defined(__aarch64_)
         typedef long long          int64;
         typedef unsigned long long uint64;
 #   else
         typedef int64_t            int64;
         typedef uint64_t           uint64;
 #   endif
+    extern const uint64        UINT64_ZERO;
+    extern const uint64        UINT64_ONE;
+    extern const uint64        UINT64_32ONES;
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
+    extern const uint64        UINT64_ZERO;
+    extern const uint64        UINT64_ONE;
+    extern const uint64        UINT64_32ONES;
 #endif
-
-#if !defined(_WIN32) || defined(__MINGW32__)
-    static const uint64 UINT64_ZERO   = 0ULL;
-    static const uint64 UINT64_ONE    = 1ULL;
-    static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+#if BITS_PER_DIGIT < 32
+    typedef unsigned int sc_carry;    // type of carry temporaries.
 #else
-    static const uint64 UINT64_ZERO   = 0i64;
-    static const uint64 UINT64_ONE    = 1i64;
-    static const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
+    typedef uint64       sc_carry;    // type of carry temporaries.
 #endif
-
 
 // Bits per ...
 // will be deleted in the future. Use numeric_limits instead
@@ -212,26 +222,35 @@ typedef unsigned int sc_digit;	// 32-bit unsigned integer
 
 // Digits per ...
 #define DIGITS_PER_CHAR   1
-#define DIGITS_PER_INT    ((BITS_PER_INT+29)/30)
-#define DIGITS_PER_LONG   ((BITS_PER_LONG+29)/30)
-#define DIGITS_PER_INT64  ((BITS_PER_INT64+29)/30)
-#define DIGITS_PER_UINT   ((BITS_PER_UINT+29)/30)
-#define DIGITS_PER_ULONG  ((BITS_PER_ULONG+29)/30)
-#define DIGITS_PER_UINT64 ((BITS_PER_UINT64+29)/30)
+#define DIGITS_PER_INT    ((BITS_PER_INT+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
+#define DIGITS_PER_LONG   ((BITS_PER_LONG+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
+#define DIGITS_PER_INT64  ((BITS_PER_INT64+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
+#define DIGITS_PER_UINT   ((BITS_PER_UINT+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
+#define DIGITS_PER_ULONG  ((BITS_PER_ULONG+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
+#define DIGITS_PER_UINT64 ((BITS_PER_UINT64+(BITS_PER_DIGIT-1))/BITS_PER_DIGIT)
 
 // Above, BITS_PER_X is mainly used for sc_signed, and BITS_PER_UX is
 // mainly used for sc_unsigned.
 
-static const small_type NB_DEFAULT_BASE = SC_DEC;
+#if defined( WIN32 ) || defined( __SUNPRO_CC ) || defined( __HP_aCC )
+typedef unsigned long fmtflags;
+#else
+typedef ::std::ios::fmtflags fmtflags;
+#endif
+
+extern const small_type NB_DEFAULT_BASE ;
 
 // For sc_int code:
+#define LLWIDTH  BITS_PER_INT64
+#define INTWIDTH BITS_PER_INT
 
-    typedef int64 int_type;
-    typedef uint64 uint_type;
-#   define SC_INTWIDTH 64
-    static const uint64 UINT_ZERO = UINT64_ZERO;
-    static const uint64 UINT_ONE = UINT64_ONE;
+typedef int64 int_type;
+typedef uint64 uint_type;
+#define SC_INTWIDTH 64
+extern const uint64 UINT_ZERO;
+extern const uint64 UINT_ONE;
 
 } // namespace sc_dt
+
 
 #endif

@@ -97,10 +97,13 @@ sc_cor_qt::stack_protect( bool enable )
         ret = mprotect( redzone, pagesize - 1, PROT_NONE );
     }
 
-    // Revert the red zone to normal memory usage.
+    // Revert the red zone to normal memory usage. Try to make it read - write -
+    // execute. If that does not work then settle for read - write
 
     else {
-        ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
+        ret = mprotect( redzone, pagesize - 1, PROT_READ|PROT_WRITE|PROT_EXEC);
+        if ( ret != 0 )
+            ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
     }
 
     sc_assert( ret == 0 );

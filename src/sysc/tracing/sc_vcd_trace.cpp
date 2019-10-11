@@ -66,6 +66,10 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert

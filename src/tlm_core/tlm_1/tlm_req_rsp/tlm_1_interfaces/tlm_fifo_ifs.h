@@ -66,11 +66,7 @@ class tlm_fifo_put_if :
 template < typename T >
 class tlm_fifo_get_if :
   public virtual tlm_get_peek_if<T> ,
-  public virtual tlm_fifo_debug_if<T>
-{
-  using tlm_get_peek_if<T>::nb_peek;
-  using tlm_fifo_debug_if<T>::nb_peek;
-};
+  public virtual tlm_fifo_debug_if<T> {};
 
 class tlm_fifo_config_size_if : public virtual sc_core::sc_interface
 {

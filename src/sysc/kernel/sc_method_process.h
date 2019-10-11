@@ -130,7 +130,7 @@ class sc_method_process : public sc_process_b {
 
   public:
     sc_method_process( const char* name_p, bool free_host,
-        sc_entry_func method_p, sc_process_host* host_p,
+        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
         const sc_spawn_options* opt_p );
 
     virtual const char* kind() const

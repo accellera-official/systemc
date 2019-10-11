@@ -39,9 +39,7 @@
 #if !defined(sc_process_handle_h_INCLUDED)
 #define sc_process_handle_h_INCLUDED
 
-#include "sysc/kernel/sc_cmnhdr.h"
-#include "sysc/kernel/sc_object.h"
-#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_module.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)

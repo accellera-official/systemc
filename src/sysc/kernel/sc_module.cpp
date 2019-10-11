@@ -313,66 +313,21 @@ sc_module::async_reset_signal_is(const sc_signal_in_if<bool>& iface, bool level)
 }
 
 void
-sc_module::finalize_module()
-{
-    /* TBD: Can check here to alert the user that end_module
-              was not called for a previous module. */
-    (void)sc_get_curr_simcontext()->hierarchy_pop();
-    sc_get_curr_simcontext()->reset_curr_proc();
-    sensitive.reset();
-    sensitive_pos.reset();
-    sensitive_neg.reset();
-    m_module_name_p = 0; // make sure we are not called in ~sc_module().
-}
-
-void
 sc_module::end_module()
 {
-    if( ! m_end_module_called )
-    {
-        m_end_module_called = true;
-
-        if (m_module_name_p) try {
-            m_module_name_p->execute_initializers();
-        } catch (...) {
-            finalize_module();
-            throw; // propagate exception
-        }
-
-        finalize_module();
+    if( ! m_end_module_called ) {
+	/* TBD: Can check here to alert the user that end_module
+                was not called for a previous module. */
+	(void)sc_get_curr_simcontext()->hierarchy_pop();
+	sc_get_curr_simcontext()->reset_curr_proc(); 
+	sensitive.reset();
+	sensitive_pos.reset();
+	sensitive_neg.reset();
+	m_end_module_called = true;
+	m_module_name_p = 0; // make sure we are not called in ~sc_module().
     }
 }
 
-// create processes via SC_METHOD, SC_THREAD, SC_CTHREAD
-
-void
-sc_module::declare_method_process( sc_entry_func func, const char* name )
-{
-    sc_process_handle handle =
-      simcontext()->create_method_process( name, false, func, this, 0 );
-    sensitive << handle;
-    sensitive_pos << handle;
-    sensitive_neg << handle;
-}
-
-void
-sc_module::declare_thread_process( sc_entry_func func, const char* name )
-{
-    sc_process_handle handle =
-      simcontext()->create_thread_process( name, false, func, this, 0 );
-    sensitive << handle;
-    sensitive_pos << handle;
-    sensitive_neg << handle;
-}
-
-sc_process_handle
-sc_module::declare_cthread_process( sc_entry_func func, const char* name )
-{
-    sc_process_handle handle =
-      simcontext()->create_cthread_process( name, false, func, this, 0 );
-    return handle;
-    // sensitivity is handled in template function
-}
 
 // to prevent initialization for SC_METHODs and SC_THREADs
 

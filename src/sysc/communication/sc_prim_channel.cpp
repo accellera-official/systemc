@@ -151,6 +151,7 @@ sc_prim_channel::simulation_done()
 
 class sc_prim_channel_registry::async_update_list
 {
+#define SC_DISABLE_ASYNC_UPDATES // @@@@#### MAC OS X
 #ifndef SC_DISABLE_ASYNC_UPDATES
 public:
 

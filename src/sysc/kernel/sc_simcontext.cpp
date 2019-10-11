@@ -665,7 +665,6 @@ sc_simcontext::elaborate()
     m_module_registry->elaboration_done();
     SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets(m_reset_finder_q);
-    m_reset_finder_q = NULL;
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -1138,7 +1137,7 @@ sc_simcontext::gen_unique_name( const char* basename_, bool preserve_first )
 
 sc_process_handle
 sc_simcontext::create_cthread_process(
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_thread_handle handle =
@@ -1155,7 +1154,7 @@ sc_simcontext::create_cthread_process(
 
 sc_process_handle
 sc_simcontext::create_method_process(
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_method_handle handle =
@@ -1195,7 +1194,7 @@ sc_simcontext::create_method_process(
 
 sc_process_handle
 sc_simcontext::create_thread_process(
-    const char* name_p, bool free_host, sc_entry_func method_p,
+    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_thread_handle handle =

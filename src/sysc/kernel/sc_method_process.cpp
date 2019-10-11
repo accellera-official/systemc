@@ -301,7 +301,7 @@ void sc_method_process::kill_process(sc_descendant_inclusion_info descendants)
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_method_process::sc_method_process( const char* name_p,
-    bool free_host, sc_entry_func method_p,
+    bool free_host, SC_ENTRY_FUNC method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p
 ):
     sc_process_b(

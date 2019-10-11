@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -71,6 +71,7 @@ class sc_fxval;
 class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
+template <int W> class sc_biguint;
 
 
 // ----------------------------------------------------------------------------
@@ -87,95 +88,110 @@ template< int W >
 class sc_bigint
     : public sc_signed
 {
+public: // anonymous compile-type information about this type.
+    enum { 
+	ACTUAL_WIDTH = W,                   // actual width.
+        DIGITS_N     = SC_DIGIT_COUNT(W-1), // number of digits in digit vector.
+	HOB          = SC_BIT_INDEX(W-1),   // bit index of high order bit.
+        HOD          = SC_DIGIT_INDEX(W-1), // digit index of high order bit.
+	SIGNED       = 1,                   // this type is signed.
+	WIDTH        = W                    // width as an enum.
+    };
+    typedef int HOD_TYPE;                   // type of high order sc_digit.
+
 public:
 
     // constructors
 
     sc_bigint()
-	: sc_signed( W )
+	: sc_signed( W, true )
 	{}
 
+    sc_bigint( bool flag )
+        : sc_signed( W, false )
+	{ *this = (int)flag; }
+
     sc_bigint( const sc_bigint<W>& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( const sc_signed& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( const sc_signed_subref& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     template< class T >
     sc_bigint( const sc_generic_base<T>& a )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ a->to_sc_signed(*this); }
 
     sc_bigint( const sc_unsigned& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( const sc_unsigned_subref& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( const char* v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( int64 v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( uint64 v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( long v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( unsigned long v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( int v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( unsigned int v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( double v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
   
     sc_bigint( const sc_bv_base& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     sc_bigint( const sc_lv_base& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
 #ifdef SC_INCLUDE_FX
 
     explicit sc_bigint( const sc_fxval& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     explicit sc_bigint( const sc_fxval_fast& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     explicit sc_bigint( const sc_fxnum& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
     explicit sc_bigint( const sc_fxnum_fast& v )
-	: sc_signed( W )
+	: sc_signed( W, false )
 	{ *this = v; }
 
 #endif
@@ -189,11 +205,19 @@ public:
 	{}
 
 #endif
+    // unary operators:
+
+    inline const sc_bigint<W> operator - ();
+    inline const sc_bigint<W> operator ~ ();
  
     // assignment operators
 
-    sc_bigint<W>& operator = ( const sc_bigint<W>& v )
-	{ sc_signed::operator = ( v ); return *this; }
+    template<int WO>
+    inline const sc_bigint<W>& operator = ( const sc_bigint<WO>& other );
+	// { sc_signed::operator = ( v ); return *this; }
+
+    template<int WO>
+    inline const sc_bigint<W>& operator = ( const sc_biguint<WO>& other );
 
     sc_bigint<W>& operator = ( const sc_signed& v )
 	{ sc_signed::operator = ( v ); return *this; }
@@ -208,31 +232,25 @@ public:
     sc_bigint<W>& operator = ( const sc_unsigned& v )
 	{ sc_signed::operator = ( v ); return *this; }
 
-    sc_bigint<W>& operator = ( const sc_unsigned_subref& v )
+    inline sc_bigint<W>& operator = ( const sc_unsigned_subref& v )
 	{ sc_signed::operator = ( v ); return *this; }
 
-    sc_bigint<W>& operator = ( const char* v )
+    inline sc_bigint<W>& operator = ( const char* v )
 	{ sc_signed::operator = ( v ); return *this; }
 
-    sc_bigint<W>& operator = ( int64 v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( int64 v );
 
-    sc_bigint<W>& operator = ( uint64 v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( uint64 v );
 
-    sc_bigint<W>& operator = ( long v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( long v );
 
-    sc_bigint<W>& operator = ( unsigned long v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( unsigned long v );
 
-    sc_bigint<W>& operator = ( int v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( int v );
 
-    sc_bigint<W>& operator = ( unsigned int v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( unsigned int v );
 
-    sc_bigint<W>& operator = ( double v )
+    inline sc_bigint<W>& operator = ( double v )
 	{ sc_signed::operator = ( v ); return *this; }
 
 
@@ -242,11 +260,9 @@ public:
     sc_bigint<W>& operator = ( const sc_lv_base& v )
 	{ sc_signed::operator = ( v ); return *this; }
 
-    sc_bigint<W>& operator = ( const sc_int_base& v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( const sc_int_base& v );
 
-    sc_bigint<W>& operator = ( const sc_uint_base& v )
-	{ sc_signed::operator = ( v ); return *this; }
+    inline sc_bigint<W>& operator = ( const sc_uint_base& v );
 
 #ifdef SC_INCLUDE_FX
 
@@ -263,6 +279,11 @@ public:
 	{ sc_signed::operator = ( v ); return *this; }
 
 #endif
+    inline void adjust_hod()
+    {
+        const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
+        digit[HOD] = ( ( (int)digit[HOD] << shift ) >> shift );
+    }
 };
 
 } // namespace sc_dt

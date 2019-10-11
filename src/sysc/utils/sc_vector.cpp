@@ -33,7 +33,6 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_object_manager.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
 
 #include <sstream>
 
@@ -43,10 +42,7 @@ sc_vector_base::sc_vector_base()
   : sc_object( sc_gen_unique_name("vector") )
   , vec_()
   , objs_vec_()
-  , locked(false)
-{
-    init_lock_cb();
-}
+{}
 
 std::vector< sc_object* > const &
 sc_vector_base::get_elements() const
@@ -72,17 +68,6 @@ sc_vector_base::implicit_cast( ... ) const
   return NULL;
 }
 
-bool
-sc_vector_base::check_locked() const
-{
-  if (locked)
-  {
-    SC_REPORT_ERROR( SC_ID_VECTOR_EMPLACE_LOCKED_, name() );
-    return false;
-  }
-  return true;
-}
-
 void
 sc_vector_base::check_index( size_type i ) const
 {
@@ -102,9 +87,6 @@ sc_vector_base::check_init( size_type n ) const
   if ( !n )
     return false;
 
-  if (!check_locked())
-    return false;
-
   if( size() ) // already filled
   {
     std::stringstream str;
@@ -116,21 +98,6 @@ sc_vector_base::check_init( size_type n ) const
     return false;
   }
   return true;
-}
-
-void
-sc_vector_base::init_lock_cb()
-{
-#if SC_HAS_PHASE_CALLBACKS_
-    register_simulation_phase_callback(SC_START_OF_SIMULATION);
-#endif
-}
-
-void
-sc_vector_base::simulation_phase_callback()
-{
-    if (simcontext()->elaboration_done())
-        lock();
 }
 
 void

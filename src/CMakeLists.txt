@@ -97,14 +97,16 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_pow10.cpp
                      sysc/datatypes/fx/scfx_rep.cpp
                      sysc/datatypes/fx/scfx_utils.cpp
-                     sysc/datatypes/int/sc_int_base.cpp
-                     sysc/datatypes/int/sc_int_mask.cpp
-                     sysc/datatypes/int/sc_length_param.cpp
-                     sysc/datatypes/int/sc_nbexterns.cpp
-                     sysc/datatypes/int/sc_nbutils.cpp
-                     sysc/datatypes/int/sc_signed.cpp
-                     sysc/datatypes/int/sc_uint_base.cpp
-                     sysc/datatypes/int/sc_unsigned.cpp
+		     sysc/datatypes/int/sc_int32_mask.cpp
+		     sysc/datatypes/int/sc_int64_io.cpp
+		     sysc/datatypes/int/sc_int64_mask.cpp
+		     sysc/datatypes/int/sc_int_base.cpp
+		     sysc/datatypes/int/sc_length_param.cpp
+		     sysc/datatypes/int/sc_nbdefs.cpp
+		     sysc/datatypes/int/sc_nbutils.cpp
+		     sysc/datatypes/int/sc_signed.cpp
+		     sysc/datatypes/int/sc_uint_base.cpp
+		     sysc/datatypes/int/sc_unsigned.cpp
                      sysc/datatypes/misc/sc_concatref.cpp
                      sysc/datatypes/misc/sc_value_base.cpp
                      sysc/kernel/sc_attribute.cpp
@@ -120,7 +122,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_method_process.cpp
                      sysc/kernel/sc_module.cpp
                      sysc/kernel/sc_module_name.cpp
-                     sysc/kernel/sc_initializer_function.h
                      sysc/kernel/sc_module_registry.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp
@@ -215,19 +216,29 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_rep.h
                      sysc/datatypes/fx/scfx_string.h
                      sysc/datatypes/fx/scfx_utils.h
-                     sysc/datatypes/int/sc_bigint.h
-                     sysc/datatypes/int/sc_biguint.h
-                     sysc/datatypes/int/sc_int.h
-                     sysc/datatypes/int/sc_int_base.h
-                     sysc/datatypes/int/sc_int_ids.h
-                     sysc/datatypes/int/sc_length_param.h
-                     sysc/datatypes/int/sc_nbdefs.h
-                     sysc/datatypes/int/sc_nbexterns.h
-                     sysc/datatypes/int/sc_nbutils.h
-                     sysc/datatypes/int/sc_signed.h
-                     sysc/datatypes/int/sc_uint.h
-                     sysc/datatypes/int/sc_uint_base.h
-                     sysc/datatypes/int/sc_unsigned.h
+		     sysc/datatypes/int/sc_bigint.h 
+		     sysc/datatypes/int/sc_bigint_inlines.h 
+		     sysc/datatypes/int/sc_big_ops.h 
+		     sysc/datatypes/int/sc_biguint.h 
+		     sysc/datatypes/int/sc_biguint_inlines.h 
+		     sysc/datatypes/int/sc_int.h 
+		     sysc/datatypes/int/sc_int_base.h 
+		     sysc/datatypes/int/sc_int_ids.h 
+		     sysc/datatypes/int/sc_int_inlines.h 
+		     sysc/datatypes/int/sc_length_param.h 
+		     sysc/datatypes/int/sc_nbdefs.h 
+		     sysc/datatypes/int/sc_nbutils.h 
+		     sysc/datatypes/int/sc_signed.h 
+		     sysc/datatypes/int/sc_signed_friends.h 
+		     sysc/datatypes/int/sc_signed_inlines.h 
+		     sysc/datatypes/int/sc_signed_ops.h 
+		     sysc/datatypes/int/sc_uint.h 
+		     sysc/datatypes/int/sc_uint_base.h 
+		     sysc/datatypes/int/sc_uint_inlines.h 
+		     sysc/datatypes/int/sc_unsigned.h 
+		     sysc/datatypes/int/sc_unsigned_friends.h 
+		     sysc/datatypes/int/sc_unsigned_inlines.h 
+                     sysc/datatypes/int/sc_vector_utils.h
                      sysc/datatypes/misc/sc_concatref.h
                      sysc/datatypes/misc/sc_value_base.h
                      sysc/kernel/sc_attribute.h
@@ -352,10 +363,10 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/tracing/sc_vcd_trace.h
                      sysc/tracing/sc_wif_trace.h
                      sysc/utils/sc_hash.h
+                     sysc/utils/sc_iostream.h
                      sysc/utils/sc_list.h
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
-                     sysc/utils/sc_meta.h
                      sysc/utils/sc_pq.h
                      sysc/utils/sc_pvector.h
                      sysc/utils/sc_report.h

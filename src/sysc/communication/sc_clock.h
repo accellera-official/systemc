@@ -48,6 +48,9 @@ class SC_API sc_clock
   typedef sc_signal<bool,SC_ONE_WRITER> base_type;
 public:
 
+    friend class sc_clock_posedge_callback;
+    friend class sc_clock_negedge_callback;
+
     // constructors
 
     sc_clock();
@@ -133,6 +136,8 @@ public:
 
 protected:
 
+    void before_end_of_elaboration();
+
     // processes
     void posedge_action();
     void negedge_action();
@@ -143,7 +148,6 @@ protected:
 
 
     void init( const sc_time&, double, const sc_time&, bool );
-    void spawn_edge_method( bool );
 
     bool is_clock() const { return true; }
 
@@ -188,6 +192,26 @@ sc_clock::negedge_action()
 	m_new_val = false;
 	request_update();
 }
+
+
+// ----------------------------------------------------------------------------
+
+class SC_API sc_clock_posedge_callback {
+public:
+    sc_clock_posedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
+    inline void operator () () { m_target_p->posedge_action(); }
+  protected:
+    sc_clock* m_target_p;
+};
+
+class SC_API sc_clock_negedge_callback {
+  public:
+    sc_clock_negedge_callback(sc_clock* target_p) : m_target_p(target_p) {}
+    inline void operator () () { m_target_p->negedge_action(); }
+  protected:
+    sc_clock* m_target_p;
+};
+
 
 } // namespace sc_core
 
