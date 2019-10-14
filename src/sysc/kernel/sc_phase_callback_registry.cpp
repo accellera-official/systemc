@@ -244,7 +244,7 @@ sc_phase_callback_registry::do_callback( sc_status s ) const
 
     for(it_type it = vec.begin(), end = vec.end(); it != end; ++it) {
         if( s & it->mask ) {
-            sc_hierarchy_scope scope(sc_hierarchy_scope::kernel_tag(), it->target);
+            sc_hierarchy_scope scope( it->target->restore_hierarchy() );
             it->target->do_simulation_phase_callback();
         }
     }
