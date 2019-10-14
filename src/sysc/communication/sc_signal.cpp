@@ -139,6 +139,8 @@ sc_event*
 sc_signal_channel::lazy_kernel_event( sc_event** ev, const char* name ) const
 {
     if ( !*ev ) {
+        sc_hierarchy_scope scope
+          ( const_cast<sc_signal_channel*>(this)->restore_hierarchy() );
         *ev = new sc_event( sc_event::kernel_event, name );
     }
     return *ev;

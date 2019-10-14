@@ -223,8 +223,9 @@ sc_notify_time_compare( const void* p1, const void* p2 )
 // | CLASS sc_invoke_method - class to invoke sc_method's to support
 // |                          sc_simcontext::preempt_with().
 // +============================================================================
-SC_MODULE(sc_invoke_method)
+class sc_invoke_method : public sc_module
 {
+public:
     SC_CTOR(sc_invoke_method)
     {
       // remove from object hierarchy
@@ -248,6 +249,7 @@ SC_MODULE(sc_invoke_method)
 	invokers_n = m_invokers.size();
 	if ( invokers_n == 0 )
 	{
+	    sc_hierarchy_scope scope( restore_hierarchy() );
 	    sc_spawn_options options;
 	    options.dont_initialize();
 	    options.set_stack_size(0x100000);
@@ -431,15 +433,12 @@ sc_simcontext::~sc_simcontext()
 // | stack if it is non-empty, or it will be the active process, or NULL
 // | if there is no active process.
 // +----------------------------------------------------------------------------
-sc_object*
+sc_object_host*
 sc_simcontext::active_object()
 {
-    sc_object* result_p; // pointer to return.
-
-    result_p = m_object_manager->hierarchy_curr();
-    if ( !result_p )
-        result_p = (sc_object*)get_curr_proc_info()->process_handle;
-    return result_p;
+    if( m_object_manager->hierarchy_size() > 0 )
+        return m_object_manager->hierarchy_curr();
+    return get_curr_proc_info()->process_handle;
 }
 
 // +----------------------------------------------------------------------------
@@ -665,6 +664,7 @@ sc_simcontext::elaborate()
     m_module_registry->elaboration_done();
     SC_DO_PHASE_CALLBACK_(elaboration_done);
     sc_reset::reconcile_resets(m_reset_finder_q);
+    m_reset_finder_q = NULL;
 
     // check for call(s) to sc_stop
     if( m_forced_stop ) {
@@ -1041,21 +1041,21 @@ sc_simcontext::end()
 }
 
 void
-sc_simcontext::hierarchy_push( sc_module* mod )
+sc_simcontext::hierarchy_push( sc_object_host* objh )
 {
-    m_object_manager->hierarchy_push( mod );
+    m_object_manager->hierarchy_push( objh );
 }
 
-sc_module*
+sc_object_host*
 sc_simcontext::hierarchy_pop()
 {
-	return static_cast<sc_module*>( m_object_manager->hierarchy_pop() );
+	return m_object_manager->hierarchy_pop();
 }
 
-sc_module*
+sc_object_host*
 sc_simcontext::hierarchy_curr() const
 {
-    return static_cast<sc_module*>( m_object_manager->hierarchy_curr() );
+    return m_object_manager->hierarchy_curr();
 }
 
 sc_object*
@@ -1137,7 +1137,7 @@ sc_simcontext::gen_unique_name( const char* basename_, bool preserve_first )
 
 sc_process_handle
 sc_simcontext::create_cthread_process(
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_thread_handle handle =
@@ -1154,7 +1154,7 @@ sc_simcontext::create_cthread_process(
 
 sc_process_handle
 sc_simcontext::create_method_process(
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_method_handle handle =
@@ -1194,7 +1194,7 @@ sc_simcontext::create_method_process(
 
 sc_process_handle
 sc_simcontext::create_thread_process(
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p,
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p )
 {
     sc_thread_handle handle =
@@ -1567,20 +1567,11 @@ SC_API const char*
 sc_gen_unique_name( const char* basename_, bool preserve_first )
 {
     sc_simcontext* simc = sc_get_curr_simcontext();
-    sc_module* curr_module = simc->hierarchy_curr();
-    if( curr_module != 0 ) {
-	return curr_module->gen_unique_name( basename_, preserve_first );
-    } else {
-        sc_process_b* curr_proc_p = sc_get_current_process_b();
-	if ( curr_proc_p )
-	{
-	    return curr_proc_p->gen_unique_name( basename_, preserve_first );
-	}
-	else
-	{
-	    return simc->gen_unique_name( basename_, preserve_first );
-	}
-    }
+    sc_object_host* curr_scope = simc->active_object();
+    if( curr_scope != NULL )
+        return curr_scope->gen_unique_name( basename_, preserve_first );
+
+    return simc->gen_unique_name( basename_, preserve_first );
 }
 
 // Get a handle for the current process

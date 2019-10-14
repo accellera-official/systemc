@@ -31,7 +31,6 @@
 #include <cstdarg>
 #include <cstring>
 
-#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"  // sc_assert
 #include "sysc/utils/sc_utils_ids.h"
@@ -49,46 +48,6 @@ inline static int
 sc_roundup( int n, int m )
 {
     return ((n - 1) / m + 1) * m;
-}
-
-// +------------------------------------------------------------------------------------------------
-// |"to_string"
-// | 
-// | This function returns a string for the supplied number representation.
-// |
-// | Arguments:
-// |     numrep = number representation to return a string for.
-// +------------------------------------------------------------------------------------------------
-const std::string
-to_string( sc_numrep numrep )
-{
-    switch( numrep )
-    {
-        case SC_DEC:
-            return std::string( "SC_DEC" );
-        case SC_BIN:
-            return std::string( "SC_BIN" );
-        case SC_BIN_US:
-            return std::string( "SC_BIN_US" );
-        case SC_BIN_SM:
-            return std::string( "SC_BIN_SM" );
-        case SC_OCT:
-            return std::string( "SC_OCT" );
-        case SC_OCT_US:
-            return std::string( "SC_OCT_US" );
-        case SC_OCT_SM:
-            return std::string( "SC_OCT_SM" );
-        case SC_HEX:
-            return std::string( "SC_HEX" );
-        case SC_HEX_US:
-            return std::string( "SC_HEX_US" );
-        case SC_HEX_SM:
-            return std::string( "SC_HEX_SM" );
-        case SC_CSD:
-            return std::string( "SC_CSD" );
-        default:
-            return std::string( "unknown" );
-    }
 }
 
 

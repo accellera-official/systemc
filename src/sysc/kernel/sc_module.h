@@ -32,15 +32,19 @@
 #define SC_MODULE_H
 
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_macros.h"
 #include "sysc/kernel/sc_module_name.h"
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_sensitive.h"
 #include "sysc/kernel/sc_time.h"
 #include "sysc/kernel/sc_wait.h"
 #include "sysc/kernel/sc_wait_cthread.h"
-#include "sysc/kernel/sc_process.h"
-#include "sysc/kernel/sc_process_handle.h"
 #include "sysc/utils/sc_list.h"
+
+#if SC_CPLUSPLUS >= 201103L
+# include <type_traits> // std::remove_reference
+#endif
 
 namespace sc_core {
 
@@ -77,7 +81,7 @@ extern SC_API const sc_bind_proxy SC_BIND_PROXY_NIL;
 // ----------------------------------------------------------------------------
 
 class SC_API sc_module
-: public sc_object, public sc_process_host
+: public sc_object_host, public sc_process_host
 {
     friend class sc_module_name;
     friend class sc_module_registry;
@@ -85,7 +89,7 @@ class SC_API sc_module
     friend class sc_port_registry;
 	friend class sc_process_b;
     friend class sc_simcontext;
-
+    friend class sc_initializer_function;
 public:
 
     sc_simcontext* sc_get_curr_simcontext()
@@ -146,13 +150,16 @@ public:
 
     // operator() is declared at the end of the class.
 
-    const ::std::vector<sc_object*>& get_child_objects() const;
-
 protected:
-
     // this must be called by user-defined modules
     void end_module();
 
+    void declare_method_process( sc_entry_func func, const char* name );
+    void declare_thread_process( sc_entry_func func, const char* name );
+    sc_process_handle declare_cthread_process( sc_entry_func func, const char* name );
+    template<typename EdgeType>
+    void declare_cthread_process( sc_entry_func func,const char* name, EdgeType& edge )
+      { sensitive( declare_cthread_process(func, name), edge ); }
 
     // to prevent initialization for SC_METHODs and SC_THREADs
     void dont_initialize();
@@ -301,6 +308,8 @@ protected:
     int append_port( sc_port_base* );
 
 private:
+    void finalize_module();
+
     sc_module( const sc_module& );
     const sc_module& operator = ( const sc_module& );
 
@@ -385,8 +394,16 @@ public:
 
 };
 
+// backwards-compatibility: allow (some) macros without trailing semicolon
+#ifdef SC_ALLOW_MACROS_WITHOUT_SEMICOLON
+#   define SC_SEMICOLON_ ;
+#else
+#   define SC_SEMICOLON_ /* nothing */
+#endif // SC_ALLOW_MACROS_WITHOUT_SEMICOLON
+
 extern SC_API sc_module* sc_module_dynalloc(sc_module*);
-#define SC_NEW(x)  ::sc_core::sc_module_dynalloc(new x);
+#define SC_NEW(x) \
+  ::sc_core::sc_module_dynalloc(new x) SC_SEMICOLON_
 
 
 // -----------------------------------------------------------------------------
@@ -396,73 +413,63 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#define SC_CTOR(user_module_name)                                             \
-    typedef user_module_name SC_CURRENT_USER_MODULE;                          \
-    user_module_name( ::sc_core::sc_module_name )
+#if SC_CPLUSPLUS >= 201103L
+    #define SC_HAS_PROCESS(user_module_name)                                  \
+        static_assert(true, "SC_HAS_PROCESS is a no-op, avoid stray ; token")
+        // TODO: add deprecation warning?
 
-// the SC_HAS_PROCESS macro call must be followed by a ;
-#define SC_HAS_PROCESS(user_module_name)                                      \
-    typedef user_module_name SC_CURRENT_USER_MODULE
+    #define SC_CURRENT_USER_MODULE_TYPE \
+        std::remove_reference<decltype(*this)>::type
+#else
+    // the SC_HAS_PROCESS macro call must be followed by a ;
+    #define SC_HAS_PROCESS(user_module_name)                                  \
+        typedef user_module_name SC_CURRENT_USER_MODULE
 
-// The this-> construct on sensitive operators in the macros below is
-// required for gcc 4.x when a templated class has a templated parent that is
-// derived from sc_module:
+    #define SC_CURRENT_USER_MODULE_TYPE SC_CURRENT_USER_MODULE
+#endif
+
+// SC_CTOR  --------------------------------------------------------------------
+
+#define SC_CTOR(...)                                                      \
+        SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
+
+// SC_CTOR( user_module_name )
+#define SC_CTOR_IMPL_ONE_(user_module_name)                               \
+        SC_HAS_PROCESS(user_module_name);                                 \
+        user_module_name( ::sc_core::sc_module_name )
+
+// SC_CTOR( user_module_name , ... )
+#define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
+        SC_HAS_PROCESS(user_module_name);                                 \
+        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
+
+#define SC_CTOR_IMPL_(...)                                                \
+      SC_CONCAT_HELPER_(SC_CTOR_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
+
+// ----------------------------------------------------------------------------
+
+// The this-> construct in the macros below is required when a templated class
+// has a templated parent that is derived from sc_module:
 //
 // template<typename X>
 // class B : public sc_module;
 // template<typename X>
 // class A : public B<X>
 
-#define declare_method_process(handle, name, host_tag, func)        \
-    {		                                                    \
-        ::sc_core::sc_process_handle handle =                      \
-	    sc_core::sc_get_curr_simcontext()->create_method_process( \
-		name,  false, SC_MAKE_FUNC_PTR( host_tag, func ), \
-		this, 0 ); \
-        this->sensitive << handle;                                        \
-        this->sensitive_pos << handle;                                    \
-        this->sensitive_neg << handle;                                    \
-    }
-
-#define declare_thread_process(handle, name, host_tag, func)        \
-    {                                                               \
-        ::sc_core::sc_process_handle handle =                      \
-	     sc_core::sc_get_curr_simcontext()->create_thread_process( \
-                 name,  false,           \
-                 SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        this->sensitive << handle;                                        \
-        this->sensitive_pos << handle;                                    \
-        this->sensitive_neg << handle;                                    \
-    }
-
-#define declare_cthread_process(handle, name, host_tag, func, edge) \
-    {                                                               \
-        ::sc_core::sc_process_handle handle =                     \
-	     sc_core::sc_get_curr_simcontext()->create_cthread_process( \
-            name,  false,          \
-                     SC_MAKE_FUNC_PTR( host_tag, func ), this, 0 ); \
-        this->sensitive.operator() ( handle, edge );\
-    }
-
 #define SC_CTHREAD(func, edge)                                                \
-    declare_cthread_process( func ## _handle,                                 \
-                             #func,                                           \
-                             SC_CURRENT_USER_MODULE,                          \
-                             func,                                            \
-                             edge )
+    this->declare_cthread_process                                             \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func, edge )    \
+    SC_SEMICOLON_
 
 #define SC_METHOD(func)                                                       \
-    declare_method_process( func ## _handle,                                  \
-                            #func,                                            \
-                            SC_CURRENT_USER_MODULE,                           \
-                            func )
+    this->declare_method_process                                              \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
+    SC_SEMICOLON_
 
 #define SC_THREAD(func)                                                       \
-    declare_thread_process( func ## _handle,                                  \
-                            #func,                                            \
-                            SC_CURRENT_USER_MODULE,                           \
-                            func )
-
+    this->declare_thread_process                                              \
+      ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
+    SC_SEMICOLON_
 
 
 // ----------------------------------------------------------------------------

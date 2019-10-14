@@ -95,17 +95,17 @@ SC_API void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
 SC_API void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
 SC_API void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
 
-struct sc_invoke_method; 
+class sc_invoke_method;
 //==============================================================================
 // sc_method_process -
 //
 //==============================================================================
 class sc_method_process : public sc_process_b {
-    friend struct sc_invoke_method; 
     friend void sc_method_cor_fn( void* );
     friend void sc_cmethod_cor_fn( void* );
     friend void sc_set_stack_size( sc_method_handle, std::size_t );
     friend class sc_event;
+    friend class sc_invoke_method;
     friend class sc_module;
     friend class sc_process_table;
     friend class sc_process_handle;
@@ -130,7 +130,7 @@ class sc_method_process : public sc_process_b {
 
   public:
     sc_method_process( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
+        sc_entry_func method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
     virtual const char* kind() const

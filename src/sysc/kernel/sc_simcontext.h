@@ -51,11 +51,14 @@ class sc_cor_pkg;
 class sc_event;
 class sc_event_timed;
 class sc_export_registry;
+class sc_hierarchy_scope;
+class sc_initializer_function;
 class sc_module;
 class sc_module_name;
 class sc_module_registry;
 class sc_name_gen;
 class sc_object;
+class sc_object_host;
 class sc_object_manager;
 class sc_phase_callback_registry;
 class sc_process_handle;
@@ -134,7 +137,7 @@ SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
-struct sc_invoke_method; 
+class sc_invoke_method;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
@@ -144,15 +147,20 @@ struct sc_invoke_method;
 
 class SC_API sc_simcontext
 {
-    friend struct sc_invoke_method; 
     friend class sc_event;
+    friend class sc_export_registry;
+    friend class sc_hierarchy_scope;
+    friend class sc_initializer_function;
+    friend class sc_invoke_method;
     friend class sc_module;
     friend class sc_object;
+    friend class sc_object_host;
     friend class sc_time;
     friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
     friend class sc_phase_callback_registry;
+    friend class sc_port_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_prim_channel;
@@ -205,11 +213,8 @@ public:
 
     inline sc_status get_status() const;
 
-    sc_object* active_object();
+    sc_object_host* active_object();
 
-    void hierarchy_push( sc_module* );
-    sc_module* hierarchy_pop();
-    sc_module* hierarchy_curr() const;
     sc_object* first_object();
     sc_object* next_object();
     sc_object* find_object( const char* name );
@@ -237,15 +242,15 @@ public:
 
     // process creation
     sc_process_handle create_cthread_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_method_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_thread_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_curr_proc_handle get_curr_proc_info();
@@ -294,6 +299,9 @@ public:
     bool pending_activity_at_current_time() const;
 
 private:
+    void hierarchy_push(sc_object_host*);
+    sc_object_host* hierarchy_pop();
+    sc_object_host* hierarchy_curr() const;
 
     void add_child_event( sc_event* );
     void add_child_object( sc_object* );

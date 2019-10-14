@@ -55,20 +55,32 @@ sc_module_name::sc_module_name( const sc_module_name& name_ )
   m_pushed( false )
 {}
 
-sc_module_name::~sc_module_name()
+sc_module_name::~sc_module_name() SC_NOEXCEPT_EXPR_(false)
 {
     if( m_pushed ) {
         sc_module_name* smn = m_simc->get_object_manager()->pop_module_name();
         if( this != smn ) {
             SC_REPORT_ERROR( SC_ID_SC_MODULE_NAME_USE_, 0 );
         }
-	if ( m_module_p ) m_module_p->end_module();
+
+        if ( m_module_p )
+            m_module_p->end_module();
     }
 }
 
 sc_module_name::operator const char*() const
 {
     return m_name;
+}
+
+
+void sc_module_name::execute_initializers()
+{
+#if SC_CPLUSPLUS >= 201103L
+    for (auto& initializer_fn : m_initializer_fn_vec)
+        initializer_fn();
+    m_initializer_fn_vec.clear();
+#endif // C++11
 }
 
 } // namespace sc_core

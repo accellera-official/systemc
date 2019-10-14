@@ -36,16 +36,17 @@ template <unsigned int BUSWIDTH = 32,
           typename FW_IF = tlm_fw_transport_if<>,
           typename BW_IF = tlm_bw_transport_if<> >
 class tlm_base_initiator_socket_b
+  : public tlm_base_socket_if
 {
 public:
   virtual ~tlm_base_initiator_socket_b() {}
 
   virtual sc_core::sc_port_b<FW_IF> &       get_base_port() = 0;
   virtual sc_core::sc_port_b<FW_IF> const & get_base_port() const = 0;
-  virtual                    BW_IF  &       get_base_interface() = 0;
-  virtual                    BW_IF  const & get_base_interface() const = 0;
   virtual sc_core::sc_export<BW_IF> &       get_base_export() = 0;
   virtual sc_core::sc_export<BW_IF> const & get_base_export() const = 0;
+  virtual                    BW_IF  &       get_base_interface() = 0;
+  virtual                    BW_IF  const & get_base_interface() const = 0;
 };
 
 
@@ -64,8 +65,7 @@ template <unsigned int BUSWIDTH = 32,
           typename BW_IF = tlm_bw_transport_if<>,
           int N = 1,
           sc_core::sc_port_policy POL = sc_core::SC_ONE_OR_MORE_BOUND>
-class tlm_base_initiator_socket : public tlm_base_socket_if,
-                                  public tlm_base_initiator_socket_b<BUSWIDTH, FW_IF, BW_IF>,
+class tlm_base_initiator_socket : public tlm_base_initiator_socket_b<BUSWIDTH, FW_IF, BW_IF>,
                                   public sc_core::sc_port<FW_IF, N, POL>
 {
 public:
@@ -155,16 +155,10 @@ public:
   }
 
   // Implementation of tlm_base_socket_if functions
-  virtual sc_core::sc_port_base &         get_port_base()
-    { return *this; }
-  virtual sc_core::sc_port_base const &   get_port_base() const
-    { return *this; }
-  virtual sc_core::sc_export_base &       get_export_base()
-    { return m_export; }
-  virtual sc_core::sc_export_base const & get_export_base() const
-    { return m_export; }
   virtual unsigned int                    get_bus_width() const
     { return BUSWIDTH; }
+  virtual sc_core::sc_type_index          get_protocol_types() const
+    { return typeid(typename BW_IF::protocol_types); }
   virtual tlm_socket_category             get_socket_category() const
     { return TLM_INITIATOR_SOCKET; }
 
@@ -202,32 +196,24 @@ class tlm_initiator_socket :
                                tlm_bw_transport_if<TYPES>,
                                N, POL>
 {
+  typedef tlm_base_initiator_socket<BUSWIDTH,
+                                    tlm_fw_transport_if<TYPES>,
+                                    tlm_bw_transport_if<TYPES>,
+                                    N, POL> base_socket_type;
 public:
-  tlm_initiator_socket() :
-    tlm_base_initiator_socket<BUSWIDTH,
-                         tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES>,
-                         N, POL>()
-  {
-  }
+  tlm_initiator_socket()
+    : base_socket_type()
+  {}
 
-  explicit tlm_initiator_socket(const char* name) :
-    tlm_base_initiator_socket<BUSWIDTH,
-                         tlm_fw_transport_if<TYPES>,
-                         tlm_bw_transport_if<TYPES>,
-                         N, POL>(name)
-  {
-  }
+  explicit tlm_initiator_socket(const char* name)
+    : base_socket_type(name)
+  {}
 
   virtual const char* kind() const
   {
     return "tlm_initiator_socket";
   }
 
-  virtual sc_core::sc_type_index get_protocol_types() const
-  {
-    return typeid(TYPES);
-  }
 };
 
 } // namespace tlm

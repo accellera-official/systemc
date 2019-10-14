@@ -1,3 +1,2 @@
 # Ignore some files for archive creation
 .*                  export-ignore
-docs/DEVELOPMENT.md export-ignore

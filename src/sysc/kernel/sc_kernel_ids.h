@@ -186,7 +186,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_TIME_CONVERSION_FAILED_, 567,
         "sc_time conversion failed")
-// available number 568
+SC_DEFINE_MESSAGE(SC_ID_INSERT_INITIALIZER_FN_, 568,
+        "failed to insert initializer function" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONSTRUCTOR_  , 569,
         "sc_module(const char*), sc_module(const std::string&) "
         "have been deprecated, use sc_module(const sc_module_name&)" )
@@ -200,7 +201,8 @@ SC_DEFINE_MESSAGE(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
         "a process may not be asynchronously reset while the simulation is not running" )
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
         "throw_it not allowed unless simulation is running " )
-
+SC_DEFINE_MESSAGE(SC_ID_CORRUPT_HIERARCHY_SCOPE_, 575,
+        "corrupted sc_hierarchy_scope unwinding" )
 
 /*****************************************************************************
 
@@ -209,7 +211,7 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
 
       Name, Affiliation, Date:
   Description of Modification:
-    
+
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $

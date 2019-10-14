@@ -26,7 +26,6 @@
  NO AUTOMATIC CHANGE LOG IS GENERATED, EXPLICIT CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-
 #ifndef SC_VER_H
 #define SC_VER_H
 
@@ -54,20 +53,20 @@ extern SC_API const bool         sc_is_prerelease;
 extern SC_API const std::string  sc_version_string;
 extern SC_API const std::string  sc_copyright_string;
 
-#define SYSTEMC_2_3_3
+#define SYSTEMC_2_4_0
 
-#define SYSTEMC_VERSION       20181013
+#define SYSTEMC_VERSION       20191014
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      2
-#define SC_VERSION_MINOR      3
-#define SC_VERSION_PATCH      3
-#define SC_IS_PRERELEASE      0
+#define SC_VERSION_MINOR      4
+#define SC_VERSION_PATCH      0
+#define SC_IS_PRERELEASE      1
 
 /// compliancy with IEEE 1666-2011 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     201101L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2018 by all Contributors,\n" \
+  "Copyright (c) 1996-2019 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
@@ -159,8 +158,19 @@ struct SC_API_VERSION_STRING
     (
        // SC_DEFAULT_WRITER_POLICY
        sc_writer_policy default_writer_policy
+       // SC_ENABLE_COVARIANT_VIRTUAL_BASE
+    ,  bool has_covariant_virtual_base
     );
 };
+
+// co-variant return types don't mix with virtual base classes
+// (like sc_interface) on Microsoft Visual C++ compilers
+// -> keep all APIs depending on this as an opt-in for now
+#ifdef SC_ENABLE_COVARIANT_VIRTUAL_BASE
+# define SC_HAS_COVARIANT_VIRTUAL_BASE_ true
+#else
+# define SC_HAS_COVARIANT_VIRTUAL_BASE_ false
+#endif // SC_ENABLE_COVARIANT_VIRTUAL_BASE
 
 #if !defined(SC_BUILD)
 // import explicitly instantiated template
@@ -179,6 +189,7 @@ SC_API_VERSION_STRING
 api_version_check
 (
   SC_DEFAULT_WRITER_POLICY
+, SC_HAS_COVARIANT_VIRTUAL_BASE_
 );
 #endif // SC_DISABLE_API_VERSION_CHECK
 #endif // SC_BUILD
@@ -197,4 +208,4 @@ api_version_check
   Description of Modification:
 
  *****************************************************************************/
-#endif
+#endif // SC_VER_H

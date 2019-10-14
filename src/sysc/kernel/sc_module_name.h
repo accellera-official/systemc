@@ -36,11 +36,22 @@
 #ifndef SC_MODULE_NAME_H
 #define SC_MODULE_NAME_H
 
+#include "sysc/kernel/sc_cmnhdr.h"
+
+#if SC_CPLUSPLUS >= 201103L
+#include <functional>
+#endif
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(push)
+#pragma warning(disable: 4251) // DLL import for std::vector
+#endif
 
 namespace sc_core {
 
 class sc_module;
 class sc_simcontext;
+class sc_initializer_function;
 
 
 // ----------------------------------------------------------------------------
@@ -53,19 +64,23 @@ class SC_API sc_module_name
 {
     friend class sc_module;
     friend class sc_object_manager;
+    friend class sc_initializer_function;
 
 public:
 
     sc_module_name( const char* );
     sc_module_name( const sc_module_name& );
 
-    ~sc_module_name();
+    // might throw from initializer function
+    ~sc_module_name() SC_NOEXCEPT_EXPR_(false);
 
     operator const char*() const;
 
 protected:
     inline void clear_module( sc_module* module_p );
     inline void set_module( sc_module* module_p );
+
+    void execute_initializers();
 
 private:
 
@@ -74,6 +89,9 @@ private:
     sc_module_name* m_next;
     sc_simcontext*  m_simc;
     bool            m_pushed;
+#if SC_CPLUSPLUS >= 201103L
+    std::vector<std::function<void()>> m_initializer_fn_vec;
+#endif // C++11
 
 private:
 
@@ -86,6 +104,9 @@ inline void sc_module_name::clear_module( sc_module* module_p )
 {
     sc_assert( m_module_p == module_p );
     m_module_p = module_p = 0; // avoid unused parameter warning (module_p)
+#if SC_CPLUSPLUS >= 201103L
+    m_initializer_fn_vec.clear();
+#endif // C++11
 }
 
 inline void sc_module_name::set_module( sc_module* module_p )
@@ -94,6 +115,10 @@ inline void sc_module_name::set_module( sc_module* module_p )
 }
 
 } // namespace sc_core
+
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(pop)
+#endif
 
 // Revision 1.4  2011/02/18 20:27:14  acg
 //  Andy Goodrich: Updated Copyrights.

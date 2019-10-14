@@ -310,6 +310,7 @@ void sc_thread_process::kill_process(sc_descendant_inclusion_info descendants )
     {
         m_throw_status = THROW_KILL;
         m_wait_cycle_n = 0;
+        remove_dynamic_events();
         simcontext()->preempt_with(this);
     }
 
@@ -395,7 +396,7 @@ void sc_thread_process::resume_process(
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
-    SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+    sc_entry_func method_p, sc_process_host* host_p,
     const sc_spawn_options* opt_p
 ):
     sc_process_b(

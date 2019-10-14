@@ -31,6 +31,8 @@
 #ifndef SC_SIGNED_INLINES_H
 #define SC_SIGNED_INLINES_H
 
+#include "sc_vector_utils.h"
+
 namespace sc_dt {
 
 // +----------------------------------------------------------------------------
