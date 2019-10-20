@@ -1,6 +1,7 @@
 # ignore common patterns
 .*.sw?
 .#*
+.DS_Store
 *~
 *.exe
 *.l[oa]
