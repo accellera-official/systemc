@@ -66,4 +66,5 @@ add_subdirectory (simple_perf)
 
 if (NOT (CMAKE_CXX_STANDARD EQUAL 98))
     add_subdirectory (2.4/in_class_initialization)
+    add_subdirectory (2.4/sc_optional)
 endif()
