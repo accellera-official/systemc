@@ -210,6 +210,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNSUSPENDABLE_NOTHREAD_  , 577,
         "unsuspendable/suspendable only valid inside a process" )
 SC_DEFINE_MESSAGE(SC_ID_UNBALANCED_UNSUSPENDALL_ , 578,
         "Unmatched unsuspendall/suspendall" )
+SC_DEFINE_MESSAGE(SC_SUSPEND_ALL_UNIMPLEMENTED_ , 579,
+        "suspend_all not enabled (during kernel build)" )
 
 /*****************************************************************************
 
