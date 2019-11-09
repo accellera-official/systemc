@@ -449,8 +449,8 @@ void at_initiator_explicit::send_end_rsp_method(void) // send end response metho
 //=============================================================================
 
 void at_initiator_explicit::invalidate_direct_mem_ptr   // invalidate_direct_mem_ptr
-( sc_dt::uint64 start_range                             // start range
-, sc_dt::uint64 end_range                               // end range
+( sc_dt::uint64 /*start_range*/                         // start range
+, sc_dt::uint64 /*end_range*/                           // end range
 ) 
 {
   std::ostringstream       msg;                         // log message

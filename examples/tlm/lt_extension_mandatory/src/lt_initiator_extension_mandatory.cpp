@@ -268,9 +268,9 @@ lt_initiator_extension_mandatory::initiator_thread      ///< initiator thread
 
 tlm::tlm_sync_enum                                        ///< response
 lt_initiator_extension_mandatory::nb_transport_bw         ///< non-blocking backward transport
-( transaction_type  &trans                                ///< transaction
-, phase_type        &phase                                ///< phase
-, sc_time           &t                                    ///< time
+( transaction_type & /*trans*/                            ///< transaction
+, phase_type       & phase                                ///< phase
+, sc_time          & t                                    ///< time
 )
 {
   tlm::tlm_sync_enum  response;                           ///< response
