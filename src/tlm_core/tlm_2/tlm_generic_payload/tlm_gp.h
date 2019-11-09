@@ -346,7 +346,7 @@ public:
     // call free() or tells the MM to do so
     // it return false if there was active MM so you are now in an unsafe situation
     // recommended use: when 100% sure there is no MM
-    template <typename T> void clear_extension(const T* ext)
+    template <typename T> void clear_extension(const T*)
     {
         clear_extension<T>();
     }
