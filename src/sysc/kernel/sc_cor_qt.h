@@ -58,8 +58,7 @@ public:
 	{}
 
     // destructor
-    virtual ~sc_cor_qt()
-        { delete[] (char*) m_stack; }
+    virtual ~sc_cor_qt();
 
     // switch stack protection on/off
     virtual void stack_protect( bool enable );

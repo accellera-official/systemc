@@ -33,6 +33,8 @@
 ## ****************************************************************************
 
 include $(top_srcdir)/config/Make-rules.sysc
+AM_CFLAGS   += @DEFS@
+AM_CXXFLAGS += @DEFS@
 
 if WANT_QT_THREADS
 QT_LIB    = packages/qt/libqt.la
