@@ -129,7 +129,7 @@ void tlm_generic_payload::reset() {
     //should the other members be reset too?
     m_gp_option = TLM_MIN_PAYLOAD;
     m_extensions.free_entire_cache();
-};
+}
 
 
 // non-virtual deep-copying of the object
