@@ -85,7 +85,8 @@ SC_DEFINE_MESSAGE(SC_ID_DEFAULT_TIME_UNIT_CHANGED_   , 516,
 	"default time unit changed to time resolution" )
 SC_DEFINE_MESSAGE(SC_ID_INCONSISTENT_API_CONFIG_     , 517,
 	"inconsistent library configuration detected" )
-// available message number 518
+SC_DEFINE_MESSAGE(SC_ID_STACK_SETUP_FAILED_          , 518,
+	"stack setup failed" )
 SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 	"wait() is only allowed in SC_THREADs and SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEXT_TRIGGER_NOT_ALLOWED_    , 520,
