@@ -3,7 +3,7 @@ Development process of the Accellera SystemC implementation
 
 This document focuses on the technical aspects related to the development
 of the SystemC implementation. Legal and formal procedures are documented
-at http://accellera.org/about/policies.
+at http://accellera.org/about/policies-and-procedures.
 
 ---------------------------------------------------------------------
 Repository setup
@@ -201,6 +201,12 @@ consider to follow these suggestions:
 >  followed by a blank line and then a more thorough description. Tools
 >  that turn commits into email, for example, use the first line on the
 >  `Subject:` line and the rest of the commit in the body.
+
+> *Note:* **Sign-off procedure for commits**
+>
+> In order to document that contributions are submitted under the
+> Apache-2.0 license (see `LICENSE`), a sign-off procedure is
+> defined in the [contributing guidelines][9].
 
 During the development of the contribution, the `master` branch may
 receive other commits. In that case, consider rebasing the commits in
@@ -496,13 +502,17 @@ assigned.
 Changelog
 ---------------------------------------------------------------------
 
+* v2.2 (2019-11-10)
+  * Fix link to policies and procedures
+  * Add reference to sign-off process described in `CONTRIBUTING.md`
+
 * v2.1 (2019-04-23)
   * Update information about public repositories and their relation
     to the WG-internal repositories.
 
 * v2.0 (2018-10-01)
   * Reorganize contents between `CONTRIBUTING.md` and `DEVELOPMENT.md`
-  * Add informatin about public repositories
+  * Add information about public repositories
   * Formatting fixes and cleanups
 
 * v1.1 (2015-08-23)
