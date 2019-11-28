@@ -25,8 +25,8 @@ How to Contribute
 
 [1]: https://www.accellera.org
 [2]: https://accellera.org/activities/working-groups/systemc-language
-[3]: http://accellera.org/about/policies
-[4]: http://workspace.accellera.org/apps/org/workgroup/lwg/
+[3]: https://accellera.org/about/policies-and-procedures
+[4]: https://workspace.accellera.org/apps/org/workgroup/lwg/
 [5]: https://forums.accellera.org/forum/9-systemc/
 
 ---------------------------------------------------------------------
