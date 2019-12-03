@@ -184,14 +184,14 @@ public:
     sc_object* get_parent() const;
     sc_object* get_parent_object() const;
 
+    virtual ~sc_object();
+
 protected:
     sc_object();
     sc_object(const char* nm);
 
     sc_object( const sc_object& );
     sc_object& operator=( const sc_object& );
-
-    virtual ~sc_object();
 
     phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
