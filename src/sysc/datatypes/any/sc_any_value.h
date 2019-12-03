@@ -122,6 +122,11 @@ public:
   typedef sc_any_value      value_type;
   typedef sc_any_value_cref const_reference;
   typedef sc_any_value_ref  reference;
+  typedef sc_any_value_cref this_type;
+
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_cref( this_type const & other ) = default;
+#endif // C++11
 
   /** @name Type queries */
   ///@{
@@ -292,6 +297,11 @@ protected:
     : sc_any_value_cref(i) {}
 
 public:
+
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_ref( this_type const& other ) = default;
+#endif // C++11
+
   /// move contents to another value (becomes @c null afterwards)
   sc_any_value move();
 
@@ -456,6 +466,10 @@ public:
   typedef std::reverse_iterator<iterator>       reverse_iterator;
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_list_cref( this_type const& other ) = default;
+#endif // C++11
+
   /** @name list queries */
   //@{
   bool      empty() const { return size() == 0;  }
@@ -547,6 +561,10 @@ protected:
     : base_type(i) {}
 
 public:
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_list_ref( this_type const& other ) = default;
+#endif // C++11
+
   this_type operator=( this_type const& );
   this_type operator=( base_type const& );
 
@@ -745,6 +763,10 @@ public:
   typedef std::reverse_iterator<iterator>              reverse_iterator;
   typedef std::reverse_iterator<const_iterator>        const_reverse_iterator;
 
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_map_cref(this_type const& other) = default;
+#endif // C++11
+
   /** @name map queries */
   //@{
   bool      empty()    const { return size() == 0;  }
@@ -852,6 +874,9 @@ protected:
     : base_type(i) {}
 
 public:
+#if SC_CPLUSPLUS >= 201103L
+  sc_any_value_map_ref( this_type const& other ) = default;
+#endif // C++11
 
   this_type operator=( base_type const& );
   this_type operator=( this_type const& );
