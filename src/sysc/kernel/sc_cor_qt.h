@@ -48,24 +48,22 @@ typedef sc_cor_pkg_qt sc_cor_pkg_t;
 // ----------------------------------------------------------------------------
 
 class sc_cor_qt
-: public sc_cor
+  : public sc_cor
 {
 public:
 
     // constructor
     sc_cor_qt()
-	: m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
-	{}
+      : m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
+    {}
 
     // destructor
-    virtual ~sc_cor_qt()
-        { delete[] (char*) m_stack; }
+    virtual ~sc_cor_qt();
 
     // switch stack protection on/off
     virtual void stack_protect( bool enable );
 
 public:
-
     std::size_t    m_stack_size;  // stack size
     void*          m_stack;       // stack
     qt_t*          m_sp;          // stack pointer
@@ -73,7 +71,6 @@ public:
     sc_cor_pkg_qt* m_pkg;         // the creating coroutine package
 
 private:
-
     // disabled
     sc_cor_qt( const sc_cor_qt& );
     sc_cor_qt& operator = ( const sc_cor_qt& );
@@ -87,12 +84,12 @@ private:
 // ----------------------------------------------------------------------------
 
 class sc_cor_pkg_qt
-: public sc_cor_pkg
+  : public sc_cor_pkg
 {
 public:
 
     // constructor
-    sc_cor_pkg_qt( sc_simcontext* simc );
+    explicit sc_cor_pkg_qt( sc_simcontext* simc );
 
     // destructor
     virtual ~sc_cor_pkg_qt();
@@ -109,12 +106,14 @@ public:
     // get the main coroutine
     virtual sc_cor* get_main();
 
+    // set the current coroutine (internal helper)
+    inline sc_cor_qt* set_current( sc_cor_qt* );
+
 private:
-
-    static int instance_count;
+    sc_cor_qt  m_main_cor; // main coroutine
+    sc_cor_qt* m_curr_cor; // current coroutine
 
 private:
-
     // disabled
     sc_cor_pkg_qt();
     sc_cor_pkg_qt( const sc_cor_pkg_qt& );

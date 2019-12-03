@@ -251,6 +251,10 @@ dnl check for pthreads compiler flags.
 dnl
 AX_PTHREAD
 
+dnl
+dnl check for presence of posix_memalign function
+dnl
+AC_CHECK_FUNC([posix_memalign],[AC_DEFINE([SC_HAVE_POSIX_MEMALIGN],[1])])
 
 dnl
 dnl Libtool setup
