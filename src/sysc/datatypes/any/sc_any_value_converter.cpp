@@ -97,7 +97,7 @@ DEFINE_UNPACK_(std::string)
 // ----------------------------------------------------------------------------
 // SystemC builtin types
 
-DEFINE_BUILTIN_( sc_core::sc_string_view, string );
+DEFINE_BUILTIN_( sc_core::sc_string_view, string )
 
 DEFINE_PACK_( sc_core::sc_time )
 {

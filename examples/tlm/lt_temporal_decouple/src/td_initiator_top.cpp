@@ -89,10 +89,10 @@ td_initiator_top::td_initiator_top
 ///    Unused and nt implemented in this example
 //
 //============================================================================== 
-void                                                                                          
-td_initiator_top::invalidate_direct_mem_ptr                                      
-( sc_dt::uint64      start_range                        
-, sc_dt::uint64      end_range                 
+void
+td_initiator_top::invalidate_direct_mem_ptr
+( sc_dt::uint64      /*start_range*/
+, sc_dt::uint64      /*end_range*/
 )
 {  
   std::ostringstream       msg;          // log message
@@ -113,11 +113,11 @@ td_initiator_top::invalidate_direct_mem_ptr
 ///    Not Used or Implemented in this example 
 //
 //============================================================================== 
-tlm::tlm_sync_enum       
-td_initiator_top::nb_transport_bw                                                          
-( tlm::tlm_generic_payload  &payload
-, tlm::tlm_phase            &phase
-, sc_core::sc_time          &delta
+tlm::tlm_sync_enum
+td_initiator_top::nb_transport_bw
+( tlm::tlm_generic_payload & /*payload*/
+, tlm::tlm_phase &           /*phase*/
+, sc_core::sc_time &         /*delta*/
 )
 {
   std::ostringstream       msg;                 // log message

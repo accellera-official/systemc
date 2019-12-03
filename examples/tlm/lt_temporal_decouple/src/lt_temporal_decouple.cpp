@@ -44,8 +44,8 @@
 //==============================================================================
 int                                     // return status
 sc_main                                 // SystemC entry point
-  (int   argc                           // argument count
-  ,char  *argv[]                        // argument vector
+  (int   /*argc*/                       // argument count
+  ,char* /*argv*/[]                     // argument vector
 )
 {
   REPORT_ENABLE_ALL_REPORTING ();

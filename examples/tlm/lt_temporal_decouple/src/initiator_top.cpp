@@ -87,10 +87,10 @@ initiator_top::initiator_top
 ///    Not implemented for this initiator
 //
 //============================================================================== 
-  void                                                                                          
-  initiator_top::invalidate_direct_mem_ptr                                      
-  ( sc_dt::uint64      start_range                        
-  , sc_dt::uint64      end_range                 
+  void
+  initiator_top::invalidate_direct_mem_ptr
+  ( sc_dt::uint64      /*start_range*/
+  , sc_dt::uint64      /*end_range*/
   )
   {  
     std::ostringstream       msg;          // log message
@@ -110,11 +110,11 @@ initiator_top::initiator_top
 ///    Not Used or Implemented in this example 
 ///
 //============================================================================== 
-tlm::tlm_sync_enum       
-initiator_top::nb_transport_bw                                                          
-( tlm::tlm_generic_payload  &payload
-, tlm::tlm_phase            &phase
-, sc_core::sc_time          &delta
+tlm::tlm_sync_enum
+initiator_top::nb_transport_bw
+( tlm::tlm_generic_payload & /*payload*/
+, tlm::tlm_phase &           /*phase*/
+, sc_core::sc_time &         /*delta*/
 )
 {
   std::ostringstream       msg;                 // log message

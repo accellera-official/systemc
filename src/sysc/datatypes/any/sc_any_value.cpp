@@ -371,8 +371,7 @@ std::istream& operator>>( std::istream& is, sc_any_value_ref v )
   catch ( rapidjson::ParseException const& ex )
   {
     std::stringstream ss;
-    ss << "JSON parse error: "
-       << rapidjson::GetParseError_En( ex.Code() )
+    ss << "JSON parse error: " << ex.what()
        << " (offset: " << ex.Offset() << ")";
     SC_REPORT_WARNING( sc_core::SC_ID_ANY_VALUE_PARSING_FAILED_, ss.str().c_str() );
     is.setstate( std::istream::failbit );
@@ -930,8 +929,7 @@ sc_any_value::from_json( sc_string_view json )
   catch ( rapidjson::ParseException const & ex )
   {
     std::stringstream ss;
-    ss << "JSON parse error: "
-       << rapidjson::GetParseError_En( ex.Code() )
+    ss << "JSON parse error: " << ex.what()
        << " (offset: " << ex.Offset() << ")";
     SC_REPORT_ERROR( sc_core::SC_ID_ANY_VALUE_PARSING_FAILED_, ss.str().c_str() );
   }
