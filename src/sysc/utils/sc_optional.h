@@ -47,6 +47,8 @@
 
 namespace sc_core {
 
+SC_API_TEMPLATE_DECL_ sc_ptr_flag<sc_object>;
+
 class SC_API sc_optional_base
 {
 public:
