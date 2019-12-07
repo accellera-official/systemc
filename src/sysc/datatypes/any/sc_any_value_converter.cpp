@@ -45,11 +45,11 @@
 namespace sc_dt {
 
 #define DEFINE_PACK_( Type )                                                  \
-  template<> bool                                                             \
+  template<> SC_API bool                                                      \
   sc_any_value_converter<Type>::pack( sc_any_value::reference dst, type const & src )
 
 #define DEFINE_UNPACK_(Type)                                                  \
-  template<> bool                                                             \
+  template<> SC_API bool                                                      \
   sc_any_value_converter<Type>::unpack( type & dst, sc_any_value::const_reference src )
 
 

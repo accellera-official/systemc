@@ -104,7 +104,7 @@ impl_type* impl_pool::free_list_;
 // ----------------------------------------------------------------------------
 // sc_any_value_cref
 
-bool
+SC_API bool
 operator == ( sc_any_value_cref const & left, sc_any_value_cref const & right )
 {
   if( PIMPL(left) == PIMPL(right) )
@@ -235,7 +235,8 @@ sc_any_value_map_cref sc_any_value_cref::get_map() const
   return sc_any_value_map_cref(pimpl_);
 }
 
-std::ostream& operator<<( std::ostream& os, sc_any_value_cref const& v )
+SC_API std::ostream&
+operator<<( std::ostream& os, sc_any_value_cref const& v )
 {
   if( v.is_null() ) {
     os << "null";
@@ -357,7 +358,8 @@ sc_any_value_ref::set_map()
   return sc_any_value_map_ref( THIS );
 }
 
-std::istream& operator>>( std::istream& is, sc_any_value_ref v )
+SC_API std::istream&
+operator>>( std::istream& is, sc_any_value_ref v )
 {
   sc_assert( PIMPL(v) );
   json_document d;
@@ -431,17 +433,17 @@ typename iterator_impl<T>::difference_type
 iterator_impl<T>::distance(impl_type that_impl) const
   { return iterator_impl_json<T>::distance( that_impl, impl_, iterator_tag<T>() ); }
 
-template class iterator_impl<sc_any_value_cref>;
-template class iterator_impl<sc_any_value_ref>;
-template class iterator_impl<sc_any_value_map_elem_cref>;
-template class iterator_impl<sc_any_value_map_elem_ref>;
+template class SC_API iterator_impl<sc_any_value_cref>;
+template class SC_API iterator_impl<sc_any_value_ref>;
+template class SC_API iterator_impl<sc_any_value_map_elem_cref>;
+template class SC_API iterator_impl<sc_any_value_map_elem_ref>;
 } // namespace sc_any_value_impl
 ///@endcond
 
-template class sc_any_value_iterator<sc_any_value_cref>;
-template class sc_any_value_iterator<sc_any_value_ref>;
-template class sc_any_value_iterator<sc_any_value_map_elem_cref>;
-template class sc_any_value_iterator<sc_any_value_map_elem_ref>;
+template class SC_API sc_any_value_iterator<sc_any_value_cref>;
+template class SC_API sc_any_value_iterator<sc_any_value_ref>;
+template class SC_API sc_any_value_iterator<sc_any_value_map_elem_cref>;
+template class SC_API sc_any_value_iterator<sc_any_value_map_elem_ref>;
 
 // ----------------------------------------------------------------------------
 // sc_any_value_list_cref
@@ -603,7 +605,7 @@ sc_any_value_list_ref::pop_back()
 // ----------------------------------------------------------------------------
 // sc_any_value_map_cref
 
-sc_any_value_map_elem_cref::sc_any_value_map_elem_cref(void* raw)
+sc_any_value_map_elem_cref::sc_any_value_map_elem_cref(impl_type raw)
   : key  ( static_cast<json_member*>(raw)->name.GetString() )
   , value( &static_cast<json_member*>(raw)->value )
   , pimpl_(raw)
@@ -663,7 +665,7 @@ sc_any_value_map_cref::cend() const
 // ----------------------------------------------------------------------------
 // sc_any_value_map_ref
 
-sc_any_value_map_elem_ref::sc_any_value_map_elem_ref(void* raw)
+sc_any_value_map_elem_ref::sc_any_value_map_elem_ref(impl_type raw)
   : key  ( static_cast<json_member*>(raw)->name.GetString() )
   , value( &static_cast<json_member*>(raw)->value )
   , pimpl_(raw)
