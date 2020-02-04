@@ -100,7 +100,7 @@ private:
 //  Coroutine package class implemented with QuickThreads.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_cor_pkg_fiber
+class sc_cor_pkg_fiber
 : public sc_cor_pkg
 {
   public:
@@ -125,7 +125,10 @@ class SC_API sc_cor_pkg_fiber
 
 private:
 
-    static int instance_count;
+    sc_cor_fiber  m_main_cor; // main coroutine
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+    sc_cor_fiber* m_curr_cor; // current coroutine
+#endif
 
 private:
 

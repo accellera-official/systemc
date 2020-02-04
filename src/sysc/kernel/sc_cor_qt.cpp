@@ -129,7 +129,7 @@ sc_cor_qt::stack_protect( bool enable )
                  << ", address=0x" << std::hex << redzone
                  << ", enable=" << std::boolalpha << enable;
 
-            SC_REPORT_WARNING( SC_ID_STACK_SETUP_FAILED_
+            SC_REPORT_WARNING( SC_ID_COROUTINE_ERROR_
                              , sstr.str().c_str() );
         }
     }
@@ -227,7 +227,7 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     void* aligned_sp = stack_alloc( &cor->m_stack, &cor->m_stack_size );
     if( aligned_sp == NULL )
     {
-        SC_REPORT_ERROR( SC_ID_STACK_SETUP_FAILED_
+        SC_REPORT_ERROR( SC_ID_COROUTINE_ERROR_
                        , "failed to allocate stack memory" );
         sc_abort();
     }
