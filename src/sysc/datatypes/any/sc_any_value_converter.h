@@ -254,20 +254,20 @@ SC_ANY_VALUE_HAS_CONVERTER_(double);
 SC_ANY_VALUE_HAS_CONVERTER_(std::string);
 
 #ifndef SC_BUILD_ANY_VALUE // defined in sc_any_value_converter.cpp
-SC_TPLEXTERN_ template struct sc_any_value_converter<bool>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<int>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<int64>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<unsigned>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<uint64>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<double>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<std::string>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<bool>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<int>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<int64>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<unsigned>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<uint64>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<double>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<std::string>;
 #endif // SC_BUILD_ANY_VALUE
 
 // related numerical types
 // (without range checks for now)
 #define SC_ANY_VALUE_CONVERTER_DERIVED_( UnderlyingType, SpecializedType ) \
   template<> \
-  struct sc_any_value_converter<SpecializedType> \
+  struct SC_API sc_any_value_converter<SpecializedType> \
     : sc_any_value_delegate_converter<SpecializedType, UnderlyingType > {}
 
 
@@ -411,16 +411,16 @@ SC_ANY_VALUE_HAS_CONVERTER_(sc_lv_base);
 SC_ANY_VALUE_CONVERTER_DERIVED_( sc_core::sc_string_view, sc_core::sc_zstring_view );
 
 #ifndef SC_BUILD_ANY_VALUE // defined in sc_any_value_converter.cpp
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_core::sc_string_view>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_core::sc_time>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_bit>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_logic>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_int_base>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_uint_base>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_signed>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_unsigned>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_bv_base>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_lv_base>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_core::sc_string_view>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_core::sc_time>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_bit>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_logic>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_int_base>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_uint_base>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_signed>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_unsigned>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_bv_base>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_lv_base>;
 #endif // SC_BUILD_ANY_VALUE
 
 /// @see sc_any_value_converter primary template
@@ -503,12 +503,12 @@ SC_ANY_VALUE_HAS_CONVERTER_(sc_ufix);
 SC_ANY_VALUE_HAS_CONVERTER_(sc_ufix_fast);
 
 #ifndef SC_BUILD_ANY_VALUE // defined in sc_any_value_converter.cpp
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_fxval>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_fxval_fast>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_fix>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_fix_fast>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_ufix>;
-SC_TPLEXTERN_ template struct sc_any_value_converter<sc_ufix_fast>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_fxval>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_fxval_fast>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_fix>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_fix_fast>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_ufix>;
+SC_TPLEXTERN_ template struct SC_API sc_any_value_converter<sc_ufix_fast>;
 #endif // SC_BUILD_ANY_VALUE
 
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N >

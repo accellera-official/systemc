@@ -33,7 +33,7 @@
 namespace sc_core {
 
 template<typename T>
-struct sc_ptr_flag
+class sc_ptr_flag
 {
 #if SC_CPLUSPLUS >= 201103L
     typedef std::uintptr_t uintptr_type;
