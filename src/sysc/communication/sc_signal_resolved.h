@@ -95,14 +95,8 @@ public:
     virtual const char* kind() const
         { return "sc_signal_resolved"; }
 
-
     // assignment
-    this_type& operator = ( const value_type& a )
-      { base_type::operator=(a); return *this; }
-
-    this_type& operator = ( const sc_signal_in_if<value_type>& a )
-      { base_type::operator=(a); return *this; }
-
+    using base_type::operator=;
     this_type& operator = ( const this_type& a )
       { base_type::operator=(a); return *this; }
 
