@@ -342,7 +342,7 @@ sc_signal_t<T,POL>::do_update()
 //  The sc_signal<T,POL> primitive channel class
 // ----------------------------------------------------------------------------
 
-template< class T, sc_writer_policy POL /* = SC_DEFAULT_WRITER_POLICY */ >
+template< class T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
 class sc_signal
   : public sc_signal_t<T,POL>
 {
