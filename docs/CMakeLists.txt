@@ -49,7 +49,6 @@ set (DOC_FILES
 	       sysc/archived/SystemC_2_1_overview.pdf
 	       sysc/archived/SystemC_2_1_features.pdf
 	       sysc/SystemC_2011_New_Features.pdf
-	       tlm/ChangeLog
 	       tlm/release/TLM_2_0_requirements.pdf
 	       tlm/release/TLM_2_0_white_paper.pdf
 	       tlm/release/README.txt
