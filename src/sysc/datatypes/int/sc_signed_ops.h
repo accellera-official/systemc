@@ -1,21 +1,21 @@
-// +----------------------------------------------------------------------------
-// | The following code is derived, directly or indirectly, from the SystemC
-// | source code Copyright (c) 1996-2017 by all Contributors.
-// | Portions related to performance improvements of sc_biguint and sc_bigint 
-// | are Copyright © 2014-2017 Cadence Design Systems
-// |  
-// | Licensed under the Apache License, Version 2.0 (the "License");
-// | you may not use this file except in compliance with the License.
-// | You may obtain a copy of the License at
-// | 
-// |     http://www.apache.org/licenses/LICENSE-2.0
-// |
-// | Unless required by applicable law or agreed to in writing, software
-// | distributed under the License is distributed on an "AS IS" BASIS,
-// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// | See the License for the specific language governing permissions and
-// | limitations under the License.
-// +----------------------------------------------------------------------------
+/*****************************************************************************
+  
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 
 /*****************************************************************************
 
@@ -949,7 +949,8 @@ const sc_signed operator-(const sc_uint_base& left, const sc_unsigned& right )
 // |   (b) BIT_OP_BIG_NATIVE
 // |   (c) BIT_OP_NATIVE_BIG
 // +----------------------------------------------------------------------------
-
+// @@@@#### How to handle signed / unsigned case?  Look at SIGNED fields
+//  if ( RIGHT_TYPE::SIGNED != LEFT_TYPE::SIGNED ) {  
 #define BIT_OP_BIG_BIG(OP,BIT_OP_RTN,RESULT_TYPE,LEFT_TYPE,RIGHT_TYPE) \
 inline \
 const RESULT_TYPE \
@@ -982,21 +983,23 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	} \
     } 
 
+        // const int                   left_n = left.get_actual_width(); 
+        // const int                   right_n = right.get_actual_width(); 
 #define BIT_OP_BIG_NATIVE(OP,BIT_OP_RTN,RESULT_TYPE,BIG_TYPE,NATIVE_TYPE) \
     inline \
     const RESULT_TYPE \
     operator OP (const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_width(); \
-        const int                   right_n = right.get_actual_width(); \
+        const int                   left_n = left.get_width(); \
+        const int                   right_n = right.get_width(); \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
 	    BIT_OP_RTN<BIG_TYPE::SIGNED,ScNativeDigits<NATIVE_TYPE>::SIGNED>(  \
-	                left.get_hod(),  \
+	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 	                left.get_digits(),  \
-	                right.get_hod(),  \
+	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 		        right.get_digits(),  \
 		        result.get_digits() ); \
 	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
@@ -1005,9 +1008,9 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
         else { \
 	    RESULT_TYPE result( right_n, false );  \
 	    BIT_OP_RTN<ScNativeDigits<NATIVE_TYPE>::SIGNED,BIG_TYPE::SIGNED>( \
-	                right.get_hod(),  \
+	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 	                right.get_digits(),  \
-	                left.get_hod(),  \
+	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 		        left.get_digits(),  \
 		        result.get_digits() ); \
 	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
@@ -1022,15 +1025,15 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_actual_width(); \
-        const int            right_n = right.get_actual_width(); \
+        const int            left_n = left.get_width(); \
+        const int            right_n = right.get_width(); \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
 	    BIT_OP_RTN<ScNativeDigits<NATIVE_TYPE>::SIGNED,BIG_TYPE::SIGNED>( \
-	                left.get_hod(),  \
+	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 		        left.get_digits(),  \
-	                right.get_hod(),  \
+	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 	                right.get_digits(),  \
 		        result.get_digits() ); \
 	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
@@ -1039,9 +1042,9 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
         else { \
 	    RESULT_TYPE result( right_n, false );  \
 	    BIT_OP_RTN<BIG_TYPE::SIGNED,ScNativeDigits<NATIVE_TYPE>::SIGNED>(  \
-	                right.get_hod(),  \
+	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 		        right.get_digits(),  \
-	                left.get_hod(),  \
+	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 	                left.get_digits(),  \
 		        result.get_digits() ); \
 	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \

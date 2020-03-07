@@ -201,6 +201,8 @@ SC_DEFINE_MESSAGE(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
         "a process may not be asynchronously reset while the simulation is not running" )
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
         "throw_it not allowed unless simulation is running " )
+SC_DEFINE_MESSAGE(SC_ID_CORRUPT_HIERARCHY_SCOPE_, 575,
+        "corrupted sc_hierarchy_scope unwinding" )
 
 /*****************************************************************************
 

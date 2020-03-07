@@ -1,21 +1,21 @@
-// +----------------------------------------------------------------------------
-// | The following code is derived, directly or indirectly, from the SystemC
-// | source code Copyright (c) 1996-2017 by all Contributors.
-// | Portions related to performance improvements of sc_biguint and sc_bigint 
-// | are Copyright © 2014-2017 Cadence Design Systems
-// |  
-// | Licensed under the Apache License, Version 2.0 (the "License");
-// | you may not use this file except in compliance with the License.
-// | You may obtain a copy of the License at
-// | 
-// |     http://www.apache.org/licenses/LICENSE-2.0
-// |
-// | Unless required by applicable law or agreed to in writing, software
-// | distributed under the License is distributed on an "AS IS" BASIS,
-// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// | See the License for the specific language governing permissions and
-// | limitations under the License.
-// +----------------------------------------------------------------------------
+/*****************************************************************************
+  
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 
 /*****************************************************************************
 
@@ -79,12 +79,12 @@ sc_big_add( RESULT& result, const LEFT&  left, const RIGHT& right )
 	*result.get_digits() = *left.get_digits() + *right.get_digits(); 
     }
     else if ( 1 == RESULT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -124,7 +124,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::add_result 
 operator + ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::add_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::add_result result(0, 0);
     // sc_big_add<WL,true,WR,true>(result, left, right);
     sc_big_add(result, left, right);
     return result;
@@ -135,7 +135,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::add_result 
 operator + ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::add_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::add_result result(0, 0);
     // sc_big_add<WL,true,WR,false>(result, left, right);
     sc_big_add(result, left, right);
     return result;
@@ -146,7 +146,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::add_result 
 operator + ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::add_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::add_result result(0, 0);
     // sc_big_add<WL,false,WR,true>(result, left, right);
     sc_big_add(result, left, right);
     return result;
@@ -157,7 +157,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::add_result 
 operator + ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::add_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::add_result result(0, 0);
     // sc_big_add<WL,false,WR,false>(result, left, right);
     sc_big_add(result, left, right);
     return result;
@@ -185,12 +185,12 @@ sc_big_and( RESULT& result, const LEFT& left, const RIGHT& right )
 	*result.get_digits() = *left.get_digits() & *right.get_digits(); 
     }
     else if ( 1 == RESULT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -234,7 +234,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::bit_result 
 operator & ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
@@ -244,7 +244,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator & ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
@@ -254,7 +254,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator & ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
@@ -264,7 +264,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::bit_result 
 operator & ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
@@ -340,7 +340,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::bit_result 
 operator | ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
@@ -350,7 +350,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator | ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
@@ -360,7 +360,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator | ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
@@ -370,7 +370,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::bit_result 
 operator | ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
@@ -397,12 +397,12 @@ sc_big_xor( RESULT& result, const LEFT& left, const RIGHT& right )
 	*result.get_digits() = *left.get_digits() ^ *right.get_digits(); 
     }
     else if ( 1 == RESULT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -447,7 +447,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::bit_result 
 operator ^ ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -457,7 +457,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator ^ ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -467,7 +467,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator ^ ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -477,7 +477,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::bit_result 
 operator ^ ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::bit_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -514,12 +514,12 @@ sc_big_divide( RESULT& result, const LEFT&  left, const RIGHT& right )
 	}
     }
     else if ( 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -563,7 +563,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::div_result
 operator / ( const sc_bigint<WL>& numer, const sc_bigint<WR>& denom )
 {
-    typename sc_big_op_info<WL,true,WR,true>::div_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
@@ -573,7 +573,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::div_result
 operator / ( const sc_biguint<WL>& numer, const sc_bigint<WR>& denom )
 {
-    typename sc_big_op_info<WL,true,WR,false>::div_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
@@ -583,7 +583,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::div_result
 operator / ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
 {
-    typename sc_big_op_info<WL,false,WR,true>::div_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
@@ -593,7 +593,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::div_result
 operator / ( const sc_biguint<WL>& numer, const sc_biguint<WR>& denom )
 {
-    typename sc_big_op_info<WL,false,WR,false>::div_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
@@ -630,12 +630,12 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
 	}
     } 
     else if ( 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
-        sc_digit* left_p = left.get_digits();
-        int64     left_value;
-        sc_digit* result_p = result.get_digits();
-        int64     result_value; 
-        sc_digit* right_p = right.get_digits();
-        int64     right_value;
+        const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+        sc_digit*       result_p = result.get_digits();
+        int64           result_value; 
+        const sc_digit* right_p = right.get_digits();
+        int64           right_value;
         if ( 1 == LEFT::HOD ) {
             left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
         }    
@@ -680,7 +680,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::mod_result
 operator % ( const sc_bigint<WL>& numer, const sc_bigint<WR>& denom )
 {
-    typename sc_big_op_info<WL,true,WR,true>::mod_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::mod_result result(0, 0);
     sc_big_modulo(result, numer, denom);
     return result;
 }
@@ -690,7 +690,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::mod_result
 operator % ( const sc_biguint<WL>& numer, const sc_bigint<WR>& denom )
 {
-    typename sc_big_op_info<WL,true,WR,false>::mod_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::mod_result result(0, 0);
     sc_big_modulo(result, numer, denom);
     return result;
 }
@@ -700,7 +700,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::mod_result
 operator % ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
 {
-    typename sc_big_op_info<WL,false,WR,true>::mod_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::mod_result result(0, 0);
     sc_big_modulo(result, numer, denom);
     return result;
 }
@@ -710,7 +710,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::mod_result
 operator % ( const sc_biguint<WL>& numer, const sc_biguint<WR>& denom )
 {
-    typename sc_big_op_info<WL,false,WR,false>::mod_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::mod_result result(0, 0);
     sc_big_modulo(result, numer, denom);
     return result;
 }
@@ -738,12 +738,12 @@ sc_big_multiply( RESULT& result, const LEFT& left, const RIGHT& right )
 	*result.get_digits() = *left.get_digits() * *right.get_digits(); 
     }
     else if ( 1 == RESULT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -783,7 +783,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::mul_result
 operator * ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::mul_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
@@ -793,7 +793,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::mul_result
 operator * ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::mul_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
@@ -803,7 +803,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::mul_result
 operator * ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::mul_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
@@ -813,7 +813,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::mul_result 
 operator * ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::mul_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
@@ -840,12 +840,12 @@ sc_big_subtract( RESULT& result, const LEFT&  left, const RIGHT& right )
 	*result.get_digits() = *left.get_digits() - *right.get_digits(); 
     }
     else if ( 1 == RESULT::HOD ) {
-	sc_digit* left_p = left.get_digits();
-        int64     left_value;
-	sc_digit* result_p = result.get_digits();
-	int64     result_value;
-	sc_digit* right_p = right.get_digits();
-        int64     right_value;
+	const sc_digit* left_p = left.get_digits();
+        int64           left_value;
+	sc_digit*       result_p = result.get_digits();
+	int64           result_value;
+	const sc_digit* right_p = right.get_digits();
+        int64           right_value;
 	if ( 1 == LEFT::HOD ) {
 	    left_value = ( (int64)left_p[1] << BITS_PER_DIGIT ) | *left_p;
 	}
@@ -891,7 +891,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,true>::sub_result
 operator - ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,true>::sub_result result(false);
+    typename sc_big_op_info<WL,true,WR,true>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }
@@ -901,7 +901,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::sub_result
 operator - ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::sub_result result(false);
+    typename sc_big_op_info<WL,true,WR,false>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }
@@ -911,7 +911,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,true>::sub_result
 operator - ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::sub_result result(false);
+    typename sc_big_op_info<WL,false,WR,true>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }
@@ -921,7 +921,7 @@ inline
 const typename sc_big_op_info<WL,false,WR,false>::sub_result
 operator - ( const sc_biguint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,false>::sub_result result(false);
+    typename sc_big_op_info<WL,false,WR,false>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }

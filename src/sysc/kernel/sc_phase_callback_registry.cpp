@@ -27,6 +27,7 @@
  *****************************************************************************/
 
 #include "sysc/kernel/sc_object.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_phase_callback_registry.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/utils/sc_report.h"
@@ -243,7 +244,7 @@ sc_phase_callback_registry::do_callback( sc_status s ) const
 
     for(it_type it = vec.begin(), end = vec.end(); it != end; ++it) {
         if( s & it->mask ) {
-            sc_object::hierarchy_scope scope(it->target);
+            sc_hierarchy_scope scope( it->target->restore_hierarchy() );
             it->target->do_simulation_phase_callback();
         }
     }

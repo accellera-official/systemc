@@ -49,6 +49,7 @@ H_FILES += \
 	utils/sc_machine.h \
 	utils/sc_mempool.h \
 	utils/sc_meta.h \
+	utils/sc_ptr_flag.h \
 	utils/sc_pq.h \
 	utils/sc_pvector.h \
 	utils/sc_report.h \

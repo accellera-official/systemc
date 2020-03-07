@@ -1,21 +1,21 @@
-// +----------------------------------------------------------------------------
-// | The following code is derived, directly or indirectly, from the SystemC
-// | source code Copyright (c) 1996-2017 by all Contributors.
-// | Portions related to performance improvements of sc_biguint and sc_bigint 
-// | are Copyright © 2014-2017 Cadence Design Systems
-// |  
-// | Licensed under the Apache License, Version 2.0 (the "License");
-// | you may not use this file except in compliance with the License.
-// | You may obtain a copy of the License at
-// | 
-// |     http://www.apache.org/licenses/LICENSE-2.0
-// |
-// | Unless required by applicable law or agreed to in writing, software
-// | distributed under the License is distributed on an "AS IS" BASIS,
-// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// | See the License for the specific language governing permissions and
-// | limitations under the License.
-// +----------------------------------------------------------------------------
+/*****************************************************************************
+  
+  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+  more contributor license agreements.  See the NOTICE file distributed
+  with this work for additional information regarding copyright ownership.
+  Accellera licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with the
+  License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+
+ *****************************************************************************/
 #if !defined(SC_VECTOR_UTILS_H)
 #define SC_VECTOR_UTILS_H
 
@@ -161,8 +161,8 @@ class ScNativeDigits<int64>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod() const          { return HOD; }
+    int             get_width() const        { return WIDTH; }
     int             is_signed() const        { return SIGNED; }
-    int             width() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -193,8 +193,8 @@ class ScNativeDigits<uint64>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod() const          { return HOD; }
+    int             get_width() const        { return WIDTH; }
     int             is_signed() const        { return SIGNED; }
-    int             width() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -225,8 +225,8 @@ class ScNativeDigits<long>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod() const          { return HOD; }
+    int             get_width() const        { return WIDTH; }
     int             is_signed() const        { return SIGNED; }
-    int             width() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -258,8 +258,8 @@ class ScNativeDigits<unsigned long>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod() const          { return HOD; }
+    int             get_width() const        { return WIDTH; }
     int             is_signed() const        { return SIGNED; }
-    int             width() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -286,8 +286,8 @@ class ScNativeDigits<int>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod() const          { return HOD; }
+    int             get_width() const        { return WIDTH; }
     int             is_signed() const        { return SIGNED; }
-    int             width() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -315,8 +315,8 @@ class ScNativeDigits<unsigned int>
     sc_digit*       get_digits()             { return m_digits; }
     int             get_digits_n() const     { return DIGITS_N; }
     int             get_hod()                { return HOD; }
+    int             get_width()              { return WIDTH; }
     int             is_signed()              { return SIGNED; }
-    int             width()                  { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -616,7 +616,7 @@ vector_and_reduce( const sc_digit* target_p,
 // +----------------------------------------------------------------------------
 // |"vector_compare"
 // | 
-// | This ACG_INLINE function compares the two supplied vectors, returing their
+// | This inline function compares the two supplied vectors, returing their
 // | relationship.
 // |
 // | Template arguments:
@@ -728,7 +728,7 @@ vector_compare( const int       left_hod,
 // +----------------------------------------------------------------------------
 // |"vector_copy"
 // | 
-// | This ACG_INLINE function copies from one vector of sc_digits to another. The
+// | This inline function copies from one vector of sc_digits to another. The
 // | from vector is treated as "signed", so if its upper bit is one any
 // | extension will be ones, otherwise it will be zeros.
 // |
@@ -766,7 +766,7 @@ vector_copy( const int       from_hod,
 // +----------------------------------------------------------------------------
 // |"vector_copy"
 // | 
-// | This ACG_INLINE function copies from one vector of sc_digits to another of the
+// | This inline function copies from one vector of sc_digits to another of the
 // | exact same size.
 // |
 // | Arguments:
@@ -788,7 +788,7 @@ vector_copy( int             digits_n,
 // +----------------------------------------------------------------------------
 // |"vector_extract"
 // | 
-// | This ACG_INLINE function extracts the specified bits. high_bit must be
+// | This inline function extracts the specified bits. high_bit must be
 // | greater than or equal to low_bit.
 // |
 // | Arguments:
@@ -852,7 +852,7 @@ vector_extract( const sc_digit* source_p,
 // +----------------------------------------------------------------------------
 // |"vector_fill"
 // | 
-// | This ACG_INLINE function fills the supplied vector of digits with the
+// | This inline function fills the supplied vector of digits with the
 // | supplied value.
 // |
 // | Arguments:
@@ -874,7 +874,7 @@ vector_fill( const sc_digit  fill,
 // +----------------------------------------------------------------------------
 // |"vector_fill_bits"
 // | 
-// | This ACG_INLINE function sets a range of bits to a value.
+// | This inline function sets a range of bits to a value.
 // |
 // | Arguments:
 // |     fill     = value to set the bits to, either -1 or 0.
@@ -920,7 +920,7 @@ vector_fill_bits( sc_digit  fill,
 // +----------------------------------------------------------------------------
 // |"vector_ones_complement"
 // | 
-// | This ACG_INLINE function performs a ones complement on the value in the 
+// | This inline function performs a ones complement on the value in the 
 // | supplied vector.
 // |
 // | Arguments:
@@ -940,7 +940,7 @@ vector_ones_complement( const int target_hod,
 // +----------------------------------------------------------------------------
 // |"vector_ones_complement"
 // | 
-// | This ACG_INLINE function performs a ones complement on the value of the 
+// | This inline function performs a ones complement on the value of the 
 // | supplied vector, placing it in the supplied destination vector.
 // |
 // | Arguments:
@@ -998,7 +998,7 @@ vector_reverse_bits( sc_digit* target_p,
 // +----------------------------------------------------------------------------
 // |"vector_insert_bits"
 // | 
-// | This ACG_INLINE function inserts the supplied value in the specified bit
+// | This inline function inserts the supplied value in the specified bit
 // | range. It is assumed the target value has enough digits to accommodate
 // | the range, and that the source data is large enough to provide data
 // | for each bit in the range.
@@ -1224,7 +1224,7 @@ class vector_mac
 // +----------------------------------------------------------------------------
 // |"vector_multiply"
 // | 
-// | This ACG_INLINE function will multiply two vectors of sc_digits representing
+// | This inline function will multiply two vectors of sc_digits representing
 // | signed numbers. Trimming and/or sign extension is left to the caller.
 // |
 // | Notes:
@@ -1958,7 +1958,7 @@ vector_subtract_shorter( const int       longer_hod,
 // +----------------------------------------------------------------------------
 // |"vector_twos_complement"
 // | 
-// | This ACG_INLINE function complements the value in the supplied vector.
+// | This inline function complements the value in the supplied vector.
 // |
 // | Arguments:
 // |     target_hod = index of the high order 'target_p' digit.
@@ -1980,7 +1980,7 @@ vector_twos_complement( const int target_hod,
 // +----------------------------------------------------------------------------
 // |"vector_twos_complement"
 // | 
-// | This ACG_INLINE function complements the value of the supplied vector, 
+// | This inline function complements the value of the supplied vector, 
 // | placing it in the supplied destination vector.
 // |
 // | Arguments:

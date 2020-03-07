@@ -92,7 +92,7 @@ void sc_prim_channel::before_end_of_elaboration()
 void
 sc_prim_channel::construction_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     before_end_of_elaboration();
 }
 
@@ -108,7 +108,7 @@ sc_prim_channel::end_of_elaboration()
 void
 sc_prim_channel::elaboration_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     end_of_elaboration();
 }
 
@@ -123,7 +123,7 @@ sc_prim_channel::start_of_simulation()
 void
 sc_prim_channel::start_simulation()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     start_of_simulation();
 }
 
@@ -138,7 +138,7 @@ sc_prim_channel::end_of_simulation()
 void
 sc_prim_channel::simulation_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     end_of_simulation();
 }
 
@@ -151,6 +151,7 @@ sc_prim_channel::simulation_done()
 
 class sc_prim_channel_registry::async_update_list
 {
+#define SC_DISABLE_ASYNC_UPDATES // @@@@#### MAC OS X
 #ifndef SC_DISABLE_ASYNC_UPDATES
 public:
 

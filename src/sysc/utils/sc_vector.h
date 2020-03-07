@@ -158,16 +158,7 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-  class SC_API context_scope
-  {
-    sc_vector_base* owner_;
-  public:
-    explicit context_scope(sc_vector_base* owner);
-    ~context_scope();
-  };
-
   void init_lock_cb();
-
   void simulation_phase_callback(); // override callback
 
 public: 
@@ -652,10 +643,10 @@ sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
 {
   if ( base_type::check_init(n) )
   {
-    // restore SystemC hierarchy context, if needed
-    sc_vector_base::context_scope scope( this );
-
     base_type::reserve( n );
+
+    // restore SystemC hierarchy context, if needed
+    sc_hierarchy_scope scope( restore_hierarchy() );
     try
     {
       for ( size_type i = 0; i<n; ++i )
@@ -686,7 +677,7 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back( Args&&... args ) {
   if (check_locked()) {
-    sc_vector_base::context_scope scope( this );
+    sc_hierarchy_scope scope( restore_hierarchy() );
     T* p = new T( make_name( basename(), size()).c_str() ,
                   std::forward<Args>(args)...);
     base_type::push_back(p);
@@ -697,13 +688,13 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back_with_name(Args &&... args) {
   if (check_locked()) {
-    sc_vector_base::context_scope scope(this);
+    sc_hierarchy_scope scope( restore_hierarchy() );
     T *p = new T(std::forward<Args>(args)...);
     base_type::push_back(p);
   }
 }
 
-#endif
+#endif // SC_CPLUSPLUS >= 201103L
 
 template< typename T >
 void

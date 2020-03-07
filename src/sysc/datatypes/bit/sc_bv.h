@@ -48,6 +48,7 @@
 #define SC_BV_H
 
 
+#include "sysc/datatypes/int/sc_bigint.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
 
 
@@ -100,9 +101,19 @@ public:
 	: sc_bv_base( W )
 	{ sc_bv_base::operator = ( a ); }
 
+    template<int WO>
+    sc_bv( const sc_biguint<WO>& a )
+      : sc_bv_base( W )
+      { sc_bv_base::operator = ( a.sc_unsigned_proxy() ); } //@@@####
+
     sc_bv( const sc_signed& a )
 	: sc_bv_base( W )
 	{ sc_bv_base::operator = ( a ); }
+
+    template<int WO>
+    sc_bv( const sc_bigint<WO>& a )
+      : sc_bv_base( W )
+      { sc_bv_base::operator = ( a.sc_signed_proxy() ); } //@@@####
 
     sc_bv( const sc_uint_base& a )
 	: sc_bv_base( W )
@@ -164,6 +175,7 @@ public:
     sc_bv<W>& operator = ( const sc_logic* a )
 	{ sc_bv_base::operator = ( a ); return *this; }
 
+#if 0
     sc_bv<W>& operator = ( const sc_unsigned& a )
 	{ sc_bv_base::operator = ( a ); return *this; }
 
@@ -172,6 +184,7 @@ public:
 
     sc_bv<W>& operator = ( const sc_uint_base& a )
 	{ sc_bv_base::operator = ( a ); return *this; }
+#endif
 
     sc_bv<W>& operator = ( const sc_int_base& a )
 	{ sc_bv_base::operator = ( a ); return *this; }

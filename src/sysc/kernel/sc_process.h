@@ -28,8 +28,8 @@
  *****************************************************************************/
 
 
-#if !defined(sc_process_h_INCLUDED)
-#define sc_process_h_INCLUDED
+#ifndef SC_PROCESS_H_INCLUDED_
+#define SC_PROCESS_H_INCLUDED_
 
 #include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_object.h"
@@ -48,7 +48,6 @@ class sc_process_handle;
 class sc_thread_process;
 class sc_reset;
 
-SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
 SC_API  sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
 SC_API bool timed_out( sc_simcontext* );
@@ -203,7 +202,7 @@ class sc_throw_it : public sc_throw_it_helper
 //       method call: sync_reset_on - sync_reset_off.
 //
 //==============================================================================
-class SC_API sc_process_b : public sc_object {
+class SC_API sc_process_b : public sc_object_host {
     friend class sc_simcontext;      // Allow static processes to have base.
     friend class sc_cthread_process; // Child can access parent.
     friend class sc_method_process;  // Child can access parent.
@@ -224,7 +223,6 @@ class SC_API sc_process_b : public sc_object {
     friend class sc_reset_finder;
     friend class sc_unwind_exception;
 
-    friend SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
     friend SC_API sc_process_handle sc_get_current_process_handle();
     friend void sc_thread_cor_fn( void* arg );
     friend SC_API bool timed_out( sc_simcontext* );
@@ -285,7 +283,6 @@ class SC_API sc_process_b : public sc_object {
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
     std::string dump_state() const;
-    const ::std::vector<sc_object*>& get_child_objects() const;
     inline sc_curr_proc_kind proc_kind() const;
     sc_event& reset_event();
     sc_event& terminated_event();
@@ -295,14 +292,16 @@ class SC_API sc_process_b : public sc_object {
 
   protected:
     virtual void add_child_object( sc_object* );
+    virtual void add_child_event( sc_event* );
+    virtual bool remove_child_object( sc_object* );
+    virtual bool remove_child_event( sc_event* );
+
     void add_static_event( const sc_event& );
     bool dynamic() const { return m_dynamic_proc != SPAWN_ELAB; }
-    const char* gen_unique_name( const char* basename_, bool preserve_first );
     inline sc_report* get_last_report() { return m_last_report_p; }
     inline bool is_disabled() const;
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
-    virtual bool remove_child_object( sc_object* );
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
@@ -344,6 +343,10 @@ class SC_API sc_process_b : public sc_object {
     inline void reference_decrement();
     inline void reference_increment();
 
+  private:
+    sc_process_b(const sc_process_b&) /* = delete */;
+    sc_process_b& operator=(const sc_process_b&) /* = delete */;
+
   protected:
     inline void semantics();
 
@@ -368,7 +371,6 @@ class SC_API sc_process_b : public sc_object {
     bool                         m_has_stack;       // true is stack present.
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
-    sc_name_gen*                 m_name_gen_p;      // subprocess name generator
     sc_curr_proc_kind            m_process_kind;    // type of process.
     int                          m_references_n;    // outstanding handles.
     std::vector<sc_reset*>       m_resets;          // resets for process.
@@ -392,40 +394,46 @@ class SC_API sc_process_b : public sc_object {
     static sc_process_b* m_last_created_process_p; // Last process created.
 };
 
-typedef sc_process_b sc_process_b;  // For compatibility.
-
 
 //------------------------------------------------------------------------------
 //"sc_process_b::XXXX_child_YYYYY"
 //
-// These methods provide child object support.
+// These methods provide child object/event support.
 //------------------------------------------------------------------------------
+
 inline void
 sc_process_b::add_child_object( sc_object* object_p )
 {
-    sc_object::add_child_object( object_p );
+    sc_object_host::add_child_object( object_p );
+    reference_increment();
+}
+
+inline void
+sc_process_b::add_child_event( sc_event* event_p )
+{
+    sc_object_host::add_child_event( event_p );
     reference_increment();
 }
 
 inline bool
 sc_process_b::remove_child_object( sc_object* object_p )
 {
-    if ( sc_object::remove_child_object( object_p ) ) {
-	    reference_decrement();
-            return true;
+    if ( sc_object_host::remove_child_object( object_p ) ) {
+        reference_decrement();
+        return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
-inline const ::std::vector<sc_object*>&
-sc_process_b::get_child_objects() const
+inline bool
+sc_process_b::remove_child_event( sc_event* event_p )
 {
-    return m_child_objects;
+    if ( sc_object_host::remove_child_event( event_p ) ) {
+        reference_decrement();
+        return true;
+    }
+    return false;
 }
-
 
 //------------------------------------------------------------------------------
 //"sc_process_b::initially_in_reset"
@@ -832,4 +840,4 @@ inline bool sc_process_b::timed_out() const
 // Revision 1.3  2006/01/13 18:44:30  acg
 // Added $Log to record CVS changes into the source.
 
-#endif // !defined(sc_process_h_INCLUDED)
+#endif // SC_PROCESS_H_INCLUDED_

@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -123,6 +123,16 @@ public:
 	: sc_int_base( W )
 	{ sc_int_base::operator = ( a ); }
 
+    template<int WO>
+    sc_int( const sc_bigint<WO>& a )
+        : sc_int_base( W )
+        { sc_int_base::operator = ( a.to_int() ); }
+
+    template<int WO>
+    sc_int( const sc_biguint<WO>& a )
+        : sc_int_base( W )
+        { sc_int_base::operator = ( a.to_int() ); }
+
 #ifdef SC_INCLUDE_FX
 
     explicit sc_int( const sc_fxval& a )
@@ -198,10 +208,22 @@ public:
     sc_int<W>& operator = ( const sc_generic_base<T>& a )
 	{ sc_int_base::operator = ( a->to_int64() ); return *this; }
 
+    template<int W1>
+    const sc_int<W>& operator = ( const sc_bigint<W1>& a );
+
+    template<int W1>
+    const sc_int<W>& operator = ( const sc_biguint<W1>& a );
+
     sc_int<W>& operator = ( const sc_signed& a )
 	{ sc_int_base::operator = ( a ); return *this; }
 
     sc_int<W>& operator = ( const sc_unsigned& a )
+	{ sc_int_base::operator = ( a ); return *this; }
+
+    sc_int<W>& operator = ( const sc_signed_subref_r& a )
+	{ sc_int_base::operator = ( a ); return *this; }
+
+    sc_int<W>& operator = ( const sc_unsigned_subref_r& a )
 	{ sc_int_base::operator = ( a ); return *this; }
 
 #ifdef SC_INCLUDE_FX

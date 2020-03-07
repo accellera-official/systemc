@@ -66,6 +66,10 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert
@@ -507,7 +511,7 @@ vcd_sc_unsigned_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+    if ( compdata.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
@@ -568,7 +572,7 @@ vcd_sc_signed_trace::write(FILE* f)
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < static_cast<size_t>(object.length()) ) {
+    if ( compdata.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
@@ -833,7 +837,7 @@ vcd_sc_fxnum_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+    if ( compdata.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
@@ -903,7 +907,7 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
     static std::vector<char> compdata(1024), rawdata(1024);
     typedef std::vector<char>::size_type size_t;
 
-    if ( compdata.size() < static_cast<size_t>(object.wl()) ) {
+    if ( compdata.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
         size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
         std::vector<char>( sz ).swap( compdata ); // resize without copying values
         std::vector<char>( sz ).swap( rawdata );
