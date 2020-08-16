@@ -36,65 +36,84 @@ namespace plt = matplotlibcpp;
  * nice graphs !*/
 class collector
 {
-    std::unordered_map<const char*, sc_time> names;  
+private:
+    std::unordered_map<const char *, sc_time> names;
     std::mutex lock;
     std::vector<std::pair<const char *, const sc_time>> times;
 
 public:
-    void add(const char *name, const sc_time mytime) {
+    void add(const char *name, const sc_time mytime)
+    {
         std::lock_guard<std::mutex> guard(lock);
-        if (names.find(name) == names.end()) {
+        if (names.find(name) == names.end())
+        {
             names.insert(std::make_pair(name, SC_ZERO_TIME));
         }
         times.push_back(std::make_pair(name, mytime));
     }
-    void csvreport() 
+
+    void csvreport()
     {
         cout << "event";
-        for (auto kv : names) {
-            cout << ", "<<kv.first;
+        for (auto kv : names)
+        {
+            cout << ", " << kv.first;
         }
-        cout <<"\n";
-        int i=0;
-        for(std::vector<std::pair<const char *, const sc_time>>::iterator it = times.begin(); it != times.end(); ++it) {
-            names[std::get<0>(*it)]=std::get<1>(*it);
+        cout << "\n";
+        int i = 0;
+        for (std::vector<std::pair<const char *, const sc_time>>::iterator it = times.begin();
+             it != times.end(); ++it)
+        {
+            names[std::get<0>(*it)] = std::get<1>(*it);
             cout << i++;
-            for (auto kv : names) {
-                cout << ", "<<kv.second.to_seconds()*1000000000;
+            for (auto kv : names)
+            {
+                cout << ", " << kv.second.to_seconds() * 1000000000;
             }
-            cout <<"\n";
+            cout << "\n";
         }
     }
+
 #ifdef WITHMATPLOT
+
     void matplot()
     {
-        std::unordered_map<const char*, std::vector<double>> vecs;  
-        for (auto kv : names) {
+        std::unordered_map<const char *, std::vector<double>> vecs;
+        for (auto kv : names)
+        {
             vecs.insert(std::make_pair(kv.first, std::vector<double>()));
         }
-        for(std::vector<std::pair<const char *, const sc_time>>::iterator it = times.begin(); it != times.end(); ++it) {
-            names[std::get<0>(*it)]=std::get<1>(*it);
-            for (auto kv : names) {
-                vecs[kv.first].push_back(kv.second.to_seconds()*1000000000);
+        for (std::vector<std::pair<const char *, const sc_time>>::iterator it = times.begin();
+             it != times.end(); ++it)
+        {
+            names[std::get<0>(*it)] = std::get<1>(*it);
+            for (auto kv : names)
+            {
+                vecs[kv.first].push_back(kv.second.to_seconds() * 1000000000);
             }
         }
-        for (auto kv : names) {
+        for (auto kv : names)
+        {
             plt::plot(vecs[kv.first]);
         }
-        
+
         plt::save("./output.png");
     }
+
     void report()
     {
         matplot();
     }
+
 #else
+
     void report()
     {
         csvreport();
     }
+
 #endif
-    
+
 };
 
 #endif

@@ -29,7 +29,8 @@
  * from a different thread. Ensuring that the normal systemc semantics of
  * 'write-over-write' are maintained is left to the interested reader.
  */
-class async_event : public sc_core::sc_prim_channel, public sc_event {
+class async_event : public sc_core::sc_prim_channel, public sc_event
+{
 private:
     sc_core::sc_time m_delay;
 public:
@@ -39,13 +40,15 @@ public:
         async_attach_suspending();
     }
 
-    void notify(sc_core::sc_time delay = SC_ZERO_TIME) {
+    void notify(sc_core::sc_time delay = SC_ZERO_TIME)
+    {
         m_delay = delay; // no guarantee if event notified multiple times.
         async_request_update();
     }
 
 protected:
-    void update(void) {
+    void update(void)
+    {
         sc_event::notify(m_delay);
     }
 };

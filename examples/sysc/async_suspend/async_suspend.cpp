@@ -22,40 +22,33 @@
 
  *****************************************************************************/
 
-#include <pthread.h>
 #include <systemc.h>
 #include "node.h"
 #include <vector>
 
 #define NODES 10
 
+int sc_main(int argc, char **argv)
+{
+    collector col;
+    srand(0); // try to keep things as determanistic as possible....
 
+    tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(1000, SC_NS));
 
+    sc_vector<asynctestnode> nodes("nodes", NODES, [&](const char *n, size_t i) { return new asynctestnode(n, col); });
 
+    for (int n = 0; n < NODES; n++)
+    {
+        for (int nn = 0; nn < NODES; nn++)
+        {
+            if (n != nn)
+                nodes[n].init_socket(nodes[nn].target_socket);
+        }
+    }
 
-int sc_main(int argc, char **argv) {
-  collector col;
-  srand(0); // try to keep things as determanistic as possible....
-  
-  tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(1000,SC_NS));
-  
-  sc_vector<asynctestnode> nodes("nodes", NODES, [&](const char *n, size_t i){return new asynctestnode(n, col);});
-  
-  for (int n=0;n<NODES;n++) {
-      for (int nn=0;nn<NODES;nn++) {
-          if (n!=nn)
-              nodes[n].init_socket(nodes[nn].target_socket);
-      }
-  }
+    sc_start(sc_time(10000, SC_NS));
 
-  sc_start(sc_time(10000,SC_NS));
+    col.report();
 
-  col.report();
-  
-  return 0;
+    return 0;
 }
-
-
-
-
-
