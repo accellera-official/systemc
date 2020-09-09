@@ -300,8 +300,13 @@ public:
     // has this event been triggered in the current delta cycle?
     bool triggered() const;
 
-    // never notified event
-    static const sc_event none;
+    // returns never notified event
+    static const sc_event& none(void) {
+        sc_simcontext *sc = sc_get_curr_simcontext();
+        if (!sc->m_none_event)
+            sc->m_none_event = new sc_event(sc_event::kernel_event, "none");
+        return *sc->m_none_event;
+    }
 
 private:
 

@@ -399,6 +399,8 @@ private:
 
     sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
 
+    sc_event*                   m_none_event; // never notified event
+
 private:
 
     // disabled

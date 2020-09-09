@@ -358,6 +358,7 @@ sc_simcontext::init()
     m_method_invoker_p = NULL;
     m_cor = 0;
     m_reset_finder_q = 0;
+    m_none_event = NULL;
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
@@ -369,6 +370,9 @@ sc_simcontext::clean()
 {
     // remove remaining zombie processes
     do_collect_processes();
+
+    if (m_none_event)
+        delete m_none_event;
 
     delete m_method_invoker_p;
     delete m_error;
