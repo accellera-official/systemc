@@ -359,6 +359,7 @@ sc_simcontext::init()
     m_cor = 0;
     m_reset_finder_q = 0;
     m_none_event = NULL;
+    m_non_event = NULL;
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
@@ -399,6 +400,9 @@ sc_simcontext::clean()
         m_reset_finder_q = rf->m_next_p;
         delete rf;
     }
+
+    if (m_non_event)
+        delete m_non_event;
 }
 
 

@@ -400,6 +400,7 @@ private:
     sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
 
     sc_event*                   m_none_event; // never notified event
+    sc_event*                   m_non_event;  // used by sc_process_handle if m_target_p == 0
 
 private:
 

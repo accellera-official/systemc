@@ -147,9 +147,9 @@ class SC_API sc_process_handle {
     sc_process_b* m_target_p;   // Target for this object instance.
 
   protected:
-    static std::vector<sc_event*>  empty_event_vector;  // If m_target_p == 0.
-    static std::vector<sc_object*> empty_object_vector; // If m_target_p == 0.
-    static sc_event                non_event;           // If m_target_p == 0.
+    static std::vector<sc_event*>  empty_event_vector;    // If m_target_p == 0.
+    static std::vector<sc_object*> empty_object_vector;   // If m_target_p == 0.
+    sc_event&                      non_event(void) const; // If m_target_p == 0.
 };
 
 inline bool operator == (
@@ -401,7 +401,7 @@ inline sc_event& sc_process_handle::reset_event() const
     else
     {
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "reset()");
-        return sc_process_handle::non_event;
+        return sc_process_handle::non_event();
     }
 }
 
@@ -478,7 +478,7 @@ inline sc_event& sc_process_handle::terminated_event()
     else
     {
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "terminated_event()");
-        return sc_process_handle::non_event;
+        return sc_process_handle::non_event();
     }
 }
 
