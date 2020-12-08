@@ -114,7 +114,8 @@ public:
     bool running;
     bool finished;
 
-    asynctestnode(sc_module_name name, collector &c) :
+    SC_HAS_PROCESS(asynctestnode);
+    asynctestnode(sc_core::sc_module_name name, collector &c) :
         init_socket("output"),
         target_socket("input"),
         txnSent_c(0),
