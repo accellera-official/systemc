@@ -36,9 +36,9 @@ struct demo_module : sc_core::sc_module
   {
     std::cout << "attach debug output.." << std::endl;
 
-    sc_core::sc_hierarchy_scope scope{ restore_hierarchy() };
     if (!debug_output.has_value())
     {
+      sc_core::sc_hierarchy_scope scope{ restore_hierarchy() };
       debug_output.emplace("debug_output");
       debug_output->bind(signal);
     }
