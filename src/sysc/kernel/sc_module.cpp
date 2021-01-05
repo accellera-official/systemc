@@ -407,7 +407,7 @@ sc_module::before_end_of_elaboration()
 void
 sc_module::construction_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -433,7 +433,7 @@ sc_module::elaboration_done( bool& error_ )
         }
         error_ = true;
     }
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
@@ -446,7 +446,7 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
@@ -459,7 +459,7 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 

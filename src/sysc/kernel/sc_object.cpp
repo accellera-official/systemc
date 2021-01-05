@@ -405,7 +405,7 @@ sc_object::get_parent() const
 }
 
 SC_NODISCARD_ sc_object::hierarchy_scope
-sc_object::restore_hierarchy()
+sc_object::get_hierarchy_scope()
 {
     sc_object_host* parent = static_cast<sc_object_host*>( get_parent_object() );
     return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), parent ).move();
@@ -577,7 +577,7 @@ sc_object_host::gen_unique_name( const char* basename_, bool preserve_first )
 }
 
 SC_NODISCARD_ sc_object::hierarchy_scope
-sc_object_host::restore_hierarchy()
+sc_object_host::get_hierarchy_scope()
 {
     return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), this ).move();
 }

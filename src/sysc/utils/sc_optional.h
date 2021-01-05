@@ -57,7 +57,7 @@ public:
     explicit operator bool() const;
 
 protected:
-    sc_hierarchy_scope restore_hierarchy();
+    sc_hierarchy_scope get_hierarchy_scope();
     void set_has_value();
     void report_double_init(const char* existing_obj_name) const;
 private:
@@ -119,7 +119,7 @@ template<typename... Args>
 void sc_optional<T>::init(Args... args)
 {
     if (!has_value()) {
-        sc_hierarchy_scope scope{ restore_hierarchy() };
+        sc_hierarchy_scope scope{ get_hierarchy_scope() };
         new (&m_val) T(std::forward<Args>(args)...);
         set_has_value();
     } else {

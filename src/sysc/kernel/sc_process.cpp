@@ -444,7 +444,7 @@ sc_event& sc_process_b::reset_event()
 {
     if ( !m_reset_event_p )
     {
-        sc_hierarchy_scope scope( restore_hierarchy() );
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_reset_event_p = new sc_event( sc_event::kernel_event, "reset_event" );
     }
     return *m_reset_event_p;
@@ -616,7 +616,7 @@ sc_event& sc_process_b::terminated_event()
 {
     if ( !m_term_event_p )
     {
-        sc_hierarchy_scope scope( restore_hierarchy() );
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_term_event_p = new sc_event( sc_event::kernel_event, "term_event" );
     }
     return *m_term_event_p;
