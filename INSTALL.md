@@ -605,7 +605,7 @@ settings to all build configurations.
    underlying C++ standard on the current platform.  By default,
    the latest supported version is chosen.
    Supported values are
-     * `SC_CPLUSPLUS=199701L` (C++03, ISO/IEC 14882:1998, 14882:2003)
+     * `SC_CPLUSPLUS=199711L` (C++03, ISO/IEC 14882:1998, 14882:2003)
      * `SC_CPLUSPLUS=201103L` (C++11, ISO/IEC 14882:2011)
      * `SC_CPLUSPLUS=201402L` (C++14, ISO/IEC 14882:2014)
      * `SC_CPLUSPLUS=201703L` (C++17, ISO/IEC 14882:2017)
