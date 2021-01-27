@@ -253,7 +253,7 @@ public:
 
     const sc_unsigned& value() const
         {
-            sc_unsigned*   result_p = sc_unsigned::m_pool.allocate();
+	    sc_unsigned*   result_p = sc_unsigned::temporary();
 
             result_p->nbits = result_p->num_bits(m_len);
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
@@ -454,9 +454,6 @@ public:
     } 
 
 public:
-    static sc_core::sc_vpool<sc_concatref> m_pool; // Pool of temporary objects.
-
-public:
     enum concat_flags {
         cf_none = 0,        // Normal value. 
         cf_xz_present = 1   // X and/or Z values present.
@@ -624,7 +621,6 @@ operator >> ( ::std::istream& is, sc_concatref& a )
 class SC_API sc_concat_bool : public sc_value_base
 {
   protected:
-    static sc_core::sc_vpool<sc_concat_bool> m_pool;  // Temporaries pool.
     bool                                     m_value; // Value for this obj.
 
   public:
@@ -644,7 +640,8 @@ class SC_API sc_concat_bool : public sc_value_base
 
     static inline sc_concat_bool* allocate( bool v )
     {
-        sc_concat_bool* result_p = m_pool.allocate();
+	static sc_core::sc_vpool<sc_concat_bool> pool(9);
+        sc_concat_bool* result_p = pool.allocate();
         result_p->m_value = v;
         return result_p;
     }
@@ -769,12 +766,19 @@ SC_CONCAT_BOOL_OP(<)
 // CONCATENATION FUNCTION AND OPERATOR FOR STANDARD SYSTEM C DATA TYPES:
 // ----------------------------------------------------------------------------
 
+inline sc_dt::sc_concatref* temporary()
+{
+    sc_core::sc_vpool<sc_concatref> pool(9);
+    sc_dt::sc_concatref* result_p = pool.allocate();
+    return result_p;
+}
+
 inline sc_dt::sc_concatref& concat(
     sc_dt::sc_value_base& a, sc_dt::sc_value_base& b)
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -786,7 +790,7 @@ sc_dt::sc_concatref& concat(
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -799,7 +803,7 @@ sc_dt::sc_concatref& concat(const sc_dt::sc_value_base& a, bool b)
     sc_dt::sc_concatref*         result_p;   // Proxy for the concatenation.
 
     b_p = sc_dt::sc_concat_bool::allocate(b);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, *b_p );
     return *result_p;
 }
@@ -812,7 +816,7 @@ sc_dt::sc_concatref& concat(bool a, const sc_dt::sc_value_base& b)
     sc_dt::sc_concatref*         result_p;   // Proxy for the concatenation.
 
     a_p = sc_dt::sc_concat_bool::allocate(a);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( *a_p, b );
     return *result_p;
 }
@@ -822,7 +826,7 @@ inline sc_dt::sc_concatref& operator , (
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -834,7 +838,7 @@ sc_dt::sc_concatref& operator , (
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -847,7 +851,7 @@ sc_dt::sc_concatref& operator , (const sc_dt::sc_value_base& a, bool b)
     sc_dt::sc_concatref*         result_p; // Proxy for the concatenation.
 
     b_p = sc_dt::sc_concat_bool::allocate(b);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( a, *b_p );
     return *result_p;
 }
@@ -860,7 +864,7 @@ sc_dt::sc_concatref& operator , (bool a, const sc_dt::sc_value_base& b)
     sc_dt::sc_concatref*         result_p; // Proxy for the concatenation.
 
     a_p = sc_dt::sc_concat_bool::allocate(a);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary();
     result_p->initialize( *a_p, b );
     return *result_p;
 }

@@ -100,6 +100,7 @@ public: // anonymous compile-type information about this type.
 	WIDTH        = W                  // width as an enum.
     };
     typedef int HOD_TYPE;                 // type of high order sc_digit.
+    // @@@@#### should HOD_TYPE be unsigned int in this case???
 
 public:
 

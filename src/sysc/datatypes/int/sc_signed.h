@@ -416,8 +416,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_signed_bitref> m_pool;
 };
 
 
@@ -612,8 +610,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_signed_subref> m_pool;
 };
 
 
@@ -748,11 +744,16 @@ public:
 
     void invalid_index( int i ) const;
 
+    sc_signed_bitref* temporary_bitref() const
+    {
+        static sc_core::sc_vpool<sc_signed_bitref> pool(9);
+        return pool.allocate();
+    }
+
     sc_signed_bitref& operator [] ( int i )
         {
             check_index(i);
-	    sc_signed_bitref* result_p =
-	        sc_signed_bitref::m_pool.allocate();
+	    sc_signed_bitref* result_p = temporary_bitref();
 	    result_p->initialize( this, i );
 	    return *result_p;
 	}
@@ -760,8 +761,7 @@ public:
     const sc_signed_bitref_r& operator [] ( int i ) const
         {
             check_index(i);
-	    sc_signed_bitref* result_p =
-	        sc_signed_bitref::m_pool.allocate();
+	    sc_signed_bitref* result_p = temporary_bitref();
 	    result_p->initialize( this, i );
 	    return *result_p;
 	}
@@ -769,8 +769,7 @@ public:
     sc_signed_bitref& bit( int i )
         {
             check_index(i);
-	    sc_signed_bitref* result_p =
-	        sc_signed_bitref::m_pool.allocate();
+	    sc_signed_bitref* result_p = temporary_bitref();
 	    result_p->initialize( this, i );
 	    return *result_p;
 	}
@@ -778,8 +777,7 @@ public:
     const sc_signed_bitref_r& bit( int i ) const
         {
             check_index(i);
-	    sc_signed_bitref* result_p =
-	        sc_signed_bitref::m_pool.allocate();
+	    sc_signed_bitref* result_p = temporary_bitref();
 	    result_p->initialize( this, i );
 	    return *result_p;
 	}
@@ -808,11 +806,16 @@ public:
 
     void invalid_range( int l, int r ) const;
 
+    sc_signed_subref* temporary_subref() const
+    {
+        static sc_core::sc_vpool<sc_signed_subref> pool(9);
+        return pool.allocate();
+    }
+
     sc_signed_subref& range( int i, int j )
         {
 	    check_range( i, j );
-	    sc_signed_subref* result_p =
-	        sc_signed_subref::m_pool.allocate();
+            sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}
@@ -820,8 +823,7 @@ public:
     const sc_signed_subref_r& range( int i, int j ) const
         {
 	    check_range( i, j );
-	    sc_signed_subref* result_p =
-	        sc_signed_subref::m_pool.allocate();
+            sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}
@@ -829,8 +831,7 @@ public:
     sc_signed_subref& operator () ( int i, int j )
         {
 	    check_range( i, j );
-	    sc_signed_subref* result_p =
-	        sc_signed_subref::m_pool.allocate();
+            sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}
@@ -838,8 +839,7 @@ public:
     const sc_signed_subref_r& operator () ( int i, int j ) const
         {
 	    check_range( i, j );
-	    sc_signed_subref* result_p =
-	        sc_signed_subref::m_pool.allocate();
+            sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}

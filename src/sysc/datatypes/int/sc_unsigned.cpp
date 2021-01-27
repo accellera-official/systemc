@@ -100,21 +100,14 @@
 namespace sc_dt
 {
 
-// Pool of temporary instances:
-//   The sc_unsigned pool is used by the concatenation support.
-//   The bit and part reference pools allow references to be returned.
-
-sc_core::sc_vpool<sc_unsigned> sc_unsigned::m_pool(8);
-sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bitref::m_pool(9);
-sc_core::sc_vpool<sc_unsigned_subref> sc_unsigned_subref::m_pool(9);
-
-
 void sc_unsigned::invalid_init( const char* type_name, int nb ) const
 {
     std::stringstream msg;
     msg << "sc_unsigned( "<< type_name << " ) : nb = " << nb << " is not valid";
     SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg.str().c_str() );
 }
+
+
 // -----------------------------------------------------------------------------
 // SECTION: Public members - Invalid selections.
 // -----------------------------------------------------------------------------
