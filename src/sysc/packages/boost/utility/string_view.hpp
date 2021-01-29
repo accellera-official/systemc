@@ -148,10 +148,10 @@ namespace sc_boost {
         SC_BOOST_CONSTEXPR const_reference operator[](size_type pos) const SC_BOOST_NOEXCEPT { return ptr_[pos]; }
 
         SC_BOOST_CONSTEXPR const_reference at(size_t pos) const {
-            return pos >= len_ ? SC_BOOST_THROW_EXCEPTION(std::out_of_range("boost::string_view::at")) : ptr_[pos];
-//             if ( pos >= len_ )
-//                 SC_BOOST_THROW_EXCEPTION( std::out_of_range ( "boost::string_view::at" ) );
-//             return ptr_[pos];
+//            return pos >= len_ ? SC_BOOST_THROW_EXCEPTION(std::out_of_range("boost::string_view::at")) : ptr_[pos];
+              if ( pos >= len_ )
+                  SC_BOOST_THROW_EXCEPTION( std::out_of_range ( "boost::string_view::at" ) );
+              return ptr_[pos];
             }
 
         SC_BOOST_CONSTEXPR const_reference front() const                { return ptr_[0]; }

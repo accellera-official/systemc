@@ -342,7 +342,7 @@ sc_signal_t<T,POL>::do_update()
 //  The sc_signal<T,POL> primitive channel class
 // ----------------------------------------------------------------------------
 
-template< class T, sc_writer_policy POL /* = SC_DEFAULT_WRITER_POLICY */ >
+template< class T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
 class sc_signal
   : public sc_signal_t<T,POL>
 {
@@ -371,12 +371,7 @@ public:
     virtual ~sc_signal() {} /* = default; */
 
     // assignment
-    this_type& operator = ( const value_type& a )
-      { base_type::operator=(a); return *this; }
-
-    this_type& operator = ( const sc_signal_in_if<value_type>& a )
-      { base_type::operator=(a); return *this; }
-
+    using base_type::operator=;
     this_type& operator = ( const this_type& a )
       { base_type::operator=(a); return *this; }
 
@@ -446,12 +441,7 @@ public:
 
 
     // assignment
-    this_type& operator = ( const value_type& a )
-      { base_type::operator=(a); return *this; }
-
-    this_type& operator = ( const sc_signal_in_if<value_type>& a )
-      { base_type::operator=(a); return *this; }
-
+    using base_type::operator=;
     this_type& operator = ( const this_type& a )
       { base_type::operator=(a); return *this; }
 
@@ -533,12 +523,7 @@ public:
 
 
     // assignment
-    this_type& operator = ( const value_type& a )
-      { base_type::operator=(a); return *this; }
-
-    this_type& operator = ( const sc_signal_in_if<value_type>& a )
-      { base_type::operator=(a); return *this; }
-
+    using base_type::operator=;
     this_type& operator = ( const this_type& a )
       { base_type::operator=(a); return *this; }
 

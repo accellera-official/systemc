@@ -31,30 +31,47 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/types.h>
+#include <cerrno>
+#include <cstring>
+#include <cstdlib>
+#include <sstream>
 
 #include "sysc/kernel/sc_cor_qt.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/utils/sc_report.h"
 
 namespace sc_core {
 
+
+
 // ----------------------------------------------------------------------------
-//  File static variables.
-// ----------------------------------------------------------------------------
 
-// main coroutine
+static std::size_t sc_pagesize()
+{
+    static std::size_t pagesize = 0;
 
-static sc_cor_qt main_cor;
+    if( pagesize == 0 ) {
+#     if defined(__ppc__)
+        pagesize = getpagesize();
+#     else
+        pagesize = sysconf( _SC_PAGESIZE );
+#     endif
+    }
 
-// current coroutine
-
-static sc_cor_qt* curr_cor = 0;
-
+    sc_assert( pagesize != 0 );
+    return pagesize;
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_qt
 //
 //  Coroutine class implemented with QuickThreads.
 // ----------------------------------------------------------------------------
+
+sc_cor_qt::~sc_cor_qt()
+{
+    std::free( m_stack );
+}
 
 // switch stack protection on/off
 
@@ -64,28 +81,23 @@ sc_cor_qt::stack_protect( bool enable )
     // Code needs to be tested on HP-UX and disabled if it doesn't work there
     // Code still needs to be ported to WIN32
 
-    static std::size_t pagesize;
-
-    if( pagesize == 0 ) {
-#       if defined(__ppc__)
-	    pagesize = getpagesize();
-#       else
-	    pagesize = sysconf( _SC_PAGESIZE );
-#       endif
-    }
-
-    sc_assert( pagesize != 0 );
+    const std::size_t pagesize = sc_pagesize();
     sc_assert( m_stack_size > ( 2 * pagesize ) );
+
+    std::size_t sp_addr = reinterpret_cast<std::size_t>(m_stack);
+#ifndef SC_HAVE_POSIX_MEMALIGN
+    const std::size_t round_up_mask = pagesize - 1;
+    if( sp_addr & round_up_mask ) { // misaligned allocation
+        sp_addr = (sp_addr + round_up_mask) & ~round_up_mask;
+    }
+#endif // SC_HAVE_POSIX_MEMALIGN
 
 #ifdef QUICKTHREADS_GROW_DOWN
     // Stacks grow from high address down to low address
-    caddr_t redzone = caddr_t( ( ( std::size_t( m_stack ) + pagesize - 1 ) /
-				 pagesize ) * pagesize );
+    caddr_t redzone = caddr_t( sp_addr );
 #else
     // Stacks grow from low address up to high address
-    caddr_t redzone = caddr_t( ( ( std::size_t( m_stack ) +
-				   m_stack_size - pagesize ) /
-				 pagesize ) * pagesize );
+    caddr_t redzone = caddr_t( sp_addr + m_stack_size - pagesize );
 #endif
 
     int ret;
@@ -103,9 +115,25 @@ sc_cor_qt::stack_protect( bool enable )
         ret = mprotect( redzone, pagesize - 1, PROT_READ | PROT_WRITE );
     }
 
-    sc_assert( ret == 0 );
-}
+    if( ret != 0 ) // ignore mprotect error with warning
+    {
+        static bool mprotect_fail_warned_once = false;
+        if( mprotect_fail_warned_once == false )
+        {
+            mprotect_fail_warned_once = true;
 
+            int mprotect_errno = errno;
+            std::stringstream sstr;
+            sstr << "unsuccessful stack protection ignored: "
+                 << std::strerror(mprotect_errno)
+                 << ", address=0x" << std::hex << redzone
+                 << ", enable=" << std::boolalpha << enable;
+
+            SC_REPORT_WARNING( SC_ID_COROUTINE_ERROR_
+                             , sstr.str().c_str() );
+        }
+    }
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_pkg_qt
@@ -113,31 +141,59 @@ sc_cor_qt::stack_protect( bool enable )
 //  Coroutine package class implemented with QuickThreads.
 // ----------------------------------------------------------------------------
 
-int sc_cor_pkg_qt::instance_count = 0;
 
+// support functions
 
-// support function
-
-inline
-void*
-stack_align( void* sp, int alignment, std::size_t* stack_size )
+// allocate aligned stack memory
+static inline void*
+stack_alloc( void** buf, std::size_t* stack_size )
 {
-    int round_up_mask = alignment - 1;
-    *stack_size = (*stack_size + round_up_mask) & ~round_up_mask;
-    return ( (void*)(((qt_word_t) sp + round_up_mask) & ~round_up_mask) );
-}
+    const std::size_t alignment     = sc_pagesize();
+    const std::size_t round_up_mask = alignment - 1;
+    sc_assert( 0 == ( alignment & round_up_mask ) ); // power of 2
+    sc_assert( buf );
 
+    // round up to multiple of alignment
+    *stack_size = (*stack_size + round_up_mask) & ~round_up_mask;
+
+#ifdef SC_HAVE_POSIX_MEMALIGN
+    if( 0 != posix_memalign( buf, alignment, *stack_size ) ) {
+        *buf = NULL; // allocation failed
+    }
+    return *buf;
+#else
+    *buf = std::malloc( *stack_size );
+    std::size_t sp_addr = reinterpret_cast<std::size_t>( *buf );
+    if( sp_addr & round_up_mask ) // misaligned allocation
+    {
+        sc_assert( *stack_size > (alignment * 2) );
+        sp_addr = (sp_addr + round_up_mask) & ~round_up_mask;
+        *stack_size -= alignment;
+    }
+    return reinterpret_cast<void*>( sp_addr );
+#endif
+}
 
 // constructor
 
 sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
-: sc_cor_pkg( simc )
+  : sc_cor_pkg( simc )
+  , m_main_cor()
+  , m_curr_cor()
 {
-    if( ++ instance_count == 1 ) {
-	// initialize the current coroutine
-	sc_assert( curr_cor == 0 );
-	curr_cor = &main_cor;
-    }
+    m_main_cor.m_pkg = this;
+    m_curr_cor = &m_main_cor;
+}
+
+
+// set current coroutine
+
+sc_cor_qt*
+sc_cor_pkg_qt::set_current(sc_cor_qt* cor)
+{
+    sc_cor_qt* old_cor = m_curr_cor;
+    m_curr_cor = cor;
+    return old_cor;
 }
 
 
@@ -145,10 +201,6 @@ sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
 
 sc_cor_pkg_qt::~sc_cor_pkg_qt()
 {
-    if( -- instance_count == 0 ) {
-	// cleanup the current coroutine
-	curr_cor = 0;
-    }
 }
 
 
@@ -158,7 +210,8 @@ extern "C"
 void
 sc_cor_qt_wrapper( void* arg, void* cor, qt_userf_t* fn )
 {
-    curr_cor = reinterpret_cast<sc_cor_qt*>( cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( cor );
+    new_cor->m_pkg->set_current( new_cor );
     // invoke the user function
     (*(sc_cor_fn*) fn)( arg );
     // not reached
@@ -170,12 +223,17 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     sc_cor_qt* cor = new sc_cor_qt();
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
-    cor->m_stack = new char[cor->m_stack_size];
-    void* sto = stack_align( cor->m_stack, QUICKTHREADS_STKALIGN,
-                             &cor->m_stack_size );
-    cor->m_sp = QUICKTHREADS_SP(sto, cor->m_stack_size - QUICKTHREADS_STKALIGN);
+
+    void* aligned_sp = stack_alloc( &cor->m_stack, &cor->m_stack_size );
+    if( aligned_sp == NULL )
+    {
+        SC_REPORT_ERROR( SC_ID_COROUTINE_ERROR_
+                       , "failed to allocate stack memory" );
+        sc_abort();
+    }
+    cor->m_sp = QUICKTHREADS_SP( aligned_sp, cor->m_stack_size );
     cor->m_sp = QUICKTHREADS_ARGS( cor->m_sp, arg, cor, (qt_userf_t*) fn,
-			           sc_cor_qt_wrapper );
+                                   sc_cor_qt_wrapper );
     return cor;
 }
 
@@ -194,8 +252,7 @@ void
 sc_cor_pkg_qt::yield( sc_cor* next_cor )
 {
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = curr_cor;
-    curr_cor = new_cor;
+    sc_cor_qt* old_cor = set_current( new_cor );
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
 }
 
@@ -213,8 +270,7 @@ void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = curr_cor;
-    curr_cor = new_cor;
+    sc_cor_qt* old_cor = set_current( new_cor );
     QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, 0, new_cor->m_sp );
 }
 
@@ -224,7 +280,7 @@ sc_cor_pkg_qt::abort( sc_cor* next_cor )
 sc_cor*
 sc_cor_pkg_qt::get_main()
 {
-    return &main_cor;
+    return &m_main_cor;
 }
 
 } // namespace sc_core

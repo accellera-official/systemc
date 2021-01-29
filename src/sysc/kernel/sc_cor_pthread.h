@@ -47,11 +47,6 @@ typedef sc_cor_pkg_pthread sc_cor_pkg_t;
 //
 //  Coroutine class implemented with Posix Threads.
 //
-// Notes:
-//   (1) The thread creation mutex and the creation condition are used to
-//       suspend the thread creating another one until the created thread
-//       reaches its invoke_module_method. This allows us to get control of
-//       thread scheduling away from the pthread package.
 // ----------------------------------------------------------------------------
 
 class sc_cor_pthread : public sc_cor
@@ -66,9 +61,6 @@ class sc_cor_pthread : public sc_cor
 
 	// module method invocator (starts thread execution)
 	static void* invoke_module_method( void* context_p );
-
-  public:
-	static sc_cor_pthread* m_active_cor_p;	   // Active coroutine.
 
   public:
 	sc_cor_fn*          m_cor_fn;		// Core function.
@@ -90,11 +82,18 @@ private:
 //  CLASS : sc_cor_pkg_pthread
 //
 //  Coroutine package class implemented with Posix Threads.
+//
+// Notes:
+//   (1) The thread creation mutex and the creation condition are used to
+//       suspend the thread creating another one until the created thread
+//       reaches its invoke_module_method. This allows us to get control of
+//       thread scheduling away from the pthread package.
 // ----------------------------------------------------------------------------
 
 class sc_cor_pkg_pthread
-: public sc_cor_pkg
+  : public sc_cor_pkg
 {
+    friend void* sc_cor_pthread::invoke_module_method( void* context_p );
 public:
 
     // constructor
@@ -117,7 +116,10 @@ public:
 
 private:
 
-    static int instance_count;
+    sc_cor_pthread   m_main_cor;    // Main coroutine
+    sc_cor_pthread*  m_curr_cor;    // Active coroutine
+    pthread_mutex_t  m_create_mtx;  // See note (1) above
+    pthread_cond_t   m_create_cond; // See note (1) above
 
 private:
 

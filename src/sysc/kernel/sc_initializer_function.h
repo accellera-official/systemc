@@ -34,6 +34,7 @@
 #if SC_CPLUSPLUS >= 201103L
 
 #include "sysc/kernel/sc_macros.h"
+#include "sysc/kernel/sc_module.h"
 #include <functional>
 #include <utility>
 

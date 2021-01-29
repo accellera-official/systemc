@@ -59,7 +59,11 @@ typedef struct qt_t {
 /* The type of the user function:
    For non-varargs, takes one void* function.
    For varargs, takes some number of arguments. */
+/* <LWG> return void from user function to match sc_cor_fn
 typedef void *(qt_userf_t)(void *pu);
+*/
+typedef void (qt_userf_t)(void *pu);
+/* </LWG> */
 typedef void *(qt_vuserf_t)(int arg0, ...);
 
 /* For non-varargs, just call a client-supplied function,
