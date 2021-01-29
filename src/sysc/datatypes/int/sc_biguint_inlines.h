@@ -478,6 +478,23 @@ sc_biguint<W>::operator=(const sc_unsigned_subref_r& v)
 }
 #endif
 
+template<int W>
+template<int WO>
+sc_bv<W>::sc_bv( const sc_biguint<WO>& v ) 
+    : sc_bv_base(W)
+{   
+    *this = v.sc_unsigned_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_lv<W>::sc_lv( const sc_biguint<WO>& v ) 
+    : sc_lv_base(W)
+{   
+    *this = v.sc_unsigned_proxy();
+}
+
+
 } // namespace sc_dt
 
 #endif // SC_BIGUINT_INLINES_H

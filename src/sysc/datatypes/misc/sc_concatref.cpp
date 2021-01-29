@@ -55,8 +55,3 @@ namespace sc_core {
     sc_byte_heap             sc_temp_heap(0x300000);
 } // namespace sc_core
 
-namespace sc_dt {
-    sc_core::sc_vpool<sc_concat_bool> sc_concat_bool::m_pool(9);
-    sc_core::sc_vpool<sc_concatref>   sc_concatref::m_pool(9);
-} // namespace sc_dt
-

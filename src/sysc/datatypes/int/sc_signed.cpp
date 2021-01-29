@@ -105,11 +105,6 @@ template class SC_API sc_vpool<sc_dt::sc_signed_subref>;
 
 namespace sc_dt {
 
-// Pool of temporary instances:
-
-sc_core::sc_vpool<sc_signed_bitref> sc_signed_bitref::m_pool(9);
-sc_core::sc_vpool<sc_signed_subref> sc_signed_subref::m_pool(9);
-
 void sc_signed::invalid_init( const char* type_name, int nb ) const
 {
     std::stringstream msg;

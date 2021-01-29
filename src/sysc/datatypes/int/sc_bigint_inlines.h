@@ -469,6 +469,21 @@ sc_bigint<W>::operator>>(const sc_unsigned &v) const
     return operator >> (v.to_uint());
 }
 
+template<int W>
+template<int WO>
+sc_bv<W>::sc_bv( const sc_bigint<WO>& v ) 
+    : sc_bv_base(W)
+{
+    *this = v.sc_signed_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_lv<W>::sc_lv( const sc_bigint<WO>& v ) 
+    : sc_lv_base(W)
+{
+    *this = v.sc_signed_proxy();
+}
 
 } // namespace sc_dt
 

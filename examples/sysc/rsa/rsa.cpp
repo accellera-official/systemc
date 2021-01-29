@@ -404,8 +404,15 @@ find_prime( const bigint& r )
   sc_bigint<NBITS> niter = 0;
 #endif
 
+#define LIMIT_UNTIL_WE_FIX_HOLLOW_SUPPORT
+#if !defined(LIMIT_UNTIL_WE_FIX_HOLLOW_SUPPORT)
   while ( ! miller_rabin( p ) ) {
     p = ( p + 2 ) % r;
+#else
+  size_t increment;
+  for ( increment = 0; increment < 100000 && !miller_rabin( p ); ++increment ) {
+    p = ( p + 2 ) % r;
+#endif
 
 #ifdef DEBUG_SYSTEMC
     assert( ++niter > 0 );
