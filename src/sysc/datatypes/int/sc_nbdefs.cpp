@@ -58,16 +58,6 @@
 namespace sc_dt
 {
 
-#ifdef SC_MAX_NBITS
-const int MAX_NDIGITS      = DIV_CEIL(SC_MAX_NBITS) + 2;
-// Consider a number with x bits another with y bits. The maximum
-// number of bits happens when we multiply them. The result will have
-// (x + y) bits. Assume that x + y <= SC_MAX_NBITS. Then, DIV_CEIL(x) +
-// DIV_CEIL(y) <= DIV_CEIL(SC_MAX_NBITS) + 2. This is the reason for +2
-// above. With this change, MAX_NDIGITS must be enough to hold the
-// result of any operation.
-#endif
-
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
 #if !defined(WIN32) || defined(__MINGW32__)

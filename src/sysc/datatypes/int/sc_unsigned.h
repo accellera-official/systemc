@@ -707,12 +707,10 @@ public:
 
     virtual ~sc_unsigned()
 	{
-#           ifndef SC_MAX_NBITS
-                if ( m_free ) {
-                    assert(digit != small_vec);
-                    delete [] digit;
-                }
-#           endif
+	    if ( m_free ) {
+		assert(digit != small_vec);
+		delete [] digit;
+	    }
 	}
 
     // Concatenation support:
@@ -1258,12 +1256,9 @@ protected:
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
   bool m_free;     // true if should free 'digit'.
-#ifdef SC_MAX_NBITS
-  sc_digit digit[DIV_CEIL(SC_MAX_NBITS)];  // Shortened as d.
-#else
   sc_digit *digit;                         // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // Speed up smaller sizes.
-#endif
+
 // Temporary object support:
 
   // SC_UNSIGNED_TEMPS_N must be a power of 2.
@@ -1488,18 +1483,14 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-#   ifdef SC_MAX_NBITS
-        test_bound(nb);
-#    else
-        if ( ndigits > (int)(sizeof(small_vec)/sizeof(sc_digit)) ) {
-	    digit = new sc_digit[ndigits];
-            m_free = true;
-	}
-	else {
-	    digit = small_vec;
-	    m_free = false;
-	}
-#    endif
+    if ( ndigits > (int)(sizeof(small_vec)/sizeof(sc_digit)) ) {
+	digit = new sc_digit[ndigits];
+	m_free = true;
+    }
+    else {
+	digit = small_vec;
+	m_free = false;
+    }
     makezero();
     v->to_sc_unsigned(*this);
 }
@@ -1744,7 +1735,7 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
 // +----------------------------------------------------------------------------
 inline
 sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
-    nbits(nb), ndigits( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT )
+    nbits(nb+1), ndigits( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT )
 {
     digit = digits_p;
     m_free = false;

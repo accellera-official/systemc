@@ -471,23 +471,6 @@ mul_signs(small_type us, small_type vs)
 //  Functions to test for errors and print out error messages.
 // ----------------------------------------------------------------------------
 
-#ifdef SC_MAX_NBITS
-
-inline
-void
-test_bound(int nb)
-{
-  if (nb > SC_MAX_NBITS) {
-      char msg[BUFSIZ];
-      std::sprintf( msg, "test_bound( int nb ) : "
-	       "nb = %d > SC_MAX_NBITS = %d is not valid",
-	       nb, SC_MAX_NBITS );
-      SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
-  }
-}
-
-#endif
-
 template< class Type >
 inline
 void

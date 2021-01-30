@@ -1469,10 +1469,11 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
     ndigits = DIV_CEIL(nbits);
 #   ifdef SC_MAX_NBITS
         test_bound(nb);
-	m_free = false;
 #    else
-        if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) 
+        if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	    digit = new sc_digit[ndigits];
+	    m_free = true;
+	}
 	else  {
 	    digit = small_vec;
 	    m_free = false;

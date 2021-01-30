@@ -79,13 +79,13 @@ template <int W> class sc_biguint;
 //
 //  Arbitrary size signed integer type.
 // ----------------------------------------------------------------------------
+// #define ITS_HOLLOW
 
-#ifdef SC_MAX_NBITS
-template< int W = SC_MAX_NBITS >
-#else
 template< int W >
-#endif
 class sc_bigint
+#if !defined(ITS_HOLLOW)
+    : public sc_signed
+#endif
 {
 public: // anonymous compile-type information about this type.
     enum { 
@@ -103,90 +103,157 @@ public:
     // constructors
 
     sc_bigint()
+    #if !defined(ITS_HOLLOW) 
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = 0; }
 
     sc_bigint(int, int) // @@@@#### ACG
+    #if !defined(ITS_HOLLOW) 
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ }
 
     template<int WO>
-    inline sc_bigint( const sc_bigint<WO>& v )
+    inline sc_bigint( const sc_bigint<WO>& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
         { *this = v; }
 
     template<int WO>
-    inline sc_bigint( const sc_biguint<WO>& v )
+    inline sc_bigint( const sc_biguint<WO>& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
         { *this = v; }
 
-    sc_bigint( const sc_signed& v )
+    sc_bigint( const sc_signed& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( const sc_signed_subref& v )
+    sc_bigint( const sc_signed_subref& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
     template< class T >
-    sc_bigint( const sc_generic_base<T>& a )
+    sc_bigint( const sc_generic_base<T>& a ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ a->to_sc_signed(*this); }
 
-    sc_bigint( const sc_unsigned& v )
+    sc_bigint( const sc_unsigned& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( const sc_unsigned_subref& v )
+    sc_bigint( const sc_unsigned_subref& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( const char* v )
+    sc_bigint( const char* v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( int64 v )
+    sc_bigint( int64 v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( uint64 v )
+    sc_bigint( uint64 v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( long v )
+    sc_bigint( long v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( unsigned long v )
+    sc_bigint( unsigned long v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( int v )
+    sc_bigint( int v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( unsigned int v )
+    sc_bigint( unsigned int v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( double v )
+    sc_bigint( double v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
   
-    sc_bigint( const sc_bv_base& v )
+    sc_bigint( const sc_bv_base& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    sc_bigint( const sc_lv_base& v )
+    sc_bigint( const sc_lv_base& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
 #ifdef SC_INCLUDE_FX
 
-    explicit sc_bigint( const sc_fxval& v )
+    explicit sc_bigint( const sc_fxval& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxval_fast& v )
+    explicit sc_bigint( const sc_fxval_fast& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxnum& v )
+    explicit sc_bigint( const sc_fxnum& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxnum_fast& v )
+    explicit sc_bigint( const sc_fxnum_fast& v ) 
+    #if !defined(ITS_HOLLOW)
+        : sc_signed( W, compile_time_digits )
+    #endif // ITS_HOLLOW
 	{ *this = v; }
 
 #endif
 
 
-#ifndef SC_MAX_NBITS
 
     // destructor
 
     ~sc_bigint()
 	{}
 
-#endif
     // unary operators:
 
     inline const sc_bigint<W> operator - ();
@@ -508,8 +575,12 @@ inline const sc_bigint<W> operator -- (int) // postfix
     return result;
 }
 
-public:
-  sc_digit digit[DIV_CEIL(W)]; 
+protected:
+#if !defined(ITS_HOLLOW)
+    sc_digit compile_time_digits[DIV_CEIL(W)];
+#else
+    sc_digit digit[DIV_CEIL(W)];
+#endif
 
 public:
     inline void adjust_hod()
@@ -530,6 +601,7 @@ public:
 	return result; 
     }
 
+#if defined(ITS_HOLLOW)
     inline operator sc_dt::sc_signed& ()
     {
         return sc_signed_proxy();
@@ -539,6 +611,7 @@ public:
     {
         return sc_signed_proxy();
     }
+#endif // ITS_HOLLOW
 
     // explicit conversion to character string:
 
@@ -550,8 +623,10 @@ public:
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
 
+#if defined(ITS_HOLLOW)
 public: // "mirror" for sc_value_base concatenation support:
   int              concat_length(bool xzp) const    { return W; }
+#endif // ITS_HOLLOW
 
 public: // field and template value accesses:
   int              get_actual_width() const { return W; }

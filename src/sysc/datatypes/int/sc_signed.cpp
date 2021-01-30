@@ -886,8 +886,10 @@ sc_signed::sc_signed(int nb, int nd, sc_digit *d,
 
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
+	m_free = true;
     } else {
 	digit = small_vec;
+	m_free = false;
     }
 
   if (ndigits <= nd)
@@ -933,8 +935,10 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     ndigits = DIV_CEIL( nbits );
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
+	m_free = true;
     } else {
 	digit = small_vec;
+	m_free = false;
     }
     vec_zero( ndigits, digit );
     return;
@@ -960,8 +964,10 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     nd = left_digit - right_digit + 1;
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
+	m_free = true;
     } else {
 	digit = small_vec;
+	m_free = false;
     }
     ScBigTemp d; // sc_digit *d = sc_get_big_temp();
   
@@ -1057,8 +1063,10 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     ndigits = DIV_CEIL( nbits );
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
+	m_free = true;
     } else {
 	digit = small_vec;
+	m_free = false;
     }
     vec_zero( ndigits, digit );
     return;
@@ -1085,8 +1093,10 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
   // Allocate memory for the range.
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
+	m_free = true;
     } else {
 	digit = small_vec;
+	m_free = false;
     }
   ScBigTemp d; // sc_digit *d = sc_get_big_temp();
   

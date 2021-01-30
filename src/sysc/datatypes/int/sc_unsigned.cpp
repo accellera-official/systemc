@@ -541,11 +541,7 @@ compare_unsigned(small_type us,
 
     int nd = (us == SC_NEG ? und : vnd);
 
-#ifdef SC_MAX_NBITS
-    sc_digit d[MAX_NDIGITS];
-#else
     ScBigTemp d; // sc_digit *d = sc_get_big_temp(); 
-#endif
 
     if (us == SC_NEG) {
 
@@ -563,10 +559,6 @@ compare_unsigned(small_type us,
       cmp_res = vec_skip_and_cmp(und, ud, nd, d);
 
     }
-
-#ifndef SC_MAX_NBITS
-    // sc_release_big_temp(d); 
-#endif
 
     return cmp_res;
 
@@ -940,7 +932,6 @@ sc_unsigned::sc_unsigned(int nb, int nd, sc_digit *d,
 {
   ndigits = DIV_CEIL(nbits);
 
-#ifndef SC_MAX_NBITS
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
@@ -948,7 +939,6 @@ sc_unsigned::sc_unsigned(int nb, int nd, sc_digit *d,
 	digit = small_vec;
 	m_free = false;
     }
-#endif
 
   if (ndigits <= nd)
     vec_copy(ndigits, digit, d);
@@ -956,10 +946,6 @@ sc_unsigned::sc_unsigned(int nb, int nd, sc_digit *d,
     vec_copy_and_zero(ndigits-1, digit, nd-1, d);
     //vec_copy_and_zero(ndigits, digit, nd, d);
 
-#if 0 // ndef SC_MAX_NBITS
-  if (alloc)
-    // sc_release_big_temp(d);
-#endif
 }
 
 // This constructor is mainly used in finding a "range" of bits from a
@@ -1123,7 +1109,6 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
       nbits = 1;
     }
     ndigits = DIV_CEIL( nbits );
-#ifndef SC_MAX_NBITS
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
@@ -1131,7 +1116,6 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
 	digit = small_vec;
 	m_free = false;
     }
-#endif
     vec_zero( ndigits, digit );
     return;
   }
@@ -1155,9 +1139,6 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
     nd = left_digit - right_digit + 1;
 
   // Allocate memory for the range.
-#ifdef SC_MAX_NBITS
-  sc_digit d[MAX_NDIGITS];
-#else
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
@@ -1166,7 +1147,6 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
 	m_free = false;
     }
   ScBigTemp d; // sc_digit *d = sc_get_big_temp();
-#endif
   
   // Getting the range on the 2's complement representation.
   {
@@ -1229,9 +1209,6 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
   }  // if reversed.
 
   
-#if !defined( SC_MAX_NBITS) 
-  // sc_release_big_temp(d);
-#endif
 }
 
 
@@ -1599,11 +1576,7 @@ sc_unsigned_subref::operator = ( double v )
     int nb = m_left - m_right + 1;
     int nd = DIV_CEIL(nb);
 
-#ifdef SC_MAX_NBITS
-    sc_digit d[MAX_NDIGITS];
-#else
     ScBigTemp d; // sc_digit *d = sc_get_big_temp(); 
-#endif
 
     if (v < 0)
 	v = -v;
@@ -1639,10 +1612,6 @@ sc_unsigned_subref::operator = ( double v )
 	else
 	    val <<= 1;
     }
-
-#ifndef SC_MAX_NBITS
-    // sc_release_big_temp(d); 
-#endif
 
     return *this;
 }
