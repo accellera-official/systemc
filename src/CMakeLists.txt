@@ -147,7 +147,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_hash.cpp
                      sysc/utils/sc_list.cpp
                      sysc/utils/sc_mempool.cpp
-		     sysc/utils/sc_meta.h
+		     sysc/utils/sc_optional.cpp
                      sysc/utils/sc_pq.cpp
                      sysc/utils/sc_report.cpp
                      sysc/utils/sc_report_handler.cpp
@@ -375,6 +375,8 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_list.h
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
+		     sysc/utils/sc_meta.h
+		     sysc/utils/sc_optional.h
                      sysc/utils/sc_pq.h
                      sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h
@@ -496,6 +498,7 @@ target_compile_definitions (
   $<$<BOOL:${ENABLE_PHASE_CALLBACKS_TRACING}>:
     SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING>
   $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
+  $<$<BOOL:${HAVE_POSIX_MEMALIGN}>:SC_HAVE_POSIX_MEMALIGN>
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
