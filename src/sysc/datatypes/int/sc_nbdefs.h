@@ -97,6 +97,11 @@ typedef unsigned char uchar;
 // better for alignment.
 typedef int small_type;
 
+// SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and 
+// sc_unsigned values. This buffer is used in place of a malloc of storage for the object 
+// instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
+// invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
+
 #define SC_SMALL_VEC_DIGITS 40
 
 // Attributes of a byte.
