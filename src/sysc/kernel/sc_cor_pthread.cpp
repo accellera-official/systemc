@@ -28,10 +28,14 @@
 
 #if !defined(_WIN32) && !defined(WIN32) && defined(SC_USE_PTHREADS)
 
+#include <cstring>
+#include <sstream>
+
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
 
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/utils/sc_report.h"
 
 using namespace std;
 
@@ -47,21 +51,6 @@ namespace sc_core {
 
 #define DEBUGF \
     if (0) std::cout << "sc_cor_pthread.cpp(" << __LINE__ << ") "
-
-// ----------------------------------------------------------------------------
-//  File static variables.
-//
-// (1) The thread creation mutex and the creation condition are used to
-//     suspend the thread creating another one until the created thread
-//     reaches its invoke_module_method. This allows us to get control of
-//     thread scheduling away from the pthread package.
-// ----------------------------------------------------------------------------
-
-static sc_cor_pthread* active_cor_p=0;   // Active co-routine.
-static pthread_cond_t  create_condition; // See note 1 above.
-static pthread_mutex_t create_mutex;     // See note 1 above.
-static sc_cor_pthread  main_cor;         // Main coroutine.
-
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_pthread
@@ -85,8 +74,8 @@ sc_cor_pthread::sc_cor_pthread()
 sc_cor_pthread::~sc_cor_pthread()
 {
     DEBUGF << this << ": sc_cor_pthread::~sc_cor_pthread()" << std::endl;
-	pthread_cond_destroy( &m_pt_condition);
-	pthread_mutex_destroy( &m_mutex );
+    pthread_cond_destroy( &m_pt_condition );
+    pthread_mutex_destroy( &m_mutex );
 }
 
 
@@ -98,7 +87,7 @@ sc_cor_pthread::~sc_cor_pthread()
 
 void* sc_cor_pthread::invoke_module_method(void* context_p)
 {
-    sc_cor_pthread* p = (sc_cor_pthread*)context_p;
+    sc_cor_pthread* p = static_cast<sc_cor_pthread*>(context_p);
     DEBUGF << p << ": sc_cor_pthread::invoke_module_method()" << std::endl;
 
 
@@ -110,20 +99,19 @@ void* sc_cor_pthread::invoke_module_method(void* context_p)
     // up the main thread which is waiting for this thread to execute to this
     // wait point.
 
-    pthread_mutex_lock( &create_mutex );
-	DEBUGF << p << ": child signalling main thread " << endl;
-    pthread_cond_signal( &create_condition );
+    pthread_mutex_lock( &p->m_pkg_p->m_create_mtx );
+    DEBUGF << p << ": child signalling main thread " << endl;
+    pthread_cond_signal( &p->m_pkg_p->m_create_cond );
     pthread_mutex_lock( &p->m_mutex );
-    pthread_mutex_unlock( &create_mutex );
+    pthread_mutex_unlock( &p->m_pkg_p->m_create_mtx );
     pthread_cond_wait( &p->m_pt_condition, &p->m_mutex );
     pthread_mutex_unlock( &p->m_mutex );
 
 
     // CALL THE SYSTEMC CODE THAT WILL ACTUALLY START THE THREAD OFF:
 
-    active_cor_p = p;
-    DEBUGF << p << ": about to invoke real method " 
-	   << active_cor_p << std::endl;
+    p->m_pkg_p->m_curr_cor = p;
+    DEBUGF << p << ": about to invoke real method" << std::endl;
     (p->m_cor_fn)(p->m_cor_fn_arg);
 
     return 0;
@@ -136,24 +124,18 @@ void* sc_cor_pthread::invoke_module_method(void* context_p)
 //  Coroutine package class implemented with Posix Threads.
 // ----------------------------------------------------------------------------
 
-int sc_cor_pkg_pthread::instance_count = 0;
-
-
 // constructor
 
 sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
-: sc_cor_pkg( simc )
+  : sc_cor_pkg( simc )
+  , m_main_cor()
+  , m_curr_cor( &m_main_cor )
 {
-    // initialize the current coroutine
-    if( ++ instance_count == 1 )
-    {
-        pthread_cond_init( &create_condition, PTHREAD_NULL );
-        pthread_mutex_init( &create_mutex, PTHREAD_NULL );
-        sc_assert( active_cor_p == 0 );
-        main_cor.m_pkg_p = this;
-		DEBUGF << &main_cor << ": is main co-routine" << std::endl;
-        active_cor_p = &main_cor;
-    }
+    pthread_mutex_init( &m_create_mtx, PTHREAD_NULL );
+    pthread_cond_init( &m_create_cond, PTHREAD_NULL );
+    m_main_cor.m_pkg_p = this;
+
+    DEBUGF << &m_main_cor << ": is main co-routine" << std::endl;
 }
 
 
@@ -161,9 +143,8 @@ sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
 
 sc_cor_pkg_pthread::~sc_cor_pkg_pthread()
 {
-    if( -- instance_count == 0 ) {
-        // cleanup the main coroutine
-    }
+    pthread_mutex_destroy(&m_create_mtx);
+    pthread_cond_destroy(&m_create_cond);
 }
 
 
@@ -173,8 +154,8 @@ sc_cor*
 sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 {
     sc_cor_pthread* cor_p = new sc_cor_pthread;
-    DEBUGF << &main_cor << ": sc_cor_pkg_pthread::create(" 
-	       << cor_p << ")" << std::endl;
+    DEBUGF << &m_main_cor << ": sc_cor_pkg_pthread::create("
+           << cor_p << ")" << std::endl;
 
 
     // INITIALIZE OBJECT'S FIELDS FROM ARGUMENT LIST:
@@ -210,24 +191,30 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     // This scheme results in the newly created thread being dormant before
     // the main thread continues execution.
 
-    pthread_mutex_lock( &create_mutex );
-    DEBUGF << &main_cor << ": about to create actual thread " 
-	       << cor_p << std::endl;
-    if ( pthread_create( &cor_p->m_thread, &attr,
-             &sc_cor_pthread::invoke_module_method, (void*)cor_p ) )
+    pthread_mutex_lock( &m_create_mtx );
+    DEBUGF << &m_main_cor << ": about to create actual thread "
+           << cor_p << std::endl;
+
+    int ret = pthread_create( &cor_p->m_thread, &attr,
+                              &sc_cor_pthread::invoke_module_method,
+                              (void*)cor_p );
+    if( ret != 0 )
     {
-        std::fprintf(stderr, "ERROR - could not create thread\n");
+        std::stringstream sstr;
+        sstr << "could not create thread: " << std::strerror( ret );
+        SC_REPORT_ERROR( SC_ID_COROUTINE_ERROR_, sstr.str().c_str() );
+        sc_abort();
     }
 
-    DEBUGF << &main_cor << ": main thread waiting for signal from " 
-	       << cor_p << std::endl;
-    pthread_cond_wait( &create_condition, &create_mutex );
-	DEBUGF << &main_cor << ": main thread signaled by " 
-	       << cor_p << endl;
-	pthread_attr_destroy( &attr ); 
-    pthread_mutex_unlock( &create_mutex );
-    DEBUGF << &main_cor << ": exiting sc_cor_pkg_pthread::create(" 
-	       << cor_p << ")" << std::endl;
+    DEBUGF << &m_main_cor << ": main thread waiting for signal from "
+           << cor_p << std::endl;
+    pthread_cond_wait( &m_create_cond, &m_create_mtx );
+    DEBUGF << &m_main_cor << ": main thread signaled by "
+           << cor_p << endl;
+    pthread_attr_destroy( &attr );
+    pthread_mutex_unlock( &m_create_mtx );
+    DEBUGF << &m_main_cor << ": exiting sc_cor_pkg_pthread::create("
+           << cor_p << ")" << std::endl;
 
     return cor_p;
 }
@@ -241,8 +228,8 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 void
 sc_cor_pkg_pthread::yield( sc_cor* next_cor_p )
 {
-    sc_cor_pthread* from_p = active_cor_p;
-    sc_cor_pthread* to_p = (sc_cor_pthread*)next_cor_p;
+    sc_cor_pthread* from_p = m_curr_cor;
+    sc_cor_pthread* to_p = static_cast<sc_cor_pthread*>(next_cor_p);
 
     DEBUGF << from_p << ": switch to " << to_p << std::endl;
     if ( to_p != from_p )
@@ -255,8 +242,8 @@ sc_cor_pkg_pthread::yield( sc_cor* next_cor_p )
         pthread_mutex_unlock( &from_p->m_mutex );
     }
 
-    active_cor_p = from_p; // When we come out of wait make ourselves active.
-	DEBUGF << from_p << " restarting after yield to " << to_p << std::endl;
+    m_curr_cor = from_p; // When we come out of wait make ourselves active.
+    DEBUGF << from_p << " restarting after yield to " << to_p << std::endl;
 }
 
 
@@ -265,9 +252,9 @@ sc_cor_pkg_pthread::yield( sc_cor* next_cor_p )
 void
 sc_cor_pkg_pthread::abort( sc_cor* next_cor_p )
 {
-    sc_cor_pthread* n_p = (sc_cor_pthread*)next_cor_p;
+    sc_cor_pthread* n_p = static_cast<sc_cor_pthread*>(next_cor_p);
 
-    DEBUGF << active_cor_p << ": aborting, switching to " << n_p << std::endl;
+    DEBUGF << m_curr_cor << ": aborting, switching to " << n_p << std::endl;
     pthread_mutex_lock( &n_p->m_mutex );
     pthread_cond_signal( &n_p->m_pt_condition );
     pthread_mutex_unlock( &n_p->m_mutex );
@@ -279,7 +266,7 @@ sc_cor_pkg_pthread::abort( sc_cor* next_cor_p )
 sc_cor*
 sc_cor_pkg_pthread::get_main()
 {
-    return &main_cor;
+    return &m_main_cor;
 }
 
 } // namespace sc_core

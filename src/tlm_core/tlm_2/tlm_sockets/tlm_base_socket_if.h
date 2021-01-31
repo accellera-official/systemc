@@ -57,7 +57,7 @@ public:
   virtual unsigned int                    get_bus_width() const = 0;
   virtual sc_core::sc_type_index          get_protocol_types() const = 0;
   virtual tlm_socket_category             get_socket_category() const = 0;
-  
+
 protected:
   virtual ~tlm_base_socket_if() {}
 };
