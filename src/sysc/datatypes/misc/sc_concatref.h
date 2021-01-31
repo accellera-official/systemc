@@ -80,12 +80,17 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/utils/sc_temporary.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bv.h"
 #include "sysc/datatypes/bit/sc_lv.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
 
 namespace sc_dt {
 
@@ -248,26 +253,26 @@ public:
 
     const sc_unsigned& value() const
         {
-            bool           left_non_zero;
-            sc_unsigned*   result_p = sc_unsigned::m_pool.allocate();
-            bool           right_non_zero;
+            sc_unsigned*   result_p = sc_unsigned::temporary();
 
             result_p->nbits = result_p->num_bits(m_len);
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
-            result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
-                sizeof(sc_digit)*result_p->ndigits );
+	    if ( result_p->ndigits > SC_SMALL_VEC_DIGITS ) {
+		result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
+		    sizeof(sc_digit)*result_p->ndigits );
+	    }
+	    else {
+	        result_p->digit = result_p->small_vec;
+	    }
 #if defined(_MSC_VER)
             // workaround spurious initialisation issue on MS Visual C++
             memset( result_p->digit, 0, sizeof(sc_digit)*result_p->ndigits );
 #else
             result_p->digit[result_p->ndigits-1] = 0;
 #endif
-            right_non_zero = m_right_p->concat_get_data( result_p->digit, 0 );
-            left_non_zero = m_left_p->concat_get_data(result_p->digit, m_len_r); 
-            if ( left_non_zero || right_non_zero ) 
-                result_p->sgn = SC_POS;
-            else
-                result_p->sgn = SC_ZERO;
+            m_right_p->concat_get_data( result_p->digit, 0 );
+            m_left_p->concat_get_data(result_p->digit, m_len_r); 
+	    result_p->adjust_hod();
             return *result_p;
         }
 
@@ -449,9 +454,6 @@ public:
     } 
 
 public:
-    static sc_core::sc_vpool<sc_concatref> m_pool; // Pool of temporary objects.
-
-public:
     enum concat_flags {
         cf_none = 0,        // Normal value. 
         cf_xz_present = 1   // X and/or Z values present.
@@ -619,7 +621,6 @@ operator >> ( ::std::istream& is, sc_concatref& a )
 class SC_API sc_concat_bool : public sc_value_base
 {
   protected:
-    static sc_core::sc_vpool<sc_concat_bool> m_pool;  // Temporaries pool.
     bool                                     m_value; // Value for this obj.
 
   public:
@@ -639,7 +640,8 @@ class SC_API sc_concat_bool : public sc_value_base
 
     static inline sc_concat_bool* allocate( bool v )
     {
-        sc_concat_bool* result_p = m_pool.allocate();
+        static sc_core::sc_vpool<sc_concat_bool> pool(9);
+        sc_concat_bool* result_p = pool.allocate();
         result_p->m_value = v;
         return result_p;
     }
@@ -654,16 +656,16 @@ class SC_API sc_concat_bool : public sc_value_base
 
     virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     {
-        int bit = 1 << (low_i % BITS_PER_DIGIT); 
-        int word_i = low_i / BITS_PER_DIGIT;
+        int bit = 1 << SC_BIT_INDEX(low_i);
+        int word_i = SC_DIGIT_INDEX(low_i);
         dst_p[word_i] &= ~bit;
         return false;
     }
 
     virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
     {
-        int bit = 1 << (low_i % BITS_PER_DIGIT); 
-        int word_i = low_i / BITS_PER_DIGIT;
+        int bit = 1 << SC_BIT_INDEX(low_i);
+        int word_i = SC_DIGIT_INDEX(low_i);
         if ( m_value )
             dst_p[word_i] |= bit;
         else 
@@ -764,12 +766,19 @@ SC_CONCAT_BOOL_OP(<)
 // CONCATENATION FUNCTION AND OPERATOR FOR STANDARD SYSTEM C DATA TYPES:
 // ----------------------------------------------------------------------------
 
+inline sc_dt::sc_concatref* temporary_concatref()
+{
+    sc_core::sc_vpool<sc_concatref> pool(9);
+    sc_dt::sc_concatref* result_p = pool.allocate();
+    return result_p;
+}
+
 inline sc_dt::sc_concatref& concat(
     sc_dt::sc_value_base& a, sc_dt::sc_value_base& b)
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -781,7 +790,7 @@ sc_dt::sc_concatref& concat(
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -794,7 +803,7 @@ sc_dt::sc_concatref& concat(const sc_dt::sc_value_base& a, bool b)
     sc_dt::sc_concatref*         result_p;   // Proxy for the concatenation.
 
     b_p = sc_dt::sc_concat_bool::allocate(b);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, *b_p );
     return *result_p;
 }
@@ -807,7 +816,7 @@ sc_dt::sc_concatref& concat(bool a, const sc_dt::sc_value_base& b)
     sc_dt::sc_concatref*         result_p;   // Proxy for the concatenation.
 
     a_p = sc_dt::sc_concat_bool::allocate(a);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( *a_p, b );
     return *result_p;
 }
@@ -817,7 +826,7 @@ inline sc_dt::sc_concatref& operator , (
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -829,7 +838,7 @@ sc_dt::sc_concatref& operator , (
 {
     sc_dt::sc_concatref* result_p;     // Proxy for the concatenation.
 
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, b );
     return *result_p;
 }
@@ -842,7 +851,7 @@ sc_dt::sc_concatref& operator , (const sc_dt::sc_value_base& a, bool b)
     sc_dt::sc_concatref*         result_p; // Proxy for the concatenation.
 
     b_p = sc_dt::sc_concat_bool::allocate(b);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( a, *b_p );
     return *result_p;
 }
@@ -855,7 +864,7 @@ sc_dt::sc_concatref& operator , (bool a, const sc_dt::sc_value_base& b)
     sc_dt::sc_concatref*         result_p; // Proxy for the concatenation.
 
     a_p = sc_dt::sc_concat_bool::allocate(a);
-    result_p = sc_dt::sc_concatref::m_pool.allocate();
+    result_p = temporary_concatref();
     result_p->initialize( *a_p, b );
     return *result_p;
 }

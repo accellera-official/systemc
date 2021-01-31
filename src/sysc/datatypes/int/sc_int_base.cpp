@@ -33,7 +33,7 @@
 
       Name, Affiliation, Date:
   Description of Modification:
-
+    
  *****************************************************************************/
 
 
@@ -69,6 +69,11 @@
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/bit/sc_bv_base.h"
 #include "sysc/datatypes/bit/sc_lv_base.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
+#include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/misc/sc_concatref.h"
 #include "sysc/datatypes/fx/sc_fix.h"
 #include "sysc/datatypes/fx/scfx_other_defs.h"
@@ -101,8 +106,6 @@ sc_int_concref_invalid_length( int length )
 //
 //  Proxy class for sc_int bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
-
-sc_core::sc_vpool<sc_int_bitref> sc_int_bitref::m_pool(9);
 
 // concatenation methods:
 
@@ -156,15 +159,15 @@ sc_int_bitref::scan( ::std::istream& is )
 // ----------------------------------------------------------------------------
 
 bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{
+{    
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
     uint_type mask;        // Mask for bits to extract or keep.
 
-    dst_i = low_i / BITS_PER_DIGIT;
+    dst_i = SC_DIGIT_INDEX(low_i);
     high_i = low_i + (m_left-m_right);
-    end_i = high_i / BITS_PER_DIGIT;
+    end_i = SC_DIGIT_INDEX(high_i);
     mask = ~mask_int[m_left][m_right];
 
 
@@ -202,7 +205,7 @@ bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
 
 bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
-{
+{    
     int       dst_i;      // Word in dst_p now processing.
     int       end_i;      // Highest order word in dst_p to process.
     int       high_i;     // Index of high order bit in dst_p to set.
@@ -211,10 +214,10 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
     bool      non_zero;	  // True if value inserted is non-zero.
     uint_type val;        // Selection value extracted from m_obj_p.
 
-    dst_i = low_i / BITS_PER_DIGIT;
-    left_shift = low_i % BITS_PER_DIGIT;
+    dst_i = SC_DIGIT_INDEX(low_i);
+    left_shift = SC_BIT_INDEX(low_i);
     high_i = low_i + (m_left-m_right);
-    end_i = high_i / BITS_PER_DIGIT;
+    end_i = SC_DIGIT_INDEX(high_i);
     mask = ~mask_int[m_left][m_right];
     val = (m_obj_p->m_val & mask) >> m_right;
     non_zero = val != 0;
@@ -267,11 +270,9 @@ bool sc_int_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 //  Proxy class for sc_int part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-sc_core::sc_vpool<sc_int_subref> sc_int_subref::m_pool(9);
-
 // assignment operators
 
-sc_int_subref&
+sc_int_subref& 
 sc_int_subref::operator = ( int_type v )
 {
     int_type val = m_obj_p->m_val;
@@ -383,6 +384,7 @@ sc_int_base::invalid_index( int i ) const
         << " violates 0 <= index <= " << (m_len - 1);
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
     sc_core::sc_abort(); // can't recover from here
+
 }
 
 void
@@ -410,7 +412,7 @@ sc_int_base::check_value() const
 
 
 // constructors
-sc_int_base::sc_int_base( const sc_bv_base& v )
+sc_int_base::sc_int_base( const sc_bv_base& v ) 
     : m_val(0), m_len( v.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
@@ -445,62 +447,31 @@ sc_int_base::sc_int_base( const sc_signed& a )
     : m_val( 0 ), m_len( a.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
-#if 0
-    for( int i = m_len - 1; i >= 0; -- i ) {
-	set( i, a.test( i ) );
-    }
-    extend_sign();
-#else
     *this = a.to_int64();
-#endif
 }
 
 sc_int_base::sc_int_base( const sc_unsigned& a )
     : m_val( 0 ), m_len( a.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
-#if 0
-    for( int i = m_len - 1; i >= 0; -- i ) {
-	set( i, a.test( i ) );
-    }
-    extend_sign();
-#else
     *this = a.to_int64();
-#endif
 }
 
 
 // assignment operators
 
-sc_int_base&
+sc_int_base& 
 sc_int_base::operator = ( const sc_signed& a )
 {
-    int minlen = sc_min( m_len, a.length() );
-    int i = 0;
-    for( ; i < minlen; ++ i ) {
-	set( i, a.test( i ) );
-    }
-    bool sgn = a.sign();
-    for( ; i < m_len; ++ i ) {
-	// sign extension
-	set( i, sgn );
-    }
+    m_val = a.to_int64();
     extend_sign();
     return *this;
 }
 
-sc_int_base&
+sc_int_base& 
 sc_int_base::operator = ( const sc_unsigned& a )
 {
-    int minlen = sc_min( m_len, a.length() );
-    int i = 0;
-    for( ; i < minlen; ++ i ) {
-	set( i, a.test( i ) );
-    }
-    for( ; i < m_len; ++ i ) {
-	// zero extension
-	set( i, 0 );
-    }
+    m_val = a.to_uint64();
     extend_sign();
     return *this;
 }
@@ -509,15 +480,7 @@ sc_int_base::operator = ( const sc_unsigned& a )
 sc_int_base&
 sc_int_base::operator = ( const sc_bv_base& a )
 {
-    int minlen = sc_min( m_len, a.length() );
-    int i = 0;
-    for( ; i < minlen; ++ i ) {
-	set( i, a.get_bit( i ) );
-    }
-    for( ; i < m_len; ++ i ) {
-	// zero extension
-	set( i, 0 );
-    }
+    m_val = a.to_uint64(); 
     extend_sign();
     return *this;
 }
@@ -525,15 +488,7 @@ sc_int_base::operator = ( const sc_bv_base& a )
 sc_int_base&
 sc_int_base::operator = ( const sc_lv_base& a )
 {
-    int minlen = sc_min( m_len, a.length() );
-    int i = 0;
-    for( ; i < minlen; ++ i ) {
-	set( i, sc_logic( a.get_bit( i ) ).to_bool() );
-    }
-    for( ; i < m_len; ++ i ) {
-	// zero extension
-	set( i, 0 );
-    }
+    m_val = a.to_uint64(); 
     extend_sign();
     return *this;
 }
@@ -549,11 +504,11 @@ sc_int_base::operator = ( const char* a )
 	SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
 			 "character string is empty" );
     }
-    else try {
+    try {
 	int len = m_len;
 	sc_fix aa( a, len, len, SC_TRN, SC_WRAP, 0, SC_ON );
 	return this->operator = ( aa );
-    } catch( const sc_core::sc_report & ) {
+    } catch( const sc_core::sc_report& ) {
         std::stringstream msg;
         msg << "character string '" << a << "' is not valid";
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
@@ -610,15 +565,15 @@ sc_int_base::xor_reduce() const
 
 
 bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{
+{    
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        left_shift;  // Left shift for val.
     uint_type  mask;        // Mask for bits to extract or keep.
 
-    dst_i = low_i / BITS_PER_DIGIT;
-    left_shift = low_i % BITS_PER_DIGIT;
-    end_i = (low_i + (m_len-1)) / BITS_PER_DIGIT;
+    dst_i = SC_DIGIT_INDEX(low_i);
+    left_shift = SC_BIT_INDEX(low_i);
+    end_i = SC_DIGIT_INDEX((low_i + (m_len-1)));
 
     mask = ~(~UINT_ZERO << left_shift);
     dst_p[dst_i] = (sc_digit)(dst_p[dst_i] & mask);
@@ -643,7 +598,7 @@ bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 //   low_i =  first bit within dst_p to be set.
 //------------------------------------------------------------------------------
 bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
-{
+{    
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        high_i;      // Index of high order bit in dst_p to set.
@@ -652,10 +607,10 @@ bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
     bool       non_zero;    // True if value inserted is non-zero.
     uint_type  val;         // Value for this object.
 
-    dst_i = low_i / BITS_PER_DIGIT;
-    left_shift = low_i % BITS_PER_DIGIT;
+    dst_i = SC_DIGIT_INDEX(low_i);
+    left_shift = SC_BIT_INDEX(low_i);
     high_i = low_i + (m_len-1);
-    end_i = high_i / BITS_PER_DIGIT;
+    end_i = SC_DIGIT_INDEX(high_i);
     val = m_val;
     non_zero = val != 0;
 
@@ -670,7 +625,7 @@ bool sc_int_base::concat_get_data( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = (~UINT_ZERO << left_shift);
-    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & ~mask) |
+    dst_p[dst_i] = (sc_digit)((dst_p[dst_i] & ~mask) | 
 		((val <<left_shift) & DIGIT_MASK));
     switch ( end_i - dst_i )
     {

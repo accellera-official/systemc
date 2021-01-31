@@ -31,14 +31,15 @@
 namespace sc_dt {
 
 // forward declarations
-class SC_API sc_any_value_cref;
-class SC_API sc_any_value_ref;
-class SC_API sc_any_value_list_cref;
-class SC_API sc_any_value_list_ref;
-class SC_API sc_any_value_map_cref;
-class SC_API sc_any_value_map_ref;
-class SC_API sc_any_value_map_elem_ref;
-class SC_API sc_any_value_map_elem_cref;
+class sc_any_value;
+class sc_any_value_cref;
+class sc_any_value_ref;
+class sc_any_value_list_cref;
+class sc_any_value_list_ref;
+class sc_any_value_map_cref;
+class sc_any_value_map_ref;
+class sc_any_value_map_elem_ref;
+class sc_any_value_map_elem_cref;
 template<typename T> class sc_any_value_iterator;
 
 //@cond SC_HIDDEN_FROM_DOXYGEN
@@ -57,7 +58,7 @@ template<typename T> struct proxy_ptr
   bool operator==(const proxy_ptr& that) const { return ref_.is_same() == (*that).is_same(); }
   bool operator!=(const proxy_ptr& that) const { return !(*this == that); }
 
-  static proxy_ptr pointer_to(element_type& elem) { return proxy_ptr(elem); }
+  static proxy_ptr pointer_to(element_type& elem) { return pointer(elem); }
 
 private:
   // avoid addressof operator

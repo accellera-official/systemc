@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -76,6 +76,7 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -185,8 +186,8 @@ public:
 	{ if (xz_present_p) *xz_present_p = false; return 1; }
     virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
         {
-	    int bit_mask = 1 << (low_i % BITS_PER_DIGIT);
-	    int word_i = low_i / BITS_PER_DIGIT;
+	    int bit_mask = 1 << SC_BIT_INDEX(low_i);
+	    int word_i = SC_DIGIT_INDEX(low_i);
 
 	    dst_p[word_i] &= ~bit_mask;
 	    return false;
@@ -194,8 +195,8 @@ public:
     virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
         {
 	    bool non_zero;
-	    int bit_mask = 1 << (low_i % BITS_PER_DIGIT);
-	    int word_i = low_i / BITS_PER_DIGIT;
+	    int bit_mask = 1 << SC_BIT_INDEX(low_i);
+	    int word_i = SC_DIGIT_INDEX(low_i);
 
 	    if ( operator uint64() )
 	    {
@@ -300,9 +301,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-public:
-    static sc_core::sc_vpool<sc_int_bitref> m_pool;
-
 };
 
 
@@ -345,7 +343,7 @@ public:
     // copy constructor
 
     sc_int_subref_r( const sc_int_subref_r& a ) :
-        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
+        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
 	m_right( a.m_right )
         {}
 
@@ -523,9 +521,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-public:
-    static sc_core::sc_vpool<sc_int_subref> m_pool;
-
 };
 
 
@@ -571,10 +566,10 @@ class SC_API sc_int_base : public sc_value_base
 #ifdef DEBUG_SYSTEMC
 	    check_value();
 #endif
-	    // cast to unsigned type before left-shift to avoid C++ undefined behavior;
-	    // cast back to signed type for arithmetic right shift (implementation-defined,
-	    // but all supported platforms implement signed right-shift arithmetically)
-	    m_val = (int_type(uint_type(m_val) << m_ulen) >> m_ulen);
+            // cast to unsigned type before left-shift to avoid C++ undefined behavior;
+            // cast back to signed type for arithmetic right shift (implementation-defined,
+            // but all supported platforms implement signed right-shift arithmetically)
+            m_val = (int_type(uint_type(m_val) << m_ulen) >> m_ulen);
 	}
 
 public:
@@ -590,12 +585,13 @@ public:
 	{ check_length(); extend_sign(); }
 
     sc_int_base( const sc_int_base& a )
-	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ),
+	: sc_value_base(a), m_val( a.m_val ), m_len( a.m_len ), 
 	  m_ulen( a.m_ulen )
 	{}
 
     explicit sc_int_base( const sc_int_subref_r& a )
-        : m_val( a ), m_len( a.length() ), m_ulen( SC_INTWIDTH - m_len )
+        : m_val( a ), m_len( a.length() ), 
+	  m_ulen( SC_INTWIDTH - m_len )
         { extend_sign(); }
 
     template< class T >
@@ -636,6 +632,9 @@ public:
 
     sc_int_base& operator = ( const sc_signed& a );
     sc_int_base& operator = ( const sc_unsigned& a );
+
+    inline sc_int_base& operator = ( const sc_signed_subref_r& a );
+    inline sc_int_base& operator = ( const sc_unsigned_subref_r& a );
 
 #ifdef SC_INCLUDE_FX
     sc_int_base& operator = ( const sc_fxval& a );
@@ -749,6 +748,12 @@ public:
     sc_int_bitref&         bit( int i );
     const sc_int_bitref_r& bit( int i ) const;
 
+    sc_int_bitref* temporary_bitref() const
+    {
+        static sc_core::sc_vpool<sc_int_bitref> pool(9);
+        return pool.allocate();
+    }
+
 
     // part selection
 
@@ -757,6 +762,12 @@ public:
 
     sc_int_subref&         range( int left, int right );
     const sc_int_subref_r& range( int left, int right ) const;
+
+    sc_int_subref* temporary_subref() const
+    {
+        static sc_core::sc_vpool<sc_int_subref> pool(9);
+        return pool.allocate();
+    }
 
 
     // bit access, without bounds checking or sign extension
@@ -852,11 +863,13 @@ public:
 	{ return (double) m_val; }
 
 
+#ifndef _32BIT_
     long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
+#endif
 
 
     // explicit conversion to character string
@@ -1237,7 +1250,7 @@ sc_int_bitref&
 sc_int_base::operator [] ( int i )
 {
     check_index( i );
-    sc_int_bitref* result_p = sc_int_bitref::m_pool.allocate();
+    sc_int_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1247,7 +1260,7 @@ const sc_int_bitref_r&
 sc_int_base::operator [] ( int i ) const
 {
     check_index( i );
-    sc_int_bitref* result_p = sc_int_bitref::m_pool.allocate();
+    sc_int_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1258,7 +1271,7 @@ sc_int_bitref&
 sc_int_base::bit( int i )
 {
     check_index( i );
-    sc_int_bitref* result_p = sc_int_bitref::m_pool.allocate();
+    sc_int_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1268,7 +1281,7 @@ const sc_int_bitref_r&
 sc_int_base::bit( int i ) const
 {
     check_index( i );
-    sc_int_bitref* result_p = sc_int_bitref::m_pool.allocate();
+    sc_int_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1281,7 +1294,7 @@ sc_int_subref&
 sc_int_base::operator () ( int left, int right )
 {
     check_range( left, right );
-    sc_int_subref* result_p = sc_int_subref::m_pool.allocate();
+    sc_int_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1291,7 +1304,7 @@ const sc_int_subref_r&
 sc_int_base::operator () ( int left, int right ) const
 {
     check_range( left, right );
-    sc_int_subref* result_p = sc_int_subref::m_pool.allocate();
+    sc_int_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1302,7 +1315,7 @@ sc_int_subref&
 sc_int_base::range( int left, int right )
 {
     check_range( left, right );
-    sc_int_subref* result_p = sc_int_subref::m_pool.allocate();
+    sc_int_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1312,7 +1325,7 @@ const sc_int_subref_r&
 sc_int_base::range( int left, int right ) const
 {
     check_range( left, right );
-    sc_int_subref* result_p = sc_int_subref::m_pool.allocate();
+    sc_int_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1381,6 +1394,7 @@ operator >> ( ::std::istream& is, sc_int_base& a )
 }
 
 } // namespace sc_dt
+
 
 #endif
 

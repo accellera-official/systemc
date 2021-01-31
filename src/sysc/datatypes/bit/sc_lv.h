@@ -55,8 +55,13 @@ namespace sc_dt
 {
 
 // classes defined in this module
+
 template <int W> class sc_lv;
 
+// forward class references
+
+template <int W> class sc_bigint;
+template <int W> class sc_biguint;
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_lv<W>
@@ -107,6 +112,10 @@ public:
     sc_lv( const sc_signed& a )
 	: sc_lv_base( W )
 	{ sc_lv_base::operator = ( a ); }
+
+    template<int WO> sc_lv( const sc_bigint<WO>& a );
+
+    template<int WO> sc_lv( const sc_biguint<WO>& a );
 
     sc_lv( const sc_uint_base& a )
 	: sc_lv_base( W )

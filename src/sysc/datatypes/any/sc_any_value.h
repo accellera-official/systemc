@@ -45,17 +45,17 @@ using sc_core::sc_string_view;
 using sc_core::sc_zstring_view;
 
 // forward declarations
-class SC_API sc_any_value;
-class SC_API sc_any_value_cref;
-class SC_API sc_any_value_ref;
-class SC_API sc_any_value_list;
-class SC_API sc_any_value_list_cref;
-class SC_API sc_any_value_list_ref;
-class SC_API sc_any_value_map;
-class SC_API sc_any_value_map_cref;
-class SC_API sc_any_value_map_ref;
-class SC_API sc_any_value_map_elem_ref;
-class SC_API sc_any_value_map_elem_cref;
+class sc_any_value;
+class sc_any_value_cref;
+class sc_any_value_ref;
+class sc_any_value_list;
+class sc_any_value_list_cref;
+class sc_any_value_list_ref;
+class sc_any_value_map;
+class sc_any_value_map_cref;
+class sc_any_value_map_ref;
+class sc_any_value_map_elem_ref;
+class sc_any_value_map_elem_cref;
 
 template<typename T> struct sc_any_value_converter;
 template<typename T> struct sc_any_value_has_pack;
@@ -88,18 +88,18 @@ enum sc_any_value_category
 };
 
 /// @ref sc_any_value comparisons
-SC_API bool operator==( sc_any_value_cref const &, sc_any_value_cref const & );
+bool operator==( sc_any_value_cref const &, sc_any_value_cref const & );
 
 /// @ref sc_any_value ostream insertion
-SC_API std::ostream& operator<<( std::ostream&, sc_any_value_cref const & );
+std::ostream& operator<<( std::ostream&, sc_any_value_cref const & );
 
 /// @ref sc_any_value istream extraction
-SC_API std::istream& operator>>( std::istream&, sc_any_value_ref );
+std::istream& operator>>( std::istream&, sc_any_value_ref );
 
 // --------------------------------------------------------------------------
 
 /// reference to a constant (nested) @ref sc_any_value
-class SC_API sc_any_value_cref
+class sc_any_value_cref
 {
   friend class sc_any_value_ref;
   friend class sc_any_value_list_cref;
@@ -108,8 +108,8 @@ class SC_API sc_any_value_cref
   friend class sc_any_value_map_ref;
   friend class sc_any_value_map_elem_cref;
   template<typename U> friend class sc_any_value_impl::iterator_impl;
-  friend SC_API bool operator==( sc_any_value_cref const &, sc_any_value_cref const & );
-  friend SC_API std::ostream& operator<<( std::ostream&, sc_any_value_cref const & );
+  friend bool operator==( sc_any_value_cref const &, sc_any_value_cref const & );
+  friend std::ostream& operator<<( std::ostream&, sc_any_value_cref const & );
 
 protected:
   typedef void* impl_type; // use type-punned pointer for now
@@ -122,11 +122,6 @@ public:
   typedef sc_any_value      value_type;
   typedef sc_any_value_cref const_reference;
   typedef sc_any_value_ref  reference;
-  typedef sc_any_value_cref this_type;
-
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_cref( this_type const & other ) = default;
-#endif // C++11
 
   /** @name Type queries */
   ///@{
@@ -280,13 +275,13 @@ sc_any_value_cref::get() const
 // --------------------------------------------------------------------------
 
 /// reference to a mutable (nested) @ref sc_any_value
-class SC_API sc_any_value_ref
+class sc_any_value_ref
   : public sc_any_value_cref
 {
   friend class sc_any_value_list_ref;
   friend class sc_any_value_map_ref;
   friend class sc_any_value_map_elem_ref;
-  friend SC_API std::istream& operator>>( std::istream&, sc_any_value_ref );
+  friend std::istream& operator>>( std::istream&, sc_any_value_ref );
   template<typename U> friend class sc_any_value_impl::iterator_impl;
   typedef sc_any_value_cref base_type;
   typedef sc_any_value_ref  this_type;
@@ -297,11 +292,6 @@ protected:
     : sc_any_value_cref(i) {}
 
 public:
-
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_ref( this_type const& other ) = default;
-#endif // C++11
-
   /// move contents to another value (becomes @c null afterwards)
   sc_any_value move();
 
@@ -446,7 +436,7 @@ SC_TPLEXTERN_ template class sc_any_value_iterator<sc_any_value_ref>;
 ///@endcond
 
 /// reference to constant sc_any_value list value
-class SC_API sc_any_value_list_cref
+class sc_any_value_list_cref
   : public sc_any_value_cref
 {
   friend class sc_any_value_cref;
@@ -461,14 +451,10 @@ protected:
 public:
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
-  typedef sc_any_value_iterator<reference>       iterator;
-  typedef sc_any_value_iterator<const_reference> const_iterator;
-  typedef std::reverse_iterator<iterator>        reverse_iterator;
-  typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
-
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_list_cref( this_type const& other ) = default;
-#endif // C++11
+  typedef sc_any_value_iterator<reference>        iterator;
+  typedef sc_any_value_iterator<const_reference>  const_iterator;
+  typedef std::reverse_iterator<iterator>       reverse_iterator;
+  typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
   /** @name list queries */
   //@{
@@ -548,7 +534,7 @@ private:
 // --------------------------------------------------------------------------
 
 /// reference to mutable sc_any_value list value
-class SC_API sc_any_value_list_ref
+class sc_any_value_list_ref
   : public sc_any_value_list_cref
 {
   friend class sc_any_value_ref;
@@ -561,10 +547,6 @@ protected:
     : base_type(i) {}
 
 public:
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_list_ref( this_type const& other ) = default;
-#endif // C++11
-
   this_type operator=( this_type const& );
   this_type operator=( base_type const& );
 
@@ -681,19 +663,14 @@ sc_any_value_ref::get_list()
 class sc_any_value_map_elem_cref
 {
   template<typename U> friend class sc_any_value_impl::iterator_impl;
-  typedef sc_any_value_map_elem_cref this_type;
-  typedef sc_any_value_impl::proxy_ptr<this_type> proxy_ptr;
+  typedef sc_any_value_impl::proxy_ptr<sc_any_value_map_elem_cref> proxy_ptr;
   typedef void value_type; // TODO: add  explicit value_type
 public:
   typedef sc_any_value_map_elem_cref const_reference;
   typedef sc_any_value_map_elem_ref  reference;
 
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_map_elem_cref(this_type const& other) = default;
-#endif // C++11
-
   /// constant reference to the element's key
-  const sc_zstring_view key;
+  sc_zstring_view key;
   /// constant reference to the element's value
   sc_any_value_cref value;
 
@@ -707,31 +684,22 @@ protected:
   typedef void* impl_type; // use type-punned pointer for now
   impl_type pimpl_;
   sc_any_value_map_elem_cref(impl_type i = NULL);
-
-private:
-  // constant reference, no assignment
-  this_type& operator=(this_type const&) /* = delete */;
 };
 
 /// reference to a mutable sc_any_value map element
-class SC_API sc_any_value_map_elem_ref
+class sc_any_value_map_elem_ref
 {
   template<typename U> friend class sc_any_value_impl::iterator_impl;
-  typedef sc_any_value_map_elem_ref this_type;
-  typedef sc_any_value_impl::proxy_ptr<this_type> proxy_ptr;
+  typedef sc_any_value_impl::proxy_ptr<sc_any_value_map_elem_ref> proxy_ptr;
   typedef void value_type; // TODO: add  explicit value_type
 public:
   typedef sc_any_value_map_elem_cref const_reference;
   typedef sc_any_value_map_elem_ref  reference;
 
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_map_elem_ref(this_type const&) = default;
-#endif // C++11
-
   /// constant reference to the element's key
-  const sc_zstring_view key;
+  sc_zstring_view key;
   /// mutable reference to the element's value
-  sc_any_value_ref value;
+  sc_any_value_ref  value;
 
   /// @copydoc sc_any_value_cref::operator&
   proxy_ptr operator&() const { return proxy_ptr(*this); }
@@ -740,10 +708,6 @@ protected:
   typedef void* impl_type; // use type-punned pointer for now
   impl_type pimpl_;
   sc_any_value_map_elem_ref(impl_type i = NULL);
-
-private:
-  // key is constant, no full assignment
-  this_type& operator=(this_type const&) /* = delete */;
 };
 
 //@cond SC_HIDDEN_FROM_DOXYGEN
@@ -759,7 +723,7 @@ SC_TPLEXTERN_ template class sc_any_value_iterator<sc_any_value_map_elem_ref>;
 // --------------------------------------------------------------------------
 
 /// reference to constant sc_any_value map
-class SC_API sc_any_value_map_cref
+class sc_any_value_map_cref
   : public sc_any_value_cref
 {
   friend class sc_any_value_cref;
@@ -780,10 +744,6 @@ public:
   typedef sc_any_value_iterator<const_element_reference> const_iterator;
   typedef std::reverse_iterator<iterator>              reverse_iterator;
   typedef std::reverse_iterator<const_iterator>        const_reverse_iterator;
-
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_map_cref(this_type const& other) = default;
-#endif // C++11
 
   /** @name map queries */
   //@{
@@ -879,7 +839,7 @@ private:
 // --------------------------------------------------------------------------
 
 /// reference to mutable sc_any_value map
-class SC_API sc_any_value_map_ref
+class sc_any_value_map_ref
   : public sc_any_value_map_cref
 {
   friend class sc_any_value_ref;
@@ -892,9 +852,6 @@ protected:
     : base_type(i) {}
 
 public:
-#if SC_CPLUSPLUS >= 201103L
-  sc_any_value_map_ref( this_type const& other ) = default;
-#endif // C++11
 
   this_type operator=( base_type const& );
   this_type operator=( this_type const& );
@@ -1069,7 +1026,7 @@ struct sc_any_value_has_unpack
  *
  * \see sc_any_value_list, sc_any_value_map, sc_any_value_converter
  */
-class SC_API sc_any_value
+class sc_any_value
   : public sc_any_value_ref
 {
   typedef sc_any_value this_type;
@@ -1180,7 +1137,6 @@ public:
 
   /** @name JSON (de)serialization
    */
-  //@{
 
   using const_reference::to_json;
   static sc_any_value from_json( sc_string_view json );
@@ -1278,7 +1234,7 @@ sc_any_value_map_ref::push_entry( sc_string_view key, const T& value )
  * This class is equivalent to a sc_any_value after calling @c set_list().
  * @see sc_any_value, sc_any_value_list_cref, sc_any_value_list_ref
  */
-class SC_API sc_any_value_list
+class sc_any_value_list
   : public sc_any_value_list_ref
 {
   friend class sc_any_value;
@@ -1354,7 +1310,7 @@ sc_any_value_list::operator=( this_type const & that )
  * This class is equivalent to a sc_any_value after calling @c set_map().
  * @see sc_any_value, sc_any_value_map_cref, sc_any_value_map_ref
  */
-class SC_API sc_any_value_map
+class sc_any_value_map
   : public sc_any_value_map_ref
 {
   friend class sc_any_value;

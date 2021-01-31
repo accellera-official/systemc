@@ -71,7 +71,9 @@
   ((void)0)
 #define RAPIDJSON_PARSE_ERROR_NORETURN(parseErrorCode,offset) \
   throw ::RAPIDJSON_NAMESPACE::ParseException( \
-           ::RAPIDJSON_NAMESPACE::parseErrorCode, offset )
+               ::RAPIDJSON_NAMESPACE::parseErrorCode, \
+               #parseErrorCode, offset \
+  )
 
 #include "sysc/packages/rapidjson/include/rapidjson/error/error.h"
 #include "sysc/packages/rapidjson/include/rapidjson/error/en.h"
@@ -81,7 +83,7 @@ RAPIDJSON_NAMESPACE_BEGIN
 struct ParseException
   : std::runtime_error, ParseResult
 {
-  ParseException( ParseErrorCode code, size_t offset )
+  ParseException( ParseErrorCode code, const char* msg, size_t offset )
      : std::runtime_error(GetParseError_En(code)), ParseResult(code,offset) {}
 };
 
