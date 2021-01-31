@@ -598,6 +598,7 @@ public:
         digit[HOD] &= ~(~0ULL << SC_BIT_INDEX(W));
     }
 
+#if defined(ITS_HOLLOW)
     inline sc_unsigned& sc_unsigned_proxy() 
     {
         sc_dt::sc_unsigned& result = sc_unsigned::allocate_temporary(W,(sc_digit*)digit); 
@@ -610,7 +611,6 @@ public:
 	return result; 
     }
 
-#if defined(ITS_HOLLOW)
     inline operator sc_dt::sc_unsigned& () 
     {
         return sc_unsigned_proxy();
@@ -620,6 +620,18 @@ public:
     {
         return sc_unsigned_proxy();
     }
+#else
+
+    inline sc_unsigned& sc_unsigned_proxy() 
+    {
+        return *this;
+    }
+
+    inline const sc_unsigned& sc_unsigned_proxy() const
+    {
+        return *this;
+    }
+
 #endif // ITS_HOLLOW
 
     // explicit conversion to character string:

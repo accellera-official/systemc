@@ -108,7 +108,7 @@ public:
     #endif // ITS_HOLLOW
 	{ *this = 0; }
 
-    sc_bigint(int, int) // @@@@#### ACG
+    sc_bigint(int, int) 
     #if !defined(ITS_HOLLOW) 
         : sc_signed( W, compile_time_digits )
     #endif // ITS_HOLLOW

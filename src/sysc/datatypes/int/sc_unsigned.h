@@ -1483,7 +1483,7 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > (int)(sizeof(small_vec)/sizeof(sc_digit)) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     }
@@ -1708,9 +1708,9 @@ sc_unsigned::to_uint() const
 
 inline
 sc_unsigned::sc_unsigned( int nb, bool zero ) :
-    nbits(nb+1), ndigits( (nb+BITS_PER_DIGIT)/BITS_PER_DIGIT )
+    nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
 {
-    if ( ( (nb+BITS_PER_DIGIT)/BITS_PER_DIGIT ) <= SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
         digit = small_vec;
 	m_free = false;
     }
@@ -1735,7 +1735,7 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
 // +----------------------------------------------------------------------------
 inline
 sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
-    nbits(nb+1), ndigits( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT )
+    nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
 {
     digit = digits_p;
     m_free = false;
@@ -1764,7 +1764,7 @@ sc_unsigned::sc_unsigned( int nb ) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
 	m_free = true;
     }

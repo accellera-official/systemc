@@ -1671,7 +1671,7 @@ sc_signed::to_ulong() const
 // +----------------------------------------------------------------------------
 inline
 sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
-    nbits(nb), ndigits( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT )
+    nbits(nb), ndigits( DIV_CEIL(nb) )
 {
     digit = digits_p;
     m_free = false;
@@ -1688,9 +1688,9 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
 // +----------------------------------------------------------------------------
 inline
 sc_signed::sc_signed( int nb, bool zero ) :
-    nbits(nb), ndigits( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT )
+    nbits(nb), ndigits( DIV_CEIL(nb) )
 {
-    if ( ( (nb+BITS_PER_DIGIT-1)/BITS_PER_DIGIT ) <= SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
         digit = small_vec;
         m_free = false;
     }

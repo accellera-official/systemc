@@ -884,7 +884,7 @@ sc_signed::sc_signed(int nb, int nd, sc_digit *d,
 {
   ndigits = DIV_CEIL(nbits);
 
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     } else {
@@ -933,7 +933,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
       nbits = 1;
     }
     ndigits = DIV_CEIL( nbits );
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     } else {
@@ -962,7 +962,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     // first get the indices for that.
 
     nd = left_digit - right_digit + 1;
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     } else {
@@ -1057,11 +1057,11 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
 
   // if u == 0 or the range is out of bounds, return 0
   if( nbits <= num_bits( 0 ) ) {
-    if( nbits <= num_bits( 0 ) ) {
+    if( nbits <= num_bits( 0 ) ) { // @@@@#### redundant!!!
       nbits = 1;
     }
     ndigits = DIV_CEIL( nbits );
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     } else {
@@ -1091,7 +1091,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     nd = left_digit - right_digit + 1;
 
   // Allocate memory for the range.
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	m_free = true;
     } else {
