@@ -654,7 +654,9 @@ public:
     // constructors
 
     explicit inline sc_signed( int nb = sc_length_param().len() );
+#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     explicit inline sc_signed( int nb, sc_digit* digit_p );
+#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     sc_signed( const sc_signed&   v );
     sc_signed( const sc_unsigned& v );
     template<class T>
@@ -1659,6 +1661,7 @@ sc_signed::to_ulong() const
     return result;
 }
 
+#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
 // | 
@@ -1676,6 +1679,7 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
     digit = digits_p;
     m_free = false;
 }
+#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
