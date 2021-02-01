@@ -97,6 +97,27 @@ typedef unsigned char uchar;
 // better for alignment.
 typedef int small_type;
 
+// BIGINT CONFIGURATIONS 
+//
+// One of these three #defines should be defined, but only one:
+//
+// BIGINT_CONFIG_HOLLOW: 
+//     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is, 
+//     sc_signed is not a parent of sc_bigint, and sc_unsigned is not a parent of sc_biguint.
+// 
+// BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE: 
+//     Configure sc_bigint and sc_biguint so they have storage for their values rather than 
+//     relying on sc_signed and sc_unsigned to provide it.
+//
+// BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE:
+//     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
+//     for their values. This includes the small vector support to eliminate malloc and free
+//     for smaller values. (See SC_SMALL_VEC_DIGITS below).
+
+// #define BIGINT_CONFIG_HOLLOW
+#define BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+// #define BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+
 // SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and 
 // sc_unsigned values. This buffer is used in place of a malloc of storage for the object 
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free

@@ -81,13 +81,12 @@ class sc_fxnum_fast;
 //
 //  Arbitrary size unsigned integer type.
 // ----------------------------------------------------------------------------
-// #define ITS_HOLLOW
 
 template< int W >
 class sc_biguint
-#if !defined(ITS_HOLLOW)
+#if !defined(BIGINT_CONFIG_HOLLOW)
     : public sc_unsigned
-#endif // ITS_HOLLOW
+#endif // BIGINT_CONFIG_HOLLOW
 {
 public: // anonymous compile-type information about this type.
     enum { 
@@ -105,151 +104,199 @@ public:
     // constructors
 
     sc_biguint() 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = 0; }
 
     sc_biguint(int, int)
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{  }
 
     sc_biguint( bool flag ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = (int)flag; }
 
     template<int WO>
     sc_biguint( const sc_biguint<WO>& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     template<int WO>
     sc_biguint( const sc_bigint<WO>& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( const sc_unsigned& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( const sc_unsigned_subref& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     template< class T >
     sc_biguint( const sc_generic_base<T>& a ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ a->to_sc_unsigned(*this); }
 
     sc_biguint( const sc_signed& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( const sc_signed_subref& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( const char* v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; } 
 
     sc_biguint( int64 v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( uint64 v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( long v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( unsigned long v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( int v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; } 
 
     sc_biguint( unsigned int v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( double v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
   
     sc_biguint( const sc_bv_base& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     sc_biguint( const sc_lv_base& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
 #ifdef SC_INCLUDE_FX
 
     explicit sc_biguint( const sc_fxval& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxval_fast& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxnum& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
     explicit sc_biguint( const sc_fxnum_fast& v ) 
-    #if !defined(ITS_HOLLOW)
+    #if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_unsigned( W, compile_time_digits )
+    #elif defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
 
@@ -586,11 +633,11 @@ inline const sc_biguint<W> operator -- (int) // postfix
 }
 
 public:
-#if !defined(ITS_HOLLOW)
+#if defined(BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
    sc_digit compile_time_digits[DIV_CEIL(W+1)];
-#else
+#elif defined(BIGINT_CONFIG_HOLLOW)
    sc_digit digit[DIV_CEIL(W+1)];
-#endif // ITS_HOLLOW
+#endif // BIGINT_CONFIG_HOLLOW
 
 public:
     void adjust_hod()
@@ -598,7 +645,7 @@ public:
         digit[HOD] &= ~(~0ULL << SC_BIT_INDEX(W));
     }
 
-#if defined(ITS_HOLLOW)
+#if defined(BIGINT_CONFIG_HOLLOW)
     inline sc_unsigned& sc_unsigned_proxy() 
     {
         sc_dt::sc_unsigned& result = sc_unsigned::allocate_temporary(W,(sc_digit*)digit); 
@@ -632,7 +679,7 @@ public:
         return *this;
     }
 
-#endif // ITS_HOLLOW
+#endif // BIGINT_CONFIG_HOLLOW
 
     // explicit conversion to character string:
 
@@ -644,10 +691,10 @@ public:
         return sc_unsigned_proxy().to_string( numrep, w_prefix );
     }
 
-#if defined(ITS_HOLLOW)
+#if defined(BIGINT_CONFIG_HOLLOW)
 public: // "mirror" for sc_value_base concatenation support:
   int              concat_length(bool xzp) const    { return W; }
-#endif // ITS_HOLLOW
+#endif // BIGINT_CONFIG_HOLLOW
 
 public: // field and template value accesses:
 

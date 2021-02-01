@@ -650,7 +650,9 @@ public:
     // constructors
 
     explicit inline sc_unsigned( int nb = sc_length_param().len() );
+#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     explicit inline sc_unsigned( int nb, sc_digit* digits_p );
+#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     sc_unsigned( const sc_unsigned& v );
     sc_unsigned( const sc_signed&   v );
 	template<class T>
@@ -1723,6 +1725,7 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
     }
 }
 
+#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
 // | 
@@ -1740,6 +1743,7 @@ sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
     digit = digits_p;
     m_free = false;
 }
+#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
