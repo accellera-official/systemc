@@ -451,7 +451,7 @@ to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	if ( W < 64 ) { result &= ~(-1LL << W); } // this is plain wrong!!!
+	if ( W < 64 ) { result &= ~(~0ULL << W); }
     }
     return result;
 }
@@ -584,14 +584,14 @@ const sc_biguint<W>& operator>>=(unsigned long v);
 // Range operators:
 
 sc_unsigned_bitref& bit( int i ) { return sc_unsigned_proxy().bit(i); }
-sc_unsigned_bitref_r& bit( int i ) const { return sc_unsigned_proxy().bit(i); }
+const sc_unsigned_bitref_r& bit( int i ) const { return sc_unsigned_proxy().bit(i); }
 sc_unsigned_bitref& operator [] ( int i ) { return bit(i); }
-sc_unsigned_bitref_r& operator [] ( int i ) const { return bit(i); }
+const sc_unsigned_bitref_r& operator [] ( int i ) const { return bit(i); }
 
 sc_unsigned_subref& range( int i, int j ) { return sc_unsigned_proxy().range(i,j); }
-sc_unsigned_subref_r& range( int i, int j ) const { return sc_unsigned_proxy().range(i,j); }
+const sc_unsigned_subref_r& range( int i, int j ) const { return sc_unsigned_proxy().range(i,j); }
 sc_unsigned_subref& operator () ( int i, int j ) { return range(i,j); }
-sc_unsigned_subref_r& operator () ( int i, int j ) const { return range(i,j); }
+const sc_unsigned_subref_r& operator () ( int i, int j ) const { return range(i,j); }
 
 // reduce methods
 
