@@ -1536,7 +1536,7 @@ vector_shift_left( const int       source_hod,
     // If the shift is not positive we are done:
     
     if ( shift_n < 0 ) {
-	std::cerr << "vector_shift_left: negative shift encountered" << std::endl;
+	std::cerr << "vector_shift_left: negative shift encountered" << shift_n << std::endl;
         return;
     }
   
@@ -1557,7 +1557,8 @@ vector_shift_left( const int       source_hod,
     // If the shift is larger than the our target we are done:
     
     if ( digit_i >= target_hod ) {
-        std::cerr << "vector_shift_left: shift larger than target" << std::endl;
+        std::cerr << "vector_shift_left: shift larger than target, word " << digit_i << " < " 
+	          << target_hod << std::endl;
         return;
     }
 
