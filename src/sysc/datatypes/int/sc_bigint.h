@@ -439,7 +439,7 @@ to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	if ( W < 64 ) { result &= ~(~0ULL << W); } // this is plain wrong!!!
+	if ( W < 64 ) { result &= ~(~0ULL << W); }
     }
     return result;
 }
