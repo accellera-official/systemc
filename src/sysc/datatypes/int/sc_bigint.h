@@ -323,22 +323,14 @@ public:
         return * this;
     }
 
-#if defined(BIGINT_CONFIG_HOLLOW)
     template< class T >
     const sc_bigint<W>& operator = ( const sc_generic_base<T>& a )
         { a->to_sc_signed(sc_signed_proxy()); return *this;}
-#else
-    template< class T >
-    const sc_bigint<W>& operator = ( const sc_generic_base<T>& a )
-        { a->to_sc_signed(*this); return *this;}
-#endif // defined(BIGINT_CONFIG_HOLLOW)
 
     inline const sc_bigint<W>& operator = ( const sc_unsigned_subref_r& v );
 
-#if defined(BIGINT_CONFIG_HOLLOW)
     inline const sc_bigint<W>& operator = ( const char* v )
 	{ sc_signed_proxy() = v; return *this; }
-#endif // defined(BIGINT_CONFIG_HOLLOW)
 
     inline const sc_bigint<W>& operator = ( int64 v );
 
@@ -352,9 +344,9 @@ public:
 
     inline const sc_bigint<W>& operator = ( unsigned int v );
 
-#if defined(BIGINT_CONFIG_HOLLOW)
     inline const sc_bigint<W>& operator = ( double v )
 	{ sc_signed_proxy() = v; return *this; }
+
 
     const sc_bigint<W>& operator = ( const sc_bv_base& v )
 	{ sc_signed_proxy() = v; return *this; }
@@ -362,15 +354,12 @@ public:
     const sc_bigint<W>& operator = ( const sc_lv_base& v )
 	{ sc_signed_proxy() = v; return *this; }
 
-#endif // defined(BIGINT_CONFIG_HOLLOW)
-
     inline const sc_bigint<W>& operator = ( const sc_int_base& v );
 
     inline const sc_bigint<W>& operator = ( const sc_uint_base& v );
 
 #ifdef SC_INCLUDE_FX
 
-#if defined(BIGINT_CONFIG_HOLLOW)
     const sc_bigint<W>& operator = ( const sc_fxval& v )
 	{ sc_signed_proxy() = v; return *this; }
 
@@ -382,7 +371,6 @@ public:
 
     const sc_bigint<W>& operator = ( const sc_fxnum_fast& v )
 	{ sc_signed_proxy() = v; return *this; }
-#endif // defined(BIGINT_CONFIG_HOLLOW)
 
 #endif
 
@@ -397,14 +385,12 @@ public:
 // | Result:
 // |     Native C++ type containing the object instance's value.
 // +----------------------------------------------------------------------------
-#if defined(BIGINT_CONFIG_HOLLOW)
 inline 
 double
 to_double() const
 {
     return sc_signed_proxy().to_double();
 }
-#endif // defined(BIGINT_CONFIG_HOLLOW)
 
 inline
 int 
@@ -567,7 +553,6 @@ inline sc_bigint<W>& operator ^= (const sc_uint_base& v);
 
 // Range operators:
 
-#if defined(BIGINT_CONFIG_HOLLOW)
 sc_signed_bitref& bit( int i ) { return sc_signed_proxy().bit(i); }
 const sc_signed_bitref_r& bit( int i ) const { return sc_signed_proxy().bit(i); }
 sc_signed_bitref& operator [] ( int i ) { return bit(i); }
@@ -577,7 +562,6 @@ sc_signed_subref& range( int i, int j ) { return sc_signed_proxy().range(i,j); }
 const sc_signed_subref_r& range( int i, int j ) const { return sc_signed_proxy().range(i,j); }
 sc_signed_subref& operator () ( int i, int j ) { return range(i,j); }
 const sc_signed_subref_r& operator () ( int i, int j ) const { return range(i,j); }
-#endif // defined(BIGINT_CONFIG_HOLLOW)
 
 // reduce methods
 
@@ -672,6 +656,20 @@ public:
     {
         return sc_signed_proxy();
     }
+#else
+
+    inline sc_signed& sc_signed_proxy()
+    {
+        return *this;
+    }
+
+    inline const sc_signed& sc_signed_proxy() const
+    {
+        return *this;
+    }
+
+
+#endif // BIGINT_CONFIG_HOLLOW
 
     // explicit conversion to character string:
 
@@ -683,6 +681,7 @@ public:
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
 
+#if defined(BIGINT_CONFIG_HOLLOW)
 public: // "mirror" for sc_value_base concatenation support:
   int              concat_length(bool xzp) const    { return W; }
 #endif // BIGINT_CONFIG_HOLLOW
