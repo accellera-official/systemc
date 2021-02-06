@@ -244,7 +244,7 @@ sc_bigint<W>::operator ~ ()
 }
 
   // SELF-REFERENCING OPERATORS:
-
+#if defined(BIGINT_CONFIG_HOLLOW)
   template<int W>
   inline sc_bigint<W>& sc_bigint<W>::operator += (const sc_signed&    v) { sc_signed_proxy()+= v; return *this; }
   template<int W>
@@ -412,6 +412,7 @@ sc_bigint<W>::operator ~ ()
   inline sc_bigint<W>& sc_bigint<W>::operator ^= (const sc_int_base&  v) { sc_signed_proxy()^= v; return *this; }
   template<int W>
   inline sc_bigint<W>& sc_bigint<W>::operator ^= (const sc_uint_base& v) { sc_signed_proxy()^= v; return *this; }
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 
 // reduce methods
 
@@ -474,7 +475,11 @@ template<int WO>
 sc_bv<W>::sc_bv( const sc_bigint<WO>& v ) 
     : sc_bv_base(W)
 {
+#if defined(BIGINT_CONFIG_HOLLOW)
     *this = v.sc_signed_proxy();
+#else
+    *this = v;
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 }
 
 template<int W>
@@ -482,7 +487,11 @@ template<int WO>
 sc_lv<W>::sc_lv( const sc_bigint<WO>& v ) 
     : sc_lv_base(W)
 {
+#if defined(BIGINT_CONFIG_HOLLOW)
     *this = v.sc_signed_proxy();
+#else
+    *this = v;
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 }
 
 } // namespace sc_dt

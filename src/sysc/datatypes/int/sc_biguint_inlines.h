@@ -80,16 +80,16 @@ sc_biguint<W>::operator = (const sc_unsigned& from)
     return *this;
 }
 
-#if 0
+#if !defined(BIGINT_CONFIG_HOLLOW)
 template<int W>
 inline
 const sc_biguint<W>&
-sc_biguint<W>::operator=(const sc_unsigned_subref_r& v)
+sc_biguint<W>::operator=(const sc_signed_subref_r& v)
 {
     operator=(sc_unsigned(v));
     return * this;
 }
-#endif
+#endif // !defined(BIGINT_CONFIG_HOLLOW)
 
 template<int W>
 inline const sc_biguint<W>&
@@ -244,6 +244,7 @@ sc_biguint<W>::operator ~ ()
 
   // SELF-REFERENCING OPERATORS:
 
+#if defined(BIGINT_CONFIG_HOLLOW)
   template<int W>
   inline const sc_biguint<W>& sc_biguint<W>::operator += (const sc_signed&    v) { sc_unsigned_proxy()+= v; return *this; }
   template<int W>
@@ -411,6 +412,7 @@ sc_biguint<W>::operator ~ ()
   inline const sc_biguint<W>& sc_biguint<W>::operator ^= (const sc_int_base&  v) { sc_unsigned_proxy()^= v; return *this; }
   template<int W>
   inline const sc_biguint<W>& sc_biguint<W>::operator ^= (const sc_uint_base& v) { sc_unsigned_proxy()^= v; return *this; }
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 
 // reduce methods
 
@@ -467,7 +469,6 @@ sc_biguint<W>::operator>>(const sc_signed &v) const
     return operator >> (v.to_uint());
 }
 
-#if 0
 template<int W>
 inline
 const sc_biguint<W>&
@@ -476,14 +477,17 @@ sc_biguint<W>::operator=(const sc_unsigned_subref_r& v)
     operator=(sc_unsigned(v));
     return * this;
 }
-#endif
 
 template<int W>
 template<int WO>
 sc_bv<W>::sc_bv( const sc_biguint<WO>& v ) 
     : sc_bv_base(W)
 {   
+#if defined(BIGINT_CONFIG_HOLLOW)
     *this = v.sc_unsigned_proxy();
+#else
+    *this = v;
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 }
 
 template<int W>
@@ -491,7 +495,11 @@ template<int WO>
 sc_lv<W>::sc_lv( const sc_biguint<WO>& v ) 
     : sc_lv_base(W)
 {   
+#if defined(BIGINT_CONFIG_HOLLOW)
     *this = v.sc_unsigned_proxy();
+#else
+    *this = v;
+#endif // defined(BIGINT_CONFIG_HOLLOW)
 }
 
 
