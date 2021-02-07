@@ -287,9 +287,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_uint_bitref> m_pool;
-
 };
 
 
@@ -503,9 +500,6 @@ public:
     // other methods
 
     void scan( ::std::istream& is = ::std::cin );
-
-protected:
-    static sc_core::sc_vpool<sc_uint_subref> m_pool;
 
 };
 

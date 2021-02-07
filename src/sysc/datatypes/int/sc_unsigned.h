@@ -415,8 +415,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_unsigned_bitref> m_pool;
 };
 
 
@@ -607,8 +605,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_unsigned_subref> m_pool;
 };
 
 
@@ -1249,9 +1245,6 @@ public:
                                          int vnb,
                                          int vnd,
                                          const sc_digit *vd);
-
-public:
-  static sc_core::sc_vpool<sc_unsigned> m_pool;
 
 protected: 
 
