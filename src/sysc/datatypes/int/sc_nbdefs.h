@@ -115,8 +115,8 @@ typedef int small_type;
 //     for smaller values. (See SC_SMALL_VEC_DIGITS below).
 
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-#define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-// #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+#define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to 
 // dispense with having an m_free boolean value, since it is sufficient to check the value of 
