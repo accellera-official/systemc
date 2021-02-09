@@ -85,10 +85,10 @@ initiator_top::initiator_top
 ///    No DMI is implemented in this example so unused
 ///
 //===================================================================== 
-  void												
-  initiator_top::invalidate_direct_mem_ptr					
-  ( sc_dt::uint64      start_range                        
-  , sc_dt::uint64      end_range                 
+  void
+  initiator_top::invalidate_direct_mem_ptr
+  ( sc_dt::uint64      /*start_range*/
+  , sc_dt::uint64      /*end_range*/
   )
   {  
     std::ostringstream       msg;          // log message
@@ -108,11 +108,11 @@ initiator_top::initiator_top
  ///    Initiator sockets.
  ///
  //===================================================================== 
-tlm::tlm_sync_enum	 
-initiator_top::nb_transport_bw								
-( tlm::tlm_generic_payload  &payload
-, tlm::tlm_phase            &phase
-, sc_core::sc_time          &delta
+tlm::tlm_sync_enum
+initiator_top::nb_transport_bw
+( tlm::tlm_generic_payload & /*payload*/
+, tlm::tlm_phase &           /*phase*/
+, sc_core::sc_time &         /*delta*/
 )
 {
   std::ostringstream       msg;                 // log message

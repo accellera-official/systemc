@@ -934,10 +934,10 @@ sc_unsigned::sc_unsigned(int nb, int nd, sc_digit *d,
 
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
 
   if (ndigits <= nd)
@@ -983,10 +983,10 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
     ndigits = DIV_CEIL( nbits );
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     vec_zero( ndigits, digit );
     return;
@@ -1012,10 +1012,10 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
     nd = left_digit - right_digit + 1;
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     ScBigTemp d; // sc_digit *d = sc_get_big_temp();
   
@@ -1111,10 +1111,10 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
     ndigits = DIV_CEIL( nbits );
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     vec_zero( ndigits, digit );
     return;
@@ -1141,10 +1141,10 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
   // Allocate memory for the range.
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
   ScBigTemp d; // sc_digit *d = sc_get_big_temp();
   
@@ -1725,10 +1725,12 @@ sc_unsigned_subref::scan( ::std::istream& is )
     *this = s.c_str();
 }
 
+#if defined(SC_BIGINT_CONFIG_HOLLOW)
 // Temporary values:
 
 sc_unsigned sc_unsigned::m_temporaries[SC_UNSIGNED_TEMPS_N];
 size_t      sc_unsigned::m_temporaries_i = 0;
+#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
 
 } // namespace sc_dt
 

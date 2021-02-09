@@ -101,22 +101,34 @@ typedef int small_type;
 //
 // One of these three #defines should be defined, but only one:
 //
-// BIGINT_CONFIG_HOLLOW: 
+// SC_BIGINT_CONFIG_HOLLOW: 
 //     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is, 
 //     sc_signed is not a parent of sc_bigint, and sc_unsigned is not a parent of sc_biguint.
 // 
-// BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE: 
+// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE: 
 //     Configure sc_bigint and sc_biguint so they have storage for their values rather than 
 //     relying on sc_signed and sc_unsigned to provide it.
 //
-// BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE:
+// SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE:
 //     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
 //     for their values. This includes the small vector support to eliminate malloc and free
 //     for smaller values. (See SC_SMALL_VEC_DIGITS below).
 
-// #define BIGINT_CONFIG_HOLLOW
-// #define BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-#define BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_HOLLOW
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+#define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+
+// SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to 
+// dispense with having an m_free boolean value, since it is sufficient to check the value of 
+// 'digit' against the address of 'small_vec' to determine if digit should be freed. If we settle on
+// SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE as the configuration to use in the long run, all the
+// instances of SC_FREE_DIGIT may be removed.
+
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE) 
+#   define SC_FREE_DIGIT(FLAG)
+#else
+#   define SC_FREE_DIGIT(FLAG) { m_free = FLAG; }
+#endif
 
 // SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and 
 // sc_unsigned values. This buffer is used in place of a malloc of storage for the object 

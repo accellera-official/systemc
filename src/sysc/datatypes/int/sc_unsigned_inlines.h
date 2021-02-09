@@ -51,11 +51,11 @@ sc_unsigned::sc_unsigned(const sc_unsigned& v) :
 {
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     }
     else  {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
 
   vec_copy(ndigits, digit, v.digit);
@@ -69,10 +69,10 @@ sc_unsigned::sc_unsigned(const sc_signed& v) :
 {
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
 
   copy_digits(v.nbits, v.ndigits, v.digit);
@@ -86,10 +86,10 @@ sc_unsigned::sc_unsigned(const sc_int_subref_r& v) :
     ndigits = SC_DIGIT_COUNT(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     *this = v.to_uint64();
 }
@@ -102,10 +102,10 @@ sc_unsigned::sc_unsigned(const sc_uint_subref_r& v) :
     ndigits = SC_DIGIT_COUNT(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     makezero();
     *this = v.to_uint64();
@@ -123,10 +123,10 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
     ndigits = SC_DIGIT_COUNT(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     digit[ndigits-1] = 0; 
     if ( v.m_left >= v.m_right ) {
@@ -152,10 +152,10 @@ sc_unsigned::sc_unsigned(const sc_unsigned_subref_r& v) :
     ndigits = SC_DIGIT_COUNT(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     digit[ndigits-1] = 0; 
     int  low_bit;
@@ -193,10 +193,10 @@ sc_unsigned::sc_unsigned(const sc_bv_base& v) :
     ndigits = DIV_CEIL(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     *this = v;
 }
@@ -217,10 +217,10 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
     ndigits = DIV_CEIL(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     *this = v;
 }

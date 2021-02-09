@@ -404,8 +404,7 @@ find_prime( const bigint& r )
   sc_bigint<NBITS> niter = 0;
 #endif
 
-#define LIMIT_UNTIL_WE_FIX_HOLLOW_SUPPORT
-#if !defined(LIMIT_UNTIL_WE_FIX_HOLLOW_SUPPORT)
+#if defined(SC_BIGINT_CONFIG_HOLLOW) // Remove when be fix hollow support!!
   while ( ! miller_rabin( p ) ) {
     p = ( p + 2 ) % r;
 #else

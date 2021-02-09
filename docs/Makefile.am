@@ -38,7 +38,8 @@ DOXYGEN=doxygen
 
 ## Core documentation (see also root directory)
 
-DOC_FILES =
+DOC_FILES = \
+	DEVELOPMENT.md
 
 ##
 ## SystemC documentation

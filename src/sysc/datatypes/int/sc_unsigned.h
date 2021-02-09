@@ -646,9 +646,9 @@ public:
     // constructors
 
     explicit inline sc_unsigned( int nb = sc_length_param().len() );
-#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     explicit inline sc_unsigned( int nb, sc_digit* digits_p );
-#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     sc_unsigned( const sc_unsigned& v );
     sc_unsigned( const sc_signed&   v );
 	template<class T>
@@ -703,13 +703,19 @@ public:
 
     // destructor
 
-    virtual ~sc_unsigned()
-	{
-	    if ( m_free ) {
-		assert(digit != small_vec);
-		delete [] digit;
-	    }
-	}
+    ~sc_unsigned()
+        {
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE) 
+            if ( digit != small_vec ) {
+                delete [] digit;
+            }
+#else
+            if ( m_free ) {
+                assert(digit != small_vec);
+                delete [] digit;
+            }
+#endif
+        }
 
     // Concatenation support:
 
@@ -1250,27 +1256,34 @@ protected:
 
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
   bool m_free;     // true if should free 'digit'.
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+
   sc_digit *digit;                         // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // Speed up smaller sizes.
 
-// Temporary object support:
+#if defined(SC_BIGINT_CONFIG_HOLLOW)
 
-  // SC_UNSIGNED_TEMPS_N must be a power of 2.
-  #define SC_UNSIGNED_TEMPS_N (1 << 15)
-  static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
-  static size_t       m_temporaries_i;
+public: // Temporary object support:
 
-public:
-  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) {
-      sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
-      m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
+  #define SC_UNSIGNED_TEMPS_N (1 << 15) // SC_UNSIGNED_TEMPS_N must be a power of 2.
+
+  static sc_unsigned  temporaries[SC_UNSIGNED_TEMPS_N];
+  static size_t       temporaries_i=0;
+
+  inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
+  {
+      sc_unsigned* result_p = &temporaries[temporaries_i];
+      temporaries_i = (temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
-      result_p->m_free = false;
+      result_p->SC_FREE_DIGIT(false)
       return *result_p;
   }
+
+#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
 
   inline void adjust_hod() { digit[ndigits-1] &= ~(-1 << ((nbits-1) & 0x1f)); }
 
@@ -1480,11 +1493,11 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
     ndigits = DIV_CEIL(nbits);
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     }
     else {
 	digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     makezero();
     v->to_sc_unsigned(*this);
@@ -1707,18 +1720,18 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
 {
     if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
         digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     else {
         digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     }
     if ( zero ) {
         vec_zero((nb+BITS_PER_DIGIT)/BITS_PER_DIGIT, digit);
     }
 }
 
-#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
 // | 
@@ -1734,9 +1747,9 @@ sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
     nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
 {
     digit = digits_p;
-    m_free = false;
+    SC_FREE_DIGIT(false)
 }
-#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
@@ -1763,11 +1776,11 @@ sc_unsigned::sc_unsigned( int nb ) :
     ndigits = DIV_CEIL(nbits);
     if ( ndigits > SC_SMALL_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
-	m_free = true;
+	SC_FREE_DIGIT(true)
     }
     else {
         digit = small_vec;
-	m_free = false;
+	SC_FREE_DIGIT(false)
     }
     makezero();
 }
