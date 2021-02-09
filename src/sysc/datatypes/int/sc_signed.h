@@ -650,9 +650,9 @@ public:
     // constructors
 
     explicit inline sc_signed( int nb = sc_length_param().len() );
-#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     explicit inline sc_signed( int nb, sc_digit* digit_p );
-#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     sc_signed( const sc_signed&   v );
     sc_signed( const sc_unsigned& v );
     template<class T>
@@ -707,7 +707,11 @@ public:
 
     virtual ~sc_signed()
 	{
-#ifndef SC_MAX_NBITS
+#if defined(SC_BIGINT_BASE_CLASS_HAS_STORAGE) 
+	    if ( digit != small_vec ) {
+		delete [] digit;
+	    }
+#else
 	    if ( m_free ) {
 		assert(digit != small_vec);
 		delete [] digit;
@@ -1246,31 +1250,33 @@ protected:
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
 
+#if !defined(SC_BIGINT_BASE_CLASS_HAS_STORAGE) 
   bool m_free; // true if should free 'digit'.
-#ifdef SC_MAX_NBITS
-  sc_digit digit[DIV_CEIL(SC_MAX_NBITS)];   // Shortened as d.
-#else
-  sc_digit *digit;                          // Shortened as d.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster. 
 #endif
 
-// Temporary object support:
+  sc_digit *digit;                          // Shortened as d.
+  sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster. 
 
-  // SC_SIGNED_TEMPS_N must be a power of 2.
-  #define SC_SIGNED_TEMPS_N (1 << 15)
+#if defined(SC_BIGINT_CONFIG_HOLLOW)
+
+#define SC_SIGNED_TEMPS_N (1 << 15) // SC_SIGNED_TEMPS_N must be a power of 2.
+
+public: // Temporary object support:
   static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
-  static size_t     m_temporaries_i;
+  static size_t     m_temporaries_i=0;
 
-public:
-  static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) {
+  inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
+  {
+
       sc_signed* result_p = &m_temporaries[m_temporaries_i];
       m_temporaries_i = (m_temporaries_i + 1) & (SC_SIGNED_TEMPS_N-1);
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
-      result_p->m_free = false;
+      result_p->SC_FREE_DIGIT(false)
       return *result_p;
   }
+#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
 
 protected:
 
@@ -1465,18 +1471,14 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-#   ifdef SC_MAX_NBITS
-        test_bound(nb);
-#    else
-        if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
-	    digit = new sc_digit[ndigits];
-	    m_free = true;
-	}
-	else  {
-	    digit = small_vec;
-	    m_free = false;
-	}
-#    endif
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
+    }
+    else  {
+	digit = small_vec;
+	SC_FREE_DIGIT(false)
+    }
     makezero();
     v->to_sc_signed(*this);
 }
@@ -1657,7 +1659,7 @@ sc_signed::to_ulong() const
     return result;
 }
 
-#if !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
 // | 
@@ -1673,9 +1675,9 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
     nbits(nb), ndigits( DIV_CEIL(nb) )
 {
     digit = digits_p;
-    m_free = false;
+    SC_FREE_DIGIT(false)
 }
-#endif // !defined(BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
@@ -1692,11 +1694,11 @@ sc_signed::sc_signed( int nb, bool zero ) :
 {
     if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
         digit = small_vec;
-        m_free = false;
+        SC_FREE_DIGIT(false)
     }
     else {
         digit = new sc_digit[ndigits];
-        m_free = true;
+        SC_FREE_DIGIT(true)
     }
     if ( zero ) {
         vec_zero(ndigits, digit);
@@ -1726,11 +1728,11 @@ sc_signed::sc_signed( int nb ) :
     ndigits = DIV_CEIL(nbits);
     if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
         digit = new sc_digit[ndigits];
-        m_free = true;
+        SC_FREE_DIGIT(true)
     }
     else {
         digit = small_vec;
-        m_free = false;
+        SC_FREE_DIGIT(false)
     }
     makezero();
 }
