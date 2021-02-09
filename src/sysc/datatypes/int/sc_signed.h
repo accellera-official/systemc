@@ -707,7 +707,7 @@ public:
 
     virtual ~sc_signed()
 	{
-#if defined(SC_BIGINT_BASE_CLASS_HAS_STORAGE) 
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 	    if ( digit != small_vec ) {
 		delete [] digit;
 	    }
@@ -1250,7 +1250,7 @@ protected:
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
 
-#if !defined(SC_BIGINT_BASE_CLASS_HAS_STORAGE) 
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
   bool m_free; // true if should free 'digit'.
 #endif
 
