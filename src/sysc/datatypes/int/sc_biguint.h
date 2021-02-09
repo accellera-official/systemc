@@ -84,9 +84,9 @@ class sc_fxnum_fast;
 
 template< int W >
 class sc_biguint
-#if !defined(SC_BIGINT_CONFIG_HOLLOW)
+#if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     : public sc_unsigned
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 {
 public: // anonymous compile-type information about this type.
     enum { 
@@ -635,9 +635,9 @@ inline const sc_biguint<W> operator -- (int) // postfix
 public:
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
    sc_digit compile_time_digits[DIV_CEIL(W+1)];
-#elif defined(SC_BIGINT_CONFIG_HOLLOW)
+#elif defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
    sc_digit digit[DIV_CEIL(W+1)];
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public:
     void adjust_hod()
@@ -645,7 +645,7 @@ public:
         digit[HOD] &= ~(~0ULL << SC_BIT_INDEX(W));
     }
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     inline sc_unsigned& sc_unsigned_proxy() 
     {
         sc_dt::sc_unsigned& result = sc_unsigned::allocate_temporary(W,(sc_digit*)digit); 
@@ -679,7 +679,7 @@ public:
         return *this;
     }
 
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
     // explicit conversion to character string:
 
@@ -691,10 +691,10 @@ public:
         return sc_unsigned_proxy().to_string( numrep, w_prefix );
     }
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 public: // "mirror" for sc_value_base concatenation support:
   int              concat_length(bool xzp) const    { return W; }
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public: // field and template value accesses:
 

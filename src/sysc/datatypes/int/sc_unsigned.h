@@ -1263,27 +1263,27 @@ protected:
   sc_digit *digit;                         // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // Speed up smaller sizes.
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 public: // Temporary object support:
 
   #define SC_UNSIGNED_TEMPS_N (1 << 15) // SC_UNSIGNED_TEMPS_N must be a power of 2.
 
-  static sc_unsigned  temporaries[SC_UNSIGNED_TEMPS_N];
-  static size_t       temporaries_i=0;
+  static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
+  static size_t       m_temporaries_i;
 
-  inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
   {
-      sc_unsigned* result_p = &temporaries[temporaries_i];
-      temporaries_i = (temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
+      sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
+      m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
-      result_p->SC_FREE_DIGIT(false)
+      result_p->m_free = false;
       return *result_p;
   }
 
-#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
   inline void adjust_hod() { digit[ndigits-1] &= ~(-1 << ((nbits-1) & 0x1f)); }
 

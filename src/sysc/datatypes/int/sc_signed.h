@@ -1257,15 +1257,15 @@ protected:
   sc_digit *digit;                          // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster. 
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 #define SC_SIGNED_TEMPS_N (1 << 15) // SC_SIGNED_TEMPS_N must be a power of 2.
 
 public: // Temporary object support:
   static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
-  static size_t     m_temporaries_i=0;
+  static size_t     m_temporaries_i;
 
-  inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
   {
 
       sc_signed* result_p = &m_temporaries[m_temporaries_i];
@@ -1273,10 +1273,10 @@ public: // Temporary object support:
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
-      result_p->SC_FREE_DIGIT(false)
+      result_p->m_free = false;
       return *result_p;
   }
-#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 protected:
 
