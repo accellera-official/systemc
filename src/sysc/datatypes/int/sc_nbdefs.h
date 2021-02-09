@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -23,7 +23,7 @@
                  arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-  
+
  *****************************************************************************/
 
 /*****************************************************************************
@@ -97,16 +97,16 @@ typedef unsigned char uchar;
 // better for alignment.
 typedef int small_type;
 
-// BIGINT CONFIGURATIONS 
+// BIGINT CONFIGURATIONS
 //
 // One of these three #defines should be defined, but only one:
 //
-// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS: 
-//     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is, 
+// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS:
+//     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is,
 //     sc_signed is not a parent of sc_bigint, and sc_unsigned is not a parent of sc_biguint.
-// 
-// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE: 
-//     Configure sc_bigint and sc_biguint so they have storage for their values rather than 
+//
+// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE:
+//     Configure sc_bigint and sc_biguint so they have storage for their values rather than
 //     relying on sc_signed and sc_unsigned to provide it.
 //
 // SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE:
@@ -118,22 +118,26 @@ typedef int small_type;
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
 #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
-// Fred, do 3 #if !defines and set the default define.
+#if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
+    !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
+    !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+  #error "need to define at least one new sc_bigint config"
+#endif
 
-// SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to 
-// dispense with having an m_free boolean value, since it is sufficient to check the value of 
+// SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
+// dispense with having an m_free boolean value, since it is sufficient to check the value of
 // 'digit' against the address of 'small_vec' to determine if digit should be freed. If we settle on
 // SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE as the configuration to use in the long run, all the
 // instances of SC_FREE_DIGIT may be removed.
 
-#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE) 
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 #   define SC_FREE_DIGIT(FLAG)
 #else
 #   define SC_FREE_DIGIT(FLAG) { m_free = FLAG; }
 #endif
 
-// SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and 
-// sc_unsigned values. This buffer is used in place of a malloc of storage for the object 
+// SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and
+// sc_unsigned values. This buffer is used in place of a malloc of storage for the object
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
 
@@ -155,15 +159,15 @@ typedef int small_type;
 #define BITS_PER_DIGIT_TYPE   32
 
 // Support for "digit" vectors used to hold the values of sc_signed,
-// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used 
-// in the concatenation support. An sc_digit is currently an unsigned 32-bit 
+// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used
+// in the concatenation support. An sc_digit is currently an unsigned 32-bit
 // quantity. The typedef used is an unsigned int, rather than an unsigned long,
-// since the unsigned long data type varies in size between 32-bit and 64-bit 
+// since the unsigned long data type varies in size between 32-bit and 64-bit
 // machines.
 
 #define BYTES_PER_DIGIT 4
 // #define BITS_PER_DIGIT  30
-#define BITS_PER_DIGIT  32 
+#define BITS_PER_DIGIT  32
 
 typedef unsigned int sc_digit;        // type holding "digits" in big values.
 
@@ -179,7 +183,7 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 //   SC_MASK_DIGIT  - mask the supplied sc_digit, keeping the valid bits
 //                    within an sc_digit.
 //   SC_BIT_MASK    - this is the mask for digits below the supplied bit
-//   SC_BIT_MASK1   - this is the mask for digits below, and including 
+//   SC_BIT_MASK1   - this is the mask for digits below, and including
 //                    the supplied bit
 //   SC_DIGIT_COUNT - this is the number of digits required to accommodate
 //                    the supplied bit.
@@ -187,7 +191,7 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 #if BITS_PER_DIGIT == 32
 #   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)>>5)
-#   define SC_MASK_DIGIT(v) (v) 
+#   define SC_MASK_DIGIT(v) (v)
 #else
 #   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
