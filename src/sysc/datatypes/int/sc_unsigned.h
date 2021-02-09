@@ -1263,7 +1263,7 @@ protected:
   sc_digit *digit;                         // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // Speed up smaller sizes.
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 public: // Temporary object support:
 
@@ -1272,7 +1272,7 @@ public: // Temporary object support:
   static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
   static size_t       m_temporaries_i;
 
-  inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
   {
       sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
       m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
@@ -1283,7 +1283,7 @@ public: // Temporary object support:
       return *result_p;
   }
 
-#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
   inline void adjust_hod() { digit[ndigits-1] &= ~(-1 << ((nbits-1) & 0x1f)); }
 

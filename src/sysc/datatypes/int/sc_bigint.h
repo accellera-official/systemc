@@ -82,7 +82,7 @@ template <int W> class sc_biguint;
 
 template< int W >
 class sc_bigint
-#if !defined(SC_BIGINT_CONFIG_HOLLOW)
+#if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     : public sc_signed
 #endif
 {
@@ -623,7 +623,7 @@ inline const sc_bigint<W> operator -- (int) // postfix
 protected:
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
     sc_digit compile_time_digits[DIV_CEIL(W)];
-#elif defined(SC_BIGINT_CONFIG_HOLLOW)
+#elif defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     sc_digit digit[DIV_CEIL(W)];
 #endif
 
@@ -634,7 +634,7 @@ public:
         digit[HOD] = ( ( (int)digit[HOD] << shift ) >> shift );
     }
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     inline sc_signed& sc_signed_proxy()
     {
         sc_dt::sc_signed& result = sc_signed::allocate_temporary(W,(sc_digit*)digit); 
@@ -669,7 +669,7 @@ public:
     }
 
 
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
     // explicit conversion to character string:
 
@@ -681,10 +681,10 @@ public:
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 public: // "mirror" for sc_value_base concatenation support:
   int              concat_length(bool xzp) const    { return W; }
-#endif // SC_BIGINT_CONFIG_HOLLOW
+#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public: // field and template value accesses:
   int              get_actual_width() const { return W; }

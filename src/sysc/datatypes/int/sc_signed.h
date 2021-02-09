@@ -1257,7 +1257,7 @@ protected:
   sc_digit *digit;                          // Shortened as d.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster. 
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 #define SC_SIGNED_TEMPS_N (1 << 15) // SC_SIGNED_TEMPS_N must be a power of 2.
 
@@ -1276,7 +1276,7 @@ public: // Temporary object support:
       result_p->m_free = false;
       return *result_p;
   }
-#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 protected:
 

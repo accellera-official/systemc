@@ -1725,12 +1725,12 @@ sc_unsigned_subref::scan( ::std::istream& is )
     *this = s.c_str();
 }
 
-#if defined(SC_BIGINT_CONFIG_HOLLOW)
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 // Temporary values:
 
 sc_unsigned sc_unsigned::m_temporaries[SC_UNSIGNED_TEMPS_N];
 size_t      sc_unsigned::m_temporaries_i = 0;
-#endif // defined(SC_BIGINT_CONFIG_HOLLOW)
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 } // namespace sc_dt
 
