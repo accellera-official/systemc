@@ -1263,9 +1263,9 @@ protected:
 
 public: // Temporary object support:
   static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
-  static size_t     m_temporaries_i=0;
+  static size_t     m_temporaries_i;
 
-  inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
   {
 
       sc_signed* result_p = &m_temporaries[m_temporaries_i];
@@ -1273,7 +1273,7 @@ public: // Temporary object support:
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
-      result_p->SC_FREE_DIGIT(false)
+      result_p->m_free = false;
       return *result_p;
   }
 #endif // defined(SC_BIGINT_CONFIG_HOLLOW)
