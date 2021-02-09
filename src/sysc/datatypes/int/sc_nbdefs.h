@@ -118,6 +118,8 @@ typedef int small_type;
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
 #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
+// Fred, do 3 #if !defines and set the default define.
+
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to 
 // dispense with having an m_free boolean value, since it is sufficient to check the value of 
 // 'digit' against the address of 'small_vec' to determine if digit should be freed. If we settle on
