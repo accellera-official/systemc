@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -20,7 +20,7 @@
 /*****************************************************************************
 
   sc_signed.cpp -- Arbitrary precision signed arithmetic.
- 
+
                    This file includes the definitions of sc_signed_bitref,
                    sc_signed_subref, and sc_signed classes. The first two
                    classes are proxy classes to reference one bit and a range
@@ -165,7 +165,7 @@ bool sc_signed::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
 
     // ALL DATA TO BE MOVED IS IN A SINGLE WORD:
 
-    mask = ~(~0U << left_shift);    
+    mask = ~(~0U << left_shift);
     dst_p[dst_i] = ( dst_p[dst_i] & ~mask );
     dst_i++;
 
@@ -203,7 +203,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
     if ( dst_i == end_i )
     {
 	mask = ~((sc_carry)-1 << left_shift);
-	dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) | 
+	dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
 	    (digit[0] << left_shift) ) & DIGIT_MASK;
     }
 
@@ -230,7 +230,7 @@ bool sc_signed::concat_get_data( sc_digit* dst_p, int low_i ) const
 	right_shift = BITS_PER_DIGIT - left_shift;
 	mask = ~((sc_carry)-1 << left_shift);
 	right_word = digit[0];
-	dst_p[dst_i] = (dst_p[dst_i] & mask) | 
+	dst_p[dst_i] = (dst_p[dst_i] & mask) |
 	    ((right_word << left_shift) & DIGIT_MASK);
 	for ( src_i = 1, dst_i++; dst_i < end_i; dst_i++, src_i++ )
 	{
@@ -264,7 +264,7 @@ uint64 sc_signed::concat_get_uint64() const
 
 // #### OPTIMIZE
 void sc_signed::concat_set(int64 src, int low_i)
-{    
+{
     *this = (low_i < 64) ? src >> low_i : src >> 63;
 }
 
@@ -290,10 +290,10 @@ void sc_signed::concat_set(uint64 src, int low_i)
 }
 
 // ----------------------------------------------------------------------------
-//  SECTION: Public members - Reduction methods.   
+//  SECTION: Public members - Reduction methods.
 // ----------------------------------------------------------------------------
 
-bool sc_signed::and_reduce() const 
+bool sc_signed::and_reduce() const
 {
     for ( int digit_i = ndigits-1; digit_i >= 0; --digit_i ) {
         if ( digit[digit_i] != (sc_digit)-1 ) {
@@ -303,7 +303,7 @@ bool sc_signed::and_reduce() const
     return true;
 }
 
-bool sc_signed::or_reduce() const 
+bool sc_signed::or_reduce() const
 {
     for ( int digit_i = ndigits-1; digit_i >= 0; --digit_i ) {
         if ( digit[digit_i] != 0 ) {
@@ -313,7 +313,7 @@ bool sc_signed::or_reduce() const
     return false;
 }
 
-bool sc_signed::xor_reduce() const 
+bool sc_signed::xor_reduce() const
 {
     int i;   // Digit examining.
     int odd; // Flag for odd number of digits.
@@ -338,7 +338,7 @@ sc_signed::operator = ( const char* a )
     if( a == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
-    } 
+    }
     else if( *a == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
@@ -349,7 +349,7 @@ sc_signed::operator = ( const char* a )
         this->operator = ( aa );
 	this->adjust_hod();
         return *this;
-    } catch( sc_core::sc_report ) {
+    } catch( sc_core::sc_report& ) {
         std::stringstream msg;
         msg << "character string '" << a << "' is not valid";
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
@@ -371,7 +371,7 @@ sc_signed::operator=(double v)
     v /= DIGIT_RADIX;
   }
   vec_zero(i, ndigits, digit);
-  return *this;  
+  return *this;
 }
 
 
@@ -431,20 +431,20 @@ sc_signed::to_string( sc_numrep numrep, bool w_prefix ) const
 //  SECTION: Interfacing with sc_int_base
 // ----------------------------------------------------------------------------
 
-sc_signed 
+sc_signed
 operator << (const sc_signed& u, const sc_int_base& v)
 { return operator<<(u, (int64) v); }
 
-const sc_signed& 
+const sc_signed&
 sc_signed::operator <<= (const sc_int_base& v)
 { return operator<<=((int64) v); }
 
 
-sc_signed 
+sc_signed
 operator >> (const sc_signed&    u, const sc_int_base&  v)
 { return operator>>(u, (int64) v); }
 
-const sc_signed& 
+const sc_signed&
 sc_signed::operator >>= (const sc_int_base&  v)
 { return operator>>=((int64) v); }
 
@@ -452,7 +452,7 @@ sc_signed::operator >>= (const sc_int_base&  v)
 //  SECTION: Interfacing with sc_uint_base
 // ----------------------------------------------------------------------------
 
-const sc_signed& 
+const sc_signed&
 sc_signed::operator <<= (const sc_uint_base& v)
 { return operator<<=((uint64) v); }
 
@@ -461,7 +461,7 @@ sc_signed
 operator >> (const sc_signed&    u, const sc_uint_base&  v)
 { return operator>>(u, (uint64) v); }
 
-const sc_signed& 
+const sc_signed&
 sc_signed::operator >>= (const sc_uint_base&  v)
 { return operator>>=((uint64) v); }
 
@@ -549,7 +549,7 @@ operator-(const sc_unsigned& u)
 }
 
 // Get a packed bit representation of the number.
-void 
+void
 sc_signed::get_packed_rep(sc_digit *buf) const
 {
   for (int digit_i =0; digit_i < ndigits; ++digit_i) {
@@ -559,7 +559,7 @@ sc_signed::get_packed_rep(sc_digit *buf) const
 
 
 // Set a packed bit representation of the number.
-void 
+void
 sc_signed::set_packed_rep(sc_digit *buf)
 {
   for (int digit_i =0; digit_i < ndigits; ++digit_i) {
@@ -572,7 +572,7 @@ sc_signed::set_packed_rep(sc_digit *buf)
 //  SECTION: Public members - Other utils.
 // ---------------------------------------------------------------------------
 
-bool 
+bool
 sc_signed::iszero() const
 {
     return check_for_zero(ndigits, digit);
@@ -605,7 +605,7 @@ sc_signed::sign() const
 #define MOD_HELPER mod_signed_friend
 #define AND_HELPER and_signed_friend
 #define  OR_HELPER  or_signed_friend
-#define XOR_HELPER xor_signed_friend 
+#define XOR_HELPER xor_signed_friend
 
 // REMOVE #include "sc_nbfriends.inc"
 
@@ -733,7 +733,7 @@ operator<<(const sc_signed& u, unsigned long v)
   int nd = DIV_CEIL(nb);
   sc_signed result(nb, false);
 
-  vector_copy( nd, u.digit, result.digit ); 
+  vector_copy( nd, u.digit, result.digit );
 
   vector_shift_left( nd, result.digit, v );
 
@@ -841,9 +841,9 @@ operator>>(const sc_signed& u, unsigned long v)
 
   sc_signed result(nb, false);
   vector_copy(nd, u.digit, result.digit);
-  vector_shift_right( nd, result.digit, v, 
+  vector_shift_right( nd, result.digit, v,
                       sc_signed::SIGNED&&(int)u.digit[nd-1]<0 ? DIGIT_MASK:0);
-    
+
   return result;
 }
 
@@ -878,7 +878,7 @@ sc_signed::operator>>=(unsigned long v)
 
 // Create a signed number with (s, nb, nd, d) as its attributes (as
 // defined in class sc_signed). If alloc is set, delete d.
-sc_signed::sc_signed(int nb, int nd, sc_digit *d, 
+sc_signed::sc_signed(int nb, int nd, sc_digit *d,
                        bool alloc) :
     sc_value_base(), nbits(num_bits(nb)), ndigits(), digit()
 {
@@ -903,7 +903,7 @@ sc_signed::sc_signed(int nb, int nd, sc_digit *d,
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type sc_signed. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
-// the output is the reverse of range(r, l). 
+// the output is the reverse of range(r, l).
 sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     sc_value_base(), nbits(), ndigits(), digit()
 {
@@ -921,7 +921,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
   // make sure that l and r point to the bits of u
   r = sc_max( r, 0 );
   l = sc_min( l, u->nbits - 1 );
-    
+
   nbits = num_bits( l - r + 1 );
 
   // nbits can still be <= 0 because l and r have just been updated
@@ -947,15 +947,15 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
   // The rest will be executed if u is not zero.
 
   ndigits = DIV_CEIL(nbits);
-  
+
   // The number of bits up to and including l and r, respectively.
-  int nl = l + 1; 
-  int nr = r + 1; 
-  
+  int nl = l + 1;
+  int nr = r + 1;
+
   // The indices of the digits that have lth and rth bits, respectively.
   int left_digit = DIV_CEIL(nl) - 1;
   int right_digit = DIV_CEIL(nr) - 1;
-  
+
   int nd;
 
     // The range is performed on the 2's complement representation, so
@@ -970,15 +970,15 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
 	SC_FREE_DIGIT(false)
     }
     ScBigTemp d; // sc_digit *d = sc_get_big_temp();
-  
+
     for (int i = right_digit; i <= left_digit; ++i)
         d[i - right_digit] = u->digit[i];
-    
+
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_signed::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
-    
+
     if (! reversed) {
       vec_copy(sc_min(nd, ndigits), digit, d);
-  
+
     }
     else {
 
@@ -996,7 +996,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     // Deletions will start from the left end and move one position
     // after each deletion.
     sc_digit del_mask = one_and_zeros(bit_ord(l - r));
-      
+
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
@@ -1019,19 +1019,19 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
       }
     }
 
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
 
-  
+
 }
 
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type sc_unsigned. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
-// the output is the reverse of range(r, l). 
+// the output is the reverse of range(r, l).
 sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     sc_value_base(), nbits(), ndigits(), digit()
 {
@@ -1049,7 +1049,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
   // make sure that l and r point to the bits of u
   r = sc_max( r, 0 );
   l = sc_min( l, u->nbits - 1 );
-    
+
   nbits = num_bits( l - r + 1 );
 
   // nbits can still be <= 0 because l and r have just been updated
@@ -1075,15 +1075,15 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
   // The rest will be executed if u is not zero.
 
   ndigits = DIV_CEIL(nbits);
-  
+
   // The number of bits up to and including l and r, respectively.
-  int nl = l + 1; 
-  int nr = r + 1; 
-  
+  int nl = l + 1;
+  int nr = r + 1;
+
   // The indices of the digits that have lth and rth bits, respectively.
   int left_digit = DIV_CEIL(nl) - 1;
   int right_digit = DIV_CEIL(nr) - 1;
-  
+
   int nd;
 
   // The range is performed on the 2's complement representation, so
@@ -1099,22 +1099,22 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
 	SC_FREE_DIGIT(false)
     }
   ScBigTemp d; // sc_digit *d = sc_get_big_temp();
-  
+
   // Getting the range on the 2's complement representation.
   {
-    
+
     for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
-    
+
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_signed::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
-    
+
   }
-  
+
   vec_zero(ndigits, digit);
 
   if (! reversed)
     vec_copy(sc_min(nd, ndigits), digit, d);
-  
+
   else {
 
     // If l < r, i.e., reversed is set, reverse the bits of digit.  d
@@ -1131,7 +1131,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     // Deletions will start from the left end and move one position
     // after each deletion.
     sc_digit del_mask = one_and_zeros(bit_ord(l - r));
-      
+
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
@@ -1154,13 +1154,13 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
       }
     }
 
-      vec_shift_right(ndigits, digit, 
+      vec_shift_right(ndigits, digit,
                       ndigits * BITS_PER_DIGIT - length(), sc_signed::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
 
 
   }  // if reversed.
 
-  
+
 }
 
 
@@ -1302,8 +1302,8 @@ sc_signed_bitref::operator ^= ( bool b )
 }
 
 // #### OPTIMIZE
-void sc_signed_bitref::concat_set(int64 src, int low_i)  
-{    
+void sc_signed_bitref::concat_set(int64 src, int low_i)
+{
 	bool value = 1 & ((low_i < 64) ? (src >> low_i) : (src >> 63));
     m_obj_p->set(m_index, value);
 }
@@ -1314,7 +1314,7 @@ void sc_signed_bitref::concat_set(const sc_signed& src, int low_i)
         m_obj_p->set(m_index, src.test(low_i));
     else
         m_obj_p->set(m_index, src<0);
-}       
+}
 
 void sc_signed_bitref::concat_set(const sc_unsigned& src, int low_i)
 {
@@ -1349,7 +1349,7 @@ sc_signed_bitref::scan( ::std::istream& is )
 
 // concatenation support
 
-uint64 sc_signed_subref_r::concat_get_uint64() const 
+uint64 sc_signed_subref_r::concat_get_uint64() const
 {
     return to_uint64();
 }
@@ -1431,18 +1431,18 @@ sc_signed_subref::operator = ( const sc_signed_subref_r& a )
     return operator = ( (sc_unsigned)( a ) );
 }
 
-const sc_signed_subref& 
+const sc_signed_subref&
 sc_signed_subref::operator = ( const sc_signed_subref& v )
 {
     if( this == &v ) {
 	return *this;
     }
-    return operator = ( (sc_unsigned)( v ) ); 
+    return operator = ( (sc_unsigned)( v ) );
 }
 
 // +----------------------------------------------------------------------------
 // |"sc_signed_subref::operator ="
-// | 
+// |
 // | These operators assign a value to an sc_signed part selection.
 // |
 // | Arguments:
@@ -1453,13 +1453,13 @@ sc_signed_subref::operator = ( const sc_signed_subref& v )
 const sc_signed_subref&
 sc_signed_subref::operator = ( const sc_signed& v )
 {
-    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(), 
+    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(),
                         m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
+const sc_signed_subref&
 sc_signed_subref::operator = ( const sc_unsigned_subref_r& v )
 {
     return operator = ( (sc_unsigned)( v ) );
@@ -1468,57 +1468,57 @@ sc_signed_subref::operator = ( const sc_unsigned_subref_r& v )
 const sc_signed_subref&
 sc_signed_subref::operator = ( const sc_unsigned& v )
 {
-    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(), 
+    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(),
                           m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
+const sc_signed_subref&
 sc_signed_subref::operator = ( unsigned long v )
 {
     ScNativeDigits<unsigned long> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(), 
+    vector_insert_bits( source.get_hod(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
-sc_signed_subref::operator = ( long v ) 
+const sc_signed_subref&
+sc_signed_subref::operator = ( long v )
 {
     ScNativeDigits<long> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(), 
+    vector_insert_bits( source.get_hod(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
+const sc_signed_subref&
 sc_signed_subref::operator = ( uint64 v )
 {
     ScNativeDigits<uint64> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(), 
+    vector_insert_bits( source.get_hod(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
-sc_signed_subref::operator = ( int64 v ) 
+const sc_signed_subref&
+sc_signed_subref::operator = ( int64 v )
 {
     ScNativeDigits<int64> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(), 
+    vector_insert_bits( source.get_hod(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
 }
 
-const sc_signed_subref& 
+const sc_signed_subref&
 sc_signed_subref::operator = ( double v )
 {
     is_bad_double(v);
@@ -1526,7 +1526,7 @@ sc_signed_subref::operator = ( double v )
     int nb = m_left - m_right + 1;
     int nd = DIV_CEIL(nb);
 
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp(); 
+    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
 
     if (v < 0)
 	v = -v;
@@ -1587,20 +1587,20 @@ void sc_signed_subref::concat_set( int64 src, int low_i )
     int  l;
     bool sign = src < 0;
 
-    if ( low_i < 64 )    
-    {    
+    if ( low_i < 64 )
+    {
 	src = src >> low_i;
-	l = sc_min( m_left, (63-low_i) + m_right );    
-	for( i = m_right; i <= l; ++ i ) {    
-		m_obj_p->set( i, src & 1 );    
-		src = src >> 1;    
-	}    
-	for ( ; i <= m_left; i++ ) m_obj_p->set(i, sign);     
-    }    
-    else    
-    {    
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, sign);     
-    }    
+	l = sc_min( m_left, (63-low_i) + m_right );
+	for( i = m_right; i <= l; ++ i ) {
+		m_obj_p->set( i, src & 1 );
+		src = src >> 1;
+	}
+	for ( ; i <= m_left; i++ ) m_obj_p->set(i, sign);
+    }
+    else
+    {
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, sign);
+    }
 }
 
 void sc_signed_subref::concat_set( const sc_signed& src, int low_i )
@@ -1620,9 +1620,9 @@ void sc_signed_subref::concat_set( const sc_signed& src, int low_i )
 	for ( ; i <= m_left; i++ ) m_obj_p->set(i, sign);
     }
     else
-    {    
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, sign);     
-    }    
+    {
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, sign);
+    }
 }
 
 void sc_signed_subref::concat_set( const sc_unsigned& src, int low_i )
@@ -1641,9 +1641,9 @@ void sc_signed_subref::concat_set( const sc_unsigned& src, int low_i )
 	for ( ; i <= m_left; i++ ) m_obj_p->set(false);
     }
     else
-    {    
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);     
-    }    
+    {
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);
+    }
 }
 
 void sc_signed_subref::concat_set( uint64 src, int low_i )
@@ -1651,20 +1651,20 @@ void sc_signed_subref::concat_set( uint64 src, int low_i )
     int  i;
     int  l;
 
-    if ( low_i < 64 )  
-    {    
+    if ( low_i < 64 )
+    {
 	src = src >> low_i;
-	l = sc_min( m_left, (63-low_i) + m_right );    
-	for( i = m_right; i <= l; ++ i ) {    
-		m_obj_p->set( i, src & 1 );    
-		src = src >> 1;    
-	}    
-	for ( ; i <= m_left; i++ ) m_obj_p->set(false);     
-    }    
-    else    
-    {    
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);     
-    }    
+	l = sc_min( m_left, (63-low_i) + m_right );
+	for( i = m_right; i <= l; ++ i ) {
+		m_obj_p->set( i, src & 1 );
+		src = src >> 1;
+	}
+	for ( ; i <= m_left; i++ ) m_obj_p->set(false);
+    }
+    else
+    {
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);
+    }
 }
 // other methods
 

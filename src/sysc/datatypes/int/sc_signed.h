@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -462,7 +462,7 @@ public:
     // copy constructor
 
     sc_signed_subref_r( const sc_signed_subref_r& a )
-	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	  m_right( a.m_right )
 	{}
 
@@ -952,7 +952,7 @@ public:
     test(int i) const
     {
       if (check_if_outside(i)) {
-	if ( (int)digit[get_hod()] < 0 ) 
+	if ( (int)digit[get_hod()] < 0 )
 	  return 1;
 	else
 	  return 0;
@@ -969,7 +969,7 @@ public:
     { if (test(i)) clear(i); else set(i);  }
 
   bool is_negative() const
-    { return (int)digit[ndigits-1] < 0; } 
+    { return (int)digit[ndigits-1] < 0; }
 
   // Make the number equal to its mirror image.
   void reverse();
@@ -1012,7 +1012,7 @@ public:
 #   define SCFP friend
 #   include "sc_signed_friends.h"
 #   undef SCFP
-  
+
   // SELF-REFERENCING OPERATORS:
 
   inline sc_signed& operator += (const sc_signed&    v);
@@ -1245,7 +1245,7 @@ public:
                                      int vnd,
                                      const sc_digit *vd);
 
-protected: 
+protected:
 
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
@@ -1255,7 +1255,7 @@ protected:
 #endif
 
   sc_digit *digit;                          // Shortened as d.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster. 
+  sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster.
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
@@ -1265,7 +1265,7 @@ public: // Temporary object support:
   static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
   static size_t     m_temporaries_i;
 
-  static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p )
   {
 
       sc_signed* result_p = &m_temporaries[m_temporaries_i];
@@ -1280,12 +1280,15 @@ public: // Temporary object support:
 
 protected:
 
-inline void adjust_hod() 
-{ 
-    const int shift = 31-SC_BIT_INDEX(nbits-1);
-    digit[ndigits-1] = ( ((int)digit[ndigits-1] << shift) >> shift);
-}
-        
+  inline void adjust_hod()
+  {
+      int shift =
+          std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
+      shift = shift > 0 ? shift : 0;
+      std::make_signed<sc_digit>::type  my_digit = digit[ndigits-1];
+      digit[ndigits-1] = ( (my_digit << shift) >> shift);
+  }
+
 
 public: // back door access:
   int        get_actual_width() const { return nbits; }
@@ -1300,7 +1303,7 @@ private:
   // Private constructors:
 
   // Constructor for sc_signed<W>:
-  
+
   explicit sc_signed( int nb, bool zero );
 
   // Create a copy of v with sign s.
@@ -1324,7 +1327,7 @@ private:
   bool check_if_outside(int bit_num) const;
 
   void copy_digits(int nb, int nd, const sc_digit *d)
-    {} 
+    {}
 
   void makezero()
     { make_zero(ndigits, digit); }
@@ -1539,7 +1542,7 @@ sc_signed_subref_r::to_uint64() const
 	    result = (result << BITS_PER_DIGIT) | digits[right_i+1];
 	    result = (result << (BITS_PER_DIGIT-right_lob)) |
 		     (digits[right_i]>>right_lob);
-	  break;     
+	  break;
 	}
 	return result;
 }
@@ -1581,17 +1584,17 @@ sc_signed_subref_r::to_ulong() const
 
 // +----------------------------------------------------------------------------
 // |"sc_signed::to_XXXX"
-// | 
+// |
 // | These functions return an object instance's value as the requested
 // | native C++ type.
 // |
-// | Notes: 
+// | Notes:
 // |   (1) These are set up for BITS_PER_DIGIT == 32.
 // | Result:
 // |     Native C++ type containing the object instance's value.
 // +----------------------------------------------------------------------------
 inline
-int 
+int
 sc_signed::to_int() const
 {
     int result;
@@ -1601,18 +1604,18 @@ sc_signed::to_int() const
 }
 
 inline
-unsigned int 
+unsigned int
 sc_signed::to_uint() const
 {
-    unsigned int result;
-
-    result =  (unsigned int)digit[0];
-    if ( nbits < 32 ) { result &= ~(-1<<nbits); }
+    unsigned int result = (unsigned int)digit[0];
+    if ( nbits < std::numeric_limits<unsigned int>::digits ) {
+        result &= ~( std::numeric_limits<unsigned int>::max() << nbits );
+    }
     return result;
 }
 
 inline
-int64 
+int64
 sc_signed::to_int64() const
 {
     int64 result;
@@ -1627,7 +1630,7 @@ sc_signed::to_int64() const
 }
 
 inline
-uint64 
+uint64
 sc_signed::to_uint64() const
 {
     uint64 result;
@@ -1637,13 +1640,15 @@ sc_signed::to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	if ( nbits < 64 ) { result &= ~(-1LL << nbits); } // this is plain wrong!!!
+	    if ( nbits < std::numeric_limits<uint64>::digits ) {
+            result &= ~( std::numeric_limits<uint64>::max() << nbits );
+        } // this is plain wrong!!!
     }
     return result;
 }
 
 inline
-long 
+long
 sc_signed::to_long() const
 {
     long result =  ( sizeof(long) < 5 ) ? to_int() : to_int64();
@@ -1652,17 +1657,18 @@ sc_signed::to_long() const
 
 
 inline
-unsigned long 
+unsigned long
 sc_signed::to_ulong() const
 {
-    unsigned long result = ( sizeof(unsigned long) < 5 ) ? to_uint() : to_uint64();
+    unsigned long result =
+        ( sizeof(unsigned long) < 5 ) ? to_uint() : to_uint64();
     return result;
 }
 
 #if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
-// | 
+// |
 // | This is the object constructor from sc_bigint<W>. It uses the supplied
 // | value buffer, that will already have been initialized.
 // |
@@ -1681,7 +1687,7 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
 
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
-// | 
+// |
 // | This is the object constructor for sc_bigint<W>.
 // |
 // | Arguments:
@@ -1707,7 +1713,7 @@ sc_signed::sc_signed( int nb, bool zero ) :
 
 // +----------------------------------------------------------------------------
 // |"sc_signed::sc_signed"
-// | 
+// |
 // | This is the explicit object instance constructor.
 // |
 // | Arguments:

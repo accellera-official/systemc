@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -20,8 +20,8 @@
 /*****************************************************************************
 
   sc_bigint<W>_inlines.h -- sc_bigint<W> inline implementations.
-  
-  This file contains inline implementations that require the other "int" 
+
+  This file contains inline implementations that require the other "int"
   headers to have been included before its contents can be resolved.
 
   Original Author: Andy Goodrich, Cadence Design Systems
@@ -35,7 +35,7 @@ namespace sc_dt {
 
 // +----------------------------------------------------------------------------
 // |"sc_bigint<W>::operator ="
-// | 
+// |
 // | These are the assignment operators for the sc_bigint<W> class.
 // |
 // | Arguments:
@@ -206,14 +206,14 @@ template<int W>
 inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( const sc_int_base& from )
 {
-    return *this = (int64)from; 
+    return *this = (int64)from;
 }
 
 template<int W>
 inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( const sc_uint_base& from )
 {
-    return *this = (uint64)from; 
+    return *this = (uint64)from;
 }
 
 // Unary operators:
@@ -225,11 +225,11 @@ sc_bigint<W>::operator - ()
     sc_carry     carry=1;
     sc_bigint<W> result;
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
-        carry += ~digit[digit_i]; 
+        carry += ~digit[digit_i];
         result.digit[digit_i] = carry;
 	carry >>=BITS_PER_DIGIT;
     }
-    return result; 
+    return result;
 }
 
 template<int W>
@@ -238,7 +238,7 @@ sc_bigint<W>::operator ~ ()
 {
     sc_bigint<W> result;
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
-        result.digit[digit_i] = ~digit[digit_i]; 
+        result.digit[digit_i] = ~digit[digit_i];
     }
     return result;
 }
@@ -448,7 +448,9 @@ sc_bigint<W>::operator>>(unsigned int v) const
 	result.digit[0] = digit[0] >> v;
     }
     else if ( W < 65 ) {
-        uint64 tmp = (digit[1] << 32 | digit[0]);
+        uint64 tmp1 = digit[1];
+        tmp1 <<=  32;
+        uint64 tmp = tmp1 | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
 	if ( v > 32 ) {
@@ -471,7 +473,7 @@ sc_bigint<W>::operator>>(const sc_unsigned &v) const
 
 template<int W>
 template<int WO>
-sc_bv<W>::sc_bv( const sc_bigint<WO>& v ) 
+sc_bv<W>::sc_bv( const sc_bigint<WO>& v )
     : sc_bv_base(W)
 {
     *this = v.sc_signed_proxy();
@@ -479,7 +481,7 @@ sc_bv<W>::sc_bv( const sc_bigint<WO>& v )
 
 template<int W>
 template<int WO>
-sc_lv<W>::sc_lv( const sc_bigint<WO>& v ) 
+sc_lv<W>::sc_lv( const sc_bigint<WO>& v )
     : sc_lv_base(W)
 {
     *this = v.sc_signed_proxy();

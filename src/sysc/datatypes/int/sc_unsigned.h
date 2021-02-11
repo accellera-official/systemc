@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -461,7 +461,7 @@ public:
     // copy constructor
 
     sc_unsigned_subref_r( const sc_unsigned_subref_r& a )
-	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	  m_right( a.m_right )
 	{}
 
@@ -705,7 +705,7 @@ public:
 
     ~sc_unsigned()
         {
-#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE) 
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
             if ( digit != small_vec ) {
                 delete [] digit;
             }
@@ -1005,7 +1005,7 @@ public:
    */
 
     // FRIEND DECLARATIONS:
-    
+
 #   define SCFP friend
 #   include "sc_unsigned_friends.h"
 #   undef SCFP
@@ -1252,7 +1252,7 @@ public:
                                          int vnd,
                                          const sc_digit *vd);
 
-protected: 
+protected:
 
   int nbits;       // Shortened as nb.
   int ndigits;     // Shortened as nd.
@@ -1272,7 +1272,7 @@ public: // Temporary object support:
   static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
   static size_t       m_temporaries_i;
 
-  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p ) 
+  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p )
   {
       sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
       m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
@@ -1285,7 +1285,13 @@ public: // Temporary object support:
 
 #endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
-  inline void adjust_hod() { digit[ndigits-1] &= ~(-1 << ((nbits-1) & 0x1f)); }
+  inline void adjust_hod()
+  {
+      sc_digit tmp = 0;
+      tmp = ~tmp;
+      unsigned shift = ((nbits-1) & (std::numeric_limits<sc_digit>::digits-1));
+      digit[ndigits-1] &= ~(tmp << shift);
+  }
 
 public: // back door access:
   int        get_actual_width() const { return nbits; }
@@ -1299,7 +1305,7 @@ private:
   // Private constructors:
 
   // Constructor for sc_biguint<W>
-  
+
   explicit sc_unsigned( int nb, bool zero );
 
   // Create a copy of v with sign s.
@@ -1558,7 +1564,7 @@ sc_unsigned_subref_r::to_uint64() const
 	    result = (result << BITS_PER_DIGIT) | digits[right_i+1];
 	    result = (result << (BITS_PER_DIGIT-right_lob)) |
 		     (digits[right_i]>>right_lob);
-	  break;     
+	  break;
 	}
 	return result;
 }
@@ -1601,17 +1607,17 @@ sc_unsigned_subref_r::to_ulong() const
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::to_XXXX"
-// | 
+// |
 // | These functions return an object instance's value as the requested
 // | native C++ type.
 // |
-// | Notes: 
+// | Notes:
 // |   (1) These are set up for BITS_PER_DIGIT == 32.
 // | Result:
 // |     Native C++ type containing the object instance's value.
 // +----------------------------------------------------------------------------
 inline
-int64 
+int64
 sc_unsigned::to_int64() const
 {
     int64 result;
@@ -1626,7 +1632,7 @@ sc_unsigned::to_int64() const
 }
 
 inline
-uint64 
+uint64
 sc_unsigned::to_uint64() const
 {
     uint64 result;
@@ -1641,7 +1647,7 @@ sc_unsigned::to_uint64() const
 }
 
 inline
-long 
+long
 sc_unsigned::to_long() const
 {
     long result;
@@ -1662,7 +1668,7 @@ sc_unsigned::to_long() const
 
 
 inline
-unsigned long 
+unsigned long
 sc_unsigned::to_ulong() const
 {
     unsigned long result;
@@ -1683,7 +1689,7 @@ sc_unsigned::to_ulong() const
 
 
 inline
-int 
+int
 sc_unsigned::to_int() const
 {
     int result;
@@ -1694,7 +1700,7 @@ sc_unsigned::to_int() const
 
 
 inline
-unsigned int 
+unsigned int
 sc_unsigned::to_uint() const
 {
     unsigned int result;
@@ -1706,7 +1712,7 @@ sc_unsigned::to_uint() const
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
-// | 
+// |
 // | This is the object constructor for sc_biguint<W>.
 // |
 // | Arguments:
@@ -1734,7 +1740,7 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
 #if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
-// | 
+// |
 // | This is the object constructor from sc_bigint<W>. It uses the supplied
 // | value buffer, that will already have been initialized.
 // |
@@ -1753,7 +1759,7 @@ sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
-// | 
+// |
 // | This is the explicit object constructor for this class.
 // |
 // | Arguments:
