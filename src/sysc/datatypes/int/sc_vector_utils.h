@@ -1623,7 +1623,7 @@ vector_shift_left( const int target_n,
 {
     if (shift_n <= 0) {
 	if (shift_n < 0) {
-            std::cerr << "vector_shift_left: negative shift encountered" << std::endl;
+            std::cerr << "vector_shift_left: negative shift encountered " << shift_n << std::endl;
             sc_assert(false);
 	}
         return;
