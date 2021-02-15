@@ -1163,11 +1163,29 @@ vector_insert_bits( const int       from_hod,
     }
 }
 
-// +============================================================================
+// +================================================================================================
 // |"vector_mac"
 // |
 // | This class implements a multiply accumulator.
-// +============================================================================
+// |
+// | (1) Each 'product' is the multiplication of two 32-bit numbers.
+// | (2) Each 'product' is accumulated in a pair of 64-bit numbers, m_low_bits and m_high_bits.
+// | (3) m_low_bits accumulates the low order 32 bits of each multiplication.
+// | (4) m_high_bits accumulates the high order 32 bits of each multiplication.
+// | (5) After a series of calls to add_product():
+// |      (a) m_low_bits will be a 64-bit value consisting of additions of the lower order 32 bits
+// |          of the product calculated by add_product()
+// |      (b) m_high_bits will be a 64-bit value consisting of the additions of the high order
+// |          32 bits of the product calculated by add_product.
+// | (5) The shift down operation:
+// |      (a) returns the lower order 32 bits of m_low_bits.
+// |      (b) adds the high order 32 bits of m_low_bits to m_high_bits, to generate the next 
+// |          accumulation.
+// |      (c) sets m_low_bits's value to low order 32 bits of m_high_bits
+// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits.
+// | (6) The high order 32 bits of m_low_bits may be non-zero after a series of calls to 
+// |     add_product(), but after the first shift_down() call they will be zero.
+// +================================================================================================
 class vector_mac
 {
   protected:
