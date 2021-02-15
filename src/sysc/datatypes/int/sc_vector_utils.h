@@ -1259,6 +1259,10 @@ class vector_mac
 // |
 // |       Let BPD represent the number of bits per digit.
 // |
+// |       The high-order digit variables for this example:
+// |           * shorter_hod is 4 
+// |           * longer_hod is 6
+// |
 // |       Long multiplication consists of calculating R from A and B:
 // |
 // |         R: rS r6 r5 r4 r3 r2 r1
@@ -1310,9 +1314,14 @@ vector_multiply( const int       longer_hod,
     vector_mac mac;
     int        result_i;
 
-    // Set the low order digits in the result that are the product of
-    // unsigned digits from both operands. These will be r1, r2, and r3
-    // in the example in note 1.
+    // Set the low order digits in the result that are the product of unsigned digits from both 
+    // operands. For the example in note (1) this is:
+    //    raw1 = a1 * b1
+    //    r1 = raw1 % BPD
+    //    raw2 = a2 * b1 + a1 * b2 + (raw1 >> BPD)
+    //    r2 = raw2 % BPD
+    //    raw3 = a3 * b1 + a2 * b2 + a1 * b3 + (raw2 >> BPD)
+    //    r3 = raw3 % BPD
 
     for (result_i=0; result_i < shorter_hod; ++result_i ) {
 	for (int other_i=0; other_i <= result_i; ++other_i ) {
@@ -1324,7 +1333,17 @@ vector_multiply( const int       longer_hod,
     // Set the next higher order digits that are the result of unsigned
     // digits in the longer operand times all the digits in the shorter
     // operand. For example 1 at this point the mac contains raw3 shifted,
-    // and the digits set will be r3 through r8 in the example in note 1.
+    // and the digits set will be:
+    //    raw4 = (raw3 >> BPD) + a4 * b1 + a3 * b2 + a2 * b3 + a1 * bS
+    //    r4 = raw4 % BPD
+    //    raw5 = (raw4 >> BPD) + a5 * b1 + a4 * b2 + a3 * b3 + a2 * bS
+    //    r5 = raw5 % BPD
+    //    raw6 = (raw5 >> BPD) + aS * b1 + a5 * b2 + a4 * b3 + a3 * bS
+    //    r6 = raw6 % BPD
+    //    raw7 = (raw6 >> BPD)           + aS * b2 + a5 * b3 + a4 * bS
+    //    r7 = raw7 % BPD
+    //    raw8 = (raw7 >> BPD)           + aS * b3 + a5 * bS
+    //    r8 = raw8 % BPD
 
     for ( result_i = shorter_hod; result_i < longer_hod; ++result_i ) {
 	mac.add_product( longer_p[result_i-shorter_hod],
@@ -1338,7 +1357,9 @@ vector_multiply( const int       longer_hod,
     // Set the digits in the result that are the product of all the
     // longer operand digits times all the digits in the shorter operand.
     // In example 1 at this point the mac contains raw8 shifted and the
-    // digit to be set will be r9.
+    // digit to be set will be r9:
+    //     raw9 = (raw8 >> BPD)           + aS * bS
+    //     r9 = raw9 % BPD
 
     for ( result_i=longer_hod; result_i < longer_hod+shorter_hod;
           ++result_i ) {
@@ -1361,6 +1382,8 @@ vector_multiply( const int       longer_hod,
     // If there are further digits in the result fill the first with the
     // remaining accumulation. Then fill any remaining digits based on the
     // on the sign of the accumulation.
+    //     rawS = (raw9 >> BPD)
+    //     rS = rawS % BPD
 
     if ( (result_hod+1) >= longer_hod+shorter_hod+1) {
         if ( (result_hod) >= longer_hod+shorter_hod+1 ) {
