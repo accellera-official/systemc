@@ -2173,13 +2173,11 @@ vector_divide( const int       numerator_n,
 	negative_numerator = true;
     }
 
-    bool switched = false; // @@@@####
     if ( SD && (0 > (int)denominator_p[denominator_n-1]) ) {
         vector_twos_complement( denominator_n-1, denominator_p,
 	                        denominator_complement );
 	denominator_p = denominator_complement;
 	negative = !negative;
-	switched = true;
     }
 
     // SET UP FOR THE CALCULATION:
