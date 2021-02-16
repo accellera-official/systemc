@@ -1168,23 +1168,39 @@ vector_insert_bits( const int       from_hod,
 // |
 // | This class implements a multiply accumulator.
 // |
-// | (1) Each 'product' is the multiplication of two 32-bit numbers.
-// | (2) Each 'product' is accumulated in a pair of 64-bit numbers, m_low_bits and m_high_bits.
-// | (3) m_low_bits accumulates the low order 32 bits of each multiplication.
-// | (4) m_high_bits accumulates the high order 32 bits of each multiplication.
+// | (1) Each product is the multiplication of two 32-bit numbers.
+// | (2) Each product is accumulated in a pair of 64-bit numbers, m_low_bits and m_high_bits.
+// | (3) m_low_bits contains the addition of the low order 32 bits of each product. 
+// | (4) m_high_bits contains the addition of the high order 32 bits of each product. 
 // | (5) After a series of calls to add_product():
 // |      (a) m_low_bits will be a 64-bit value consisting of additions of the lower order 32 bits
-// |          of the product calculated by add_product()
+// |          of each product calculated. Its low order 32 bits are the current "digit" for the
+// |          calculation, its high order 32 bits are the carry from the additions.
 // |      (b) m_high_bits will be a 64-bit value consisting of the additions of the high order
-// |          32 bits of the product calculated by add_product.
-// | (5) The shift down operation:
-// |      (a) returns the lower order 32 bits of m_low_bits.
-// |      (b) adds the high order 32 bits of m_low_bits to m_high_bits, to generate the next 
-// |          accumulation.
-// |      (c) sets m_low_bits's value to low order 32 bits of m_high_bits
-// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits.
-// | (6) The high order 32 bits of m_low_bits may be non-zero after a series of calls to 
-// |     add_product(), but after the first shift_down() call they will be zero.
+// |          32 bits of each product calculated by add_product. Similarly, its two 32-bit halves
+// |          are 'digit' value and carry.
+// |
+// |            m_high_order_bits              m_low_order_bits
+// |     +-------------+-------------+   +-------------+-------------+
+// |     | high carry  | high digit  |   | low carry   | low digit   |
+// |     +-------------+-------------+   +-------------+-------------+
+// |
+// | (6) The shift down operation:
+// |      (a) Returns the lower order 32 bits of m_low_bits, 'digit'.
+// |      (b) Calculates the next digit and carry by adding the high order 32 bits(carry) of 
+// |          m_low_bits to m_high_bits.
+// |      (c) Sets m_low_bits to low order 32 bits of m_high_bits (this is the new 'digit'
+// |          value, awaiting additional low order adds.)
+// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits, (this the accumulated carry
+// |          awaiting the addition of high-order adds..
+// |
+// |     X = (m_low_order >> 32) + m_high_order_bits
+// |     
+// |            m_high_order_bits              m_low_order_bits
+// |     +-------------+-------------+   +-------------+-------------+
+// |     |     0       | high 32 of X|   |     0       | low 32 of X |
+// |     +-------------+-------------+   +-------------+-------------+
+// |
 // +================================================================================================
 class vector_mac
 {
