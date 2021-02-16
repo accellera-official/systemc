@@ -337,8 +337,7 @@ class ScNativeDigits<unsigned int>
 // +----------------------------------------------------------------------------
 inline
 int
-vector_skip_leading_zeros( const int       hod,
-                           const sc_digit* digits_p )
+vector_skip_leading_zeros( const int hod, const sc_digit* digits_p )
 {
     int digit_i; // digit now examining.
     for ( digit_i = hod; (digit_i > 0) && (digits_p[digit_i] == 0); --digit_i )
@@ -1175,24 +1174,24 @@ vector_insert_bits( const int       from_hod,
 // | (5) After a series of calls to add_product():
 // |      (a) m_low_bits will be a 64-bit value consisting of additions of the lower order 32 bits
 // |          of each product calculated. Its low order 32 bits are the current "digit" for the
-// |          calculation, its high order 32 bits are the carry from the additions.
-// |      (b) m_high_bits will be a 64-bit value consisting of the additions of the high order
-// |          32 bits of each product calculated by add_product. Similarly, its two 32-bit halves
-// |          are 'digit' value and carry.
+// |          additions, its high order 32 bits are the carry from those additions.
+// |      (b) Similarly m_high_bits will be a 64-bit value consisting of the additions of the high 
+// |          order 32 bits of each product calculated by add_product. Its two 32-bit halves
+// |          are 'next digit' value and carry.
 // |
 // |            m_high_order_bits              m_low_order_bits
 // |     +-------------+-------------+   +-------------+-------------+
-// |     | high carry  | high digit  |   | low carry   | low digit   |
+// |     | next carry  | next digit  |   |current carry|current digit|
 // |     +-------------+-------------+   +-------------+-------------+
 // |
-// | (6) The shift down operation:
+// | (6) The shift down operation yields the current digit and adjusts for the next digit:
 // |      (a) Returns the lower order 32 bits of m_low_bits, 'digit'.
-// |      (b) Calculates the next digit and carry by adding the high order 32 bits(carry) of 
-// |          m_low_bits to m_high_bits.
+// |      (b) Calculates the current value of the next digit and carry by adding the high order 
+// |          32 bits(carry) of m_low_bits to m_high_bits.
 // |      (c) Sets m_low_bits to low order 32 bits of m_high_bits (this is the new 'digit'
 // |          value, awaiting additional low order adds.)
-// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits, (this the accumulated carry
-// |          awaiting the addition of high-order adds..
+// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits, (this is the accumulated 
+// |          high carry awaiting the addition of high-order adds.)
 // |
 // |     X = (m_low_order >> 32) + m_high_order_bits
 // |     
@@ -2146,7 +2145,6 @@ vector_divide( const int       numerator_n,
 	       const int       remainder_n,
 	       sc_digit*       remainder_p )
 {
-#if !defined(STRATUS)
     // Initialize the quotient to zero and the remainder to the numerator,
     // if their return is requested:
 
@@ -2192,11 +2190,7 @@ vector_divide( const int       numerator_n,
     int       denom_32_hod;     // high order radix32 denominator digit.
     int       numer_32_hod;     // most significant radix32 numerator digit.
 
-    for ( denom_32_hod = denominator_n-1;
-          denom_32_hod > 0 && !denominator_p[denom_32_hod];
-          --denom_32_hod) {
-        continue;
-    }
+    denom_32_hod = vector_skip_leading_zeros( denominator_n-1, denominator_p );
     bool denom_16_hod_odd = (bool)(denominator_p[denom_32_hod] >> 16);
     int  denom_16_hod= 2*denom_32_hod + denom_16_hod_odd;
 
@@ -2396,7 +2390,6 @@ vector_divide( const int       numerator_n,
 	    vector_twos_complement( remainder_n-1, remainder_p );
 	}
     }
-#endif // !defined(STRATUS)
     return true;
 }
 
