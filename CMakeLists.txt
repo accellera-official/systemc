@@ -506,6 +506,10 @@ else (ENABLE_PTHREADS)
 endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
+  # QuickThreads stack protection can benefit from posix_memalign
+  include(CheckSymbolExists)
+  check_symbol_exists(posix_memalign "stdlib.h" HAVE_POSIX_MEMALIGN)
+
   # To build QuickThreads, enable the assembler support.
   enable_language (ASM)
 else (QT_ARCH)

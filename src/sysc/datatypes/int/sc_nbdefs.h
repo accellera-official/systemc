@@ -121,7 +121,6 @@ typedef int small_type;
 #if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
     !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
     !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-  // Default:
   #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 #endif
 

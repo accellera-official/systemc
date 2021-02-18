@@ -660,13 +660,13 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
     }
     else {
 
-        ok = vector_divide<LEFT::SIGNED,RIGHT::SIGNED>( LEFT::HOD,
+        ok = vector_divide<LEFT::SIGNED,RIGHT::SIGNED>( LEFT::DIGITS_N,
                                                         left.get_digits(),
-                                                        RIGHT::HOD,
+                                                        RIGHT::DIGITS_N,
                                                         right.get_digits(),
                                                         0,
                                                         NULL,
-                                                        RESULT::HOD,
+                                                        RESULT::DIGITS_N,
                                                         result.get_digits() );
     }
     if ( !ok ) {
