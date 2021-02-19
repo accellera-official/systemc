@@ -84,19 +84,6 @@
 
 namespace sc_dt
 {
-
-// Sign of a number:
-#define SC_NEG       -1     // Negative number
-#define SC_ZERO      0      // Zero
-#define SC_POS       1      // Positive number
-#define SC_NOSIGN    2      // Uninitialized sc_signed number
-
-typedef unsigned char uchar;
-
-// A small_type number is at least a char. Defining an int is probably
-// better for alignment.
-typedef int small_type;
-
 // BIGINT CONFIGURATIONS
 //
 // One of these three #defines should be defined, but only one:
@@ -142,6 +129,18 @@ typedef int small_type;
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
 
 #define SC_SMALL_VEC_DIGITS 40
+
+// Sign of a number:
+#define SC_NEG       -1     // Negative number
+#define SC_ZERO      0      // Zero
+#define SC_POS       1      // Positive number
+#define SC_NOSIGN    2      // Uninitialized sc_signed number
+
+typedef unsigned char uchar;
+
+// A small_type number is at least a char. Defining an int is probably
+// better for alignment.
+typedef int small_type;
 
 // Attributes of a byte.
 #define BITS_PER_BYTE   8
@@ -197,8 +196,8 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
 #   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
 #endif
-#define SC_BIT_MASK(BITS) ~( -1 << SC_BIT_INDEX(BITS) )
-#define SC_BIT_MASK1(BITS) ~( -2 << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK(BITS)  ~(  std::numeric_limits<sc_digit>::max()    << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK1(BITS) ~( (std::numeric_limits<sc_digit>::max()-1) << SC_BIT_INDEX(BITS) )
 #define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
