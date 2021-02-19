@@ -196,8 +196,8 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
 #   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
 #endif
-#define SC_BIT_MASK(BITS)  ~(  std::numeric_limits<sc_digit>::max()    << SC_BIT_INDEX(BITS) )
-#define SC_BIT_MASK1(BITS) ~( (std::numeric_limits<sc_digit>::max()-1) << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK(BITS)  ~( -1 << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK1(BITS) ~( -2 << SC_BIT_INDEX(BITS) )
 #define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
