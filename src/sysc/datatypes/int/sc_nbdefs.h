@@ -84,19 +84,6 @@
 
 namespace sc_dt
 {
-
-// Sign of a number:
-#define SC_NEG       -1     // Negative number
-#define SC_ZERO      0      // Zero
-#define SC_POS       1      // Positive number
-#define SC_NOSIGN    2      // Uninitialized sc_signed number
-
-typedef unsigned char uchar;
-
-// A small_type number is at least a char. Defining an int is probably
-// better for alignment.
-typedef int small_type;
-
 // BIGINT CONFIGURATIONS
 //
 // One of these three #defines should be defined, but only one:
@@ -116,12 +103,12 @@ typedef int small_type;
 
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-//#define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+#define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
 #if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
     !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
     !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-  #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+  #error "need to define one new sc_bigint config"
 #endif
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
@@ -142,6 +129,18 @@ typedef int small_type;
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
 
 #define SC_SMALL_VEC_DIGITS 40
+
+// Sign of a number:
+#define SC_NEG       -1     // Negative number
+#define SC_ZERO      0      // Zero
+#define SC_POS       1      // Positive number
+#define SC_NOSIGN    2      // Uninitialized sc_signed number
+
+typedef unsigned char uchar;
+
+// A small_type number is at least a char. Defining an int is probably
+// better for alignment.
+typedef int small_type;
 
 // Attributes of a byte.
 #define BITS_PER_BYTE   8
