@@ -1294,12 +1294,12 @@ public: // Temporary object support:
   }
 
 public: // back door access:
-  int        get_actual_width() const { return nbits; }
-  sc_digit*  get_digits() const       { return digit; }
-  sc_digit*  get_digits()             { return digit; }
-  int        get_digits_n() const     { return ndigits; }
-  int        get_hod() const          { return SC_DIGIT_INDEX(nbits-1); }
-  int        get_width() const        { return nbits-1; }
+  inline int        get_actual_width() const { return nbits; }
+  inline sc_digit*  get_digits() const       { return digit; }
+  inline sc_digit*  get_digits()             { return digit; }
+  inline int        get_digits_n() const     { return ndigits; }
+  inline int        get_hod() const          { return SC_DIGIT_INDEX(nbits-1); }
+  inline int        get_width() const        { return nbits-1; }
 
 private:
   // Private constructors:
