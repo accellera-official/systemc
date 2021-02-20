@@ -442,22 +442,20 @@ sc_biguint<W>::operator>>(unsigned int v) const
 	return result;
     }
     sc_unsigned result(nb, false);
-    if ( W < 33 ) {
+    if ( nbits < 33 ) {
 	result.digit[0] = digit[0] >> v;
     }
-    else if ( W < 65 ) {
+    else if ( nbits < 65 ) {
         uint64 tmp1 = digit[1];
         tmp1 <<= 32;
         uint64 tmp = tmp1 | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
-	if ( v > 32 ) {
-	    result.digit[1] = (tmp >>32);
-	}
+	result.digit[1] = (tmp >> 32);
     }
     else {
-        result.digit[SC_DIGIT_INDEX(nb)] = 0;
-	vector_extract(digit, result.digit, nb, v); // +1 issue?
+        result.digit[SC_DIGIT_INDEX(result.nbits)] = 0;
+	vector_extract(digit, result.digit, nbits+1, v); // sc_unsigned has an extra bit!!
     }
     return result;
 }
