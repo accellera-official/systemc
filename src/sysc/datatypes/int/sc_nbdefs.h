@@ -103,12 +103,15 @@ namespace sc_dt
 
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-#define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
 #if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
     !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
     !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-  #error "need to define one new sc_bigint config"
+
+  // default
+  #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+
 #endif
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
@@ -196,8 +199,8 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
 #   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
 #endif
-#define SC_BIT_MASK(BITS)  ~( ~1 << SC_BIT_INDEX(BITS) )
-#define SC_BIT_MASK1(BITS) ~( -2 << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK(BITS)  ~( (std::numeric_limits<sc_digit>::max()  ) << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK1(BITS) ~( (std::numeric_limits<sc_digit>::max()-1) << SC_BIT_INDEX(BITS) )
 #define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
