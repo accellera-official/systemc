@@ -687,15 +687,15 @@ public: // "mirror" for sc_value_base concatenation support:
 #endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public: // field and template value accesses:
-  int              get_actual_width() const { return W; }
-  const sc_digit*  get_digits() const       { return digit; }
-  sc_digit*        get_digits()             { return digit; }
-  int              get_digits_n() const     { return DIV_CEIL(W); }
-  int              get_hod() const          { return SC_DIGIT_INDEX(W-1); }
-  sc_digit*        get_raw()                { return digit; }
-  int              get_width() const        { return W; }
+  inline int              get_actual_width() const { return W; }
+  inline const sc_digit*  get_digits() const       { return digit; }
+  inline sc_digit*        get_digits()             { return digit; }
+  inline int              get_digits_n() const     { return DIV_CEIL(W); }
+  inline int              get_hod() const          { return SC_DIGIT_INDEX(W-1); }
+  inline sc_digit*        get_raw()                { return digit; }
+  inline int              get_width() const        { return W; }
 
-  int              length() const           { return W; }
+  inline int              length() const           { return W; }
 
 };
 
