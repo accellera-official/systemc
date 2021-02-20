@@ -224,9 +224,10 @@ sc_bigint<W>::operator - ()
 {
     sc_carry     carry=1;
     sc_bigint<W> result;
+    sc_digit* result_digits = result.get_digits();
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
         carry += ~digit[digit_i];
-        result.digit[digit_i] = carry;
+        result_digits[digit_i] = carry;
 	carry >>=BITS_PER_DIGIT;
     }
     return result;
@@ -237,8 +238,9 @@ inline const sc_bigint<W>
 sc_bigint<W>::operator ~ ()
 {
     sc_bigint<W> result;
+    sc_digit* result_digits = result.get_digits();
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
-        result.digit[digit_i] = ~digit[digit_i];
+        result_digits[digit_i] = ~digit[digit_i];
     }
     return result;
 }
