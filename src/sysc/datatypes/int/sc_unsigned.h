@@ -1298,7 +1298,7 @@ public: // back door access:
   sc_digit*  get_digits() const       { return digit; }
   sc_digit*  get_digits()             { return digit; }
   int        get_digits_n() const     { return ndigits; }
-  int        get_hod() const          { return SC_DIGIT_INDEX(nbits-1); }
+  int        get_hod() const          { return ndigits-1; }
   int        get_width() const        { return nbits-1; }
 
 private:
