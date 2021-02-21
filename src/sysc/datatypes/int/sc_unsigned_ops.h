@@ -87,7 +87,7 @@ operator==(const sc_unsigned& u, const sc_unsigned& v)
 {
   if (&u == &v)
     return true;
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) == 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) == 0;
 }
 
 
@@ -95,7 +95,7 @@ bool
 operator==(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          == 0;
 }
 
@@ -104,7 +104,7 @@ bool
 operator==(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          == 0;
 }
 
@@ -113,7 +113,7 @@ bool
 operator==(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          == 0;
 }
 
@@ -121,7 +121,7 @@ bool
 operator==(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          == 0;
 }
 
@@ -130,7 +130,7 @@ bool
 operator==(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          == 0;
 }
 
@@ -138,7 +138,7 @@ bool
 operator==(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          == 0;
 }
 
@@ -150,7 +150,7 @@ operator==(unsigned int u, const sc_unsigned& v)
 bool
 operator!=(const sc_unsigned& u, const sc_unsigned& v)
 {
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) != 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) != 0;
 }
 
 
@@ -158,7 +158,7 @@ bool
 operator!=(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          != 0;
 }
 
@@ -167,7 +167,7 @@ bool
 operator!=(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          != 0;
 }
 
@@ -176,7 +176,7 @@ bool
 operator!=(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          != 0;
 }
 
@@ -184,7 +184,7 @@ bool
 operator!=(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          != 0;
 }
 
@@ -193,7 +193,7 @@ bool
 operator!=(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          != 0;
 }
 
@@ -201,7 +201,7 @@ bool
 operator!=(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          != 0;
 }
 
@@ -214,7 +214,7 @@ operator<(const sc_unsigned& u, const sc_unsigned& v)
 {
   if (&u < &v)
     return true;
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) < 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) < 0;
 }
 
 
@@ -222,7 +222,7 @@ bool
 operator<(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          < 0;
 }
 
@@ -231,7 +231,7 @@ bool
 operator<(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          < 0;
 }
 
@@ -240,7 +240,7 @@ bool
 operator<(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          < 0;
 }
 
@@ -249,7 +249,7 @@ bool
 operator<(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          < 0;
 }
 
@@ -258,7 +258,7 @@ bool
 operator<(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          < 0;
 }
 
@@ -267,7 +267,7 @@ bool
 operator<(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          < 0;
 }
 
@@ -281,7 +281,7 @@ operator<=(const sc_unsigned& u, const sc_unsigned& v)
 {
   if (&u < &v)
     return true;
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) <= 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) <= 0;
 }
 
 
@@ -289,7 +289,7 @@ bool
 operator<=(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          <= 0;
 }
 
@@ -298,7 +298,7 @@ bool
 operator<=(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          <= 0;
 }
 
@@ -307,7 +307,7 @@ bool
 operator<=(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          <= 0;
 }
 
@@ -315,7 +315,7 @@ bool
 operator<=(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          <= 0;
 }
 
@@ -324,7 +324,7 @@ bool
 operator<=(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          <= 0;
 }
 
@@ -332,7 +332,7 @@ bool
 operator<=(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          <= 0;
 }
 
@@ -345,7 +345,7 @@ operator>(const sc_unsigned& u, const sc_unsigned& v)
 {
   if (&u < &v)
     return true;
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) > 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) > 0;
 }
 
 
@@ -353,7 +353,7 @@ bool
 operator>(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          > 0;
 }
 
@@ -362,7 +362,7 @@ bool
 operator>(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          > 0;
 }
 
@@ -371,7 +371,7 @@ bool
 operator>(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          > 0;
 }
 
@@ -379,7 +379,7 @@ bool
 operator>(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          > 0;
 }
 
@@ -388,7 +388,7 @@ bool
 operator>(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          > 0;
 }
 
@@ -396,7 +396,7 @@ bool
 operator>(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          > 0;
 }
 
@@ -410,7 +410,7 @@ operator>=(const sc_unsigned& u, const sc_unsigned& v)
 {
   if (&u < &v)
     return true;
-  return vector_compare( u.ndigits, u.digit, v.ndigits, v.digit ) >= 0;
+  return vector_compare( u.get_hod(), u.digit, v.get_hod(), v.digit ) >= 0;
 }
 
 
@@ -418,7 +418,7 @@ bool
 operator>=(const sc_unsigned& u, uint64 v)
 {
   ScNativeDigits<uint64> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_UINT64, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_UINT64-1, temp.digits() )
          >= 0;
 }
 
@@ -427,7 +427,7 @@ bool
 operator>=(uint64 u, const sc_unsigned& v)
 {
   ScNativeDigits<uint64> temp( u );
-  return vector_compare( DIGITS_PER_UINT64, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_UINT64-1, temp.digits(), v.get_hod(), v.digit )
          >= 0;
 }
 
@@ -436,7 +436,7 @@ bool
 operator>=(const sc_unsigned& u, unsigned int v)
 {
   ScNativeDigits<unsigned int> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          >= 0;
 }
 
@@ -444,7 +444,7 @@ bool
 operator>=(const sc_unsigned& u, unsigned long v)
 {
   ScNativeDigits<unsigned long> temp( v );
-  return vector_compare( u.ndigits, u.digit, DIGITS_PER_ULONG, temp.digits() )
+  return vector_compare( u.get_hod(), u.digit, DIGITS_PER_ULONG-1, temp.digits() )
          >= 0;
 }
 
@@ -453,7 +453,7 @@ bool
 operator>=(unsigned int u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned int> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          >= 0;
 }
 
@@ -461,7 +461,7 @@ bool
 operator>=(unsigned long u, const sc_unsigned& v)
 {
   ScNativeDigits<unsigned long> temp( u );
-  return vector_compare( DIGITS_PER_ULONG, temp.digits(), v.ndigits, v.digit )
+  return vector_compare( DIGITS_PER_ULONG-1, temp.digits(), v.get_hod(), v.digit )
          >= 0;
 }
 

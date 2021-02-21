@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+  
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  sc_bigint.h -- Template version of arbitrary length integer. This class
+  sc_bigint.h -- Template version of arbitrary length integer. This class 
                  enables compile-time bit widths for sc_signed numbers.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
@@ -87,7 +87,7 @@ class sc_bigint
 #endif
 {
 public: // anonymous compile-type information about this type.
-    enum {
+    enum { 
 	ACTUAL_WIDTH = W,                   // actual width.
         DIGITS_N     = SC_DIGIT_COUNT(W-1), // number of digits in digit vector.
 	HOB          = SC_BIT_INDEX(W-1),   // bit index of high order bit.
@@ -109,7 +109,7 @@ public:
     #endif
 	{ *this = 0; }
 
-    sc_bigint(int, int)
+    sc_bigint(int, int) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
@@ -118,7 +118,7 @@ public:
 	{ }
 
     template<int WO>
-    inline sc_bigint( const sc_bigint<WO>& v )
+    inline sc_bigint( const sc_bigint<WO>& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
@@ -127,7 +127,7 @@ public:
         { *this = v; }
 
     template<int WO>
-    inline sc_bigint( const sc_biguint<WO>& v )
+    inline sc_bigint( const sc_biguint<WO>& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
@@ -135,7 +135,7 @@ public:
     #endif
         { *this = v; }
 
-    sc_bigint( const sc_signed& v )
+    sc_bigint( const sc_signed& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
@@ -143,7 +143,7 @@ public:
     #endif
 	{ *this = v; }
 
-    sc_bigint( const sc_signed_subref& v )
+    sc_bigint( const sc_signed_subref& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
@@ -152,142 +152,142 @@ public:
 	{ *this = v; }
 
     template< class T >
-    sc_bigint( const sc_generic_base<T>& a )
+    sc_bigint( const sc_generic_base<T>& a ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ a->to_sc_signed(*this); }
 
-    sc_bigint( const sc_unsigned& v )
+    sc_bigint( const sc_unsigned& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( const sc_unsigned_subref& v )
+    sc_bigint( const sc_unsigned_subref& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( const char* v )
+    sc_bigint( const char* v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( int64 v )
+    sc_bigint( int64 v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( uint64 v )
+    sc_bigint( uint64 v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( long v )
+    sc_bigint( long v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( unsigned long v )
+    sc_bigint( unsigned long v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( int v )
+    sc_bigint( int v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( unsigned int v )
+    sc_bigint( unsigned int v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( double v )
+    sc_bigint( double v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
+	{ *this = v; }
+  
+    sc_bigint( const sc_bv_base& v ) 
+    #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
+        : sc_signed( W, compile_time_digits )
+    #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_signed( W, false )
+    #endif 
 	{ *this = v; }
 
-    sc_bigint( const sc_bv_base& v )
+    sc_bigint( const sc_lv_base& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
-	{ *this = v; }
-
-    sc_bigint( const sc_lv_base& v )
-    #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
-        : sc_signed( W, compile_time_digits )
-    #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-        : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
 #ifdef SC_INCLUDE_FX
 
-    explicit sc_bigint( const sc_fxval& v )
+    explicit sc_bigint( const sc_fxval& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxval_fast& v )
+    explicit sc_bigint( const sc_fxval_fast& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxnum& v )
+    explicit sc_bigint( const sc_fxnum& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
-    explicit sc_bigint( const sc_fxnum_fast& v )
+    explicit sc_bigint( const sc_fxnum_fast& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
         : sc_signed( W, compile_time_digits )
     #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
         : sc_signed( W, false )
-    #endif
+    #endif 
 	{ *this = v; }
 
 #endif
@@ -303,7 +303,7 @@ public:
 
     inline const sc_bigint<W> operator - ();
     inline const sc_bigint<W> operator ~ ();
-
+ 
     // assignment operators
 
     template<int WO>
@@ -376,16 +376,16 @@ public:
 
 // +----------------------------------------------------------------------------
 // |"sc_bigint<W>::to_XXXX"
-// |
+// | 
 // | These functions return an object instance's value as the requested
 // | native C++ type.
 // |
-// | Notes:
+// | Notes: 
 // |   (1) These are set up for BITS_PER_DIGIT == 32.
 // | Result:
 // |     Native C++ type containing the object instance's value.
 // +----------------------------------------------------------------------------
-inline
+inline 
 double
 to_double() const
 {
@@ -393,7 +393,7 @@ to_double() const
 }
 
 inline
-int
+int 
 to_int() const
 {
     int result;
@@ -403,7 +403,7 @@ to_int() const
 }
 
 inline
-unsigned int
+unsigned int 
 to_uint() const
 {
     unsigned int result;
@@ -414,7 +414,7 @@ to_uint() const
 }
 
 inline
-int64
+int64 
 to_int64() const
 {
     int64 result;
@@ -429,7 +429,7 @@ to_int64() const
 }
 
 inline
-uint64
+uint64 
 to_uint64() const
 {
     uint64 result;
@@ -445,7 +445,7 @@ to_uint64() const
 }
 
 inline
-long
+long 
 to_long() const
 {
     long result =  ( sizeof(long) < 5 ) ? to_int() : to_int64();
@@ -454,7 +454,7 @@ to_long() const
 
 
 inline
-unsigned long
+unsigned long 
 to_ulong() const
 {
     unsigned long result = ( sizeof(unsigned long) < 5 ) ? to_uint() : to_uint64();
@@ -627,7 +627,6 @@ protected:
     sc_digit digit[DIV_CEIL(W)];
 #endif
 
-public:
     inline void adjust_hod()
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
@@ -637,14 +636,14 @@ public:
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     inline sc_signed& sc_signed_proxy()
     {
-        sc_dt::sc_signed& result = sc_signed::allocate_temporary(W,(sc_digit*)digit);
-	return result;
+        sc_dt::sc_signed& result = sc_signed::allocate_temporary(W,(sc_digit*)digit); 
+	return result; 
     }
 
     inline const sc_signed& sc_signed_proxy() const
     {
-        const sc_dt::sc_signed& result = sc_signed::allocate_temporary(W,(sc_digit*)digit);
-	return result;
+        const sc_dt::sc_signed& result = sc_signed::allocate_temporary(W,(sc_digit*)digit); 
+	return result; 
     }
 
     inline operator sc_dt::sc_signed& ()
@@ -673,7 +672,7 @@ public:
 
     // explicit conversion to character string:
 
-    const std::string to_string( sc_numrep numrep = SC_DEC ) const {
+    const std::string to_string( sc_numrep numrep = SC_DEC ) const { 
         return sc_signed_proxy().to_string( numrep );
     }
 

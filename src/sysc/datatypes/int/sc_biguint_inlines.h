@@ -437,27 +437,36 @@ sc_biguint<W>::operator>>(unsigned int v) const
         return sc_unsigned(*this);
     }
     int nb = W - v;
+
+    // If we shift off the end return a single bit 0.
+
     if ( nb <= 0 ) {
         sc_unsigned result(1, true);
 	return result;
     }
+
+
+    // Return a value that is the width of the shifted value:
+    //
+    // Note: sc_biguint<W> values have one extra bit on the top, so the comparison is down
+    // one bit, e.g., W < 32, not W < 33.
+
     sc_unsigned result(nb, false);
-    if ( W < 33 ) {
+    if ( W < 32 ) {
 	result.digit[0] = digit[0] >> v;
     }
-    else if ( W < 65 ) {
-        uint64 tmp1 = digit[1];
-        tmp1 <<= 32;
-        uint64 tmp = tmp1 | digit[0];
+    else if ( W < 64 ) {
+        uint64 tmp = digit[1];
+        tmp = (tmp << 32) | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
-	if ( v > 32 ) {
-	    result.digit[1] = (tmp >>32);
+	if ( result.nbits > 32 ) { 
+	    result.digit[1] = (tmp >> 32);
 	}
     }
     else {
-        result.digit[SC_DIGIT_INDEX(nb)] = 0;
-	vector_extract(digit, result.digit, nb, v); // +1 issue?
+	vector_extract(digit, result.digit, W, v);  // @@@@@@@@
+	result.adjust_hod();
     }
     return result;
 }
