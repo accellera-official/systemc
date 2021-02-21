@@ -114,7 +114,7 @@ void
 sc_unsigned::invalid_index( int i ) const
 {
     std::stringstream msg;
-    msg << "sc_biguint bit selection: index = " << i << " violates "
+    msg << "sc_biguint/sc_unsigned bit selection: index = " << i << " violates "
            "0 <= index <= " << (nbits-2);
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
     sc_core::sc_abort(); // can't recover from here
@@ -124,7 +124,7 @@ void
 sc_unsigned::invalid_range( int l, int r ) const
 {
     std::stringstream msg;
-    msg << "sc_biguint part selection: left = " << l << ", right = " << r << "\n"
+    msg << "sc_biguint/sc_unsigned part selection: left = " << l << ", right = " << r << "\n"
            "  violates either (" << (nbits-2) << " >= left >= 0) or "
            "(" << (nbits-2) << " >= right >= 0)";
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
@@ -778,6 +778,8 @@ operator<<(const sc_unsigned& u, unsigned long v)
 
   vector_shift_left( nd, result.digit, v );
 
+  result.adjust_hod(); 
+
   return result;
 }
 
@@ -800,6 +802,7 @@ sc_unsigned::operator<<=(unsigned long v)
 
   vec_shift_left(ndigits, digit, v);
   adjust_hod();
+
   return *this;
 }
 
