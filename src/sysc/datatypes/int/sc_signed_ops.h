@@ -967,7 +967,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 			right.get_hod(), \
 			right.get_digits(), \
 			result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
 	    return result; \
 	} \
 	else { \
@@ -978,7 +978,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 			left.get_hod(), \
 			left.get_digits(), \
 			result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
 	    return result; \
 	} \
     } 
@@ -1002,7 +1002,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 		        right.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
         else { \
@@ -1013,7 +1013,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 		        left.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
     } 
@@ -1036,7 +1036,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 	                right.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
         else { \
@@ -1047,7 +1047,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 	                left.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
     }
@@ -1237,7 +1237,7 @@ inline
 const sc_signed
 sc_signed::operator++(int) // postfix
 {
-  // Copy digit into d.
+  // Make a copy before incrementing and return it.
 
   sc_signed result(*this);
 
@@ -1259,7 +1259,7 @@ inline
 const sc_signed
 sc_signed::operator--(int) // postfix
 {
-  // Copy digit into d.
+  // Make a copy before decrementing and return it.
 
   sc_signed result(*this);
 
@@ -1434,7 +1434,7 @@ inline
 const sc_unsigned
 sc_unsigned::operator++(int) // postfix
 {
-  // Copy digit into d.
+  // Make copy to return before incrementing.
 
   sc_unsigned result(*this);
 
@@ -1456,7 +1456,7 @@ inline
 const sc_unsigned
 sc_unsigned::operator--(int) // postfix
 {
-  // Copy digit into d.
+  // Make copy to return before decrementing.
 
   sc_unsigned result(*this);
 
