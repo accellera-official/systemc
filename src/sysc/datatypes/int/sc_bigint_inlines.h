@@ -440,28 +440,33 @@ sc_bigint<W>::operator>>(unsigned int v) const
         return sc_signed(*this);
     }
     int nb = W - v;
+
+    // If we shift off the end return a single bit 0.
+
     if ( 0 >= nb ) {
 	sc_signed result(1, false);
         result.digit[1] = 0 > (int)digit[HOD] ? -1 : 0;
 	return result;
     }
+
+    // Return a value that is the width of the shifted value:
+
     sc_signed result(nb, false);
     if ( W < 33 ) {
-	result.digit[0] = digit[0] >> v;
+	result.digit[0] = (int)digit[0] >> v;
     }
     else if ( W < 65 ) {
-        uint64 tmp1 = digit[1];
-        tmp1 <<=  32;
-        uint64 tmp = tmp1 | digit[0];
+        int64 tmp = digit[1];
+        tmp = (tmp << 32) | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
-	if ( v > 32 ) {
+	if ( nb > 32 ) {
 	    result.digit[1] = (tmp >>32);
 	}
     }
     else {
-        result.digit[SC_DIGIT_INDEX(nb)] = 0 > (int)digit[HOD] ? -1 : 0;
-	vector_extract(digit, result.digit, nb, v); // +1 issue?
+	vector_extract(digit, result.digit, W, v); 
+	result.adjust_hod();
     }
     return result;
 }
