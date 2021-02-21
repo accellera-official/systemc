@@ -627,7 +627,9 @@ protected:
     sc_digit digit[DIV_CEIL(W)];
 #endif
 
+#if 1 // @@@@@@@@
 public:
+#endif // @@@@@@@@
     inline void adjust_hod()
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
