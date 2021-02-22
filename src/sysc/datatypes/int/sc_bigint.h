@@ -627,12 +627,14 @@ protected:
     sc_digit digit[DIV_CEIL(W)];
 #endif
 
+public:
     inline void adjust_hod()
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
         digit[HOD] = ( ( (int)digit[HOD] << shift ) >> shift );
     }
 
+public:
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
     inline sc_signed& sc_signed_proxy()
     {
@@ -670,7 +672,7 @@ protected:
 
 #endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
-    // explicit conversion to character string:
+public: // explicit conversion to character string:
 
     const std::string to_string( sc_numrep numrep = SC_DEC ) const { 
         return sc_signed_proxy().to_string( numrep );
