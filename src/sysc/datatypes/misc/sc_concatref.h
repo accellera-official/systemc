@@ -264,12 +264,6 @@ public:
 	    else {
 	        result_p->digit = result_p->small_vec;
 	    }
-#if defined(_MSC_VER)
-            // workaround spurious initialisation issue on MS Visual C++
-            memset( result_p->digit, 0, sizeof(sc_digit)*result_p->ndigits );
-#else
-            result_p->digit[result_p->ndigits-1] = 0;
-#endif
             m_right_p->concat_get_data( result_p->digit, 0 );
             m_left_p->concat_get_data(result_p->digit, m_len_r); 
 	    result_p->adjust_hod();
