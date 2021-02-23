@@ -33,7 +33,6 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object_int.h"
 
-#define SC_DISABLE_ASYNC_UPDATES // @@@@#### MAC OS X
 #ifndef SC_DISABLE_ASYNC_UPDATES
 #  include "sysc/communication/sc_host_mutex.h"
 #  include "sysc/communication/sc_host_semaphore.h"
