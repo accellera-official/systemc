@@ -128,7 +128,6 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    digit[ndigits-1] = 0; 
     if ( v.m_left >= v.m_right ) {
         high_bit = v.m_left;
         low_bit = v.m_right;
@@ -142,6 +141,7 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
     if ( reversed ) {
         vector_reverse_bits( digit, high_bit-low_bit, 0 );
     }
+    adjust_hod();
 }
 
 inline

@@ -465,9 +465,9 @@ sc_biguint<W>::operator>>(unsigned int v) const
 	}
     }
     else {
-	vector_extract(digit, result.digit, W, v);  // @@@@@@@@
-	result.adjust_hod();
+	vector_extract(digit, result.digit, W-1, v);  
     }
+    result.adjust_hod();
     return result;
 }
 

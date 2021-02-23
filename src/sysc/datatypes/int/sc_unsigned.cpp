@@ -892,8 +892,7 @@ operator>>(const sc_unsigned& u, unsigned long v)
 
   sc_unsigned result(nb, false);
   vector_copy(nd, u.digit, result.digit);
-  vector_shift_right( nd, result.digit, v,
-                      sc_unsigned::SIGNED&&(int)u.digit[nd-1]<0 ? DIGIT_MASK:0);
+  vector_shift_right( nd, result.digit, v, 0);
 
   return result;
 }

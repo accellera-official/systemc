@@ -441,11 +441,11 @@ sc_bigint<W>::operator>>(unsigned int v) const
     }
     int nb = W - v;
 
-    // If we shift off the end return a single bit 0.
+    // If we shift off the end return the sign bit.
 
     if ( 0 >= nb ) {
 	sc_signed result(1, false);
-        result.digit[1] = 0 > (int)digit[HOD] ? -1 : 0;
+        result.digit[0] = 0 > (int)digit[HOD] ? -1 : 0;
 	return result;
     }
 
@@ -465,9 +465,9 @@ sc_bigint<W>::operator>>(unsigned int v) const
 	}
     }
     else {
-	vector_extract(digit, result.digit, W, v); 
-	result.adjust_hod();
+	vector_extract(digit, result.digit, W-1, v); 
     }
+    result.adjust_hod();
     return result;
 }
 
