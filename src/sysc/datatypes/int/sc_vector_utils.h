@@ -791,9 +791,10 @@ vector_copy( int             digits_n,
 // +----------------------------------------------------------------------------
 // |"vector_extract"
 // |
-// | This inline function extracts the specified bits. high_bit must be
-// | greater than or equal to low_bit.
-// |
+// | This inline function extracts the specified bits. 
+// |   (1) high_bit must be greater than or equal to low_bit.
+// |   (2) any high order bits in the high order digit of destination_p that are not part
+// |       of the the value from source_p will be zeroed.
 // | Arguments:
 // |     source_p      -> where to extract the bits from.
 // |     destination_p -> where to place the extracted bits.
