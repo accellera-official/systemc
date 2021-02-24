@@ -89,7 +89,7 @@ class sc_bigint
 public: // anonymous compile-type information about this type.
     enum { 
 	ACTUAL_WIDTH = W,                   // actual width.
-        DIGITS_N     = SC_DIGIT_COUNT(W-1), // number of digits in digit vector.
+        DIGITS_N     = SC_DIGIT_COUNT(W),   // number of digits in digit vector.
 	HOB          = SC_BIT_INDEX(W-1),   // bit index of high order bit.
         HOD          = SC_DIGIT_INDEX(W-1), // digit index of high order bit.
 	SIGNED       = 1,                   // this type is signed.

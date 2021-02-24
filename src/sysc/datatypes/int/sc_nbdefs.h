@@ -181,27 +181,28 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 //
 //   SC_BIT_INDEX   - return the index of this bit within its sc_digit.
 //   SC_DIGIT_INDEX - return the index within an sc_digit vector of the
-//                    supplied bit.
+//                    supplied bit index.
 //   SC_MASK_DIGIT  - mask the supplied sc_digit, keeping the valid bits
 //                    within an sc_digit.
 //   SC_BIT_MASK    - this is the mask for digits below the supplied bit
 //   SC_BIT_MASK1   - this is the mask for digits below, and including
 //                    the supplied bit
 //   SC_DIGIT_COUNT - this is the number of digits required to accommodate
-//                    the supplied bit.
+//                    the supplied number of bits.
 
 #if BITS_PER_DIGIT == 32
 #   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
-#   define SC_DIGIT_INDEX(BIT) ((BIT)>>5)
+#   define SC_DIGIT_INDEX(BIT_I) ((BIT_I)>>5)
 #   define SC_MASK_DIGIT(v) (v)
+#   define SC_DIGIT_COUNT(BITS_N) ((BITS_N+BITS_PER_DIGIT-1)/BITS_PER_DIGIT) 
 #else
 #   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
 #   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
+#   define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 #endif
 #define SC_BIT_MASK(BITS)  ~( (std::numeric_limits<sc_digit>::max()  ) << SC_BIT_INDEX(BITS) )
 #define SC_BIT_MASK1(BITS) ~( (std::numeric_limits<sc_digit>::max()-1) << SC_BIT_INDEX(BITS) )
-#define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
 

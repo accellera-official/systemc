@@ -78,13 +78,13 @@ class sc_big_op_info
 {
   public: // width calculations:
     enum {
-      left_count = SC_DIGIT_COUNT(WL-1+!SL),
+      left_count = SC_DIGIT_COUNT(WL+!SL),
       left_extra = !SL && SR,
-      left_hod   = SC_DIGIT_INDEX(WL-1+!SL),
+      left_hod   = SC_DIGIT_INDEX(WL+!SL),
 
-      right_count = SC_DIGIT_COUNT(WR-1+!SR),
+      right_count = SC_DIGIT_COUNT(WR+!SR),
       right_extra = SL && !SR,
-      right_hod   = SC_DIGIT_INDEX(WR-1+!SR),
+      right_hod   = SC_DIGIT_INDEX(WR+!SR),
 
       signed_result = SL || SR,
 
@@ -109,7 +109,7 @@ class sc_big_op_info
       mul_mask  = SC_BIT_MASK1(mul_bits+!signed_result),
       sub_mask  = SC_BIT_MASK1(sub_bits+!signed_result),
 
-      shorter_length = SC_DIGIT_COUNT( VEC_MIN(WL,WR) )
+      shorter_length = SC_DIGIT_COUNT( VEC_MIN(WL+!SL,WR+!SR) )
     };
 
   public: // operand types:
@@ -141,7 +141,7 @@ class ScNativeDigits<int64>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(int64),
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH,
 	SIGNED           = 1
@@ -173,7 +173,7 @@ class ScNativeDigits<uint64>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(uint64)+1,
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH-1,
 	SIGNED       = 0
@@ -205,7 +205,7 @@ class ScNativeDigits<long>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(long),
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH,
 	SIGNED       = 1
@@ -237,7 +237,7 @@ class ScNativeDigits<unsigned long>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(unsigned long)+1,
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH-1,
 	SIGNED       = 0
@@ -270,7 +270,7 @@ class ScNativeDigits<int>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(int),
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH,
 	SIGNED       = 1
@@ -298,7 +298,7 @@ class ScNativeDigits<unsigned int>
   public:
     enum {
         ACTUAL_WIDTH = 8*sizeof(unsigned int)+1,
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH-1),
+        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH-1,
 	SIGNED       = 0
