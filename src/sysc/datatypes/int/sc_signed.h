@@ -1254,8 +1254,8 @@ protected:
   bool m_free; // true if should free 'digit'.
 #endif
 
-  sc_digit *digit;                          // Shortened as d.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS];  // make small values faster.
+  sc_digit *digit;                         // storage for our value.
+  sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // make small values faster.
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
