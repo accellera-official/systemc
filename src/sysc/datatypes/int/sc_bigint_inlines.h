@@ -436,6 +436,7 @@ template<int W>
 const sc_signed
 sc_bigint<W>::operator>>(unsigned int v) const
 {
+#if 0
     if (v == 0) {
         return sc_signed(*this);
     }
@@ -469,6 +470,20 @@ sc_bigint<W>::operator>>(unsigned int v) const
     }
     result.adjust_hod();
     return result;
+#else
+  if (v == 0)
+    return sc_signed(*this);
+
+  int nb = nbits;
+  int nd = ndigits;
+
+  sc_signed result(nb, false);
+  vector_copy(nd, digit, result.digit);
+  vector_shift_right( nd, result.digit, v,
+                      sc_signed::SIGNED&&(int)digit[nd-1]<0 ? DIGIT_MASK:0);
+
+  return result;
+#endif
 }
 
 template<int W>

@@ -142,6 +142,7 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
         vector_reverse_bits( digit, high_bit-low_bit, 0 );
     }
     adjust_hod();
+    if (0) std::cout << "@@@@ " << nbits << " " << ndigits << " " << low_bit << " " << high_bit << std::endl;
 }
 
 inline

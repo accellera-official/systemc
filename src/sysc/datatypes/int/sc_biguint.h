@@ -90,12 +90,12 @@ class sc_biguint
 {
 public: // anonymous compile-type information about this type.
     enum {
-	ACTUAL_WIDTH = W+1,               // actual width.
-        DIGITS_N     = SC_DIGIT_COUNT(W), // number of digits in digit vector.
-        HOB          = SC_BIT_INDEX(W),   // bit index of high order bit.
-        HOD          = SC_DIGIT_INDEX(W), // digit index of high order bit.
-	SIGNED       = 0,                 // this type is unsigned.
-	WIDTH        = W                  // width as an enum.
+	ACTUAL_WIDTH = W+1,                 // actual width.
+        DIGITS_N     = SC_DIGIT_COUNT(W+1), // number of digits in digit vector.
+        HOB          = SC_BIT_INDEX(W),     // bit index of high order bit.
+        HOD          = SC_DIGIT_INDEX(W),   // digit index of high order bit.
+	SIGNED       = 0,                   // this type is unsigned.
+	WIDTH        = W                    // width as an enum.
     };
     typedef int HOD_TYPE;                 // type of high order sc_digit.
 
