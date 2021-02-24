@@ -808,10 +808,15 @@ vector_extract( const sc_digit* source_p,
 	        const int       high_bit,
 	        const int       low_bit )
 {
-    const int dst_width = (high_bit-low_bit) + 1;
-    const int lod = SC_DIGIT_INDEX(low_bit);
-    const int hod = SC_DIGIT_INDEX(high_bit);
-    const int right_shift = SC_BIT_INDEX(low_bit);
+    int dst_hob;     // high order bit in destination_p to be moved to.
+    int lod;         // low order digit containing data in source_p.
+    int hod;         // high order digit containing data in source_p.
+    int right_shift; // index of bit within lod of the low order bit to moved.
+
+    dst_hob = high_bit-low_bit;
+    lod = SC_DIGIT_INDEX(low_bit);
+    hod = SC_DIGIT_INDEX(high_bit);
+    right_shift = SC_BIT_INDEX(low_bit);
 
     // The extraction is on an sc_digit boundary, just move the digits.
 
@@ -842,7 +847,7 @@ vector_extract( const sc_digit* source_p,
 	    *dst_p++ = (value << left_shift) | carry;
 	    carry = (value >> right_shift);
 	}
-	const int dst_hod = SC_DIGIT_INDEX(dst_width);
+	const int dst_hod = SC_DIGIT_INDEX(dst_hob);
 	if ( dst_p == &destination_p[dst_hod] ) {
 	    *dst_p = carry;
 	}
@@ -850,7 +855,7 @@ vector_extract( const sc_digit* source_p,
 
     // Trim the upper sc_digit:
 
-    destination_p[SC_DIGIT_INDEX(dst_width)] &= SC_BIT_MASK(dst_width);
+    destination_p[SC_DIGIT_INDEX(dst_hob)] &= SC_BIT_MASK1(dst_hob);
 }
 
 // +----------------------------------------------------------------------------
