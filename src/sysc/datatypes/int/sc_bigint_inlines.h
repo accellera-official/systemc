@@ -479,8 +479,7 @@ sc_bigint<W>::operator>>(unsigned int v) const
 
   sc_signed result(nb, false);
   vector_copy(nd, digit, result.digit);
-  vector_shift_right( nd, result.digit, v,
-                      sc_signed::SIGNED&&(int)digit[nd-1]<0 ? DIGIT_MASK:0);
+  vector_shift_right( nd, result.digit, v, ((int)digit[nd-1] < 0) ? DIGIT_MASK:0);
 
   return result;
 #endif
