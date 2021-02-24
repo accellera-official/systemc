@@ -1665,6 +1665,11 @@ vector_shift_left( const int       source_hod,
 // |
 // | This function shifts left the supplied vector by the supplied number of
 // | bits.
+// | This function shifts left the supplied vector by the supplied number of
+// | bits. Because the order of the digits in the array have the low order bits
+// | at index 0 and the high order bits at index N, the actual shifting is to 
+// | the right from lower index to higher index.
+// |
 // |
 // | Arguments:
 // |     target_n   =  number of digits in 'target_p'
@@ -1741,7 +1746,9 @@ vector_shift_left( const int target_n,
 // |"vector_shift_right"
 // |
 // | This function shifts right the supplied vector by the supplied number of
-// | bits.
+// | bits. Because the order of the digits in the array have the low order bits
+// | at index 0 and the high order bits at index N, the actual shifting is to 
+// | the left from higher index to lower index.
 // |
 // | Arguments:
 // |     target_n   =  number of digits in 'target_p'
@@ -1762,8 +1769,10 @@ vector_shift_right( const int       target_n,
 
     // PERFORM INTER-DIGIT SHIFTING:
     //
-    // If required move whole sc_digit instances down to account for the
-    // shift factor greater than BITS_PER_DIGIT:
+    // (1) If the low order digit (target_p[0]) does not contain the intra-digit shift point move 
+    //     all the digits in target_p down so that it does contain the shift point. 
+    // (2) In the degenerate case, where the shift is a multiple of the number of bits in a
+    //     digit we are done.
 
     if (bits_n >= (int) BITS_PER_DIGIT) {
 
@@ -1798,8 +1807,10 @@ vector_shift_right( const int       target_n,
 
     // PERFORM INTRA-DIGIT SHIFTING:
     //
-    // Roll through the digits in the target performing shifts smaller than
-    // BITS_PER_DIGIT bits.
+    // (1) At this point target_p[0] contains the shift point. Roll through the digits in target_p
+    //     from top to bottom performing shifts smaller than BITS_PER_DIGIT bits.
+    // (2) Each digit will contain it high order bits as low order bits, and the next digit's
+    //     low order bits as its high order bits.
 
     int      other_shift_n = BITS_PER_DIGIT - bits_n;
     sc_digit carry = fill << other_shift_n;
