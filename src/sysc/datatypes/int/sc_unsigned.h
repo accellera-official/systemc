@@ -719,7 +719,7 @@ public:
 
     // Concatenation support:
 
-    sc_digit* get_raw() const { return digit; }
+    const sc_digit* get_raw() const { return digit; }
     virtual int concat_length(bool* xz_present_p) const
        { if ( xz_present_p ) *xz_present_p = false; return nbits-1; }
     virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const;
@@ -1335,7 +1335,7 @@ private:
     { make_zero(ndigits, digit); }
 
   public: // sc_ac back door:
-    sc_digit*  get_raw()                       { return digit; }
+    // sc_digit*  get_raw()                       { return digit; }
     int        get_raw_nbits() const           { return nbits; }
 };
 
@@ -1532,7 +1532,7 @@ sc_unsigned_subref_r::to_uint64() const
 {
 	int                right = m_right;
 	if ( right > m_left ) { return to_uint64_reversed(); }
-	sc_digit*          digits = m_obj_p->get_raw();
+	const sc_digit*    digits = m_obj_p->get_raw();
 	int                adjust = right + 63;
 	int                left = ( adjust < m_left ) ? adjust : m_left;
 	int                left_hob;
