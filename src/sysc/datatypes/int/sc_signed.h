@@ -1277,11 +1277,10 @@ protected:
 
   inline void adjust_hod()
   {
-      int shift =
-          std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
+      int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
       shift = shift > 0 ? shift : 0;
-      std::make_signed<sc_digit>::type  my_digit = digit[ndigits-1];
-      digit[ndigits-1] = ( (my_digit << shift) >> shift);
+      std::make_signed<sc_digit>::type  high_digit = digit[ndigits-1];
+      digit[ndigits-1] = ( (high_digit << shift) >> shift);
   }
 
 
