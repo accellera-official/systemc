@@ -733,7 +733,7 @@ operator<<(const sc_signed& u, unsigned long v)
   int nd = DIV_CEIL(nb);
   sc_signed result(nb, false);
 
-  vector_copy( nd, u.digit, result.digit );
+  vector_copy( DIV_CEIL(u.nbits), u.digit, result.digit );
 
   vector_shift_left( nd, result.digit, v );
 
