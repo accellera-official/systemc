@@ -1588,18 +1588,18 @@ vector_or_reduce( const sc_digit* target_p,
 // | sign extended if extra bits are required for the target.
 // |
 // | Arguments:
-// |     source_hod =  index of highest digit in 'source_p'
-// |     source_p   -> digits of source.
-// |     target_hod =  index of highest digit in 'target_p'
-// |     target_p   -> digits in the target.
+// |     from_hod =  index of highest digit in 'from_p'
+// |     from_p   -> digits of source.
+// |     to_hod =  index of highest digit in 'to_p'
+// |     to_p   -> digits in the target.
 // |     shift_n    =  number of bits to shift.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_shift_left( const int       source_hod,
-                   const sc_digit* source_p,
-                   const int       target_hod,
-		   sc_digit*       target_p,
+vector_shift_left( const int       from_hod,
+                   const sc_digit* from_p,
+                   const int       to_hod,
+		   sc_digit*       to_p,
 		   const int       shift_n )
 {
     // If the shift is not positive we are done:
@@ -1610,39 +1610,55 @@ vector_shift_left( const int       source_hod,
         return;
     }
 
-    int             digit_i;
-    const sc_digit* from_p = source_p;
-    const int       left_shift_n = SC_BIT_INDEX(shift_n);
-    const int       start_hod = VEC_MIN( SC_DIGIT_INDEX(shift_n), target_hod );
-    const int       end_hod = VEC_MIN( target_hod, start_hod+source_hod );
-    // const sc_digit* from_p = &source_p[start_hod];
-    sc_digit*       to_p = target_p;
+    int      carry_shift_n; // amount to shift a carry down by when composing a to_p digit.
+    int      from_i;        // digit in from_p now accessing.
+    int      from_shift_n;  // amount to shift a from_p digit down by when composing a to_p digit.
+    sc_digit fill;          // high order fill value, either zero or all ones.
+    int      to_i;          // digit in to_p now accessing.
+    int      to_start_hod;  // first digit in to_p to receive a from_p digit.
+    int      to_end_hod;    // last digit in to_p to recieve a from_p digit.
+    
+    from_shift_n = SC_BIT_INDEX(shift_n);
+    carry_shift_n = 32-from_shift_n;
+    to_start_hod = VEC_MIN( SC_DIGIT_INDEX(shift_n), to_hod );
+    to_end_hod = VEC_MIN( to_hod, to_start_hod+from_hod );
+    fill = 0 > (int)from_p[from_hod] ? ~0u : 0;
 
-    // Zero any whole low order words:
+    if ( false ) {
+	std::cout << "from_hod      = " << std::dec << from_hod << std::endl;
+	std::cout << "to_hod        = " << to_hod << std::endl;
+	std::cout << "shift_n       = " << shift_n << std::endl;
+	std::cout << "carry_shift_n = " << carry_shift_n << std::endl;
+	std::cout << "from_shift_n  = " << from_shift_n << std::endl;
+	std::cout << "to_start_hod  = " << to_start_hod << std::endl;
+	std::cout << "to_end_hod    = " << to_end_hod << std::endl;
+	std::cout << "fill          = " << std::hex << fill << std::dec << std::endl;
+    }
 
-    for ( digit_i = 0; digit_i < start_hod; ++digit_i ) {
-        *to_p++ = 0;
+    // Zero any whole low order words below our transfer point:
+
+    for ( to_i = 0; to_i < to_start_hod; ++to_i ) {
+        to_p[to_i] = 0;
     }
 
     // If the shift is larger than the our target we are done:
 
-    if ( digit_i > target_hod ) {
-        std::cerr << "vector_shift_left: shift larger than target, word " << digit_i << " < "
-	          << target_hod << std::endl;
+    if ( to_i > to_hod ) {
+        std::cerr << "my_vector_shift_left: shift larger than target, word " << to_i << " < "
+	          << to_hod << std::endl;
         return;
     }
 
-    // The easy case, we just move digits, sign extending if there are not
-    // enough.
+    // Shift point is on an sc_digit boundary. 
 
-    if ( 0 == left_shift_n ) {
-        for ( ; digit_i <= end_hod; ++digit_i ) {
-	    *to_p++ = *from_p++;
+    if ( 0 == from_shift_n ) {
+        for ( from_i=0; to_i <= to_end_hod; ++from_i, ++to_i ) {
+	    to_p[to_i] = from_p[from_i];
         }
-	if ( digit_i < target_hod ) {
-	    sc_digit fill = 0 > (int)source_p[source_hod] ? -1 : 0;
-	    for ( ; digit_i <= target_hod; ++digit_i ) {
-	        *to_p++ = fill;
+	if ( to_i <= to_hod ) {
+	    sc_digit fill = 0 > (int)from_p[from_hod] ? -1 : 0;
+	    for ( ; to_i <= to_hod; ++to_i ) {
+	        to_p[to_i] = fill;
 	    }
 	}
     }
@@ -1650,18 +1666,16 @@ vector_shift_left( const int       source_hod,
     // The messy case we need to shift within a digit:
 
     else {
-	const int  right_shift_n = (BITS_PER_DIGIT-1) - left_shift_n;
-	sc_digit   low_bits = 0;
-        for ( ; digit_i < end_hod; ++digit_i ) {
-	    sc_digit high_bits = *from_p++;
-	    *to_p++ = (high_bits << left_shift_n) | low_bits;
-	    low_bits = high_bits >> right_shift_n;
+        from_i = 0;
+        sc_digit carry = 0; // from_p[from_i] << carry_shift_n;
+        for ( ; to_i <= to_end_hod; ++from_i, ++to_i ) {
+	    sc_digit from_digit = from_p[from_i];
+            to_p[to_i] = (from_digit << from_shift_n) | carry;
+            carry = from_digit >> carry_shift_n;
         }
-	sc_digit fill = 0 > (int)source_p[source_hod] ? -1 : 0;
-	*to_p = (fill << left_shift_n) | low_bits;
-	for ( ++digit_i; digit_i <= target_hod; ++digit_i ) {
-	    // *to_p++ = fill;
-	    *++to_p = fill;
+	to_p[to_i] = (fill << from_shift_n) | carry;
+	for ( to_i = to_i+1; to_i <= to_hod; ++to_i ) {
+	    to_p[to_i] = fill;
 	}
     }
 }
