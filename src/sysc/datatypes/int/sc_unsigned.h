@@ -701,20 +701,11 @@ public:
 #endif
 
 
-    // destructor
+    // destructor:
 
     ~sc_unsigned()
         {
-#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-            if ( digit != small_vec ) {
-                delete [] digit;
-            }
-#else
-            if ( m_free ) {
-                assert(digit != small_vec);
-                delete [] digit;
-            }
-#endif
+            if ( digit_is_allocated() ) { delete [] digit; }
         }
 
     // Concatenation support:
@@ -1254,14 +1245,19 @@ public:
 
 protected:
 
-  int nbits;       // Shortened as nb.
-  int ndigits;     // Shortened as nd.
-#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-  bool m_free;     // true if should free 'digit'.
-#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-
+  int      nbits;                          // Shortened as nb.
+  int      ndigits;                        // Shortened as nd.
   sc_digit *digit;                         // storage for our value.
   sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // speed up smaller sizes.
+
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+  bool m_free; // true if should free 'digit'.
+public:
+  inline bool digit_is_allocated() const { return m_free; }
+#else
+public:
+  inline bool digit_is_allocated() const { return digit != (sc_digit*)small_vec; }
+#endif
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
