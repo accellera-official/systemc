@@ -1626,7 +1626,7 @@ vector_shift_left( const int       source_hod,
 
     // If the shift is larger than the our target we are done:
 
-    if ( digit_i >= target_hod ) {
+    if ( digit_i > target_hod ) {
         std::cerr << "vector_shift_left: shift larger than target, word " << digit_i << " < "
 	          << target_hod << std::endl;
         return;
