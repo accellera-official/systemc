@@ -684,8 +684,7 @@ public: // explicit conversion to character string:
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 public: // "mirror" for sc_value_base concatenation support:
-  int              concat_length(bool xzp) const { return W; }
-  const sc_digit*  get_raw() const               { return digit; }
+  int              concat_length(bool xzp) const    { return W; }
 #endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public: // field and template value accesses:
@@ -694,6 +693,7 @@ public: // field and template value accesses:
   inline sc_digit*        get_digits()             { return digit; }
   inline int              get_digits_n() const     { return DIV_CEIL(W); }
   inline int              get_hod() const          { return SC_DIGIT_INDEX(W-1); }
+  inline sc_digit*        get_raw()                { return digit; }
   inline int              get_width() const        { return W; }
 
   inline int              length() const           { return W; }
