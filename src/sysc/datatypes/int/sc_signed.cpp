@@ -833,18 +833,40 @@ operator>>(const sc_signed& u, long v)
 sc_signed
 operator>>(const sc_signed& u, unsigned long v)
 {
-  if (v == 0)
-    return sc_signed(u);
+    if (v == 0) {
+        return sc_signed(u);
+    }
+    int nb = u.nbits - v;
+    
+    // If we shift off the end return the sign bit.
+    
+    if ( 0 >= nb ) {
+        sc_signed result(1, false);
+        result.digit[0] = 0 > (int)u.digit[u.ndigits-1] ? -1 : 0;
+        return result;
+    }
+    
+    // Return a value that is the width of the shifted value:
+    
+    sc_signed result(nb, false);
+    if ( u.nbits < 33 ) {
+        result.digit[0] = (int)u.digit[0] >> v;
+    }
+    else if ( u.nbits < 65 ) {
+        int64 tmp = u.digit[1];
+        tmp = (tmp << 32) | u.digit[0];
+        tmp = tmp >> v; 
+        result.digit[0] = tmp;
+        if ( nb > 32 ) {
+            result.digit[1] = (tmp >>32);
+        }
+    }
+    else {
+        vector_extract(u.digit, result.digit, u.nbits-1, v);
+    }
+    result.adjust_hod();
+    return result;
 
-  int nb = u.nbits;
-  int nd = u.ndigits;
-
-  sc_signed result(nb, false);
-  vector_copy(nd, u.digit, result.digit);
-  vector_shift_right( nd, result.digit, v,
-                      sc_signed::SIGNED&&(int)u.digit[nd-1]<0 ? DIGIT_MASK:0);
-
-  return result;
 }
 
 
