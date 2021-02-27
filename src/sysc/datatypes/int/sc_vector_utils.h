@@ -1667,13 +1667,13 @@ vector_shift_left( const int       from_hod,
 
     else {
         from_i = 0;
-        sc_digit carry = 0; // from_p[from_i] << carry_shift_n;
+        sc_digit carry = 0; 
         for ( ; to_i <= to_end_hod; ++from_i, ++to_i ) {
 	    sc_digit from_digit = from_p[from_i];
             to_p[to_i] = (from_digit << from_shift_n) | carry;
             carry = from_digit >> carry_shift_n;
         }
-	to_p[to_i] = (fill << from_shift_n) | carry;
+	if ( to_i <= to_hod ) { to_p[to_i] = (fill << from_shift_n) | carry; }
 	for ( to_i = to_i+1; to_i <= to_hod; ++to_i ) {
 	    to_p[to_i] = fill;
 	}
