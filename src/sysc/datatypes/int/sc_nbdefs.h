@@ -192,9 +192,9 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 
 #if BITS_PER_DIGIT == 32
 #   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
-#   define SC_DIGIT_INDEX(BIT_I) ((BIT_I)>>5)
+#   define SC_DIGIT_INDEX(BIT_INDEX) ((BIT_INDEX)>>5)
 #   define SC_MASK_DIGIT(v) (v)
-#   define SC_DIGIT_COUNT(BITS_N) ((BITS_N+BITS_PER_DIGIT-1)/BITS_PER_DIGIT) 
+#   define SC_DIGIT_COUNT(BIT_WIDTH) ((BIT_WIDTH+BITS_PER_DIGIT-1)/BITS_PER_DIGIT) 
 #else
 #   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
