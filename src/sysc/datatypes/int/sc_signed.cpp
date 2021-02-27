@@ -733,9 +733,13 @@ operator<<(const sc_signed& u, unsigned long v)
   int nd = DIV_CEIL(nb);
   sc_signed result(nb, false);
 
+#if 0
   vector_copy( DIV_CEIL(u.nbits), u.digit, result.digit );
 
   vector_shift_left( nd, result.digit, v );
+#else
+  vector_shift_left( u.ndigits-1, u.digit, nd-1, result.digit, v );
+#endif
 
   return result;
 }
@@ -991,7 +995,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
     for (int i = right_digit; i <= left_digit; ++i)
         d[i - right_digit] = u->digit[i];
@@ -1120,7 +1124,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-  ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
   // Getting the range on the 2's complement representation.
   {
@@ -1548,7 +1552,7 @@ sc_signed_subref::operator = ( double v )
     int nb = m_left - m_right + 1;
     int nd = DIV_CEIL(nb);
 
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
     if (v < 0)
 	v = -v;

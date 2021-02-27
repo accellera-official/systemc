@@ -101,7 +101,6 @@ class sc_concat_bool;
 } // namespace sc_dt
 
 namespace sc_core {
-extern sc_byte_heap SC_API sc_temp_heap; // Temporary storage.
 
 // explicit template instantiations
 SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concatref>;
@@ -258,8 +257,7 @@ public:
             result_p->nbits = result_p->num_bits(m_len);
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
 	    if ( result_p->ndigits > SC_SMALL_VEC_DIGITS ) {
-		result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
-		    sizeof(sc_digit)*result_p->ndigits );
+		result_p->digit = sc_temporary_digits.allocate( result_p->ndigits );
 	    }
 	    else {
 	        result_p->digit = result_p->small_vec;

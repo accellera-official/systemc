@@ -698,153 +698,91 @@ is_bad_double(double v)
 		         "v is not finite - NaN or Inf" );
 }
 
-// +----------------------------------------------------------------------------
-// | Big Temporary Buffer Support.
-// |
-// | For efficiency rather than allocating temporary buffers in code like
-// | the support for sc_signed and sc_unsigned a large temporary buffer is
-// | available.
-// |
-// | Notes:
-// |   (1) If the static large buffers are already in use a warning message will
-// |       be be issued and a dynamically allocated buffer will be provided.
-// |   (2) When sc_release_big_temp() is called supplying a buffer that is
-// |       not one of the static large buffers the buffer will be deleted.
-// |   (3) The actual storage is defined in sc_nbutils.cpp.
-// |   (4) If the situation in (1) occurs with any frequency then changing the 
-// |       signature of sc_get_big_temp() to provide a size, to allow a smaller
-// |       buffer to be dynamically allocated, would seem appropriate. At 
-// |       present we don't ever get to the pointer where we need to dynamically
-// |       allocate a buffer.
-// +----------------------------------------------------------------------------
-class ScBigTemp
-{
+//------------------------------------------------------------------------------
+// sc_digit_heap - CLASS MANAGING A TEMPORARY HEAP OF BYTES
+//
+// This facility implements a heap of temporary byte allocations. Once an 
+// request has been allocated it is not freed. However the entire heap 
+// wraps and the storage is reused. This means that no allocations should
+// be assumed as permanent. Allocations are double-word aligned. This is
+// raw storage, so objects which contain virtual methods cannot be allocated
+// with this object. See the sc_vpool object for that type of storage 
+// allocation.
+//
+// char* allocate( int size )
+//   This method returns a pointer to block of size bytes. The block
+//   returned is the next available one in the heap. If the current heap
+//   cannot fullfil the request it will be rewound and storage allocated from
+//   its start. All allocations start on an 8-byte boundary.
+//       size = number of bytes to be allocated.
+//
+// void initialize( int heap_size=0x100000 )
+//   This method allocates the storage to be managed. If there is already
+//   a block of storage under management it is freed. If no argument is
+//   provided for the heap size, a megabyte will be allocated.
+//       heap_size = number of bytes to allocate for the heap.
+//
+// unsigned int length()
+//   This method returns the size of this object's heap in bytes.
+//
+// sc_digit_heap()
+//   This is the non-initialized object instance constructor. It does not 
+//   allocate the heap storage, that is done by the initialize() method.
+//
+// sc_digit_heap(int)
+//   This is the initializing object instance constructor. It does allocates
+//   a heap of the specified number of bytes.
+//       heap_size = number of bytes to allocate for the heap.
+//------------------------------------------------------------------------------
+class SC_API sc_digit_heap {
   public:
-    enum { BufferCount = 4, BufferSize = 32768 };
-  public:
-    ScBigTemp()
+    sc_digit*  m_bgn_p;  // Beginning of heap storage.
+    sc_digit*  m_end_p;  // End of heap storage.
+    sc_digit*  m_next_p; // Next heap location to be allocated.
+
+    inline sc_digit* allocate( size_t digits_n )
     {
-        for ( int buffer_i = 0; buffer_i < BufferCount; ++buffer_i ) {
-	    if ( false == buffers_in_use[buffer_i] ) {
-	        m_p = buffers[buffer_i];
-		m_buffer_i = buffer_i;
-		buffers_in_use[buffer_i] = true;
-		return;
-	    }
-	}
-	m_p = new sc_digit[BufferSize];
-	m_buffer_i = -1;
-	std::cerr << "Allocated big buffer" << std::endl;
+        sc_digit*   result_p;
+        result_p = m_next_p;
+        m_next_p += digits_n;
+        if ( m_next_p >= m_end_p )
+        {
+            result_p = m_bgn_p;
+            m_next_p = m_bgn_p + digits_n;
+        }
+        return result_p; 
     }
 
-    ~ScBigTemp()
+    inline void initialize( size_t heap_size=0x100000 )
     {
-        if ( m_buffer_i < 0 ) {
-	    delete [] m_p;
-	}
-	else {
-	    buffers_in_use[m_buffer_i] = false;
-	}
+        delete [] m_bgn_p;
+        m_bgn_p = new sc_digit[heap_size];
+        m_end_p = &m_bgn_p[heap_size];
+        m_next_p = m_bgn_p;
     }
 
-    operator sc_digit* ()
+    inline size_t length()
     {
-        return m_p;
+	return (size_t)(m_end_p - m_bgn_p);
     }
 
-  protected:
-    int       m_buffer_i; // buffer m_p points to, or -1.
-    sc_digit* m_p;        // pointer to allocated buffer.
+    inline sc_digit_heap() : m_bgn_p(0), m_end_p(0), m_next_p(0)
+    {
+    }
 
-  protected:
-    static sc_digit buffers[BufferCount][BufferSize];
-    static bool     buffers_in_use[BufferCount];
+    inline sc_digit_heap( size_t heap_size ) : m_bgn_p(0), m_end_p(0), m_next_p(0)
+    {
+	initialize( heap_size );
+    }
+
+    inline ~sc_digit_heap()
+    {
+	    delete [] m_bgn_p;
+    }
+
 };
 
-#if 0
-#define SC_BIG_TEMP_SIZE 32768
-
-extern sc_digit sc_big_temp1[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-extern bool     sc_big_temp1_in_use;            // true if sc_big_temp is in use
-extern sc_digit sc_big_temp2[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-extern bool     sc_big_temp2_in_use;            // true if sc_big_temp is in use
-extern sc_digit sc_big_temp3[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-extern bool     sc_big_temp3_in_use;            // true if sc_big_temp is in use
-extern sc_digit sc_big_temp4[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-extern bool     sc_big_temp4_in_use;            // true if sc_big_temp is in use
-
-inline sc_digit* sc_get_big_temp()
-{
-    if ( !sc_big_temp1_in_use ) {
-        sc_big_temp1_in_use = true;
-        return sc_big_temp1;
-    }
-    else if ( !sc_big_temp2_in_use ) {
-        sc_big_temp2_in_use = true;
-        return sc_big_temp2;
-    }
-    else if ( !sc_big_temp3_in_use ) {
-        sc_big_temp3_in_use = true;
-        return sc_big_temp3;
-    }
-    else if ( !sc_big_temp4_in_use ) {
-        sc_big_temp4_in_use = true;
-        return sc_big_temp4;
-    }
-    else {
-        std::cerr << "out of big temp buffers!!!"
-                  << std::endl;
-        return new sc_digit[SC_BIG_TEMP_SIZE];
-    }
-}
-
-inline void sc_release_big_temp( sc_digit* release_p )
-{
-    if ( release_p == sc_big_temp1 ) {
-        if ( sc_big_temp1_in_use == false ) {
-            std::cerr << "Call to sc_release_big_temp on temp buffer 1 "
-                      << "but it has not been allocated!!!"
-                      << std::endl;
-	}
-        else {
-            sc_big_temp1_in_use = false;
-        }
-    }
-    else if ( release_p == sc_big_temp2 ) {
-        if ( sc_big_temp2_in_use == false ) {
-            std::cerr << "Call to sc_release_big_temp on temp buffer 2 "
-                      << "but it has not been allocated!!!"
-                      << std::endl;
-	}
-        else {
-            sc_big_temp2_in_use = false;
-        }
-    }
-    else if ( release_p == sc_big_temp3 ) {
-        if ( sc_big_temp3_in_use == false ) {
-            std::cerr << "Call to sc_release_big_temp on temp buffer 3 "
-                      << "but it has not been allocated!!!"
-                      << std::endl;
-	}
-        else {
-            sc_big_temp3_in_use = false;
-        }
-    }
-    else if ( release_p == sc_big_temp4 ) {
-        if ( sc_big_temp4_in_use == false ) {
-            std::cerr << "Call to sc_release_big_temp on temp buffer 4 "
-                      << "but it has not been allocated!!!"
-                      << std::endl;
-	}
-        else {
-            sc_big_temp4_in_use = false;
-        }
-    }
-    else {
-        delete release_p;
-    }
-}
-#endif
+extern sc_digit_heap SC_API sc_temporary_digits;
 
 } // namespace sc_dt
 

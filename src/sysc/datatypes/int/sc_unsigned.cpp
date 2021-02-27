@@ -541,7 +541,7 @@ compare_unsigned(small_type us,
 
     int nd = (us == SC_NEG ? und : vnd);
 
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
     if (us == SC_NEG) {
 
@@ -576,7 +576,7 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
 
   const sc_digit *digit_or_d;
 
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(buf_ndigits);
 
     digit_or_d = digit;
 
@@ -1041,7 +1041,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
     for (int i = right_digit; i <= left_digit; ++i)
         d[i - right_digit] = u->digit[i];
@@ -1170,7 +1170,7 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-  ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
   // Getting the range on the 2's complement representation.
   {
@@ -1600,7 +1600,7 @@ sc_unsigned_subref::operator = ( double v )
     int nb = m_left - m_right + 1;
     int nd = DIV_CEIL(nb);
 
-    ScBigTemp d; // sc_digit *d = sc_get_big_temp();
+    sc_digit* d = sc_temporary_digits.allocate(nd);
 
     if (v < 0)
 	v = -v;

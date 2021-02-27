@@ -408,8 +408,7 @@ sc_signed::to_double() const
 
     double v = 0.0;
     if ( 0 > (int)digit[hod]  ) {
-          ScBigTemp temp;
-	  sc_digit* to_p = (sc_digit*)temp;
+	  sc_digit* to_p = sc_temporary_digits.allocate(ndigits);
 	  vector_copy( ndigits, digit, to_p );
 	  vector_twos_complement( hod, to_p );
 	  for ( ; hod >= 0; --hod ) {

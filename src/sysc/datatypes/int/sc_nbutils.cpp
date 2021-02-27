@@ -73,22 +73,15 @@ namespace sc_dt
 //
 // ----------------------------------------------------------------------------
 
+#if 0
 sc_digit ScBigTemp::buffers[ScBigTemp::BufferCount][ScBigTemp::BufferSize];
 bool ScBigTemp::buffers_in_use[ScBigTemp::BufferCount] = {
     false, false, false, false
 };
-
-#if 0
-sc_digit sc_big_temp1[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-sc_digit sc_big_temp2[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-sc_digit sc_big_temp3[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-sc_digit sc_big_temp4[SC_BIG_TEMP_SIZE]; // big temporary buffer.
-
-bool     sc_big_temp1_in_use=false;      // true if sc_big_temp is in use.
-bool     sc_big_temp2_in_use=false;      // true if sc_big_temp is in use.
-bool     sc_big_temp3_in_use=false;      // true if sc_big_temp is in use.
-bool     sc_big_temp4_in_use=false;      // true if sc_big_temp is in use.
 #endif
+
+sc_digit_heap sc_temporary_digits(0x100000);
+
 
 // ----------------------------------------------------------------------------
 //  SECTION: General utility functions.
