@@ -583,64 +583,10 @@ bool
 sc_signed::sign() const
 {
     //@@@@#### CHECK THIS
-    return ((digit[ndigits - 1] & one_and_zeros(bit_ord(nbits - 1))) != 0);
+    return ((digit[ndigits - 1] & one_and_zeros(SC_BIT_INDEX(nbits - 1))) != 0);
 }
 
 // The rest of the utils in this section are included from sc_nbcommon.cpp.
-
-
-// ----------------------------------------------------------------------------
-//  SECTION: Private members.
-// ----------------------------------------------------------------------------
-
-// The private members in this section are included from sc_nbcommon.cpp.
-
-#define CLASS_TYPE sc_signed
-#define CLASS_TYPE_STR "sc_signed"
-
-#define ADD_HELPER add_signed_friend
-#define SUB_HELPER sub_signed_friend
-#define MUL_HELPER mul_signed_friend
-#define DIV_HELPER div_signed_friend
-#define MOD_HELPER mod_signed_friend
-#define AND_HELPER and_signed_friend
-#define  OR_HELPER  or_signed_friend
-#define XOR_HELPER xor_signed_friend
-
-// REMOVE #include "sc_nbfriends.inc"
-
-#undef  SC_UNSIGNED
-#define SC_SIGNED
-#define IF_SC_SIGNED              1  // 1 = sc_signed
-#define CLASS_TYPE_SUBREF         sc_signed_subref_r
-#define OTHER_CLASS_TYPE          sc_unsigned
-#define OTHER_CLASS_TYPE_SUBREF   sc_unsigned_subref_r
-
-#define MUL_ON_HELPER mul_on_help_signed
-#define DIV_ON_HELPER div_on_help_signed
-#define MOD_ON_HELPER mod_on_help_signed
-
-#undef MOD_ON_HELPER
-#undef DIV_ON_HELPER
-#undef MUL_ON_HELPER
-
-#undef OTHER_CLASS_TYPE_SUBREF
-#undef OTHER_CLASS_TYPE
-#undef CLASS_TYPE_SUBREF
-#undef IF_SC_SIGNED
-#undef SC_SIGNED
-
-#undef XOR_HELPER
-#undef  OR_HELPER
-#undef AND_HELPER
-#undef MOD_HELPER
-#undef DIV_HELPER
-#undef MUL_HELPER
-#undef SUB_HELPER
-#undef ADD_HELPER
-
-#undef CLASS_TYPE
-#undef CLASS_TYPE_STR
 
 
 // ----------------------------------------------------------------------------
@@ -734,9 +680,9 @@ operator<<(const sc_signed& u, unsigned long v)
   sc_signed result(nb, false);
 
 #if 0
-  vector_copy( DIV_CEIL(u.nbits), u.digit, result.digit );
+  vector_copy( nd, u.digit, result.digit );
 
-  vector_shift_left( nd, result.digit, v );
+  vector_shift_left( u.get_digits_n(), result.digit, v );
 #else
   vector_shift_left( u.ndigits-1, u.digit, nd-1, result.digit, v );
 #endif
@@ -761,7 +707,11 @@ sc_signed::operator<<=(unsigned long v)
   if (v == 0)
     return *this;
 
+  #if 1
+  vector_shift_left(ndigits, digit, v);
+  #else
   vec_shift_left(ndigits, digit, v);
+  #endif
   adjust_hod();
   return *this;
 }
@@ -901,31 +851,6 @@ sc_signed::operator>>=(unsigned long v)
 //  SECTION: Private members.
 // ----------------------------------------------------------------------------
 
-
-// Create a signed number with (s, nb, nd, d) as its attributes (as
-// defined in class sc_signed). If alloc is set, delete d.
-sc_signed::sc_signed(int nb, int nd, sc_digit *d,
-                       bool alloc) :
-    sc_value_base(), nbits(num_bits(nb)), ndigits(), digit()
-{
-  ndigits = DIV_CEIL(nbits);
-
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
-	digit = new sc_digit[ndigits];
-	SC_FREE_DIGIT(true)
-    } else {
-	digit = small_vec;
-	SC_FREE_DIGIT(false)
-    }
-
-  if (ndigits <= nd)
-    vec_copy(ndigits, digit, d);
-  else
-    vec_copy_and_zero(ndigits-1, digit, nd-1, d);
-    //vec_copy_and_zero(ndigits, digit, nd, d);
-
-}
-
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type sc_signed. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
@@ -1003,7 +928,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_signed::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
 
     if (! reversed) {
-      vec_copy(sc_min(nd, ndigits), digit, d);
+      vector_copy(sc_min(nd, ndigits), digit, d);
 
     }
     else {
@@ -1021,7 +946,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
@@ -1139,7 +1064,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
   vec_zero(ndigits, digit);
 
   if (! reversed)
-    vec_copy(sc_min(nd, ndigits), digit, d);
+    vector_copy(sc_min(nd, ndigits), digit, d);
 
   else {
 
@@ -1156,7 +1081,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
