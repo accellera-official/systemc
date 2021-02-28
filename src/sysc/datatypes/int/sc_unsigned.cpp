@@ -499,72 +499,6 @@ operator+(const sc_unsigned& u)
 //  SECTION: Friends
 // ----------------------------------------------------------------------------
 
-// Compare u and v as unsigned and return r
-//  r = 0 if u == v
-//  r < 0 if u < v
-//  r > 0 if u > v
-
-int
-compare_unsigned(small_type us,
-                 int unb, int und, const sc_digit *ud,
-                 small_type vs,
-                 int vnb, int vnd, const sc_digit *vd,
-                 small_type if_u_signed,
-                 small_type if_v_signed)
-{
-
-  if (us == vs) {
-
-    if (us == SC_ZERO)
-      return 0;
-
-    else {
-
-      int cmp_res = vec_skip_and_cmp(und, ud, vnd, vd);
-
-      if (us == SC_POS)
-        return cmp_res;
-      else
-        return -cmp_res;
-
-    }
-  }
-  else {
-
-    if (us == SC_ZERO)
-      return -vs;
-
-    if (vs == SC_ZERO)
-      return us;
-
-    int cmp_res;
-
-    int nd = (us == SC_NEG ? und : vnd);
-
-    sc_digit* d = sc_temporary_digits.allocate(nd);
-
-    if (us == SC_NEG) {
-
-      vec_copy(nd, d, ud);
-      vec_complement(nd, d);
-      trim(if_u_signed, unb, nd, d);
-      cmp_res = vec_skip_and_cmp(nd, d, vnd, vd);
-
-    }
-    else {
-
-      vec_copy(nd, d, vd);
-      vec_complement(nd, d);
-      trim(if_v_signed, vnb, nd, d);
-      cmp_res = vec_skip_and_cmp(und, ud, nd, d);
-
-    }
-
-    return cmp_res;
-
-  }
-}
-
 // Get a packed bit representation of the number.
 void
 sc_unsigned::get_packed_rep(sc_digit *buf) const
@@ -587,7 +521,7 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
 
   for (int i = length() - 1; i >= 0; --i) {
 
-    if ((digit_or_d[digit_ord(i)] & one_and_zeros(bit_ord(i))) != 0) // Test.
+    if ((digit_or_d[SC_DIGIT_INDEX(i)] & one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
 
       buf[i / BITS_PER_DIGIT_TYPE] |=
         one_and_zeros(SC_BIT_INDEX(i)); // Set.
@@ -615,11 +549,11 @@ sc_unsigned::set_packed_rep(sc_digit *buf)
     if ((buf[i / BITS_PER_DIGIT_TYPE] &
          one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
 
-      digit[digit_ord(i)] |= one_and_zeros(bit_ord(i));     // Set.
+      digit[SC_DIGIT_INDEX(i)] |= one_and_zeros(SC_BIT_INDEX(i));     // Set.
 
     else
 
-      digit[digit_ord(i)] &= ~(one_and_zeros(bit_ord(i)));  // Clear
+      digit[SC_DIGIT_INDEX(i)] &= ~(one_and_zeros(SC_BIT_INDEX(i)));  // Clear
 
   }
 
@@ -638,58 +572,6 @@ sc_unsigned::iszero() const
     }
     return true;
 }
-
-// ----------------------------------------------------------------------------
-//  SECTION: Private members.
-// ----------------------------------------------------------------------------
-
-// The private members in this section are included from
-// sc_nbcommon.cpp.
-
-#define CLASS_TYPE sc_unsigned
-#define CLASS_TYPE_STR "sc_unsigned"
-
-#define ADD_HELPER add_unsigned_friend
-#define SUB_HELPER sub_unsigned_friend
-#define MUL_HELPER mul_unsigned_friend
-#define DIV_HELPER div_unsigned_friend
-#define MOD_HELPER mod_unsigned_friend
-#define AND_HELPER and_unsigned_friend
-#define  OR_HELPER  or_unsigned_friend
-#define XOR_HELPER xor_unsigned_friend
-
-#undef  SC_SIGNED
-#define SC_UNSIGNED
-#define IF_SC_SIGNED              0  // 0 = sc_unsigned
-#define CLASS_TYPE_SUBREF         sc_unsigned_subref_r
-#define OTHER_CLASS_TYPE          sc_signed
-#define OTHER_CLASS_TYPE_SUBREF   sc_signed_subref_r
-
-#define MUL_ON_HELPER mul_on_help_unsigned
-#define DIV_ON_HELPER div_on_help_unsigned
-#define MOD_ON_HELPER mod_on_help_unsigned
-
-#undef MOD_ON_HELPER
-#undef DIV_ON_HELPER
-#undef MUL_ON_HELPER
-
-#undef OTHER_CLASS_TYPE_SUBREF
-#undef OTHER_CLASS_TYPE
-#undef CLASS_TYPE_SUBREF
-#undef IF_SC_SIGNED
-#undef SC_UNSIGNED
-
-#undef XOR_HELPER
-#undef  OR_HELPER
-#undef AND_HELPER
-#undef MOD_HELPER
-#undef DIV_HELPER
-#undef MUL_HELPER
-#undef SUB_HELPER
-#undef ADD_HELPER
-
-#undef CLASS_TYPE
-#undef CLASS_TYPE_STR
 
 // ----------------------------------------------------------------------------
 //  SECTION: Input and output operators
@@ -774,7 +656,8 @@ operator<<(const sc_unsigned& u, unsigned long v)
   int nd = DIV_CEIL(nb);
   sc_unsigned result(nb, false);
 
-  vector_copy( DIV_CEIL(u.nbits), u.digit, result.digit );
+  // @@@@@@@@ Other form of shift left?
+  vector_copy( u.get_digits_n(), u.digit, result.digit );
 
   vector_shift_left( nd, result.digit, v );
 
@@ -800,7 +683,7 @@ sc_unsigned::operator<<=(unsigned long v)
   if (v == 0)
     return *this;
 
-  vec_shift_left(ndigits, digit, v);
+  vector_shift_left( ndigits, digit, v );
   adjust_hod();
 
   return *this;
@@ -947,31 +830,6 @@ sc_unsigned::operator>>=(unsigned long v)
 //  SECTION: Private members.
 // ----------------------------------------------------------------------------
 
-
-// Create a signed number with (s, nb, nd, d) as its attributes (as
-// defined in class sc_unsigned). If alloc is set, delete d.
-sc_unsigned::sc_unsigned(int nb, int nd, sc_digit *d,
-                       bool alloc) :
-    sc_value_base(), nbits(num_bits(nb)), ndigits(), digit()
-{
-  ndigits = DIV_CEIL(nbits);
-
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
-	digit = new sc_digit[ndigits];
-	SC_FREE_DIGIT(true)
-    } else {
-	digit = small_vec;
-	SC_FREE_DIGIT(false)
-    }
-
-  if (ndigits <= nd)
-    vec_copy(ndigits, digit, d);
-  else
-    vec_copy_and_zero(ndigits-1, digit, nd-1, d);
-    //vec_copy_and_zero(ndigits, digit, nd, d);
-
-}
-
 // This constructor is mainly used in finding a "range" of bits from a
 // number of type sc_unsigned. The function range(l, r) can have
 // arbitrary precedence between l and r. If l is smaller than r, then
@@ -1049,7 +907,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
     vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_unsigned::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
 
     if (! reversed) {
-      vec_copy(sc_min(nd, ndigits), digit, d);
+      vector_copy(sc_min(nd, ndigits), digit, d);
 
     }
     else {
@@ -1067,7 +925,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
@@ -1185,7 +1043,7 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
   vec_zero(ndigits, digit);
 
   if (! reversed)
-    vec_copy(sc_min(nd, ndigits), digit, d);
+    vector_copy(sc_min(nd, ndigits), digit, d);
 
   else {
 
@@ -1202,7 +1060,7 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
 
     // Deletions will start from the left end and move one position
     // after each deletion.
-    sc_digit del_mask = one_and_zeros(bit_ord(l - r));
+    sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
       vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
