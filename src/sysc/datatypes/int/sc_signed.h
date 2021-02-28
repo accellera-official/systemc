@@ -135,79 +135,6 @@ class sc_fxnum_fast;
 #include "sc_signed_friends.h"
 #undef SCFP
 
-
-// Helper function declarations
-sc_signed add_signed_friend(small_type us,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     small_type vs,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed sub_signed_friend(small_type us,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     small_type vs,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed mul_signed_friend(small_type s,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed div_signed_friend(small_type s,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed mod_signed_friend(small_type us,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed and_signed_friend(small_type us,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     small_type vs,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-sc_signed or_signed_friend(small_type us,
-                                    int unb,
-                                    int und,
-                                    const sc_digit *ud,
-                                    small_type vs,
-                                    int vnb,
-                                    int vnd,
-                                    const sc_digit *vd);
-
-sc_signed xor_signed_friend(small_type us,
-                                     int unb,
-                                     int und,
-                                     const sc_digit *ud,
-                                     small_type vs,
-                                     int vnb,
-                                     int vnd,
-                                     const sc_digit *vd);
-
-
-
   // SHIFT OPERATORS:
 
   // LEFT SHIFT operators:
@@ -910,8 +837,8 @@ public:
       if (check_if_outside(i))
 	return;
 
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
       digit[digit_num] |= one_and_zeros(bit_num);
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
@@ -926,8 +853,8 @@ public:
       if (check_if_outside(i))
 	return;
 
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
       digit[digit_num] &= ~(one_and_zeros(bit_num));
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
@@ -948,8 +875,8 @@ public:
 	else
 	  return 0;
       }
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
 	return ((digit[digit_num] & one_and_zeros(bit_num)) != 0);
     }
@@ -1304,9 +1231,6 @@ private:
   sc_signed(const sc_signed&   v, small_type s);
   sc_signed(const sc_unsigned& v, small_type s);
 
-  // Create a signed number with the given attributes.
-  sc_signed(int nb, int nd, sc_digit *d, bool alloc = true);
-
   // Create an unsigned number using the bits u[l..r].
   sc_signed(const sc_signed* u, int l, int r);
   sc_signed(const sc_unsigned* u, int l, int r);
@@ -1320,14 +1244,8 @@ private:
 
   bool check_if_outside(int bit_num) const;
 
-  void copy_digits(int nb, int nd, const sc_digit *d)
-    {}
-
   void makezero()
-    { make_zero(ndigits, digit); }
-
-  // Conversion functions between 2's complement (2C) and
-  // sign-magnitude (SM):
+    { for ( int digit_i = 0; digit_i < ndigits; ++ digit_i ) { digit[digit_i] = 0; } }
 
 };
 

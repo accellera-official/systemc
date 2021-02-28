@@ -58,7 +58,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned& v) :
 	SC_FREE_DIGIT(false)
     }
 
-  vec_copy(ndigits, digit, v.digit);
+  vector_copy( ndigits, v.digit, digit);
 }
 
 
@@ -75,7 +75,8 @@ sc_unsigned::sc_unsigned(const sc_signed& v) :
 	SC_FREE_DIGIT(false)
     }
 
-  copy_digits(v.nbits, v.ndigits, v.digit);
+  vector_copy( v.ndigits, v.digit, digit );
+  adjust_hod();
 }
 
 inline
@@ -240,9 +241,7 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
 inline const sc_unsigned&
 sc_unsigned::operator = (const sc_unsigned& from)
 {
-    sc_digit* to_p = get_digits();
-    int       to_hod = get_hod();
-    vector_copy( from.get_hod(), from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), get_digits_n(), get_digits() );
     adjust_hod();
     return *this;
 }
@@ -250,9 +249,7 @@ sc_unsigned::operator = (const sc_unsigned& from)
 inline const sc_unsigned&
 sc_unsigned::operator = (const sc_signed& from)
 {
-    sc_digit* to_p = get_digits();
-    const int to_hod = get_hod();
-    vector_copy( from.get_hod(), from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), get_digits_n(), get_digits() );
     adjust_hod();
     return *this;
 }
@@ -421,57 +418,6 @@ sc_unsigned::to_double() const
 
     return v;
 }
-
-#if 0
-// Set the ith bit with 1.
-inline
-void
-sc_unsigned::set(int i)
-{
-  if (check_if_outside(i))
-    return;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-  digit[digit_num] |= one_and_zeros(bit_num);
-  digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
-}
-
-
-// Set the ith bit with 0, i.e., clear the ith bit.
-inline
-void
-sc_unsigned::clear(int i)
-{
-  if (check_if_outside(i))
-    return;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-  digit[digit_num] &= ~(one_and_zeros(bit_num));
-  digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
-}
-
-// Return true if the bit i is 1, false otherwise. If i is outside the
-// bounds, return 1/0 according to the sign of the number by assuming
-// that the number has infinite length.
-
-inline
-bool
-sc_unsigned::test(int i) const
-{
-  if (check_if_outside(i))
-    return 0;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-    return ((digit[digit_num] & one_and_zeros(bit_num)) != 0);
-}
-#endif
-
 
 } // namespace sc_dt
 

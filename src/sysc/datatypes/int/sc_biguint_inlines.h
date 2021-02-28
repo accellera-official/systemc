@@ -52,7 +52,7 @@ sc_biguint<W>::operator = (const sc_biguint<WO>& from)
         vector_copy( DIGITS_N, from.get_digits(), get_digits() );
     }
     else {
-        vector_copy(sc_biguint<WO>::HOD, from.get_digits(), HOD, get_digits() );
+        vector_copy(sc_biguint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, get_digits() );
         adjust_hod();
     }
     return *this;
@@ -64,7 +64,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_bigint<WO>& from)
 {
     sc_digit* to_p = get_digits();
-    vector_copy( WO/BITS_PER_DIGIT, from.get_digits(), HOD, to_p );
+    vector_copy( sc_biguint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, to_p );
     adjust_hod();
     return *this;
 }
@@ -74,8 +74,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_unsigned& from)
 {
     sc_digit* to_p = get_digits();
-    int       to_hod = get_hod();
-    vector_copy( from.get_hod(), from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), DIGITS_N, to_p );
     adjust_hod();
     return *this;
 }
@@ -96,9 +95,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_signed& from)
 {
     sc_digit* to_p = get_digits();
-    const int to_hod = get_hod();
-    const int from_hod = from.get_hod();
-    vector_copy( from_hod, from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), DIGITS_N, to_p );
     adjust_hod();
     return *this;
 }
