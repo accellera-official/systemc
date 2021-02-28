@@ -736,31 +736,31 @@ vector_compare( const int       left_hod,
 // | extension will be ones, otherwise it will be zeros.
 // |
 // | Arguments:
-// |     from_hod = index of the high order 'from' digit.
-// |     from_p   = vector of digits to be copied from.
-// |     to_hod   = index of the high order 'to' digit.
-// |     to_p     = vector of digits to be copied to.
+// |     from_n = length  of 'from_p'.
+// |     from_p = vector of digits to be copied from.
+// |     to_n   = length of 'to_p'.
+// |     to_p   = vector of digits to be copied to.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_copy( const int       from_hod,
+vector_copy( const int       from_n,
 	     const sc_digit* from_p,
-	     const int       to_hod,
+	     const int       to_n,
 	     sc_digit*       to_p )
 {
     int digit_i; // digit now accessing.
 
-    if ( from_hod < to_hod ) {
-        for ( digit_i = 0; digit_i <= from_hod; ++digit_i ) {
+    if ( from_n < to_n ) {
+        for ( digit_i = 0; digit_i < from_n; ++digit_i ) {
 	    to_p[digit_i] = from_p[digit_i];
 	}
-	sc_digit fill = 0 > (int)from_p[from_hod] ? -1 : 0;
-        for ( ; digit_i <= to_hod; ++digit_i ) {
+	sc_digit fill = 0 > (int)from_p[from_n-1] ? -1 : 0;
+        for ( ; digit_i < to_n; ++digit_i ) {
 	    to_p[digit_i] = fill;
 	}
     }
     else {
-        for ( digit_i = 0; digit_i <= to_hod; ++digit_i ) {
+        for ( digit_i = 0; digit_i < to_n; ++digit_i ) {
 	    to_p[digit_i] = from_p[digit_i];
 	}
     }
@@ -1750,15 +1750,15 @@ vector_shift_left( const int target_n,
     sc_digit* target_iter_p = target_p;
     sc_digit* target_end_p = target_iter_p + target_n;
 
-    int shift_right_n = BITS_PER_DIGIT - shift_remaining;
-    sc_digit mask = one_and_ones(shift_right_n);
+    int carry_shift = BITS_PER_DIGIT - shift_remaining;
+    sc_digit mask = one_and_ones(carry_shift);
 
     sc_carry carry = 0;
 
     while (target_iter_p < target_end_p) {
       sc_digit target_value = (*target_iter_p);
       (*target_iter_p++) = (((target_value & mask) << shift_remaining) | carry);
-      carry = target_value >> shift_right_n;
+      carry = target_value >> carry_shift;
     }
 }
 
