@@ -147,64 +147,6 @@ fsm_move(char c, small_type &b, small_type &s, small_type &state)
 }  
 
 
-// Get base b and sign s of the number in the char string v. Return a
-// pointer to the first char after the point where b and s are
-// determined or where the end of v is reached. The input string v has
-// to be null terminated.
-const char 
-*get_base_and_sign(const char *v, small_type &b, small_type &s)
-{
-
-#ifdef DEBUG_SYSTEMC
-  assert(v != NULL);
-#endif
-
-  const small_type STATE_START = 0;
-  const small_type STATE_FINISH = 3;
-
-  // Default sign = SC_POS, default base = 10.
-  s = SC_POS;
-  b = NB_DEFAULT_BASE;
-
-  small_type state = STATE_START;
-  small_type nskip = 0; // Skip that many chars.
-  const char *u = v;
-
-  while (*u) {
-    if (isspace(*u))  // Skip white space.
-      ++u;
-    else {
-      nskip += fsm_move(*u, b, s, state);
-      if (state == STATE_FINISH)
-        break;
-      else
-        ++u;
-    }
-  }
-
-#ifdef DEBUG_SYSTEMC
-  // Test to see if the above loop executed more than it should
-  // have. The max number of skipped chars is equal to the length of
-  // the longest format specifier, e.g., "-0x".
-  assert(nskip <= 3);
-#endif
-
-  v += nskip;
-
-  // Handles empty strings or strings without any digits after the
-  // base or base and sign specifier.
-  if (*v == '\0') { 
-      char msg[BUFSIZ];
-      std::sprintf( msg,
-	       "get_base_and_sign( const char* v, small_type&, small_type& ) : "
-	       "v = \"\" is not valid" );
-      SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
-  }
-
-  return v;
-
-}
-
 //------------------------------------------------------------------------------
 //"parse_binary_bits"
 //
@@ -519,69 +461,6 @@ void parse_hex_bits(
 // ----------------------------------------------------------------------------
 //  SECTION: Utility functions involving unsigned vectors.
 // ----------------------------------------------------------------------------
-
-// Set u <<= nsl.
-// If nsl is negative, it is ignored.
-void 
-vec_shift_left(int ulen, sc_digit *u, int nsl)
-{
-
-#ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  if (nsl <= 0)
-    return;
-
-  // Shift left whole digits if nsl is large enough.
-  if (nsl >= (int) BITS_PER_DIGIT) {
-
-    int nd;
-
-    if ( SC_BIT_INDEX(nsl) == 0 ) {
-      nd = SC_DIGIT_INDEX(nsl);
-      nsl = 0;
-    }
-    else {
-      nd = DIV_CEIL(nsl) - 1;
-      nsl -= nd * BITS_PER_DIGIT;
-    }
-
-    if (nd) {
-
-      // Shift left for nd digits.
-      for (int j = ulen - 1; j >= nd; --j)
-        u[j] = u[j - nd];
-      
-      vec_zero( sc_min( nd, ulen ), u );
-      
-    }
-
-    if (nsl == 0)
-      return;
-
-  }
-
-  // Shift left if nsl < BITS_PER_DIGIT.
-  sc_digit *uiter = u;
-  sc_digit *uend = uiter + ulen;
-
-  int nsr = BITS_PER_DIGIT - nsl;
-  sc_digit mask = one_and_ones(nsr);
-
-  sc_carry carry = 0;
-
-  while (uiter < uend) {
-    sc_digit uval = (*uiter);
-    (*uiter++) = (((uval & mask) << nsl) | carry);
-    carry = uval >> nsr;
-  }
-
-  if (uiter < uend)
-    (*uiter) = carry;
-
-}
-
 
 // Set u >>= nsr.
 // If nsr is negative, it is ignored.
