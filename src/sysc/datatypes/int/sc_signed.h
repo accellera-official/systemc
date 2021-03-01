@@ -100,6 +100,7 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 
 
@@ -1244,8 +1245,7 @@ private:
 
   bool check_if_outside(int bit_num) const;
 
-  void makezero()
-    { for ( int digit_i = 0; digit_i < ndigits; ++ digit_i ) { digit[digit_i] = 0; } }
+  void makezero() { vector_zero( 0, ndigits, digit ); }
 
 };
 
@@ -1619,7 +1619,7 @@ sc_signed::sc_signed( int nb, bool zero ) :
         SC_FREE_DIGIT(true)
     }
     if ( zero ) {
-        vec_zero(ndigits, digit);
+        makezero();
     }
 }
 
