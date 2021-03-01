@@ -191,7 +191,7 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 //                    the supplied number of bits.
 
 #if BITS_PER_DIGIT == 32
-#   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
+#   define SC_BIT_INDEX(BIT) ( ( (BIT)&std::numeric_limits<sc_digit>::digits-1) )
 #   define SC_DIGIT_INDEX(BIT_INDEX) ((BIT_INDEX)>>5)
 #   define SC_MASK_DIGIT(v) (v)
 #   define SC_DIGIT_COUNT(BIT_WIDTH) ((BIT_WIDTH+BITS_PER_DIGIT-1)/BITS_PER_DIGIT) 
