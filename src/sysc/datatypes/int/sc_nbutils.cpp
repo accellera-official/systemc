@@ -502,8 +502,9 @@ vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
           u[j] = fill;
       }
       else
-        vec_zero(ulen - sc_min( nd, ulen ), ulen, u);
-     
+	for ( int digit_i = ulen - sc_min( nd, ulen ); digit_i < ulen ; ++digit_i ) { 
+	    u[digit_i] = 0; 
+	}
     }
 
     if (nsr == 0)

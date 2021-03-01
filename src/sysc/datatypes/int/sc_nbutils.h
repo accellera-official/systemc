@@ -165,29 +165,6 @@ vec_skip_leading_zeros(int ulen, const sc_digit *u)
 
 }
 
-// Set u[i] = 0 where i = from ... (ulen - 1).
-inline
-void
-vec_zero(int from, int ulen, sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  for(int i = from; i < ulen; i++)
-    u[i] = 0;
-
-}
-
-// Set u[i] = 0 where i = 0 .. (ulen - 1).
-inline
-void
-vec_zero(int ulen, sc_digit *u)
-{
-  vec_zero(0, ulen, u);
-}
-
 // 2's-complement the digits in u.
 inline
 void
@@ -238,7 +215,7 @@ from_uint(int ulen, sc_digit *u, Type v)
     v >>= BITS_PER_DIGIT;
   }
 
-  vec_zero(i, ulen, u);
+  for ( int digit_i = i; digit_i < ulen; ++digit_i ) { u[digit_i] = 0; }
 
 }
 
