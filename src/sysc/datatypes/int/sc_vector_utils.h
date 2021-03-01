@@ -2603,6 +2603,23 @@ vector_xor_reduce( const sc_digit* target_p,
     return count & 1;
 }
 
+// +------------------------------------------------------------------------------------------------
+// |"vector_zero"
+// |
+// | This function sets a specified range of digits in the supplied vector to zero.
+// |
+// | Arguments:
+// |     from_i   = first digit to be zeroed.
+// |     to_i     = first digit NOT to be zeroed.
+// |     target_p = digit vector containing the digits to be zeroed..
+// +------------------------------------------------------------------------------------------------
+inline
+void
+vector_zero( int from_i, int to_i, sc_digit* target_p )
+{
+    for ( int digit_i = from_i; digit_i < to_i; ++digit_i ) { target_p[digit_i] = 0; }
+}
+
 #undef VEC_MIN
 #undef VEC_MAX
 
