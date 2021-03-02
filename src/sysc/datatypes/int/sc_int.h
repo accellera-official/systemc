@@ -126,12 +126,12 @@ public:
     template<int WO>
     sc_int( const sc_bigint<WO>& a )
         : sc_int_base( W )
-        { sc_int_base::operator = ( a.to_int() ); }
+        { sc_int_base::operator = ( a.to_int64() ); }
 
     template<int WO>
     sc_int( const sc_biguint<WO>& a )
         : sc_int_base( W )
-        { sc_int_base::operator = ( a.to_int() ); }
+        { sc_int_base::operator = ( a.to_int64() ); }
 
 #ifdef SC_INCLUDE_FX
 
