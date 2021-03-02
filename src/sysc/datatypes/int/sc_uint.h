@@ -122,12 +122,12 @@ public:
     template<int WO>
     sc_uint( const sc_bigint<WO>& a )
         : sc_uint_base( W )
-        { sc_uint_base::operator = ( a.to_uint() ); }
+        { sc_uint_base::operator = ( a.to_uint64() ); }
 
     template<int WO>
     sc_uint( const sc_biguint<WO>& a )
         : sc_uint_base( W )
-        { sc_uint_base::operator = ( a.to_uint() ); }
+        { sc_uint_base::operator = ( a.to_uint64() ); }
 
     sc_uint( const sc_signed& a )
 	: sc_uint_base( W )
