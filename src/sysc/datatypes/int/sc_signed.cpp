@@ -575,7 +575,10 @@ sc_signed::set_packed_rep(sc_digit *buf)
 bool
 sc_signed::iszero() const
 {
-    return check_for_zero(ndigits, digit);
+    for ( int digit_i = 0; digit_i < ndigits; ++digit_i ) {
+        if ( digit[digit_i] != 0 ) return false;
+    }
+    return true;
 }
 
 
@@ -840,7 +843,7 @@ sc_signed::operator>>=(unsigned long v)
     if (v == 0)
         return *this;
 
-    vec_shift_right(ndigits, digit, v, (int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(ndigits, digit, v, (int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
 
   return *this;
 }
@@ -925,7 +928,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     for (int i = right_digit; i <= left_digit; ++i)
         d[i - right_digit] = u->digit[i];
 
-    vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, (int)d[nd-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, (int)d[nd-1]<0 ? DIGIT_MASK:0);
 
     if (! reversed) {
       vector_copy(sc_min(nd, ndigits), digit, d);
@@ -949,7 +952,7 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
     sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
-      vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
+      vector_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
     }
 
@@ -965,12 +968,12 @@ sc_signed::sc_signed(const sc_signed* u, int l, int r) :
       del_mask = ins_mask;
 
       while (del_mask) {
-        vec_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
+        vector_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
         del_mask >>= 1;
       }
     }
 
-      vec_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 0);
+      vector_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
@@ -1056,7 +1059,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
 
-    vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, (int)d[nd-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, (int)d[nd-1]<0 ? DIGIT_MASK:0);
 
   }
 
@@ -1083,7 +1086,7 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
     sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
-      vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
+      vector_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
       del_mask >>= 1;
     }
 
@@ -1099,12 +1102,12 @@ sc_signed::sc_signed(const sc_unsigned* u, int l, int r) :
       del_mask = ins_mask;
 
       while (del_mask) {
-        vec_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
+        vector_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
         del_mask >>= 1;
       }
     }
 
-      vec_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 
+      vector_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 
                       (int)d[nd-1]<0 ? DIGIT_MASK:0);
 
 
