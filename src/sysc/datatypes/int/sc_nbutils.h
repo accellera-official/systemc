@@ -89,10 +89,6 @@ SC_API void parse_hex_bits(
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
-extern 
-SC_API void 
-vec_shift_right(int vlen, sc_digit *u, int nsr, sc_digit fill = 0);
-
 // ----------------------------------------------------------------------------
 //  Various utility functions. 
 // ----------------------------------------------------------------------------
@@ -121,70 +117,6 @@ one_and_zeros(int n)
 {
   return ((sc_carry) 1 << n);
 }
-
-// ----------------------------------------------------------------------------
-//  Functions to compare, zero, complement vector(s).
-// ----------------------------------------------------------------------------
-
-// Find the index of the first non-zero digit.
-// - ulen (before) = the number of digits in u.
-// - the returned value = the index of the first non-zero digit. 
-// A negative value of -1 indicates that every digit in u is zero.
-inline
-int
-vec_find_first_nonzero(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  while ((--ulen >= 0) && (! u[ulen]))
-    ;
-
-  return ulen;
-  
-}
-
-// Skip all the leading zero digits.  
-// - ulen (before) = the number of digits in u.
-// - the returned value = the number of non-zero digits in u.
-// - the returned value is non-negative.
-inline 
-int
-vec_skip_leading_zeros(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // assert((ulen <= 0) || (u != NULL));
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  return (1 + vec_find_first_nonzero(ulen, u));
-
-}
-
-// 2's-complement the digits in u.
-inline
-void
-vec_complement(int ulen, sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  sc_carry carry = 1;
-
-  for (int i = 0; i < ulen; ++i) {
-    carry += (~u[i] & DIGIT_MASK);
-    u[i] = carry & DIGIT_MASK;
-    carry >>= BITS_PER_DIGIT;
-  }
-  
-}
-
 
 // ----------------------------------------------------------------------------
 //  Functions to handle built-in types or signs.
@@ -273,29 +205,6 @@ div_by_zero(Type s)
   }
 }
 
-
-// ----------------------------------------------------------------------------
-//  Functions to check if a given vector is zero or make one.
-// ----------------------------------------------------------------------------
-
-// If u[i] is zero for every i = 0,..., ulen - 1, return true,
-// else return false.
-inline
-bool
-check_for_zero(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // assert(ulen >= 0);
-  assert((ulen > 0) && (u != NULL));
-#endif
-
-  if (vec_find_first_nonzero(ulen, u) < 0)
-    return true;
-
-  return false;
-
-}
 
 // ----------------------------------------------------------------------------
 //  Functions for both signed and unsigned numbers to convert sign-magnitude
