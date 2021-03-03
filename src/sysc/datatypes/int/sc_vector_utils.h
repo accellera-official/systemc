@@ -20,6 +20,7 @@
 #define SC_VECTOR_UTILS_H
 
 #include "sc_nbdefs.h"
+#include "sc_nbutils.h"
 
 namespace sc_dt {
 
@@ -1400,6 +1401,7 @@ vector_multiply( const int       longer_hod,
 
     // Set the next higher order digit to the signed product of the
     // operand's high order digits:
+    //
     // If there are further digits in the result fill the first with the
     // remaining accumulation. Then fill any remaining digits based on the
     // on the sign of the accumulation.
@@ -1606,7 +1608,7 @@ vector_shift_left( const int       from_hod,
 
     if ( shift_n < 0 ) {
 	std::cerr << "vector_shift_left: negative shift encountered" << shift_n << std::endl;
-        sc_assert(false);
+	sc_assert(shift_n >= 0);
         return;
     }
 
@@ -2058,16 +2060,16 @@ vector_subtract_shorter( const int       longer_hod,
 // | This inline function complements the value in the supplied vector.
 // |
 // | Arguments:
-// |     target_hod = index of the high order 'target_p' digit.
-// |     target_p   = vector of digits to be complemented.
+// |     target_n = number of digits in 'target_p'
+// |     target_p = vector of digits to be complemented.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_twos_complement( const int target_hod,
+vector_twos_complement( const int target_n,
 	                sc_digit* target_p )
 {
     long long carry = 0;
-    for ( int digit_i = 0; digit_i <= target_hod; ++digit_i ) {
+    for ( int digit_i = 0; digit_i < target_n; ++digit_i ) {
         carry -= target_p[digit_i];
 	target_p[digit_i] = carry;
 	carry >>= BITS_PER_DIGIT;
@@ -2158,8 +2160,8 @@ vector_twos_complement( const int       source_hod,
 // |     denominator_p = vector of digits containing the denominator.
 // |     quotient_n    = number of digits in 'quotient_p' or zero.
 // |     quotient_p    = vector of digits to receive quotient of the divide.
-// |     remainder_n   = number of digits in remainder_p or zero.
-// |     remainder_p   = vector of digits to receive remainder of the divide.
+// |     remainder_n   = number of digits in remainder_p or zero if no remainder is desired.
+// |     remainder_p   = vector of digits to receive remainder of the divide, (NULL - none desired).
 // | Result:
 // |   true if the operation was successful, false if a divide by zero was
 // |   detected.
@@ -2178,12 +2180,15 @@ vector_divide( const int       numerator_n,
 {
     // Initialize the quotient to zero and the remainder to the numerator,
     // if their return is requested:
-
-    for( int quot_i=0; quot_i < quotient_n; ++quot_i) {
-        quotient_p[quot_i] = 0;
+    if ( 0 != quotient_n ) {
+	for( int quot_i=0; quot_i < quotient_n; ++quot_i) {
+	    quotient_p[quot_i] = 0;
+	}
     }
-    for( int remain_i=0; remain_i < remainder_n; ++remain_i) {
-        remainder_p[remain_i] = numerator_p[remain_i];
+    if ( 0 != remainder_n ) {
+	for( int remain_i=0; remain_i < remainder_n; ++remain_i) {
+	    remainder_p[remain_i] = numerator_p[remain_i];
+	}
     }
 
     // CONVERT THE OPERANDS TO NON-NEGATIVE VALUES:
@@ -2191,23 +2196,23 @@ vector_divide( const int       numerator_n,
     // If a complement is necessary use a temporary buffer, otherwise use
     // the vector that was passed in from the caller.
 
-    sc_digit denominator_complement[denominator_n];
     bool     negative_numerator = false;
     bool     negative = false;
-    sc_digit numerator_complement[numerator_n];
 
     if ( SN && ( 0 > (int)numerator_p[numerator_n-1]  ) ) {
+	sc_digit* numerator_complement_p = sc_temporary_digits.allocate(numerator_n+1);
         vector_twos_complement( numerator_n-1, numerator_p,
-	                        numerator_complement );
-	numerator_p = numerator_complement;
+	                        numerator_complement_p );
+	numerator_p = numerator_complement_p;
 	negative = true;
 	negative_numerator = true;
     }
 
     if ( SD && (0 > (int)denominator_p[denominator_n-1]) ) {
+	sc_digit* denominator_complement_p = sc_temporary_digits.allocate(denominator_n+1);
         vector_twos_complement( denominator_n-1, denominator_p,
-	                        denominator_complement );
-	denominator_p = denominator_complement;
+	                        denominator_complement_p );
+	denominator_p = denominator_complement_p;
 	negative = !negative;
     }
 
@@ -2262,12 +2267,12 @@ vector_divide( const int       numerator_n,
     // Copy the numerator into the remainder to start off the division process
     // and zero the extra high order radix32 digit of the remainder:
 
-    sc_digit remain_work[numerator_n+1]; // remainder working vector.
+    sc_digit* remain_work_p = sc_temporary_digits.allocate( numerator_n+10 ); 
 
     for (int remain_32_i = 0; remain_32_i <= numer_32_hod; ++remain_32_i ) {
-	remain_work[remain_32_i] = numerator_p[remain_32_i];
+	remain_work_p[remain_32_i] = numerator_p[remain_32_i];
     }
-    remain_work[numer_32_hod+1] = 0;
+    remain_work_p[numer_32_hod+1] = 0;
 
     // CALCULATE THE QUOTIENT AND REMAINDER:
     //
@@ -2300,16 +2305,16 @@ vector_divide( const int       numerator_n,
 	// result can be larger than the radix, so adjust it down by 1
 	// if necessary.
 
-	sc_digit low_order_bits = remain_32_i > 0 ? remain_work[remain_32_i-1] :
+	sc_digit low_order_bits = remain_32_i > 0 ? remain_work_p[remain_32_i-1] :
 						    (sc_digit) 0;
 	uint64 numer_value;
 	if ( remain_16_odd ) {
-            numer_value = ( (uint64)remain_work[remain_32_i+1] << 48 ) |
-	                  ( (uint64)remain_work[remain_32_i] << 16 ) |
+            numer_value = ( (uint64)remain_work_p[remain_32_i+1] << 48 ) |
+	                  ( (uint64)remain_work_p[remain_32_i] << 16 ) |
 			  ( low_order_bits >> 16 );
 	}
 	else {
-	    numer_value = ( (uint64)remain_work[remain_32_i] << 32 ) |
+	    numer_value = ( (uint64)remain_work_p[remain_32_i] << 32 ) |
 	                    low_order_bits;
 	}
 
@@ -2326,12 +2331,12 @@ vector_divide( const int       numerator_n,
 	uint64 quot_term = quot_guess << (quot_16_odd ? 16:0);
 
 	for ( int denom_32_i = 0; denom_32_i <= denom_32_hod; ++denom_32_i) {
-	    carry += remain_work[quot_32_i + denom_32_i];
+	    carry += remain_work_p[quot_32_i + denom_32_i];
 	    bool carry_was_minus = carry < 0;
 	    product = denominator_p[denom_32_i] * quot_term;
 	    bool product_hob_one = (product < 0);
 	    carry -= product;
-	    remain_work[quot_32_i + denom_32_i] = carry;
+	    remain_work_p[quot_32_i + denom_32_i] = carry;
 	    bool carry_is_minus = carry < 0;
 	    carry >>= 32;
 
@@ -2365,8 +2370,8 @@ vector_divide( const int       numerator_n,
 	// current carry to the remainder for that digit.
 
 	if ( quot_16_odd || denom_16_hod_odd ) {
-	    carry += remain_work[quot_32_i + denom_32_hod + 1];
-	    remain_work[quot_32_i + denom_32_hod + 1] = carry;
+	    carry += remain_work_p[quot_32_i + denom_32_hod + 1];
+	    remain_work_p[quot_32_i + denom_32_hod + 1] = carry;
 	}
 
 	// If the carry is negative we overshot by one in our approximation
@@ -2378,19 +2383,19 @@ vector_divide( const int       numerator_n,
 	    for(int restore_i = 0; restore_i <= denom_32_hod; ++restore_i) {
 		carry += (int64)denominator_p[restore_i] <<
 		                 (quot_16_odd ? 16:0);
-		carry += remain_work[quot_32_i + restore_i];
-		remain_work[quot_32_i + restore_i] = carry;
+		carry += remain_work_p[quot_32_i + restore_i];
+		remain_work_p[quot_32_i + restore_i] = carry;
 		carry >>= BITS_PER_DIGIT;
 	    }
 	    if ( quot_16_odd | denom_16_hod_odd ) {
-		remain_work[quot_32_i+denom_32_hod+1] += carry;
+		remain_work_p[quot_32_i+denom_32_hod+1] += carry;
 	    }
 	    quot_guess--;
 	}
 
-	// Assign the next quotient digit:
+	// Assign the next quotient digit, if we are returning it:
 
-	if( quotient_n && quot_32_i < quotient_n ) {
+	if( quotient_n && quot_32_i < quotient_n ) { 
 	    if(quot_16_odd) {
 		quotient_p[quot_32_i] = quot_guess << 16;
 	    }
@@ -2405,20 +2410,20 @@ vector_divide( const int       numerator_n,
     // (1) If the result is negative complement the quotient.
     // (2) If the numerator was negative complement the remainder.
 
-    if ( (SN || SD) && negative && quotient_n ) {
+    if ( (SN || SD) && negative && quotient_n ) { 
         vector_twos_complement( quotient_n, quotient_p );
     }
 
     if ( remainder_n) {
         int remain_n = VEC_MIN(remainder_n-1, numer_32_hod);
         for ( int remain_i = 0; remain_i <= remain_n; ++remain_i) {
-	    remainder_p[remain_i] = remain_work[remain_i];
+	    remainder_p[remain_i] = remain_work_p[remain_i];
 	}
         for (int remain_i = remain_n+1; remain_i < remainder_n; ++remain_i) {
 	    remainder_p[remain_i] = 0;
 	}
 	if ( SN && negative_numerator ) {
-	    vector_twos_complement( remainder_n-1, remainder_p );
+	    vector_twos_complement( remainder_n, remainder_p );
 	}
     }
     return true;
@@ -2601,6 +2606,23 @@ vector_xor_reduce( const sc_digit* target_p,
     count += byte_one_bits[ byte_p[3] ];
 
     return count & 1;
+}
+
+// +------------------------------------------------------------------------------------------------
+// |"vector_zero"
+// |
+// | This function sets a specified range of digits in the supplied vector to zero.
+// |
+// | Arguments:
+// |     from_i   = first digit to be zeroed.
+// |     to_i     = first digit NOT to be zeroed.
+// |     target_p = digit vector containing the digits to be zeroed..
+// +------------------------------------------------------------------------------------------------
+inline
+void
+vector_zero( int from_i, int to_i, sc_digit* target_p )
+{
+    for ( int digit_i = from_i; digit_i < to_i; ++digit_i ) { target_p[digit_i] = 0; }
 }
 
 #undef VEC_MIN

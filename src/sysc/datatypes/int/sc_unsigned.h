@@ -97,6 +97,7 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -136,7 +137,7 @@ class sc_fxnum_fast;
   // LEFT SHIFT operators:
 
   sc_unsigned operator << (const sc_unsigned&  u, const sc_signed&    v);
-    sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
+  sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
 
   sc_unsigned operator << (const sc_unsigned&  u, const sc_unsigned&  v);
   sc_unsigned operator << (const sc_unsigned&  u, int64               v);
@@ -1239,8 +1240,7 @@ private:
 
   bool check_if_outside(int bit_num) const;
 
-  void makezero()
-    { for ( int digit_i = 0; digit_i < ndigits; ++ digit_i ) { digit[digit_i] = 0; } }
+  void makezero() { vector_zero( 0, ndigits, digit ); }
 
   public: // sc_ac back door:
     sc_digit*  get_raw()                       { return digit; }
@@ -1641,7 +1641,7 @@ sc_unsigned::sc_unsigned( int nb, bool zero ) :
 	SC_FREE_DIGIT(true)
     }
     if ( zero ) {
-        vec_zero((nb+BITS_PER_DIGIT)/BITS_PER_DIGIT, digit);
+        makezero();
     }
 }
 

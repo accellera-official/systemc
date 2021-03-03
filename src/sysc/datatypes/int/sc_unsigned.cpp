@@ -365,7 +365,7 @@ sc_unsigned::operator=(double v)
 #endif
     v /= DIGIT_RADIX;
   }
-  vec_zero(i, ndigits, digit);
+  vector_zero(i, ndigits, digit);
   return *this;
 }
 
@@ -506,7 +506,7 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
   int buf_ndigits = (length() - 1) / BITS_PER_DIGIT_TYPE + 1;
 
   // Initialize buf to zero.
-  vec_zero(buf_ndigits, buf);
+  vector_zero(0, buf_ndigits, buf);
 
   const sc_digit *digit_or_d;
 
@@ -541,7 +541,7 @@ void
 sc_unsigned::set_packed_rep(sc_digit *buf)
 {
   // Initialize digit to zero.
-  vec_zero(ndigits, digit);
+  makezero();
 
   // Copy the bits from buf to digit.
   for (int i = length() - 1; i >= 0; --i) {
@@ -819,7 +819,7 @@ sc_unsigned::operator>>=(unsigned long v)
     if (v == 0)
         return *this;
 
-    vec_shift_right(ndigits, digit, v, sc_unsigned::SIGNED&&(int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(ndigits, digit, v, 0);
 
   return *this;
 }
@@ -870,7 +870,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    vec_zero( ndigits, digit );
+    makezero();
     return;
   }
 
@@ -904,7 +904,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
     for (int i = right_digit; i <= left_digit; ++i)
         d[i - right_digit] = u->digit[i];
 
-    vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_unsigned::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
 
     if (! reversed) {
       vector_copy(sc_min(nd, ndigits), digit, d);
@@ -928,7 +928,7 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
     sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
-      vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
+      vector_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0)); 
       del_mask >>= 1;
     }
 
@@ -944,13 +944,12 @@ sc_unsigned::sc_unsigned(const sc_unsigned* u, int l, int r) :
       del_mask = ins_mask;
 
       while (del_mask) {
-        vec_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
+        vector_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0)); 
         del_mask >>= 1;
       }
     }
 
-      vec_shift_right(ndigits, digit,
-                      ndigits * BITS_PER_DIGIT - length(), 0);
+      vector_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
@@ -998,7 +997,7 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
 	digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    vec_zero( ndigits, digit );
+    makezero();
     return;
   }
 
@@ -1036,11 +1035,11 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
     for (int i = right_digit; i <= left_digit; ++i)
       d[i - right_digit] = u->digit[i];
 
-    vec_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, sc_unsigned::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
+    vector_shift_right(nd, d, r - right_digit * BITS_PER_DIGIT, 0);
 
   }
 
-  vec_zero(ndigits, digit);
+  makezero();
 
   if (! reversed)
     vector_copy(sc_min(nd, ndigits), digit, d);
@@ -1063,7 +1062,7 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
     sc_digit del_mask = one_and_zeros(SC_BIT_INDEX(l - r));
 
     while (del_mask) {
-      vec_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0));
+      vector_shift_right(ndigits, digit, 1, ((d[nd_less_1] & del_mask) != 0)); 
       del_mask >>= 1;
     }
 
@@ -1079,13 +1078,12 @@ sc_unsigned::sc_unsigned(const sc_signed* u, int l, int r) :
       del_mask = ins_mask;
 
       while (del_mask) {
-        vec_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0));
+        vector_shift_right(ndigits, digit, 1, ((d[j] & del_mask) != 0)); 
         del_mask >>= 1;
       }
     }
 
-      vec_shift_right(ndigits, digit,
-                      ndigits * BITS_PER_DIGIT - length(), sc_unsigned::SIGNED&&(int)d[nd-1]<0 ? DIGIT_MASK:0);
+      vector_shift_right(ndigits, digit, ndigits * BITS_PER_DIGIT - length(), 0);
 
 
   }  // if reversed.
@@ -1474,7 +1472,7 @@ sc_unsigned_subref::operator = ( double v )
 	v /= DIGIT_RADIX;
     }
 
-    vec_zero(i, nd, d);
+    vector_zero(i, nd, d);
 
     sc_digit val = 1;  // Bit value.
     int j = 0;   // Current digit in d.
