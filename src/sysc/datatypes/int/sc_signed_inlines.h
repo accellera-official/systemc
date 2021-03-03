@@ -405,7 +405,7 @@ sc_signed::to_double() const
     if ( 0 > (int)digit[hod]  ) {
 	  sc_digit* to_p = sc_temporary_digits.allocate(ndigits);
 	  vector_copy( ndigits, digit, to_p );
-	  vector_twos_complement( hod, to_p );
+	  vector_twos_complement( ndigits, to_p );
 	  for ( ; hod >= 0; --hod ) {
               v = v * DIGIT_RADIX + to_p[hod];
 	  }
