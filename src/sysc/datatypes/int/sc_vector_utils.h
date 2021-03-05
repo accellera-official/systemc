@@ -69,9 +69,9 @@ class sc_big_op_type<WIDTH,false>
 // | sc_bigint<W> and sc_biguint<W> operands.
 // |
 // | Template arguments:
-// |   WL   = width of left operand of the operation.
-// |   SL  = true if left operand is signed.
-// |   WR  = width of right operand of the operation.
+// |   WL = width of left operand of the operation.
+// |   SL = true if left operand is signed.
+// |   WR = width of right operand of the operation.
 // |   SR = true if right operand is signed.
 // +============================================================================
 template<int WL, bool SL, int WR, bool SR>
@@ -79,6 +79,8 @@ class sc_big_op_info
 {
   public: // width calculations:
     enum {
+      signed_result = SL || SR,
+
       left_count = SC_DIGIT_COUNT(WL+!SL),
       left_extra = !SL && SR,
       left_hod   = SC_DIGIT_INDEX(WL+!SL),
@@ -86,8 +88,6 @@ class sc_big_op_info
       right_count = SC_DIGIT_COUNT(WR+!SR),
       right_extra = SL && !SR,
       right_hod   = SC_DIGIT_INDEX(WR+!SR),
-
-      signed_result = SL || SR,
 
       add_bits = VEC_MAX(WL+left_extra,WR+right_extra)+1,
       bit_bits = VEC_MAX(WL+left_extra,WR+right_extra),
