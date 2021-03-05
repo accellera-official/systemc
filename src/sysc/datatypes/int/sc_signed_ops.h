@@ -1025,8 +1025,8 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_width(); \
-        const int            right_n = right.get_width(); \
+        const int            left_n = left.get_actual_width(); \
+        const int            right_n = right.get_actual_width(); \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
