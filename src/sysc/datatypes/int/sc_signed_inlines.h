@@ -142,7 +142,7 @@ sc_signed::sc_signed(const sc_unsigned_subref_r& v) :
 {
     nbits = v.length();
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VECT_DIGITS ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
@@ -184,7 +184,7 @@ sc_signed::sc_signed(const sc_bv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VECT_DIGITS ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
