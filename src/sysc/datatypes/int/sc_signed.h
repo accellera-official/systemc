@@ -1232,10 +1232,6 @@ private:
   sc_signed(const sc_signed&   v, small_type s);
   sc_signed(const sc_unsigned& v, small_type s);
 
-  // Create an unsigned number using the bits u[l..r].
-  sc_signed(const sc_signed* u, int l, int r);
-  sc_signed(const sc_unsigned* u, int l, int r);
-
   // Private member functions. The called functions are inline functions.
 
   small_type default_sign() const
