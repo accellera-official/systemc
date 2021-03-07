@@ -73,13 +73,6 @@ namespace sc_dt
 //
 // ----------------------------------------------------------------------------
 
-#if 0
-sc_digit ScBigTemp::buffers[ScBigTemp::BufferCount][ScBigTemp::BufferSize];
-bool ScBigTemp::buffers_in_use[ScBigTemp::BufferCount] = {
-    false, false, false, false
-};
-#endif
-
 sc_digit_heap sc_temporary_digits(0x100000);
 
 
