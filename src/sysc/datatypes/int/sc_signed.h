@@ -1207,8 +1207,8 @@ protected:
   {
       int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
       shift = shift > 0 ? shift : 0;
-      std::make_signed<sc_digit>::type  high_digit = digit[ndigits-1];
-      digit[ndigits-1] = ( (high_digit << shift) >> shift);
+      sc_digit high_digit = digit[ndigits-1];
+      digit[ndigits-1] = ( (std::make_signed<sc_digit>::type) (high_digit << shift) ) >> shift;
   }
 
 
