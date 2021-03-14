@@ -409,7 +409,6 @@ to_uint() const
     unsigned int result;
 
     result =  (unsigned int)digit[0];
-    if ( W < 32 ) { result &= ~((~0u)<<W); }
     return result;
 }
 
@@ -423,7 +422,7 @@ to_int64() const
         result =  to_int();
     }
     else {
-        result = ( (int64)digit[1] << BITS_PER_DIGIT ) | digit[0];
+        result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0]; 
     }
     return result;
 }
@@ -439,7 +438,6 @@ to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	if ( W < 64 ) { result &= ~(~0ULL << W); }
     }
     return result;
 }
