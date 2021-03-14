@@ -331,10 +331,13 @@ inline bool sc_method_process::run_process()
 //   (3) The process is expecting a static trigger, 
 //       dynamic event waits take priority.
 //
-//
-// If the triggering process is the same process, the trigger is
-// ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-// is defined.
+// Notes:
+//   (1) See note 1 in the header for sc_simcontext::prepare_to_simulate (in 
+//       file sc_simcontext.cpp) for a diagram showing the state transitions 
+//       for processes.
+//   (2) If the triggering process is the same process, the trigger is
+//       ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
+//       is defined.
 //------------------------------------------------------------------------------
 inline
 void
