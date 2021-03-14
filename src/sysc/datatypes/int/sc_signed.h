@@ -1516,9 +1516,6 @@ unsigned int
 sc_signed::to_uint() const
 {
     unsigned int result = (unsigned int)digit[0];
-    if ( nbits < std::numeric_limits<unsigned int>::digits ) {
-        result &= ~( std::numeric_limits<unsigned int>::max() << nbits );
-    }
     return result;
 }
 
@@ -1548,9 +1545,6 @@ sc_signed::to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	    if ( nbits < std::numeric_limits<uint64>::digits ) {
-            result &= ~( std::numeric_limits<uint64>::max() << nbits );
-        } // this is plain wrong!!!
     }
     return result;
 }
