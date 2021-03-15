@@ -932,6 +932,14 @@ scfx_rep::to_uint64() const
 
     // Ignore bits off the top; they modulo out.
     // Ignore bits off the bottom; we're truncating.
+
+    // If bottom integer word is zero, skip over them:
+    while (idx < m_lsw)
+    {
+        shift += bits_in_word;
+        idx += 1;
+    }
+
     while (shift < 64 && m_msw >= idx && idx >= m_lsw)
     {
         result += static_cast<uint64>(m_mant[idx]) << shift;
