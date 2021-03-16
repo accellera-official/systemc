@@ -835,12 +835,6 @@ sc_start_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_start_of_simulation_called;
 }
 
-// The following variable controls whether process control corners should
-// be considered errors or not. See sc_simcontext.cpp for details on what
-// happens if this value is set to true.
-
-extern SC_API bool sc_allow_process_control_corners;
-
 } // namespace sc_core
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)

@@ -52,9 +52,6 @@ SC_API  sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
 SC_API bool timed_out( sc_simcontext* );
 
-SC_API extern bool sc_allow_process_control_corners; // see sc_simcontext.cpp.
-
-
 // Process handles as forward references:
 
 typedef class sc_cthread_process* sc_cthread_handle;
