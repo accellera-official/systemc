@@ -487,16 +487,16 @@ public:
     // explicit conversions
 
     inline int64 to_int64() const
-	{ return to_anything_signed(); }
+	{ return (int64)to_anything_unsigned(); }
     inline uint64 to_uint64() const;
     int to_int() const
-	{ return (int)to_anything_signed(); }
+	{ return (int)to_anything_unsigned(); }
 
     unsigned int to_uint() const
 	{ return (unsigned int)to_anything_unsigned(); }
 
     long to_long() const
-	{ return (long)to_anything_signed(); }
+	{ return (long)to_anything_unsigned(); }
 
     unsigned long to_ulong() const
 	{ return (unsigned long)to_anything_unsigned(); }
