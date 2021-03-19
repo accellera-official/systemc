@@ -66,7 +66,6 @@ sc_cor_pthread::sc_cor_pthread()
     DEBUGF << this << ": sc_cor_pthread::sc_cor_pthread()" << std::endl;
     pthread_cond_init( &m_pt_condition, PTHREAD_NULL );
     pthread_mutex_init( &m_mutex, PTHREAD_NULL );
-    DEBUGF << this << ": exiting sc_cor_pthread::sc_cor_pthread()" << std::endl;
 }
 
 
@@ -77,7 +76,6 @@ sc_cor_pthread::~sc_cor_pthread()
     DEBUGF << this << ": sc_cor_pthread::~sc_cor_pthread()" << std::endl;
     pthread_cond_destroy( &m_pt_condition );
     pthread_mutex_destroy( &m_mutex );
-    DEBUGF << this << ": exiting sc_cor_pthread::~sc_cor_pthread()" << std::endl;
 }
 
 
@@ -145,10 +143,8 @@ sc_cor_pkg_pthread::sc_cor_pkg_pthread( sc_simcontext* simc )
 
 sc_cor_pkg_pthread::~sc_cor_pkg_pthread()
 {
-    DEBUGF << this << ": sc_cor_pkg_pthread::~sc_cor_pkg_pthread()" << std::endl;
     pthread_mutex_destroy(&m_create_mtx);
     pthread_cond_destroy(&m_create_cond);
-    DEBUGF << this << ": exiting sc_cor_pkg_pthread::~sc_cor_pkg_pthread()" << std::endl;
 }
 
 
