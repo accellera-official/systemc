@@ -48,11 +48,11 @@
 namespace sc_dt {
 
 #define DEFINE_PACK_( Type )                                                  \
-  template<> bool                                                             \
+  template<> SC_API bool                                                             \
   sc_any_value_converter<Type>::pack( sc_any_value::reference dst, type const & src )
 
 #define DEFINE_UNPACK_(Type)                                                  \
-  template<> bool                                                             \
+  template<> SC_API bool                                                             \
   sc_any_value_converter<Type>::unpack( type & dst, sc_any_value::const_reference src )
 
 
@@ -100,7 +100,7 @@ DEFINE_UNPACK_(std::string)
 // ----------------------------------------------------------------------------
 // SystemC builtin types
 
-DEFINE_BUILTIN_( sc_core::sc_string_view, string );
+DEFINE_BUILTIN_( sc_core::sc_string_view, string )
 
 DEFINE_PACK_( sc_core::sc_time )
 {
