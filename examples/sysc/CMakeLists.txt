@@ -67,6 +67,10 @@ add_subdirectory (simple_perf)
 if (NOT (CMAKE_CXX_STANDARD EQUAL 98))
     add_subdirectory (2.4/in_class_initialization)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    add_subdirectory (2.4/sc_optional)
+>>>>>>> 91bc190670a826c4c6c711f3c753d4e3be8fca17
 =======
     add_subdirectory (2.4/sc_optional)
 >>>>>>> 91bc190670a826c4c6c711f3c753d4e3be8fca17
