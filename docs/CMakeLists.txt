@@ -39,8 +39,10 @@
 ###############################################################################
 
 
-set (DOC_FILES sysc/README
-               sysc/archived/README
+set (DOC_FILES
+	       DEVELOPMENT.md
+	       sysc/README
+	       sysc/archived/README
 	       sysc/archived/FuncSpec20.pdf
 	       sysc/archived/WhitePaper20.pdf
 	       sysc/archived/UserGuide20.pdf

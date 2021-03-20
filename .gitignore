@@ -1,6 +1,7 @@
 # ignore common patterns
 .*.sw?
 .#*
+.DS_Store
 *~
 *.exe
 *.l[oa]
@@ -54,6 +55,7 @@ Makefile.in
 *.opensdf
 *.db
 
+.vs/
 Release/
 Debug/
 DebugDLL/

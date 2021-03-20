@@ -35,9 +35,6 @@
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 
-#include "sysc/datatypes/int/sc_signed_inlines.h"
-#include "sysc/datatypes/int/sc_unsigned_inlines.h"
-
 #ifdef SC_INCLUDE_FX
 #include "sysc/datatypes/fx/sc_fxval.h"
 #include "sysc/datatypes/fx/sc_fix.h"
@@ -48,11 +45,11 @@
 namespace sc_dt {
 
 #define DEFINE_PACK_( Type )                                                  \
-  template<> SC_API bool                                                             \
+  template<> SC_API bool                                                      \
   sc_any_value_converter<Type>::pack( sc_any_value::reference dst, type const & src )
 
 #define DEFINE_UNPACK_(Type)                                                  \
-  template<> SC_API bool                                                             \
+  template<> SC_API bool                                                      \
   sc_any_value_converter<Type>::unpack( type & dst, sc_any_value::const_reference src )
 
 
