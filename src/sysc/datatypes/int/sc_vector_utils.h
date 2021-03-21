@@ -1013,51 +1013,57 @@ vector_reverse_bits( sc_digit* target_p,
 // | the range, and that the source data is large enough to provide data
 // | for each bit in the range.
 // | Arguments:
-// |     from_hod    =  index of high order digit of from_p.
-// |     from_p      -> value to be inserted.
-// |     to_p        -> vector the bits are to be inserted in.
-// |     high_bit_i  =  high order bit of the insertion.
-// |     low_bit_i   =  low order bit of the insertion.
+// |     from_digits_n =  number of digits in from_p.
+// |     from_p        -> value to be inserted.
+// |     to_p          -> vector the bits are to be inserted in.
+// |     high_bit_i    =  high order bit of the insertion.
+// |     low_bit_i     =  low order bit of the insertion.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_insert_bits( const int       from_hod,
+vector_insert_bits( const int       from_digits_n,
                     const sc_digit* from_p,
 		    sc_digit*       to_p,
 		    const int       high_bit_i,
 		    const int       low_bit_i )
 {
     const int debug=0;   // set to non-zero to debug.
-    int       lob;       // bit index of lower order bit in the insertion.
-    int       lod;       // digit index of low order bit in the insertion.
-    int       hob;       // bit index of high order bit in the insertion.
-    int       hod;       // digit index of high order bit in the insertion.
+    int       from_hod;  // digit index of high order bit in the from_p.
     bool      reverse;   // true -> reverse the bits in the insertion.
+    int       to_hob;    // bit index of high order bit in the insertion.
+    int       to_hod;    // digit index of high order bit in the insertion.
+    int       to_lob;    // bit index of lower order bit in the insertion.
+    int       to_lod;    // digit index of low order bit in the insertion.
 
     // Configure for big endian bit ordering:
 
     if ( high_bit_i >= low_bit_i ) {
         reverse = false;
-	lob = SC_BIT_INDEX(low_bit_i);
-	lod = SC_DIGIT_INDEX(low_bit_i);
-	hob = SC_BIT_INDEX(high_bit_i);
-	hod = SC_DIGIT_INDEX(high_bit_i);
+	to_lob = SC_BIT_INDEX(low_bit_i);
+	to_lod = SC_DIGIT_INDEX(low_bit_i);
+	to_hob = SC_BIT_INDEX(high_bit_i);
+	to_hod = SC_DIGIT_INDEX(high_bit_i);
     }
+
+    // Configure for little endian bit ordering:
+
     else {
 	reverse = true;
-	lob = SC_BIT_INDEX(high_bit_i);
-	lod = SC_DIGIT_INDEX(high_bit_i);
-	hob = SC_BIT_INDEX(low_bit_i);
-	hod = SC_DIGIT_INDEX(low_bit_i);
+	to_lob = SC_BIT_INDEX(high_bit_i);
+	to_lod = SC_DIGIT_INDEX(high_bit_i);
+	to_hob = SC_BIT_INDEX(low_bit_i);
+	to_hod = SC_DIGIT_INDEX(low_bit_i);
     }
+
+    from_hod = from_digits_n - 1;
 
     if ( debug ) {
 	std::cout << "vector_insert_bits(" << from_hod << ", from_p, to_p, "
 	          << high_bit_i << ", " << low_bit_i << "):" << std::endl;
-	std::cout << "   lob = " << lob << std::endl;
-	std::cout << "   lod = " << lod << std::endl;
-	std::cout << "   hob = " << hob << std::endl;
-	std::cout << "   hod = " << hod << std::endl;
+	std::cout << "   to_lob = " << to_lob << std::endl;
+	std::cout << "   to_lod = " << to_lod << std::endl;
+	std::cout << "   to_hob = " << to_hob << std::endl;
+	std::cout << "   to_hod = " << to_hod << std::endl;
     }
 
     // ALL THE BITS ARE IN A SINGLE sc_digit:
@@ -1066,10 +1072,10 @@ vector_insert_bits( const int       from_hod,
     // through all its bits even if its the only digit because of sign
     // extension.
 
-    if ( hod == lod ) {
-        sc_digit mask = SC_BIT_MASK1(hob-lob);
-        to_p[lod] = ( to_p[lod] & ~(mask << lob) ) |
-                                  ( ( *from_p & mask ) << lob) ;
+    if ( to_hod == to_lod ) {
+        sc_digit mask = SC_BIT_MASK1(to_hob-to_lob);
+        to_p[to_lod] = ( to_p[to_lod] & ~(mask << to_lob) ) |
+                                  ( ( *from_p & mask ) << to_lob) ;
 
     }
 
@@ -1082,7 +1088,7 @@ vector_insert_bits( const int       from_hod,
 	// to be filled, full_hod, and the amount we can fill from the
 	// source, src_hod.
 
-        const int full_hod = hod - lod;
+        const int full_hod = to_hod - to_lod;
 	const int src_hod = full_hod > from_hod ? from_hod : full_hod;
 	if ( debug ) {
 	    std::cout << "   full_hod = " << full_hod << std::endl;
@@ -1093,10 +1099,10 @@ vector_insert_bits( const int       from_hod,
 	// Low order bit is on an sc_digit boundary: no shifting is necessary,
 	// just a mask on the high order digit.
 
-	if ( 0 == lob ) {
+	if ( 0 == to_lob ) {
 	    int             digit_i;
-	    sc_digit        hob_mask = SC_BIT_MASK1(hob);
-	    sc_digit*       dst_p = &to_p[lod];
+	    sc_digit        to_hob_mask = SC_BIT_MASK1(to_hob);
+	    sc_digit*       dst_p = &to_p[to_lod];
 	    const sc_digit* src_p = from_p;
 
 	    // Insert the bits below the high order digit, pad with a sign
@@ -1110,13 +1116,13 @@ vector_insert_bits( const int       from_hod,
 		for ( ; digit_i < full_hod; ++digit_i ) {
 		    *dst_p++ = fill;
 		}
-		*dst_p = ( *dst_p & ~hob_mask ) | ( fill & hob_mask );
+		*dst_p = ( *dst_p & ~to_hob_mask ) | ( fill & to_hob_mask );
 	    }
 	    else {
 		for ( digit_i = 0; digit_i < src_hod; ++digit_i ) {
 		    *dst_p++ = *src_p++;
 		}
-		*dst_p = ( *dst_p & ~hob_mask ) | ( *src_p & hob_mask );
+		*dst_p = ( *dst_p & ~to_hob_mask ) | ( *src_p & to_hob_mask );
 	    }
 	}
 
@@ -1125,10 +1131,10 @@ vector_insert_bits( const int       from_hod,
 
 	else {
 	    int             digit_i;
-	    sc_digit*       dst_p = &to_p[lod];
-	    sc_digit        hob_mask = SC_BIT_MASK1(hob);
-	    int             left_shift = lob;
-	    sc_digit        low_mask = SC_BIT_MASK(lob);
+	    sc_digit*       dst_p = &to_p[to_lod];
+	    sc_digit        to_hob_mask = SC_BIT_MASK1(to_hob);
+	    int             left_shift = to_lob;
+	    sc_digit        low_mask = SC_BIT_MASK(to_lob);
 	    int             right_shift = BITS_PER_DIGIT - left_shift;
 	    const sc_digit* src_p = from_p;
 
@@ -1146,8 +1152,8 @@ vector_insert_bits( const int       from_hod,
 		    low_value = high_value >> right_shift;
 		}
 		sc_digit highest_value = (fill << left_shift) | low_value;
-		// *dst_p = (*dst_p & ~hob_mask) | (low_value & hob_mask);
-		*dst_p = (*dst_p & ~hob_mask) | (highest_value & hob_mask);
+		// *dst_p = (*dst_p & ~to_hob_mask) | (low_value & to_hob_mask);
+		*dst_p = (*dst_p & ~to_hob_mask) | (highest_value & to_hob_mask);
 	    }
 	    else {
 		for ( digit_i = 0; digit_i < src_hod; ++digit_i ) {
@@ -1157,7 +1163,7 @@ vector_insert_bits( const int       from_hod,
 		}
 		sc_digit highest_value = *src_p++;
 		highest_value = highest_value << left_shift | low_value;
-		*dst_p = (*dst_p & ~hob_mask) | (highest_value & hob_mask);
+		*dst_p = (*dst_p & ~to_hob_mask) | (highest_value & to_hob_mask);
 	    }
 	}
     }
@@ -1590,17 +1596,17 @@ vector_or_reduce( const sc_digit* target_p,
 // | sign extended if extra bits are required for the target.
 // |
 // | Arguments:
-// |     from_hod =  index of highest digit in 'from_p'
-// |     from_p   -> digits of source.
-// |     to_hod =  index of highest digit in 'to_p'
-// |     to_p   -> digits in the target.
-// |     shift_n    =  number of bits to shift.
+// |     from_digits_n =  number of digits in 'from_p'
+// |     from_p        -> digits of source.
+// |     to_digits_n   =  number of highest digits in 'to_p'
+// |     to_p          -> digits in the target.
+// |     shift_n       =  number of bits to shift.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_shift_left( const int       from_hod,
+vector_shift_left( const int       from_digits_n,
                    const sc_digit* from_p,
-                   const int       to_hod,
+                   const int       to_digits_n,
 		   sc_digit*       to_p,
 		   const int       shift_n )
 {
@@ -1613,15 +1619,19 @@ vector_shift_left( const int       from_hod,
     }
 
     int      carry_shift_n; // amount to shift a carry down by when composing a to_p digit.
+    int      from_hod;      // index of high order digit in 'from_p'.
     int      from_i;        // digit in from_p now accessing.
     int      from_shift_n;  // amount to shift a from_p digit down by when composing a to_p digit.
     sc_digit fill;          // high order fill value, either zero or all ones.
+    int      to_hod;        // index of high order digit in 'to_p'.
     int      to_i;          // digit in to_p now accessing.
     int      to_start_hod;  // first digit in to_p to receive a from_p digit.
     int      to_end_hod;    // last digit in to_p to recieve a from_p digit.
     
+    from_hod = from_digits_n-1;
     from_shift_n = SC_BIT_INDEX(shift_n);
     carry_shift_n = 32-from_shift_n;
+    to_hod = to_digits_n-1;
     to_start_hod = VEC_MIN( SC_DIGIT_INDEX(shift_n), to_hod );
     to_end_hod = VEC_MIN( to_hod, to_start_hod+from_hod );
     fill = 0 > (int)from_p[from_hod] ? ~0u : 0;
@@ -1646,7 +1656,7 @@ vector_shift_left( const int       from_hod,
     // If the shift is larger than the our target we are done:
 
     if ( to_i > to_hod ) {
-        std::cerr << "my_vector_shift_left: shift larger than target, word " << to_i << " < "
+        std::cerr << "vector_shift_left: shift larger than target, word " << to_i << " > "
 	          << to_hod << std::endl;
         return;
     }
