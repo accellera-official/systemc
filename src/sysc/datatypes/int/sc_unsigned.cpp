@@ -656,11 +656,7 @@ operator<<(const sc_unsigned& u, unsigned long v)
   int nd = DIV_CEIL(nb);
   sc_unsigned result(nb, false);
 
-  // @@@@@@@@ Other form of shift left?
-  vector_copy( u.get_digits_n(), u.digit, result.digit );
-
-  vector_shift_left( nd, result.digit, v );
-
+  vector_shift_left( u.ndigits, u.digit, nd, result.digit, v );
   result.adjust_hod(); 
 
   return result;
@@ -1105,7 +1101,7 @@ sc_unsigned_subref_r::to_string( sc_numrep numrep, bool w_prefix ) const
 const sc_unsigned_subref&
 sc_unsigned_subref::operator = ( const sc_signed& v )
 {
-    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(),
+    vector_insert_bits( v.get_digits_n(), v.get_digits(), m_obj_p->get_digits(),
                         m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1114,7 +1110,7 @@ sc_unsigned_subref::operator = ( const sc_signed& v )
 const sc_unsigned_subref&
 sc_unsigned_subref::operator = ( const sc_unsigned& v )
 {
-    vector_insert_bits( v.get_hod(), v.get_digits(), m_obj_p->get_digits(),
+    vector_insert_bits( v.get_digits_n(), v.get_digits(), m_obj_p->get_digits(),
                         m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1147,7 +1143,7 @@ sc_unsigned_subref::operator = ( unsigned long v )
 {
     ScNativeDigits<unsigned long> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(),
+    vector_insert_bits( source.get_digits_n(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1158,7 +1154,7 @@ sc_unsigned_subref::operator = ( long v )
 {
     ScNativeDigits<long> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(),
+    vector_insert_bits( source.get_digits_n(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1169,7 +1165,7 @@ sc_unsigned_subref::operator = ( uint64  v )
 {
     ScNativeDigits<uint64> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(),
+    vector_insert_bits( source.get_digits_n(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1180,7 +1176,7 @@ sc_unsigned_subref::operator = ( int64 v )
 {
     ScNativeDigits<int64> source(v);
 
-    vector_insert_bits( source.get_hod(), source.get_digits(),
+    vector_insert_bits( source.get_digits_n(), source.get_digits(),
                         m_obj_p->get_digits(), m_left, m_right );
     m_obj_p->adjust_hod();
     return *this;
@@ -1212,24 +1208,7 @@ sc_unsigned_subref::operator = ( double v )
 
     vector_zero(i, nd, d);
 
-    sc_digit val = 1;  // Bit value.
-    int j = 0;   // Current digit in d.
-
-    i = 0;  // Current bit in d.
-
-    while (i < nb) {
-
-	m_obj_p->set(i + m_right, (bool) (d[j] & val));
-
-	++i;
-
-	if (SC_BIT_INDEX(i) == 0) {
-	    val = 1;
-	    ++j;
-	}
-	else
-	    val <<= 1;
-    }
+    vector_insert_bits( nd,  d, m_obj_p->get_digits(), m_left, m_right );
 
     return *this;
 }
