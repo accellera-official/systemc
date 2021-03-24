@@ -157,13 +157,13 @@ class ScNativeDigits<int64>
 	    m_digits[digit_i] = init;
 	}
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod() const          { return HOD; }
-    int             get_width() const        { return WIDTH; }
-    int             is_signed() const        { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod() const           { return HOD; }
+    int             is_signed() const         { return SIGNED; }
+    int             length() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -189,13 +189,13 @@ class ScNativeDigits<uint64>
 	    m_digits[digit_i] = init;
 	}
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod() const          { return HOD; }
-    int             get_width() const        { return WIDTH; }
-    int             is_signed() const        { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod() const           { return HOD; }
+    int             is_signed() const         { return SIGNED; }
+    int             length() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -221,13 +221,13 @@ class ScNativeDigits<long>
 	    m_digits[digit_i] = init;
 	}
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod() const          { return HOD; }
-    int             get_width() const        { return WIDTH; }
-    int             is_signed() const        { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod() const           { return HOD; }
+    int             is_signed() const         { return SIGNED; }
+    int             length() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -254,13 +254,13 @@ class ScNativeDigits<unsigned long>
 	    m_digits[digit_i] = llinit;
 	}
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod() const          { return HOD; }
-    int             get_width() const        { return WIDTH; }
-    int             is_signed() const        { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod() const           { return HOD; }
+    int             is_signed() const         { return SIGNED; }
+    int             length() const            { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -282,13 +282,13 @@ class ScNativeDigits<int>
     {
         m_digits[0] = init;
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod() const          { return HOD; }
-    int             get_width() const        { return WIDTH; }
-    int             is_signed() const        { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod() const           { return HOD; }
+    int             length() const            { return WIDTH; }
+    int             is_signed() const         { return SIGNED; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
@@ -311,13 +311,13 @@ class ScNativeDigits<unsigned int>
         m_digits[0] = init;
 	m_digits[1] = 0;
     }
-    int             get_actual_width() const { return ACTUAL_WIDTH; }
-    const sc_digit* get_digits() const       { return m_digits; }
-    sc_digit*       get_digits()             { return m_digits; }
-    int             get_digits_n() const     { return DIGITS_N; }
-    int             get_hod()                { return HOD; }
-    int             get_width()              { return WIDTH; }
-    int             is_signed()              { return SIGNED; }
+    int             get_actual_length() const { return ACTUAL_WIDTH; }
+    const sc_digit* get_digits() const        { return m_digits; }
+    sc_digit*       get_digits()              { return m_digits; }
+    int             get_digits_n() const      { return DIGITS_N; }
+    int             get_hod()                 { return HOD; }
+    int             is_signed()               { return SIGNED; }
+    int             length()                  { return WIDTH; }
   protected:
     sc_digit m_digits[DIGITS_N];
 };
