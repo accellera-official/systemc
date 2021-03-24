@@ -698,16 +698,15 @@ public: // "mirror" for sc_value_base concatenation support:
 
 public: // field and template value accesses:
 
-  inline int              get_actual_width() const { return W+1; }
-  inline const sc_digit*  get_digits() const       { return digit; }
-  inline sc_digit*        get_digits()             { return digit; }
-  inline int              get_digits_n() const     { return DIV_CEIL(W+1); }
-  inline int              get_hod() const          { return SC_DIGIT_INDEX(W); }
-  inline sc_digit*        get_raw()                { return digit; }
-  inline sc_digit*        get_raw() const          { return (sc_digit*)digit; }
-  inline int              get_width() const        { return W; }
+  inline int              get_actual_length() const { return W+1; }
+  inline const sc_digit*  get_digits() const        { return digit; }
+  inline sc_digit*        get_digits()              { return digit; }
+  inline int              get_digits_n() const      { return DIV_CEIL(W+1); }
+  inline int              get_hod() const           { return SC_DIGIT_INDEX(W); }
+  inline sc_digit*        get_raw()                 { return digit; }
+  inline sc_digit*        get_raw() const           { return (sc_digit*)digit; }
 
-  inline int              length() const           { return W; }
+  inline int              length() const            { return W; }
 
 };
 
