@@ -949,15 +949,21 @@ const sc_signed operator-(const sc_uint_base& left, const sc_unsigned& right )
 // |   (b) BIT_OP_BIG_NATIVE
 // |   (c) BIT_OP_NATIVE_BIG
 // +----------------------------------------------------------------------------
-// @@@@#### How to handle signed / unsigned case?  Look at SIGNED fields
-//  if ( RIGHT_TYPE::SIGNED != LEFT_TYPE::SIGNED ) {  
 #define BIT_OP_BIG_BIG(OP,BIT_OP_RTN,RESULT_TYPE,LEFT_TYPE,RIGHT_TYPE) \
 inline \
 const RESULT_TYPE \
 operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	int left_n  = left.get_actual_length(); \
-	int right_n = right.get_actual_length(); \
+	int left_n; \
+	int right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
      \
 	if ( left_n >= right_n ) { \
 	    RESULT_TYPE result(left_n, false); \
@@ -983,16 +989,22 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	} \
     } 
 
-        // const int                   left_n = left.get_actual_length(); 
-        // const int                   right_n = right.get_actual_length(); 
 #define BIT_OP_BIG_NATIVE(OP,BIT_OP_RTN,RESULT_TYPE,BIG_TYPE,NATIVE_TYPE) \
     inline \
     const RESULT_TYPE \
     operator OP (const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
+	int                         left_n; \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_length(); \
-        const int                   right_n = right.get_actual_length(); \
+	int                         right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
@@ -1025,9 +1037,17 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_actual_length(); \
-        const int            right_n = right.get_actual_length(); \
-     \
+	int                         left_n; \
+	int                         right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
+	\
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
 	    BIT_OP_RTN<ScNativeDigits<NATIVE_TYPE>::SIGNED,BIG_TYPE::SIGNED>( \
