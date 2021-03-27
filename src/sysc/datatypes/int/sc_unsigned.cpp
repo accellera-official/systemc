@@ -388,13 +388,15 @@ const sc_unsigned&
 sc_unsigned::operator = ( const sc_lv_base& v )
 {
     int minlen = sc_min( nbits, v.length() );
-    int i = 0;
-    // Process bit by bit to catch 4-state logic assignments...
-    for( ; i < minlen; ++ i ) {
-        safe_set( i, sc_logic( v.get_bit( i ) ).to_bool(), digit );
-    }
-    for( ; i < nbits; ++ i ) {
-        safe_set( i, 0, digit );  // zero-extend
+    int digits_n = DIV_CEIL(minlen);
+    for ( int digit_i = 0; digit_i < digits_n; ++digit_i ) {
+        if ( v.get_cword(digit_i) != 0 ) { // warn about offending 4-state bits:
+	    int bit_max = sc_min( (digit_i+1)*std::numeric_limits<sc_digit>::digits-1, minlen );
+	    for( int i = digit_i*std::numeric_limits<sc_digit>::digits; i < bit_max; ++i ) {
+                sc_logic( v.get_bit( i ) ).to_bool();
+	    }
+	}
+        digit[digit_i] = v.get_word(digit_i);
     }
     adjust_hod();
     return *this;
