@@ -167,11 +167,11 @@ typedef int small_type;
 // since the unsigned long data type varies in size between 32-bit and 64-bit
 // machines.
 
-#define BYTES_PER_DIGIT 4
-// #define BITS_PER_DIGIT  30
-#define BITS_PER_DIGIT  32
-
 typedef unsigned int sc_digit;        // type holding "digits" in big values.
+
+#define BYTES_PER_DIGIT (std::numeric_limits<sc_digit>::digits/8)
+#define BITS_PER_DIGIT  std::numeric_limits<sc_digit>::digits
+
 
 #define DIGIT_RADIX     ((sc_carry)1 << BITS_PER_DIGIT)
 #define DIGIT_MASK      (DIGIT_RADIX - 1)
