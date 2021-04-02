@@ -170,7 +170,7 @@ typedef int small_type;
 typedef unsigned int sc_digit;        // type holding "digits" in big values.
 
 #define BYTES_PER_DIGIT (std::numeric_limits<sc_digit>::digits/8)
-#define BITS_PER_DIGIT  std::numeric_limits<sc_digit>::digits
+#define BITS_PER_DIGIT  32
 
 
 #define DIGIT_RADIX     ((sc_carry)1 << BITS_PER_DIGIT)
