@@ -424,6 +424,39 @@ inline bool sc_biguint<W>::xor_reduce()  const { return vector_xor_reduce(W,digi
 template<int W>
 inline bool sc_biguint<W>::xnor_reduce() const { return !vector_xor_reduce(W,digit); }
 
+// left shift methods:
+
+template<int W>
+const sc_unsigned
+sc_biguint<W>::operator<<(unsigned int v) const
+{
+  if (v == 0)
+    return sc_unsigned(*this);
+
+  int nb = W + v;
+  int nd = DIV_CEIL(nb+1);
+  sc_unsigned result(nb, false);
+
+  vector_shift_left( DIV_CEIL(W+1), digit, nd, result.digit, v );
+  result.adjust_hod();
+
+  return result;
+}
+
+template<int W>
+const sc_biguint<W>&
+sc_biguint<W>::operator<<=(unsigned int v)
+{
+  if (v == 0)
+    return *this;
+
+  vector_shift_left( ndigits, digit, v );
+  adjust_hod();
+
+  return *this;
+}
+
+
 // right shift methods:
 
 template<int W>
@@ -453,7 +486,7 @@ sc_biguint<W>::operator>>(unsigned int v) const
 	result.digit[0] = digit[0] >> v;
     }
     else if ( W < 64 ) {
-        uint64 tmp = digit[1];
+        uint64 tmp = digit[DIV_CEIL(W)-1];
         tmp = (tmp << 32) | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
@@ -469,10 +502,17 @@ sc_biguint<W>::operator>>(unsigned int v) const
 }
 
 template<int W>
-const sc_unsigned
-sc_biguint<W>::operator>>(const sc_signed &v) const
+const sc_biguint<W>&
+sc_biguint<W>::operator>>=(unsigned int v)
 {
-    return operator >> (v.to_uint());
+    int nd = DIV_CEIL(W+1);
+
+    if (v == 0)
+        return *this;
+
+    vector_shift_right(nd, digit, v, 0);
+
+  return *this;
 }
 
 #if 0
