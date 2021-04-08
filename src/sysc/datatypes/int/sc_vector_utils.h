@@ -1613,8 +1613,6 @@ vector_shift_left( const int       from_digits_n,
     // If the shift is not positive we are done:
 
     if ( shift_n < 0 ) {
-	std::cerr << "vector_shift_left: negative shift encountered" << shift_n << std::endl;
-	sc_assert(shift_n >= 0);
         return;
     }
 
