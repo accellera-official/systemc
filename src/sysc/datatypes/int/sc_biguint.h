@@ -656,7 +656,10 @@ inline const sc_biguint<W> operator -- (int) // postfix
 
 public:
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
-   sc_digit compile_time_digits[DIV_CEIL(W+1)];
+   // If the number of digits is sufficient to fit in sc_signed::small_vec then just allocate
+   // a single word here to save storage. Otherwise we allocate enough storage to accomodate
+   // our value.
+   sc_digit compile_time_digits[DIV_CEIL(W+1)>SC_SMALL_VEC_DIGITS?DIV_CEIL(W+1):1];
 #elif defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
    sc_digit digit[DIV_CEIL(W+1)];
 #endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS

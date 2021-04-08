@@ -1604,8 +1604,18 @@ inline
 sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
     nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
 {
-    digit = digits_p;
-    SC_FREE_DIGIT(false)
+#   if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
+        if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
+            digit = small_vec;
+        }
+        else {
+            digit = digits_p;
+        }
+	SC_FREE_DIGIT(false)
+#   else
+        digit = digits_p;
+        SC_FREE_DIGIT(false)
+#   endif
 }
 #endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
