@@ -114,7 +114,7 @@ sc_signed::sc_signed(const sc_signed_subref_r& v) :
         digit = small_vec;
 	SC_FREE_DIGIT(false)
     }
-    digit[ndigits-1] = 0; 
+    // @@@@@@@@ REMOVE? digit[ndigits-1] = 0; 
     int  low_bit;
     bool reversed = false;
     int  high_bit;
@@ -417,6 +417,12 @@ sc_signed::to_double() const
 	}
     }
     return v;
+}
+
+inline const sc_signed&
+sc_signed::operator>>=(const sc_unsigned& v)
+{
+  return operator>>=(v.to_uint());
 }
 
 } // namespace sc_dt

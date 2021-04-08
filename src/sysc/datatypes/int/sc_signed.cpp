@@ -97,12 +97,6 @@
 
 #include <sstream>
 
-// explicit template instantiations
-namespace sc_core {
-template class SC_API sc_vpool<sc_dt::sc_signed_bitref>;
-template class SC_API sc_vpool<sc_dt::sc_signed_subref>;
-} // namespace sc_core
-
 namespace sc_dt {
 
 void sc_signed::invalid_init( const char* type_name, int nb ) const
@@ -163,7 +157,10 @@ bool sc_signed::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
     left_shift = SC_BIT_INDEX(low_i);
 
 
-    // ALL DATA TO BE MOVED IS IN A SINGLE WORD:
+    // MOVE FIRST WORD (IT MAY BE PARTIAL) AND THEN ANY OTHERS:
+    //
+    // We may "clobber" upper bits, but they will be written at some point
+    // anyway.
 
     mask = ~(~0U << left_shift);
     dst_p[dst_i] = ( dst_p[dst_i] & ~mask );
@@ -353,6 +350,7 @@ sc_signed::operator = ( const char* a )
         std::stringstream msg;
         msg << "character string '" << a << "' is not valid";
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
+	// never reached
     }
     return *this;
 }
@@ -429,44 +427,6 @@ sc_signed::to_string( sc_numrep numrep, bool w_prefix ) const
 
 
 // ----------------------------------------------------------------------------
-//  SECTION: Interfacing with sc_int_base
-// ----------------------------------------------------------------------------
-
-sc_signed
-operator << (const sc_signed& u, const sc_int_base& v)
-{ return operator<<(u, (int64) v); }
-
-const sc_signed&
-sc_signed::operator <<= (const sc_int_base& v)
-{ return operator<<=((int64) v); }
-
-
-sc_signed
-operator >> (const sc_signed&    u, const sc_int_base&  v)
-{ return operator>>(u, (int64) v); }
-
-const sc_signed&
-sc_signed::operator >>= (const sc_int_base&  v)
-{ return operator>>=((int64) v); }
-
-// ----------------------------------------------------------------------------
-//  SECTION: Interfacing with sc_uint_base
-// ----------------------------------------------------------------------------
-
-const sc_signed&
-sc_signed::operator <<= (const sc_uint_base& v)
-{ return operator<<=((uint64) v); }
-
-
-sc_signed
-operator >> (const sc_signed&    u, const sc_uint_base&  v)
-{ return operator>>(u, (uint64) v); }
-
-const sc_signed&
-sc_signed::operator >>= (const sc_uint_base&  v)
-{ return operator>>=((uint64) v); }
-
-// ----------------------------------------------------------------------------
 //  SECTION: Input and output operators
 // ----------------------------------------------------------------------------
 
@@ -487,7 +447,7 @@ sc_signed::operator >>= (const sc_uint_base&  v)
 sc_signed
 operator<<(const sc_signed& u, const sc_unsigned& v)
 {
-  return operator<<(u, v.to_ulong());
+  return u << v.to_uint(); // operator<<(u, v.to_uint());
 }
 
 // The rest of the operators in this section are included from
@@ -502,7 +462,7 @@ sc_signed
 operator>>(const sc_signed& u, const sc_unsigned& v)
 {
 
-  return operator>>(u, v.to_ulong());
+  return u >> v.to_uint(); // operator>>(u, v.to_ulong());
 
 }
 
@@ -604,242 +564,6 @@ sc_signed::scan( ::std::istream& is )
     is >> s;
     *this = s.c_str();
 }
-
-
-// ----------------------------------------------------------------------------
-//  SECTION: LEFT SHIFT operators: <<, <<=
-// ----------------------------------------------------------------------------
-
-sc_signed
-operator<<(const sc_signed& u, const sc_signed& v)
-{
-  return operator<<(u, v.to_ulong());
-}
-
-
-const sc_signed&
-sc_signed::operator<<=(const sc_signed& v)
-{
-  return operator<<=(v.to_ulong());
-}
-
-
-sc_signed
-operator<<(const sc_signed& u, int64 v)
-{
-  if (v <= 0)
-    return sc_signed(u);
-
-  return operator<<(u, (unsigned long) v);
-}
-
-
-sc_signed
-operator<<(const sc_signed& u, uint64 v)
-{
-  if (v == 0)
-    return sc_signed(u);
-
-  return operator<<(u, (unsigned long) v);
-}
-
-
-const sc_signed&
-sc_signed::operator<<=(int64 v)
-{
-  if (v <= 0)
-    return *this;
-
-  return operator<<=((unsigned long) v);
-}
-
-
-const sc_signed&
-sc_signed::operator<<=(uint64 v)
-{
-  if (v == 0)
-    return *this;
-
-  return operator<<=((unsigned long) v);
-}
-
-
-sc_signed
-operator<<(const sc_signed& u, long v)
-{
-  if (v <= 0)
-    return sc_signed(u);
-
-  return operator<<(u, (unsigned long) v);
-}
-
-sc_signed
-operator<<(const sc_signed& u, unsigned long v)
-{
-  if (v == 0)
-    return sc_signed(u);
-
-  int nb = u.nbits + v;
-  int nd = DIV_CEIL(nb);
-  sc_signed result(nb, false);
-
-  vector_shift_left( u.ndigits, u.digit, nd, result.digit, v );
-  result.adjust_hod();
-
-  return result;
-}
-
-
-const sc_signed&
-sc_signed::operator<<=(long v)
-{
-  if (v <= 0)
-    return *this;
-
-  return operator<<=((unsigned long) v);
-}
-
-
-const sc_signed&
-sc_signed::operator<<=(unsigned long v)
-{
-  if (v == 0)
-    return *this;
-
-  vector_shift_left(ndigits, digit, v);
-  adjust_hod();
-  return *this;
-}
-
-
-// ----------------------------------------------------------------------------
-//  SECTION: RIGHT SHIFT operators: >>, >>=
-// ----------------------------------------------------------------------------
-
-sc_signed
-operator>>(const sc_signed& u, const sc_signed& v)
-{
-  return operator>>(u, v.to_long());
-}
-
-
-const sc_signed&
-sc_signed::operator>>=(const sc_signed& v)
-{
-  return operator>>=(v.to_long());
-}
-
-
-sc_signed
-operator>>(const sc_signed& u, int64 v)
-{
-  if (v <= 0)
-    return sc_signed(u);
-
-  return operator>>(u, (unsigned long) v);
-}
-
-
-sc_signed
-operator>>(const sc_signed& u, uint64 v)
-{
-  if (v == 0)
-    return sc_signed(u);
-
-  return operator>>(u, (unsigned long) v);
-}
-
-const sc_signed&
-sc_signed::operator>>=(int64 v)
-{
-  if (v <= 0)
-    return *this;
-
-  return operator>>=((unsigned long) v);
-}
-
-
-const sc_signed&
-sc_signed::operator>>=(uint64 v)
-{
-  if (v == 0)
-    return *this;
-
-  return operator>>=((unsigned long) v);
-}
-
-
-sc_signed
-operator>>(const sc_signed& u, long v)
-{
-  if (v <= 0)
-    return sc_signed(u);
-
-  return operator>>(u, (unsigned long) v);
-}
-
-
-sc_signed
-operator>>(const sc_signed& u, unsigned long v)
-{
-    if (v == 0) {
-        return sc_signed(u);
-    }
-    int nb = u.nbits - v;
-    
-    // If we shift off the end return the sign bit.
-    
-    if ( 0 >= nb ) {
-        sc_signed result(1, false);
-        result.digit[0] = 0 > (int)u.digit[u.ndigits-1] ? -1 : 0;
-        return result;
-    }
-    
-    // Return a value that is the width of the shifted value:
-    
-    sc_signed result(nb, false);
-    if ( u.nbits < 33 ) {
-        result.digit[0] = (int)u.digit[0] >> v;
-    }
-    else if ( u.nbits < 65 ) {
-        int64 tmp = u.digit[1];
-        tmp = (tmp << 32) | u.digit[0];
-        tmp = tmp >> v; 
-        result.digit[0] = tmp;
-        if ( nb > 32 ) {
-            result.digit[1] = (tmp >>32);
-        }
-    }
-    else {
-        vector_extract(u.digit, result.digit, u.nbits-1, v);
-    }
-    result.adjust_hod();
-    return result;
-
-}
-
-
-const sc_signed&
-sc_signed::operator>>=(long v)
-{
-  if (v <= 0)
-    return *this;
-
-  return operator>>=((unsigned long) v);
-}
-
-
-const sc_signed&
-sc_signed::operator>>=(unsigned long v)
-{
-    if (v == 0)
-        return *this;
-
-    vector_shift_right(ndigits, digit, v, (int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
-
-  return *this;
-}
-
 
 
 // ----------------------------------------------------------------------------

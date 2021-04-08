@@ -85,13 +85,8 @@ sc_unsigned::sc_unsigned(const sc_int_subref_r& v) :
 {
     nbits = v.length()+1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
-	digit = new sc_digit[ndigits];
-	SC_FREE_DIGIT(true)
-    } else {
-	digit = small_vec;
-	SC_FREE_DIGIT(false)
-    }
+    digit = small_vec;
+    SC_FREE_DIGIT(false)
     *this = v.to_uint64();
 }
 
@@ -101,13 +96,8 @@ sc_unsigned::sc_unsigned(const sc_uint_subref_r& v) :
 {
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
-	digit = new sc_digit[ndigits];
-	SC_FREE_DIGIT(true)
-    } else {
-	digit = small_vec;
-	SC_FREE_DIGIT(false)
-    }
+    digit = small_vec;
+    SC_FREE_DIGIT(false)
     makezero();
     *this = v.to_uint64();
 }
@@ -418,6 +408,13 @@ sc_unsigned::to_double() const
 
     return v;
 }
+
+inline const sc_unsigned&
+sc_unsigned::operator>>=(const sc_signed& v)
+{
+  return operator>>=(v.to_uint());
+}
+
 
 } // namespace sc_dt
 
