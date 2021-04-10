@@ -1223,28 +1223,28 @@ class vector_mac
   public:
     vector_mac() : m_high_bits(0), m_low_bits(0) {}
 
-    void add_product( int left, int right )
+    inline void add_product( int left, int right )
     {
 	int64 product = (int64)left * (int64)right;
 	m_low_bits += (unsigned int)product;
 	m_high_bits += (product >> BITS_PER_DIGIT);
     }
 
-    void add_product( unsigned int left, int right )
+    inline void add_product( unsigned int left, int right )
     {
 	int64 product = (uint64)left * (int64)right;
 	m_low_bits += (unsigned int)product;
 	m_high_bits += (product >> BITS_PER_DIGIT);
     }
 
-    void add_product( int left, unsigned int right )
+    inline void add_product( int left, unsigned int right )
     {
 	int64 product = (int64)left * (uint64)right;
 	m_low_bits += (unsigned int)product;
 	m_high_bits += (product >> BITS_PER_DIGIT);
     }
 
-    void add_product( unsigned int left, unsigned int right )
+    inline void add_product( unsigned int left, unsigned int right )
     {
 	uint64 product = (uint64)left * (uint64)right;
 	m_low_bits += (unsigned int)product;
@@ -1261,7 +1261,7 @@ class vector_mac
 
     sc_digit low_bits() { return m_low_bits; }
 
-    sc_digit shift_down()
+    inline sc_digit shift_down()
     {
         sc_digit result = m_low_bits;
         m_high_bits += (m_low_bits >> BITS_PER_DIGIT);
