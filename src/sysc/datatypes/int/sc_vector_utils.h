@@ -323,6 +323,30 @@ class ScNativeDigits<unsigned int>
 };
 
 // +----------------------------------------------------------------------------
+// |"vector_skip_leading_ones"
+// |
+// | This function returns the index of the highest order sc_digit in the
+// | supplied vector that is not all ones, or zero if all sc_digits are all 
+// | ones.
+// |
+// | Arguments:
+// |     hod      = index of high order digit in 'digits_p'.
+// |     digits_p = vector of digits to find the highest non-zero entry in.
+// | Result:
+// |     index of the highest order non-all-ones entry in 'digits_p' or 0 if
+// |     all the entries in 'digits_p' are all ones.
+// +----------------------------------------------------------------------------
+inline
+int
+vector_skip_leading_ones( const int hod, const sc_digit* digits_p )
+{
+    int digit_i; // digit now examining.
+    for ( digit_i = hod; (digit_i > 0) && (digits_p[digit_i] == ~0u); --digit_i )
+        continue;
+    return digit_i;
+}
+
+// +----------------------------------------------------------------------------
 // |"vector_skip_leading_zeros"
 // |
 // | This function returns the index of the highest order sc_digit in the
@@ -346,6 +370,35 @@ vector_skip_leading_zeros( const int hod, const sc_digit* digits_p )
     return digit_i;
 }
 
+// +------------------------------------------------------------------------------------------------
+// |"vector_find_significant_hod"
+// | 
+// | This function finds the "significant" high order digit of the supplied vector. For a
+// | positive number leading zero digits are skipped, however, if the resultant high order
+// | digit would be negative one digit of zeroes is added back in.
+// | Similarly for a negative number leading all one digits are skipped, however, if the resultant
+// | high order digit would be positive one digit of all ones is added back in.
+// |
+// | Arguments:
+// |     hod    = high order digit of 'digits'.
+// |     digits = digits to be examined.
+// | Result:
+// |     index of significant order digit.
+// +------------------------------------------------------------------------------------------------
+inline int vector_find_significant_hod( int hod, const sc_digit* digits )
+{
+    int result_hod;
+    if ( (int)digits[hod] < 0 ) {
+	result_hod = vector_skip_leading_ones( hod, digits );
+	if ( (int)digits[result_hod] > 0 ) { ++result_hod;  }
+    }
+    else {
+	result_hod = vector_skip_leading_zeros( hod, digits );
+	if ( (int)digits[result_hod] < 0 ) { ++result_hod;  }
+    }
+    return result_hod;
+}
+    
 // +----------------------------------------------------------------------------
 // |"vector_add"
 // |
@@ -1275,7 +1328,7 @@ class vector_mac
 // |"vector_multiply"
 // |
 // | This inline function will multiply two vectors of sc_digits representing
-// | signed numbers. Trimming and/or sign extension is left to the caller.
+// | signed numbers. Some sign extension is left to the caller.
 // |
 // | Notes:
 // |   (1) We use standard long multiplication to generate the result, using
@@ -1323,24 +1376,49 @@ class vector_mac
 // |   (2) It is assumed that result_hod >= longer_hod+shorter_hod.
 // |
 // | Arguments:
-// |     longer_hod   =  number of sc_digits in the left operand.
-// |     longer_p     -> vector of sc_digits representing the left operand.
-// |     shorter_hod  =  number of sc_digits in the right operand.
-// |     shorter_p    -> vector of sc_digits representing the right operand.
-// |     result_hod   =  number of sc_digits in the result.
-// |     result_p     -> vector of sc_digits representing the result.
+// |     left_hod   =  number of sc_digits in the left operand.
+// |     left_p     -> vector of sc_digits representing the left operand.
+// |     right_hod  =  number of sc_digits in the right operand.
+// |     right_p    -> vector of sc_digits representing the right operand.
+// |     result_hod =  number of sc_digits in the result.
+// |     result_p   -> vector of sc_digits representing the result.
 // +----------------------------------------------------------------------------
 inline
 void
-vector_multiply( const int       longer_hod,
-		 const sc_digit* longer_p,
-		 const int       shorter_hod,
-		 const sc_digit* shorter_p,
-		 const int       result_hod,
-		 sc_digit*       result_p)
+vector_multiply( int             left_hod,
+                 const sc_digit* left_p,
+                 int             right_hod,
+                 const sc_digit* right_p,
+                 int             result_hod,
+                 sc_digit*       result_p)
 {
-    vector_mac mac;
-    int        result_i;
+    int             longer_hod;
+    const sc_digit* longer_p;
+    vector_mac      mac;
+    int             result_i;
+    int             shorter_hod;
+    const sc_digit* shorter_p;
+
+    // Trim leading zeros and all ones sc_digits to speed up the operation, and use the 
+    // shorter result operand is as the multiplier
+
+    if ( true ) {
+	left_hod = vector_find_significant_hod( left_hod, left_p ); 
+	right_hod = vector_find_significant_hod( right_hod, right_p ); 
+    }
+    if ( left_hod >= right_hod ) { 
+	longer_hod = left_hod; 
+	longer_p = left_p; 
+	shorter_hod = right_hod; 
+	shorter_p = right_p; 
+    } 
+    else { 
+	longer_hod = right_hod; 
+	longer_p = right_p; 
+	shorter_hod = left_hod; 
+	shorter_p = left_p; 
+    } 
+
 
     // Set the low order digits in the result that are the product of unsigned digits from both 
     // operands. For the example in note (1) this is:

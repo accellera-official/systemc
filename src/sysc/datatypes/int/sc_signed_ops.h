@@ -588,22 +588,12 @@ operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	int right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-	if ( left_n >= right_n ) { \
-	    vector_multiply( left.get_hod(), \
-			     left.get_digits(), \
-			     right.get_hod(), \
-			     right.get_digits(), \
-			     result.get_hod(), \
-			     result.get_digits() ); \
-	} \
-	else { \
-	    vector_multiply( right.get_hod(), \
-			     right.get_digits(), \
-			     left.get_hod(), \
-			     left.get_digits(), \
-			     result.get_hod(), \
-			     result.get_digits() ); \
-	} \
+	vector_multiply( left.get_hod(), \
+			 left.get_digits(), \
+			 right.get_hod(), \
+			 right.get_digits(), \
+			 result.get_hod(), \
+			 result.get_digits() ); \
 	return result; \
     } 
 
@@ -617,22 +607,12 @@ operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
         const int                   right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-        if ( left_n > right_n ) { \
-	    vector_multiply( left.get_hod(),  \
-	                     left.get_digits(),  \
-	                     right.get_hod(),  \
-		             right.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
-        else { \
-	    vector_multiply( right.get_hod(),  \
-	                     right.get_digits(),  \
-	                     left.get_hod(),  \
-		             left.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
+	vector_multiply( left.get_hod(),  \
+			 left.get_digits(),  \
+			 right.get_hod(),  \
+			 right.get_digits(),  \
+			 result.get_hod(),  \
+			 result.get_digits() ); \
 	return result; \
     } 
 
@@ -647,23 +627,12 @@ operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
         const int            right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-        if ( left_n > right_n ) { \
-	    vector_multiply( left.get_hod(),  \
-		             left.get_digits(),  \
-	                     right.get_hod(),  \
-	                     right.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
-        else { \
-	    vector_multiply(  \
-	                     right.get_hod(),  \
-		             right.get_digits(),  \
-	                     left.get_hod(),  \
-	                     left.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
+	vector_multiply( left.get_hod(),  \
+			 left.get_digits(),  \
+			 right.get_hod(),  \
+			 right.get_digits(),  \
+			 result.get_hod(),  \
+			 result.get_digits() ); \
 	return result; \
     }
 
