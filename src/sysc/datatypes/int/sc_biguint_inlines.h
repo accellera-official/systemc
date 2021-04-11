@@ -450,7 +450,7 @@ sc_biguint<W>::operator<<=(unsigned int v)
   if (v == 0)
     return *this;
 
-  vector_shift_left( ndigits, digit, v );
+  vector_shift_left( DIV_CEIL(W+1), digit, v );
   adjust_hod();
 
   return *this;
