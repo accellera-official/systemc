@@ -390,7 +390,7 @@ inline int vector_find_significant_hod( int hod, const sc_digit* digits )
     int result_hod;
     if ( (int)digits[hod] < 0 ) {
 	result_hod = vector_skip_leading_ones( hod, digits );
-	if ( (int)digits[result_hod] > 0 ) { ++result_hod;  }
+	if ( (int)digits[result_hod] >= 0 ) { ++result_hod;  }
     }
     else {
 	result_hod = vector_skip_leading_zeros( hod, digits );
