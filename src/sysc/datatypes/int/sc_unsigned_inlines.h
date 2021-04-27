@@ -409,10 +409,28 @@ sc_unsigned::to_double() const
     return v;
 }
 
+inline sc_unsigned
+sc_unsigned::operator>>(const sc_signed& v) const
+{
+  return operator>>(v.to_int());
+}
+
 inline const sc_unsigned&
 sc_unsigned::operator>>=(const sc_signed& v)
 {
-  return operator>>=(v.to_uint());
+  return operator>>=(v.to_int());
+}
+
+inline sc_unsigned
+sc_unsigned::operator<<(const sc_signed& v) const
+{
+  return operator<<(v.to_int());
+}
+
+inline const sc_unsigned&
+sc_unsigned::operator<<=(const sc_signed& v)
+{
+  return operator<<=(v.to_int());
 }
 
 
