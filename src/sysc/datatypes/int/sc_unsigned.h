@@ -380,6 +380,26 @@ public:
     const std::string to_string( sc_numrep numrep, bool w_prefix ) const;
 
 
+    // shift operators
+
+    inline sc_unsigned operator<<( int v ) const;
+    inline sc_unsigned operator<<(const sc_signed&    v) const;
+    inline sc_unsigned operator<<(const sc_unsigned&  v) const;
+    inline sc_unsigned operator<<(int64               v) const;
+    inline sc_unsigned operator<<(uint64              v) const;
+    inline sc_unsigned operator<<(long                v) const;
+    inline sc_unsigned operator<<(unsigned long       v) const;
+    inline sc_unsigned operator<<(unsigned int        v) const;
+
+    inline sc_unsigned operator>>( int v ) const;
+    inline sc_unsigned operator>>(const sc_signed&    v) const;
+    inline sc_unsigned operator>>(const sc_unsigned&  v) const;
+    inline sc_unsigned operator>>(int64               v) const;
+    inline sc_unsigned operator>>(uint64              v) const;
+    inline sc_unsigned operator>>(long                v) const;
+    inline sc_unsigned operator>>(unsigned long       v) const;
+    inline sc_unsigned operator>>(unsigned int        v) const;
+
     // concatenation support
 
     virtual int concat_length(bool* xz_present_p) const
@@ -422,6 +442,7 @@ private: // disabled
 inline
 ::std::ostream&
 operator<<( ::std::ostream&, const sc_unsigned_subref_r& );
+
 
 
 // ----------------------------------------------------------------------------
@@ -490,7 +511,6 @@ public:
     void scan( ::std::istream& is = ::std::cin );
 
 };
-
 
 
 inline

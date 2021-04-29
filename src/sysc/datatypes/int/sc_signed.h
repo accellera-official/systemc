@@ -363,7 +363,6 @@ public:
 
     operator sc_unsigned () const;
 
-
     // explicit conversions
 
     double               to_double() const;
@@ -379,6 +378,26 @@ public:
 
     const std::string to_string( sc_numrep numrep = SC_DEC ) const;
     const std::string to_string( sc_numrep numrep, bool w_prefix ) const;
+
+    // shift operators
+
+    inline sc_unsigned operator<<( int v ) const;
+    inline sc_unsigned operator<<(const sc_signed&    v) const;
+    inline sc_unsigned operator<<(const sc_unsigned&  v) const;
+    inline sc_unsigned operator<<(int64               v) const;
+    inline sc_unsigned operator<<(uint64              v) const;
+    inline sc_unsigned operator<<(long                v) const;
+    inline sc_unsigned operator<<(unsigned long       v) const;
+    inline sc_unsigned operator<<(unsigned int        v) const;
+
+    inline sc_unsigned operator>>( int v ) const;
+    inline sc_unsigned operator>>(const sc_signed&    v) const;
+    inline sc_unsigned operator>>(const sc_unsigned&  v) const;
+    inline sc_unsigned operator>>(int64               v) const;
+    inline sc_unsigned operator>>(uint64              v) const;
+    inline sc_unsigned operator>>(long                v) const;
+    inline sc_unsigned operator>>(unsigned long       v) const;
+    inline sc_unsigned operator>>(unsigned int        v) const;
 
     // concatenation support
 
@@ -420,6 +439,10 @@ private: // disabled
 };
 
 
+// shift operators
+
+inline sc_unsigned operator<<( const sc_signed_subref_r& target, int v );
+inline sc_unsigned operator>>( const sc_signed_subref_r& target, int v );
 
 inline
 ::std::ostream&
