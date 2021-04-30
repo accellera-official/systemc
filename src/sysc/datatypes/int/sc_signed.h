@@ -428,11 +428,6 @@ private: // disabled
 };
 
 
-// shift operators
-
-inline sc_unsigned operator<<( const sc_signed_subref_r& target, int v );
-inline sc_unsigned operator>>( const sc_signed_subref_r& target, int v );
-
 inline
 ::std::ostream&
 operator<<( ::std::ostream&, const sc_signed_subref_r& );
