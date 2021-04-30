@@ -35,6 +35,55 @@
 
 namespace sc_dt {
 
+// +------------------------------------------------------------------------------------------------
+// |"sc_unsigned_subref_r shift operators"
+// | 
+// | These are the shift operators for part selections.
+// |
+// | Notes:
+// |   (1) There are definitions for shift types of int, sc_signed, and sc_unsigned. All other
+// |       native C++ integer types will be matched to the int shift type by the compiler.
+// | Arguments:
+// |     shift = amount to shift by.
+// | Result:
+// |     sc_unsigned instance representing the shifted value.
+// +------------------------------------------------------------------------------------------------
+inline
+sc_unsigned sc_unsigned_subref_r::operator<<( int shift ) const
+{ 
+    return ((sc_unsigned)*this)<<(shift); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator<<(const sc_signed&    v) const 
+{
+    return this->operator<<( v.to_int() ); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator<<(const sc_unsigned&  v) const
+{
+    return this->operator<<( v.to_int() ); 
+}
+
+inline
+sc_unsigned sc_unsigned_subref_r::operator>>( int shift ) const
+{ 
+    return ((sc_unsigned)*this)>>(shift); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator>>(const sc_signed&    v) const 
+{
+    return this->operator>>( v.to_int() ); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator>>(const sc_unsigned&  v) const
+{
+    return this->operator>>( v.to_int() ); 
+}
+
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
 // | 
@@ -409,10 +458,28 @@ sc_unsigned::to_double() const
     return v;
 }
 
+inline sc_unsigned
+sc_unsigned::operator>>(const sc_signed& v) const
+{
+  return operator>>(v.to_int());
+}
+
 inline const sc_unsigned&
 sc_unsigned::operator>>=(const sc_signed& v)
 {
-  return operator>>=(v.to_uint());
+  return operator>>=(v.to_int());
+}
+
+inline sc_unsigned
+sc_unsigned::operator<<(const sc_signed& v) const
+{
+  return operator<<(v.to_int());
+}
+
+inline const sc_unsigned&
+sc_unsigned::operator<<=(const sc_signed& v)
+{
+  return operator<<=(v.to_int());
 }
 
 

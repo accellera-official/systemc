@@ -136,23 +136,10 @@ class sc_fxnum_fast;
 #include "sc_signed_friends.h"
 #undef SCFP
 
-  // SHIFT OPERATORS:
-
-  // LEFT SHIFT operators:
-
-  sc_unsigned operator << (const sc_unsigned&  u, const sc_signed&    v);
-  sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
-
-  // RIGHT SHIFT operators:
-
-  sc_unsigned operator >> (const sc_unsigned&  u, const sc_signed&    v);
-  sc_signed operator >> (const sc_signed&    u, const sc_unsigned&  v);
-
   // Unary arithmetic operators
 
   sc_signed operator + (const sc_signed&   u);
   sc_signed operator - (const sc_signed&   u);
-  // @@@@@@@@ sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
 
@@ -265,7 +252,7 @@ private: // disabled
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_signed_bitref_r& );
+operator<<( ::std::ostream&, const sc_signed_bitref_r& );
 
 
 // ----------------------------------------------------------------------------
@@ -279,8 +266,6 @@ class sc_signed_bitref
 {
     friend class sc_signed;
     friend class sc_core::sc_vpool<sc_signed_bitref>;
-
-
 
 protected: // constructor
 
@@ -323,7 +308,7 @@ public:
 
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_signed_bitref& );
+operator>>( ::std::istream&, sc_signed_bitref& );
 
 
 // ----------------------------------------------------------------------------
@@ -378,7 +363,6 @@ public:
 
     operator sc_unsigned () const;
 
-
     // explicit conversions
 
     double               to_double() const;
@@ -394,6 +378,16 @@ public:
 
     const std::string to_string( sc_numrep numrep = SC_DEC ) const;
     const std::string to_string( sc_numrep numrep, bool w_prefix ) const;
+
+    // shift operators
+
+    inline sc_unsigned operator<<( int v ) const;
+    inline sc_unsigned operator<<(const sc_signed&    v) const;
+    inline sc_unsigned operator<<(const sc_unsigned&  v) const;
+
+    inline sc_unsigned operator>>( int v ) const;
+    inline sc_unsigned operator>>(const sc_signed&    v) const;
+    inline sc_unsigned operator>>(const sc_unsigned&  v) const;
 
     // concatenation support
 
@@ -415,7 +409,6 @@ public:
     bool xor_reduce() const ;
     bool xnor_reduce() const;
 
-
     // other methods
 
     void print( ::std::ostream& os = ::std::cout ) const
@@ -435,10 +428,9 @@ private: // disabled
 };
 
 
-
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_signed_subref_r& );
+operator<<( ::std::ostream&, const sc_signed_subref_r& );
 
 
 // ----------------------------------------------------------------------------
@@ -517,7 +509,7 @@ public:
 
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_signed_subref& );
+operator>>( ::std::istream&, sc_signed_subref& );
 
 
 // ----------------------------------------------------------------------------
@@ -1000,14 +992,11 @@ public:
 
   // LEFT SHIFT operators:
 
-  friend sc_unsigned operator << (const sc_unsigned&  u, const sc_signed&    v);
-  friend   sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
-
   inline
   sc_signed
-  operator<<(unsigned int v) const
+  operator<<(int v) const
   {
-    if (v == 0)
+    if (v <= 0)
       return sc_signed(*this);
   
     int nb = nbits + v;
@@ -1020,17 +1009,18 @@ public:
     return result;
   }
 
-  sc_signed operator << ( const sc_signed&    v ) const { return operator << ( v.to_uint() ); }
-  sc_signed operator << ( int64               v ) const { return operator << ( (unsigned int)v ); }
-  sc_signed operator << ( uint64              v ) const { return operator << ( (unsigned int)v ); }
-  sc_signed operator << ( long                v ) const { return operator << ( (unsigned int)v ); }
-  sc_signed operator << ( unsigned long       v ) const { return operator << ( (unsigned int)v ); }
-  sc_signed operator << ( int                 v ) const { return operator << ( (unsigned int)v ); }
+  sc_signed operator<<(const sc_unsigned&  v ) const;
+  sc_signed operator<<( const sc_signed&    v ) const { return operator<<( v.to_int() ); }
+  sc_signed operator<<( int64               v ) const { return operator<<( (int)v ); }
+  sc_signed operator<<( uint64              v ) const { return operator<<( (int)v ); }
+  sc_signed operator<<( long                v ) const { return operator<<( (int)v ); }
+  sc_signed operator<<( unsigned long       v ) const { return operator<<( (int)v ); }
+  sc_signed operator<<( unsigned int        v ) const { return operator<<( (int)v ); }
 
   const sc_signed&
-  operator<<=(unsigned int v)
+  operator<<=(int v)
   {
-    if (v == 0)
+    if (v <= 0)
       return *this;
 
     vector_shift_left( ndigits, digit, v );
@@ -1038,24 +1028,21 @@ public:
 
     return *this;
   }
-  const sc_signed& operator <<= (const sc_unsigned&  v);
-  const sc_signed& operator <<= (const sc_signed&    v) { return operator<<=( v.to_uint() ); }
-  const sc_signed& operator <<= (int64               v) { return operator<<=((unsigned int) v); }
-  const sc_signed& operator <<= (uint64              v) { return operator<<=((unsigned int) v); }
-  const sc_signed& operator <<= (long                v) { return operator<<=((unsigned int) v); }
-  const sc_signed& operator <<= (unsigned long       v) { return operator<<=((unsigned int) v); }
-  const sc_signed& operator <<= (int                 v) { return operator<<=((unsigned int) v); }
+  const sc_signed& operator<<=(const sc_unsigned&  v);
+  const sc_signed& operator<<=(const sc_signed&    v) { return operator<<=( v.to_int() ); }
+  const sc_signed& operator<<=(int64               v) { return operator<<=((int) v); }
+  const sc_signed& operator<<=(uint64              v) { return operator<<=((int) v); }
+  const sc_signed& operator<<=(long                v) { return operator<<=((int) v); }
+  const sc_signed& operator<<=(unsigned long       v) { return operator<<=((int) v); }
+  const sc_signed& operator<<=(unsigned int        v) { return operator<<=((int) v); }
 
   // RIGHT SHIFT operators:
 
-  friend sc_unsigned operator >> (const sc_unsigned&  u, const sc_signed&    v);
-  friend sc_signed operator >> (const sc_signed&    u, const sc_unsigned&  v);
-
   inline
   sc_signed
-  operator>>(unsigned int v) const
+  operator>>(int v) const
   {   
-      if (v == 0) {
+      if (v <= 0) {
           return sc_signed(*this);
       }
       int nb = nbits - v;
@@ -1090,31 +1077,32 @@ public:
       return result;
   }
 
-  sc_signed operator >> (const sc_signed& v) const { return operator >> ( v.to_uint() ); }
-  sc_signed operator >> (int64            v) const { return operator >> ( (unsigned int)v ); }
-  sc_signed operator >> (uint64           v) const { return operator >> ( (unsigned int)v ); }
-  sc_signed operator >> (long             v) const { return operator >> ( (unsigned int)v ); }
-  sc_signed operator >> (unsigned long    v) const { return operator >> ( (unsigned int)v ); }
-  sc_signed operator >> (int              v) const { return operator >> ( (unsigned int)v ); }
+  sc_signed operator>>(const sc_unsigned& v) const;
+  sc_signed operator>>(const sc_signed& v) const { return operator>>( v.to_int() ); }
+  sc_signed operator>>(int64            v) const { return operator>>( (int)v ); }
+  sc_signed operator>>(uint64           v) const { return operator>>( (int)v ); }
+  sc_signed operator>>(long             v) const { return operator>>( (int)v ); }
+  sc_signed operator>>(unsigned long    v) const { return operator>>( (int)v ); }
+  sc_signed operator>>(unsigned int     v) const { return operator>>( (int)v ); }
   
   inline
   const sc_signed&
-  operator>>=(unsigned int v)
+  operator>>=(int v)
   {
-      if (v == 0)
+      if (v <= 0)
           return *this;
   
       vector_shift_right(ndigits, digit, v, (int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
   
     return *this;
   }
-  const sc_signed& operator >>= (const sc_unsigned&  v);
-  const sc_signed& operator >>= (const sc_signed&    v) { return operator >>= ( v.to_uint() ); }
-  const sc_signed& operator >>= (int64               v) { return operator >>= ( (unsigned int)v ); }
-  const sc_signed& operator >>= (uint64              v) { return operator >>= ( (unsigned int)v ); }
-  const sc_signed& operator >>= (long                v) { return operator >>= ( (unsigned int)v ); }
-  const sc_signed& operator >>= (unsigned long       v) { return operator >>= ( (unsigned int)v ); }
-  const sc_signed& operator >>= (int                 v) { return operator >>= ( (unsigned int)v ); }
+  const sc_signed& operator>>=(const sc_unsigned&  v);
+  const sc_signed& operator>>=(const sc_signed&    v) { return operator>>=( v.to_int() ); }
+  const sc_signed& operator>>=(int64               v) { return operator>>=( (int)v ); }
+  const sc_signed& operator>>=(uint64              v) { return operator>>=( (int)v ); }
+  const sc_signed& operator>>=(long                v) { return operator>>=( (int)v ); }
+  const sc_signed& operator>>=(unsigned long       v) { return operator>>=( (int)v ); }
+  const sc_signed& operator>>=(unsigned int        v) { return operator>>=( (int)v ); }
 
   // Unary arithmetic operators
 
@@ -1210,17 +1198,17 @@ private:
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_signed& );
+operator<<( ::std::ostream&, const sc_signed& );
 
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_signed& );
+operator>>( ::std::istream&, sc_signed& );
 
 
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_signed_bitref_r& a )
+operator<<( ::std::ostream& os, const sc_signed_bitref_r& a )
 {
     a.print( os );
     return os;
@@ -1229,7 +1217,7 @@ operator << ( ::std::ostream& os, const sc_signed_bitref_r& a )
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_signed_bitref& a )
+operator>>( ::std::istream& is, sc_signed_bitref& a )
 {
     a.scan( is );
     return is;
@@ -1288,7 +1276,7 @@ inline bool sc_signed_subref_r::xnor_reduce() const
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_signed_subref_r& a )
+operator<<( ::std::ostream& os, const sc_signed_subref_r& a )
 {
     a.print( os );
     return os;
@@ -1316,7 +1304,7 @@ sc_signed_subref::operator = ( const char* a )
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_signed_subref& a )
+operator>>( ::std::istream& is, sc_signed_subref& a )
 {
     a.scan( is );
     return is;
@@ -1359,7 +1347,7 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_signed& a )
+operator<<( ::std::ostream& os, const sc_signed& a )
 {
     a.print( os );
     return os;
@@ -1367,7 +1355,7 @@ operator << ( ::std::ostream& os, const sc_signed& a )
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_signed& a )
+operator>>( ::std::istream& is, sc_signed& a )
 {
     a.scan( is );
     return is;
