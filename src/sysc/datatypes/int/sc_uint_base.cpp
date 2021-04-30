@@ -459,17 +459,6 @@ sc_uint_base::operator = ( const sc_bv_base& a )
 sc_uint_base&
 sc_uint_base::operator = ( const sc_lv_base& a )
 {
-#if 0
-    int minlen = sc_min( m_len, a.length() );
-    int i = 0;
-    for( ; i < minlen; ++ i ) {
-	set( i, sc_logic( a.get_bit( i ) ).to_bool() );
-    }
-    for( ; i < m_len; ++ i ) {
-	// zero extension
-	set( i, 0 );
-    }
-#endif
     m_val = a.to_uint64();
     extend_sign();
     return *this;

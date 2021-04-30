@@ -575,40 +575,20 @@ inline bool xnor_reduce() const;
 const sc_signed operator<<(int v) const;
 const sc_signed operator<<(const sc_signed& v) const { return operator << (v.to_int()); }
 const sc_signed operator<<(const sc_unsigned& v) const { return operator << (v.to_int()); }
-const sc_signed operator<<(int64 v) const { return operator << ((int)v); }
-const sc_signed operator<<(uint64 v) const { return operator << ((int)v); }
-const sc_signed operator<<(long v) const { return operator << ((int)v); }
-const sc_signed operator<<(unsigned long v) const { return operator << ((int)v); }
-const sc_signed operator<<(unsigned int v) const { return operator << ((int)v); }
 
 const sc_bigint<W>& operator<<=(int v);
 const sc_bigint<W>& operator<<=(const sc_unsigned& v) { return operator<<=( v.to_int() ); }
 const sc_bigint<W>& operator<<=(const sc_signed& v)   { return operator<<= ( v.to_int() ); }
-const sc_bigint<W>& operator<<=(int64 v) { return operator<<=( (int) v ); }
-const sc_bigint<W>& operator<<=(uint64 v) { return operator<<=( (int) v ); }
-const sc_bigint<W>& operator<<=(long v) { return operator<<=( (int) v ); }
-const sc_bigint<W>& operator<<=(unsigned long v) { return operator<<=( (int) v ); }
-const sc_bigint<W>& operator<<=(unsigned int v) { return operator<<=( (int) v ); }
 
 // right shift operators
 
 const sc_signed operator>>(int v) const;
 const sc_signed operator>>(const sc_signed& v) const { return operator >> (v.to_int()); }
 const sc_signed operator>>(const sc_unsigned& v) const { return operator>>(v.to_int()); }
-const sc_signed operator>>(int64 v) const { return operator >> ((int)v); }
-const sc_signed operator>>(uint64 v) const { return operator >> ((int)v); }
-const sc_signed operator>>(long v) const { return operator >> ((int)v); }
-const sc_signed operator>>(unsigned long v) const { return operator >> ((int)v); }
-const sc_signed operator>>(unsigned int v) const { return operator >> ((int)v); }
 
 const sc_bigint<W>& operator>>=(int v);
 const sc_bigint<W>& operator>>=(const sc_unsigned& v) { return operator>>= (v.to_int() ); }
 const sc_bigint<W>& operator>>=(const sc_signed& v) { return operator>>=( v.to_int() ); }
-const sc_bigint<W>& operator>>=(int64 v) { return operator>>=( (int)v ); }
-const sc_bigint<W>& operator>>=(uint64 v) { return operator>>=( (int)v ); }
-const sc_bigint<W>& operator>>=(long v) { return operator>>=( (int)v ); }
-const sc_bigint<W>& operator>>=(unsigned long v) { return operator>>=( (int)v ); }
-const sc_bigint<W>& operator>>=(unsigned int v) { return operator>>=( (int)v ); }
 
 // Increment operators:
 

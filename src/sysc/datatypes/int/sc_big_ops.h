@@ -766,22 +766,9 @@ sc_big_multiply( RESULT& result, const LEFT& left, const RIGHT& right )
 	*result_p = result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
-#if 0
-    else if ( (const int)LEFT::HOD >= (const int)RIGHT::HOD ) {
-	vector_multiply( LEFT::HOD,   left.get_digits(), 
-		         RIGHT::HOD,  right.get_digits(), 
-		         RESULT::HOD, result.get_digits() );
-    }
-    else {
-	vector_multiply( RIGHT::HOD,  right.get_digits(), 
-		         LEFT::HOD,   left.get_digits(), 
-		         RESULT::HOD, result.get_digits() );
-    }
-#else
     vector_multiply( LEFT::HOD,   left.get_digits(), 
 		     RIGHT::HOD,  right.get_digits(), 
 		     RESULT::HOD, result.get_digits() );
-#endif
 }
 
 template<int WL, int WR>

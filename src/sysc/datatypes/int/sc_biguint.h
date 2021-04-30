@@ -316,11 +316,6 @@ public:
 
     // assignment operators
 
-#if 0
-    const sc_biguint<W>& operator = ( const sc_biguint<W>& v )
-        { sc_unsigned_proxy() = ( v ); return *this; }
-#endif
-
     template<int WO>
     const sc_biguint<W>& operator = ( const sc_biguint<WO>& v );
 
@@ -568,40 +563,20 @@ inline const sc_biguint<W>& operator ^= (const sc_uint_base& v);
 const sc_unsigned operator<<(int v) const;
 const sc_unsigned operator<<(const sc_signed& v) const { return operator << (v.to_int()); } 
 const sc_unsigned operator<<(const sc_unsigned& v) const { return operator << (v.to_int()); }
-const sc_unsigned operator<<(int64 v) const { return operator << ((int)v); }
-const sc_unsigned operator<<(uint64 v) const { return operator << ((int)v); }
-const sc_unsigned operator<<(long v) const { return operator << ((int)v); }
-const sc_unsigned operator<<(unsigned long v) const { return operator << ((int)v); }
-const sc_unsigned operator<<(unsigned int v) const { return operator << ((int)v); }
 
 const sc_biguint<W>& operator<<=(int v);
 const sc_biguint<W>& operator<<=(const sc_unsigned& v) { return operator <<=( v.to_int() ); }
 const sc_biguint<W>& operator<<=(const sc_signed& v) { return operator <<=( v.to_int() ); }
-const sc_biguint<W>& operator<<=(int64 v) { return operator <<= ((int)v); }
-const sc_biguint<W>& operator<<=(uint64 v) { return operator <<= ((int)v); }
-const sc_biguint<W>& operator<<=(long v) { return operator <<= ((int)v); }
-const sc_biguint<W>& operator<<=(unsigned long v) { return operator <<= ((int)v); }
-const sc_biguint<W>& operator<<=(unsigned int v) { return operator <<=( (int)v ); }
 
 // Right shift operators:
 
 const sc_unsigned operator>>(int v) const;
 const sc_unsigned operator>>(const sc_signed& v) const { return operator >> (v.to_int()); } 
 const sc_unsigned operator>>(const sc_unsigned& v) const { return operator >> (v.to_int()); }
-const sc_unsigned operator>>(int64 v) const { return operator >> ((int)v); }
-const sc_unsigned operator>>(uint64 v) const { return operator >> ((int)v); }
-const sc_unsigned operator>>(long v) const { return operator >> ((int)v); }
-const sc_unsigned operator>>(unsigned long v) const { return operator >> ((int)v); }
-const sc_unsigned operator>>(unsigned int v) const { return operator >> ((int)v); }
 
 const sc_biguint<W>& operator>>=(int v);
 const sc_biguint<W>& operator>>=(const sc_unsigned& v) { return operator >>=( v.to_int() ); }
 const sc_biguint<W>& operator>>=(const sc_signed& v) { return operator >>=( v.to_int() ); }
-const sc_biguint<W>& operator>>=(int64 v) { return operator >>=( (int)v ); }
-const sc_biguint<W>& operator>>=(uint64 v) { return operator >>=( (int)v ); }
-const sc_biguint<W>& operator>>=(long v) { return operator >>=( (int)v ); }
-const sc_biguint<W>& operator>>=(unsigned long v) { return operator >>=( (int)v ); }
-const sc_biguint<W>& operator>>=(unsigned int v) { return operator >>=( (int)v ); }
 
 // Range operators:
 
