@@ -385,20 +385,10 @@ public:
     inline sc_unsigned operator<<( int v ) const;
     inline sc_unsigned operator<<(const sc_signed&    v) const;
     inline sc_unsigned operator<<(const sc_unsigned&  v) const;
-    inline sc_unsigned operator<<(int64               v) const;
-    inline sc_unsigned operator<<(uint64              v) const;
-    inline sc_unsigned operator<<(long                v) const;
-    inline sc_unsigned operator<<(unsigned long       v) const;
-    inline sc_unsigned operator<<(unsigned int        v) const;
 
     inline sc_unsigned operator>>( int v ) const;
     inline sc_unsigned operator>>(const sc_signed&    v) const;
     inline sc_unsigned operator>>(const sc_unsigned&  v) const;
-    inline sc_unsigned operator>>(int64               v) const;
-    inline sc_unsigned operator>>(uint64              v) const;
-    inline sc_unsigned operator>>(long                v) const;
-    inline sc_unsigned operator>>(unsigned long       v) const;
-    inline sc_unsigned operator>>(unsigned int        v) const;
 
     // concatenation support
 

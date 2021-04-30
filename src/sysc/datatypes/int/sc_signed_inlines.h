@@ -36,10 +36,13 @@
 namespace sc_dt {
 
 // +------------------------------------------------------------------------------------------------
-// |"sc_unsigned_subref_r shift operators"
+// |"sc_signed_subref_r shift operators"
 // | 
 // | These are the shift operators for part selections.
 // |
+// | Notes:
+// |   (1) There are definitions for shift types of int, sc_signed, and sc_unsigned. All other
+// |       native C++ integer types will be matched to the int shift type by the compiler.
 // | Arguments:
 // |     shift = amount to shift by.
 // | Result:
@@ -63,36 +66,6 @@ sc_unsigned sc_signed_subref_r::operator<<(const sc_unsigned&  v) const
     return this->operator<<( v.to_int() ); 
 }
 
-inline 
-sc_unsigned sc_signed_subref_r::operator<<(int64               v) const
-{
-    return this->operator<<( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator<<(uint64              v) const
-{
-    return this->operator<<( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator<<(long                v) const
-{
-    return this->operator<<( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator<<(unsigned long       v) const
-{
-    return this->operator<<( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator<<(unsigned int        v) const
-{
-    return this->operator<<( (int)v );
-}
-
 inline
 sc_unsigned sc_signed_subref_r::operator>>( int shift ) const
 { 
@@ -109,36 +82,6 @@ inline
 sc_unsigned sc_signed_subref_r::operator>>(const sc_unsigned&  v) const
 {
     return this->operator>>( v.to_int() ); 
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator>>(int64               v) const
-{
-    return this->operator>>( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator>>(uint64              v) const
-{
-    return this->operator>>( (int)v);
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator>>(long                v) const
-{
-    return this->operator>>( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator>>(unsigned long       v) const
-{
-    return this->operator>>( (int)v );
-}
-
-inline 
-sc_unsigned sc_signed_subref_r::operator>>(unsigned int        v) const
-{
-    return this->operator>>( (int)v );
 }
 
 // +----------------------------------------------------------------------------
