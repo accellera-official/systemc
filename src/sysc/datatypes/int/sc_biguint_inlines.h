@@ -79,17 +79,6 @@ sc_biguint<W>::operator = (const sc_unsigned& from)
     return *this;
 }
 
-#if 0
-template<int W>
-inline
-const sc_biguint<W>&
-sc_biguint<W>::operator=(const sc_unsigned_subref_r& v)
-{
-    operator=(sc_unsigned(v));
-    return * this;
-}
-#endif
-
 template<int W>
 inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_signed& from)
@@ -514,17 +503,6 @@ sc_biguint<W>::operator>>=(int v)
 
   return *this;
 }
-
-#if 0
-template<int W>
-inline
-const sc_biguint<W>&
-sc_biguint<W>::operator=(const sc_unsigned_subref_r& v)
-{
-    operator=(sc_unsigned(v));
-    return * this;
-}
-#endif
 
 template<int W>
 template<int WO>

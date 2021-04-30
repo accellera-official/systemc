@@ -329,21 +329,6 @@ sc_signed::operator = ( long from )
     return *this;
 }
 
-#if 0
-inline const sc_signed&
-sc_signed::operator = ( int from )
-{
-    int to_hod = get_hod();
-    sc_digit* to_p = get_digits();
-    *to_p++ = from;
-    if ( to_hod > 0 ) {
-	vector_fill( from < 0 ? -1 : 0, to_hod-1, to_p );
-    }
-    adjust_hod();
-    return *this;
-}
-#endif
-
 inline const sc_signed&
 sc_signed::operator = ( uint64 from )
 {
@@ -380,21 +365,6 @@ sc_signed::operator = ( unsigned long from )
     adjust_hod();
     return *this;
 }
-
-#if 0
-inline const sc_signed&
-sc_signed::operator = ( unsigned int from )
-{
-    int to_hod = get_hod();
-    sc_digit* to_p = get_digits();
-    *to_p++ = from;
-    if ( to_hod > 0 ) {
-	vector_fill( 0, to_hod-1, to_p );
-    }
-    adjust_hod();
-    return *this;
-}
-#endif
 
 inline const sc_signed&
 sc_signed::operator = ( const sc_int_base& from )
