@@ -133,12 +133,6 @@ namespace sc_dt
 
 #define SC_SMALL_VEC_DIGITS 40
 
-// Sign of a number:
-#define SC_NEG       -1     // Negative number
-#define SC_ZERO      0      // Zero
-#define SC_POS       1      // Positive number
-#define SC_NOSIGN    2      // Uninitialized sc_signed number
-
 typedef unsigned char uchar;
 
 // A small_type number is at least a char. Defining an int is probably
