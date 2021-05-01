@@ -152,43 +152,6 @@ from_uint(int ulen, sc_digit *u, Type v)
 }
 
 
-// Get u's sign and return its absolute value.
-// u can be long, unsigned long, int64, or uint64.
-template< class Type >
-inline
-small_type
-get_sign(Type &u) 
-{
-  if (u > 0)
-    return SC_POS;
-
-  else if (u == 0)
-    return SC_ZERO;
-
-  else {
-    u = -u;
-    return SC_NEG;
-  }
-}
-
-
-// Return us * vs:
-// - Return SC_ZERO if either sign is SC_ZERO.
-// - Return SC_POS if us == vs
-// - Return SC_NEG if us != vs.
-inline
-small_type
-mul_signs(small_type us, small_type vs)
-{
-  if ((us == SC_ZERO) || (vs == SC_ZERO))
-    return SC_ZERO;
-
-  if (us == vs)
-    return SC_POS;
-
-  return SC_NEG;
-}
-
 
 // ----------------------------------------------------------------------------
 //  Functions to test for errors and print out error messages.
