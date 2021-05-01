@@ -224,7 +224,7 @@ protected:
     int     m_len;  // length in bits
     int     m_size; // size of data array
     sc_digit* m_data; // data array
-    sc_digit  m_small_vec[SC_SMALL_VEC_DIGITS];
+    sc_digit  m_small_vec[SC_SMALL_VEC_DIGITS>0?SC_SMALL_VEC_DIGITS:1];
 };
 
 
