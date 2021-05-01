@@ -1106,10 +1106,10 @@ public:
 
 protected:
 
-  int      nbits;                          // Shortened as nb.
-  int      ndigits;                        // Shortened as nd.
-  sc_digit *digit;                         // storage for our value.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // speed up smaller sizes.
+  int      nbits;                                                  // number of bits in use.
+  int      ndigits;                                                // number words in 'digits'
+  sc_digit *digit;                                                 // storage for our value.
+  sc_digit small_vec[SC_SMALL_VEC_DIGITS>0?SC_SMALL_VEC_DIGITS:1]; // make small values faster.
 
 #if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
   bool m_free; // true if should free 'digit'.
@@ -1169,9 +1169,6 @@ private:
   sc_unsigned(const sc_signed&   v, small_type s);
 
   // Private member functions. The called functions are inline functions.
-
-  small_type default_sign() const
-    { return SC_POS; }
 
   static int num_bits(int nb) { return nb + 1; }
 
