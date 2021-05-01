@@ -80,65 +80,6 @@ sc_digit_heap sc_temporary_digits(0x100000);
 //  SECTION: General utility functions.
 // ----------------------------------------------------------------------------
 
-// Return the number of characters to advance the source of c.  This
-// function implements one move of the FSM to parse the following
-// regular expressions. Error checking is done in the caller.
-
-small_type
-fsm_move(char c, small_type &b, small_type &s, small_type &state)
-{
-
-  // Possible regular expressions (REs):
-  // Let N = any digit depending on the base.
-  //    1. [0|1|..|9]N*
-  //    2. [+|-][0|1|..|9]N*
-  //    3. 0[b|B|d|D|o|O|x|X][0|1|..|F]N*
-  //    4. [+|-]?0[b|B|d|D|o|O|x|X][0|1|..|F]N*
-  //
-  // The finite state machine (FMS) to parse these regular expressions
-  // has 4 states, 0 to 3. 0 is the initial state and 3 is the final
-  // state.
-  //
-  // Default sign = SC_POS, default base = NB_DEFAULT_BASE.
-
-  switch (state) {
-
-  case 0: // The initial state.
-    switch (c) { 
-    case '0': s = SC_POS; state = 1; return 0; // RE 1 or 3
-    case '+': s = SC_POS; state = 2; return 1; // RE 2
-    case '-': s = SC_NEG; state = 2; return 1; // RE 2
-    default:  s = SC_POS; b = NB_DEFAULT_BASE; state = 3; return 0; // RE 1
-    }
-    // break; //unreachable code
-  case 1: // 0...
-    switch (c) {
-    case 'x': case 'X': b = SC_HEX; state = 3; return 2; // RE 3 or 4
-    case 'd': case 'D': b = SC_DEC; state = 3; return 2; // RE 3 or 4
-    case 'o': case 'O': b = SC_OCT; state = 3; return 2; // RE 3 or 4
-    case 'b': case 'B': b = SC_BIN; state = 3; return 2; // RE 3 or 4
-    default:  b = NB_DEFAULT_BASE; state = 3; return 0; // RE 1
-    }
-    // break; //unreachable code
-  case 2: // +... or -...
-    switch (c) {
-    case '0': state = 1; return 0; // RE 2 or 4
-    default:  b = NB_DEFAULT_BASE; state = 3; return 0; // RE 2
-    }
-    // break; //unreachable code
-  case 3: // The final state.
-    break;
-
-  default:
-    // Any other state is not possible.
-    assert((0 <= state) && (state <= 3));
-
-  } // switch
-
-  return 0;
-
-}  
-
 
 //------------------------------------------------------------------------------
 //"parse_binary_bits"
