@@ -90,6 +90,11 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
+# BIGINT_CONFIG                 Configuration of big integer datatypes
+#                               (one of BASE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+#
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON if not targetting Windows).
 #
@@ -288,6 +293,8 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
   set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+
+option (BIGINT_CONFIGURATION "Configuration of big integers." BASE_CLASS_HAS_STORAGE)
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
