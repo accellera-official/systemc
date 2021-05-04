@@ -510,6 +510,10 @@ target_compile_options(
   PRIVATE
   $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
     -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+  $<$<BIGINT_CONFIG:BIGINT_CONFIG>:
+      /TEMPLATE_CLASS_HAS_NO_BASE_CLASS
+      /TEMPLATE_CLASS_HAS_STORAGE
+      /BASE_CLASS_HAS_STORAGE>
   $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
 
 target_include_directories(systemc
