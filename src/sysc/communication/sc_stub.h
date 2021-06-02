@@ -221,13 +221,13 @@ public:
 //  the character set 0-9.
 //
 //  It shall be error to bind sc_open to a port which is not of type
-//  sc_port <sc_signal_inout_if>. It shall be allowed to read and write
+//  sc_port <sc_signal_inout_if<T> >. It shall be allowed to read and write
 //  to this channel. The value read from the channel is implementation-defined.
 //  Values written to the channel shall be ignored. The channel shall not
 //  notify an event when values are written.
 //
 //  NOTE—An application cannot not use sc_open for input ports of type
-//  sc_port <sc_signal_in_if> because its value is undefined.
+//  sc_port <sc_signal_in_if<T> > because its value is undefined.
 // ----------------------------------------------------------------------------
 
 static sc_open_impl const /* implementation defined */  sc_open = {};
@@ -256,7 +256,7 @@ static sc_open_impl const /* implementation defined */  sc_open = {};
 //    associated channel and port to which the channel is bound.
 //
 //  It shall be error to bind sc_tie to a port which is not of type
-//  sc_port<sc_signal_in_if> or sc_port <sc_signal_inout_if>.
+//  sc_port<sc_signal_in_if<T> > or sc_port <sc_signal_inout_if<T> >.
 //  It shall be allowed to read and write to this channel. The value read
 //  from the channel shall correspond to the specified pre-defined types.
 //  Values written to the channel shall be ignored. The channel shall not
