@@ -39,6 +39,36 @@
 
 #include <systemc.h>
 
+void scan_hierarchy(sc_core::sc_object* obj)
+{
+  std::vector<sc_core::sc_object*> children = obj->get_child_objects();
+  for ( unsigned i = 0; i < children.size(); i++ )
+    if ( children[i] )
+    {
+      scan_hierarchy( children[i] );
+
+      std::cout << " name: "
+                << children[i]->name()
+                << " kind: " << children[i]->kind()
+                << std::endl;
+     }
+}
+
+void show_hierarchy() {
+
+  std::vector<sc_core::sc_object*> tops = sc_core::sc_get_top_level_objects();
+
+  for ( unsigned i = 0; i < tops.size(); i++ )
+    if ( tops[i] )
+    {
+      std::cout << " name: "
+              << tops[i] ->name()
+              << " kind: " << tops[i]->kind()
+              << std::endl;
+      scan_hierarchy( tops[i] );
+    }
+}
+
 template < typename T >
 struct mod : public sc_core::sc_module
 {
@@ -153,6 +183,8 @@ int sc_main(int argc, char* argv[])
   sc_dt::sc_bv<4> val22 = "1010";
   mod22.inp(sc_core::sc_tie::value(val22));
   mod22.outp(sc_core::sc_open);
+
+  show_hierarchy();
 
   sc_core::sc_start();
 
