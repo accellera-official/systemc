@@ -312,7 +312,6 @@
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp" />
     <ClCompile Include="..\..\src\sysc\communication\sc_clock.cpp" />
-    <ClCompile Include="..\..\src\sysc\datatypes\misc\sc_concatref.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_cor_fiber.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_cthread_process.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_event.cpp" />
