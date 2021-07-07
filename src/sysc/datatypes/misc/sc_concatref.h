@@ -98,6 +98,17 @@ namespace sc_dt {
 class sc_concatref;
 class sc_concat_bool;
 
+} // namespace sc_dt
+
+namespace sc_core {
+
+// explicit template instantiations
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concatref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concat_bool>;
+} // namespace sc_core
+
+namespace sc_dt {
+
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_concatref
 //

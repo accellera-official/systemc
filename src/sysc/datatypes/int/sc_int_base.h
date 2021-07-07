@@ -104,6 +104,16 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
+} // namespace sc_dt
+
+// extern template instantiations
+namespace sc_core {
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_bitref>;
+SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_subref>;
+} // namespace sc_core
+
+namespace sc_dt {
+
 extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
