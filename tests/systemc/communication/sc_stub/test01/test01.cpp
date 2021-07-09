@@ -35,7 +35,7 @@
 
  *****************************************************************************/
 
-// test sc_tie::high, sc_tie::low and sc_open
+// test sc_tie::high, sc_tie::low and sc_unbound
 
 #include <systemc.h>
 
@@ -95,94 +95,30 @@ struct mod : public sc_core::sc_module
 int sc_main(int argc, char* argv[])
 {
   mod<sc_dt::sc_logic> mod1("mod1");
-  mod1.inp(sc_core::sc_tie::high);
-  mod1.outp(sc_core::sc_open);
+  mod1.inp(sc_core::sc_tie::value(SC_LOGIC_1));
+  mod1.outp(sc_core::sc_unbound);
 
   mod<bool> mod2("mod2");
-  mod2.inp(sc_core::sc_tie::high);
-  mod2.outp(sc_core::sc_open);
+  mod2.inp(sc_core::sc_tie::value(true));
+  mod2.outp(sc_core::sc_unbound);
 
   mod<int> mod3("mod3");
-  mod3.inp(sc_core::sc_tie::high);
-  mod3.outp(sc_core::sc_open);
+  mod3.inp(sc_core::sc_tie::value(2));
+  mod3.outp(sc_core::sc_unbound);
 
   mod<double> mod4("mod4");
-  mod4.inp(sc_core::sc_tie::high);
-  mod4.outp(sc_core::sc_open);
+  mod4.inp(sc_core::sc_tie::value(3.14));
+  mod4.outp(sc_core::sc_unbound);
 
-  mod<sc_dt::sc_logic> mod5("mod5");
-  mod5.inp(sc_core::sc_tie::high);
-  mod5.outp(sc_core::sc_tie::high);
+  mod<sc_dt::sc_lv<4> > mod5("mod5");
+  sc_dt::sc_lv<4> val5 = "X0X0";
+  mod5.inp(sc_core::sc_tie::value(val5));
+  mod5.outp(sc_core::sc_unbound);
 
-  mod<bool> mod6("mod6");
-  mod6.inp(sc_core::sc_tie::high);
-  mod6.outp(sc_core::sc_tie::high);
-
-  mod<int> mod7("mod7");
-  mod7.inp(sc_core::sc_tie::high);
-  mod7.outp(sc_core::sc_tie::high);
-
-  mod<double> mod8("mod8");
-  mod8.inp(sc_core::sc_tie::high);
-  mod8.outp(sc_core::sc_tie::high);
-
-  mod<sc_dt::sc_logic> mod9("mod9");
-  mod9.inp(sc_core::sc_tie::low);
-  mod9.outp(sc_core::sc_open);
-
-  mod<bool> mod10("mod10");
-  mod10.inp(sc_core::sc_tie::low);
-  mod10.outp(sc_core::sc_open);
-
-  mod<int> mod11("mod11");
-  mod11.inp(sc_core::sc_tie::low);
-  mod11.outp(sc_core::sc_open);
-
-  mod<double> mod12("mod12");
-  mod12.inp(sc_core::sc_tie::low);
-  mod12.outp(sc_core::sc_open);
-
-  mod<sc_dt::sc_logic> mod13("mod13");
-  mod13.inp(sc_core::sc_tie::low);
-  mod13.outp(sc_core::sc_tie::low);
-
-  mod<bool> mod14("mod14");
-  mod14.inp(sc_core::sc_tie::low);
-  mod14.outp(sc_core::sc_tie::low);
-
-  mod<int> mod15("mod15");
-  mod15.inp(sc_core::sc_tie::low);
-  mod15.outp(sc_core::sc_tie::low);
-
-  mod<double> mod16("mod16");
-  mod16.inp(sc_core::sc_tie::low);
-  mod16.outp(sc_core::sc_tie::low);
-
-  mod<sc_dt::sc_logic> mod17("mod17");
-  mod17.inp(sc_core::sc_tie::value(SC_LOGIC_1));
-  mod17.outp(sc_core::sc_open);
-
-  mod<bool> mod18("mod18");
-  mod18.inp(sc_core::sc_tie::value(true));
-  mod18.outp(sc_core::sc_open);
-
-  mod<int> mod19("mod19");
-  mod19.inp(sc_core::sc_tie::value(2));
-  mod19.outp(sc_core::sc_open);
-
-  mod<double> mod20("mod20");
-  mod20.inp(sc_core::sc_tie::value(3.14));
-  mod20.outp(sc_core::sc_open);
-
-  mod<sc_dt::sc_lv<4> > mod21("mod21");
-  sc_dt::sc_lv<4> val21 = "X0X0";
-  mod21.inp(sc_core::sc_tie::value(val21));
-  mod21.outp(sc_core::sc_open);
-
-  mod<sc_dt::sc_bv<4> > mod22("mod22");
-  sc_dt::sc_bv<4> val22 = "1010";
-  mod22.inp(sc_core::sc_tie::value(val22));
-  mod22.outp(sc_core::sc_open);
+  mod<sc_dt::sc_bv<4> > mod6("mod6");
+  sc_dt::sc_bv<4> val6 = "1010";
+  mod6.inp(sc_core::sc_tie::value(val6));
+  mod6.outp(sc_core::sc_unbound);
 
   show_hierarchy();
 
