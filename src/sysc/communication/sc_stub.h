@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  sc_stub.h -- sc_stub, sc_open, sc_tie
+  sc_stub.h -- sc_stub, sc_unbound, sc_tie
 
   Original Authors: Martin Barnasconi, Ralph Goergen, NXP B.V. 2021/06/01
 
@@ -41,7 +41,7 @@ namespace sc_core {
 //  CLASS : sc_stub (implementation-defined)
 //
 //  Class sc_stub shall define a predefined channel which acts as an stub.
-//  The class shall be used for the definition of sc_open and sc_tie.
+//  The class shall be used for the definition of sc_unbound and sc_tie.
 // ----------------------------------------------------------------------------
 
 template < typename T >
@@ -94,166 +94,53 @@ private:
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_open_impl (implementation-defined)
+//  CLASS : sc_unbound_impl (implementation-defined)
 //
-//  The class sc_open_impl is used to create object sc_open
+//  The class sc_unbound_impl is used to create object sc_unbound
 // ----------------------------------------------------------------------------
 
-struct sc_open_impl // implementation-defined
+struct sc_unbound_impl // implementation-defined
 {
-  // Only allowed to connect sc_open to interfaces of type output and inout
+  // Only allowed to connect sc_unbound to interfaces of type output and inout
   template < typename T >
   operator sc_core::sc_signal_inout_if<T> & () const
   {
-    return *(new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_open")));
+    return *(new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_unbound")));
   }
-}; // struct sc_open_impl
+}; // struct sc_unbound_impl
 
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_tie_high_impl (implementation-defined)
+//  sc_unbound
 //
-//  The class sc_tie_high_impl is used to create object sc_tie::high
-// ----------------------------------------------------------------------------
-
-class sc_tie_high_impl
-{
-public:
-  operator sc_core::sc_signal_inout_if<sc_dt::sc_logic> & () const
-  {
-    return *(new sc_core::sc_stub<sc_dt::sc_logic>(sc_core::sc_gen_unique_name("sc_tie::high"), sc_dt::SC_LOGIC_1));
-  }
-
-  operator sc_core::sc_signal_inout_if<bool> & () const
-  {
-    return *(new sc_core::sc_stub<bool>(sc_core::sc_gen_unique_name("sc_tie::high"), true));
-  }
-
-  operator sc_core::sc_signal_inout_if<int> & () const
-  {
-    return *(new sc_core::sc_stub<int>(sc_core::sc_gen_unique_name("sc_tie::high"), 1));
-  }
-
-  operator sc_core::sc_signal_inout_if<double> & () const
-  {
-    return *(new sc_core::sc_stub<double>(sc_core::sc_gen_unique_name("sc_tie::high"), 1.0));
-  }
-
-  operator sc_core::sc_signal_in_if<sc_dt::sc_logic> & () const
-  {
-    return *(new sc_core::sc_stub<sc_dt::sc_logic>(sc_core::sc_gen_unique_name("sc_tie::high"), sc_dt::SC_LOGIC_1));
-  }
-
-  operator sc_core::sc_signal_in_if<bool> & () const
-  {
-    return *(new sc_core::sc_stub<bool>(sc_core::sc_gen_unique_name("sc_tie::high"), true));
-  }
-
-  operator sc_core::sc_signal_in_if<int> & () const
-  {
-    return *(new sc_core::sc_stub<int>(sc_core::sc_gen_unique_name("sc_tie::high"), 1));
-  }
-
-  operator sc_core::sc_signal_in_if<double> & () const
-  {
-    return *(new sc_core::sc_stub<double>(sc_core::sc_gen_unique_name("sc_tie::high"), 1.0));
-  }
-}; // class sc_tie_high_impl
-
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_tie_low_impl (implementation-defined)
-//
-//  The class sc_tie_low_impl is used to create object sc_tie::low
-// ----------------------------------------------------------------------------
-
-class sc_tie_low_impl
-{
-public:
-  operator sc_core::sc_signal_inout_if<sc_dt::sc_logic> & () const
-  {
-    return *(new sc_core::sc_stub<sc_dt::sc_logic>(sc_core::sc_gen_unique_name("sc_tie::low"), sc_dt::SC_LOGIC_0));
-  }
-
-  operator sc_core::sc_signal_inout_if<bool> & () const
-  {
-    return *(new sc_core::sc_stub<bool>(sc_core::sc_gen_unique_name("sc_tie::low"), false));
-  }
-
-  operator sc_core::sc_signal_inout_if<int> & () const
-  {
-    return *(new sc_core::sc_stub<int>(sc_core::sc_gen_unique_name("sc_tie::low"), 0));
-  }
-
-  operator sc_core::sc_signal_inout_if<double> & () const
-  {
-    return *(new sc_core::sc_stub<double>(sc_core::sc_gen_unique_name("sc_tie::low"), 0.0));
-  }
-
-  operator sc_core::sc_signal_in_if<sc_dt::sc_logic> & () const
-  {
-    return *(new sc_core::sc_stub<sc_dt::sc_logic>(sc_core::sc_gen_unique_name("sc_tie::low"), sc_dt::SC_LOGIC_0));
-  }
-
-  operator sc_core::sc_signal_in_if<bool> & () const
-  {
-    return *(new sc_core::sc_stub<bool>(sc_core::sc_gen_unique_name("sc_tie::low"), false));
-  }
-
-  operator sc_core::sc_signal_in_if<int> & () const
-  {
-    return *(new sc_core::sc_stub<int>(sc_core::sc_gen_unique_name("sc_tie::low"), 0));
-  }
-
-  operator sc_core::sc_signal_in_if<double> & () const
-  {
-    return *(new sc_core::sc_stub<double>(sc_core::sc_gen_unique_name("sc_tie::low"), 0.0));
-  }
-}; // class sc_tie_low_impl
-
-// ----------------------------------------------------------------------------
-//  sc_open
-//
-//  The static object sc_open shall define a predefined channel which acts as
-//  an open connection. Each time sc_open is used in an application, a new
-//  predefined channel shall be created with a name with prefix "sc_open",
+//  The static object sc_unbound shall define a predefined channel which acts as
+//  an open connection. Each time sc_unbound is used in an application, a new
+//  predefined channel shall be created with a name with prefix "sc_unbound",
 //  followed by an underscore and series of one of more decimal digits from
 //  the character set 0-9.
 //
-//  It shall be error to bind sc_open to a port which is not of type
+//  It shall be error to bind sc_unbound to a port which is not of type
 //  sc_port <sc_signal_inout_if<T> >. It shall be allowed to read and write
 //  to this channel. The value read from the channel is implementation-defined.
 //  Values written to the channel shall be ignored. The channel shall not
 //  notify an event when values are written.
 //
-//  NOTE—An application cannot not use sc_open for input ports of type
+//  NOTE—An application cannot not use sc_unbound for input ports of type
 //  sc_port <sc_signal_in_if<T> > because its value is undefined.
 // ----------------------------------------------------------------------------
 
-static sc_open_impl const /* implementation defined */  sc_open = {};
+static sc_unbound_impl const /* implementation defined */  sc_unbound = {};
 
 // ----------------------------------------------------------------------------
 //  sc_tie
 //
-//  The static object sc_tie shall define a predefined channel to tie the
-//  port to a fixed high, low or predefined value. Each time sc_tie is used
-//  in an application, a new predefined channel shall be created with a name
-//  with prefix "sc_tie", followed by an underscore and series of one of more
-//  decimal digits from the character set 0-9.
-//
-//  The following pre-defined types for sc_tie shall be supported:
-//
-//  * sc_tie::high, representing a channel tied to a logic 1. It shall support
-//    the follow types: Boolean type ‘1’ or true, sc_dt::sc_logic type
-//    sc_dt::SC_LOGIC_1, integer type with a value of 1, and double and
-//    floating types with a value of 1.0.
-//  * sc_tie::low, representing a channel tied to a logic 0. It shall support
-//    the follow types: Boolean type ‘0’ or false, sc_dt::sc_logic type
-//    sc_dt::SC_LOGIC_0, integer type with a value of 0, and double and
-//    floating types with a value of 0.0.
-//  * sc_tie::value, representing a channel tied to specified value of type T.
-//    The type of the value shall be compatible with the type of the
-//    associated channel and port to which the channel is bound.
+//  The function sc_tie::value shall return a predefined channel to tie
+//  the port to the specified value of type T. The type of the value shall be
+//  compatible with the type of the associated channel to which the port
+//  is bound. Each time sc_tie is used in an application, a new
+//  predefined channel shall be created with a name with prefix "sc_tie",
+//  followed by an underscore and series of one of more decimal digits from
+//  the character set 0-9.
 //
 //  It shall be error to bind sc_tie to a port which is not of type
 //  sc_port<sc_signal_in_if<T> > or sc_port <sc_signal_inout_if<T> >.
@@ -264,9 +151,6 @@ static sc_open_impl const /* implementation defined */  sc_open = {};
 // ----------------------------------------------------------------------------
 
 namespace sc_tie {
-
-  static sc_tie_high_impl const high = {};
-  static sc_tie_low_impl const low = {};
 
   template < typename T >
   sc_core::sc_signal_in_if<T>& value(const T& val)
