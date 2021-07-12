@@ -840,7 +840,6 @@ sc_assertion_failed(const char* msg, const char* file, int line)
 {
     sc_report_handler::report( SC_FATAL, SC_ID_ASSERTION_FAILED_
                              , msg, file, line );
-    sc_abort();
 }
 
 } // namespace sc_core
