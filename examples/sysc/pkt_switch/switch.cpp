@@ -201,19 +201,19 @@ void mcast_pkt_switch :: entry()
 	      {
 		q1_out.pkt_in(R1.val);
 		R1.val.dest1 = false;
-		if (!(R1.val.dest1|R1.val.dest1|R1.val.dest2|R1.val.dest3)) R1.free = true;
+		if (!(R1.val.dest0|R1.val.dest1|R1.val.dest2|R1.val.dest3)) R1.free = true;
 	      }
 	    if ((!R2.free) && (R2.val.dest2) && (!q2_out.full))
 	      {
 		q2_out.pkt_in(R2.val);
 		R2.val.dest2 = false;
-		if (!(R2.val.dest2|R2.val.dest1|R2.val.dest2|R2.val.dest3)) R2.free = true;
+		if (!(R2.val.dest0|R2.val.dest1|R2.val.dest2|R2.val.dest3)) R2.free = true;
 	      }
 	    if ((!R3.free) && (R3.val.dest3) && (!q3_out.full))
 	      {
 		q3_out.pkt_in(R3.val);
 		R3.val.dest3 = false;
-		if (!(R3.val.dest3|R3.val.dest1|R3.val.dest2|R3.val.dest3)) R3.free = true;
+		if (!(R3.val.dest0|R3.val.dest1|R3.val.dest2|R3.val.dest3)) R3.free = true;
 	      }
 
 	    /////write the packets out//////////////////////////////////    
