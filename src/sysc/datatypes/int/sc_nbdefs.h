@@ -109,19 +109,10 @@ namespace sc_dt
     !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
     !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 
-  // use BIGINT_CONFIG flag:
-
-  #if BIGINT_CONFIG == BASE_CLASS_HAS_STORAGE
-      #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
-  #elif BIGINT_CONFIG == TEMPLATE_CLASS_HAS_STORAGE
-      #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-  #elif TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-      #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_BASE_CLASS
-  #else
-      #error no BIGINT_CONFIG specified in CMakefile.txt!!!
-  #endif
-
+    #error no BIGINT_CONFIG specified in CMakefile.txt!!!
 #endif
+
+
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
 // dispense with having an m_free boolean value, since it is sufficient to check the value of
@@ -197,7 +188,7 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 #   define SC_BIT_INDEX(BIT) ( (BIT)&(std::numeric_limits<sc_digit>::digits-1) )
 #   define SC_DIGIT_INDEX(BIT_INDEX) ((BIT_INDEX)>>5)
 #   define SC_MASK_DIGIT(v) (v)
-#   define SC_DIGIT_COUNT(BIT_WIDTH) ((BIT_WIDTH+BITS_PER_DIGIT-1)/BITS_PER_DIGIT) 
+#   define SC_DIGIT_COUNT(BIT_WIDTH) ((BIT_WIDTH+BITS_PER_DIGIT-1)/BITS_PER_DIGIT)
 #else
 #   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)

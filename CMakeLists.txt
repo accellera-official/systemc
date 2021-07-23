@@ -90,7 +90,7 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
-# BIGINT_CONFIG                 Configuration of big integer datatypes
+# BIGINT_CONFIGURATION          Configuration of big integer datatypes
 #                               (one of BASE_CLASS_HAS_STORAGE
 #                                       TEMPLATE_CLASS_HAS_STORAGE
 #                                       TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
@@ -294,7 +294,24 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-option (BIGINT_CONFIGURATION "Configuration of big integers." BASE_CLASS_HAS_STORAGE)
+
+set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
+set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BitIntConfigs})
+
+option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
+
+#set (BIGINT_CONFIGURATION
+#    "TEMPLATE_CLASS_HAS_NO_BASE_CLASS"
+#    "TEMPLATE_CLASS_HAS_STORAGE"
+#    "BASE_CLASS_HAS_STORAGE"
+#    CACHE STRINGS
+#    "Configuration of big integers." 
+#    FORCE
+#    "BASE_CLASS_HAS_STORAGE"
+#)
+
+#option (BIGINT_CONFIG "Configuration of big integers." BASE_CLASS_HAS_STORAGE)
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 

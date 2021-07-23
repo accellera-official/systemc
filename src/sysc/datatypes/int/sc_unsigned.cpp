@@ -954,6 +954,23 @@ sc_unsigned_subref::operator = ( const sc_uint_base& a )
     return operator = ( (uint64) a );
 }
 
+
+const sc_unsigned_subref&
+sc_unsigned_subref::operator = ( const sc_bv_base& a )
+{
+    sc_unsigned aa( a );
+    return operator = ( aa );
+}
+
+
+const sc_unsigned_subref&
+sc_unsigned_subref::operator = ( const sc_lv_base& a )
+{
+    sc_unsigned aa( a );
+    return operator = ( aa );
+}
+
+
 // concatenation methods
 
 void sc_unsigned_subref::concat_set( int64 src, int low_i )
