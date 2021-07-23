@@ -109,7 +109,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
 		     sysc/datatypes/int/sc_signed.cpp
 		     sysc/datatypes/int/sc_uint_base.cpp
 		     sysc/datatypes/int/sc_unsigned.cpp
-                     sysc/datatypes/misc/sc_concatref.cpp
                      sysc/datatypes/misc/sc_value_base.cpp
                      sysc/kernel/sc_attribute.cpp
                      sysc/kernel/sc_cor_fiber.cpp
