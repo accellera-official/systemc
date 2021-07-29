@@ -58,24 +58,21 @@ static sc_cor_qt* curr_cor = 0;
 //  Sanitizer helpers
 // ----------------------------------------------------------------------------
 
-static void* cur_stack = nullptr;
-
 static void __sanitizer_start_switch_fiber(void** fake, void* stack_base,
     size_t size) __attribute__((weakref("__sanitizer_start_switch_fiber")));
 static void __sanitizer_finish_switch_fiber(void* fake, void** stack_base,
     size_t* size) __attribute__((weakref("__sanitizer_finish_switch_fiber")));
 
 static void __sanitizer_start_switch_cor_qt( sc_cor_qt* next ) {
-    if (&__sanitizer_start_switch_fiber != nullptr) {
-        __sanitizer_start_switch_fiber( &cur_stack, next->m_stack,
+    if (&__sanitizer_start_switch_fiber != NULL) {
+        __sanitizer_start_switch_fiber( NULL, next->m_stack,
                                         next->m_stack_size );
     }
 }
 
-static void __sanitizer_finish_switch_cor_qt( sc_cor_qt* old ) {
-    if (&__sanitizer_finish_switch_fiber != nullptr) {
-        __sanitizer_finish_switch_fiber( cur_stack, &old->m_stack,
-                                         &old->m_stack_size );
+static void __sanitizer_finish_switch_cor_qt() {
+    if (&__sanitizer_finish_switch_fiber != NULL) {
+        __sanitizer_finish_switch_fiber( NULL, NULL, NULL );
     }
 }
 
@@ -265,9 +262,8 @@ extern "C"
 void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 {
-    sc_cor_qt* old_cor_qt = reinterpret_cast<sc_cor_qt*>( old_cor );
-    old_cor_qt->m_sp = sp;
-    __sanitizer_finish_switch_cor_qt( old_cor_qt );
+    reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
+    __sanitizer_finish_switch_cor_qt();
     return 0;
 }
 
