@@ -55,6 +55,31 @@ static sc_cor_qt main_cor;
 static sc_cor_qt* curr_cor = 0;
 
 // ----------------------------------------------------------------------------
+//  Sanitizer helpers
+// ----------------------------------------------------------------------------
+
+static void* cur_stack = nullptr;
+
+static void __sanitizer_start_switch_fiber(void** fake, void* stack_base,
+    size_t size) __attribute__((weakref("__sanitizer_start_switch_fiber")));
+static void __sanitizer_finish_switch_fiber(void* fake, void** stack_base,
+    size_t* size) __attribute__((weakref("__sanitizer_finish_switch_fiber")));
+
+static void __sanitizer_start_switch_cor_qt( sc_cor_qt* next ) {
+    if (&__sanitizer_start_switch_fiber != nullptr) {
+        __sanitizer_start_switch_fiber( &cur_stack, next->m_stack,
+                                        next->m_stack_size );
+    }
+}
+
+static void __sanitizer_finish_switch_cor_qt( sc_cor_qt* old ) {
+    if (&__sanitizer_finish_switch_fiber != nullptr) {
+        __sanitizer_finish_switch_fiber( cur_stack, &old->m_stack,
+                                         &old->m_stack_size );
+    }
+}
+
+// ----------------------------------------------------------------------------
 
 static std::size_t sc_pagesize()
 {
@@ -80,7 +105,8 @@ static std::size_t sc_pagesize()
 
 sc_cor_qt::~sc_cor_qt()
 {
-    std::free( m_stack );
+    if (m_stack)
+        munmap(m_stack, m_stack_size);
 }
 
 // switch stack protection on/off
@@ -167,23 +193,12 @@ stack_alloc( void** buf, std::size_t* stack_size )
 
     // round up to multiple of alignment
     *stack_size = (*stack_size + round_up_mask) & ~round_up_mask;
+    *buf = mmap(NULL, *stack_size, PROT_READ | PROT_WRITE,
+                MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (*buf == MAP_FAILED)
+        *buf = NULL;
 
-#ifdef SC_HAVE_POSIX_MEMALIGN
-    if( 0 != posix_memalign( buf, alignment, *stack_size ) ) {
-        *buf = NULL; // allocation failed
-    }
     return *buf;
-#else
-    *buf = std::malloc( *stack_size );
-    std::size_t sp_addr = reinterpret_cast<std::size_t>( *buf );
-    if( sp_addr & round_up_mask ) // misaligned allocation
-    {
-        sc_assert( *stack_size > (alignment * 2) );
-        sp_addr = (sp_addr + round_up_mask) & ~round_up_mask;
-        *stack_size -= alignment;
-    }
-    return reinterpret_cast<void*>( sp_addr );
-#endif
 }
 
 // constructor
@@ -211,6 +226,7 @@ sc_cor_pkg_qt::~sc_cor_pkg_qt()
 
 
 // create a new coroutine
+
 
 extern "C"
 void
@@ -249,7 +265,9 @@ extern "C"
 void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 {
-    reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
+    sc_cor_qt* old_cor_qt = reinterpret_cast<sc_cor_qt*>( old_cor );
+    old_cor_qt->m_sp = sp;
+    __sanitizer_finish_switch_cor_qt( old_cor_qt );
     return 0;
 }
 
@@ -259,6 +277,7 @@ sc_cor_pkg_qt::yield( sc_cor* next_cor )
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
+    __sanitizer_start_switch_cor_qt( new_cor );
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
 }
 
