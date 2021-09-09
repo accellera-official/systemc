@@ -118,7 +118,7 @@ namespace sc_dt
   #elif TEMPLATE_CLASS_HAS_NO_BASE_CLASS
       #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_BASE_CLASS
   #else
-      #error no BIGINT_CONFIG specified in CMakefile.txt!!!
+      #error no BIGINT_CONFIG specified in CMakeLists.txt!!!
   #endif
 
 #endif
