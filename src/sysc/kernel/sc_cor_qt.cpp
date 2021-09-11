@@ -56,6 +56,30 @@ static sc_cor_qt* curr_cor = 0;
 
 // ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+//  Sanitizer helpers
+// ----------------------------------------------------------------------------
+
+static void __sanitizer_start_switch_fiber(void** fake, void* stack_base,
+    size_t size) __attribute__((weakref("__sanitizer_start_switch_fiber")));
+static void __sanitizer_finish_switch_fiber(void* fake, void** stack_base,
+    size_t* size) __attribute__((weakref("__sanitizer_finish_switch_fiber")));
+
+static void __sanitizer_start_switch_cor_qt( sc_cor_qt* next ) {
+    if (&__sanitizer_start_switch_fiber != NULL) {
+        __sanitizer_start_switch_fiber( NULL, next->m_stack,
+                                        next->m_stack_size );
+    }
+}
+
+static void __sanitizer_finish_switch_cor_qt() {
+    if (&__sanitizer_finish_switch_fiber != NULL) {
+        __sanitizer_finish_switch_fiber( NULL, NULL, NULL );
+    }
+}
+
+// ----------------------------------------------------------------------------
+
 static std::size_t sc_pagesize()
 {
     static std::size_t pagesize = 0;
@@ -264,6 +288,7 @@ void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
 {
     reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
+    __sanitizer_finish_switch_cor_qt();
     return 0;
 }
 
@@ -273,6 +298,7 @@ sc_cor_pkg_qt::yield( sc_cor* next_cor )
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
     sc_cor_qt* old_cor = curr_cor;
     curr_cor = new_cor;
+    __sanitizer_start_switch_cor_qt( new_cor );
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
 }
 
