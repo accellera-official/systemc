@@ -149,6 +149,10 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
+# ENABLE_LEGACY_MEM_MGMT        Use std::malloc or posix_memalign to allocate the
+#                               stack of the coroutines instead of mmap. ASAN will
+#                               not work with this.
+#
 # ENABLE_SUSPEND_ALL            Enable the suspend_all mechanism (experimental).
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
@@ -319,6 +323,10 @@ option (ENABLE_SUSPEND_ALL "Enable the suspend_all mechanism (experimental)." un
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
+        OFF)
+
+option (ENABLE_LEGACY_MEM_MGMT
+        "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
         OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
@@ -669,6 +677,7 @@ if (ENABLE_PTHREADS)
 else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
 message (STATUS "ENABLE_SUSPEND_ALL = ${ENABLE_SUSPEND_ALL}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")

@@ -70,7 +70,13 @@ static std::size_t sc_pagesize()
 
 sc_cor_qt::~sc_cor_qt()
 {
+#ifdef SC_LEGACY_MEM_MGMT
     std::free( m_stack );
+#else
+    if ( m_stack ) {
+        ::munmap( m_stack, m_stack_size );
+    }
+#endif
 }
 
 // switch stack protection on/off
@@ -156,12 +162,13 @@ stack_alloc( void** buf, std::size_t* stack_size )
     // round up to multiple of alignment
     *stack_size = (*stack_size + round_up_mask) & ~round_up_mask;
 
-#ifdef SC_HAVE_POSIX_MEMALIGN
-    if( 0 != posix_memalign( buf, alignment, *stack_size ) ) {
-        *buf = NULL; // allocation failed
-    }
-    return *buf;
-#else
+#ifdef SC_LEGACY_MEM_MGMT
+    #ifdef SC_HAVE_POSIX_MEMALIGN
+        if( 0 != posix_memalign( buf, alignment, *stack_size ) ) {
+            *buf = NULL; // allocation failed
+        }
+        return *buf;
+    #endif
     *buf = std::malloc( *stack_size );
     std::size_t sp_addr = reinterpret_cast<std::size_t>( *buf );
     if( sp_addr & round_up_mask ) // misaligned allocation
@@ -171,6 +178,13 @@ stack_alloc( void** buf, std::size_t* stack_size )
         *stack_size -= alignment;
     }
     return reinterpret_cast<void*>( sp_addr );
+#else
+    *buf = ::mmap( NULL, *stack_size, PROT_READ | PROT_WRITE,
+                   MAP_PRIVATE | MAP_ANON, -1, 0 );
+    if ( *buf == MAP_FAILED ) {
+        *buf = NULL;
+    }
+    return *buf;
 #endif
 }
 
