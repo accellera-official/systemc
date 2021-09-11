@@ -508,9 +508,11 @@ target_include_directories(systemc
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 if (APPLE)
-  # It's OK that _sc_main is an undefined symbol.
-  set_target_properties (systemc PROPERTIES LINK_FLAGS -Wl,-U,_sc_main)
-endif (APPLE)
+  # It's OK that _sc_main, __sanitizer_start_switch_fiber, and
+  # __sanitizer_finish_switch_fiber are undefined symbols.
+  set_target_properties (systemc PROPERTIES LINK_FLAGS
+    -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
+endif(APPLE)
 
 target_link_libraries (systemc PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
 
