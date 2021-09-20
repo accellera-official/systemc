@@ -968,6 +968,23 @@ sc_signed_subref::operator = ( const sc_uint_base& a )
     return operator = ( (uint64) a );
 }
 
+
+const sc_signed_subref&
+sc_signed_subref::operator = ( const sc_bv_base& a )
+{
+    sc_signed aa( a );
+    return operator = ( aa );
+}
+
+
+const sc_signed_subref&
+sc_signed_subref::operator = ( const sc_lv_base& a )
+{
+    sc_signed aa( a );
+    return operator = ( aa );
+}
+
+
 // concatenation methods
 
 

@@ -427,6 +427,31 @@ private: // disabled
     const sc_unsigned_subref_r& operator = ( const sc_unsigned_subref_r& );
 };
 
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_unsigned_subref_r& a ) {
+    return a.and_reduce();
+}
+
+inline bool nand_reduce( const sc_unsigned_subref_r& a ) {
+    return a.nand_reduce();
+}
+
+inline bool or_reduce( const sc_unsigned_subref_r& a ) {
+    return a.or_reduce();
+}
+
+inline bool nor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.nor_reduce();
+}
+
+inline bool xor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.xor_reduce();
+}
+
+inline bool xnor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.xnor_reduce();
+}
 
 
 inline
@@ -488,6 +513,8 @@ public:
     const sc_unsigned_subref& operator = ( double a );
     const sc_unsigned_subref& operator = ( const sc_int_base& a );
     const sc_unsigned_subref& operator = ( const sc_uint_base& a );
+    const sc_unsigned_subref& operator = ( const sc_bv_base& );
+    const sc_unsigned_subref& operator = ( const sc_lv_base& );
 
     // concatenation methods
 
@@ -526,8 +553,10 @@ class sc_unsigned : public sc_value_base
     friend class sc_signed_subref_r;
     template<int W> friend class sc_bigint;
     template<int W> friend class sc_biguint;
+#ifndef ALIAS_SC_INT
     template<int W> friend class sc_int;
     template<int W> friend class sc_uint;
+#endif
 
   // Needed for types using sc_unsigned.
   typedef bool elemtype;
@@ -751,6 +780,8 @@ public:
     inline int64         to_int64() const;
     inline uint64        to_uint64() const;
     double               to_double() const;
+
+    //inline operator bool() const { return to_uint64(); }
 
 #ifdef SC_DT_DEPRECATED
     int to_signed() const
@@ -993,14 +1024,14 @@ public:
   {
     if (v <= 0)
       return sc_unsigned(*this);
-  
+
     int nb = nbits + v;
     int nd = DIV_CEIL(nb);
     sc_unsigned result(nb, false);
-  
+
     vector_shift_left( ndigits, digit, nd, result.digit, v );
     result.adjust_hod();
-  
+
     return result;
   }
 
@@ -1017,10 +1048,10 @@ public:
   {
     if (v <= 0)
       return *this;
-  
-    vector_shift_left( ndigits, digit, v ); 
+
+    vector_shift_left( ndigits, digit, v );
     adjust_hod();
-  
+
     return *this;
   }
   const sc_unsigned& operator<<=(const sc_signed&    v);
@@ -1041,16 +1072,16 @@ public:
           return sc_unsigned(*this);
       }
       int nb = nbits - v;
-     
+
       // If we shift off the end return the sign bit.
-     
+
       if ( 0 >= nb ) {
           sc_unsigned result(1, true);
           return result;
       }
-     
+
       // Return a value that is the width of the shifted value:
-     
+
       sc_unsigned result(nb, false);
       if ( nbits < 33 ) {
           result.digit[0] = (int)digit[0] >> v;
@@ -1136,7 +1167,9 @@ public: // Temporary object support:
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
       result_p->m_free = false;
+#endif
       return *result_p;
   }
 
@@ -1146,7 +1179,7 @@ public: // Temporary object support:
   {
       sc_digit tmp = 0;
       tmp = ~tmp;
-      unsigned shift = SC_BIT_INDEX( nbits-1 ); 
+      unsigned shift = SC_BIT_INDEX( nbits-1 );
       digit[ndigits-1] &= ~(tmp << shift);
   }
 
@@ -1180,6 +1213,22 @@ private:
     sc_digit*  get_raw()                       { return digit; }
     int        get_raw_nbits() const           { return nbits; }
 };
+
+
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_unsigned& a ) { return a.and_reduce(); }
+
+inline bool nand_reduce( const sc_unsigned& a ) { return a.nand_reduce(); }
+
+inline bool or_reduce( const sc_unsigned& a ) { return a.or_reduce(); }
+
+inline bool nor_reduce( const sc_unsigned& a ) { return a.nor_reduce(); }
+
+inline bool xor_reduce( const sc_unsigned& a ) { return a.xor_reduce(); }
+
+inline bool xnor_reduce( const sc_unsigned& a ) { return a.xnor_reduce(); }
+
 
 
 
