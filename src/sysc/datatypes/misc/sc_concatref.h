@@ -98,17 +98,6 @@ namespace sc_dt {
 class sc_concatref;
 class sc_concat_bool;
 
-} // namespace sc_dt
-
-namespace sc_core {
-
-// explicit template instantiations
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concatref>;
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concat_bool>;
-} // namespace sc_core
-
-namespace sc_dt {
-
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_concatref
 //
@@ -758,9 +747,9 @@ SC_CONCAT_BOOL_OP(<)
 // CONCATENATION FUNCTION AND OPERATOR FOR STANDARD SYSTEM C DATA TYPES:
 // ----------------------------------------------------------------------------
 
-inline sc_dt::sc_concatref* temporary_concatref()
+static inline sc_dt::sc_concatref* temporary_concatref()
 {
-    sc_core::sc_vpool<sc_concatref> pool(9);
+    static sc_core::sc_vpool<sc_concatref> pool(9);
     sc_dt::sc_concatref* result_p = pool.allocate();
     return result_p;
 }
