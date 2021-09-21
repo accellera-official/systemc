@@ -82,7 +82,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/communication/sc_signal_ports.cpp
                      sysc/communication/sc_signal_resolved.cpp
                      sysc/communication/sc_signal_resolved_ports.cpp
-		     sysc/datatypes/any/sc_any_value.cpp
+                     sysc/datatypes/any/sc_any_value.cpp
                      sysc/datatypes/any/sc_any_value_converter.cpp
                      sysc/datatypes/bit/sc_bit.cpp
                      sysc/datatypes/bit/sc_bv_base.cpp
@@ -146,7 +146,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_hash.cpp
                      sysc/utils/sc_list.cpp
                      sysc/utils/sc_mempool.cpp
-		     sysc/utils/sc_optional.cpp
+                     sysc/utils/sc_optional.cpp
                      sysc/utils/sc_pq.cpp
                      sysc/utils/sc_report.cpp
                      sysc/utils/sc_report_handler.cpp
@@ -374,8 +374,8 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_list.h
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
-		     sysc/utils/sc_meta.h
-		     sysc/utils/sc_optional.h
+                     sysc/utils/sc_meta.h
+                     sysc/utils/sc_optional.h
                      sysc/utils/sc_pq.h
                      sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h
@@ -475,6 +475,8 @@ add_library (systemc sysc/communication/sc_clock.cpp
 
 add_library (SystemC::systemc ALIAS systemc)
 
+MESSAGE(STATUS "Bigint config: " ${BIGINT_CONFIGURATION})
+
 target_compile_definitions (
   systemc
   PUBLIC
@@ -486,6 +488,7 @@ target_compile_definitions (
   SC_BUILD
   SC_INCLUDE_FX
   $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
+  $<$<BOOL:${ALIAS_INT_TO_BIGINT}>:ALIAS_SC_INT>
   $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
   $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
@@ -501,6 +504,16 @@ target_compile_definitions (
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
+
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_NO_BASE_CLASS")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "BASE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE )
+endif()
 
 target_compile_options(
   systemc
@@ -553,3 +566,8 @@ install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
          FILES_MATCHING PATTERN "*.hpp")
+
+# Uncomment correct #define in the install: 
+install (CODE "set(BIGINT_CONFIGURATION ${BIGINT_CONFIGURATION})")
+install (CODE "set(SC_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR})")
+install (SCRIPT "${CMAKE_SOURCE_DIR}/PostInstall.cmake")

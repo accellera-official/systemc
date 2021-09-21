@@ -428,6 +428,33 @@ private: // disabled
 };
 
 
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_signed_subref_r& a ) {
+    return a.and_reduce();
+}
+
+inline bool nand_reduce( const sc_signed_subref_r& a ) {
+    return a.nand_reduce();
+}
+
+inline bool or_reduce( const sc_signed_subref_r& a ) {
+    return a.or_reduce();
+}
+
+inline bool nor_reduce( const sc_signed_subref_r& a ) {
+    return a.nor_reduce();
+}
+
+inline bool xor_reduce( const sc_signed_subref_r& a ) {
+    return a.xor_reduce();
+}
+
+inline bool xnor_reduce( const sc_signed_subref_r& a ) {
+    return a.xnor_reduce();
+}
+
+
 inline
 ::std::ostream&
 operator<<( ::std::ostream&, const sc_signed_subref_r& );
@@ -491,6 +518,8 @@ public:
     const sc_signed_subref& operator = ( double a );
     const sc_signed_subref& operator = ( const sc_int_base& a );
     const sc_signed_subref& operator = ( const sc_uint_base& a );
+    const sc_signed_subref& operator = ( const sc_bv_base& );
+    const sc_signed_subref& operator = ( const sc_lv_base& );
 
     // concatenation methods
 
@@ -530,9 +559,10 @@ class sc_signed : public sc_value_base
     friend class sc_unsigned_subref_r;
     template<int W> friend class sc_bigint;
     template<int W> friend class sc_biguint;
+#ifndef ALIAS_SC_INT
     template<int W> friend class sc_int;
     template<int W> friend class sc_uint;
-
+#endif
   // Needed for types using sc_signed.
   typedef bool elemtype;
 
@@ -747,6 +777,8 @@ public:
     inline unsigned long to_ulong() const;
     inline int64         to_int64() const;
     inline uint64        to_uint64() const;
+
+    //inline operator bool() const { return to_uint64(); }
 
 #ifdef SC_DT_DEPRECATED
     int to_signed() const
@@ -998,14 +1030,14 @@ public:
   {
     if (v <= 0)
       return sc_signed(*this);
-  
+
     int nb = nbits + v;
     int nd = DIV_CEIL(nb);
     sc_signed result(nb, false);
-  
+
     vector_shift_left( ndigits, digit, nd, result.digit, v );
     result.adjust_hod();
-  
+
     return result;
   }
 
@@ -1041,30 +1073,30 @@ public:
   inline
   sc_signed
   operator>>(int v) const
-  {   
+  {
       if (v <= 0) {
           return sc_signed(*this);
       }
       int nb = nbits - v;
-      
+
       // If we shift off the end return the sign bit.
-      
+
       if ( 0 >= nb ) {
           sc_signed result(1, false);
           result.digit[0] = 0 > (int)digit[ndigits-1] ? -1 : 0;
           return result;
       }
-      
+
       // Return a value that is the width of the shifted value:
-      
+
       sc_signed result(nb, false);
-      if ( nbits < 33 ) { 
+      if ( nbits < 33 ) {
           result.digit[0] = (int)digit[0] >> v;
       }
       else if ( nbits < 65 ) {
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
-          tmp = tmp >> v; 
+          tmp = tmp >> v;
           result.digit[0] = tmp;
           if ( nb > 32 ) {
               result.digit[1] = (tmp >>32);
@@ -1084,16 +1116,16 @@ public:
   sc_signed operator>>(long             v) const { return operator>>( (int)v ); }
   sc_signed operator>>(unsigned long    v) const { return operator>>( (int)v ); }
   sc_signed operator>>(unsigned int     v) const { return operator>>( (int)v ); }
-  
+
   inline
   const sc_signed&
   operator>>=(int v)
   {
       if (v <= 0)
           return *this;
-  
+
       vector_shift_right(ndigits, digit, v, (int)digit[ndigits-1]<0 ? DIGIT_MASK:0);
-  
+
     return *this;
   }
   const sc_signed& operator>>=(const sc_unsigned&  v);
@@ -1190,6 +1222,20 @@ private:
   void makezero() { vector_zero( 0, ndigits, digit ); }
 
 };
+
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_signed& a ) { return a.and_reduce(); }
+
+inline bool nand_reduce( const sc_signed& a ) { return a.nand_reduce(); }
+
+inline bool or_reduce( const sc_signed& a ) { return a.or_reduce(); }
+
+inline bool nor_reduce( const sc_signed& a ) { return a.nor_reduce(); }
+
+inline bool xor_reduce( const sc_signed& a ) { return a.xor_reduce(); }
+
+inline bool xnor_reduce( const sc_signed& a ) { return a.xnor_reduce(); }
 
 
 

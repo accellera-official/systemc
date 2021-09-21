@@ -448,6 +448,20 @@ sc_bigint<W>::operator<<(int v) const
 
 template<int W>
 const sc_bigint<W>&
+sc_bigint<W>::operator<<=(int v)
+{
+  if (v <= 0)
+    return *this;
+
+  vector_shift_left( DIV_CEIL(W+1), digit, v );
+  adjust_hod();
+
+  return *this;
+}
+
+
+template<int W>
+const sc_bigint<W>&
 sc_bigint<W>::operator>>=(int v)
 {
 
@@ -496,7 +510,7 @@ sc_bigint<W>::operator>>(int v) const
 	}
     }
     else {
-	vector_extract(digit, result.digit, W-1, v); 
+	vector_extract(digit, result.digit, W-1, v);
     }
     result.adjust_hod();
     return result;
