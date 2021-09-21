@@ -149,6 +149,8 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
+# ENABLE_SUSPEND_ALL            Enable the suspend_all mechanism (experimental).
+#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -313,6 +315,8 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
+option (ENABLE_SUSPEND_ALL "Enable the suspend_all mechanism (experimental)." undef)
+
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
         OFF)
@@ -342,6 +346,7 @@ mark_as_advanced(DISABLE_ASYNC_UPDATES
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  ENABLE_PHASE_CALLBACKS
                  ENABLE_PHASE_CALLBACKS_TRACING
+                 ENABLE_SUSPEND_ALL
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -664,6 +669,7 @@ if (ENABLE_PTHREADS)
 else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_SUSPEND_ALL = ${ENABLE_SUSPEND_ALL}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)

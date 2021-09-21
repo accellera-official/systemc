@@ -1,0 +1,42 @@
+
+This is a simple test for async suspend:
+
+ 	 Each 'node' consists of a SystemC thread, and a p_thread component.
+ 	
+ 	 The p_thread gets transactions from a queue (or creates new ones), and 'sends'
+ 	 them by poting them to a 'mailbox' (txn), and then signalling SystemC using
+ 	 an async_events (sendIt). It then uses a 'semaphore' (txnSent) to wait till
+ 	 the txn is sent, before sending another one.
+ 	 The p_thread has it's own notion of 'time' (myTime)
+ 	
+ 	 Meanwhile, the SystemC thread recieves the async event (sendIt), in a
+ 	 SC_THREAD (sendTxns). This must be a thread, so that 'wait' can be called.
+ 	 The txn's are sent to a 'random' other node, where they are processed by a
+ 	 b_transport which calls wait().
+ 	 Once done, sendTxns releases the semaphore allowing the p_thread to continue.
+ 	
+ 	 In order to maintain syncronisation, the SystemC thread can do 2 things:
+ 	  1. If the 'nodes' local time (myTime) is ahead of SystemC, the p_thread
+ 	  semaphore is released by notifying a method at the appropriate myTime.
+ 	  2. Else SystemC is requested to suspend (waiting for the node to catch up).
+ 	
+ 	 The b_transport call is protected as 'unsuspendable', to ensure that all
+ 	 b_transport calls can complete.
+
+         In each node is a systemc thred which simply wait(..)s a
+         random amount of time, this 'drives' SystemC time forward.
+         
+Configuration:
+        Set the amount of time you want to run in async_suspend.c
+        
+        In node.h, set the relatives speeds of the SystemC wait, the nodes
+        internal (myTime), and the b_transport time.
+        
+        If you have python installed, you may try using the MatPlot
+        library, enable this in collector.h - this will generate a
+        .png picture of the resulting run in 'output.png'
+        
+To run and generate a graphical output, build with "WITHMATPLOT":
+e.g.
+g++ -DWITHMATPLOT --std=c++11 async_suspend.cpp -I ../../../src/ -I /usr/include/python3.6m/ -L../../../build/src/ -lsystemc -lpython3.6m -lpthread
+

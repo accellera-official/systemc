@@ -571,7 +571,9 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_timed_out(false),
     m_timeout_event_p(0),
     m_trigger_type(STATIC),
-    m_unwinding(false)
+    m_unwinding(false),
+    m_unsuspendable(false),
+    m_suspend_all_req(false)
 {
     // Check spawn phase: m_ready_to_simulate is set *after* elaboration_done()
     unsigned spawned = SPAWN_ELAB;
