@@ -86,11 +86,10 @@ class SC_API sc_hierarchy_scope
     sc_hierarchy_scope(kernel_tag, sc_object*);
     sc_hierarchy_scope(kernel_tag, sc_object_host*);
 public:
-    static const root_tag root;
-
-    // open explicit root scope
-    sc_hierarchy_scope( root_tag );
     ~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false);
+
+    // get root scope
+    static sc_hierarchy_scope get_root() { return sc_hierarchy_scope(sc_core::sc_hierarchy_scope::root); }
 
 #if SC_CPLUSPLUS >= 201103L
     sc_hierarchy_scope(sc_hierarchy_scope&&);
@@ -105,6 +104,9 @@ private:
     // disabled dynamic allocation
     void* operator new(std::size_t) /* = delete */;
     void* operator new[](std::size_t) /* = delete */;
+
+    static const root_tag root;
+    sc_hierarchy_scope( root_tag );
 
 private:
     sc_simcontext*  m_simc;
@@ -197,7 +199,7 @@ protected:
     phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
 
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope restore_hierarchy();
+    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
 
 private:
             void do_simulation_phase_callback();
@@ -250,7 +252,7 @@ public:
 
 protected:
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope restore_hierarchy();
+    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
 
 private:
     virtual void add_child_event( sc_event* event_p );

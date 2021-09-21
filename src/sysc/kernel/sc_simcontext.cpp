@@ -249,7 +249,7 @@ public:
 	invokers_n = m_invokers.size();
 	if ( invokers_n == 0 )
 	{
-	    sc_hierarchy_scope scope( restore_hierarchy() );
+	    sc_hierarchy_scope scope( get_hierarchy_scope() );
 	    sc_spawn_options options;
 	    options.dont_initialize();
 	    options.set_stack_size(0x100000);

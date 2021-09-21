@@ -646,7 +646,7 @@ sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
     base_type::reserve( n );
 
     // restore SystemC hierarchy context, if needed
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     try
     {
       for ( size_type i = 0; i<n; ++i )
@@ -677,7 +677,7 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back( Args&&... args ) {
   if (check_locked()) {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     T* p = new T( make_name( basename(), size()).c_str() ,
                   std::forward<Args>(args)...);
     base_type::push_back(p);
@@ -688,7 +688,7 @@ template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back_with_name(Args &&... args) {
   if (check_locked()) {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     T *p = new T(std::forward<Args>(args)...);
     base_type::push_back(p);
   }

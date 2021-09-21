@@ -580,7 +580,7 @@ sc_port_base::free_binding()
 void
 sc_port_base::construction_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -591,21 +591,21 @@ sc_port_base::elaboration_done()
     delete m_bind_info;
     m_bind_info = 0;
 
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
 void
 sc_port_base::start_simulation()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
 void
 sc_port_base::simulation_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 
