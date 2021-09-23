@@ -249,7 +249,7 @@ public:
 	invokers_n = m_invokers.size();
 	if ( invokers_n == 0 )
 	{
-	    sc_hierarchy_scope scope( restore_hierarchy() );
+	    sc_hierarchy_scope scope( get_hierarchy_scope() );
 	    sc_spawn_options options;
 	    options.dont_initialize();
 	    options.set_stack_size(0x100000);
@@ -364,6 +364,8 @@ sc_simcontext::init()
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
     m_simulation_status = SC_ELABORATION;
+    m_suspend = 0;
+    m_unsuspendable = 0;
 }
 
 void
@@ -415,7 +417,8 @@ sc_simcontext::sc_simcontext() :
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
     m_simulation_status(SC_ELABORATION), m_start_of_simulation_called(false),
-    m_cor_pkg(0), m_cor(0), m_reset_finder_q(0)
+    m_cor_pkg(0), m_cor(0), m_reset_finder_q(0),
+    m_suspend(0), m_unsuspendable(0)
 {
     init();
 }
@@ -672,52 +675,6 @@ sc_simcontext::elaborate()
         return;
     }
 }
-
-// +----------------------------------------------------------------------------
-// |"sc_simcontext::prepare_to_simulate"
-// |
-// | This method prepares all simulation objects for the start of simulation.
-// |
-// |
-// | Notes:
-// | (1) The state transition diagram for processes is shown below:
-// |
-// |     ......................................................................
-// |     .         ENABLED                    .           DISABLED            .
-// |     .                                    .                               .
-// |     .                 +----------+    disable      +----------+          .
-// |     .   +------------>|          |-------.-------->|          |          .
-// |     .   |             | runnable |       .         | runnable |          .
-// |     .   |     +-------|          |<------.---------|          |------+   .
-// |     .   |     |       +----------+     enable      +----------+      |   .
-// |     .   |     |          |    ^          .            |    ^         |   .
-// |     .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
-// |     .   |     |          V    |          .            V    |         |   .
-// |     .   |     |       +----------+    disable      +----------+      |   .
-// |     .   |     |       | suspend  |-------.-------->| suspend  |      |   .
-// |     . t |   r |       |          |       .         |          |      | r .
-// |     . r |   u |       |  ready   |<------.---------|  ready   |      | u .
-// |     . i |   n |       +----------+     enable      +----------+      | n .
-// |     . g |   / |         ^                .                           | / .
-// |     . g |   w |  trigger|                .                           | w .
-// |     . e |   a |         |                .                           | a .
-// |     . r |   i |       +----------+    disable      +----------+      | i .
-// |     .   |   t |       | suspend  |-------.-------->| suspend  |      | t .
-// |     .   |     |       |          |       .         |          |      |   .
-// |     .   |     |       | waiting  |<------.---------| waiting  |      |   .
-// |     .   |     |       +----------+     enable      +----------+      |   .
-// |     .   |     |          |    ^          .            |    ^         |   .
-// |     .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
-// |     .   |     |          V    |          .            V    |         |   .
-// |     .   |     |       +----------+    disable      +----------+      |   .
-// |     .   |     +------>|          |-------.-------->|          |      |   .
-// |     .   |             | waiting  |       .         | waiting  |      |   .
-// |     .   +-------------|          |<------.---------|          |<-----+   .
-// |     .                 +----------+     enable      +----------+          .
-// |     .                                    .                               .
-// |     ......................................................................
-// |
-// +----------------------------------------------------------------------------
 
 void
 sc_simcontext::prepare_to_simulate()
@@ -1417,7 +1374,11 @@ sc_simcontext::is_running() const
 bool
 sc_simcontext::next_time( sc_time& result ) const
 {
-    while( m_timed_events->size() ) {
+    while( m_timed_events->size()
+#ifdef SC_ENABLE_SUSPEND_ALL
+           && ( !m_suspend ||  m_unsuspendable )
+#endif
+        ) {
 	sc_event_timed* et = m_timed_events->top();
 	if( et->event() != 0 ) {
 	    result = et->notify_time();
@@ -1911,6 +1872,170 @@ SC_API bool sc_is_unwinding()
 {
     return sc_get_current_process_handle().is_unwinding();
 }
+
+SC_API void sc_suspend_all(sc_simcontext* csc)
+{
+#ifndef SC_ENABLE_SUSPEND_ALL
+    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
+    return;
+#endif
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (!process_p->m_suspend_all_req) {
+            process_p->m_suspend_all_req=true;
+        } else {
+            return;
+        }
+    }
+    // Update the main simcontext counters
+    if (!csc) csc = sc_get_curr_simcontext();
+    csc->m_suspend++;
+}
+
+SC_API void sc_unsuspend_all(sc_simcontext* csc)
+{
+#ifndef SC_ENABLE_SUSPEND_ALL
+    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
+    return;
+#endif
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (process_p->m_suspend_all_req) {
+            process_p->m_suspend_all_req=false;
+        } else {
+            return;
+        }
+    }
+    // Update the main simcontext counters
+    if (!csc) csc = sc_get_curr_simcontext();
+    if ( csc->m_suspend ) {
+        csc->m_suspend--;
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNBALANCED_UNSUSPENDALL_, "");
+    }
+}
+
+SC_API void sc_suspendable()
+{
+#ifndef SC_ENABLE_SUSPEND_ALL
+    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
+    return;
+#endif
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (process_p->m_unsuspendable) {
+            process_p->m_unsuspendable=false;
+
+            if (sc_get_curr_simcontext()->m_unsuspendable > 0 ) {
+                sc_get_curr_simcontext()->m_unsuspendable--;
+            } else {
+                SC_REPORT_ERROR(SC_ID_UNMATCHED_SUSPENDABLE_, "");
+            }
+        }
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNSUSPENDABLE_NOTHREAD_, "");
+    }
+}
+
+SC_API void sc_unsuspendable()
+{
+#ifndef SC_ENABLE_SUSPEND_ALL
+    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
+    return;
+#endif
+    sc_process_b*                process_p;
+
+    process_p = (sc_process_b*)sc_get_current_process_handle();
+    if ( process_p ) {
+        if (!process_p->m_unsuspendable) {
+            process_p->m_unsuspendable=true;
+
+            sc_get_curr_simcontext()->m_unsuspendable++;
+        }
+    } else {
+        SC_REPORT_ERROR(SC_ID_UNSUSPENDABLE_NOTHREAD_, "");
+    }
+}
+
+
+// The IEEE 1666 Standard for 2011 designates that the treatment of
+// certain process control interactions as being "implementation dependent".
+// These interactions are:
+//   (1) What happens when a resume() call is performed on a disabled,
+//       suspended process.
+//   (2) What happens when sync_reset_on() or sync_reset_off() is called
+//       on a suspended process.
+//   (3) What happens when the value specified in a reset_signal_is()
+//       call changes value while a process is suspended.
+//
+// By default this Proof of Concept implementation reports an error
+// for these interactions. However, the implementation also provides
+// a non-error treatment. The non-error treatment for the interactions is:
+//   (1) A resume() call performed on a disabled, suspended process will
+//       mark the process as no longer suspended, and if it is capable
+//       of execution (not waiting on any events) it will be placed on
+//       the queue of runnable processes. See the state diagram below.
+//   (2) A call to sync_reset_on() or sync_reset_off() will set or clear
+//       the synchronous reset flag. Whether the process is in reset or
+//       not will be determined when the process actually executes by
+//       looking at the flag's value at that time.
+//   (3) If a suspended process has a reset_signal_is() specification
+//       the value of the reset variable at the time of its next execution
+//       will determine whether it is in reset or not.
+//
+// TO GET THE NON-ERROR BEHAVIOR SET THE VARIABLE BELOW TO TRUE.
+//
+// This can be done in this source before you build the library, or you
+// can use an assignment as the first statement in your sc_main() function:
+//    sc_core::sc_allow_process_control_corners = true;
+
+bool sc_allow_process_control_corners = false;
+
+// The state transition diagram for the interaction of disable and suspend
+// when sc_allow_process_control_corners is true is shown below:
+//
+// ......................................................................
+// .         ENABLED                    .           DISABLED            .
+// .                                    .                               .
+// .                 +----------+    disable      +----------+          .
+// .   +------------>|          |-------.-------->|          |          .
+// .   |             | runnable |       .         | runnable |          .
+// .   |     +-------|          |<------.---------|          |------+   .
+// .   |     |       +----------+     enable      +----------+      |   .
+// .   |     |          |    ^          .            |    ^         |   .
+// .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
+// .   |     |          V    |          .            V    |         |   .
+// .   |     |       +----------+    disable      +----------+      |   .
+// .   |     |       | suspend  |-------.-------->| suspend  |      |   .
+// . t |   r |       |          |       .         |          |      | r .
+// . r |   u |       |  ready   |<------.---------|  ready   |      | u .
+// . i |   n |       +----------+     enable      +----------+      | n .
+// . g |   / |         ^                .                           | / .
+// . g |   w |  trigger|                .                           | w .
+// . e |   a |         |                .                           | a .
+// . r |   i |       +----------+    disable      +----------+      | i .
+// .   |   t |       | suspend  |-------.-------->| suspend  |      | t .
+// .   |     |       |          |       .         |          |      |   .
+// .   |     |       | waiting  |<------.---------| waiting  |      |   .
+// .   |     |       +----------+     enable      +----------+      |   .
+// .   |     |          |    ^          .            |    ^         |   .
+// .   |     |  suspend |    | resume   .    suspend |    | resume  |   .
+// .   |     |          V    |          .            V    |         |   .
+// .   |     |       +----------+    disable      +----------+      |   .
+// .   |     +------>|          |-------.-------->|          |      |   .
+// .   |             | waiting  |       .         | waiting  |      |   .
+// .   +-------------|          |<------.---------|          |<-----+   .
+// .                 +----------+     enable      +----------+          .
+// .                                    .                               .
+// ......................................................................
+
+// ----------------------------------------------------------------------------
 
 static std::ostream&
 print_status_expression( std::ostream& os, sc_status s );

@@ -92,7 +92,7 @@ void sc_prim_channel::before_end_of_elaboration()
 void
 sc_prim_channel::construction_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -108,7 +108,7 @@ sc_prim_channel::end_of_elaboration()
 void
 sc_prim_channel::elaboration_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
@@ -123,7 +123,7 @@ sc_prim_channel::start_of_simulation()
 void
 sc_prim_channel::start_simulation()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
@@ -138,7 +138,7 @@ sc_prim_channel::end_of_simulation()
 void
 sc_prim_channel::simulation_done()
 {
-    sc_hierarchy_scope scope( restore_hierarchy() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 
