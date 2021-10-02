@@ -19,7 +19,7 @@
 
 ###############################################################################
 #
-# examples/sysc/CMakeLists.txt --
+# examples/sysc/async_suspend/CMakeLists.txt --
 # CMake script to configure the SystemC sources and to generate native
 # Makefiles and project workspaces for your compiler environment.
 #
@@ -38,34 +38,14 @@
 #
 ###############################################################################
 
+option(ASYNC_SUSPEND_MATPLOT "Build async_suspend example with matplotlib for grahpical output" OFF)
 
-set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set(TEST_FOLDER "examples/sysc" CACHE INTERNAL "" FORCE)
+add_executable(async_suspend async_suspend.cpp)
+target_link_libraries(async_suspend SystemC::systemc pthread)
 
-add_subdirectory (2.1/dpipe)
-add_subdirectory (2.1/forkjoin)
-add_subdirectory (2.1/reset_signal_is)
-add_subdirectory (2.1/sc_export)
-add_subdirectory (2.1/sc_report)
-add_subdirectory (2.1/scx_barrier)
-add_subdirectory (2.1/scx_mutex_w_policy)
-#add_subdirectory (2.1/specialized_signals) # needs work!!!!
-add_subdirectory (2.3/sc_rvd)
-add_subdirectory (2.3/sc_ttd)
-add_subdirectory (2.3/simple_async)
-add_subdirectory (fft/fft_flpt)
-add_subdirectory (fft/fft_fxpt)
-add_subdirectory (fir)
-add_subdirectory (pipe)
-add_subdirectory (pkt_switch)
-add_subdirectory (risc_cpu)
-add_subdirectory (rsa)
-add_subdirectory (simple_bus)
-add_subdirectory (simple_fifo)
-add_subdirectory (simple_perf)
-add_subdirectory (async_suspend)
-
-if (NOT (CMAKE_CXX_STANDARD EQUAL 98))
-    add_subdirectory (2.4/in_class_initialization)
-    add_subdirectory (2.4/sc_optional)
+if(ASYNC_SUSPEND_MATPLOT)
+    find_package(Python3 REQUIRED COMPONENTS Development)
+    target_link_libraries(async_suspend ${Python3_LIBRARIES})
+    target_include_directories(async_suspend PRIVATE ${Python3_INCLUDE_DIRS})
+    add_definitions(-DWITHMATPLOT)
 endif()
