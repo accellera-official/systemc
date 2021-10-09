@@ -138,10 +138,6 @@ CXX_FILES += \
 	datatypes/int/sc_uint_base.cpp \
 	datatypes/int/sc_unsigned.cpp \
 	\
-<<<<<<< HEAD
-	datatypes/misc/sc_concatref.cpp \
-=======
->>>>>>> master
 	datatypes/misc/sc_value_base.cpp \
 	\
 	datatypes/any/sc_any_value.cpp \
