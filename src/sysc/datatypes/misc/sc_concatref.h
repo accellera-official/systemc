@@ -98,18 +98,6 @@ namespace sc_dt {
 class sc_concatref;
 class sc_concat_bool;
 
-} // namespace sc_dt
-
-namespace sc_core {
-extern sc_byte_heap SC_API sc_temp_heap; // Temporary storage.
-
-// explicit template instantiations
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concatref>;
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_concat_bool>;
-} // namespace sc_core
-
-namespace sc_dt {
-
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_concatref
 //
@@ -253,23 +241,16 @@ public:
 
     const sc_unsigned& value() const
         {
-	    sc_unsigned*   result_p = sc_unsigned::temporary();
+            sc_unsigned*   result_p = sc_unsigned::temporary();
 
             result_p->nbits = result_p->num_bits(m_len);
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
 	    if ( result_p->ndigits > SC_SMALL_VEC_DIGITS ) {
-		result_p->digit = (sc_digit*)sc_core::sc_temp_heap.allocate( 
-		    sizeof(sc_digit)*result_p->ndigits );
+		result_p->digit = sc_temporary_digits.allocate( result_p->ndigits );
 	    }
 	    else {
 	        result_p->digit = result_p->small_vec;
 	    }
-#if defined(_MSC_VER)
-            // workaround spurious initialisation issue on MS Visual C++
-            memset( result_p->digit, 0, sizeof(sc_digit)*result_p->ndigits );
-#else
-            result_p->digit[result_p->ndigits-1] = 0;
-#endif
             m_right_p->concat_get_data( result_p->digit, 0 );
             m_left_p->concat_get_data(result_p->digit, m_len_r); 
 	    result_p->adjust_hod();
@@ -640,7 +621,7 @@ class SC_API sc_concat_bool : public sc_value_base
 
     static inline sc_concat_bool* allocate( bool v )
     {
-	static sc_core::sc_vpool<sc_concat_bool> pool(9);
+        static sc_core::sc_vpool<sc_concat_bool> pool(9);
         sc_concat_bool* result_p = pool.allocate();
         result_p->m_value = v;
         return result_p;
@@ -766,9 +747,9 @@ SC_CONCAT_BOOL_OP(<)
 // CONCATENATION FUNCTION AND OPERATOR FOR STANDARD SYSTEM C DATA TYPES:
 // ----------------------------------------------------------------------------
 
-inline sc_dt::sc_concatref* temporary_concatref()
+static inline sc_dt::sc_concatref* temporary_concatref()
 {
-    sc_core::sc_vpool<sc_concatref> pool(9);
+    static sc_core::sc_vpool<sc_concatref> pool(9);
     sc_dt::sc_concatref* result_p = pool.allocate();
     return result_p;
 }

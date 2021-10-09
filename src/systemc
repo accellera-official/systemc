@@ -98,6 +98,9 @@
 #include "sysc/datatypes/bit/sc_bv.h"
 #include "sysc/datatypes/bit/sc_lv.h"
 
+#include "sysc/datatypes/int/sc_signed.h"
+#include "sysc/datatypes/int/sc_unsigned.h"
+
 #include "sysc/datatypes/int/sc_bigint.h"
 #include "sysc/datatypes/int/sc_biguint.h"
 #include "sysc/datatypes/int/sc_int.h"
@@ -127,6 +130,7 @@
 
 #include "sysc/utils/sc_utils_ids.h"
 
+#include "sysc/utils/sc_optional.h"
 #include "sysc/utils/sc_pvector.h"
 #include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_vector.h"

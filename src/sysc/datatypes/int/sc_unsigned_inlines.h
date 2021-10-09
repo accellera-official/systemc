@@ -35,6 +35,55 @@
 
 namespace sc_dt {
 
+// +------------------------------------------------------------------------------------------------
+// |"sc_unsigned_subref_r shift operators"
+// | 
+// | These are the shift operators for part selections.
+// |
+// | Notes:
+// |   (1) There are definitions for shift types of int, sc_signed, and sc_unsigned. All other
+// |       native C++ integer types will be matched to the int shift type by the compiler.
+// | Arguments:
+// |     shift = amount to shift by.
+// | Result:
+// |     sc_unsigned instance representing the shifted value.
+// +------------------------------------------------------------------------------------------------
+inline
+sc_unsigned sc_unsigned_subref_r::operator<<( int shift ) const
+{ 
+    return ((sc_unsigned)*this)<<(shift); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator<<(const sc_signed&    v) const 
+{
+    return this->operator<<( v.to_int() ); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator<<(const sc_unsigned&  v) const
+{
+    return this->operator<<( v.to_int() ); 
+}
+
+inline
+sc_unsigned sc_unsigned_subref_r::operator>>( int shift ) const
+{ 
+    return ((sc_unsigned)*this)>>(shift); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator>>(const sc_signed&    v) const 
+{
+    return this->operator>>( v.to_int() ); 
+}
+
+inline 
+sc_unsigned sc_unsigned_subref_r::operator>>(const sc_unsigned&  v) const
+{
+    return this->operator>>( v.to_int() ); 
+}
+
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
 // | 
@@ -49,14 +98,16 @@ inline
 sc_unsigned::sc_unsigned(const sc_unsigned& v) :
     sc_value_base(v), nbits(v.nbits), ndigits(v.ndigits), digit()
 {
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     }
     else  {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
 
-  vec_copy(ndigits, digit, v.digit);
+  vector_copy( ndigits, v.digit, digit);
 }
 
 
@@ -65,13 +116,16 @@ sc_unsigned::sc_unsigned(const sc_signed& v) :
     sc_value_base(v), nbits(v.nbits+1), 
     ndigits( SC_DIGIT_COUNT(nbits) ), digit()
 {
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
 
-  copy_digits(v.nbits, v.ndigits, v.digit);
+  vector_copy( v.ndigits, v.digit, digit );
+  adjust_hod();
 }
 
 inline
@@ -80,11 +134,8 @@ sc_unsigned::sc_unsigned(const sc_int_subref_r& v) :
 {
     nbits = v.length()+1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
-	digit = new sc_digit[ndigits];
-    } else {
-	digit = small_vec;
-    }
+    digit = small_vec;
+    SC_FREE_DIGIT(false)
     *this = v.to_uint64();
 }
 
@@ -94,11 +145,8 @@ sc_unsigned::sc_unsigned(const sc_uint_subref_r& v) :
 {
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
-	digit = new sc_digit[ndigits];
-    } else {
-	digit = small_vec;
-    }
+    digit = small_vec;
+    SC_FREE_DIGIT(false)
     makezero();
     *this = v.to_uint64();
 }
@@ -113,12 +161,13 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
 
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
-    digit[ndigits-1] = 0; 
     if ( v.m_left >= v.m_right ) {
         high_bit = v.m_left;
         low_bit = v.m_right;
@@ -132,6 +181,8 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
     if ( reversed ) {
         vector_reverse_bits( digit, high_bit-low_bit, 0 );
     }
+    adjust_hod();
+    if (0) std::cout << "@@@@ " << nbits << " " << ndigits << " " << low_bit << " " << high_bit << std::endl;
 }
 
 inline
@@ -140,10 +191,12 @@ sc_unsigned::sc_unsigned(const sc_unsigned_subref_r& v) :
 {
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
     digit[ndigits-1] = 0; 
     int  low_bit;
@@ -179,10 +232,12 @@ sc_unsigned::sc_unsigned(const sc_bv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
     *this = v;
 }
@@ -201,10 +256,12 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     } else {
 	digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
     *this = v;
 }
@@ -223,9 +280,7 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
 inline const sc_unsigned&
 sc_unsigned::operator = (const sc_unsigned& from)
 {
-    sc_digit* to_p = get_digits();
-    int       to_hod = get_hod();
-    vector_copy( from.get_hod(), from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), get_digits_n(), get_digits() );
     adjust_hod();
     return *this;
 }
@@ -233,9 +288,7 @@ sc_unsigned::operator = (const sc_unsigned& from)
 inline const sc_unsigned&
 sc_unsigned::operator = (const sc_signed& from)
 {
-    sc_digit* to_p = get_digits();
-    const int to_hod = get_hod();
-    vector_copy( from.get_hod(), from.get_digits(), to_hod, to_p );
+    vector_copy( from.get_digits_n(), from.get_digits(), get_digits_n(), get_digits() );
     adjust_hod();
     return *this;
 }
@@ -277,21 +330,6 @@ sc_unsigned::operator = ( long from )
     return *this;
 }
 
-#if 0
-inline const sc_unsigned&
-sc_unsigned::operator = ( int from )
-{
-    int to_hod = get_hod();
-    sc_digit* to_p = get_digits();
-    *to_p++ = from;
-    if ( to_hod > 0 ) {
-	vector_fill( from < 0 ? -1 : 0, to_hod-1, to_p );
-    }
-    adjust_hod();
-    return *this;
-}
-#endif
-
 inline const sc_unsigned&
 sc_unsigned::operator = ( uint64 from )
 {
@@ -328,21 +366,6 @@ sc_unsigned::operator = ( unsigned long from )
     adjust_hod();
     return *this;
 }
-
-#if 0
-inline const sc_unsigned&
-sc_unsigned::operator = ( unsigned int from )
-{
-    int to_hod = get_hod();
-    sc_digit* to_p = get_digits();
-    *to_p++ = from;
-    if ( to_hod > 0 ) {
-	vector_fill( 0, to_hod-1, to_p );
-    }
-    adjust_hod();
-    return *this;
-}
-#endif
 
 inline const sc_unsigned&
 sc_unsigned::operator = ( const sc_int_base& from )
@@ -405,55 +428,29 @@ sc_unsigned::to_double() const
     return v;
 }
 
-#if 0
-// Set the ith bit with 1.
-inline
-void
-sc_unsigned::set(int i)
+inline sc_unsigned
+sc_unsigned::operator>>(const sc_signed& v) const
 {
-  if (check_if_outside(i))
-    return;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-  digit[digit_num] |= one_and_zeros(bit_num);
-  digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+  return operator>>(v.to_int());
 }
 
-
-// Set the ith bit with 0, i.e., clear the ith bit.
-inline
-void
-sc_unsigned::clear(int i)
+inline const sc_unsigned&
+sc_unsigned::operator>>=(const sc_signed& v)
 {
-  if (check_if_outside(i))
-    return;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-  digit[digit_num] &= ~(one_and_zeros(bit_num));
-  digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+  return operator>>=(v.to_int());
 }
 
-// Return true if the bit i is 1, false otherwise. If i is outside the
-// bounds, return 1/0 according to the sign of the number by assuming
-// that the number has infinite length.
-
-inline
-bool
-sc_unsigned::test(int i) const
+inline sc_unsigned
+sc_unsigned::operator<<(const sc_signed& v) const
 {
-  if (check_if_outside(i))
-    return 0;
-
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
-    return ((digit[digit_num] & one_and_zeros(bit_num)) != 0);
+  return operator<<(v.to_int());
 }
-#endif
+
+inline const sc_unsigned&
+sc_unsigned::operator<<=(const sc_signed& v)
+{
+  return operator<<=(v.to_int());
+}
 
 
 } // namespace sc_dt

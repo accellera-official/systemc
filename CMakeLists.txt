@@ -90,6 +90,11 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
+# BIGINT_CONFIGURATION          Configuration of big integer datatypes
+#                               (one of BASE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+#
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON if not targetting Windows).
 #
@@ -271,7 +276,7 @@ if (NOT CMAKE_BUILD_TYPE)
        FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-set (CMAKE_CXX_STANDARD 98 CACHE STRING
+set (CMAKE_CXX_STANDARD 17 CACHE STRING
      "C++ standard to build all targets. Supported values are 98, 11, and 14.")
 set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
      "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
@@ -286,6 +291,25 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
   set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+
+
+set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
+set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BitIntConfigs})
+
+option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
+
+#set (BIGINT_CONFIGURATION
+#    "TEMPLATE_CLASS_HAS_NO_BASE_CLASS"
+#    "TEMPLATE_CLASS_HAS_STORAGE"
+#    "BASE_CLASS_HAS_STORAGE"
+#    CACHE STRINGS
+#    "Configuration of big integers." 
+#    FORCE
+#    "BASE_CLASS_HAS_STORAGE"
+#)
+
+#option (BIGINT_CONFIG "Configuration of big integers." BASE_CLASS_HAS_STORAGE)
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
@@ -504,6 +528,10 @@ else (ENABLE_PTHREADS)
 endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
+  # QuickThreads stack protection can benefit from posix_memalign
+  include(CheckSymbolExists)
+  check_symbol_exists(posix_memalign "stdlib.h" HAVE_POSIX_MEMALIGN)
+
   # To build QuickThreads, enable the assembler support.
   enable_language (ASM)
 else (QT_ARCH)

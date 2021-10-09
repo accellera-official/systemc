@@ -16,42 +16,41 @@
   permissions and limitations under the License.
 
  *****************************************************************************/
-
 /*****************************************************************************
 
-    sc_concatref.cpp -- Concatenation support.
-
-    Original Author: Andy Goodrich, Forte Design Systems, Inc.
+  Original Author: Mark Burton, GreenSocs
 
  *****************************************************************************/
 
-/*****************************************************************************
+#ifndef ASYNCEVENT_H
+#define ASYNCEVENT_H
 
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
+/* this is a very simplistic implementation of an event that can be notified
+ * from a different thread. Ensuring that the normal systemc semantics of
+ * 'write-over-write' are maintained is left to the interested reader.
+ */
+class async_event : public sc_core::sc_prim_channel, public sc_event
+{
+private:
+    sc_core::sc_time m_delay;
+public:
+    SC_HAS_PROCESS(async_event);
+    async_event(sc_module_name n = "")
+    {
+        async_attach_suspending();
+    }
 
-      Name, Affiliation, Date:
-  Description of Modification:
+    void notify(sc_core::sc_time delay = SC_ZERO_TIME)
+    {
+        m_delay = delay; // no guarantee if event notified multiple times.
+        async_request_update();
+    }
 
- *****************************************************************************/
+protected:
+    void update(void)
+    {
+        sc_event::notify(m_delay);
+    }
+};
 
-// $Log: sc_concatref.cpp,v $
-// Revision 1.1.1.1  2006/12/15 20:20:05  acg
-// SystemC 2.3
-//
-// Revision 1.3  2006/01/13 18:54:01  acg
-// Andy Goodrich: added $Log command so that CVS comments are reproduced in
-// the source.
-//
-
-#include "sysc/datatypes/misc/sc_concatref.h"
-#include "sysc/utils/sc_temporary.h"
-
-// STORAGE POOLS USED BY sc_concatref:
-
-namespace sc_core {
-    template class SC_API sc_vpool<sc_dt::sc_concatref>;
-    template class SC_API sc_vpool<sc_dt::sc_concat_bool>;
-    sc_byte_heap             sc_temp_heap(0x300000);
-} // namespace sc_core
-
+#endif

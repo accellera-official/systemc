@@ -192,12 +192,6 @@ protected:
 	{ return sc_core::timed_out( simcontext() ); }
 
 
-#if 0 // @@@@####
-    // delta count maintenance
-    sc_dt::uint64 delta_count()
-	{ return simcontext()->m_delta_count; }
-#endif
-
 private:
 
     // called during the update phase of a delta cycle (if requested)

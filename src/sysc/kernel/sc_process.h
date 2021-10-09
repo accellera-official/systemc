@@ -227,6 +227,11 @@ class SC_API sc_process_b : public sc_object_host {
     friend void sc_thread_cor_fn( void* arg );
     friend SC_API bool timed_out( sc_simcontext* );
 
+    friend void sc_suspend_all( sc_simcontext* );
+    friend void sc_unsuspend_all( sc_simcontext* );
+    friend void sc_suspendable();
+    friend void sc_unsuspendable();
+
   public:
     enum process_throw_type {
         THROW_NONE = 0,
@@ -389,6 +394,11 @@ class SC_API sc_process_b : public sc_object_host {
     sc_event*                    m_timeout_event_p; // timeout event.
     trigger_t                    m_trigger_type;    // type of trigger using.
     bool                         m_unwinding;       // true if unwinding stack.
+
+    bool                         m_unsuspendable;   // This process should not
+                                                    // be suspended
+    bool                         m_suspend_all_req; // This process is
+                                                    // requesting global suspension.
 
   protected:
     static sc_process_b* m_last_created_process_p; // Last process created.

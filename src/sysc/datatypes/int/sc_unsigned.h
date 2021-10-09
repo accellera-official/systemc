@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -97,6 +97,7 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/int/sc_nbutils.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -131,127 +132,13 @@ class sc_fxnum_fast;
 #include "sc_unsigned_friends.h"
 #undef SCFP
 
-// Helper function declarions
-int compare_unsigned(small_type us,
-                              int unb,
-                              int und,
-                              const sc_digit *ud,
-                              small_type vs,
-                              int vnb,
-                              int vnd,
-                              const sc_digit *vd,
-                              small_type if_u_signed=0,
-                              small_type if_v_signed=0);
-
-sc_unsigned add_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-sc_unsigned sub_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-sc_unsigned mul_unsigned_friend(small_type s,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-sc_unsigned div_unsigned_friend(small_type s,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-sc_unsigned mod_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-sc_unsigned and_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-
-sc_unsigned or_unsigned_friend(small_type us,
-                                        int unb,
-                                        int und,
-                                        const sc_digit *ud,
-                                        small_type vs,
-                                        int vnb,
-                                        int vnd,
-                                        const sc_digit *vd);
-
-sc_unsigned xor_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  // SHIFT OPERATORS:
-
-  // LEFT SHIFT operators:
-
-  sc_unsigned operator << (const sc_unsigned&  u, const sc_signed&    v);
-    sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
-
-  sc_unsigned operator << (const sc_unsigned&  u, const sc_unsigned&  v);
-  sc_unsigned operator << (const sc_unsigned&  u, int64               v);
-  sc_unsigned operator << (const sc_unsigned&  u, uint64              v);
-  sc_unsigned operator << (const sc_unsigned&  u, long                v);
-  sc_unsigned operator << (const sc_unsigned&  u, unsigned long       v);
-  inline sc_unsigned operator << (const sc_unsigned&  u, int                 v);
-  inline sc_unsigned operator << (const sc_unsigned&  u, unsigned int        v);
-
-  sc_unsigned operator << (const sc_unsigned&  u, const sc_uint_base& v);
-  sc_unsigned operator << (const sc_unsigned&  u, const sc_int_base&  v);
-
-  // RIGHT SHIFT operators:
-
-  sc_unsigned operator >> (const sc_unsigned&  u, const sc_signed&    v);
-    sc_signed operator >> (const sc_signed&    u, const sc_unsigned&  v);
-
-  sc_unsigned operator >> (const sc_unsigned&  u, const sc_unsigned&  v);
-  sc_unsigned operator >> (const sc_unsigned&  u, int64               v);
-  sc_unsigned operator >> (const sc_unsigned&  u, uint64              v);
-  sc_unsigned operator >> (const sc_unsigned&  u, long                v);
-  sc_unsigned operator >> (const sc_unsigned&  u, unsigned long       v);
-  inline sc_unsigned operator >> (const sc_unsigned&  u, int                 v);
-  inline sc_unsigned operator >> (const sc_unsigned&  u, unsigned int        v);
-
-  sc_unsigned operator >> ( const sc_unsigned& , const sc_uint_base& );
-  sc_unsigned operator >> ( const sc_unsigned&, const sc_int_base& );
-
   // Unary arithmetic operators
+
   sc_unsigned operator + (const sc_unsigned& u);
-    sc_signed operator - (const sc_unsigned& u);
+  sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
+
   sc_signed operator ~ (const sc_unsigned& u);
 
 // ----------------------------------------------------------------------------
@@ -305,7 +192,7 @@ public:
 
     // explicit conversions
 
-    uint64 value() const
+    bool value() const
 	{ return operator uint64(); }
 
     bool to_bool() const
@@ -343,6 +230,7 @@ public:
 	    return result;
         }
 
+
     // other methods
 
     void print( ::std::ostream& os = ::std::cout ) const
@@ -353,9 +241,7 @@ protected:
     int          m_index;
     sc_unsigned* m_obj_p;
 
-private:
-
-    // disabled
+private: // disabled
     const sc_unsigned_bitref_r& operator = ( const sc_unsigned_bitref_r& );
 };
 
@@ -363,7 +249,7 @@ private:
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_unsigned_bitref_r& );
+operator<<( ::std::ostream&, const sc_unsigned_bitref_r& );
 
 
 // ----------------------------------------------------------------------------
@@ -421,7 +307,7 @@ public:
 
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_unsigned_bitref& );
+operator>>( ::std::istream&, sc_unsigned_bitref& );
 
 
 // ----------------------------------------------------------------------------
@@ -461,7 +347,7 @@ public:
     // copy constructor
 
     sc_unsigned_subref_r( const sc_unsigned_subref_r& a )
-	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+	: sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	  m_right( a.m_right )
 	{}
 
@@ -493,6 +379,16 @@ public:
     const std::string to_string( sc_numrep numrep = SC_DEC ) const;
     const std::string to_string( sc_numrep numrep, bool w_prefix ) const;
 
+
+    // shift operators
+
+    inline sc_unsigned operator<<( int v ) const;
+    inline sc_unsigned operator<<(const sc_signed&    v) const;
+    inline sc_unsigned operator<<(const sc_unsigned&  v) const;
+
+    inline sc_unsigned operator>>( int v ) const;
+    inline sc_unsigned operator>>(const sc_signed&    v) const;
+    inline sc_unsigned operator>>(const sc_unsigned&  v) const;
 
     // concatenation support
 
@@ -527,17 +423,41 @@ protected:
     sc_unsigned* m_obj_p;  // Target of this part selection.
     int          m_right;  // Right-most bit in this part selection.
 
-private:
-
-    // disabled
+private: // disabled
     const sc_unsigned_subref_r& operator = ( const sc_unsigned_subref_r& );
 };
 
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_unsigned_subref_r& a ) {
+    return a.and_reduce();
+}
+
+inline bool nand_reduce( const sc_unsigned_subref_r& a ) {
+    return a.nand_reduce();
+}
+
+inline bool or_reduce( const sc_unsigned_subref_r& a ) {
+    return a.or_reduce();
+}
+
+inline bool nor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.nor_reduce();
+}
+
+inline bool xor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.xor_reduce();
+}
+
+inline bool xnor_reduce( const sc_unsigned_subref_r& a ) {
+    return a.xnor_reduce();
+}
 
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_unsigned_subref_r& );
+operator<<( ::std::ostream&, const sc_unsigned_subref_r& );
+
 
 
 // ----------------------------------------------------------------------------
@@ -593,6 +513,8 @@ public:
     const sc_unsigned_subref& operator = ( double a );
     const sc_unsigned_subref& operator = ( const sc_int_base& a );
     const sc_unsigned_subref& operator = ( const sc_uint_base& a );
+    const sc_unsigned_subref& operator = ( const sc_bv_base& );
+    const sc_unsigned_subref& operator = ( const sc_lv_base& );
 
     // concatenation methods
 
@@ -608,10 +530,9 @@ public:
 };
 
 
-
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_unsigned_subref& );
+operator>>( ::std::istream&, sc_unsigned_subref& );
 
 
 // ----------------------------------------------------------------------------
@@ -632,8 +553,10 @@ class sc_unsigned : public sc_value_base
     friend class sc_signed_subref_r;
     template<int W> friend class sc_bigint;
     template<int W> friend class sc_biguint;
+#ifndef ALIAS_SC_INT
     template<int W> friend class sc_int;
     template<int W> friend class sc_uint;
+#endif
 
   // Needed for types using sc_unsigned.
   typedef bool elemtype;
@@ -646,6 +569,9 @@ public:
     // constructors
 
     explicit inline sc_unsigned( int nb = sc_length_param().len() );
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+    explicit inline sc_unsigned( int nb, sc_digit* digits_p );
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
     sc_unsigned( const sc_unsigned& v );
     sc_unsigned( const sc_signed&   v );
 	template<class T>
@@ -698,16 +624,12 @@ public:
 #endif
 
 
-    // destructor
+    // destructor:
 
-    virtual ~sc_unsigned()
-	{
-#           ifndef SC_MAX_NBITS
-                if ( digit != small_vec ) {
-		    delete [] digit;
-		}
-#           endif
-	}
+    ~sc_unsigned()
+        {
+            if ( digit_is_allocated() ) { delete [] digit; }
+        }
 
     // Concatenation support:
 
@@ -725,12 +647,12 @@ public:
     // Increment operators.
 
     sc_unsigned& operator ++ ();
-    const sc_unsigned operator ++ (int);
+    inline const sc_unsigned operator ++ (int);
 
     // Decrement operators.
 
     sc_unsigned& operator -- ();
-    const sc_unsigned operator -- (int);
+    inline const sc_unsigned operator -- (int);
 
     void invalid_init( const char* type_name, int nb ) const;
 
@@ -804,10 +726,10 @@ public:
     void invalid_range( int l, int r ) const;
 
     sc_unsigned_subref* temporary_subref() const
-    {       
+    {
         static sc_core::sc_vpool<sc_unsigned_subref> pool(9);
         return pool.allocate();
-    }   
+    }
 
     sc_unsigned_subref& range( int i, int j )
         {
@@ -842,12 +764,12 @@ public:
         }
 
     // temporary for concatenation:
-    
+
     static sc_unsigned* temporary()
     {
         static sc_core::sc_vpool<sc_unsigned> pool(9);
         return pool.allocate();
-    }       
+    }
 
     // explicit conversions
 
@@ -858,6 +780,8 @@ public:
     inline int64         to_int64() const;
     inline uint64        to_uint64() const;
     double               to_double() const;
+
+    //inline operator bool() const { return to_uint64(); }
 
 #ifdef SC_DT_DEPRECATED
     int to_signed() const
@@ -915,8 +839,8 @@ public:
       if (check_if_outside(i))
 	return;
 
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
       digit[digit_num] |= one_and_zeros(bit_num);
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
@@ -931,8 +855,8 @@ public:
       if (check_if_outside(i))
 	return;
 
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
       digit[digit_num] &= ~(one_and_zeros(bit_num));
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
@@ -949,8 +873,8 @@ public:
       if (check_if_outside(i))
 	return 0;
 
-      int bit_num = bit_ord(i);
-      int digit_num = digit_ord(i);
+      int bit_num = SC_BIT_INDEX(i);
+      int digit_num = SC_DIGIT_INDEX(i);
 
 	return ((digit[digit_num] & one_and_zeros(bit_num)) != 0);
     }
@@ -997,7 +921,7 @@ public:
    */
 
     // FRIEND DECLARATIONS:
-    
+
 #   define SCFP friend
 #   include "sc_unsigned_friends.h"
 #   undef SCFP
@@ -1092,212 +1016,198 @@ public:
   inline sc_unsigned& operator ^= (const sc_int_base&  v);
   inline sc_unsigned& operator ^= (const sc_uint_base& v);
 
-  // SHIFT OPERATORS:
-
   // LEFT SHIFT operators:
 
-  friend sc_unsigned operator << (const sc_unsigned&  u, const sc_signed&    v);
-  friend   sc_signed operator << (const sc_signed&    u, const sc_unsigned&  v);
+  inline
+  sc_unsigned
+  operator<<(int v) const
+  {
+    if (v <= 0)
+      return sc_unsigned(*this);
 
-  friend sc_unsigned operator << (const sc_unsigned&  u, const sc_unsigned&  v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, int64               v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, uint64              v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, long                v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, unsigned long       v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, int                 v)
-    { return operator<<(u, (long) v); }
-  friend sc_unsigned operator << (const sc_unsigned&  u, unsigned int        v)
-    { return operator<<(u, (unsigned long) v); }
+    int nb = nbits + v;
+    int nd = DIV_CEIL(nb);
+    sc_unsigned result(nb, false);
 
-  const sc_unsigned& operator <<= (const sc_signed&    v);
-  const sc_unsigned& operator <<= (const sc_unsigned&  v);
-  const sc_unsigned& operator <<= (int64               v);
-  const sc_unsigned& operator <<= (uint64              v);
-  const sc_unsigned& operator <<= (long                v);
-  const sc_unsigned& operator <<= (unsigned long       v);
-  const sc_unsigned& operator <<= (int                 v)
-    { return operator<<=((long) v); }
-  const sc_unsigned& operator <<= (unsigned int        v)
-    { return operator<<=((unsigned long) v); }
+    vector_shift_left( ndigits, digit, nd, result.digit, v );
+    result.adjust_hod();
 
-  friend sc_unsigned operator << (const sc_unsigned&  u, const sc_uint_base& v);
-  friend sc_unsigned operator << (const sc_unsigned&  u, const sc_int_base&  v);
-  const sc_unsigned& operator <<= (const sc_int_base&  v);
-  const sc_unsigned& operator <<= (const sc_uint_base& v);
+    return result;
+  }
+
+  sc_unsigned operator<<(const sc_signed&    v) const;
+  sc_unsigned operator<<(const sc_unsigned&  v) const { return operator<<( v.to_int() ); }
+  sc_unsigned operator<<(int64               v) const { return operator<<( (int)v ); }
+  sc_unsigned operator<<(uint64              v) const { return operator<<( (int)v ); }
+  sc_unsigned operator<<(long                v) const { return operator<<( (int)v ); }
+  sc_unsigned operator<<(unsigned long       v) const { return operator<<( (int)v ); }
+  sc_unsigned operator<<(unsigned int        v) const { return operator<<( (int)v ); }
+
+  const sc_unsigned&
+  operator<<=(int v)
+  {
+    if (v <= 0)
+      return *this;
+
+    vector_shift_left( ndigits, digit, v );
+    adjust_hod();
+
+    return *this;
+  }
+  const sc_unsigned& operator<<=(const sc_signed&    v);
+  const sc_unsigned& operator<<=(const sc_unsigned&  v) { return operator<<=( v.to_int() ); }
+  const sc_unsigned& operator<<=(int64               v) { return operator<<=((int) v); }
+  const sc_unsigned& operator<<=(uint64              v) { return operator<<=((int) v); }
+  const sc_unsigned& operator<<=(long                v) { return operator<<=((int) v); }
+  const sc_unsigned& operator<<=(unsigned long       v) { return operator<<=((int) v); }
+  const sc_unsigned& operator<<=(unsigned int        v) { return operator<<=((int) v); }
 
   // RIGHT SHIFT operators:
 
-  friend sc_unsigned operator >> (const sc_unsigned&  u, const sc_signed&    v);
-  friend   sc_signed operator >> (const sc_signed&    u, const sc_unsigned&  v);
+  inline
+  sc_unsigned
+  operator>>(int v) const
+  {
+      if (v <= 0) {
+          return sc_unsigned(*this);
+      }
+      int nb = nbits - v;
 
-  friend sc_unsigned operator >> (const sc_unsigned&  u, const sc_unsigned&  v);
-  friend sc_unsigned operator >> (const sc_unsigned&  u, int64               v);
-  friend sc_unsigned operator >> (const sc_unsigned&  u, uint64              v);
-  friend sc_unsigned operator >> (const sc_unsigned&  u, long                v);
-  friend sc_unsigned operator >> (const sc_unsigned&  u, unsigned long       v);
-  friend sc_unsigned operator >> (const sc_unsigned&  u, int                 v)
-    { return operator>>(u, (long) v); }
-  friend sc_unsigned operator >> (const sc_unsigned&  u, unsigned int        v)
-    { return operator>>(u, (unsigned long) v); }
+      // If we shift off the end return the sign bit.
 
-  const sc_unsigned& operator >>= (const sc_signed&    v);
-  const sc_unsigned& operator >>= (const sc_unsigned&  v);
-  const sc_unsigned& operator >>= (int64               v);
-  const sc_unsigned& operator >>= (uint64              v);
-  const sc_unsigned& operator >>= (long                v);
-  const sc_unsigned& operator >>= (unsigned long       v);
-  const sc_unsigned& operator >>= (int                 v)
-    { return operator>>=((long) v); }
-  const sc_unsigned& operator >>= (unsigned int        v)
-    { return operator>>=((unsigned long) v); }
+      if ( 0 >= nb ) {
+          sc_unsigned result(1, true);
+          return result;
+      }
 
-  friend sc_unsigned operator >> ( const sc_unsigned& , const sc_uint_base& );
-  friend sc_unsigned operator >> ( const sc_unsigned&, const sc_int_base& );
-  const sc_unsigned& operator >>= (const sc_int_base&  v);
-  const sc_unsigned& operator >>= (const sc_uint_base& v);
+      // Return a value that is the width of the shifted value:
+
+      sc_unsigned result(nb, false);
+      if ( nbits < 33 ) {
+          result.digit[0] = (int)digit[0] >> v;
+      }
+      else if ( nbits < 65 ) {
+          int64 tmp = digit[1];
+          tmp = (tmp << 32) | digit[0];
+          tmp = tmp >> v;
+          result.digit[0] = tmp;
+          if ( nb > 32 ) {
+              result.digit[1] = (tmp >>32);
+          }
+      }
+      else {
+          vector_extract(digit, result.digit, nbits-1, v);
+      }
+      result.adjust_hod();
+      return result;
+  }
+
+  sc_unsigned operator>>(const sc_signed&  v) const;
+  sc_unsigned operator>>(const sc_unsigned&  v) const { return operator>>( v.to_int() ); }
+  sc_unsigned operator>>(int64               v) const { return operator>>( (int)v ); }
+  sc_unsigned operator>>(uint64              v) const { return operator>>( (int)v ); }
+  sc_unsigned operator>>(long                v) const { return operator>>( (int)v ); }
+  sc_unsigned operator>>(unsigned long       v) const { return operator>>( (int)v ); }
+  sc_unsigned operator>>(unsigned int        v) const { return operator>>( (int)v ); }
+
+  const sc_unsigned&
+  operator>>=(int v)
+  {
+      if (v <= 0)
+          return *this;
+      vector_shift_right(ndigits, digit, v, 0);
+    return *this;
+  }
+  const sc_unsigned& operator>>=(const sc_signed&    v);
+  const sc_unsigned& operator>>=(const sc_unsigned&  v) { return operator>>=(v.to_int()); }
+  const sc_unsigned& operator>>=(int64               v) { return operator>>=((int)v); }
+  const sc_unsigned& operator>>=(uint64              v) { return operator>>=((int)v); }
+  const sc_unsigned& operator>>=(long                v) { return operator>>=((int)v); }
+  const sc_unsigned& operator>>=(unsigned long       v) { return operator>>=((int)v); }
+  const sc_unsigned& operator>>=(unsigned int        v) { return operator>>=((int)v); }
 
   // Unary arithmetic operators
+
   friend sc_unsigned operator + (const sc_unsigned& u);
-  friend   sc_signed operator - (const sc_unsigned& u);
+  friend sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
+
   friend sc_signed operator ~ (const sc_unsigned& u);
 
-  // Helper functions.
-  friend int compare_unsigned(small_type us,
-                              int unb,
-                              int und,
-                              const sc_digit *ud,
-                              small_type vs,
-                              int vnb,
-                              int vnd,
-                              const sc_digit *vd,
-                              small_type if_u_signed,
-                              small_type if_v_signed);
+protected:
 
-  friend sc_unsigned add_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
+  int      nbits;                                                  // number of bits in use.
+  int      ndigits;                                                // number words in 'digits'
+  sc_digit *digit;                                                 // storage for our value.
+  sc_digit small_vec[SC_SMALL_VEC_DIGITS>0?SC_SMALL_VEC_DIGITS:1]; // make small values faster.
 
-  friend sc_unsigned sub_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  friend sc_unsigned mul_unsigned_friend(small_type s,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  friend sc_unsigned div_unsigned_friend(small_type s,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  friend sc_unsigned mod_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  friend sc_unsigned and_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-  friend sc_unsigned or_unsigned_friend(small_type us,
-                                        int unb,
-                                        int und,
-                                        const sc_digit *ud,
-                                        small_type vs,
-                                        int vnb,
-                                        int vnd,
-                                        const sc_digit *vd);
-
-  friend sc_unsigned xor_unsigned_friend(small_type us,
-                                         int unb,
-                                         int und,
-                                         const sc_digit *ud,
-                                         small_type vs,
-                                         int vnb,
-                                         int vnd,
-                                         const sc_digit *vd);
-
-protected: 
-
-  int nbits;       // Shortened as nb.
-  int ndigits;     // Shortened as nd.
-
-#ifdef SC_MAX_NBITS
-  sc_digit digit[DIV_CEIL(SC_MAX_NBITS)];  // Shortened as d.
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+  bool m_free; // true if should free 'digit'.
+public:
+  inline bool digit_is_allocated() const { return m_free; }
 #else
-  sc_digit *digit;                         // Shortened as d.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS]; // Speed up smaller sizes.
+public:
+  inline bool digit_is_allocated() const { return digit != (sc_digit*)small_vec; }
 #endif
 
-  inline void adjust_hod() { digit[ndigits-1] &= ~(-1 << ((nbits-1) & 0x1f)); }
+#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
+
+public: // Temporary object support:
+
+  #define SC_UNSIGNED_TEMPS_N (1 << 15) // SC_UNSIGNED_TEMPS_N must be a power of 2.
+
+  static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
+  static size_t       m_temporaries_i;
+
+  static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p )
+  {
+      sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
+      m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
+      result_p->digit = digits_p;
+      result_p->nbits = num_bits(nb);
+      result_p->ndigits = DIV_CEIL(result_p->nbits);
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+      result_p->m_free = false;
+#endif
+      return *result_p;
+  }
+
+#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
+
+  inline void adjust_hod()
+  {
+      sc_digit tmp = 0;
+      tmp = ~tmp;
+      unsigned shift = SC_BIT_INDEX( nbits-1 );
+      digit[ndigits-1] &= ~(tmp << shift);
+  }
 
 public: // back door access:
-  int        get_actual_width() const { return nbits; }
-  sc_digit*  get_digits() const       { return digit; }
-  sc_digit*  get_digits()             { return digit; }
-  int        get_digits_n() const     { return ndigits; }
-  int        get_hod() const          { return SC_DIGIT_INDEX(nbits-1); }
-  int        get_width() const        { return nbits-1; }
+  inline int        get_actual_length() const { return nbits; }
+  inline sc_digit*  get_digits() const        { return digit; }
+  inline sc_digit*  get_digits()              { return digit; }
+  inline int        get_digits_n() const      { return ndigits; }
+  inline int        get_hod() const           { return ndigits-1; }
 
 private:
   // Private constructors:
 
   // Constructor for sc_biguint<W>
-  
+
   explicit sc_unsigned( int nb, bool zero );
 
   // Create a copy of v with sign s.
   sc_unsigned(const sc_unsigned& v, small_type s);
   sc_unsigned(const sc_signed&   v, small_type s);
 
-  // Create an unsigned number with the given attributes.
-  sc_unsigned(int nb, int nd, sc_digit *d, bool alloc = true);
-
-  // Create an unsigned number using the bits u[l..r].
-  sc_unsigned(const sc_signed* u, int l, int r);
-  sc_unsigned(const sc_unsigned* u, int l, int r);
-
   // Private member functions. The called functions are inline functions.
 
-  small_type default_sign() const
-    { return SC_POS; }
-
-  int num_bits(int nb) const { return nb + 1; }
+  static int num_bits(int nb) { return nb + 1; }
 
   bool check_if_outside(int bit_num) const;
 
-  void copy_digits(int nb, int nd, const sc_digit *d)
-    { copy_digits_unsigned(nbits, ndigits, digit, nb, nd, d); }
-
-  void makezero()
-    { make_zero(ndigits, digit); }
+  void makezero() { vector_zero( 0, ndigits, digit ); }
 
   public: // sc_ac back door:
     sc_digit*  get_raw()                       { return digit; }
@@ -1305,14 +1215,30 @@ private:
 };
 
 
+// functional notation for the reduce methods
+
+inline bool and_reduce( const sc_unsigned& a ) { return a.and_reduce(); }
+
+inline bool nand_reduce( const sc_unsigned& a ) { return a.nand_reduce(); }
+
+inline bool or_reduce( const sc_unsigned& a ) { return a.or_reduce(); }
+
+inline bool nor_reduce( const sc_unsigned& a ) { return a.nor_reduce(); }
+
+inline bool xor_reduce( const sc_unsigned& a ) { return a.xor_reduce(); }
+
+inline bool xnor_reduce( const sc_unsigned& a ) { return a.xnor_reduce(); }
+
+
+
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream&, const sc_unsigned& );
+operator<<( ::std::ostream&, const sc_unsigned& );
 
 inline
 ::std::istream&
-operator >> ( ::std::istream&, sc_unsigned& );
+operator>>( ::std::istream&, sc_unsigned& );
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
@@ -1326,7 +1252,7 @@ operator >> ( ::std::istream&, sc_unsigned& );
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_unsigned_bitref_r& a )
+operator<<( ::std::ostream& os, const sc_unsigned_bitref_r& a )
 {
     a.print( os );
     return os;
@@ -1350,7 +1276,7 @@ inline const sc_unsigned_subref& sc_unsigned_subref::operator = (
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_unsigned_bitref& a )
+operator>>( ::std::istream& is, sc_unsigned_bitref& a )
 {
     a.scan( is );
     return is;
@@ -1409,7 +1335,7 @@ inline bool sc_unsigned_subref_r::xnor_reduce() const
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_unsigned_subref_r& a )
+operator<<( ::std::ostream& os, const sc_unsigned_subref_r& a )
 {
     a.print( os );
     return os;
@@ -1435,7 +1361,7 @@ sc_unsigned_subref::operator = ( const char* a )
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_unsigned_subref& a )
+operator>>( ::std::istream& is, sc_unsigned_subref& a )
 {
     a.scan( is );
     return is;
@@ -1462,16 +1388,14 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-#   ifdef SC_MAX_NBITS
-        test_bound(nb);
-#    else
-        if ( ndigits > (int)(sizeof(small_vec)/sizeof(sc_digit)) ) {
-	    digit = new sc_digit[ndigits];
-	}
-	else {
-	    digit = small_vec;
-	}
-#    endif
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+	digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
+    }
+    else {
+	digit = small_vec;
+	SC_FREE_DIGIT(false)
+    }
     makezero();
     v->to_sc_unsigned(*this);
 }
@@ -1479,7 +1403,7 @@ sc_unsigned::sc_unsigned( const sc_generic_base<T>& v )
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_unsigned& a )
+operator<<( ::std::ostream& os, const sc_unsigned& a )
 {
     a.print( os );
     return os;
@@ -1487,7 +1411,7 @@ operator << ( ::std::ostream& os, const sc_unsigned& a )
 
 inline
 ::std::istream&
-operator >> ( ::std::istream& is, sc_unsigned& a )
+operator>>( ::std::istream& is, sc_unsigned& a )
 {
     a.scan( is );
     return is;
@@ -1531,7 +1455,7 @@ sc_unsigned_subref_r::to_uint64() const
 	    result = (result << BITS_PER_DIGIT) | digits[right_i+1];
 	    result = (result << (BITS_PER_DIGIT-right_lob)) |
 		     (digits[right_i]>>right_lob);
-	  break;     
+	  break;
 	}
 	return result;
 }
@@ -1574,17 +1498,17 @@ sc_unsigned_subref_r::to_ulong() const
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::to_XXXX"
-// | 
+// |
 // | These functions return an object instance's value as the requested
 // | native C++ type.
 // |
-// | Notes: 
+// | Notes:
 // |   (1) These are set up for BITS_PER_DIGIT == 32.
 // | Result:
 // |     Native C++ type containing the object instance's value.
 // +----------------------------------------------------------------------------
 inline
-int64 
+int64
 sc_unsigned::to_int64() const
 {
     int64 result;
@@ -1599,7 +1523,7 @@ sc_unsigned::to_int64() const
 }
 
 inline
-uint64 
+uint64
 sc_unsigned::to_uint64() const
 {
     uint64 result;
@@ -1614,7 +1538,7 @@ sc_unsigned::to_uint64() const
 }
 
 inline
-long 
+long
 sc_unsigned::to_long() const
 {
     long result;
@@ -1635,7 +1559,7 @@ sc_unsigned::to_long() const
 
 
 inline
-unsigned long 
+unsigned long
 sc_unsigned::to_ulong() const
 {
     unsigned long result;
@@ -1656,7 +1580,7 @@ sc_unsigned::to_ulong() const
 
 
 inline
-int 
+int
 sc_unsigned::to_int() const
 {
     int result;
@@ -1667,7 +1591,7 @@ sc_unsigned::to_int() const
 
 
 inline
-unsigned int 
+unsigned int
 sc_unsigned::to_uint() const
 {
     unsigned int result;
@@ -1679,7 +1603,7 @@ sc_unsigned::to_uint() const
 
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
-// | 
+// |
 // | This is the object constructor for sc_biguint<W>.
 // |
 // | Arguments:
@@ -1689,22 +1613,54 @@ sc_unsigned::to_uint() const
 
 inline
 sc_unsigned::sc_unsigned( int nb, bool zero ) :
-    nbits(nb+1), ndigits( (nb+BITS_PER_DIGIT)/BITS_PER_DIGIT )
+    nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
 {
-    if ( ( (nb+BITS_PER_DIGIT)/BITS_PER_DIGIT ) <= SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
         digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
     else {
         digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     }
     if ( zero ) {
-        vec_zero((nb+BITS_PER_DIGIT)/BITS_PER_DIGIT, digit);
+        makezero();
     }
 }
 
+#if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
 // +----------------------------------------------------------------------------
 // |"sc_unsigned::sc_unsigned"
-// | 
+// |
+// | This is the object constructor from sc_bigint<W>. It uses the supplied
+// | value buffer, that will already have been initialized.
+// |
+// | Arguments:
+// |     nb       = number of bits the object instance needs to support.
+// |     digits_p = storage from sc_bigint<W> to use as our storage.
+// +----------------------------------------------------------------------------
+inline
+sc_unsigned::sc_unsigned( int nb, sc_digit* digits_p ) :
+    nbits(nb+1), ndigits( DIV_CEIL(nb+1) )
+{
+#   if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
+        if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
+            digit = small_vec;
+        }
+        else {
+            digit = digits_p;
+        }
+	SC_FREE_DIGIT(false)
+#   else
+        digit = digits_p;
+        SC_FREE_DIGIT(false)
+#   endif
+}
+#endif // !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+
+// +----------------------------------------------------------------------------
+// |"sc_unsigned::sc_unsigned"
+// |
 // | This is the explicit object constructor for this class.
 // |
 // | Arguments:
@@ -1725,11 +1681,13 @@ sc_unsigned::sc_unsigned( int nb ) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
+	SC_FREE_DIGIT(true)
     }
     else {
         digit = small_vec;
+	SC_FREE_DIGIT(false)
     }
     makezero();
 }

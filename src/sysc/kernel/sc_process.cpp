@@ -380,15 +380,6 @@ sc_process_b::report_immediate_self_notification() const
 void sc_process_b::reset_changed( bool async, bool asserted )
 {
 
-    // Error out on the corner case:
-
-    if ( !sc_allow_process_control_corners && !async &&
-         (m_state & ps_bit_suspended) )
-    {
-	report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	              "synchronous reset changed on a suspended process" );
-    }
-
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
 
     if ( m_state & ps_bit_zombie ) return;
@@ -444,7 +435,7 @@ sc_event& sc_process_b::reset_event()
 {
     if ( !m_reset_event_p )
     {
-        sc_hierarchy_scope scope( restore_hierarchy() );
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_reset_event_p = new sc_event( sc_event::kernel_event, "reset_event" );
     }
     return *m_reset_event_p;
@@ -571,7 +562,9 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_timed_out(false),
     m_timeout_event_p(0),
     m_trigger_type(STATIC),
-    m_unwinding(false)
+    m_unwinding(false),
+    m_unsuspendable(false),
+    m_suspend_all_req(false)
 {
     // Check spawn phase: m_ready_to_simulate is set *after* elaboration_done()
     unsigned spawned = SPAWN_ELAB;
@@ -616,7 +609,7 @@ sc_event& sc_process_b::terminated_event()
 {
     if ( !m_term_event_p )
     {
-        sc_hierarchy_scope scope( restore_hierarchy() );
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_term_event_p = new sc_event( sc_event::kernel_event, "term_event" );
     }
     return *m_term_event_p;

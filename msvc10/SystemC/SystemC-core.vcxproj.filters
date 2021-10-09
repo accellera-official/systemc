@@ -43,6 +43,9 @@
     <ClCompile Include="..\..\src\sysc\utils\sc_mempool.cpp">
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\sysc\utils\sc_optional.cpp">
+      <Filter>Source Files\sc_core</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\sysc\kernel\sc_method_process.cpp">
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
@@ -152,6 +155,15 @@
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value.cpp">
+<<<<<<< HEAD
+      <Filter>Source Files\sc_dt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.cpp">
+      <Filter>Source Files\sc_dt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp">
+=======
+>>>>>>> master
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.cpp">
@@ -161,9 +173,6 @@
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp">
-      <Filter>Source Files\sc_dt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\sysc\datatypes\misc\sc_concatref.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxcast_switch.cpp">
@@ -415,6 +424,9 @@
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\utils\sc_meta.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sysc\utils\sc_optional.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\kernel\sc_macros.h">

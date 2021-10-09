@@ -96,34 +96,35 @@ SCFP const sc_unsigned operator/(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_unsigned operator/(const sc_unsigned&  u, uint64              v);
 SCFP const sc_unsigned operator/(const sc_unsigned&  u, unsigned long       v);
 
-// operator % with an sc_unsigned result:
+// operator % with an sc_signed result:
 
 SCFP const sc_signed   operator%(const sc_unsigned&  u, const sc_signed&    v);
 
 SCFP const sc_signed   operator%(const sc_signed&    u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator%(const sc_unsigned&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator%(const sc_int_base&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator%(int                 u, const sc_unsigned&  v);
 SCFP const sc_signed   operator%(long                u, const sc_unsigned&  v);
 SCFP const sc_signed   operator%(int64               u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator%(const sc_uint_base& u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator%(unsigned int        u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator%(uint64              u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator%(unsigned long       u, const sc_unsigned&  v);
-
 SCFP const sc_signed   operator%(const sc_unsigned&  u, const sc_int_base&  v);
 SCFP const sc_signed   operator%(const sc_unsigned&  u, int                 v);
 SCFP const sc_signed   operator%(const sc_unsigned&  u, long                v);
 SCFP const sc_signed   operator%(const sc_unsigned&  u, int64               v);
+
+// operator % with an sc_unsigned result:
+
+SCFP const sc_unsigned operator%(const sc_unsigned&  u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator%(const sc_uint_base& u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator%(unsigned int        u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator%(uint64              u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator%(unsigned long       u, const sc_unsigned&  v);
 SCFP const sc_unsigned operator%(const sc_unsigned&  u, const sc_uint_base& v);
 SCFP const sc_unsigned operator%(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_unsigned operator%(const sc_unsigned&  u, uint64              v);
 SCFP const sc_unsigned operator%(const sc_unsigned&  u, unsigned long       v);
 
-// operator - with an sc_unsigned result:
+// operator - with an sc_signed result:
 
 SCFP const sc_signed   operator-(const sc_unsigned&  u, const sc_signed&    v);
-
 SCFP const sc_signed   operator-(const sc_signed&    u, const sc_unsigned&  v);
 SCFP const sc_signed   operator-(const sc_unsigned&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator-(const sc_int_base&  u, const sc_unsigned&  v);
@@ -144,73 +145,81 @@ SCFP const sc_signed   operator-(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_signed   operator-(const sc_unsigned&  u, uint64              v);
 SCFP const sc_signed   operator-(const sc_unsigned&  u, unsigned long       v);
 
-// operator & with an sc_unsigned result:
+// operator & with an sc_signed result:
 
 SCFP const sc_signed   operator&(const sc_unsigned&  u, const sc_signed&    v);
-
 SCFP const sc_signed   operator&(const sc_signed&    u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator&(const sc_unsigned&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator&(const sc_int_base&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator&(int                 u, const sc_unsigned&  v);
 SCFP const sc_signed   operator&(long                u, const sc_unsigned&  v);
 SCFP const sc_signed   operator&(int64               u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator&(const sc_uint_base& u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator&(unsigned int        u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator&(uint64              u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator&(unsigned long       u, const sc_unsigned&  v);
 
 SCFP const sc_signed   operator&(const sc_unsigned&  u, const sc_int_base&  v);
 SCFP const sc_signed   operator&(const sc_unsigned&  u, int                 v);
 SCFP const sc_signed   operator&(const sc_unsigned&  u, long                v);
 SCFP const sc_signed   operator&(const sc_unsigned&  u, int64               v);
+
+// operator & with an sc_unsigned result:
+
+SCFP const sc_unsigned operator&(const sc_unsigned&  u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator&(const sc_uint_base& u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator&(unsigned int        u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator&(uint64              u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator&(unsigned long       u, const sc_unsigned&  v);
+
 SCFP const sc_unsigned operator&(const sc_unsigned&  u, const sc_uint_base& v);
 SCFP const sc_unsigned operator&(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_unsigned operator&(const sc_unsigned&  u, uint64              v);
 SCFP const sc_unsigned operator&(const sc_unsigned&  u, unsigned long       v);
 
-// operator | with an sc_unsigned result:
+// operator | with an sc_signed result:
 
 SCFP const sc_signed   operator|(const sc_unsigned&  u, const sc_signed&    v);
 
 SCFP const sc_signed   operator|(const sc_signed&    u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator|(const sc_unsigned&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator|(const sc_int_base&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator|(int                 u, const sc_unsigned&  v);
 SCFP const sc_signed   operator|(long                u, const sc_unsigned&  v);
 SCFP const sc_signed   operator|(int64               u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator|(const sc_uint_base& u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator|(unsigned int        u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator|(uint64              u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator|(unsigned long       u, const sc_unsigned&  v);
 
 SCFP const sc_signed   operator|(const sc_unsigned&  u, const sc_int_base&  v);
 SCFP const sc_signed   operator|(const sc_unsigned&  u, int                 v);
 SCFP const sc_signed   operator|(const sc_unsigned&  u, long                v);
 SCFP const sc_signed   operator|(const sc_unsigned&  u, int64               v);
+
+// operator | with an sc_unsigned result:
+
+SCFP const sc_unsigned operator|(const sc_unsigned&  u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator|(const sc_uint_base& u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator|(unsigned int        u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator|(uint64              u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator|(unsigned long       u, const sc_unsigned&  v);
+
 SCFP const sc_unsigned operator|(const sc_unsigned&  u, const sc_uint_base& v);
 SCFP const sc_unsigned operator|(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_unsigned operator|(const sc_unsigned&  u, uint64              v);
 SCFP const sc_unsigned operator|(const sc_unsigned&  u, unsigned long       v);
 
-// operator ^ with an sc_unsigned result:
+// operator ^ with an sc_signed result:
 
 SCFP const sc_signed   operator^(const sc_unsigned&  u, const sc_signed&    v);
-
 SCFP const sc_signed   operator^(const sc_signed&    u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator^(const sc_unsigned&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator^(const sc_int_base&  u, const sc_unsigned&  v);
 SCFP const sc_signed   operator^(int                 u, const sc_unsigned&  v);
 SCFP const sc_signed   operator^(long                u, const sc_unsigned&  v);
 SCFP const sc_signed   operator^(int64               u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator^(const sc_uint_base& u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator^(unsigned int        u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator^(uint64              u, const sc_unsigned&  v);
-SCFP const sc_unsigned operator^(unsigned long       u, const sc_unsigned&  v);
-
 SCFP const sc_signed   operator^(const sc_unsigned&  u, const sc_int_base&  v);
 SCFP const sc_signed   operator^(const sc_unsigned&  u, int                 v);
 SCFP const sc_signed   operator^(const sc_unsigned&  u, long                v);
 SCFP const sc_signed   operator^(const sc_unsigned&  u, int64               v);
+
+// operator ^ with an sc_unsigned result:
+
+SCFP const sc_unsigned operator^(const sc_unsigned&  u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator^(const sc_uint_base& u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator^(unsigned int        u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator^(uint64              u, const sc_unsigned&  v);
+SCFP const sc_unsigned operator^(unsigned long       u, const sc_unsigned&  v);
 SCFP const sc_unsigned operator^(const sc_unsigned&  u, const sc_uint_base& v);
 SCFP const sc_unsigned operator^(const sc_unsigned&  u, unsigned int        v);
 SCFP const sc_unsigned operator^(const sc_unsigned&  u, uint64              v);

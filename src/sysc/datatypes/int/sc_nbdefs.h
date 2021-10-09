@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -23,7 +23,7 @@
                  arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-  
+
  *****************************************************************************/
 
 /*****************************************************************************
@@ -76,7 +76,6 @@
 #endif
 
 #include "sysc/utils/sc_iostream.h"
-#include "sysc/kernel/sc_constants.h"   // For SC_MAX_NBITS
 #include "sysc/utils/sc_string.h"       // For sc_numrep
 
 // Activate support mixed operands for concatenation via the comma operator
@@ -85,20 +84,60 @@
 
 namespace sc_dt
 {
+// BIGINT CONFIGURATIONS
+//
+// One of these three #defines should be defined, but only one:
+//
+// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS:
+//     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is,
+//     sc_signed is not a parent of sc_bigint, and sc_unsigned is not a parent of sc_biguint.
+//
+// SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE:
+//     Configure sc_bigint and sc_biguint so they have storage for their values rather than
+//     relying on sc_signed and sc_unsigned to provide it.
+//
+// SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE:
+//     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
+//     for their values. This includes the small vector support to eliminate malloc and free
+//     for smaller values. (See SC_SMALL_VEC_DIGITS below).
 
-// Sign of a number:
-#define SC_NEG       -1     // Negative number
-#define SC_ZERO      0      // Zero
-#define SC_POS       1      // Positive number
-#define SC_NOSIGN    2      // Uninitialized sc_signed number
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+
+#if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
+    !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
+    !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+
+    #error no BIGINT_CONFIG specified in CMakefile.txt!!!
+#endif
+
+
+
+// SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
+// dispense with having an m_free boolean value, since it is sufficient to check the value of
+// 'digit' against the address of 'small_vec' to determine if digit should be freed. If we settle on
+// SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE as the configuration to use in the long run, all the
+// instances of SC_FREE_DIGIT may be removed.
+
+#if defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#   define SC_FREE_DIGIT(FLAG)
+#else
+#   define SC_FREE_DIGIT(FLAG) { m_free = FLAG; }
+#endif
+
+// SC_SMALL_VEC_DIGITS - controls the size of the compile-time buffer contained in sc_signed and
+// sc_unsigned values. This buffer is used in place of a malloc of storage for the object
+// instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
+// invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
+
+#define SC_SMALL_VEC_DIGITS 40
 
 typedef unsigned char uchar;
 
 // A small_type number is at least a char. Defining an int is probably
 // better for alignment.
 typedef int small_type;
-
-#define SC_SMALL_VEC_DIGITS 40
 
 // Attributes of a byte.
 #define BITS_PER_BYTE   8
@@ -116,17 +155,17 @@ typedef int small_type;
 #define BITS_PER_DIGIT_TYPE   32
 
 // Support for "digit" vectors used to hold the values of sc_signed,
-// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used 
-// in the concatenation support. An sc_digit is currently an unsigned 32-bit 
+// sc_unsigned, sc_bv_base,  and sc_lv_base data types. This type is also used
+// in the concatenation support. An sc_digit is currently an unsigned 32-bit
 // quantity. The typedef used is an unsigned int, rather than an unsigned long,
-// since the unsigned long data type varies in size between 32-bit and 64-bit 
+// since the unsigned long data type varies in size between 32-bit and 64-bit
 // machines.
 
-#define BYTES_PER_DIGIT 4
-// #define BITS_PER_DIGIT  30
-#define BITS_PER_DIGIT  32 
-
 typedef unsigned int sc_digit;        // type holding "digits" in big values.
+
+#define BYTES_PER_DIGIT (std::numeric_limits<sc_digit>::digits/8)
+#define BITS_PER_DIGIT  32
+
 
 #define DIGIT_RADIX     ((sc_carry)1 << BITS_PER_DIGIT)
 #define DIGIT_MASK      (DIGIT_RADIX - 1)
@@ -136,27 +175,28 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 //
 //   SC_BIT_INDEX   - return the index of this bit within its sc_digit.
 //   SC_DIGIT_INDEX - return the index within an sc_digit vector of the
-//                    supplied bit.
+//                    supplied bit index.
 //   SC_MASK_DIGIT  - mask the supplied sc_digit, keeping the valid bits
 //                    within an sc_digit.
 //   SC_BIT_MASK    - this is the mask for digits below the supplied bit
-//   SC_BIT_MASK1   - this is the mask for digits below, and including 
+//   SC_BIT_MASK1   - this is the mask for digits below, and including
 //                    the supplied bit
 //   SC_DIGIT_COUNT - this is the number of digits required to accommodate
-//                    the supplied bit.
+//                    the supplied number of bits.
 
 #if BITS_PER_DIGIT == 32
-#   define SC_BIT_INDEX(BIT) ((BIT)&0x1f)
-#   define SC_DIGIT_INDEX(BIT) ((BIT)>>5)
-#   define SC_MASK_DIGIT(v) (v) 
+#   define SC_BIT_INDEX(BIT) ( (BIT)&(std::numeric_limits<sc_digit>::digits-1) )
+#   define SC_DIGIT_INDEX(BIT_INDEX) ((BIT_INDEX)>>5)
+#   define SC_MASK_DIGIT(v) (v)
+#   define SC_DIGIT_COUNT(BIT_WIDTH) ((BIT_WIDTH+BITS_PER_DIGIT-1)/BITS_PER_DIGIT)
 #else
 #   define SC_BIT_INDEX(BIT) ((BIT)%BITS_PER_DIGIT)
 #   define SC_DIGIT_INDEX(BIT) ((BIT)/BITS_PER_DIGIT)
 #   define SC_MASK_DIGIT(v) ((v) & DIGIT_MASK)
+#   define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
 #endif
-#define SC_BIT_MASK(BITS) ~( -1 << SC_BIT_INDEX(BITS) )
-#define SC_BIT_MASK1(BITS) ~( -2 << SC_BIT_INDEX(BITS) )
-#define SC_DIGIT_COUNT(BIT) (SC_DIGIT_INDEX(BIT)+1)
+#define SC_BIT_MASK(BITS)  ~( (std::numeric_limits<sc_digit>::max()  ) << SC_BIT_INDEX(BITS) )
+#define SC_BIT_MASK1(BITS) ~( (std::numeric_limits<sc_digit>::max()-1) << SC_BIT_INDEX(BITS) )
 
 // Make sure that BYTES_PER_DIGIT = ceil(BITS_PER_DIGIT / BITS_PER_BYTE).
 
@@ -173,16 +213,6 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 // DIV_CEIL(x) = ceil(x / BITS_PER_DIGIT) = the number of digits to
 // store x bits. x is a positive number.
 #define DIV_CEIL(x) DIV_CEIL2(x, BITS_PER_DIGIT)
-
-#ifdef SC_MAX_NBITS
-extern const int MAX_NDIGITS;
-// Consider a number with x bits another with y bits. The maximum
-// number of bits happens when we multiply them. The result will have
-// (x + y) bits. Assume that x + y <= SC_MAX_NBITS. Then, DIV_CEIL(x) +
-// DIV_CEIL(y) <= DIV_CEIL(SC_MAX_NBITS) + 2. This is the reason for +2
-// above. With this change, MAX_NDIGITS must be enough to hold the
-// result of any operation.
-#endif
 
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.

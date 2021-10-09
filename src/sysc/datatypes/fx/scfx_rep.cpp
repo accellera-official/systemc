@@ -605,8 +605,10 @@ scfx_rep::from_string( const char* s, int cte_wl )
 		{
 		    case '1':
 		        set_bin( j );
+		        /* fallthrough */
 		    case '0':
-			j --;
+		        j --;
+		        /* fallthrough */
 		    case '.':
 			break;
 		    default:
@@ -643,8 +645,10 @@ scfx_rep::from_string( const char* s, int cte_wl )
 		    case '7': case '6': case '5': case '4':
 		    case '3': case '2': case '1':
 		        set_oct( j, *s - '0' );
+		        /* fallthrough */
 		    case '0':
-			j -= 3;
+		        j -= 3;
+		        /* fallthrough */
 		    case '.':
 			break;
 		    default:
@@ -679,6 +683,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 			    carry = temp < m_mant[i];
 			    m_mant[i] = temp;
 			}
+			/* fallthrough */
 		    case '.':
 			break;
 		    default:
@@ -737,8 +742,10 @@ scfx_rep::from_string( const char* s, int cte_wl )
 		    case '9': case '8': case '7': case '6': case '5':
 		    case '4': case '3': case '2': case '1':
 		       set_hex( j, *s - '0' );
+		       /* fallthrough */
 		    case '0':
 		       j -= 4;
+		       /* fallthrough */
 		    case '.':
 		       break;
 		   default:
@@ -925,6 +932,14 @@ scfx_rep::to_uint64() const
 
     // Ignore bits off the top; they modulo out.
     // Ignore bits off the bottom; we're truncating.
+
+    // If bottom integer word is zero, skip over them:
+    while (idx < m_lsw)
+    {
+        shift += bits_in_word;
+        idx += 1;
+    }
+
     while (shift < 64 && m_msw >= idx && idx >= m_lsw)
     {
         result += static_cast<uint64>(m_mant[idx]) << shift;

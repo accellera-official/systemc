@@ -730,6 +730,7 @@ public:
         return pool.allocate();
     }
 
+
     // part selection
 
     sc_uint_subref&         operator () ( int left, int right );
@@ -743,6 +744,7 @@ public:
         static sc_core::sc_vpool<sc_uint_subref> pool(9);
         return pool.allocate();
     }
+
 
     // bit access, without bounds checking or sign extension
 

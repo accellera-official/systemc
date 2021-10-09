@@ -423,7 +423,7 @@ tlm_to_hostendian_generic(tlm_generic_payload *txn, unsigned int sizeof_databus)
 ///////////////////////////////////////////////////////////////////////////////
 // function set (1): Utilities
 template<class D>
-inline void copy_d1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_d1(uchar *src1, uchar* /*src2*/, uchar *dest1, uchar *dest2) {
   *((D *)dest1) = *((D *)src1);
   *((D *)dest2) = tlm_bool<D>::TLM_TRUE;
 }
@@ -435,22 +435,22 @@ inline void copy_db1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
 }
 
 template<class D>
-inline void true_b1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void true_b1(uchar* /*src1*/, uchar* /*src2*/, uchar* /*dest1*/, uchar *dest2) {
   *((D *)dest2) = tlm_bool<D>::TLM_TRUE;
 }
 
 template<class D>
-inline void copy_b1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_b1(uchar* /*src1*/, uchar* src2, uchar* /*dest1*/, uchar *dest2) {
   *((D *)dest2) = *((D *)src2);
 }
 
 template<class D>
-inline void copy_dbyb1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_dbyb1(uchar *src1, uchar *src2, uchar *dest1, uchar* /*dest2*/) {
   if(*src2 != TLM_BYTE_DISABLED)  *((D *)src1) = *((D *)dest1);
 }
 
 template<class D>
-inline void copy_dbytrue1(uchar *src1, uchar *src2, uchar *dest1, uchar *dest2) {
+inline void copy_dbytrue1(uchar *src1, uchar* /*src2*/, uchar *dest1, uchar* /*dest2*/) {
   *((D *)src1) = *((D *)dest1);
 }
 
@@ -458,7 +458,7 @@ template<class D> inline void false_b1(uchar *dest1) {
   *((D *)dest1) = tlm_bool<D>::TLM_FALSE;
 }
 
-template<class D> inline void no_b1(uchar *dest1) {
+template<class D> inline void no_b1(uchar* /*dest1*/) {
 }
 
 template<class D,

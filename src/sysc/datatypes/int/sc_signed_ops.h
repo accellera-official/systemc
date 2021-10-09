@@ -52,8 +52,8 @@ namespace sc_dt {
     const RESULT_TYPE \
     operator+(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	const int left_n  = left.get_actual_width(); \
-	const int right_n = right.get_actual_width(); \
+	const int left_n  = left.get_actual_length(); \
+	const int right_n = right.get_actual_length(); \
      \
 	if ( left_n >= right_n ) { \
 	    RESULT_TYPE result(left_n+1, false); \
@@ -83,8 +83,8 @@ namespace sc_dt {
     operator+(const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_width(); \
-        const int                   right_n = right.get_actual_width(); \
+        const int                   left_n = left.get_actual_length(); \
+        const int                   right_n = right.get_actual_length(); \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n+1, false );  \
@@ -115,8 +115,8 @@ namespace sc_dt {
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int                   left_n = left.get_actual_width(); \
-        const int                   right_n = right.get_actual_width(); \
+        const int                   left_n = left.get_actual_length(); \
+        const int                   right_n = right.get_actual_length(); \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n+1, false );  \
@@ -243,7 +243,7 @@ inline \
 const RESULT_TYPE \
 operator/(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	int left_n  = left.get_actual_width(); \
+	int left_n  = left.get_actual_length(); \
      \
 	RESULT_TYPE quotient(left_n+right.SIGNED); \
 	bool ok = vector_divide<LEFT_TYPE::SIGNED,RIGHT_TYPE::SIGNED>( \
@@ -268,7 +268,7 @@ operator/(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     operator/(const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_width(); \
+        const int                   left_n = left.get_actual_length(); \
      \
 	RESULT_TYPE quotient(left_n+right.SIGNED, false); \
 	bool ok = \
@@ -295,7 +295,7 @@ operator/(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_actual_width(); \
+        const int            left_n = left.get_actual_length(); \
      \
 	RESULT_TYPE quotient(left_n+right.SIGNED, false); \
 	bool ok = \
@@ -417,8 +417,8 @@ inline \
 const RESULT_TYPE \
 operator%(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	const int left_n  = left.get_actual_width(); \
-	const int right_n = right.get_actual_width(); \
+	const int left_n  = left.get_actual_length(); \
+	const int right_n = right.get_actual_length(); \
 	const int width_n = OPS_MIN( left_n,right_n+right.SIGNED ); \
      \
 	RESULT_TYPE result(width_n); \
@@ -440,8 +440,8 @@ operator%(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     operator%(const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int            left_n = left.get_actual_width(); \
-        const int            right_n = right.get_actual_width(); \
+        const int            left_n = left.get_actual_length(); \
+        const int            right_n = right.get_actual_length(); \
 	const int            width_n = OPS_MIN( left_n,right_n+right.SIGNED ); \
      \
 	RESULT_TYPE result(width_n); \
@@ -464,8 +464,8 @@ operator%(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int  left_n = left.get_actual_width(); \
-        const int  right_n = right.get_actual_width(); \
+        const int  left_n = left.get_actual_length(); \
+        const int  right_n = right.get_actual_length(); \
 	const int  width_n = OPS_MIN( left_n,right_n+right.SIGNED ); \
      \
 	RESULT_TYPE result(width_n); \
@@ -584,26 +584,16 @@ inline \
 const RESULT_TYPE \
 operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	int left_n  = left.get_actual_width(); \
-	int right_n = right.get_actual_width(); \
+	int left_n  = left.get_actual_length(); \
+	int right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-	if ( left_n >= right_n ) { \
-	    vector_multiply( left.get_hod(), \
-			     left.get_digits(), \
-			     right.get_hod(), \
-			     right.get_digits(), \
-			     result.get_hod(), \
-			     result.get_digits() ); \
-	} \
-	else { \
-	    vector_multiply( right.get_hod(), \
-			     right.get_digits(), \
-			     left.get_hod(), \
-			     left.get_digits(), \
-			     result.get_hod(), \
-			     result.get_digits() ); \
-	} \
+	vector_multiply( left.get_hod(), \
+			 left.get_digits(), \
+			 right.get_hod(), \
+			 right.get_digits(), \
+			 result.get_hod(), \
+			 result.get_digits() ); \
 	return result; \
     } 
 
@@ -613,26 +603,16 @@ operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     operator*(const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_width(); \
-        const int                   right_n = right.get_actual_width(); \
+        const int                   left_n = left.get_actual_length(); \
+        const int                   right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-        if ( left_n > right_n ) { \
-	    vector_multiply( left.get_hod(),  \
-	                     left.get_digits(),  \
-	                     right.get_hod(),  \
-		             right.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
-        else { \
-	    vector_multiply( right.get_hod(),  \
-	                     right.get_digits(),  \
-	                     left.get_hod(),  \
-		             left.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
+	vector_multiply( left.get_hod(),  \
+			 left.get_digits(),  \
+			 right.get_hod(),  \
+			 right.get_digits(),  \
+			 result.get_hod(),  \
+			 result.get_digits() ); \
 	return result; \
     } 
 
@@ -643,27 +623,16 @@ operator*(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_actual_width(); \
-        const int            right_n = right.get_actual_width(); \
+        const int            left_n = left.get_actual_length(); \
+        const int            right_n = right.get_actual_length(); \
      \
 	RESULT_TYPE result(left_n+right_n, false); \
-        if ( left_n > right_n ) { \
-	    vector_multiply( left.get_hod(),  \
-		             left.get_digits(),  \
-	                     right.get_hod(),  \
-	                     right.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
-        else { \
-	    vector_multiply(  \
-	                     right.get_hod(),  \
-		             right.get_digits(),  \
-	                     left.get_hod(),  \
-	                     left.get_digits(),  \
-	                     result.get_hod(),  \
-		             result.get_digits() ); \
-        } \
+	vector_multiply( left.get_hod(),  \
+			 left.get_digits(),  \
+			 right.get_hod(),  \
+			 right.get_digits(),  \
+			 result.get_hod(),  \
+			 result.get_digits() ); \
 	return result; \
     }
 
@@ -769,8 +738,8 @@ inline \
 const sc_signed \
 operator-(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	int left_n  = left.get_actual_width(); \
-	int right_n = right.get_actual_width(); \
+	int left_n  = left.get_actual_length(); \
+	int right_n = right.get_actual_length(); \
      \
 	if ( left_n >= right_n ) { \
 	    sc_signed result(left_n+1, false); \
@@ -800,8 +769,8 @@ operator-(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     operator-(const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_actual_width(); \
-        const int                   right_n = right.get_actual_width(); \
+        const int                   left_n = left.get_actual_length(); \
+        const int                   right_n = right.get_actual_length(); \
      \
         if ( left_n > right_n ) { \
 	    sc_signed result( left_n+1, false );  \
@@ -832,8 +801,8 @@ operator-(const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_actual_width(); \
-        const int            right_n = right.get_actual_width(); \
+        const int            left_n = left.get_actual_length(); \
+        const int            right_n = right.get_actual_length(); \
      \
         if ( left_n > right_n ) { \
 	    sc_signed result( left_n+1, false );  \
@@ -949,15 +918,21 @@ const sc_signed operator-(const sc_uint_base& left, const sc_unsigned& right )
 // |   (b) BIT_OP_BIG_NATIVE
 // |   (c) BIT_OP_NATIVE_BIG
 // +----------------------------------------------------------------------------
-// @@@@#### How to handle signed / unsigned case?  Look at SIGNED fields
-//  if ( RIGHT_TYPE::SIGNED != LEFT_TYPE::SIGNED ) {  
 #define BIT_OP_BIG_BIG(OP,BIT_OP_RTN,RESULT_TYPE,LEFT_TYPE,RIGHT_TYPE) \
 inline \
 const RESULT_TYPE \
 operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
-	int left_n  = left.get_actual_width(); \
-	int right_n = right.get_actual_width(); \
+	int left_n; \
+	int right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
      \
 	if ( left_n >= right_n ) { \
 	    RESULT_TYPE result(left_n, false); \
@@ -967,7 +942,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 			right.get_hod(), \
 			right.get_digits(), \
 			result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
 	    return result; \
 	} \
 	else { \
@@ -978,21 +953,27 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 			left.get_hod(), \
 			left.get_digits(), \
 			result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
 	    return result; \
 	} \
     } 
 
-        // const int                   left_n = left.get_actual_width(); 
-        // const int                   right_n = right.get_actual_width(); 
 #define BIT_OP_BIG_NATIVE(OP,BIT_OP_RTN,RESULT_TYPE,BIG_TYPE,NATIVE_TYPE) \
     inline \
     const RESULT_TYPE \
     operator OP (const BIG_TYPE &left, NATIVE_TYPE native) \
     { \
+	int                         left_n; \
         ScNativeDigits<NATIVE_TYPE> right( native ); \
-        const int                   left_n = left.get_width(); \
-        const int                   right_n = right.get_width(); \
+	int                         right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
      \
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
@@ -1002,7 +983,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 		        right.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
         else { \
@@ -1013,7 +994,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 		        left.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
     } 
@@ -1025,9 +1006,17 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
     { \
      \
         ScNativeDigits<NATIVE_TYPE> left(native); \
-        const int            left_n = left.get_width(); \
-        const int            right_n = right.get_width(); \
-     \
+	int                         left_n; \
+	int                         right_n; \
+	if ( RESULT_TYPE::SIGNED ) { \
+	    left_n  = left.get_actual_length(); \
+	    right_n = right.get_actual_length(); \
+	} \
+	else { \
+	    left_n  = left.length(); \
+	    right_n = right.length(); \
+	} \
+	\
         if ( left_n > right_n ) { \
 	    RESULT_TYPE result( left_n, false );  \
 	    BIT_OP_RTN<ScNativeDigits<NATIVE_TYPE>::SIGNED,BIG_TYPE::SIGNED>( \
@@ -1036,7 +1025,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < right.get_hod() ? result.get_hod() : right.get_hod(),  \
 	                right.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
         else { \
@@ -1047,7 +1036,7 @@ operator OP (const LEFT_TYPE& left, const RIGHT_TYPE& right) \
 	                result.get_hod() < left.get_hod() ? result.get_hod() : left.get_hod(),  \
 	                left.get_digits(),  \
 		        result.get_digits() ); \
-	    if ( RESULT_TYPE::SIGNED ) result.adjust_hod(); \
+	    result.adjust_hod(); \
             return result; \
         } \
     }
@@ -1237,7 +1226,7 @@ inline
 const sc_signed
 sc_signed::operator++(int) // postfix
 {
-  // Copy digit into d.
+  // Make a copy before incrementing and return it.
 
   sc_signed result(*this);
 
@@ -1259,7 +1248,7 @@ inline
 const sc_signed
 sc_signed::operator--(int) // postfix
 {
-  // Copy digit into d.
+  // Make a copy before decrementing and return it.
 
   sc_signed result(*this);
 
@@ -1434,7 +1423,7 @@ inline
 const sc_unsigned
 sc_unsigned::operator++(int) // postfix
 {
-  // Copy digit into d.
+  // Make copy to return before incrementing.
 
   sc_unsigned result(*this);
 
@@ -1456,7 +1445,7 @@ inline
 const sc_unsigned
 sc_unsigned::operator--(int) // postfix
 {
-  // Copy digit into d.
+  // Make copy to return before decrementing.
 
   sc_unsigned result(*this);
 
