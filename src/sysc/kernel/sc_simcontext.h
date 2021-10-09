@@ -74,6 +74,7 @@ class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
 
+extern sc_simcontext* sc_get_curr_simcontext();
 
 template< typename > class sc_plist;
 typedef sc_plist< sc_process_b* > sc_process_list;
@@ -94,21 +95,21 @@ enum sc_stop_mode {          // sc_stop modes:
 extern SC_API void sc_set_stop_mode( sc_stop_mode mode );
 extern SC_API sc_stop_mode sc_get_stop_mode();
 
-enum sc_starvation_policy
+enum sc_starvation_policy 
 {
     SC_EXIT_ON_STARVATION,
     SC_RUN_TO_TIME
 };
 extern SC_API void sc_start();
-extern SC_API void sc_start( const sc_time& duration,
+extern SC_API void sc_start( const sc_time& duration, 
                       sc_starvation_policy p=SC_RUN_TO_TIME );
-inline void sc_start( int duration, sc_time_unit unit,
+inline void sc_start( int duration, sc_time_unit unit, 
                       sc_starvation_policy p=SC_RUN_TO_TIME )
 {
     sc_start( sc_time((double)duration,unit), p );
 }
 
-inline void sc_start( double duration, sc_time_unit unit,
+inline void sc_start( double duration, sc_time_unit unit, 
                       sc_starvation_policy p=SC_RUN_TO_TIME )
 {
     sc_start( sc_time(duration,unit), p );
@@ -138,6 +139,13 @@ SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
 class sc_invoke_method;
+
+SC_API void    sc_suspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
+SC_API void    sc_unsuspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
+SC_API void    sc_unsuspendable();
+SC_API void    sc_suspendable();
+
+struct sc_invoke_method; 
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
@@ -180,6 +188,10 @@ class SC_API sc_simcontext
     friend SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_current_time( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_future_time( const sc_simcontext* );
+    friend SC_API void sc_suspend_all(sc_simcontext*);
+    friend SC_API void sc_unsuspend_all(sc_simcontext*);
+    friend SC_API void sc_unsuspendable();
+    friend SC_API void sc_suspendable();
 
     enum sc_signal_write_check
     {
@@ -236,20 +248,20 @@ public:
                                       const std::string& name);
 
     // to generate unique names for objects in an MT-Safe way
-    const char* gen_unique_name( const char* basename_,
-                                 bool preserve_first = false
+    const char* gen_unique_name( const char* basename_, 
+                                 bool preserve_first = false 
                                );
 
     // process creation
-    sc_process_handle create_cthread_process(
+    sc_process_handle create_cthread_process( 
     const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
-    sc_process_handle create_method_process(
+    sc_process_handle create_method_process( 
     const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
-    sc_process_handle create_thread_process(
+    sc_process_handle create_thread_process( 
     const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
@@ -295,14 +307,13 @@ public:
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
-    bool next_time( sc_time& t ) const;
+    bool next_time( sc_time& t ) const; 
     bool pending_activity_at_current_time() const;
-
-    sc_object_host* hierarchy_curr() const;
 
 private:
     void hierarchy_push(sc_object_host*);
     sc_object_host* hierarchy_pop();
+    sc_object_host* hierarchy_curr() const;
 
     void add_child_event( sc_event* );
     void add_child_object( sc_object* );
@@ -387,7 +398,7 @@ private:
     sc_time_params*             m_time_params;
     sc_time                     m_curr_time;
     mutable sc_time             m_max_time;
-
+ 
     sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
@@ -398,7 +409,7 @@ private:
     bool                        m_elaboration_done;
     execution_phases            m_execution_phase;
     sc_report*                  m_error;
-    bool                        m_in_simulator_control;
+    bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
     sc_status                   m_simulation_status;
     bool                        m_start_of_simulation_called;
@@ -408,6 +419,8 @@ private:
 
     sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
 
+    int                         m_suspend;
+    int                         m_unsuspendable;
 private:
 
     // disabled
@@ -453,7 +466,7 @@ sc_simcontext::elaboration_done() const
 
 inline sc_status sc_simcontext::get_status() const
 {
-    return m_simulation_status != SC_RUNNING ?
+    return m_simulation_status != SC_RUNNING ? 
                   m_simulation_status :
 		  (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
 }
@@ -556,7 +569,7 @@ sc_simcontext::time_stamp() const
 }
 
 
-inline
+inline 
 bool
 sc_simcontext::event_occurred(sc_dt::uint64 last_change_stamp) const
 {
@@ -719,7 +732,7 @@ sc_dt::uint64 sc_delta_count_at_current_time()
     return sc_get_curr_simcontext()->delta_count_at_current_time();
 }
 
-inline
+inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
     return simc_p->m_ready_to_simulate;
@@ -835,6 +848,12 @@ sc_start_of_simulation_invoked()
     return sc_get_curr_simcontext()->m_start_of_simulation_called;
 }
 
+// The following variable controls whether process control corners should
+// be considered errors or not. See sc_simcontext.cpp for details on what
+// happens if this value is set to true.
+
+extern SC_API bool sc_allow_process_control_corners;
+
 } // namespace sc_core
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
@@ -854,19 +873,19 @@ sc_start_of_simulation_invoked()
                                25 August, 2003
   Description of Modification: - support for dynamic process
                                - support for sc export registry
-                               - new member methods elaborate(),
+                               - new member methods elaborate(), 
                  prepare_to_simulate(), and initial_crunch()
                  that are invoked by initialize() in that order
-                               - add sc_get_last_created_process_handle() for
+                               - add sc_get_last_created_process_handle() for 
                  use before simulation starts
-
+                               
       Name, Affiliation, Date: Bishnupriya Bhattacharya, Cadence Design Systems,
                                3 March, 2004
   Description of Modification: add sc_get_curr_process_kind()
 
-      Name, Affiliation, Date:
-  Description of Modification:
-
+      Name, Affiliation, Date: 
+  Description of Modification: 
+                               
  *****************************************************************************/
 // $Log: sc_simcontext.h,v $
 // Revision 1.26  2011/09/05 21:20:22  acg

@@ -36,7 +36,7 @@ void sc_optional_base::report_double_init(const char* existing_obj_name) const
     SC_REPORT_ERROR( SC_ID_OPTIONAL_INIT_CALLED_TWICE_, existing_obj_name);
 }
 
-sc_hierarchy_scope sc_optional_base::restore_hierarchy()
+sc_hierarchy_scope sc_optional_base::get_hierarchy_scope()
 {
     return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), m_parent_with_flag );
 }
