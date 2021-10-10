@@ -854,6 +854,13 @@ settings to all build configurations.
    as when building an application/library to be linked against a
    DLL version of SystemC.
 
+ * SC_ENABLE_SUSPEND_ALL
+   This adds the (experimental) interface:
+     suspend_all(), unsuspend_all(), suspendable(), unsuspendable()
+   see https://github.com/OSCI-WG/systemc/pull/353 for more information.
+
+   This option is usually set by the `configure` option
+     `--enable-suspend-all`
 
 
 Influential environment variables
