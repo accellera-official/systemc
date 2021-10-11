@@ -479,23 +479,6 @@ AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
 AC_MSG_RESULT($enable_phase_callbacks)
 
 dnl
-dnl enable simulation suspend_all (experimental)
-dnl
-AC_MSG_CHECKING([whether to enable suspend_all (experimental)])
-AC_ARG_ENABLE([suspend-all],
-  [AS_HELP_STRING([--enable-suspend-all],
-                  [enable susppend_all (experimental)
-                   @<:@yes|no(=default)@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_suspend_all=yes],
-    [no|default],[enable_suspend_all=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-suspend-all])])],
-  [enable_suspend_all=no])
-AM_CONDITIONAL([ENABLE_SUSPEND_ALL],dnl
-               [test x"$enable_suspend_all" = xyes])
-AC_MSG_RESULT($enable_suspend_all)
-
-dnl
 dnl enable VCD scopes
 dnl
 AC_MSG_CHECKING([whether to enable VCD scopes by default])
@@ -687,7 +670,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Phase callbacks (experimental) : $enable_phase_callbacks
-   suspend_all (experimental)     : $enable_suspend_all
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
