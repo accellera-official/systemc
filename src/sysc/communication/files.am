@@ -70,6 +70,7 @@ H_FILES += \
 	communication/sc_signal_resolved_ports.h \
 	communication/sc_signal_rv.h \
 	communication/sc_signal_rv_ports.h \
+	communication/sc_stub.h \
 	communication/sc_writer_policy.h
 
 CXX_FILES += \

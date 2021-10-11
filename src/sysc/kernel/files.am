@@ -58,7 +58,6 @@ H_FILES += \
 	kernel/sc_macros.h \
 	kernel/sc_module.h \
 	kernel/sc_module_name.h \
-	kernel/sc_initializer_function.h \
 	kernel/sc_object.h \
 	kernel/sc_process.h \
 	kernel/sc_process_handle.h \

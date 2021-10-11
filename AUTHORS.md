@@ -6,6 +6,7 @@ Authors of SystemC / TLM
  *  Guillaume Audeon,            ARM Ltd.
  *  John Aynsley,                Doulos, Inc.
  *  Mohamed Bamakhrama,          Intel Corporation
+ *  Martin Barnasconi,           NXP Semiconductors
  *  Bishnupriya Bhattacharya,    Cadence Design Systems, Inc.
  *  David Black,                 Doulos, Inc.
  *  Bill Bunton,                 XtremeEDA Corp.
