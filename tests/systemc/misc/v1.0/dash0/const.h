@@ -56,7 +56,7 @@ const int ONE_HOUR              = 36000000; // in 10 x milliseconds.
 const int PERIODS_PER_HOUR      = ONE_HOUR / FAST_CLOCK_PERIOD1;
 
 #define AWAIT(N) \
-  for (register int i = 0; i < N; ++i)  \
+  for (int i = 0; i < N; ++i)  \
     wait();
 
 #endif
