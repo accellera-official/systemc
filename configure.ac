@@ -513,6 +513,23 @@ AM_CONDITIONAL([DISABLE_VCD_SCOPES],dnl
 AC_MSG_RESULT($enable_vcd_scopes)
 
 dnl
+dnl enable legacy memory management for allocating coroutine stack
+dnl
+AC_MSG_CHECKING([whether to enable legacy memory managment for allocating coroutine stack])
+AC_ARG_ENABLE([legacy_mem_mgmt],
+  [AS_HELP_STRING([--enable-legacy-mem-mgmt],
+                  [enable legacy memory management for coroutine stack
+                   @<:@yes|no(=default)@:>@])],
+  [AS_CASE(["${enableval}"],dnl
+    [yes],       [enable_legacy_mem_mgmt=yes],
+    [no|default],[enable_legacy_mem_mgmt=no],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-legacy-mem-mgmt])])],
+  [enable_legacy_mem_mgmt=no])
+AM_CONDITIONAL([ENABLE_LEGACY_MEM_MGMT],dnl
+               [test x"$enable_legacy_mem_mgmt" = xyes])
+AC_MSG_RESULT($enable_legacy_mem_mgmt)
+
+dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
@@ -686,6 +703,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
+   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
    Phase callbacks (experimental) : $enable_phase_callbacks
    suspend_all (experimental)     : $enable_suspend_all
  ${sysc_additional}
