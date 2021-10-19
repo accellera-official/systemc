@@ -156,7 +156,7 @@ CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
                               generators. (default: Release).
 
 CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-                              values are 98, 11, and 14. (default: 98)
+                              values are 98, 11, 14, and 17. (default: 98)
 
 CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
                               is a requirement. (default: ON)
@@ -396,7 +396,7 @@ set (CMAKE_PREFIX_PATH /opt/systemc)
 find_package(SystemCLanguage CONFIG REQUIRED)
 
 set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
-     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
+     "C++ standard to build all targets. Supported values are 98, 11, 14, and 17.")
 set (CMAKE_CXX_STANDARD_REQUIRED ${SystemC_CXX_STANDARD_REQUIRED} CACHE BOOL
      "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
 
