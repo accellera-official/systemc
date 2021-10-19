@@ -40,7 +40,7 @@ struct leaf_object : public sc_core::sc_object
   {}
 
   // allow public access to hierarchy
-  using sc_core::sc_object::restore_hierarchy;
+  using sc_core::sc_object::get_hierarchy_scope;
 };
 
 SC_MODULE(hier_module)
@@ -80,7 +80,7 @@ template<typename T>
 T* hier_module::add_named(const char* nm)
 {
   // force current SystemC hierarchy to point to current module
-  sc_core::sc_hierarchy_scope scope = restore_hierarchy();
+  sc_core::sc_hierarchy_scope scope = get_hierarchy_scope();
 
   sc_assert( sc_core::sc_get_current_object() == this );
   T* ret = new T(nm);
@@ -163,7 +163,7 @@ void top_module::before_end_of_elaboration()
 
   // new SystemC root scope
   {
-    sc_core::sc_hierarchy_scope scope( sc_core::sc_hierarchy_scope::root );
+    sc_core::sc_hierarchy_scope scope( sc_core::sc_hierarchy_scope::get_root() );
     sc_assert( sc_core::sc_get_current_object() == NULL );
 
     m_root = new hier_module("root");
@@ -187,7 +187,7 @@ void top_module::before_end_of_elaboration()
   leaf_object* beoe_nested_o = m_sub.add_object("obj");
   sc_assert( beoe_nested_o->get_parent_object() == &m_sub );
   {
-    sc_core::sc_hierarchy_scope scope = beoe_nested_o->restore_hierarchy();
+    sc_core::sc_hierarchy_scope scope = beoe_nested_o->get_hierarchy_scope();
     sc_assert( sc_core::sc_get_current_object() == &m_sub );
 
     hier_module* beoe_nested_m = new hier_module("beoe_nested_m");
