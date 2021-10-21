@@ -210,8 +210,6 @@
 cmake_minimum_required (VERSION 3.1)
 cmake_policy(SET CMP0001 NEW)
 
-project (SystemCLanguage CXX C)
-
 set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
 if(EXISTS ${SystemCLanguage_VERSION_FILE})
     file(READ ${SystemCLanguage_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
@@ -296,7 +294,9 @@ endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 
 set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
-set(BIGINT_CONFIGURATION "TEMPLATE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+
+set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+
 set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BitIntConfigs})
 
 option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
