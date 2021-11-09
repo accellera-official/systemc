@@ -73,6 +73,7 @@ sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
             sstr << basename_ << "_" << *c;
             sstr.str().swap( m_unique_name );
         }
+        delete c;
     } else {
         std::stringstream sstr;
         sstr << basename_ << "_" << ++ (*c);
