@@ -501,6 +501,7 @@ target_compile_definitions (
     SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING>
   $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
   $<$<BOOL:${HAVE_POSIX_MEMALIGN}>:SC_HAVE_POSIX_MEMALIGN>
+  $<$<BOOL:${ENABLE_LEGACY_MEM_MGMT}>:SC_LEGACY_MEM_MGMT>
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
@@ -530,9 +531,11 @@ target_include_directories(systemc
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 if (APPLE)
-  # It's OK that _sc_main is an undefined symbol.
-  set_target_properties (systemc PROPERTIES LINK_FLAGS -Wl,-U,_sc_main)
-endif (APPLE)
+  # It's OK that _sc_main, __sanitizer_start_switch_fiber, and
+  # __sanitizer_finish_switch_fiber are undefined symbols.
+  set_target_properties (systemc PROPERTIES LINK_FLAGS
+    -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
+endif(APPLE)
 
 target_link_libraries (systemc PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
 
