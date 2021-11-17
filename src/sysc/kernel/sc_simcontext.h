@@ -138,14 +138,12 @@ SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
-class sc_invoke_method;
-
 SC_API void    sc_suspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
 SC_API void    sc_unsuspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
 SC_API void    sc_unsuspendable();
 SC_API void    sc_suspendable();
 
-struct sc_invoke_method; 
+class sc_invoke_method;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
@@ -304,6 +302,8 @@ public:
 
     const ::std::vector<sc_object*>& get_child_objects() const;
 
+    sc_event& null_event();
+
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
@@ -388,6 +388,8 @@ private:
 
     std::vector<sc_event*>      m_delta_events;
     sc_ppq<sc_event_timed*>*    m_timed_events;
+
+    sc_event*                   m_null_event_p;
 
     std::vector<sc_trace_file*> m_trace_files;
     bool                        m_something_to_trace;
