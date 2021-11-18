@@ -138,12 +138,12 @@ SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
+class sc_invoke_method;
+
 SC_API void    sc_suspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
 SC_API void    sc_unsuspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
 SC_API void    sc_unsuspendable();
 SC_API void    sc_suspendable();
-
-class sc_invoke_method;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
