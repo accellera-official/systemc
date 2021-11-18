@@ -70,7 +70,9 @@ _UpgradeReport_Files/
 #/msvc*/SystemC/DebugDLL/
 #/msvc*/SystemC/_UpgradeReport_Files/
 
-
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
 /docs/*/doxygen/*.tag
+
+# vscode config file
+/.vscode/*

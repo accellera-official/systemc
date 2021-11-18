@@ -400,6 +400,10 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
     typedef user_module_name SC_CURRENT_USER_MODULE;                          \
     user_module_name( ::sc_core::sc_module_name )
 
+#define SC_DTOR(user_module_name)                                             \
+    typedef user_module_name SC_CURRENT_USER_MODULE;                          \
+    ~##user_module_name()
+
 // the SC_HAS_PROCESS macro call must be followed by a ;
 #define SC_HAS_PROCESS(user_module_name)                                      \
     typedef user_module_name SC_CURRENT_USER_MODULE
