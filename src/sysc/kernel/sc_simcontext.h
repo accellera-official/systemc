@@ -145,8 +145,6 @@ SC_API void    sc_unsuspend_all( sc_simcontext* csc = sc_get_curr_simcontext() )
 SC_API void    sc_unsuspendable();
 SC_API void    sc_suspendable();
 
-struct sc_invoke_method; 
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
