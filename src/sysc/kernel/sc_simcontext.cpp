@@ -380,6 +380,7 @@ sc_simcontext::clean()
     delete m_time_params;
     delete m_collectable;
     delete m_runnable;
+    delete m_null_event_p;
     delete m_timed_events;
     delete m_process_table;
     delete m_name_gen;
@@ -427,6 +428,21 @@ sc_simcontext::~sc_simcontext()
 {
     clean();
 }
+
+// +----------------------------------------------------------------------------
+// |"sc_simcontext::null_event"
+// |
+// | This method returns a "null" event that can be used with sc_event::none()
+// | and sc_
+// +----------------------------------------------------------------------------
+sc_event& sc_simcontext::null_event() 
+{ 
+    if ( NULL == m_null_event_p ) { 
+        m_null_event_p = new sc_event( sc_event::kernel_event, "null" ); 
+    }
+    return *m_null_event_p; 
+}
+
 
 // +----------------------------------------------------------------------------
 // |"sc_simcontext::active_object"
