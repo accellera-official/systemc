@@ -27,6 +27,8 @@
 
 namespace sc_core {
 
+template class SC_API sc_ptr_flag<sc_object>;
+
 sc_optional_base::sc_optional_base()
   : m_parent_with_flag(sc_get_current_object())
 {}
