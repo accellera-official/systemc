@@ -49,7 +49,7 @@ namespace sc_core {
 
 std::vector<sc_event*>  sc_process_handle::empty_event_vector;
 std::vector<sc_object*> sc_process_handle::empty_object_vector;
-sc_event                sc_process_handle::non_event( sc_event::kernel_event );
+sc_event&               sc_process_handle::non_event() { return sc_get_curr_simcontext()->null_event(); }
 
 // Last process that was created:
 
