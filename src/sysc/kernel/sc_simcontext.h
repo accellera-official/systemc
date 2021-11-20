@@ -302,6 +302,8 @@ public:
 
     const ::std::vector<sc_object*>& get_child_objects() const;
 
+    sc_event& null_event();
+
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
@@ -386,6 +388,8 @@ private:
 
     std::vector<sc_event*>      m_delta_events;
     sc_ppq<sc_event_timed*>*    m_timed_events;
+
+    sc_event*                   m_null_event_p;
 
     std::vector<sc_trace_file*> m_trace_files;
     bool                        m_something_to_trace;
