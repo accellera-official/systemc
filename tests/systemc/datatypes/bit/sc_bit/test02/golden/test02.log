@@ -1,0 +1,10 @@
+SystemC Simulation
+bv4 = 0011
+bv8 = 01000000
+bv4 | bv8 = 01000011
+bv8 | bv4 = 01000011
+
+lv5 = 1Z0X1
+lv10 = 00101ZZZZZ
+lv5 | lv10 = 001011XXX1
+lv10 | lv5 = 001011XXX1
