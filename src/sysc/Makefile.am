@@ -52,7 +52,6 @@ include utils/files.am
 
 # include individual third-party packages
 include packages/boost.am
-include packages/rapidjson.am
 if WANT_QT_THREADS
 include packages/qt.am
 endif
