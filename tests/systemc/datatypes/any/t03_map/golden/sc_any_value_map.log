@@ -1,6 +1,0 @@
-SystemC Simulation
-b=true i=42 s="SystemC" 
-s="SystemC" i=42 b=true 
-b=true i=42 s="SystemC" i=43 i=44 i=45 u=1 v=2 w=null 
-b=true s="SystemC" u=1 v=2 w=null 
-b=true s="SystemC" w=null 
