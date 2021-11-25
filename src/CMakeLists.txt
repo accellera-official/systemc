@@ -82,8 +82,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/communication/sc_signal_ports.cpp
                      sysc/communication/sc_signal_resolved.cpp
                      sysc/communication/sc_signal_resolved_ports.cpp
-                     sysc/datatypes/any/sc_any_value.cpp
-                     sysc/datatypes/any/sc_any_value_converter.cpp
                      sysc/datatypes/bit/sc_bit.cpp
                      sysc/datatypes/bit/sc_bv_base.cpp
                      sysc/datatypes/bit/sc_logic.cpp
@@ -188,10 +186,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/communication/sc_signal_rv.h
                      sysc/communication/sc_signal_rv_ports.h
                      sysc/communication/sc_writer_policy.h
-                     sysc/datatypes/any/sc_any_value.h
-                     sysc/datatypes/any/sc_any_value_ids.h
-                     sysc/datatypes/any/sc_any_value_iterator.h
-                     sysc/datatypes/any/sc_any_value_converter.h
                      sysc/datatypes/bit/sc_bit.h
                      sysc/datatypes/bit/sc_bit_ids.h
                      sysc/datatypes/bit/sc_bit_proxies.h
