@@ -376,7 +376,7 @@ operator & ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     const X& x =  px.back_cast();
     const Y& y =  py.back_cast();
-    if ( x.length() <= y.length() ) {
+    if ( x.length() >= y.length() ) {
         sc_lv_base a( x );
         return ( a &= y );
     }
