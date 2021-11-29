@@ -38,6 +38,21 @@
 #include <systemc.h>
 
 #define OP(OPERATION) cout << #OPERATION << " = " << ( OPERATION ) << endl;
+
+#define BIT_OPS(LEFT,RIGHT) { \
+    cout << endl << "BIT operations:" << endl; \
+    cout << "    operands: " << endl; \
+    cout << "        " << #LEFT << " = " << LEFT << endl; \
+    cout << "        " << #RIGHT << " = " << RIGHT << endl; \
+    cout << "        "; OP(LEFT & RIGHT) \
+    cout << "        "; OP(RIGHT & LEFT) \
+    cout << "        "; OP(LEFT | RIGHT) \
+    cout << "        "; OP(RIGHT | LEFT) \
+    cout << "        "; OP(LEFT ^ RIGHT) \
+    cout << "        "; OP(RIGHT ^ LEFT) \
+}
+
+
 int sc_main(int argc, char* argv[])
 {
     sc_lv<5>  lv5;
@@ -47,20 +62,39 @@ int sc_main(int argc, char* argv[])
 
     bv4 = 3;
     bv8 = 0x40;
-
     lv5 = "1z0x1";
-
     lv10 = "101zzzzz";
 
-    OP(bv4)
-    OP(bv8)
-    OP(bv4 | bv8 )
-    OP(bv8 | bv4 )
-    cout << endl;
-    OP(lv5)
-    OP(lv10)
-    OP(lv5 | lv10 )
-    OP(lv10 | lv5 )
+    BIT_OPS(bv4,bv8);
+    BIT_OPS(lv5,lv10);
+    BIT_OPS(bv4,lv10);
+    BIT_OPS(lv5,bv8);
+
+
+    bv4 = 3;
+    bv8 = 0x42;
+    lv5 = "1x1x1";
+    lv10 = "0000000000";
+
+    BIT_OPS(bv4,bv8);
+
+    BIT_OPS(lv5,lv10);
+    BIT_OPS(bv4,lv10);
+    BIT_OPS(lv5,bv8);
+
+    lv10 = "xxxxxxxxxx";
+
+    BIT_OPS(lv5,lv10);
+    BIT_OPS(bv4,lv10);
+    BIT_OPS(lv5,bv8);
+    BIT_OPS(lv10,lv10);
+
+    lv10 = "zzzzzzzzzz";
+
+    BIT_OPS(lv5,lv10);
+    BIT_OPS(bv4,lv10);
+    BIT_OPS(lv5,bv8);
+    BIT_OPS(lv10,lv10);
 
     return 0;
 }
