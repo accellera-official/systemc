@@ -374,9 +374,53 @@ inline
 const sc_lv_base
 operator & ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
-    sc_lv_base a( px.back_cast() );
-    return ( a &= py.back_cast() );
+    const X& x =  px.back_cast();
+    const Y& y =  py.back_cast();
+    if ( x.length() >= y.length() ) {
+        sc_lv_base a( x );
+        return ( a &= y );
+    }
+    else {
+        sc_lv_base a( y );
+        return ( a &= x );
+    }
 }
+
+#define DEFN_BITWISE_AND_OP_T_NATIVE(tp)                                      \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator & ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( 8*sizeof(tp) );                                             \
+    y = b;                                                                    \
+    return ( x & y );                                                         \
+}
+DEFN_BITWISE_AND_OP_T_NATIVE(unsigned long)
+DEFN_BITWISE_AND_OP_T_NATIVE(long)
+DEFN_BITWISE_AND_OP_T_NATIVE(unsigned int)
+DEFN_BITWISE_AND_OP_T_NATIVE(int)
+DEFN_BITWISE_AND_OP_T_NATIVE(uint64)
+DEFN_BITWISE_AND_OP_T_NATIVE(int64)
+#undef DEFN_BITWISE_AND_OP_T_NATIVE
+
+#define DEFN_BITWISE_AND_OP_T_SYSTEMC(tp)                                     \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator & ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( b.length() );                                               \
+    y = b;                                                                    \
+    return ( x & y );                                                         \
+}
+DEFN_BITWISE_AND_OP_T_SYSTEMC(const sc_unsigned&)
+DEFN_BITWISE_AND_OP_T_SYSTEMC(const sc_signed&)
+DEFN_BITWISE_AND_OP_T_SYSTEMC(const sc_uint_base&)
+DEFN_BITWISE_AND_OP_T_SYSTEMC(const sc_int_base&)
+#undef DEFN_BITWISE_AND_OP_T_SYSTEMC
 
 
 #define DEFN_BITWISE_AND_OP_T_A(tp)                                           \
@@ -392,16 +436,6 @@ sc_proxy<X>::operator & ( tp b ) const                                        \
 DEFN_BITWISE_AND_OP_T_A(const char*)
 DEFN_BITWISE_AND_OP_T_A(const bool*)
 DEFN_BITWISE_AND_OP_T_A(const sc_logic*)
-DEFN_BITWISE_AND_OP_T_A(const sc_unsigned&)
-DEFN_BITWISE_AND_OP_T_A(const sc_signed&)
-DEFN_BITWISE_AND_OP_T_A(const sc_uint_base&)
-DEFN_BITWISE_AND_OP_T_A(const sc_int_base&)
-DEFN_BITWISE_AND_OP_T_A(unsigned long)
-DEFN_BITWISE_AND_OP_T_A(long)
-DEFN_BITWISE_AND_OP_T_A(unsigned int)
-DEFN_BITWISE_AND_OP_T_A(int)
-DEFN_BITWISE_AND_OP_T_A(uint64)
-DEFN_BITWISE_AND_OP_T_A(int64)
 
 #undef DEFN_BITWISE_AND_OP_T_A
 
@@ -476,10 +510,53 @@ inline
 const sc_lv_base
 operator | ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
-    sc_lv_base a( px.back_cast() );
-    return ( a |= py.back_cast() );
+    const X& x =  px.back_cast();
+    const Y& y =  py.back_cast();
+    if ( x.length() >= y.length() ) {
+        sc_lv_base a( x );
+        return ( a |= y );
+    }
+    else {
+        sc_lv_base a( y );
+        return ( a |= x );
+    }
 }
 
+#define DEFN_BITWISE_OR_OP_T_NATIVE(tp)                                       \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator | ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( 8*sizeof(tp) );                                             \
+    y = b;                                                                    \
+    return ( x | y );                                                         \
+}
+DEFN_BITWISE_OR_OP_T_NATIVE(unsigned long)
+DEFN_BITWISE_OR_OP_T_NATIVE(long)
+DEFN_BITWISE_OR_OP_T_NATIVE(unsigned int)
+DEFN_BITWISE_OR_OP_T_NATIVE(int)
+DEFN_BITWISE_OR_OP_T_NATIVE(uint64)
+DEFN_BITWISE_OR_OP_T_NATIVE(int64)
+#undef DEFN_BITWISE_OR_OP_T_NATIVE
+
+#define DEFN_BITWISE_OR_OP_T_SYSTEMC(tp)                                      \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator | ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( b.length() );                                               \
+    y = b;                                                                    \
+    return ( x | y );                                                         \
+}
+DEFN_BITWISE_OR_OP_T_SYSTEMC(const sc_unsigned&)
+DEFN_BITWISE_OR_OP_T_SYSTEMC(const sc_signed&)
+DEFN_BITWISE_OR_OP_T_SYSTEMC(const sc_uint_base&)
+DEFN_BITWISE_OR_OP_T_SYSTEMC(const sc_int_base&)
+#undef DEFN_BITWISE_OR_OP_T_SYSTEMC
 
 #define DEFN_BITWISE_OR_OP_T_A(tp)                                            \
 template <class X>                                                            \
@@ -494,16 +571,6 @@ sc_proxy<X>::operator | ( tp b ) const                                        \
 DEFN_BITWISE_OR_OP_T_A(const char*)
 DEFN_BITWISE_OR_OP_T_A(const bool*)
 DEFN_BITWISE_OR_OP_T_A(const sc_logic*)
-DEFN_BITWISE_OR_OP_T_A(const sc_unsigned&)
-DEFN_BITWISE_OR_OP_T_A(const sc_signed&)
-DEFN_BITWISE_OR_OP_T_A(const sc_uint_base&)
-DEFN_BITWISE_OR_OP_T_A(const sc_int_base&)
-DEFN_BITWISE_OR_OP_T_A(unsigned long)
-DEFN_BITWISE_OR_OP_T_A(long)
-DEFN_BITWISE_OR_OP_T_A(unsigned int)
-DEFN_BITWISE_OR_OP_T_A(int)
-DEFN_BITWISE_OR_OP_T_A(uint64)
-DEFN_BITWISE_OR_OP_T_A(int64)
 
 #undef DEFN_BITWISE_OR_OP_T_A
 
@@ -578,9 +645,53 @@ inline
 const sc_lv_base
 operator ^ ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
-    sc_lv_base a( px.back_cast() );
-    return ( a ^= py.back_cast() );
+    const X& x =  px.back_cast();
+    const Y& y =  py.back_cast();
+    if ( x.length() >= y.length() ) {
+        sc_lv_base a( x );
+        return ( a ^= y );
+    }
+    else {
+        sc_lv_base a( y );
+        return ( a ^= x );
+    }
 }
+
+#define DEFN_BITWISE_XOR_OP_T_NATIVE(tp)                                      \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator ^ ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( 8*sizeof(tp) );                                             \
+    y = b;                                                                    \
+    return ( x ^ y );                                                         \
+}
+DEFN_BITWISE_XOR_OP_T_NATIVE(unsigned long)
+DEFN_BITWISE_XOR_OP_T_NATIVE(long)
+DEFN_BITWISE_XOR_OP_T_NATIVE(unsigned int)
+DEFN_BITWISE_XOR_OP_T_NATIVE(int)
+DEFN_BITWISE_XOR_OP_T_NATIVE(uint64)
+DEFN_BITWISE_XOR_OP_T_NATIVE(int64)
+#undef DEFN_BITWISE_XOR_OP_T_NATIVE
+
+#define DEFN_BITWISE_XOR_OP_T_SYSTEMC(tp)                                     \
+template <class X>                                                            \
+inline                                                                        \
+const sc_lv_base                                                              \
+sc_proxy<X>::operator ^ ( tp b ) const                                        \
+{                                                                             \
+    sc_lv_base x( back_cast() );                                              \
+    sc_lv_base y( b.length() );                                               \
+    y = b;                                                                    \
+    return ( x ^ y );                                                         \
+}
+DEFN_BITWISE_XOR_OP_T_SYSTEMC(const sc_unsigned&)
+DEFN_BITWISE_XOR_OP_T_SYSTEMC(const sc_signed&)
+DEFN_BITWISE_XOR_OP_T_SYSTEMC(const sc_uint_base&)
+DEFN_BITWISE_XOR_OP_T_SYSTEMC(const sc_int_base&)
+#undef DEFN_BITWISE_XOR_OP_T_SYSTEMC
 
 
 #define DEFN_BITWISE_XOR_OP_T_A(tp)                                           \
@@ -596,16 +707,6 @@ sc_proxy<X>::operator ^ ( tp b ) const                                        \
 DEFN_BITWISE_XOR_OP_T_A(const char*)
 DEFN_BITWISE_XOR_OP_T_A(const bool*)
 DEFN_BITWISE_XOR_OP_T_A(const sc_logic*)
-DEFN_BITWISE_XOR_OP_T_A(const sc_unsigned&)
-DEFN_BITWISE_XOR_OP_T_A(const sc_signed&)
-DEFN_BITWISE_XOR_OP_T_A(const sc_uint_base&)
-DEFN_BITWISE_XOR_OP_T_A(const sc_int_base&)
-DEFN_BITWISE_XOR_OP_T_A(unsigned long)
-DEFN_BITWISE_XOR_OP_T_A(long)
-DEFN_BITWISE_XOR_OP_T_A(unsigned int)
-DEFN_BITWISE_XOR_OP_T_A(int)
-DEFN_BITWISE_XOR_OP_T_A(uint64)
-DEFN_BITWISE_XOR_OP_T_A(int64)
 
 #undef DEFN_BITWISE_XOR_OP_T_A
 
