@@ -132,6 +132,7 @@ namespace sc_dt
 // sc_unsigned values. This buffer is used in place of a malloc of storage for the object
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
+//
 // NOTICE: the commented out #define below is necessary for PostInstall.make
 
 // #define SC_SMALL_VEC_DIGITS SMALL_VEC_DIGITS_CONFIG
