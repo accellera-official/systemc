@@ -100,6 +100,8 @@ namespace sc_dt
 //     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
 //     for their values. This includes the small vector support to eliminate malloc and free
 //     for smaller values. (See SC_SMALL_VEC_DIGITS below).
+// 
+// NOTICE: the 3 commented out #define below is necessary for PostInstall.make
 
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
@@ -130,9 +132,11 @@ namespace sc_dt
 // sc_unsigned values. This buffer is used in place of a malloc of storage for the object
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
+// NOTICE: the commented out #define below is necessary for PostInstall.make
 
 // #define SC_SMALL_VEC_DIGITS SMALL_VEC_DIGITS_CONFIG
-#ifndef SC_SMALL_VEC_DIGITS
+
+#if !defined(SC_SMALL_VEC_DIGITS)
 #   error no SC_SMALL_VEC_DIGITS specified
 #endif
 
