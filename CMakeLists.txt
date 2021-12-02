@@ -304,20 +304,10 @@ endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
 set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
 set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BitIntConfigs})
+set(SMALLVEC_DIGITS_CONFIG "40" CACHE STRING "Size of default allocation of SC_SMALL_VEC_DIGITS in sc_unsigned/sc_signed.")
+set_property(CACHE SMALLVEC_DIGITS_CONFIG PROPERTY VALUE ${SMALLVEC_DIGITS_CONFIG} )
 
 option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
-
-#set (BIGINT_CONFIGURATION
-#    "TEMPLATE_CLASS_HAS_NO_BASE_CLASS"
-#    "TEMPLATE_CLASS_HAS_STORAGE"
-#    "BASE_CLASS_HAS_STORAGE"
-#    CACHE STRINGS
-#    "Configuration of big integers." 
-#    FORCE
-#    "BASE_CLASS_HAS_STORAGE"
-#)
-
-#option (BIGINT_CONFIG "Configuration of big integers." BASE_CLASS_HAS_STORAGE)
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 

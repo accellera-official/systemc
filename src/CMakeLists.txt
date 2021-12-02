@@ -469,8 +469,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
 
 add_library (SystemC::systemc ALIAS systemc)
 
-MESSAGE(STATUS "Bigint config: " ${BIGINT_CONFIGURATION})
-
 target_compile_definitions (
   systemc
   PUBLIC
@@ -500,6 +498,10 @@ target_compile_definitions (
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
 
+
+
+MESSAGE(STATUS "Bigint config: " ${BIGINT_CONFIGURATION})
+
 if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_NO_BASE_CLASS")
   add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
 endif()
@@ -519,6 +521,9 @@ endif()
 if (BIGINT_CONFIGURATION STREQUAL "BASE_CLASS_HAS_STORAGE")
   add_definitions( -DSC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE )
 endif()
+
+MESSAGE(STATUS "SMALLVEC_DIGITS_CONFIG config: " ${SMALLVEC_DIGITS_CONFIG})
+add_definitions(-DSC_SMALL_VEC_DIGITS=${SMALLVEC_DIGITS_CONFIG} )
 
 target_compile_options(
   systemc

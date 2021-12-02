@@ -131,7 +131,9 @@ namespace sc_dt
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
 
-#define SC_SMALL_VEC_DIGITS 40
+#ifndef SC_SMALL_VEC_DIGITS
+#   define SC_SMALL_VEC_DIGITS 4
+#endif
 
 typedef unsigned char uchar;
 
