@@ -307,8 +307,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\sysc\kernel\sc_attribute.cpp" />
-    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value.cpp" />
-    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp" />
     <ClCompile Include="..\..\src\sysc\communication\sc_clock.cpp" />
@@ -417,11 +415,6 @@
     <ClInclude Include="..\..\src\sysc\communication\sc_signal_rv.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_signal_rv_ports.h" />
     <ClInclude Include="..\..\src\sysc\communication\sc_writer_policy.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_ids.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_any_value_iterator.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\any\sc_rapidjson.h" />
     <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit.h" />
     <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit_ids.h" />
     <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit_proxies.h" />

@@ -102,9 +102,6 @@ NO_H_FILES += \
 	datatypes/int/sc_unsigned_subref.inc \
 	\
 	datatypes/fx/scfx_pow10.h \
-	\
-	datatypes/any/sc_rapidjson.h
-
 
 CXX_FILES += \
 	datatypes/bit/sc_bit.cpp \
@@ -133,10 +130,7 @@ CXX_FILES += \
 	datatypes/int/sc_uint_base.cpp \
 	datatypes/int/sc_unsigned.cpp \
 	\
-	datatypes/misc/sc_value_base.cpp \
-	\
-	datatypes/any/sc_any_value.cpp \
-	datatypes/any/sc_any_value_converter.cpp
+	datatypes/misc/sc_concatref.cpp 
 
 INCDIRS += \
   datatypes/bit \
