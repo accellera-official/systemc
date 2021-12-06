@@ -233,7 +233,7 @@ protected:
 // bitwise left rotate
 
 inline
-const sc_bv_base
+sc_bv_base
 lrotate( const sc_bv_base& x, int n )
 {
     sc_bv_base a( x );
@@ -244,7 +244,7 @@ lrotate( const sc_bv_base& x, int n )
 // bitwise right rotate
 
 inline
-const sc_bv_base
+sc_bv_base
 rrotate( const sc_bv_base& x, int n )
 {
     sc_bv_base a( x );

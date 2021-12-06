@@ -154,8 +154,8 @@ public:
     int msb() const;            // most significant non-zero bit
     int lsb() const;            // least significant non-zero bit
 
-    static const scfx_ieee_double nan();
-    static const scfx_ieee_double inf( int );
+    static scfx_ieee_double nan();
+    static scfx_ieee_double inf( int );
 
 };
 
@@ -397,7 +397,7 @@ scfx_ieee_double::lsb() const
 
 
 inline
-const scfx_ieee_double
+scfx_ieee_double
 scfx_ieee_double::nan()
 {
     scfx_ieee_double id;
@@ -406,7 +406,7 @@ scfx_ieee_double::nan()
 }
 
 inline
-const scfx_ieee_double
+scfx_ieee_double
 scfx_ieee_double::inf( int sign )
 {
     scfx_ieee_double id( sign );

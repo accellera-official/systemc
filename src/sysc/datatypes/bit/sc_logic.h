@@ -231,9 +231,9 @@ public:
     // bitwise operators and functions
 
 
-    friend const sc_logic operator & ( const sc_logic&, const sc_logic& );
-    friend const sc_logic operator | ( const sc_logic&, const sc_logic& );
-    friend const sc_logic operator ^ ( const sc_logic&, const sc_logic& );
+    friend sc_logic operator & ( const sc_logic&, const sc_logic& );
+    friend sc_logic operator | ( const sc_logic&, const sc_logic& );
+    friend sc_logic operator ^ ( const sc_logic&, const sc_logic& );
 
     // relational operators
 
@@ -242,7 +242,7 @@ public:
 
     // bitwise complement
 
-    const sc_logic operator ~ () const
+    sc_logic operator ~ () const
 	{ return sc_logic( not_table[m_val] ); }
 
     sc_logic& b_not()
@@ -305,13 +305,13 @@ private:
 
 // bitwise operators
 
-inline const sc_logic operator & ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator & ( const sc_logic& a, const sc_logic& b )
        { return sc_logic( sc_logic::and_table[a.m_val][b.m_val] ); }
 
-inline const sc_logic operator | ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator | ( const sc_logic& a, const sc_logic& b )
        { return sc_logic( sc_logic::or_table[a.m_val][b.m_val] ); }
 
-inline const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
        { return sc_logic( sc_logic::xor_table[a.m_val][b.m_val] ); }
 
 #define DEFN_BIN_OP_T(ret,op,tp)                       \
@@ -326,9 +326,9 @@ inline const sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
     DEFN_BIN_OP_T(ret,op,char)                         \
     DEFN_BIN_OP_T(ret,op,int)
 
-DEFN_BIN_OP(const sc_logic,&)
-DEFN_BIN_OP(const sc_logic,|)
-DEFN_BIN_OP(const sc_logic,^)
+DEFN_BIN_OP(sc_logic,&)
+DEFN_BIN_OP(sc_logic,|)
+DEFN_BIN_OP(sc_logic,^)
 
 // relational operators and functions
 
