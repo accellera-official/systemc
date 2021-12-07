@@ -486,7 +486,8 @@ public:
 
     inline int64 to_int64() const
 	{ return to_anything_unsigned(); }
-    inline uint64 to_uint64() const;
+    inline uint64 to_uint64() const
+	{ return to_anything_unsigned(); }
     int to_int() const
 	{ return (int)to_anything_unsigned(); }
 
@@ -529,8 +530,7 @@ protected:
     void check_bounds( int n ) const;  // check if bit n accessible
     void check_wbounds( int n ) const; // check if word n accessible
 
-    sc_digit to_anything_unsigned() const;
-    int64 to_anything_signed() const;
+    uint64 to_anything_unsigned() const;
 };
 
 
@@ -1446,60 +1446,11 @@ sc_proxy<X>::check_wbounds( int n ) const  // check if word n accessible
 
 template <class X>
 inline
-sc_digit
+uint64
 sc_proxy<X>::to_anything_unsigned() const
 {
     // only 0 word is returned
     // can't convert logic values other than 0 and 1
-    const X& x = back_cast();
-    int len = x.length();
-    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
-	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
-    }
-    sc_digit w = x.get_word( 0 );
-    if( len >= SC_DIGIT_SIZE ) {
-	return w;
-    }
-    return ( w & (~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - len)) );
-}
-
-template <class X>
-inline
-uint64
-sc_proxy<X>::to_uint64() const
-{
-    // words 1 and 0 returned.
-    // can't convert logic values other than 0 and 1
-    const X& x = back_cast();
-    int len = x.length();
-    if( x.get_cword( 0 ) != SC_DIGIT_ZERO ) {
-	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
-    }
-    uint64 w = x.get_word( 0 );
-    if( len > SC_DIGIT_SIZE )
-    {
-	if( x.get_cword( 1 ) != SC_DIGIT_ZERO ) {
-	    SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
-	}
-	uint64 w1 = x.get_word( 1 );
-        w = w | (w1 << SC_DIGIT_SIZE);
-	return w;
-    }
-    else if( len == SC_DIGIT_SIZE )
-    {
-	return w;
-    }
-    else
-    {
-	return ( w & (~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - len)) );
-    }
-}
-
-template <class X>
-inline
-int64
-sc_proxy<X>::to_anything_signed() const
-{
     const X& x = back_cast();
     int len = x.length();
     int64 w = 0;
@@ -1513,19 +1464,8 @@ sc_proxy<X>::to_anything_signed() const
     if( x.get_cword( 0 ) != SC_DIGIT_ZERO )
 	SC_REPORT_WARNING( sc_core::SC_ID_VECTOR_CONTAINS_LOGIC_VALUE_, 0 );
     w = (w << SC_DIGIT_SIZE) | x.get_word( 0 );
-    if( len >= 64 ) {
-	return w;
-    }
-
-    uint64 zero = 0;
-    value_type sgn = x.get_bit( len - 1 );
-    if( sgn == 0 ) {
-	return (int64)( w & (~zero >> (64 - len)) );
-    } else {
-	return (int64)( w | (~zero << len) );
-    }
+    return w;
 }
-
 
 // ----------------------------------------------------------------------------
 
