@@ -34,7 +34,7 @@ extern void qt_align(void);
     QUICKTHREADS_SPUT(sp, QUICKTHREADS_USER_INDEX,  userf),    \
     QUICKTHREADS_SPUT(sp, QUICKTHREADS_ARGT_INDEX,  pt),       \
     QUICKTHREADS_SPUT(sp, QUICKTHREADS_ARGU_INDEX,  pu),       \
-    sp)
+    ((qt_t *)QUICKTHREADS_ADJ(sp)))
 
 #define QUICKTHREADS_LINK_INDEX  -1 // x30; standard
 #define QUICKTHREADS_FRAME_INDEX -2 // x29; standard
