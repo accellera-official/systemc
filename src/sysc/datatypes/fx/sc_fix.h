@@ -1054,18 +1054,18 @@ b_not( sc_fix& c, const sc_fix& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-sc_fix                                                                  \
+sc_fix                                                                        \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
     b.observer_read();                                                        \
     int iwl_a = a.iwl();                                                      \
     int iwl_b = b.iwl();                                                      \
-    int iwl_c = sc_max( iwl_a, iwl_b );                              \
-    int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );            \
+    int iwl_c = sc_max( iwl_a, iwl_b );                                       \
+    int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );                     \
     sc_fix c( iwl_c + fwl_c, iwl_c );                                         \
     for( int i = -fwl_c; i < iwl_c; ++ i )                                    \
-	c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
+        c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
     return sc_fix( c, iwl_c + fwl_c, iwl_c );                                 \
 }
 

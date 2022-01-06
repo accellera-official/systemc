@@ -205,18 +205,18 @@ public:
     DEFN_ASN_OP_T(op, bool)                        \
     DEFN_ASN_OP_T(op, char)                        \
     DEFN_ASN_OP_T(op, int )                        \
-    DEFN_ASN_OP_T(op, const sc_bit& )
+    DEFN_ASN_OP_T(op, sc_bit& )
 
-    sc_logic& operator = ( const sc_logic& a )
+    sc_logic& operator = ( sc_logic a )
         { m_val = a.m_val; return *this; }
 
-    sc_logic& operator &= ( const sc_logic& b )
+    sc_logic& operator &= ( sc_logic b )
         { m_val = and_table[m_val][b.m_val]; return *this; }
 
-    sc_logic& operator |= ( const sc_logic& b )
+    sc_logic& operator |= ( sc_logic b )
         { m_val = or_table[m_val][b.m_val]; return *this; }
 
-    sc_logic& operator ^= ( const sc_logic& b )
+    sc_logic& operator ^= ( sc_logic b )
         { m_val = xor_table[m_val][b.m_val]; return *this; }
 
     DEFN_ASN_OP(=)
@@ -231,14 +231,14 @@ public:
     // bitwise operators and functions
 
 
-    friend sc_logic operator & ( const sc_logic&, const sc_logic& );
-    friend sc_logic operator | ( const sc_logic&, const sc_logic& );
-    friend sc_logic operator ^ ( const sc_logic&, const sc_logic& );
+    friend sc_logic operator & ( sc_logic, sc_logic );
+    friend sc_logic operator | ( sc_logic, sc_logic );
+    friend sc_logic operator ^ ( sc_logic, sc_logic );
 
     // relational operators
 
-    friend bool operator == ( const sc_logic&, const sc_logic& );
-    friend bool operator != ( const sc_logic&, const sc_logic& );
+    friend bool operator == ( sc_logic, sc_logic );
+    friend bool operator != ( sc_logic, sc_logic );
 
     // bitwise complement
 
@@ -305,19 +305,19 @@ private:
 
 // bitwise operators
 
-inline sc_logic operator & ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator & ( sc_logic a, sc_logic b )
        { return sc_logic( sc_logic::and_table[a.m_val][b.m_val] ); }
 
-inline sc_logic operator | ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator | ( sc_logic a, sc_logic b )
        { return sc_logic( sc_logic::or_table[a.m_val][b.m_val] ); }
 
-inline sc_logic operator ^ ( const sc_logic& a, const sc_logic& b )
+inline sc_logic operator ^ ( sc_logic a, sc_logic b )
        { return sc_logic( sc_logic::xor_table[a.m_val][b.m_val] ); }
 
 #define DEFN_BIN_OP_T(ret,op,tp)                       \
-    inline ret operator op ( const sc_logic& a, tp b ) \
+    inline ret operator op ( sc_logic a, tp b ) \
         { return ( a op sc_logic( b ) ); }             \
-    inline ret operator op ( tp a, const sc_logic& b ) \
+    inline ret operator op ( tp a, sc_logic b ) \
         { return ( sc_logic( a ) op b ); }
 
 #define DEFN_BIN_OP(ret,op)                            \
@@ -332,10 +332,10 @@ DEFN_BIN_OP(sc_logic,^)
 
 // relational operators and functions
 
-inline bool operator == ( const sc_logic& a, const sc_logic& b )
+inline bool operator == ( sc_logic a, sc_logic b )
        { return ( (int) a.m_val == b.m_val ); }
 
-inline bool operator != ( const sc_logic& a, const sc_logic& b )
+inline bool operator != ( sc_logic a, sc_logic b )
        { return ( (int) a.m_val != b.m_val ); }
 
 DEFN_BIN_OP(bool,==)
@@ -348,7 +348,7 @@ DEFN_BIN_OP(bool,!=)
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, const sc_logic& a )
+operator << ( ::std::ostream& os, sc_logic a )
 {
     a.print( os );
     return os;

@@ -1057,7 +1057,7 @@ b_not( sc_ufix& c, const sc_ufix& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-sc_ufix                                                                 \
+sc_ufix                                                                       \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
@@ -1068,7 +1068,7 @@ operator op ( const tp1& a, const tp2& b )                                    \
     int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );                     \
     sc_ufix c( iwl_c + fwl_c, iwl_c );                                        \
     for( int i = -fwl_c; i < iwl_c; ++ i )                                    \
-	c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
+        c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
     return sc_ufix( c, iwl_c + fwl_c, iwl_c );                                \
 }
 
