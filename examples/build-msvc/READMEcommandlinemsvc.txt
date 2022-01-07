@@ -20,7 +20,7 @@ Usage
   Check the path to the SystemC installation.  Usually, it should
   be sufficient to set the SYSTEMC_HOME environment and MSVC environment.
 
-  If you want to use SystemC with a different versions of MSVC, 
+  If you want to use SystemC with different versions of MSVC, 
   it is recommended to copy the MSVC10 project
   files to a new subdirectory (msvc<version>/SystemC) before upgrading
   the project files.  Afterwards, update the MSVC variable to point
