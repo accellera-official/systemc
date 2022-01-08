@@ -486,21 +486,24 @@ public:
 
     // explicit conversions
 
+    // because bit fields are unsigned to_uint64() is used for all to_XXXX conversions to
+    // native C++ types.
+    inline uint64 to_uint64() const;
+
     inline int64 to_int64() const
-	{ return (int64)to_anything_unsigned(); }
-    inline uint64 to_uint64() const
-	{ return (uint64)to_anything_unsigned(); }
+	{ return to_uint64(); }
+
     int to_int() const
-	{ return (int)to_anything_unsigned(); }
+	{ return (int)to_uint64(); }
 
     unsigned int to_uint() const
-	{ return (unsigned int)to_anything_unsigned(); }
+	{ return (unsigned int)to_uint64(); }
 
     long to_long() const
-	{ return (long)to_anything_unsigned(); }
+	{ return (long)to_uint64(); }
 
     unsigned long to_ulong() const
-	{ return (unsigned long)to_anything_unsigned(); }
+	{ return (unsigned long)to_uint64(); }
 
 #ifdef SC_DT_DEPRECATED
 
@@ -531,8 +534,6 @@ protected:
 
     void check_bounds( int n ) const;  // check if bit n accessible
     void check_wbounds( int n ) const; // check if word n accessible
-
-    uint64 to_anything_unsigned() const;
 };
 
 
@@ -1449,7 +1450,7 @@ sc_proxy<X>::check_wbounds( int n ) const  // check if word n accessible
 template <class X>
 inline
 uint64
-sc_proxy<X>::to_anything_unsigned() const
+sc_proxy<X>::to_uint64() const
 {
     // only 0 word is returned
     // can't convert logic values other than 0 and 1
