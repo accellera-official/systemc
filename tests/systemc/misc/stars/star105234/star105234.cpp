@@ -47,7 +47,7 @@ int sc_main(int, char**)
   b = "101";
   int x = b.to_int();
   
-  sc_assert(x==-3);
+  sc_assert(x>0);
 
   return(0);
 }
