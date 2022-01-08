@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test02.cpp -- Test sc_module::set_stack_size
+  test02.cpp -- Test bit ops.
 
   Original Author: Andy Goodrich, Forte Design Systemc, Inc. 2003-10-13
 
