@@ -1223,7 +1223,7 @@ sc_signed::operator++() // prefix
 
 
 inline
-const sc_signed
+sc_signed
 sc_signed::operator++(int) // postfix
 {
   // Make a copy before incrementing and return it.
@@ -1245,7 +1245,7 @@ sc_signed::operator--() // prefix
 
 
 inline
-const sc_signed
+sc_signed
 sc_signed::operator--(int) // postfix
 {
   // Make a copy before decrementing and return it.
@@ -1420,7 +1420,7 @@ sc_unsigned::operator++() // prefix
 
 
 inline
-const sc_unsigned
+sc_unsigned
 sc_unsigned::operator++(int) // postfix
 {
   // Make copy to return before incrementing.
@@ -1442,7 +1442,7 @@ sc_unsigned::operator--() // prefix
 
 
 inline
-const sc_unsigned
+sc_unsigned
 sc_unsigned::operator--(int) // postfix
 {
   // Make copy to return before decrementing.

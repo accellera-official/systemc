@@ -652,11 +652,11 @@ public:
 
     // Increment operators.
     sc_signed& operator ++ ();
-    inline const sc_signed operator ++ (int);
+    inline sc_signed operator ++ (int);
 
     // Decrement operators.
     sc_signed& operator -- ();
-    inline const sc_signed operator -- (int);
+    inline sc_signed operator -- (int);
 
     void invalid_init( const char* type_name, int nb ) const;
 

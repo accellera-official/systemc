@@ -607,7 +607,7 @@ inline sc_biguint<W>& operator ++ () // prefix
     return *this;
 }
 
-inline const sc_biguint<W> operator ++ (int) // postfix
+inline sc_biguint<W> operator ++ (int) // postfix
 {
     sc_biguint<W> result(*this);
     *this = *this + 1;
@@ -622,7 +622,7 @@ inline sc_biguint<W>& operator -- () // prefix
     return *this;
 }
 
-inline const sc_biguint<W> operator -- (int) // postfix
+inline sc_biguint<W> operator -- (int) // postfix
 {
     sc_biguint<W> result(*this);
     *this = *this - 1;

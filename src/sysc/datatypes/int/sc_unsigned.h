@@ -647,12 +647,12 @@ public:
     // Increment operators.
 
     sc_unsigned& operator ++ ();
-    inline const sc_unsigned operator ++ (int);
+    inline sc_unsigned operator ++ (int);
 
     // Decrement operators.
 
     sc_unsigned& operator -- ();
-    inline const sc_unsigned operator -- (int);
+    inline sc_unsigned operator -- (int);
 
     void invalid_init( const char* type_name, int nb ) const;
 
