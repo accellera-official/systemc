@@ -76,7 +76,7 @@ public:
     scfx_pow10();
     ~scfx_pow10();
 
-    const scfx_rep operator() ( int );
+    scfx_rep operator() ( int );
 
 private:
 

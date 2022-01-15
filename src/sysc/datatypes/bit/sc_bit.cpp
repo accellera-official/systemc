@@ -107,7 +107,7 @@ sc_bit::sc_bit( const sc_logic& a )  // non-VSIA
 // assignment operators
 
 sc_bit&
-sc_bit::operator = ( const sc_logic& b )  // non-VSIA
+sc_bit::operator = ( sc_logic b )  // non-VSIA
 {
     return ( *this = sc_bit( b ) );
 }

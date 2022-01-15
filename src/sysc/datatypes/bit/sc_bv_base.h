@@ -228,32 +228,6 @@ protected:
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-#if 0
-
-// bitwise left rotate
-
-inline
-const sc_bv_base
-lrotate( const sc_bv_base& x, int n )
-{
-    sc_bv_base a( x );
-    return a.lrotate( n );
-}
-
-
-// bitwise right rotate
-
-inline
-const sc_bv_base
-rrotate( const sc_bv_base& x, int n )
-{
-    sc_bv_base a( x );
-    return a.rrotate( n );
-}
-
-#endif
-
-
 // common methods
 
 inline

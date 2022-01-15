@@ -70,7 +70,7 @@ enum sc_enc
 };
 
 
-SC_API const std::string to_string( sc_enc );
+SC_API std::string to_string( sc_enc );
 
 
 inline
@@ -99,7 +99,7 @@ enum sc_q_mode
 };
 
 
-SC_API const std::string to_string( sc_q_mode );
+SC_API std::string to_string( sc_q_mode );
 
 
 inline
@@ -128,7 +128,7 @@ enum sc_o_mode
 // (*) uses the number of saturated bits argument, see the documentation.
 
 
-SC_API const std::string to_string( sc_o_mode );
+SC_API std::string to_string( sc_o_mode );
 
 
 inline
@@ -152,7 +152,7 @@ enum sc_switch
 };
 
 
-SC_API const std::string to_string( sc_switch );
+SC_API std::string to_string( sc_switch );
 
 
 inline
@@ -176,7 +176,7 @@ enum sc_fmt
 };
 
 
-SC_API const std::string to_string( sc_fmt );
+SC_API std::string to_string( sc_fmt );
 
 
 inline
