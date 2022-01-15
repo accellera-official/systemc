@@ -118,8 +118,8 @@ assign_v_( sc_proxy<X>& px, const T& a );
 
 // other functions; forward declarations
 
-SC_API const std::string convert_to_bin( const char* s );
-SC_API const std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
+SC_API std::string convert_to_bin( const char* s );
+SC_API std::string convert_to_fmt( const std::string& s, sc_numrep numrep, bool );
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_proxy_traits
@@ -254,7 +254,7 @@ public:
 
     X& b_not();
 
-    const sc_lv_base operator ~ () const;
+    sc_lv_base operator ~ () const;
 
 
     // bitwise and
@@ -284,19 +284,19 @@ public:
     X& operator &= ( int64 b );
 
 
-    const sc_lv_base operator & ( const char* b ) const;
-    const sc_lv_base operator & ( const bool* b ) const;
-    const sc_lv_base operator & ( const sc_logic* b ) const;
-    const sc_lv_base operator & ( const sc_unsigned& b ) const;
-    const sc_lv_base operator & ( const sc_signed& b ) const;
-    const sc_lv_base operator & ( const sc_uint_base& b ) const;
-    const sc_lv_base operator & ( const sc_int_base& b ) const;
-    const sc_lv_base operator & ( unsigned long b ) const;
-    const sc_lv_base operator & ( long b ) const;
-    const sc_lv_base operator & ( unsigned int b ) const;
-    const sc_lv_base operator & ( int b ) const;
-    const sc_lv_base operator & ( uint64 b ) const;
-    const sc_lv_base operator & ( int64 b ) const;
+    sc_lv_base operator & ( const char* b ) const;
+    sc_lv_base operator & ( const bool* b ) const;
+    sc_lv_base operator & ( const sc_logic* b ) const;
+    sc_lv_base operator & ( const sc_unsigned& b ) const;
+    sc_lv_base operator & ( const sc_signed& b ) const;
+    sc_lv_base operator & ( const sc_uint_base& b ) const;
+    sc_lv_base operator & ( const sc_int_base& b ) const;
+    sc_lv_base operator & ( unsigned long b ) const;
+    sc_lv_base operator & ( long b ) const;
+    sc_lv_base operator & ( unsigned int b ) const;
+    sc_lv_base operator & ( int b ) const;
+    sc_lv_base operator & ( uint64 b ) const;
+    sc_lv_base operator & ( int64 b ) const;
 
 
     // bitwise or
@@ -326,19 +326,19 @@ public:
     X& operator |= ( int64 b );
 
 
-    const sc_lv_base operator | ( const char* b ) const;
-    const sc_lv_base operator | ( const bool* b ) const;
-    const sc_lv_base operator | ( const sc_logic* b ) const;
-    const sc_lv_base operator | ( const sc_unsigned& b ) const;
-    const sc_lv_base operator | ( const sc_signed& b ) const;
-    const sc_lv_base operator | ( const sc_uint_base& b ) const;
-    const sc_lv_base operator | ( const sc_int_base& b ) const;
-    const sc_lv_base operator | ( unsigned long b ) const;
-    const sc_lv_base operator | ( long b ) const;
-    const sc_lv_base operator | ( unsigned int b ) const;
-    const sc_lv_base operator | ( int b ) const;
-    const sc_lv_base operator | ( uint64 b ) const;
-    const sc_lv_base operator | ( int64 b ) const;
+    sc_lv_base operator | ( const char* b ) const;
+    sc_lv_base operator | ( const bool* b ) const;
+    sc_lv_base operator | ( const sc_logic* b ) const;
+    sc_lv_base operator | ( const sc_unsigned& b ) const;
+    sc_lv_base operator | ( const sc_signed& b ) const;
+    sc_lv_base operator | ( const sc_uint_base& b ) const;
+    sc_lv_base operator | ( const sc_int_base& b ) const;
+    sc_lv_base operator | ( unsigned long b ) const;
+    sc_lv_base operator | ( long b ) const;
+    sc_lv_base operator | ( unsigned int b ) const;
+    sc_lv_base operator | ( int b ) const;
+    sc_lv_base operator | ( uint64 b ) const;
+    sc_lv_base operator | ( int64 b ) const;
 
 
     // bitwise xor
@@ -368,33 +368,33 @@ public:
     X& operator ^= ( int64 b );
 
 
-    const sc_lv_base operator ^ ( const char* b ) const;
-    const sc_lv_base operator ^ ( const bool* b ) const;
-    const sc_lv_base operator ^ ( const sc_logic* b ) const;
-    const sc_lv_base operator ^ ( const sc_unsigned& b ) const;
-    const sc_lv_base operator ^ ( const sc_signed& b ) const;
-    const sc_lv_base operator ^ ( const sc_uint_base& b ) const;
-    const sc_lv_base operator ^ ( const sc_int_base& b ) const;
-    const sc_lv_base operator ^ ( unsigned long b ) const;
-    const sc_lv_base operator ^ ( long b ) const;
-    const sc_lv_base operator ^ ( unsigned int b ) const;
-    const sc_lv_base operator ^ ( int b ) const;
-    const sc_lv_base operator ^ ( uint64 b ) const;
-    const sc_lv_base operator ^ ( int64 b ) const;
+    sc_lv_base operator ^ ( const char* b ) const;
+    sc_lv_base operator ^ ( const bool* b ) const;
+    sc_lv_base operator ^ ( const sc_logic* b ) const;
+    sc_lv_base operator ^ ( const sc_unsigned& b ) const;
+    sc_lv_base operator ^ ( const sc_signed& b ) const;
+    sc_lv_base operator ^ ( const sc_uint_base& b ) const;
+    sc_lv_base operator ^ ( const sc_int_base& b ) const;
+    sc_lv_base operator ^ ( unsigned long b ) const;
+    sc_lv_base operator ^ ( long b ) const;
+    sc_lv_base operator ^ ( unsigned int b ) const;
+    sc_lv_base operator ^ ( int b ) const;
+    sc_lv_base operator ^ ( uint64 b ) const;
+    sc_lv_base operator ^ ( int64 b ) const;
 
 
     // bitwise left shift
 
     X& operator <<= ( int n );
 
-    const sc_lv_base operator << ( int n ) const;
+    sc_lv_base operator << ( int n ) const;
 
 
     // bitwise right shift
 
     X& operator >>= ( int n );
 
-    const sc_lv_base operator >> ( int n ) const;
+    sc_lv_base operator >> ( int n ) const;
 
 
     // bitwise left rotate
@@ -479,9 +479,9 @@ public:
 
     // explicit conversions to character string
 
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
+    std::string to_string() const;
+    std::string to_string( sc_numrep ) const;
+    std::string to_string( sc_numrep, bool ) const;
 
 
     // explicit conversions
@@ -551,14 +551,14 @@ operator &= ( sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator & ( const sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 
 #define DECL_BITWISE_AND_OP_T(tp)                                             \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator & ( tp b, const sc_proxy<X>& px );
 
 DECL_BITWISE_AND_OP_T(const char*)
@@ -588,14 +588,14 @@ operator |= ( sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator | ( const sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 
 #define DECL_BITWISE_OR_OP_T(tp)                                              \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator | ( tp a, const sc_proxy<X>& px );
 
 DECL_BITWISE_OR_OP_T(const char*)
@@ -625,14 +625,14 @@ operator ^= ( sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator ^ ( const sc_proxy<X>& px, const sc_proxy<Y>& py );
 
 
 #define DECL_BITWISE_XOR_OP_T(tp)                                             \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator ^ ( tp a, const sc_proxy<X>& px );
 
 DECL_BITWISE_XOR_OP_T(const char*)
@@ -1244,7 +1244,7 @@ sc_proxy<X>::operator >>= ( int n )
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 lrotate( const sc_proxy<X>& x, int n );
 
 
@@ -1252,7 +1252,7 @@ lrotate( const sc_proxy<X>& x, int n );
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 rrotate( const sc_proxy<X>& x, int n );
 
 
@@ -1276,7 +1276,7 @@ sc_proxy<X>::reverse()
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 reverse( const sc_proxy<X>& a );
 
 
@@ -1382,7 +1382,7 @@ DEFN_REL_OP_T(int64)
 
 template <class X>
 inline
-const std::string
+std::string
 sc_proxy<X>::to_string() const
 {
     const X& x = back_cast();
@@ -1396,7 +1396,7 @@ sc_proxy<X>::to_string() const
 
 template <class X>
 inline
-const std::string
+std::string
 sc_proxy<X>::to_string( sc_numrep numrep ) const
 {
     return convert_to_fmt( to_string(), numrep, true );
@@ -1404,7 +1404,7 @@ sc_proxy<X>::to_string( sc_numrep numrep ) const
 
 template <class X>
 inline
-const std::string
+std::string
 sc_proxy<X>::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     return convert_to_fmt( to_string(), numrep, w_prefix );

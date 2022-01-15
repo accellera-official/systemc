@@ -249,7 +249,7 @@ protected:
 // bitwise left rotate
 
 inline
-const sc_lv_base
+sc_lv_base
 lrotate( const sc_lv_base& x, int n )
 {
     sc_lv_base a( x );
@@ -260,7 +260,7 @@ lrotate( const sc_lv_base& x, int n )
 // bitwise right rotate
 
 inline
-const sc_lv_base
+sc_lv_base
 rrotate( const sc_lv_base& x, int n )
 {
     sc_lv_base a( x );
@@ -322,7 +322,7 @@ sc_lv_base::clean_tail()
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 sc_proxy<X>::operator ~ () const
 {
     sc_lv_base a( back_cast() );
@@ -371,7 +371,7 @@ DEFN_BITWISE_AND_ASN_OP_T(int64)
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator & ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     const X& x =  px.back_cast();
@@ -389,7 +389,7 @@ operator & ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 #define DEFN_BITWISE_AND_OP_T_NATIVE(tp)                                      \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator & ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -408,7 +408,7 @@ DEFN_BITWISE_AND_OP_T_NATIVE(int64)
 #define DEFN_BITWISE_AND_OP_T_SYSTEMC(tp)                                     \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator & ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -426,7 +426,7 @@ DEFN_BITWISE_AND_OP_T_SYSTEMC(const sc_int_base&)
 #define DEFN_BITWISE_AND_OP_T_A(tp)                                           \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator & ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base a( back_cast() );                                              \
@@ -443,7 +443,7 @@ DEFN_BITWISE_AND_OP_T_A(const sc_logic*)
 #define DEFN_BITWISE_AND_OP_T_B(tp)                                           \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator & ( tp b, const sc_proxy<X>& px )                                    \
 {                                                                             \
     return ( px & b );                                                        \
@@ -507,7 +507,7 @@ DEFN_BITWISE_OR_ASN_OP_T(int64)
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator | ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     const X& x =  px.back_cast();
@@ -525,7 +525,7 @@ operator | ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 #define DEFN_BITWISE_OR_OP_T_NATIVE(tp)                                       \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -544,7 +544,7 @@ DEFN_BITWISE_OR_OP_T_NATIVE(int64)
 #define DEFN_BITWISE_OR_OP_T_SYSTEMC(tp)                                      \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -561,7 +561,7 @@ DEFN_BITWISE_OR_OP_T_SYSTEMC(const sc_int_base&)
 #define DEFN_BITWISE_OR_OP_T_A(tp)                                            \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base a( back_cast() );                                              \
@@ -575,10 +575,10 @@ DEFN_BITWISE_OR_OP_T_A(const sc_logic*)
 #undef DEFN_BITWISE_OR_OP_T_A
 
 
-#define DEFN_BITWISE_OR_OP_T_B(tp)                                           \
+#define DEFN_BITWISE_OR_OP_T_B(tp)                                            \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator | ( tp b, const sc_proxy<X>& px )                                    \
 {                                                                             \
     return ( px | b );                                                        \
@@ -642,7 +642,7 @@ DEFN_BITWISE_XOR_ASN_OP_T(int64)
 
 template <class X, class Y>
 inline
-const sc_lv_base
+sc_lv_base
 operator ^ ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 {
     const X& x =  px.back_cast();
@@ -660,7 +660,7 @@ operator ^ ( const sc_proxy<X>& px, const sc_proxy<Y>& py )
 #define DEFN_BITWISE_XOR_OP_T_NATIVE(tp)                                      \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -679,7 +679,7 @@ DEFN_BITWISE_XOR_OP_T_NATIVE(int64)
 #define DEFN_BITWISE_XOR_OP_T_SYSTEMC(tp)                                     \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
@@ -697,7 +697,7 @@ DEFN_BITWISE_XOR_OP_T_SYSTEMC(const sc_int_base&)
 #define DEFN_BITWISE_XOR_OP_T_A(tp)                                           \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base a( back_cast() );                                              \
@@ -714,7 +714,7 @@ DEFN_BITWISE_XOR_OP_T_A(const sc_logic*)
 #define DEFN_BITWISE_XOR_OP_T_B(tp)                                           \
 template <class X>                                                            \
 inline                                                                        \
-const sc_lv_base                                                              \
+sc_lv_base                                                                    \
 operator ^ ( tp b, const sc_proxy<X>& px )                                    \
 {                                                                             \
     return ( px ^ b );                                                        \
@@ -741,7 +741,7 @@ DEFN_BITWISE_XOR_OP_T_B(int64)
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 sc_proxy<X>::operator << ( int n ) const
 {
     sc_lv_base a( back_cast().length()+n );
@@ -754,7 +754,7 @@ sc_proxy<X>::operator << ( int n ) const
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 sc_proxy<X>::operator >> ( int n ) const
 {
     sc_lv_base a( back_cast() );
@@ -791,7 +791,7 @@ sc_proxy<X>::lrotate( int n )
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 lrotate( const sc_proxy<X>& x, int n )
 {
     sc_lv_base a( x.back_cast() );
@@ -828,7 +828,7 @@ sc_proxy<X>::rrotate( int n )
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 rrotate( const sc_proxy<X>& x, int n )
 {
     sc_lv_base a( x.back_cast() );
@@ -840,7 +840,7 @@ rrotate( const sc_proxy<X>& x, int n )
 
 template <class X>
 inline
-const sc_lv_base
+sc_lv_base
 reverse( const sc_proxy<X>& x )
 {
     sc_lv_base a( x.back_cast() );

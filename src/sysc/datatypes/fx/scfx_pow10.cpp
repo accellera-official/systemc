@@ -74,7 +74,7 @@ scfx_pow10::~scfx_pow10()
 {}
 
 
-const scfx_rep
+scfx_rep
 scfx_pow10::operator() ( int i )
 {
     if( i == 0 ) {

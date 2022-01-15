@@ -66,7 +66,7 @@ template class SC_API sc_context<sc_fxcast_switch>;
 //  Fixed-point cast switch class.
 // ----------------------------------------------------------------------------
 
-const std::string
+std::string
 sc_fxcast_switch::to_string() const
 {
     return sc_dt::to_string( m_sw );

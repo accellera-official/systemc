@@ -331,9 +331,9 @@ public:
     unsigned int  to_unsigned() const;
 #endif
 
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
+    std::string to_string() const;
+    std::string to_string( sc_numrep ) const;
+    std::string to_string( sc_numrep, bool ) const;
 
 
     // implicit conversion
@@ -511,9 +511,9 @@ public:
     unsigned int  to_unsigned() const;
 #endif
 
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
+    std::string to_string() const;
+    std::string to_string( sc_numrep ) const;
+    std::string to_string( sc_numrep, bool ) const;
 
 
     // implicit conversion
@@ -681,8 +681,8 @@ public:
 
     // unary operators
 
-    const sc_fxval operator - () const;
-    const sc_fxval operator + () const;
+    sc_fxval operator - () const;
+    sc_fxval operator + () const;
 
 
     // unary functions
@@ -694,8 +694,8 @@ public:
     // binary operators
 
 #define DECL_BIN_OP_T(op,tp)                                                  \
-    friend const sc_fxval operator op ( const sc_fxnum&, tp );                \
-    friend const sc_fxval operator op ( tp, const sc_fxnum& );
+    friend sc_fxval operator op ( const sc_fxnum&, tp );                      \
+    friend sc_fxval operator op ( tp, const sc_fxnum& );
 
 #ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_OP_OTHER(op)                                                 \
@@ -710,7 +710,7 @@ public:
 #endif
 
 #define DECL_BIN_OP(op,dummy)                                                 \
-    friend const sc_fxval operator op ( const sc_fxnum&, const sc_fxnum& );   \
+    friend sc_fxval operator op ( const sc_fxnum&, const sc_fxnum& );         \
     DECL_BIN_OP_T(op,int)                                                     \
     DECL_BIN_OP_T(op,unsigned int)                                            \
     DECL_BIN_OP_T(op,long)                                                    \
@@ -728,7 +728,7 @@ public:
     DECL_BIN_OP(-,sub)
 // don't use macros
 //    DECL_BIN_OP(/,div)
-    friend const sc_fxval operator / ( const sc_fxnum&, const sc_fxnum& );
+    friend sc_fxval operator / ( const sc_fxnum&, const sc_fxnum& );
     DECL_BIN_OP_T(/,int)
     DECL_BIN_OP_T(/,unsigned int)
     DECL_BIN_OP_T(/,long)
@@ -753,8 +753,8 @@ public:
 #undef DECL_BIN_OP_OTHER
 #undef DECL_BIN_OP
 
-    friend const sc_fxval operator << ( const sc_fxnum&, int );
-    friend const sc_fxval operator >> ( const sc_fxnum&, int );
+    friend sc_fxval operator << ( const sc_fxnum&, int );
+    friend sc_fxval operator >> ( const sc_fxnum&, int );
 
 
     // binary functions
@@ -899,8 +899,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval operator ++ ( int );
-    const sc_fxval operator -- ( int );
+    sc_fxval operator ++ ( int );
+    sc_fxval operator -- ( int );
 
     sc_fxnum& operator ++ ();
     sc_fxnum& operator -- ();
@@ -952,17 +952,17 @@ public:
 
     // explicit conversion to character string
 
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
-    const std::string to_string( sc_fmt ) const;
-    const std::string to_string( sc_numrep, sc_fmt ) const;
-    const std::string to_string( sc_numrep, bool, sc_fmt ) const;
+    std::string to_string() const;
+    std::string to_string( sc_numrep ) const;
+    std::string to_string( sc_numrep, bool ) const;
+    std::string to_string( sc_fmt ) const;
+    std::string to_string( sc_numrep, sc_fmt ) const;
+    std::string to_string( sc_numrep, bool, sc_fmt ) const;
 
-    const std::string to_dec() const;
-    const std::string to_bin() const;
-    const std::string to_oct() const;
-    const std::string to_hex() const;
+    std::string to_dec() const;
+    std::string to_bin() const;
+    std::string to_oct() const;
+    std::string to_hex() const;
 
 
     // query value
@@ -976,7 +976,7 @@ public:
     bool quantization_flag() const;
     bool overflow_flag() const;
 
-    const sc_fxval value() const;
+    sc_fxval value() const;
 
 
     // query parameters
@@ -1110,8 +1110,8 @@ public:
 
     // unary operators
 
-    const sc_fxval_fast operator - () const;
-    const sc_fxval_fast operator + () const;
+    sc_fxval_fast operator - () const;
+    sc_fxval_fast operator + () const;
 
 
     // unary functions
@@ -1123,8 +1123,8 @@ public:
     // binary operators
 
 #define DECL_BIN_OP_T(op,tp)                                                  \
-    friend const sc_fxval_fast operator op ( const sc_fxnum_fast&, tp );      \
-    friend const sc_fxval_fast operator op ( tp, const sc_fxnum_fast& );
+    friend sc_fxval_fast operator op ( const sc_fxnum_fast&, tp );            \
+    friend sc_fxval_fast operator op ( tp, const sc_fxnum_fast& );
 
 #ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_OP_OTHER(op)                                                 \
@@ -1139,7 +1139,7 @@ public:
 #endif
 
 #define DECL_BIN_OP(op,dummy)                                                 \
-    friend const sc_fxval_fast operator op ( const sc_fxnum_fast&,            \
+    friend sc_fxval_fast operator op ( const sc_fxnum_fast&,                  \
 					     const sc_fxnum_fast& );          \
     DECL_BIN_OP_T(op,int)                                                     \
     DECL_BIN_OP_T(op,unsigned int)                                            \
@@ -1155,7 +1155,7 @@ public:
     DECL_BIN_OP(+,add)
     DECL_BIN_OP(-,sub)
 //    DECL_BIN_OP(/,div)
-    friend const sc_fxval_fast operator / ( const sc_fxnum_fast&,
+    friend sc_fxval_fast operator / ( const sc_fxnum_fast&,
 					     const sc_fxnum_fast& );
     DECL_BIN_OP_T(/,int)
     DECL_BIN_OP_T(/,unsigned int)
@@ -1179,8 +1179,8 @@ public:
 #undef DECL_BIN_OP_OTHER
 #undef DECL_BIN_OP
 
-    friend const sc_fxval_fast operator << ( const sc_fxnum_fast&, int );
-    friend const sc_fxval_fast operator >> ( const sc_fxnum_fast&, int );
+    friend sc_fxval_fast operator << ( const sc_fxnum_fast&, int );
+    friend sc_fxval_fast operator >> ( const sc_fxnum_fast&, int );
 
 
     // binary functions
@@ -1325,8 +1325,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval_fast operator ++ ( int );
-    const sc_fxval_fast operator -- ( int );
+    sc_fxval_fast operator ++ ( int );
+    sc_fxval_fast operator -- ( int );
 
     sc_fxnum_fast& operator ++ ();
     sc_fxnum_fast& operator -- ();
@@ -1378,17 +1378,17 @@ public:
 
     // explicit conversion to character string
 
-    const std::string to_string() const;
-    const std::string to_string( sc_numrep ) const;
-    const std::string to_string( sc_numrep, bool ) const;
-    const std::string to_string( sc_fmt ) const;
-    const std::string to_string( sc_numrep, sc_fmt ) const;
-    const std::string to_string( sc_numrep, bool, sc_fmt ) const;
+    std::string to_string() const;
+    std::string to_string( sc_numrep ) const;
+    std::string to_string( sc_numrep, bool ) const;
+    std::string to_string( sc_fmt ) const;
+    std::string to_string( sc_numrep, sc_fmt ) const;
+    std::string to_string( sc_numrep, bool, sc_fmt ) const;
 
-    const std::string to_dec() const;
-    const std::string to_bin() const;
-    const std::string to_oct() const;
-    const std::string to_hex() const;
+    std::string to_dec() const;
+    std::string to_bin() const;
+    std::string to_oct() const;
+    std::string to_hex() const;
 
 
     // query value
@@ -1402,7 +1402,7 @@ public:
     bool quantization_flag() const;
     bool overflow_flag() const;
 
-    const sc_fxval_fast value() const;
+    sc_fxval_fast value() const;
 
 
     // query parameters
@@ -2121,7 +2121,7 @@ sc_fxnum_subref_r::to_unsigned() const
 
 
 inline
-const std::string
+std::string
 sc_fxnum_subref_r::to_string() const
 {
     get();
@@ -2129,7 +2129,7 @@ sc_fxnum_subref_r::to_string() const
 }
 
 inline
-const std::string
+std::string
 sc_fxnum_subref_r::to_string( sc_numrep numrep ) const
 {
     get();
@@ -2137,7 +2137,7 @@ sc_fxnum_subref_r::to_string( sc_numrep numrep ) const
 }
 
 inline
-const std::string
+std::string
 sc_fxnum_subref_r::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     get();
@@ -2484,7 +2484,7 @@ sc_fxnum_fast_subref_r::to_unsigned() const
 
 
 inline
-const std::string
+std::string
 sc_fxnum_fast_subref_r::to_string() const
 {
     get();
@@ -2492,7 +2492,7 @@ sc_fxnum_fast_subref_r::to_string() const
 }
 
 inline
-const std::string
+std::string
 sc_fxnum_fast_subref_r::to_string( sc_numrep numrep ) const
 {
     get();
@@ -2500,7 +2500,7 @@ sc_fxnum_fast_subref_r::to_string( sc_numrep numrep ) const
 }
 
 inline
-const std::string
+std::string
 sc_fxnum_fast_subref_r::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     get();
@@ -2777,7 +2777,7 @@ sc_fxnum::get_rep() const
 // unary operators
 
 inline
-const sc_fxval
+sc_fxval
 sc_fxnum::operator - () const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
@@ -2785,7 +2785,7 @@ sc_fxnum::operator - () const
 }
 
 inline
-const sc_fxval
+sc_fxval
 sc_fxnum::operator + () const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
@@ -2819,7 +2819,7 @@ neg( sc_fxnum& c, const sc_fxnum& a )
 
 #define DEFN_BIN_OP_T(op,fnc,tp)                                              \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( const sc_fxnum& a, tp b )                                       \
 {                                                                             \
     SC_FXNUM_OBSERVER_READ_( a )                                              \
@@ -2828,7 +2828,7 @@ operator op ( const sc_fxnum& a, tp b )                                       \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( tp a, const sc_fxnum& b )                                       \
 {                                                                             \
     SC_FXNUM_OBSERVER_READ_( b )                                              \
@@ -2850,7 +2850,7 @@ DEFN_BIN_OP_T(op,fnc,const sc_unsigned&)
 
 #define DEFN_BIN_OP(op,fnc)                                                   \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( const sc_fxnum& a, const sc_fxnum& b )                          \
 {                                                                             \
     SC_FXNUM_OBSERVER_READ_( a )                                              \
@@ -2859,7 +2859,7 @@ operator op ( const sc_fxnum& a, const sc_fxnum& b )                          \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( const sc_fxnum& a, const sc_fxval& b )                          \
 {                                                                             \
     SC_FXNUM_OBSERVER_READ_( a )                                              \
@@ -2867,7 +2867,7 @@ operator op ( const sc_fxnum& a, const sc_fxval& b )                          \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( const sc_fxval& a, const sc_fxnum& b )                          \
 {                                                                             \
     SC_FXNUM_OBSERVER_READ_( b )                                              \
@@ -2891,7 +2891,7 @@ DEFN_BIN_OP(-,sub)
 // don't use macros
 //DEFN_BIN_OP(/,div)
 inline
-const sc_fxval
+sc_fxval
 operator / ( const sc_fxnum& a, const sc_fxnum& b )
 {
     SC_FXNUM_OBSERVER_READ_( a )
@@ -2900,7 +2900,7 @@ operator / ( const sc_fxnum& a, const sc_fxnum& b )
 }
 
 inline
-const sc_fxval
+sc_fxval
 operator / ( const sc_fxnum& a, const sc_fxval& b )
 {
     SC_FXNUM_OBSERVER_READ_( a )
@@ -2908,7 +2908,7 @@ operator / ( const sc_fxnum& a, const sc_fxval& b )
 }
 
 inline
-const sc_fxval
+sc_fxval
 operator / ( const sc_fxval& a, const sc_fxnum& b )
 {
     SC_FXNUM_OBSERVER_READ_( b )
@@ -2940,7 +2940,7 @@ DEFN_BIN_OP_T(/,div,const sc_unsigned&)
 
 
 inline
-const sc_fxval
+sc_fxval
 operator << ( const sc_fxnum& a, int b )
 {
     SC_FXNUM_OBSERVER_READ_( a )
@@ -2948,7 +2948,7 @@ operator << ( const sc_fxnum& a, int b )
 }
 
 inline
-const sc_fxval
+sc_fxval
 operator >> ( const sc_fxnum& a, int b )
 {
     SC_FXNUM_OBSERVER_READ_( a )
@@ -3381,7 +3381,7 @@ sc_fxnum::operator >>= ( int b )
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval
+sc_fxval
 sc_fxnum::operator ++ ( int )
 {
     sc_fxval c( *this );
@@ -3390,7 +3390,7 @@ sc_fxnum::operator ++ ( int )
 }
 
 inline
-const sc_fxval
+sc_fxval
 sc_fxnum::operator -- ( int )
 {
     sc_fxval c( *this );
@@ -3662,7 +3662,7 @@ sc_fxnum::overflow_flag() const
 
 
 inline
-const sc_fxval
+sc_fxval
 sc_fxnum::value() const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
@@ -3907,7 +3907,7 @@ sc_fxnum_fast::get_val() const
 // unary operators
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fxnum_fast::operator - () const
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -3915,7 +3915,7 @@ sc_fxnum_fast::operator - () const
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fxnum_fast::operator + () const
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -3948,7 +3948,7 @@ neg( sc_fxnum_fast& c, const sc_fxnum_fast& a )
 
 #define DEFN_BIN_OP_T(op,tp)                                                  \
 inline                                                                        \
-const sc_fxval_fast                                                           \
+sc_fxval_fast                                                                 \
 operator op ( const sc_fxnum_fast& a, tp b )                                  \
 {                                                                             \
     SC_FXNUM_FAST_OBSERVER_READ_( a )                                         \
@@ -3957,7 +3957,7 @@ operator op ( const sc_fxnum_fast& a, tp b )                                  \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval_fast                                                           \
+sc_fxval_fast                                                                 \
 operator op ( tp a, const sc_fxnum_fast& b )                                  \
 {                                                                             \
     SC_FXNUM_FAST_OBSERVER_READ_( b )                                         \
@@ -3979,7 +3979,7 @@ DEFN_BIN_OP_T(op,const sc_unsigned&)
 
 #define DEFN_BIN_OP(op,dummy)                                                 \
 inline                                                                        \
-const sc_fxval_fast                                                           \
+sc_fxval_fast                                                                 \
 operator op ( const sc_fxnum_fast& a, const sc_fxnum_fast& b )                \
 {                                                                             \
     SC_FXNUM_FAST_OBSERVER_READ_( a )                                         \
@@ -3988,7 +3988,7 @@ operator op ( const sc_fxnum_fast& a, const sc_fxnum_fast& b )                \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval_fast                                                           \
+sc_fxval_fast                                                                 \
 operator op ( const sc_fxnum_fast& a, const sc_fxval_fast& b )                \
 {                                                                             \
     SC_FXNUM_FAST_OBSERVER_READ_( a )                                         \
@@ -3996,7 +3996,7 @@ operator op ( const sc_fxnum_fast& a, const sc_fxval_fast& b )                \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval_fast                                                           \
+sc_fxval_fast                                                                 \
 operator op ( const sc_fxval_fast& a, const sc_fxnum_fast& b )                \
 {                                                                             \
     SC_FXNUM_FAST_OBSERVER_READ_( b )                                         \
@@ -4017,7 +4017,7 @@ DEFN_BIN_OP(+,add)
 DEFN_BIN_OP(-,sub)
 //DEFN_BIN_OP(/,div)
 inline
-const sc_fxval_fast
+sc_fxval_fast
 operator / ( const sc_fxnum_fast& a, const sc_fxnum_fast& b )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( a )
@@ -4026,7 +4026,7 @@ operator / ( const sc_fxnum_fast& a, const sc_fxnum_fast& b )
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 operator / ( const sc_fxnum_fast& a, const sc_fxval_fast& b )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( a )
@@ -4034,7 +4034,7 @@ operator / ( const sc_fxnum_fast& a, const sc_fxval_fast& b )
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 operator / ( const sc_fxval_fast& a, const sc_fxnum_fast& b )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( b )
@@ -4064,7 +4064,7 @@ DEFN_BIN_OP_T(/,const sc_unsigned&)
 
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 operator << ( const sc_fxnum_fast& a, int b )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( a )
@@ -4072,7 +4072,7 @@ operator << ( const sc_fxnum_fast& a, int b )
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 operator >> ( const sc_fxnum_fast& a, int b )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( a )
@@ -4485,7 +4485,7 @@ sc_fxnum_fast::operator >>= ( int b )
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fxnum_fast::operator ++ ( int )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -4498,7 +4498,7 @@ sc_fxnum_fast::operator ++ ( int )
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fxnum_fast::operator -- ( int )
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -4802,7 +4802,7 @@ sc_fxnum_fast::overflow_flag() const
 
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fxnum_fast::value() const
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -4925,7 +4925,7 @@ sc_fxval::sc_fxval( const sc_fxnum_fast& a,
 
 #define DEFN_BIN_OP_T(op,fnc,tp)                                              \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                \
 operator op ( const sc_fxval& a, tp b )                                       \
 {                                                                             \
     SC_FXVAL_OBSERVER_READ_( a )                                              \
@@ -4934,7 +4934,7 @@ operator op ( const sc_fxval& a, tp b )                                       \
 }                                                                             \
                                                                               \
 inline                                                                        \
-const sc_fxval                                                                \
+sc_fxval                                                                      \
 operator op ( tp a, const sc_fxval& b )                                       \
 {                                                                             \
     SC_FXVAL_OBSERVER_READ_( b )                                              \
