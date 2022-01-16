@@ -367,7 +367,7 @@ CLASS_TYPE::operator++() // prefix
 }
 
 
-const CLASS_TYPE
+CLASS_TYPE
 CLASS_TYPE::operator++(int) // postfix
 {
   // Copy digit into d.
@@ -563,7 +563,7 @@ CLASS_TYPE::operator--() // prefix
 }
 
 
-const CLASS_TYPE
+CLASS_TYPE
 CLASS_TYPE::operator--(int) // postfix
 {
   // Copy digit into d.

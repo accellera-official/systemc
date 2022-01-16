@@ -1092,12 +1092,12 @@ public:
     // Increment operators.
 
     sc_unsigned& operator ++ ();
-    const sc_unsigned operator ++ (int);
+    sc_unsigned operator ++ (int);
 
     // Decrement operators.
 
     sc_unsigned& operator -- ();
-    const sc_unsigned operator -- (int);
+    sc_unsigned operator -- (int);
 
 
     // bit selection

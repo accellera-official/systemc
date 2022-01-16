@@ -710,13 +710,13 @@ public:
     sc_int_base& operator ++ () // prefix
 	{ ++ m_val; extend_sign(); return *this; }
 
-    const sc_int_base operator ++ ( int ) // postfix
+    sc_int_base operator ++ ( int ) // postfix
 	{ sc_int_base tmp( *this ); ++ m_val; extend_sign(); return tmp; }
 
     sc_int_base& operator -- () // prefix
 	{ -- m_val; extend_sign(); return *this; }
 
-    const sc_int_base operator -- ( int ) // postfix
+    sc_int_base operator -- ( int ) // postfix
 	{ sc_int_base tmp( *this ); -- m_val; extend_sign(); return tmp; }
 
 
