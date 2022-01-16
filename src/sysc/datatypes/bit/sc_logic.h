@@ -183,7 +183,7 @@ public:
 	: m_val( to_value( a ) )
 	{}
 
-    explicit sc_logic( sc_bit a )
+    explicit sc_logic( const sc_bit& a )
 	: m_val( to_value( a.to_bool() ) )
 	{}
 
