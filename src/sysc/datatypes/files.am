@@ -91,7 +91,7 @@ H_FILES += \
 	datatypes/int/sc_unsigned.h \
 	\
 	datatypes/misc/sc_concatref.h \
-	datatypes/misc/sc_value_base.h \
+	datatypes/misc/sc_value_base.h
 
 NO_H_FILES += \
 	datatypes/int/sc_nbcommon.inc \
@@ -101,7 +101,7 @@ NO_H_FILES += \
 	datatypes/int/sc_unsigned_bitref.inc \
 	datatypes/int/sc_unsigned_subref.inc \
 	\
-	datatypes/fx/scfx_pow10.h \
+	datatypes/fx/scfx_pow10.h
 
 CXX_FILES += \
 	datatypes/bit/sc_bit.cpp \
@@ -130,7 +130,8 @@ CXX_FILES += \
 	datatypes/int/sc_uint_base.cpp \
 	datatypes/int/sc_unsigned.cpp \
 	\
-	datatypes/misc/sc_concatref.cpp 
+	datatypes/misc/sc_concatref.cpp \
+	datatypes/misc/sc_value_base.cpp 
 
 INCDIRS += \
   datatypes/bit \
