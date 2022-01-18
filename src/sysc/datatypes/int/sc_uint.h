@@ -291,13 +291,13 @@ public:
     sc_uint<W>& operator ++ () // prefix
 	{ sc_uint_base::operator ++ (); return *this; }
 
-    const sc_uint<W> operator ++ ( int ) // postfix
+    sc_uint<W> operator ++ ( int ) // postfix
 	{ return sc_uint<W>( sc_uint_base::operator ++ ( 0 ) ); }
 
     sc_uint<W>& operator -- () // prefix
 	{ sc_uint_base::operator -- (); return *this; }
 
-    const sc_uint<W> operator -- ( int ) // postfix
+    sc_uint<W> operator -- ( int ) // postfix
 	{ return sc_uint<W>( sc_uint_base::operator -- ( 0 ) ); }
 };
 

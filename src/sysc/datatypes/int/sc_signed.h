@@ -1189,11 +1189,11 @@ public:
 
     // Increment operators.
     sc_signed& operator ++ ();
-    const sc_signed operator ++ (int);
+    sc_signed operator ++ (int);
 
     // Decrement operators.
     sc_signed& operator -- ();
-    const sc_signed operator -- (int);
+    sc_signed operator -- (int);
 
 
     // bit selection
