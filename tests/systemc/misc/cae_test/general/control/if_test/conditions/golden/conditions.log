@@ -22,7 +22,7 @@ Display : 1001 1001 1001 1001 -7  at 107 ns
 Stimuli: stim1= 10 stim2= 10 stim3= 10 stim4= 10 stim5= 10  112 ns
 Display : 1010 1010 1010 1010 -6  at 118 ns
 Stimuli: stim1= 11 stim2= 11 stim3= 11 stim4= 11 stim5= 11  123 ns
-Display : 0100 0100 0100 0000 0  at 129 ns
+Display : 1011 1011 1011 0000 -5  at 129 ns
 Stimuli: stim1= 12 stim2= 12 stim3= 12 stim4= 12 stim5= 12  134 ns
 Display : 1100 1100 1100 1100 -4  at 140 ns
 Stimuli: stim1= 13 stim2= 13 stim3= 13 stim4= 13 stim5= 13  145 ns
