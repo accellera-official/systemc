@@ -133,9 +133,14 @@ CXX_FILES += \
 	datatypes/fx/sc_fxdefs.cpp \
 	datatypes/fx/sc_fxcast_switch.cpp \
 	\
+<<<<<<< HEAD
 	datatypes/bit/sc_lv_base.cpp \
 	datatypes/bit/sc_logic.cpp \
 	datatypes/bit/sc_bv_base.cpp \
+=======
+	datatypes/misc/sc_concatref.cpp \
+	datatypes/misc/sc_value_base.cpp 
+>>>>>>> master
 
 INCDIRS += \
   datatypes/bit \
