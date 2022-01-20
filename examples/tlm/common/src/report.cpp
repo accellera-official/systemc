@@ -95,6 +95,62 @@ std::string print(const tlm::tlm_sync_enum status)
   }//end switch
   return os.str();
 }
+
+std::string print(const tlm::tlm_response_status status)
+{ 
+  std::stringstream os;
+  switch (status)
+  {
+    case tlm::TLM_OK_RESPONSE:
+      {
+        os << "OK_RESPONSE";
+        break;
+      }
+    case tlm::TLM_INCOMPLETE_RESPONSE:
+      {
+        os << "INCOMPLETE_RESPONSE";
+        break;
+      }
+    case tlm::TLM_GENERIC_ERROR_RESPONSE:
+      {
+        os << "GENERIC_ERROR_RESPONSE";
+        break;
+      }
+
+    case tlm::TLM_ADDRESS_ERROR_RESPONSE:
+      {
+        os << "ADDRESS_ERROR_RESPONSE";
+        break;
+      }
+
+    case tlm::TLM_COMMAND_ERROR_RESPONSE:
+      {
+        os << "COMMAND_ERROR_RESPONSE";
+        break;
+      }
+
+    case tlm::TLM_BURST_ERROR_RESPONSE :
+
+      {
+        os << "BURST_ERROR_RESPONSE";
+        break;
+      }
+    case tlm::TLM_BYTE_ENABLE_ERROR_RESPONSE:
+      {
+        os << "BYTE_ENABLE_ERROR_RESPONSE";
+        break;
+      }
+
+    default:
+      {
+        os << "UNKNOWN_" << status;
+        break;
+      }
+  }//end switch
+  return os.str();
+}
+
+
 //=====================================================================
 //
 ///  @brief helper function for printing memory transactions
