@@ -187,7 +187,7 @@ public:
     DEFN_ASN_OP_T(=,long)
     DEFN_ASN_OP_T(=,unsigned long)
 
-    sc_bit& operator = ( sc_logic b );  // non-VSIA
+    sc_bit& operator = ( const sc_logic& b );  // non-VSIA
 
 
     // bitwise assignment operators
