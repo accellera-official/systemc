@@ -269,6 +269,8 @@ Here is an overview of changes in 2.3.x compared to 2.3.0.
 Note: These features partly add functionality beyond the current
       IEEE Std. 1666-2011.
 
+  - [2.3.4] sc_pvector, removed constructor taking unused int argument
+
   - [2.3.3] SC_NAMED, a convenience macro for named entities
 
     The new macro SC_NAMED(var,args...)  can be used to construct a variable
