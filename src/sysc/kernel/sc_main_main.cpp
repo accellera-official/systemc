@@ -132,11 +132,16 @@ sc_elab_and_sim( int argc, char* argv[] )
         SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_, ss.str().c_str() );
     }
 
+#if 0 // this needs work - there are issues with threads being released after sc_main_main
+      // has returned. For example, attempts to call sc_simcontext::remove_process() after
+      // the sc_simcontext object has been removed.
+
 #   ifdef PURIFY
         sc_get_curr_simcontext()->clean();
 #   else
         delete sc_get_curr_simcontext();
 #   endif
+#endif
     return status;
 }
 
