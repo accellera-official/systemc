@@ -180,6 +180,7 @@ class SC_API sc_simcontext
     friend SC_API bool sc_is_running( const sc_simcontext* simc_p );
     friend SC_API void sc_pause();
     friend SC_API bool sc_end_of_simulation_invoked();
+    friend SC_API int sc_elab_and_sim( int argc, char* argv[] );
     friend SC_API void sc_start( const sc_time&, sc_starvation_policy );
     friend SC_API bool sc_start_of_simulation_invoked();
     friend void sc_thread_cor_fn(void*);
