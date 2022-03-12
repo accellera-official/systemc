@@ -341,6 +341,7 @@ sc_simcontext::init()
     reset_curr_proc();
     m_next_proc_id = -1;
     m_timed_events = new sc_ppq<sc_event_timed*>( 128, sc_notify_time_compare );
+    m_null_event_p = NULL;
     m_something_to_trace = false;
     m_runnable = new sc_runnable;
     m_collectable = new sc_process_list;
