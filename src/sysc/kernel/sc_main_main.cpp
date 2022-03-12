@@ -31,6 +31,7 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
+#include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
 #include "sysc/utils/sc_report.h"
 #include "sysc/utils/sc_report_handler.h"
