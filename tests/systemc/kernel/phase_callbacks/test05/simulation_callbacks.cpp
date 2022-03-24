@@ -22,7 +22,7 @@
   simulation_callbacks.cpp -- Test of simulation phase callbacks
 
   Note: requires simulation phase callback support enabled in the kernel
-        SC_ENABLE_SIMULATION_PHASE_CALLBACKS / --enable-phase-callbacks
+        SC_ENABLE_STAGE_CALLBACKS / --enable-phase-callbacks
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-05-17
 
