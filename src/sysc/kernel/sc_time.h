@@ -35,11 +35,19 @@
 #include "sysc/datatypes/fx/scfx_ieee.h"
 
 #include <iostream>
-
+#include <string_view>
 
 namespace sc_core {
 
+// forward declarations
+
 class sc_simcontext;
+class sc_module;
+class sc_event_or_list;
+class sc_event_and_list;
+class sc_prim_channel;
+class sc_event;
+class SC_API sc_time_tuple;
 
 // friend operator declarations
 
@@ -50,6 +58,12 @@ class sc_simcontext;
     const sc_time operator / ( const sc_time&, double );
     double        operator / ( const sc_time&, const sc_time& );
 
+// ----------------------------------------------------------------------------
+// Internal time representation
+// IMPLEMENTATION DEFINED
+// ----------------------------------------------------------------------------
+
+#define SC_TIME_DT sc_dt::uint64 
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
@@ -67,8 +81,6 @@ enum sc_time_unit
     SC_SEC
 };
 
-class SC_API sc_time_tuple;
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
 //
@@ -77,44 +89,52 @@ class SC_API sc_time_tuple;
 
 class SC_API sc_time
 {
+    friend class sc_module;
+    friend class sc_prim_channel;
+    friend class sc_event;
+    friend class sc_clock;
+
+    friend void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+    friend void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend void wait( const sc_time&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+
 public:
 
-    typedef sc_dt::uint64 value_type;
+    typedef SC_TIME_DT value_type;
 
     // constructors
 
     sc_time();
     sc_time( const sc_time& );
-
     sc_time( double, sc_time_unit );
-    sc_time( double, sc_time_unit, sc_simcontext* );
-
-    // convert time unit from string
-    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
-    sc_time( double, const char* unit );
-    sc_time( double, const char* unit, sc_simcontext* );
+    sc_time( std::string_view str );
 
     static sc_time from_value( value_type );
     static sc_time from_seconds( double );
-    static sc_time from_string( const char * str );
-
-    // deprecated, use from_value(v)
-    sc_time( double, bool scale );
-    sc_time( value_type, bool scale );
+    static sc_time from_string( std::string_view str );
 
     // assignment operator
 
     sc_time& operator = ( const sc_time& );
 
-
     // conversion functions
 
-    value_type value() const;      // relative to the time resolution
+    value_type value() const;  // relative to the time resolution
     double to_double() const;  // relative to the time resolution
-    double to_default_time_units() const;
     double to_seconds() const;
+    double to_default_time_units() const;
     const std::string to_string() const;
-
 
     // relational operators
 
@@ -125,29 +145,38 @@ public:
     bool operator >  ( const sc_time& ) const;
     bool operator >= ( const sc_time& ) const;
 
-
     // arithmetic operators
 
     sc_time& operator += ( const sc_time& );
     sc_time& operator -= ( const sc_time& );
-
-    friend const sc_time operator + ( const sc_time&, const sc_time& );
-    friend const sc_time operator - ( const sc_time&, const sc_time& );
-
     sc_time& operator *= ( double );
     sc_time& operator /= ( double );
     sc_time& operator %= ( const sc_time& );
 
+    friend const sc_time operator + ( const sc_time&, const sc_time& );
+    friend const sc_time operator - ( const sc_time&, const sc_time& );
     friend const sc_time operator * ( const sc_time&, double );
     friend const sc_time operator * ( double, const sc_time& );
     friend const sc_time operator / ( const sc_time&, double );
     friend double        operator / ( const sc_time&, const sc_time& );
     friend const sc_time operator % ( const sc_time&, const sc_time& );
 
-
     // print function
 
     void print( ::std::ostream& os = std::cout ) const;
+
+private: // Implementation-defined
+
+    sc_time( double, sc_time_unit, sc_simcontext* );
+
+    // convert time unit from string
+    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
+    sc_time( double, const char* unit );
+    sc_time( double, const char* unit, sc_simcontext* );
+
+    // deprecated, use from_value(v)
+    sc_time( double, bool scale );
+    sc_time( value_type, bool scale );
 
 private:
 

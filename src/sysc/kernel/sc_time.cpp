@@ -184,6 +184,10 @@ sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
   : m_value( from_value_and_unit( v, tu, simc->m_time_params ) )
 {}
 
+sc_time::sc_time( std::string_view ts )
+  : m_value( from_value_and_unit( from_string(ts).to_seconds(), SC_SEC, sc_get_curr_simcontext()->m_time_params) )
+{}
+
 sc_time::sc_time( double v, bool scale )
 : m_value( 0 )
 {
@@ -283,10 +287,11 @@ sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
 {}
 
 sc_time
-sc_time::from_string( const char * str )
+sc_time::from_string( std::string_view str ) 
 {
+    // TODO replace by more strict regex
     char * endptr = NULL;
-    double v = str ? std::strtod( str, &endptr ) : 0.0;
+    double v = str.data() ? std::strtod( str.data(), &endptr ) : 0.0;
     if( str == endptr || v < 0.0 ) {
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
         return SC_ZERO_TIME;
