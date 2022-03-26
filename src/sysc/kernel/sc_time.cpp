@@ -37,6 +37,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <regex>
+#include <string>
 
 #ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
 #  define SC_MAXTIME_ALLOWED_ 1
@@ -48,34 +50,42 @@ namespace sc_core {
 
 static
 double time_values[] = {
-    1,       // fs
-    1e3,     // ps
-    1e6,     // ns
-    1e9,     // us
+    1e15,    // s
     1e12,    // ms
-    1e15     // s
+    1e9,     // us
+    1e6,     // ns
+    1e3,     // ps
+    1,       // fs
+    1e-3,    // as 
+    1e-6,    // zs
+    1e-9     // ys
 };
 
 static
 const char* time_units[] = {
-    "fs",
-    "ps",
-    "ns",
-    "us",
+    "s",
     "ms",
-    "s"
+    "us",
+    "ns",
+    "ps",
+    "fs",
+    "as",
+    "zs",
+    "ys"
 };
 
 static
-const char* time_units_sc[] = {
-    "SC_FS",
-    "SC_PS",
-    "SC_NS",
-    "SC_US",
-    "SC_MS",
+const char* time_units_str[] = {
     "SC_SEC"
+    "SC_MS",
+    "SC_US",
+    "SC_NS",
+    "SC_PS",
+    "SC_FS",
+    "SC_AS",
+    "SC_ZS",
+    "SC_YS"
 };
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time_tuple
 //
@@ -98,11 +108,11 @@ sc_time_tuple::init( value_type val )
     }
     sc_assert( tr == 1 );
 
-    unsigned tu = scale / 3;
-    while( tu < SC_SEC && ( val % 10 ) == 0 ) {
+    unsigned tu = SC_FS - (scale / 3); // TODO high-res 
+    while( tu > SC_SEC && ( val % 10 ) == 0 ) {
         val /= 10;
         scale++;
-        tu += ( 0 == ( scale % 3 ) );
+        tu -= ( 0 == ( scale % 3 ) );
     }
 
     m_value  = val;
@@ -199,19 +209,18 @@ sc_time::sc_time( double v, bool scale )
     }
 
     if( v != 0 ) {
-	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-	if( scale ) {
-	    double scale_fac = sc_dt::uint64_to_double(
-		time_params->default_time_unit );
-	    // linux bug workaround; don't change next two lines
-	    volatile double tmp = v * scale_fac + 0.5;
-	    m_value = static_cast<sc_dt::int64>( tmp );
-	} else {
-	    // linux bug workaround; don't change next two lines
-	    volatile double tmp = v + 0.5;
-	    m_value = static_cast<sc_dt::int64>( tmp );
-	}
-	time_params->time_resolution_fixed = true;
+        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+	    if( scale ) {
+            double scale_fac = sc_dt::uint64_to_double( time_params->default_time_unit );
+            // linux bug workaround; don't change next two lines
+            volatile double tmp = v * scale_fac + 0.5;
+            m_value = static_cast<sc_dt::int64>( tmp );
+        } else {
+            // linux bug workaround; don't change next two lines
+            volatile double tmp = v + 0.5;
+            m_value = static_cast<sc_dt::int64>( tmp );
+        }
+        time_params->time_resolution_fixed = true;
     }
 }
 
@@ -226,18 +235,17 @@ sc_time::sc_time( value_type v, bool scale )
     }
 
     if( v != 0 ) {
-	sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-	if( scale ) {
-	    double scale_fac = sc_dt::uint64_to_double(
-		time_params->default_time_unit );
-	    // linux bug workaround; don't change next two lines
-	    volatile double tmp = sc_dt::uint64_to_double( v ) *
-		                  scale_fac + 0.5;
-	    m_value = static_cast<sc_dt::int64>( tmp );
-	} else {
-	    m_value = v;
-	}
-	time_params->time_resolution_fixed = true;
+        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        if( scale ) {
+            double scale_fac = sc_dt::uint64_to_double(
+            time_params->default_time_unit );
+            // linux bug workaround; don't change next two lines
+            volatile double tmp = sc_dt::uint64_to_double( v ) * scale_fac + 0.5;
+            m_value = static_cast<sc_dt::int64>( tmp );
+        } else {
+            m_value = v;
+        }
+        time_params->time_resolution_fixed = true;
     }
 }
 
@@ -262,13 +270,13 @@ from_value_and_unit_symbol( double v, const char* unit, sc_time_params* tp )
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "no time unit given" );
         return t;
     }
-    unsigned tu = SC_FS;
-    while( tu <= SC_SEC
+    unsigned tu = SC_SEC;
+    while( tu <= SC_FS    // TODO: high-res
           && std::strcmp( unit, time_units[tu] ) != 0
-          && std::strcmp( unit, time_units_sc[tu] ) != 0 )
+          && std::strcmp( unit, time_units_str[tu] ) != 0 )
       { ++tu; }
 
-    if( tu > SC_SEC ) {
+    if( tu > SC_FS ) { // TODO high-res
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid unit given" );
         return t;
     }
@@ -289,15 +297,32 @@ sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
 sc_time
 sc_time::from_string( std::string_view str ) 
 {
-    // TODO replace by more strict regex
-    char * endptr = NULL;
-    double v = str.data() ? std::strtod( str.data(), &endptr ) : 0.0;
-    if( str == endptr || v < 0.0 ) {
+    std::regex reg("^(\\d+(?:\\.\\d+)?)((?:[e,E][\\-,\\+]?\\d+)?)\\s?([f,p,n,u,m]?)(s?)$");
+    // regex capturing groups
+    // (0) full string
+    // (1) value (mandatory)
+    // (2) exponent (optional)
+    // (3) scale (optional)
+    // (4) unit (optional)
+    std::smatch match; 
+  
+    std::string s = str.data();
+    s = std::regex_replace( s, std::regex("\\s"), ""); // remove all whitespaces first
+
+    if( !std::regex_search(s, match, reg) ) {
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
         return SC_ZERO_TIME;
     }
-    while( *endptr && std::isspace( *endptr ) ) ++endptr; // skip whitespace
-    return sc_time( v, endptr );
+    
+    char * endptr = NULL;
+    std::string sval = match.str(1) + match.str(2);
+    double val = std::strtod(sval.c_str(), &endptr );
+    std::string unit = match.str(3) + match.str(4);
+
+    if( match.str(4).empty() )
+        unit += "s";
+   
+    return sc_time( val, unit.c_str() );
 }
 
 // conversion functions
@@ -312,7 +337,7 @@ sc_time::to_default_time_units() const
         time_params->time_resolution_fixed = true;
 #   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) /
-	     sc_dt::uint64_to_double( time_params->default_time_unit ) );
+        sc_dt::uint64_to_double( time_params->default_time_unit ) );
 }
 
 double
@@ -325,7 +350,7 @@ sc_time::to_seconds() const
         time_params->time_resolution_fixed = true;
 #   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) *
-	     time_params->time_resolution * 1e-15 );
+        time_params->time_resolution * 1e-15 );
 }
 
 
@@ -367,7 +392,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
 
     // must be positive
     if( v < 0.0 ) {
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value not positive" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value not positive" );
     }
 
     // must be a power of ten
@@ -378,46 +403,45 @@ sc_set_time_resolution( double v, sc_time_unit tu )
 #else
     if( modf( log10( v ), &dummy ) != 0.0 ) {
 #endif
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-			 "value not a power of ten" );
+    SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
+        "value not a power of ten" );
     }
 
     sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
     if( sc_is_running() ) {
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
     }
 
     sc_time_params* time_params = simc->m_time_params;
 
     // can be specified only once
     if( time_params->time_resolution_specified ) {
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "already specified" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "already specified" );
     }
 
     // can only be specified before any sc_time is constructed
     if( time_params->time_resolution_fixed ) {
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-			 "sc_time object(s) constructed" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
+                         "sc_time object(s) constructed" );
     }
 
     // must be larger than or equal to 1 fs
     volatile double resolution = v * time_values[tu];
     if( resolution < 1.0 ) {
-	SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-			 "value smaller than 1 fs" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
+                         "value smaller than 1 fs" );
     }
 
     // recalculate the default time unit
-    volatile double time_unit = sc_dt::uint64_to_double(
-	time_params->default_time_unit ) *
-	( time_params->time_resolution / resolution );
+    volatile double time_unit = sc_dt::uint64_to_double( time_params->default_time_unit ) 
+      * ( time_params->time_resolution / resolution );
     if( time_unit < 1.0 ) {
-	SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
-	time_params->default_time_unit = 1;
+      SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
+      time_params->default_time_unit = 1;
     } else {
-	time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
+        time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
     }
 
     time_params->time_resolution = resolution;
@@ -438,29 +462,29 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     if ( warn_default_time_unit )
     {
         warn_default_time_unit=false;
-        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-	    "deprecated function: sc_set_default_time_unit");
+        SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_,
+                        "deprecated function: sc_set_default_time_unit");
     }
 
     // first perform the necessary checks
 
     // must be positive
     if( v < 0.0 ) {
-	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "value not positive" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "value not positive" );
     }
 
     // must be a power of ten
     double dummy;
     if( modf( log10( v ), &dummy ) != 0.0 ) {
-	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-			 "value not a power of ten" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
+                         "value not a power of ten" );
     }
 
     sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
     if( sc_is_running() ) {
-	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "simulation running" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "simulation running" );
     }
 
     sc_time_params* time_params = simc->m_time_params;
@@ -473,15 +497,15 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 
     // can be specified only once
     if( time_params->default_time_unit_specified ) {
-	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "already specified" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "already specified" );
     }
 
     // must be larger than or equal to the time resolution
     volatile double time_unit = ( v * time_values[tu] ) /
 	                        time_params->time_resolution;
     if( time_unit < 1.0 ) {
-	SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-			 "value smaller than time resolution" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
+                         "value smaller than time resolution" );
     }
 
     time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
@@ -499,8 +523,7 @@ sc_get_default_time_unit()
             "deprecated function: sc_get_default_time_unit");
     }
     return sc_time::from_value(
-              sc_get_curr_simcontext()->m_time_params->default_time_unit
-           );
+        sc_get_curr_simcontext()->m_time_params->default_time_unit );
 }
 
 

@@ -71,15 +71,12 @@ class SC_API sc_time_tuple;
 //  Enumeration of time units.
 // ----------------------------------------------------------------------------
 
-enum sc_time_unit
-{
-    SC_FS = 0,
-    SC_PS,
-    SC_NS,
-    SC_US,
-    SC_MS,
-    SC_SEC
-};
+#define SC_TIME_UNIT_BASE SC_SEC, SC_MS, SC_US, SC_NS, SC_PS, SC_FS
+#define SC_TIME_UNIT_EXT  SC_AS, SC_ZS, SC_YS
+
+enum sc_time_unit { SC_TIME_UNIT_BASE };
+
+// TODO time unit for increased resolution
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -119,6 +116,10 @@ public:
     sc_time( const sc_time& );
     sc_time( double, sc_time_unit );
     sc_time( std::string_view str );
+
+    // deprecated, use from_value(v)
+    sc_time( double, bool scale );
+    sc_time( value_type, bool scale );
 
     static sc_time from_value( value_type );
     static sc_time from_seconds( double );
@@ -165,7 +166,7 @@ public:
 
     void print( ::std::ostream& os = std::cout ) const;
 
-private: // Implementation-defined
+private: // implementation-defined
 
     sc_time( double, sc_time_unit, sc_simcontext* );
 
@@ -173,10 +174,6 @@ private: // Implementation-defined
     // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
     sc_time( double, const char* unit );
     sc_time( double, const char* unit, sc_simcontext* );
-
-    // deprecated, use from_value(v)
-    sc_time( double, bool scale );
-    sc_time( value_type, bool scale );
 
 private:
 
