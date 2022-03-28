@@ -63,7 +63,12 @@ class SC_API sc_time_tuple;
 // IMPLEMENTATION DEFINED
 // ----------------------------------------------------------------------------
 
+#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
+#define SC_TIME_DT sc_dt::uint64 // TODO replace by new type sc_dt::int128
+#else
 #define SC_TIME_DT sc_dt::uint64 
+#endif
+
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
@@ -74,9 +79,11 @@ class SC_API sc_time_tuple;
 #define SC_TIME_UNIT_BASE SC_SEC, SC_MS, SC_US, SC_NS, SC_PS, SC_FS
 #define SC_TIME_UNIT_EXT  SC_AS, SC_ZS, SC_YS
 
+#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
+enum sc_time_unit { SC_TIME_UNIT_BASE, SC_TIME_UNIT_EXT };
+#else
 enum sc_time_unit { SC_TIME_UNIT_BASE };
-
-// TODO time unit for increased resolution
+#endif
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -167,16 +174,9 @@ public:
     void print( ::std::ostream& os = std::cout ) const;
 
 private: // implementation-defined
-
     sc_time( double, sc_time_unit, sc_simcontext* );
 
-    // convert time unit from string
-    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
-    sc_time( double, const char* unit );
-    sc_time( double, const char* unit, sc_simcontext* );
-
 private:
-
     value_type m_value;
 };
 

@@ -39,6 +39,7 @@
 #include <sstream>
 #include <regex>
 #include <string>
+#include <algorithm>
 
 #ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
 #  define SC_MAXTIME_ALLOWED_ 1
@@ -48,18 +49,33 @@
 
 namespace sc_core {
 
+#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
 static
 double time_values[] = {
-    1e15,    // s
-    1e12,    // ms
-    1e9,     // us
-    1e6,     // ns
-    1e3,     // ps
-    1,       // fs
-    1e-3,    // as 
-    1e-6,    // zs
-    1e-9     // ys
+    1e24, // s
+    1e21, // ms
+    1e18, // us
+    1e15, // ns
+    1e12, // ps
+    1e9,  // fs
+    1e6,  // as 
+    1e3,  // zs
+    1     // ys
 };
+#else
+static
+double time_values[] = {
+    1e15, // s
+    1e12, // ms
+    1e9,  // us
+    1e6,  // ns
+    1e3,  // ps
+    1,    // fs
+    1e-3, // as 
+    1e-6, // zs
+    1e-9  // ys
+};
+#endif
 
 static
 const char* time_units[] = {
@@ -76,7 +92,7 @@ const char* time_units[] = {
 
 static
 const char* time_units_str[] = {
-    "SC_SEC"
+    "SC_SEC",
     "SC_MS",
     "SC_US",
     "SC_NS",
@@ -108,7 +124,13 @@ sc_time_tuple::init( value_type val )
     }
     sc_assert( tr == 1 );
 
-    unsigned tu = SC_FS - (scale / 3); // TODO high-res 
+#   ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
+    unsigned tu_max = SC_YS;
+#   else
+    unsigned tu_max = SC_FS;
+#   endif
+
+    unsigned tu = tu_max - (scale / 3);
     while( tu > SC_SEC && ( val % 10 ) == 0 ) {
         val /= 10;
         scale++;
@@ -132,8 +154,8 @@ sc_time::value_type
 sc_time_tuple::value() const
 {
     if( !has_value() )
-        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_
-                       , "sc_time_tuple value overflow" );
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_,
+                         "sc_time_tuple value overflow" );
     return m_value * m_offset;
 }
 
@@ -160,16 +182,10 @@ sc_time_tuple::to_string() const
     return oss.str();
 }
 
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_time
-//
-//  The time class.
-// ----------------------------------------------------------------------------
-
-// constructors
+// helper functions
 
 namespace /* anonymous */ {
+
 static sc_time::value_type
 from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
@@ -181,9 +197,63 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
         t = static_cast<sc_dt::int64>( tmp );
         tp->time_resolution_fixed = true;
     }
+    
     return t;
 }
+
+static sc_time::value_type
+from_string_view( std::string_view str, sc_time_params* tp )
+{
+    std::regex reg("^(\\d+(?:\\.\\d+)?)((?:e[\\-,\\+]?\\d+)?)([f,p,n,u,m]?)(s?)$");
+    // regex capturing groups
+    // (0) full string
+    // (1) value (mandatory)
+    // (2) exponent (optional)
+    // (3) scale (optional)
+    // (4) unit (optional)
+    std::smatch match; 
+  
+    std::string s = str.data();
+    s = std::regex_replace(s, std::regex("\\s"), ""); // remove all whitespaces first
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower); // upper to lowercase
+
+    if( !std::regex_search(s, match, reg) ) {
+        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
+        return 0;
+    }
+    
+    char * endptr = NULL;
+    std::string sval = match.str(1) + match.str(2);
+    double val = std::strtod(sval.c_str(), &endptr );
+    std::string unit_str = match.str(3) + match.str(4);
+
+    if( match.str(4).empty() )
+        unit_str += "s";
+
+    unsigned time_unit = SC_SEC;
+#   ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
+    unsigned tu_max = SC_YS;
+#   else
+    unsigned tu_max = SC_FS;
+#   endif
+
+    while( time_unit <= tu_max
+       && std::strcmp( unit_str.c_str(), time_units[time_unit] ) != 0 )
+    { ++time_unit; }
+
+    return from_value_and_unit(val, static_cast<sc_time_unit>(time_unit), tp );
+}
+
 } /* anonymous namespace */
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_time
+//
+//  The time class.
+// ----------------------------------------------------------------------------
+
+// constructors
 
 sc_time::sc_time( double v, sc_time_unit tu )
   : m_value
@@ -194,8 +264,8 @@ sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
   : m_value( from_value_and_unit( v, tu, simc->m_time_params ) )
 {}
 
-sc_time::sc_time( std::string_view ts )
-  : m_value( from_value_and_unit( from_string(ts).to_seconds(), SC_SEC, sc_get_curr_simcontext()->m_time_params) )
+sc_time::sc_time( std::string_view strv )
+  : m_value( from_string_view(strv, sc_get_curr_simcontext()->m_time_params) )
 {}
 
 sc_time::sc_time( double v, bool scale )
@@ -261,68 +331,10 @@ sc_time::from_value( value_type v )
     return t;
 }
 
-namespace /* anonymous */ {
-static sc_time::value_type
-from_value_and_unit_symbol( double v, const char* unit, sc_time_params* tp )
-{
-    sc_time::value_type t = 0;
-    if( !unit || !*unit ) {
-        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "no time unit given" );
-        return t;
-    }
-    unsigned tu = SC_SEC;
-    while( tu <= SC_FS    // TODO: high-res
-          && std::strcmp( unit, time_units[tu] ) != 0
-          && std::strcmp( unit, time_units_str[tu] ) != 0 )
-      { ++tu; }
-
-    if( tu > SC_FS ) { // TODO high-res
-        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid unit given" );
-        return t;
-    }
-
-    return from_value_and_unit( v, static_cast<sc_time_unit>(tu), tp );
-}
-} /* anonymous namespace */
-
-sc_time::sc_time( double v, const char* unit )
-  : m_value
-     ( from_value_and_unit_symbol( v, unit, sc_get_curr_simcontext()->m_time_params ) )
-{}
-
-sc_time::sc_time( double v, const char* unit, sc_simcontext* simc )
-  : m_value( from_value_and_unit_symbol( v, unit, simc->m_time_params ) )
-{}
-
 sc_time
 sc_time::from_string( std::string_view str ) 
 {
-    std::regex reg("^(\\d+(?:\\.\\d+)?)((?:[e,E][\\-,\\+]?\\d+)?)\\s?([f,p,n,u,m]?)(s?)$");
-    // regex capturing groups
-    // (0) full string
-    // (1) value (mandatory)
-    // (2) exponent (optional)
-    // (3) scale (optional)
-    // (4) unit (optional)
-    std::smatch match; 
-  
-    std::string s = str.data();
-    s = std::regex_replace( s, std::regex("\\s"), ""); // remove all whitespaces first
-
-    if( !std::regex_search(s, match, reg) ) {
-        SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
-        return SC_ZERO_TIME;
-    }
-    
-    char * endptr = NULL;
-    std::string sval = match.str(1) + match.str(2);
-    double val = std::strtod(sval.c_str(), &endptr );
-    std::string unit = match.str(3) + match.str(4);
-
-    if( match.str(4).empty() )
-        unit += "s";
-   
-    return sc_time( val, unit.c_str() );
+    return from_value( from_string_view(str, sc_get_curr_simcontext()->m_time_params) );
 }
 
 // conversion functions
@@ -350,7 +362,7 @@ sc_time::to_seconds() const
         time_params->time_resolution_fixed = true;
 #   endif // SC_MAXTIME_ALLOWED_
     return ( sc_dt::uint64_to_double( m_value ) *
-        time_params->time_resolution * 1e-15 );
+        time_params->time_resolution  / time_values[0] ); 
 }
 
 
@@ -370,10 +382,10 @@ sc_time::print( ::std::ostream& os ) const
 // ----------------------------------------------------------------------------
 
 sc_time_params::sc_time_params()
-: time_resolution( 1000 ),		// default 1 ps
+: time_resolution( time_values[4]),   // in femto seconds (default 1 ps)
   time_resolution_specified( false ),
   time_resolution_fixed( false ),
-  default_time_unit( 1000 ),		// default 1 ns
+  default_time_unit( 1000 ),          // default 1 ns
   default_time_unit_specified( false )
 {}
 

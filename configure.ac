@@ -38,12 +38,7 @@ dnl ***************************************************************************
 dnl
 dnl Initialization.
 dnl
-AC_INIT([SystemC],
-        [2.4.0],
-        [http://forums.accellera.org/forum/9-systemc/],
-        [systemc],
-        [http://accellera.org/],
-)
+AC_INIT([SystemC],[2.4.0],[http://forums.accellera.org/forum/9-systemc/],[systemc],[http://accellera.org/],[])
 dnl version of the included TLM library
 TLM_PACKAGE_VERSION=2.0.6
 AC_SUBST(TLM_PACKAGE_VERSION)
@@ -55,7 +50,7 @@ AC_CONFIG_MACRO_DIR([config])
 dnl
 dnl Some simple checks.
 dnl
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
@@ -267,7 +262,7 @@ dnl    detect C++ library dependencies, esp. for cross-compilation
 CXXFLAGS_USER="${CXXFLAGS}"
 CXXFLAGS="${EXTRA_CXXFLAGS} ${CXXFLAGS}"
 dnl
-AC_PROG_LIBTOOL
+LT_INIT
 dnl  - restore user-given CXXFLAGS
 CXXFLAGS="${CXXFLAGS_USER}"
 
@@ -530,6 +525,23 @@ AM_CONDITIONAL([ENABLE_LEGACY_MEM_MGMT],dnl
 AC_MSG_RESULT($enable_legacy_mem_mgmt)
 
 dnl
+dnl enable high time resolution
+dnl
+AC_MSG_CHECKING([whether to enable high time resolution])
+AC_ARG_ENABLE([high_time_resolution],
+  [AS_HELP_STRING([--enable-high-time-resolution],
+                  [enable high time resolution
+                   @<:@yes|no(=default)@:>@])],
+  [AS_CASE(["${enableval}"],dnl
+    [yes],       [enable_high_time_resolution=yes],
+    [no|default],[enable_high_time_resolution=no],
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-high-time-resolution])])],
+  [enable_high_time_resolution=no])
+AM_CONDITIONAL([ENABLE_HIGH_TIME_RESOLUTION],dnl
+               [test x"$enable_high_time_resolution" = xyes])
+AC_MSG_RESULT($enable_high_time_resolution)
+
+dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
@@ -596,8 +608,7 @@ AC_SUBST(QT_ARCH)
 dnl
 dnl Create the Makefiles.
 dnl
-AC_OUTPUT(
- Makefile 
+AC_CONFIG_FILES([Makefile 
  src/Makefile 
  src/systemc.pc
  src/tlm.pc
@@ -612,7 +623,8 @@ AC_OUTPUT(
  docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
-)
+])
+AC_OUTPUT
 
 dnl
 dnl print configuration summary
@@ -698,14 +710,16 @@ Configuration summary of $PACKAGE_STRING for $target
  Compiler        : ${sysc_compiler}
  ${sysc_flags}
  Build settings:
-   Enable compiler optimizations  : $enable_optimize
-   Include debugging symbols      : $enable_debug
-   Coroutine package for processes: $sysc_coroutine
-   Enable VCD scopes by default   : $enable_vcd_scopes
-   Disable async_request_update   : $disable_async_updates
-   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
-   Phase callbacks (experimental) : $enable_phase_callbacks
-   suspend_all (experimental)     : $enable_suspend_all
+   Enable compiler optimizations       : $enable_optimize
+   Include debugging symbols           : $enable_debug
+   Coroutine package for processes     : $sysc_coroutine
+   Enable VCD scopes by default        : $enable_vcd_scopes
+   Disable async_request_update        : $disable_async_updates
+   Enable legacy mem. mangement        : $enable_legacy_mem_mgmt
+   Phase callbacks (experimental)      : $enable_phase_callbacks
+   suspend_all (experimental)          : $enable_suspend_all
+   High time resolution (experimental) : $enable_high_time_resolution
+
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
