@@ -19,10 +19,10 @@
 
 /*****************************************************************************
 
-  simulation_callbacks.cpp -- Test of simulation phase callbacks
+  simulation_callbacks.cpp -- Test of simulation stage callbacks
 
-  Note: requires simulation phase callback support enabled in the kernel
-        SC_ENABLE_STAGE_CALLBACKS / --enable-phase-callbacks
+  Note: requires simulation stage callback support enabled in the kernel
+        SC_ENABLE_STAGE_CALLBACKS / --enable-stage-callbacks
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-05-17
 
@@ -71,13 +71,10 @@
 #endif
 
 #if REGISTER_CALLBACKS
-//#  define CALLBACK_MASK ( SC_END_OF_EVALUATION )
-//#  define CALLBACK_MASK ( SC_END_OF_UPDATE )
-//#  define CALLBACK_MASK ( SC_BEFORE_TIMESTEP )
-#  define CALLBACK_MASK ( SC_END_OF_UPDATE | SC_BEFORE_TIMESTEP )
+#  define CALLBACK_MASK ( SC_POST_UPDATE | SC_PRE_TIMESTEP )
 #else
-// SC_RUNNING (for EXTRA_METHOD)
-#  define CALLBACK_MASK ( SC_RUNNING )
+// during SC_RUNNING (for EXTRA_METHOD)
+#  define CALLBACK_MASK ( SC_STAGE_NONE )
 #endif
 
 static const sc_dt::uint64 max_rounds         = ROUNDS;
@@ -85,18 +82,20 @@ static const sc_dt::uint64 max_timed_triggers = NUM_TIMED_TRIGGERS;
 static const sc_dt::uint64 max_delta_triggers = NUM_DELTA_TRIGGERS;
 static const sc_time  delay(1, SC_NS);
 
-SC_MODULE(phase_tracer)
+
+class stage_tracer : public sc_module, public sc_stage_callback_if
 {
-  SC_HAS_PROCESS(phase_tracer);
-  phase_tracer( sc_module_name = sc_core::sc_gen_unique_name("phase_tracer") )
-    : cb_mask(CALLBACK_MASK), cb_count(0)
+public:
+  SC_HAS_PROCESS(stage_tracer);
+  stage_tracer( sc_module_name = sc_core::sc_gen_unique_name("stage_tracer") )
+    : cb_count(0)
   {
 #if REGISTER_CALLBACKS
-    cb_mask = register_simulation_phase_callback( CALLBACK_MASK );
+    sc_register_stage_callback( *this, CALLBACK_MASK );
 #endif
   }
 
-  virtual void simulation_phase_callback()
+  void stage_callback(const sc_stage& stage)
   {
     cb_count++;
 
@@ -109,31 +108,30 @@ SC_MODULE(phase_tracer)
         ttp = sc_time_to_pending_activity().to_string();
       }
       std::cout << name()
-                << ": phase callback "
+                << "::stage_callback, sc_status = "
                 << sc_get_status()
-                << ": " << sc_time_stamp()
+		<< ", sc_stage = " << stage
+                << ", time = " << sc_time_stamp()
                 << " -> pending activity: " << ttp
                 << std::endl;
     }
 #   endif
-    sc_assert( cb_mask & sc_get_status() );
   }
 
-  ~phase_tracer()
-      { print_static_phase_stats( "[destructor]" ); }
+  ~stage_tracer()
+      { print_static_stage_stats( "[destructor]" ); }
 
-  void print_static_phase_stats( const char* phase )
+  void print_static_stage_stats( const char* stage )
   {
 #if VERBOSE
       std::cout << name()
-                << ": " << phase << ": "
+                << ": " << stage << ": "
                 << cb_count << " callbacks called."
                 << std::endl;
 #endif
   }
 
 private:
-  unsigned      cb_mask;
   sc_dt::uint64 cb_count;
 };
 
@@ -193,12 +191,12 @@ private:
   void extra()
   {
     if( sc_pending_activity_at_current_time() ) {
-      pt.simulation_phase_callback();
+      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
       next_trigger(SC_ZERO_TIME);
     } else if (sc_time_to_pending_activity()== sc_max_time()-sc_time_stamp() ) {
       next_trigger();
     } else {
-      pt.simulation_phase_callback();
+      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
       next_trigger(sc_time_to_pending_activity());
     }
   }
@@ -215,7 +213,7 @@ private:
   }
 
 private:
-  phase_tracer pt;
+  stage_tracer pt;
   sc_dt::uint64 timed_count, delta_count;
   sc_event timed_ev, delta_ev;
 };

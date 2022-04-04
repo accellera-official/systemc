@@ -19,11 +19,11 @@
 
 /*****************************************************************************
 
-  simulation_callbacks_outside_sc_module.cpp -- Test of simulation phase callbacks
+  simulation_callbacks_outside_sc_module.cpp -- Test of simulation stage callbacks
   similar to simulation_callbacks, except reception is done outside a sc_module.
 
-  Note: requires simulation phase callback support enabled in the kernel
-        SC_ENABLE_STAGE_CALLBACKS / --enable-phase-callbacks
+  Note: requires simulation stage callback support enabled in the kernel
+        SC_ENABLE_STAGE_CALLBACKS / --enable-stage-callbacks
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-05-17
 
@@ -72,13 +72,10 @@
 #endif
 
 #if REGISTER_CALLBACKS
-//#  define CALLBACK_MASK ( SC_END_OF_EVALUATION )
-//#  define CALLBACK_MASK ( SC_END_OF_UPDATE )
-//#  define CALLBACK_MASK ( SC_BEFORE_TIMESTEP )
-#  define CALLBACK_MASK ( SC_END_OF_UPDATE | SC_BEFORE_TIMESTEP )
+#  define CALLBACK_MASK ( SC_POST_UPDATE | SC_PRE_TIMESTEP )
 #else
-// SC_RUNNING (for EXTRA_METHOD)
-#  define CALLBACK_MASK ( SC_RUNNING )
+// during SC_RUNNING (for EXTRA_METHOD)
+#  define CALLBACK_MASK ( SC_STAGE_NONE )
 #endif
 
 static const sc_dt::uint64 max_rounds         = ROUNDS;
@@ -86,20 +83,19 @@ static const sc_dt::uint64 max_timed_triggers = NUM_TIMED_TRIGGERS;
 static const sc_dt::uint64 max_delta_triggers = NUM_DELTA_TRIGGERS;
 static const sc_time  delay(1, SC_NS);
 
-class phase_tracer : public sc_core::sc_phase_callback_if
+class stage_tracer : public sc_core::sc_stage_callback_if
 {
 public:
 
-  phase_tracer()
-    : cb_mask(CALLBACK_MASK), cb_count(0)
+  stage_tracer(const std::string& name) 
+    : m_name(name), cb_count(0)
   {
 #if REGISTER_CALLBACKS
-    cb_mask = sc_core::sc_register_phase_callback( *this,
-                                                   CALLBACK_MASK );
+    sc_core::sc_register_stage_callback( *this, CALLBACK_MASK );
 #endif
   }
 
-  virtual void simulation_phase_callback()
+  void stage_callback(const sc_stage& stage)
   {
     cb_count++;
 
@@ -111,37 +107,43 @@ public:
       } else {
         ttp = sc_time_to_pending_activity().to_string();
       }
-      std::cout << "phase_tracer: phase callback "
+      std::cout << name()
+                << "::stage_callback, sc_status = "
                 << sc_get_status()
-                << ": " << sc_time_stamp()
+		<< ", sc_stage = " << stage
+                << ", time = " << sc_time_stamp()
                 << " -> pending activity: " << ttp
                 << std::endl;
     }
 #   endif
-    sc_assert( cb_mask & sc_get_status() );
   }
 
-  ~phase_tracer()
-      { print_static_phase_stats( "[destructor]" ); }
+  ~stage_tracer()
+      { print_static_stage_stats( "[destructor]" ); }
 
-  void print_static_phase_stats( const char* phase )
+  void print_static_stage_stats( const char* stage )
   {
 #if VERBOSE
-      std::cout << "phase tracer: " << phase << ": "
+      std::cout << "stage tracer: " << stage << ": "
                 << cb_count << " callbacks called."
                 << std::endl;
 #endif
   }
+  
+  const std::string& name()
+  {
+      return m_name;
+  }
 
 private:
-  unsigned      cb_mask;
+  std::string   m_name;
   sc_dt::uint64 cb_count;
 };
 
 SC_MODULE(activities)
 {
   SC_CTOR(activities)
-    : timed_count(), delta_count()
+    : pt("tracer"), timed_count(), delta_count()
   {
     TIMED_PROCESS(timed);
       sensitive << timed_ev;
@@ -194,12 +196,12 @@ private:
   void extra()
   {
     if( sc_pending_activity_at_current_time() ) {
-      pt.simulation_phase_callback();
+      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
       next_trigger(SC_ZERO_TIME);
     } else if (sc_time_to_pending_activity()== sc_max_time()-sc_time_stamp() ) {
       next_trigger();
     } else {
-      pt.simulation_phase_callback();
+      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
       next_trigger(sc_time_to_pending_activity());
     }
   }
@@ -216,7 +218,7 @@ private:
   }
 
 private:
-  phase_tracer pt;
+  stage_tracer pt;
   sc_dt::uint64 timed_count, delta_count;
   sc_event timed_ev, delta_ev;
 };

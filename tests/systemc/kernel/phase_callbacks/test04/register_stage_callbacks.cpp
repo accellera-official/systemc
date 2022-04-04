@@ -19,10 +19,10 @@
 
 /*****************************************************************************
 
-  register_phase_callbacks.cpp -- Test for (un)registering dynamic callbacks
+  register_stage_callbacks.cpp -- Test for (un)registering dynamic callbacks
 
-  Note: requires simulation phase callback support enabled in the kernel
-        SC_ENABLE_STAGE_CALLBACKS / --enable-phase-callbacks
+  Note: requires simulation stage callback support enabled in the kernel
+        SC_ENABLE_STAGE_CALLBACKS / --enable-stage-callbacks
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-05-17
 
@@ -42,57 +42,22 @@
 
 #define VERBOSE 1
 
-SC_MODULE(phase_tracer)
+class stage_tracer : public sc_module, public sc_stage_callback_if
 {
-  SC_HAS_PROCESS(phase_tracer);
-  phase_tracer( sc_module_name nm
-                  = sc_core::sc_gen_unique_name("phase_tracer") )
+public:
+  SC_HAS_PROCESS(stage_tracer);
+  stage_tracer( sc_module_name nm
+                  = sc_core::sc_gen_unique_name("stage_tracer") )
     : cb_count(0), timed_count(), delta_count()
   {
     SC_METHOD(timed);
     SC_METHOD(delta);
       sensitive << ev;
 
-    old_mask = SC_STATUS_ANY;
-    cb_mask = register_simulation_phase_callback( SC_STATUS_ANY );
-    sc_assert( cb_mask == (old_mask & ~SC_ELABORATION & ~SC_RUNNING) );
-    old_mask = cb_mask;
+    sc_register_stage_callback(*this, SC_STAGE_ANY);
 
-    cb_mask = unregister_simulation_phase_callback(SC_STOPPED);
-    sc_assert( cb_mask == (old_mask & ~SC_STOPPED) );
-    old_mask = cb_mask;
-
-    cb_mask = register_simulation_phase_callback( SC_UNITIALIZED );
-    sc_assert( cb_mask == old_mask );
-
-    cb_mask = unregister_simulation_phase_callback(SC_UNITIALIZED);
-    sc_assert( cb_mask == old_mask );
-
-    cb_mask = unregister_simulation_phase_callback(SC_RUNNING);
-    sc_assert( cb_mask == (old_mask & ~SC_END_OF_INITIALIZATION
-//                                  & ~SC_END_OF_EVALUATION
-                                    & ~SC_END_OF_UPDATE
-                                    & ~SC_BEFORE_TIMESTEP) );
-    old_mask = cb_mask;
-
-    cb_mask = unregister_simulation_phase_callback(SC_ELABORATION);
-    sc_assert( cb_mask == (old_mask & ~SC_BEFORE_END_OF_ELABORATION
-                                    & ~SC_END_OF_ELABORATION ) );
-    old_mask = cb_mask;
-
-    cb_mask = unregister_simulation_phase_callback( SC_STATUS_ANY );
-    sc_assert( cb_mask == SC_UNITIALIZED );
-    old_mask = cb_mask;
-
-    cb_mask = register_simulation_phase_callback( SC_RUNNING );
-    sc_assert( cb_mask == ( SC_END_OF_INITIALIZATION
-//                            | SC_END_OF_EVALUATION
-                            | SC_END_OF_UPDATE | SC_BEFORE_TIMESTEP ) );
-
-    cb_mask = register_simulation_phase_callback( SC_STATUS_ANY );
-    sc_assert( cb_mask == (SC_STATUS_ANY & ~SC_ELABORATION & ~SC_RUNNING) );
   }
-
+  
   void timed()
   {
     std::cout
@@ -119,7 +84,7 @@ SC_MODULE(phase_tracer)
     delta_count++;
   }
 
-  virtual void simulation_phase_callback()
+  void stage_callback(const sc_stage& stage)
   {
     cb_count++;
 
@@ -132,25 +97,25 @@ SC_MODULE(phase_tracer)
         ttp = sc_time_to_pending_activity().to_string();
       }
       std::cout << name()
-                << ": phase callback "
+                << "::stage_callback, sc_status = "
                 << sc_get_status()
-                << ": " << sc_time_stamp()
+		<< ", sc_stage = " << stage
+                << ", time = " << sc_time_stamp()
                 << " -> pending activity: " << ttp
                 << std::endl;
     }
 #   endif
-    sc_assert( cb_mask & sc_get_status() );
 
-    switch( sc_get_status() )
+    switch( stage )
     {
-    case SC_END_OF_UPDATE:
-    case SC_BEFORE_TIMESTEP:
+    case SC_POST_UPDATE:
+    case SC_PRE_TIMESTEP:
       if( timed_count == 3 )
-        ev.cancel();
+        ev.cancel(); // allowed?
       if( delta_count == 2 )
-        ev.notify(SC_ZERO_TIME);
+        ev.notify(SC_ZERO_TIME); // not allowed
       if( timed_count == 2 )
-        ev.notify( 1, SC_NS );
+        ev.notify( 1, SC_NS ); // not allowed
       break;
     default:
       // do nothing
@@ -158,14 +123,14 @@ SC_MODULE(phase_tracer)
     }
   }
 
-  ~phase_tracer()
-      { print_static_phase_stats( "[destructor]" ); }
+  ~stage_tracer()
+      { print_static_stage_stats( "[destructor]" ); }
 
-  void print_static_phase_stats( const char* phase )
+  void print_static_stage_stats( const char* stage )
   {
 #if VERBOSE
       std::cout << name()
-                << ": " << phase << ": "
+                << ": " << stage << ": "
                 << cb_count << " callbacks called."
                 << std::endl;
 #endif
@@ -176,34 +141,33 @@ private:
   virtual void before_end_of_elaboration()
   {
     sc_assert( sc_get_status() == SC_BEFORE_END_OF_ELABORATION );
-    print_static_phase_stats( "before_end_of_elaboration" );
+    print_static_stage_stats( "before_end_of_elaboration" );
   }
 
   virtual void end_of_elaboration()
   {
     sc_assert( sc_get_status() == SC_END_OF_ELABORATION );
-    print_static_phase_stats( "end_of_elaboration" );
+    print_static_stage_stats( "end_of_elaboration" );
   }
 
   virtual void start_of_simulation()
   {
     sc_assert( sc_get_status() == SC_START_OF_SIMULATION );
-    print_static_phase_stats( "start_of_simulation" );
+    print_static_stage_stats( "start_of_simulation" );
 
     // ignored - issues warning
-    register_simulation_phase_callback( SC_ELABORATION );
+    sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION ); // SC_POST_BEFORE_END_OF_ELABORATION
   }
 
   virtual void end_of_simulation()
   {
     sc_assert( sc_get_status() == SC_END_OF_SIMULATION );
-    print_static_phase_stats( "end_of_simulation" );
+    print_static_stage_stats( "end_of_simulation" );
   }
 
 
 
 private:
-  phase_cb_mask cb_mask, old_mask;
   sc_dt::uint64 cb_count, timed_count, delta_count;
   sc_event ev;
 };
@@ -212,10 +176,10 @@ private:
 int sc_main(int, char*[])
 {
   // don't run without callbacks enabled
-  sc_report_handler::set_actions( SC_ID_PHASE_CALLBACKS_UNSUPPORTED_
+  sc_report_handler::set_actions( SC_ID_STAGE_CALLBACKS_UNSUPPORTED_
                                 , SC_DEFAULT_ERROR_ACTIONS );
 
-  phase_tracer pt;
+  stage_tracer st("my_tracer");
   sc_start();
   return 0;
 }
