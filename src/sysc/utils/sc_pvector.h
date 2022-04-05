@@ -58,7 +58,7 @@ public:
 	// typedef typename ::std::vector<T>::const_iterator const_iterator;
 	// typedef typename ::std::vector<T>::iterator       iterator;
 
-    sc_pvector( int alloc_n = 0 )
+    sc_pvector()
 	{
 	}
 
