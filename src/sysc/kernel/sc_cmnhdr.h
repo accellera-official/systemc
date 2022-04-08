@@ -156,7 +156,7 @@
 // indicate, that a function result shall not be discarded
 
 #ifndef SC_NODISCARD_
-#if SC_CPLUSPLUS >= 201103L && defined(__has_cpp_attribute)
+#if SC_CPLUSPLUS >= 201700L && defined(__has_cpp_attribute)
 # if __has_cpp_attribute(nodiscard)
 #   define SC_NODISCARD_ [[nodiscard]]
 # endif
