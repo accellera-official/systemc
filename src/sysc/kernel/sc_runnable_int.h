@@ -69,8 +69,8 @@ namespace sc_core {
 // twice in a row might end up on the queue twice if it were the first
 // one that was queued!)
 
-#define SC_NO_METHODS ((sc_method_handle)0xdb)
-#define SC_NO_THREADS ((sc_thread_handle)0xdb)
+#define SC_NO_METHODS ((sc_method_handle)0xd0)
+#define SC_NO_THREADS ((sc_thread_handle)0xd0)
 
 
 //------------------------------------------------------------------------------
