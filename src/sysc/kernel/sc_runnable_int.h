@@ -47,12 +47,27 @@
 //            message will not print.
 #if 0
 #   include <cstring>
+inline
+const char*
+my_get_current_process_name( const char * if_empty = NULL )
+{
+    sc_core::sc_process_b* active_p; // active process to get name of.
+    const char*   result;   // name of active process.
+
+    active_p = sc_core::sc_get_curr_simcontext()->get_curr_proc_info()->process_handle;
+    if ( active_p )
+        result = active_p->name();
+    else
+        result = if_empty;
+    return result;
+}
+
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
-	            << sc_get_current_process_name("** NONE **") << "): " << MSG \
+	            << my_get_current_process_name("** NONE **") << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
     }
 #else
@@ -69,8 +84,8 @@ namespace sc_core {
 // twice in a row might end up on the queue twice if it were the first
 // one that was queued!)
 
-#define SC_NO_METHODS ((sc_method_handle)0xd0)
-#define SC_NO_THREADS ((sc_thread_handle)0xd0)
+#define SC_NO_METHODS m_methods_push_head
+#define SC_NO_THREADS m_threads_push_head
 
 
 //------------------------------------------------------------------------------
@@ -134,7 +149,6 @@ inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::init()
 {
-    m_methods_pop = SC_NO_METHODS;
     if ( !m_methods_push_head )
     {
         m_methods_push_head = new sc_method_process("methods_push_head", true, 
@@ -142,10 +156,10 @@ inline void sc_runnable::init()
         m_methods_push_head->dont_initialize(true);
 	m_methods_push_head->detach();
     }
+    m_methods_pop = SC_NO_METHODS;
     m_methods_push_tail = m_methods_push_head;
     m_methods_push_head->set_next_runnable(SC_NO_METHODS);
 
-    m_threads_pop = SC_NO_THREADS;
     if ( !m_threads_push_head )
     {
         m_threads_push_head = new sc_thread_process("threads_push_head", true, 
@@ -153,6 +167,7 @@ inline void sc_runnable::init()
         m_threads_push_head->dont_initialize(true);
 	m_threads_push_head->detach();
     }
+    m_threads_pop = SC_NO_THREADS;
     m_threads_push_head->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail = m_threads_push_head;
 }
@@ -336,7 +351,7 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
     // Search the push queue:
 
     prior_p = m_methods_push_head;
-    for ( now_p = m_methods_push_head; now_p!= SC_NO_METHODS; 
+    for ( now_p = m_methods_push_head->next_runnable(); now_p!= SC_NO_METHODS; 
 	    now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
@@ -393,7 +408,7 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
     // Search the push queue:
 
     prior_p = m_threads_push_head;
-    for ( now_p = m_threads_push_head; now_p != SC_NO_THREADS; 
+    for ( now_p = m_threads_push_head->next_runnable(); now_p != SC_NO_THREADS; 
 	  now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
