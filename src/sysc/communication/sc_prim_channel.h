@@ -47,7 +47,7 @@ class SC_API sc_prim_channel
     friend class sc_prim_channel_registry;
 
 public:
-    enum { list_end = 0xd0 };
+    enum { list_end = NULL };
 public:
     virtual const char* kind() const
         { return "sc_prim_channel"; }
