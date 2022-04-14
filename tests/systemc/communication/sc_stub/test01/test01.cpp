@@ -37,7 +37,7 @@
 
 // test sc_tie::high, sc_tie::low and sc_unbound
 
-#include <systemc.h>
+#include <systemc>
 
 void scan_hierarchy(sc_core::sc_object* obj)
 {
@@ -95,7 +95,7 @@ struct mod : public sc_core::sc_module
 int sc_main(int argc, char* argv[])
 {
   mod<sc_dt::sc_logic> mod1("mod1");
-  mod1.inp(sc_core::sc_tie::value(SC_LOGIC_1));
+  mod1.inp(sc_core::sc_tie::value(sc_dt::SC_LOGIC_1));
   mod1.outp(sc_core::sc_unbound);
 
   mod<bool> mod2("mod2");
