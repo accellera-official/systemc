@@ -104,7 +104,7 @@ sc_time_tuple::init( value_type val )
         scale++;
         tu -= ( 0 == ( scale % 3 ) );
     }
-    
+
     m_value  = val;
     m_unit   = static_cast<sc_time_unit>( 5-tu );
     m_offset = 1;
@@ -165,7 +165,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
         t = static_cast<sc_dt::int64>( tmp );
         tp->time_resolution_fixed = true;
     }
-    
+
     return t;
 }
 
@@ -180,7 +180,7 @@ sc_time_from_string( const std::string& str, sc_time_params* tp )
     // (3) scale (optional)
     // (4) unit (optional)
     std::smatch match; 
-  
+
     std::string s = std::regex_replace(str, std::regex("\\s"), ""); // remove all whitespaces first
     std::transform(s.begin(), s.end(), s.begin(), ::tolower); // upper to lowercase
 
@@ -188,7 +188,7 @@ sc_time_from_string( const std::string& str, sc_time_params* tp )
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
         return 0;
     }
-    
+
     char * endptr = NULL;
     std::string sval = match.str(1) + match.str(2);
     double val = std::strtod(sval.c_str(), &endptr );
@@ -239,7 +239,7 @@ sc_time::sc_time( double v, bool scale )
 
     if( v != 0 ) {
         sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-	    if( scale ) {
+        if( scale ) {
             double scale_fac = sc_dt::uint64_to_double( time_params->default_time_unit );
             // linux bug workaround; don't change next two lines
             volatile double tmp = v * scale_fac + 0.5;
@@ -359,11 +359,11 @@ sc_time::print( ::std::ostream& os ) const
 // ----------------------------------------------------------------------------
 
 sc_time_params::sc_time_params()
-: time_resolution( time_values[4] ),  // default 1 ps
-  time_resolution_specified( false ),
-  time_resolution_fixed( false ),
-  default_time_unit( 1000 ),          // default 1 ns
-  default_time_unit_specified( false )
+  : time_resolution( time_values[4] ),  // default 1 ps
+    time_resolution_specified( false ),
+    time_resolution_fixed( false ),
+    default_time_unit( 1000 ),          // default 1 ns
+    default_time_unit_specified( false )
 {}
 
 sc_time_params::~sc_time_params()
@@ -491,7 +491,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 
     // must be larger than or equal to the time resolution
     volatile double time_unit = ( v * time_values[5-tu] ) /
-	                        time_params->time_resolution;
+                                  time_params->time_resolution;
     if( time_unit < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
                          "value smaller than time resolution" );
