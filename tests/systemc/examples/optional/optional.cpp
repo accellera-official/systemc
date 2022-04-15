@@ -19,7 +19,11 @@
 
 #include <systemc>
 
-#include <optional> // NOTE: requires C++17
+#if SC_CPLUSPLUS >= 201703L
+#include <optional>
+#else
+#error "This test requires C++17 features.";
+#endif
 
 struct demo_module : sc_core::sc_module
 {
@@ -38,12 +42,14 @@ struct demo_module : sc_core::sc_module
 
     if (!debug_output.has_value())
     {
-      sc_core::sc_hierarchy_scope scope{ restore_hierarchy() };
+      sc_core::sc_hierarchy_scope scope{ get_hierarchy_scope() };
       debug_output.emplace("debug_output");
       debug_output->bind(signal);
     }
     else
+    {
       SC_REPORT_ERROR("optional", "Cannot attach debug output more than once.");
+    }
   }
 
 private:
@@ -56,22 +62,22 @@ private:
   }
 
   // optional output that tracks how many times clocked_method was triggered
-  std::optional<sc_core::sc_out<int>>   debug_output;
+  std::optional<sc_core::sc_out<int> > debug_output;
 
 };
 
 
 int sc_main(int argc, char **argv)
 {
-  demo_module    demo("demo");
+  demo_module demo("demo");
   sc_core::sc_signal<int> debug_out("debug_out");
-  sc_core::sc_clock       clk("clk", {10, sc_core::SC_NS});
+  sc_core::sc_clock clk("clk", {10, sc_core::SC_NS});
 
   demo.clk(clk);
 
   demo.attach_debug_output(debug_out);
 
-  sc_core::sc_start(40, sc_core::SC_NS);
+  sc_core::sc_start(40.0, sc_core::SC_NS);
 
   std::vector<sc_core::sc_object*> children = demo.get_child_objects();
 
