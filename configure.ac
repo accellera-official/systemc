@@ -38,7 +38,12 @@ dnl ***************************************************************************
 dnl
 dnl Initialization.
 dnl
-AC_INIT([SystemC],[2.4.0],[http://forums.accellera.org/forum/9-systemc/],[systemc],[http://accellera.org/],[])
+AC_INIT([SystemC],
+        [2.4.0],
+        [http://forums.accellera.org/forum/9-systemc/],
+        [systemc],
+        [http://accellera.org/],
+)
 dnl version of the included TLM library
 TLM_PACKAGE_VERSION=2.0.6
 AC_SUBST(TLM_PACKAGE_VERSION)
@@ -50,7 +55,7 @@ AC_CONFIG_MACRO_DIR([config])
 dnl
 dnl Some simple checks.
 dnl
-AC_CANONICAL_TARGET
+AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
@@ -262,7 +267,7 @@ dnl    detect C++ library dependencies, esp. for cross-compilation
 CXXFLAGS_USER="${CXXFLAGS}"
 CXXFLAGS="${EXTRA_CXXFLAGS} ${CXXFLAGS}"
 dnl
-LT_INIT
+AC_PROG_LIBTOOL
 dnl  - restore user-given CXXFLAGS
 CXXFLAGS="${CXXFLAGS_USER}"
 
@@ -591,7 +596,8 @@ AC_SUBST(QT_ARCH)
 dnl
 dnl Create the Makefiles.
 dnl
-AC_CONFIG_FILES([Makefile 
+AC_OUTPUT(
+ Makefile 
  src/Makefile 
  src/systemc.pc
  src/tlm.pc
@@ -606,8 +612,7 @@ AC_CONFIG_FILES([Makefile
  docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
-])
-AC_OUTPUT
+)
 
 dnl
 dnl print configuration summary
@@ -693,15 +698,14 @@ Configuration summary of $PACKAGE_STRING for $target
  Compiler        : ${sysc_compiler}
  ${sysc_flags}
  Build settings:
-   Enable compiler optimizations       : $enable_optimize
-   Include debugging symbols           : $enable_debug
-   Coroutine package for processes     : $sysc_coroutine
-   Enable VCD scopes by default        : $enable_vcd_scopes
-   Disable async_request_update        : $disable_async_updates
-   Enable legacy mem. mangement        : $enable_legacy_mem_mgmt
-   Phase callbacks (experimental)      : $enable_phase_callbacks
-   suspend_all (experimental)          : $enable_suspend_all
-
+   Enable compiler optimizations  : $enable_optimize
+   Include debugging symbols      : $enable_debug
+   Coroutine package for processes: $sysc_coroutine
+   Enable VCD scopes by default   : $enable_vcd_scopes
+   Disable async_request_update   : $disable_async_updates
+   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
+   Phase callbacks (experimental) : $enable_phase_callbacks
+   suspend_all (experimental)     : $enable_suspend_all
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
