@@ -155,8 +155,6 @@
 #
 # ENABLE_SUSPEND_ALL            Enable the suspend_all mechanism (experimental).
 #
-# ENABLE_HIGH_TIME_RESOLUTION   Enable high time resolution (experimental).
-#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -330,8 +328,6 @@ option (INSTALL_TO_LIB_BUILD_TYPE_DIR
 option (ENABLE_LEGACY_MEM_MGMT
         "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
         OFF)
-
-option (ENABLE_HIGH_TIME_RESOLUTION "Enable high time resulution (experimental)." OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
@@ -682,7 +678,6 @@ else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
 message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
-message (STATUS "ENABLE_HIGH_TIME_RESOLUTION = ${ENABLE_HIGH_TIME_RESOLUTION}")
 message (STATUS "ENABLE_SUSPEND_ALL = ${ENABLE_SUSPEND_ALL}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")

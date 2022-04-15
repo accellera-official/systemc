@@ -35,7 +35,10 @@
 #include "sysc/datatypes/fx/scfx_ieee.h"
 
 #include <iostream>
+
+#if SC_CPLUSPLUS >= 201703L
 #include <string_view>
+#endif
 
 namespace sc_core {
 
@@ -60,30 +63,26 @@ class SC_API sc_time_tuple;
 
 // ----------------------------------------------------------------------------
 // Internal time representation
-// IMPLEMENTATION DEFINED
+//
+// Implementation defined
+// LRM: Time shall be represented internally as an unsigned
+// integer of at least 64 bits declared as sc_time::value_type.
 // ----------------------------------------------------------------------------
 
-#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
-#define SC_TIME_DT sc_dt::uint64 // TODO replace by new type sc_dt::int128
-#else
-#define SC_TIME_DT sc_dt::uint64 
-#endif
 
+#define SC_TIME_DT sc_dt::uint64 
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
 //
 //  Enumeration of time units.
+//  NOTE: constant values are implementation defined. Values below are
+//        selected for backwards compatiblity with IEEE
 // ----------------------------------------------------------------------------
 
-#define SC_TIME_UNIT_BASE SC_SEC, SC_MS, SC_US, SC_NS, SC_PS, SC_FS
-#define SC_TIME_UNIT_EXT  SC_AS, SC_ZS, SC_YS
+enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2, 
+                    SC_PS = 1, SC_FS = 0, SC_AS = -1, SC_ZS = -2, SC_YS = -3 };
 
-#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
-enum sc_time_unit { SC_TIME_UNIT_BASE, SC_TIME_UNIT_EXT };
-#else
-enum sc_time_unit { SC_TIME_UNIT_BASE };
-#endif
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -122,15 +121,21 @@ public:
     sc_time();
     sc_time( const sc_time& );
     sc_time( double, sc_time_unit );
-    sc_time( std::string_view str );
+
+    // convert time object from string
+    // For C++ versions prior to C++17, offer some (non-standard) backwards compatibility
+    // using std::string instead of std::string_view
+#if SC_CPLUSPLUS >= 201703L
+    explicit sc_time( std::string_view strv );
+    static sc_time from_string( std::string_view strv );
+#else
+    explicit sc_time( const std::string& str );
+    static sc_time from_string( const std::string& str );
+#endif
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
     sc_time( value_type, bool scale );
-
-    static sc_time from_value( value_type );
-    static sc_time from_seconds( double );
-    static sc_time from_string( std::string_view str );
 
     // assignment operator
 
@@ -143,6 +148,9 @@ public:
     double to_seconds() const;
     double to_default_time_units() const;
     const std::string to_string() const;
+
+    static sc_time from_value( value_type );
+    static sc_time from_seconds( double );
 
     // relational operators
 
@@ -217,10 +225,9 @@ private:
     unsigned     m_offset;
 };
 
-// print operator
+// stream operator for printing
 
 inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
-
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -453,7 +460,7 @@ operator % ( const sc_time& t1, const sc_time& t2 )
     return tmp %= t2;
 }
 
-// print operator
+// operator<< for printing
 
 inline
 ::std::ostream&

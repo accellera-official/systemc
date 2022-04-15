@@ -525,23 +525,6 @@ AM_CONDITIONAL([ENABLE_LEGACY_MEM_MGMT],dnl
 AC_MSG_RESULT($enable_legacy_mem_mgmt)
 
 dnl
-dnl enable high time resolution
-dnl
-AC_MSG_CHECKING([whether to enable high time resolution])
-AC_ARG_ENABLE([high_time_resolution],
-  [AS_HELP_STRING([--enable-high-time-resolution],
-                  [enable high time resolution
-                   @<:@yes|no(=default)@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_high_time_resolution=yes],
-    [no|default],[enable_high_time_resolution=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-high-time-resolution])])],
-  [enable_high_time_resolution=no])
-AM_CONDITIONAL([ENABLE_HIGH_TIME_RESOLUTION],dnl
-               [test x"$enable_high_time_resolution" = xyes])
-AC_MSG_RESULT($enable_high_time_resolution)
-
-dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
@@ -718,7 +701,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable legacy mem. mangement        : $enable_legacy_mem_mgmt
    Phase callbacks (experimental)      : $enable_phase_callbacks
    suspend_all (experimental)          : $enable_suspend_all
-   High time resolution (experimental) : $enable_high_time_resolution
 
  ${sysc_additional}
 ---------------------------------------------------------------------

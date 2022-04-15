@@ -49,9 +49,8 @@
 
 namespace sc_core {
 
-#ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
 static
-double time_values[] = {
+double time_values[] = {  
     1e24, // s
     1e21, // ms
     1e18, // us
@@ -60,22 +59,8 @@ double time_values[] = {
     1e9,  // fs
     1e6,  // as 
     1e3,  // zs
-    1     // ys
+    1     // ys 
 };
-#else
-static
-double time_values[] = {
-    1e15, // s
-    1e12, // ms
-    1e9,  // us
-    1e6,  // ns
-    1e3,  // ps
-    1,    // fs
-    1e-3, // as 
-    1e-6, // zs
-    1e-9  // ys
-};
-#endif
 
 static
 const char* time_units[] = {
@@ -90,18 +75,6 @@ const char* time_units[] = {
     "ys"
 };
 
-static
-const char* time_units_str[] = {
-    "SC_SEC",
-    "SC_MS",
-    "SC_US",
-    "SC_NS",
-    "SC_PS",
-    "SC_FS",
-    "SC_AS",
-    "SC_ZS",
-    "SC_YS"
-};
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time_tuple
 //
@@ -124,21 +97,16 @@ sc_time_tuple::init( value_type val )
     }
     sc_assert( tr == 1 );
 
-#   ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
-    unsigned tu_max = SC_YS;
-#   else
-    unsigned tu_max = SC_FS;
-#   endif
-
+    unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
     unsigned tu = tu_max - (scale / 3);
-    while( tu > SC_SEC && ( val % 10 ) == 0 ) {
+    while( tu > 0 && ( val % 10 ) == 0 ) {
         val /= 10;
         scale++;
         tu -= ( 0 == ( scale % 3 ) );
     }
-
+    
     m_value  = val;
-    m_unit   = static_cast<sc_time_unit>( tu );
+    m_unit   = static_cast<sc_time_unit>( 5-tu );
     m_offset = 1;
     for( scale %= 3; scale != 0 ; scale-- )
         m_offset *= 10;
@@ -162,7 +130,7 @@ sc_time_tuple::value() const
 const char *
 sc_time_tuple::unit_symbol() const
 {
-    return time_units[m_unit];
+    return time_units[5-m_unit];
 }
 
 std::string
@@ -177,7 +145,7 @@ sc_time_tuple::to_string() const
         for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 ) {
             oss << '0';
         }
-        oss << ' ' << time_units[m_unit];
+        oss << ' ' << time_units[5-m_unit];
     }
     return oss.str();
 }
@@ -191,7 +159,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( v != 0 ) {
-        double scale_fac = time_values[tu] / tp->time_resolution;
+        double scale_fac = time_values[5-tu] / tp->time_resolution;
         // linux bug workaround; don't change next two lines
         volatile double tmp = v * scale_fac + 0.5;
         t = static_cast<sc_dt::int64>( tmp );
@@ -202,7 +170,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 }
 
 static sc_time::value_type
-from_string_view( std::string_view str, sc_time_params* tp )
+sc_time_from_string( const std::string& str, sc_time_params* tp )
 {
     std::regex reg("^(\\d+(?:\\.\\d+)?)((?:e[\\-,\\+]?\\d+)?)([f,p,n,u,m]?)(s?)$");
     // regex capturing groups
@@ -213,8 +181,7 @@ from_string_view( std::string_view str, sc_time_params* tp )
     // (4) unit (optional)
     std::smatch match; 
   
-    std::string s = str.data();
-    s = std::regex_replace(s, std::regex("\\s"), ""); // remove all whitespaces first
+    std::string s = std::regex_replace(str, std::regex("\\s"), ""); // remove all whitespaces first
     std::transform(s.begin(), s.end(), s.begin(), ::tolower); // upper to lowercase
 
     if( !std::regex_search(s, match, reg) ) {
@@ -230,18 +197,13 @@ from_string_view( std::string_view str, sc_time_params* tp )
     if( match.str(4).empty() )
         unit_str += "s";
 
-    unsigned time_unit = SC_SEC;
-#   ifdef SC_ENABLE_HIGH_TIME_RESOLUTION
-    unsigned tu_max = SC_YS;
-#   else
-    unsigned tu_max = SC_FS;
-#   endif
+    unsigned time_units_idx = 0; // first element in time_units
+    unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
+    while( time_units_idx <= tu_max
+       && std::strcmp( unit_str.c_str(), time_units[time_units_idx] ) != 0 )
+    { ++time_units_idx; }
 
-    while( time_unit <= tu_max
-       && std::strcmp( unit_str.c_str(), time_units[time_unit] ) != 0 )
-    { ++time_unit; }
-
-    return from_value_and_unit(val, static_cast<sc_time_unit>(time_unit), tp );
+    return from_value_and_unit(val, static_cast<sc_time_unit>(5-time_units_idx), tp );
 }
 
 } /* anonymous namespace */
@@ -264,9 +226,6 @@ sc_time::sc_time( double v, sc_time_unit tu, sc_simcontext* simc )
   : m_value( from_value_and_unit( v, tu, simc->m_time_params ) )
 {}
 
-sc_time::sc_time( std::string_view strv )
-  : m_value( from_string_view(strv, sc_get_curr_simcontext()->m_time_params) )
-{}
 
 sc_time::sc_time( double v, bool scale )
 : m_value( 0 )
@@ -319,6 +278,29 @@ sc_time::sc_time( value_type v, bool scale )
     }
 }
 
+#if SC_CPLUSPLUS >= 201703L
+sc_time::sc_time( std::string_view strv )
+  : m_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) )
+{}
+
+sc_time
+sc_time::from_string( std::string_view strv ) 
+{
+    return from_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) );
+}
+#else
+sc_time::sc_time( const std::string& str )
+  : m_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) )
+{}
+
+sc_time
+sc_time::from_string( const std::string& str ) 
+{
+    return from_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) );
+}
+#endif
+
+
 sc_time
 sc_time::from_value( value_type v )
 {
@@ -331,11 +313,6 @@ sc_time::from_value( value_type v )
     return t;
 }
 
-sc_time
-sc_time::from_string( std::string_view str ) 
-{
-    return from_value( from_string_view(str, sc_get_curr_simcontext()->m_time_params) );
-}
 
 // conversion functions
 
@@ -382,7 +359,7 @@ sc_time::print( ::std::ostream& os ) const
 // ----------------------------------------------------------------------------
 
 sc_time_params::sc_time_params()
-: time_resolution( time_values[4]),   // in femto seconds (default 1 ps)
+: time_resolution( time_values[4] ),  // default 1 ps
   time_resolution_specified( false ),
   time_resolution_fixed( false ),
   default_time_unit( 1000 ),          // default 1 ns
@@ -440,10 +417,10 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // must be larger than or equal to 1 fs
-    volatile double resolution = v * time_values[tu];
+    volatile double resolution = v * time_values[5-tu];
     if( resolution < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-                         "value smaller than 1 fs" );
+                         "value smaller than 1 ys" );
     }
 
     // recalculate the default time unit
@@ -513,7 +490,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     }
 
     // must be larger than or equal to the time resolution
-    volatile double time_unit = ( v * time_values[tu] ) /
+    volatile double time_unit = ( v * time_values[5-tu] ) /
 	                        time_params->time_resolution;
     if( time_unit < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
