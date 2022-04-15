@@ -47,27 +47,12 @@
 //            message will not print.
 #if 0
 #   include <cstring>
-inline
-const char*
-my_get_current_process_name( const char * if_empty = NULL )
-{
-    sc_core::sc_process_b* active_p; // active process to get name of.
-    const char*   result;   // name of active process.
-
-    active_p = sc_core::sc_get_curr_simcontext()->get_curr_proc_info()->process_handle;
-    if ( active_p )
-        result = active_p->name();
-    else
-        result = if_empty;
-    return result;
-}
-
 #   define DEBUG_NAME ""
 #   define DEBUG_MSG(NAME,P,MSG) \
     { \
         if ( P && ( (std::strlen(NAME)==0) || !std::strcmp(NAME,P->name())) ) \
           std::cout << "**** " << sc_time_stamp() << " ("  \
-	            << my_get_current_process_name("** NONE **") << "): " << MSG \
+	            << sc_get_current_process_name("** NONE **") << "): " << MSG \
 		    << " - " << P->name() << std::endl; \
     }
 #else

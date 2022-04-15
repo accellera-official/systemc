@@ -61,21 +61,6 @@
 
 namespace sc_core {
 
-inline
-const char*
-sc_get_current_process_name( const char * if_empty = NULL )
-{
-    sc_process_b* active_p; // active process to get name of.
-    const char*   result;   // name of active process.
-
-    active_p = sc_get_curr_simcontext()->get_curr_proc_info()->process_handle;
-    if ( active_p )
-        result = active_p->name();
-    else
-        result = if_empty;
-    return result;
-}
-
 // We use m_current_writer rather than m_curr_proc_info.process_handle to
 // return the active process for sc_signal<T>::check_write since that lets
 // us turn it off a library compile time, and only incur the overhead at
