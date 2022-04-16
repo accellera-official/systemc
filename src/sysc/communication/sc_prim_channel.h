@@ -47,13 +47,11 @@ class SC_API sc_prim_channel
     friend class sc_prim_channel_registry;
 
 public:
-    enum { list_end = NULL };
-public:
     virtual const char* kind() const
         { return "sc_prim_channel"; }
 
     inline bool update_requested() 
-	{ return m_update_next_p != (sc_prim_channel*)list_end; }
+	{ return m_queued_for_update; }
 
     // request the update method to be executed during the update phase
     inline void request_update();
@@ -192,12 +190,6 @@ protected:
 	{ return sc_core::timed_out( simcontext() ); }
 
 
-#if 0 // @@@@####
-    // delta count maintenance
-    sc_dt::uint64 delta_count()
-	{ return simcontext()->m_delta_count; }
-#endif
-
 private:
 
     // called during the update phase of a delta cycle (if requested)
@@ -222,7 +214,7 @@ private:
 private:
 
     sc_prim_channel_registry* m_registry;          // Update list manager.
-    sc_prim_channel*          m_update_next_p;     // Next entry in update list.
+    bool                      m_queued_for_update; // true if queued for update.
 };
 
 
@@ -251,8 +243,7 @@ public:
 
     bool pending_updates() const
     { 
-        return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
-               || pending_async_updates();
+        return m_update_list.size() != 0 || pending_async_updates();
     }   
 
     bool pending_async_updates() const;
@@ -306,7 +297,7 @@ private:
     int                           m_construction_done;   // # of constructs.
     std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
     sc_simcontext*                m_simc;                // simulator context.
-    sc_prim_channel*              m_update_list_p;       // internal updates.
+    std::vector<sc_prim_channel*> m_update_list;         // list of internal updates.
 };
 
 
@@ -323,8 +314,8 @@ inline
 void
 sc_prim_channel_registry::request_update( sc_prim_channel& prim_channel_ )
 {
-    prim_channel_.m_update_next_p = m_update_list_p;
-    m_update_list_p = &prim_channel_;
+    prim_channel_.m_queued_for_update = true;
+    m_update_list.push_back(&prim_channel_);
 }
 
 // ----------------------------------------------------------------------------
@@ -339,7 +330,7 @@ inline
 void
 sc_prim_channel::request_update()
 {
-    if( ! m_update_next_p ) {
+    if( !m_queued_for_update ) {
 	m_registry->request_update( *this );
     }
 }
@@ -376,7 +367,7 @@ void
 sc_prim_channel::perform_update()
 {
     update();
-    m_update_next_p = 0;
+    m_queued_for_update = false;
 }
 
 
