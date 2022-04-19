@@ -52,7 +52,7 @@ int sc_main( int, char*[] )
 
     // test constructors
 
-    check_time( sc_time(SC_ZERO_TIME), sc_time("0") ); // nu unit assumes seconds
+    check_time( sc_time(SC_ZERO_TIME), sc_time("0") ); // no unit, assumes seconds
     check_time( sc_time(1.0, SC_MS), sc_time("1e-3") );
     check_time( sc_time(1.0, SC_MS), sc_time("1ms") );
     check_time( sc_time(1.0, SC_MS), sc_time("1 ms") );
@@ -83,18 +83,18 @@ int sc_main( int, char*[] )
     check_time( sc_time(1.0, SC_MS), sc_time("1mS") ); // mixed upper and lower case, but valid
     check_time( sc_time(1.0, SC_MS), sc_time("1Ms") ); // mixed upper and lower case, but valid
 
-    const char* str = "1ms";
-    check_time( sc_time(1.0, SC_MS), sc_time(str) ); 
-
 #if SC_CPLUSPLUS >= 201703L
     string_view sv{"1ms"};
     check_time( sc_time(1.0, SC_MS), sc_time(sv) ); 
 #endif
 
-    // To support older (<C++17) compilers, a constructor accepting std::string
-    // has been made available, not this is outside the scope of the SystemC standard
+    // To support older (<C++17) compilers, a constructor accepting std::string or old C-string
+    // has been made available, note: this is outside the scope of the SystemC standard
 
     check_time( sc_time(1.0, SC_MS), sc_time(string("1ms")) ); 
+
+    char str[] = "1ms";
+    check_time( sc_time(1.0, SC_MS), sc_time(str) ); 
 
     // test static member function from_string
 
