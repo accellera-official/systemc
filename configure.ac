@@ -576,9 +576,6 @@ AC_OUTPUT(
  examples/sysc/Makefile 
  examples/tlm/Makefile
  examples/tlm/common/Makefile
- docs/Makefile
- docs/sysc/doxygen/Doxyfile
- docs/tlm/doxygen/Doxyfile
 )
 
 dnl
