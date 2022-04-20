@@ -1024,12 +1024,15 @@ sub parse_args
             # do not cleanup
             if( $arg =~ /^-no-cleanup/ ) {
                 $rt_cleanup = 0;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
+            # override SystemC architecture.
             if( $arg =~ /^-arch/ ) {
                 $arg = shift @arglist;
                 $rt_systemc_arch = $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1041,6 +1044,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_defines, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1048,12 +1052,14 @@ sub parse_args
             if( $arg =~ /^-f/ ) {
                 $arg = shift @arglist;
                 $files .= ( $files eq '' ) ? "$arg" : " $arg";
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # compile with debug flag
             if( $arg =~ /^-g/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'debug' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1065,6 +1071,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_includes, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1076,6 +1083,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldpaths, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1087,6 +1095,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldlibs, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1094,6 +1103,7 @@ sub parse_args
             if( $arg =~ /^-M(D|T)d?$/ ) {
                 $rt_msvc_runtime     = $arg;
                 $rt_msvc_runtime_dbg = $arg; # override both runtimes explicitly
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1103,12 +1113,14 @@ sub parse_args
                 # force DLL-based runtimes
                 $rt_msvc_runtime     =~ s/T/D/;
                 $rt_msvc_runtime_dbg =~ s/T/D/;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # send mail with results
             if( $arg =~ /^-m/ ) {
                 $rt_mail = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1116,12 +1128,14 @@ sub parse_args
             if( $arg =~ /^-o/ ) {
                 $arg = shift @arglist;
                 $rt_opts .= ( $rt_opts eq '' ) ? "$arg" : " $arg";
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # compile with optimize flag
             if( $arg =~ /^-O/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'optimize' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1134,24 +1148,28 @@ sub parse_args
             # link with purecov
             if( $arg =~ /^-purecov/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'purecov' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # link with purify
             if( $arg =~ /^-purify/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'purify' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # link with quantify
             if( $arg =~ /^-quantify/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'quantify' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # run quick tests only
             if( $arg =~ /^-Q/ ) {
                 $rt_quick_tests = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1168,6 +1186,7 @@ sub parse_args
                     }
                 }
                 close OLD_OUTPUT_FH;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1175,18 +1194,28 @@ sub parse_args
             if( $arg =~ /^-t/ ) {
                 $arg = shift @arglist;
                 $rt_timeout = $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # time tests
             if( $arg =~ /^-T/ ) {
                 $rt_time_tests = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # verbose
             if( $arg =~ /^-v/ ) {
                 $rt_verbose = 1;
+                $rt_mk_opts .= "$arg ";
+                next;
+            }
+
+            # suppress error messages
+            if( $arg =~ /^-e/ ) {
+                $rt_err_wrn_msg = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -2702,7 +2731,7 @@ clean:
 .PHONY: test
 
 %.log:
-	$verify -no-cleanup \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
+	$verify $rt_mk_opts \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
 EOT
 }
 
@@ -2725,9 +2754,6 @@ sub write_targets {
 }
 
 sub gen_makefile {
-# Limitation: Options are not passed from verify.pl to the Makefile,
-# the Makefile needs to be edited manually if extra options are
-# required. This could be improved of course.
     my @tests = test_dirs();
     my %deps = gen_deps(@tests);
     write_base_rules(%deps);
