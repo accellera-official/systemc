@@ -645,6 +645,7 @@ sub init_globals
     chop( $rt_output_dir = `pwd` );     # directory for output logs
     $rt_prodname = "systemc.exe";       # simulation executable name
     $rt_quick_tests = 0;
+    $rt_makefile = 0;
     $rt_tests_dir = "$rt_systemc_test/tests";
     $rt_common_include_dir = "include/common"; # relative to $rt_systemc_test
     $rt_time_tests = 0;
@@ -976,6 +977,7 @@ Usage: $0 [<options>] <directories|names>
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
+      -M           Generate Makefile for running tests (in parallel)
       -purecov     Link tests with purecov.
       -purify      Link tests with purify.
       -quantify    Link tests with quantify.
@@ -1123,6 +1125,13 @@ sub parse_args
                 next;
             }
 
+            # Generate makefile
+            if( $arg =~ /^-M/ ) {
+                $rt_makefile = 1;
+                next;
+            }
+
+
             # link with purecov
             if( $arg =~ /^-purecov/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'purecov' };
@@ -1189,6 +1198,10 @@ sub parse_args
         else {
             $tests .= ( $tests eq '' ) ? "$arg" : " $arg";
         }
+    }
+
+    if ($tests eq '' && $rt_makefile == 1) {
+        $tests = '.'
     }
 
     # print usage if no tests specified
@@ -1651,30 +1664,15 @@ sub get_testlist
 
 sub create_dir
 {
+    use File::Path qw(make_path);
     local( $dir ) = @_;
 
-    # remove first / from $dir
-    $dir =~ s|/||;
-
-    # start at the root directory
-    chdir( '/' );
-
-    local( $d );
-    foreach $d ( split( '/', $dir ) ) {
-        # create directory $d if it doesn't exist
-        if( ! ( -d "$d" ) ) {
-            if( ! mkdir( $d, $rt_dir_permissions ) ) {
-                &print_log( "Error: cannot create directory '$d'\n" );
-                # failed
-                return 0;
-            }
-        }
-        # go to directory $d
-        if( ! chdir( $d ) ) {
-            &print_log( "Error: cannot go to directory '$d'\n" );
-            # failed
-            return 0;
-        }
+    make_path( $dir, { mode => $rt_dir_permissions} );
+    # go to directory $dir
+    if( ! chdir( $dir ) ) {
+        &print_log( "Error: cannot go to directory '$dir'\n" );
+        # failed
+        return 0;
     }
 
     # succeeded
@@ -2641,6 +2639,103 @@ sub clean_up
     1;
 }
 
+sub test_dirs {
+    my $t;
+    my @tests;
+    foreach $t ( sort( keys %rt_testlist ) ) {
+        my $dir = (split(/ /, $t))[0];
+        push(@tests, File::Spec->canonpath($dir));
+    }
+
+    @tests;
+}
+
+sub gen_deps {
+    use Data::Dumper;
+
+    my @tests = @_;
+    my %deps;
+    my $t;
+    foreach $t (@tests) {
+        my @parts = File::Spec->splitdir($t);
+        for(my $n = 1; $n < scalar @parts; $n = $n + 1){
+            my $base = File::Spec->catdir(@parts[0..$n - 1]);
+            my $dep =  File::Spec->catdir(($base, $parts[$n]));
+            $deps{$base}{$dep} = 0;
+        }
+    }
+
+    %deps;
+}
+
+sub write_base_rules {
+    my %deps = @_;
+    my @bases;
+    my $b;
+    my $verify = File::Spec->catdir($rt_systemc_test, "scripts", "verify.pl");
+
+    foreach $b (keys %deps) {
+        if (File::Spec->splitdir($b) == 1) {
+            push(@bases, $b);
+        }
+    }
+
+    print "test: clean
+\t\@\$(MAKE) all
+
+all: @bases
+
+\ttouch pass.log fail.log
+\techo -n pass: > result.log
+\twc -l < pass.log >> result.log
+\techo -n fail: >> result.log
+\twc -l < fail.log >> result.log
+\tcat result.log
+
+clean:
+\trm -rf result.log pass.log fail.log @bases
+
+\ttouch pass.log fail.log
+
+.PHONY: clean
+.PHONY: all
+.PHONY: test
+
+%.log:
+\t$verify -no-cleanup \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
+
+";
+
+}
+
+sub write_deps {
+    my %deps = @_;
+    my $base;
+    foreach $base (keys %deps) {
+        my @depstr = keys %{ $deps{$base} };
+        print ".PHONY:\n";
+        print "$base: @depstr\n\n";
+    }
+}
+
+sub write_targets {
+    my @tests = @_;
+    my $t;
+    foreach $t (@tests) {
+        print ".PHONY: $t\n$t: $t.log\n\n";
+    }
+}
+
+sub gen_makefile {
+# Limitation: Options are not passed from verify.pl to the Makefile,
+# the Makefile needs to be edited manually if extra options are
+# required. This could be improved of course.
+    my @tests = test_dirs();
+    my %deps = gen_deps(@tests);
+    write_base_rules(%deps);
+    write_deps(%deps);
+    write_targets(@tests);
+}
 
 # -----------------------------------------------------------------------------
 #  SUB : main
@@ -2659,10 +2754,16 @@ sub main
 
     &prepare_environment;
 
+    &get_testlist( $tests, $files ) || exit 1;
+ 
+    if( $rt_makefile ) {
+        gen_makefile();
+        exit 0;
+    }
+
     &print_intro;
 
-    &get_testlist( $tests, $files ) || exit 1;
-
+    my $exit_code = 0;
     local( $t );
     $rt_test_number = 0;
     foreach $t ( sort( keys %rt_testlist ) ) {
@@ -2674,11 +2775,14 @@ sub main
             &clean_up if( $rt_cleanup );
         } else {
             push( @rt_fail, "$error_code : $t" );
+            $exit_code ++;
         }
         &print_log( "(", $#rt_pass + 1, ":", $#rt_fail + 1, ")\n" );
     }
 
     &compile_results;
+
+    exit $exit_code;
 }
 
 
