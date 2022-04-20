@@ -1125,12 +1125,11 @@ sub parse_args
                 next;
             }
 
-            # Generate makefile
+            # Generate Makefile
             if( $arg =~ /^-M/ ) {
                 $rt_makefile = 1;
                 next;
             }
-
 
             # link with purecov
             if( $arg =~ /^-purecov/ ) {
@@ -2506,7 +2505,7 @@ sub run_test
     }
 
     #
-    # create compile command line for makefile with .mk extension
+    # create compile command line for Makefile with .mk extension
     #
     if( $type =~ /$rt_test_type{'c'}/ ) {
 
@@ -2680,32 +2679,31 @@ sub write_base_rules {
         }
     }
 
-    print "test: clean
-\t\@\$(MAKE) all
+    print <<"EOT";
+test: clean
+	\@\$(MAKE) all
 
 all: @bases
 
-\ttouch pass.log fail.log
-\techo -n pass: > result.log
-\twc -l < pass.log >> result.log
-\techo -n fail: >> result.log
-\twc -l < fail.log >> result.log
-\tcat result.log
+	touch pass.log fail.log
+	echo -n pass: > result.log
+	wc -l < pass.log >> result.log
+	echo -n fail: >> result.log
+	wc -l < fail.log >> result.log
+	cat result.log
 
 clean:
-\trm -rf result.log pass.log fail.log @bases
+	rm -rf result.log pass.log fail.log @bases
 
-\ttouch pass.log fail.log
+	touch pass.log fail.log
 
 .PHONY: clean
 .PHONY: all
 .PHONY: test
 
 %.log:
-\t$verify -no-cleanup \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
-
-";
-
+	$verify -no-cleanup \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
+EOT
 }
 
 sub write_deps {
