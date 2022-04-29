@@ -61,13 +61,16 @@
 
 namespace sc_core {
 
-// The values below are used to indicate when a queue is empty. A non-zero     
-// non-legal pointer value is used for this so that a zero value in the
-// m_execute_p field of an sc_process_b instance can be used to indicate      
-// that is has not been queued for run. (If we did not use a non-zero
-// queue empty indicator then a sc_process_b instance that was queued
-// twice in a row might end up on the queue twice if it were the first
-// one that was queued!)
+// The address of the queue heads for the method and thread runnable queuss
+// are used as the "end of queue" values in the m_execute_p field of an 
+// sc_process_b instance. The queues are processed by walking the m_execute_p 
+// values of the sc_process_b instances in the queue. When the m_execute_p value 
+// is the queue head that indicates that sc_process_b instance is the last entry 
+// in the queue.
+//
+// This allows a null m_execute_p field in an sc_process_b instance to 
+// indicate that the instance has not on the queued. That prevents an sc_process_b 
+// instance from being queued twice.
 
 #define SC_NO_METHODS m_methods_push_head
 #define SC_NO_THREADS m_threads_push_head
