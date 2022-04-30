@@ -53,7 +53,7 @@ namespace sc_core {
 sc_prim_channel::sc_prim_channel()
 : sc_object( 0 ),
   m_registry( simcontext()->get_prim_channel_registry() ),
-  m_queued_for_update( false ) 
+  m_update_next_p( 0 ) 
 {
     m_registry->insert( *this );
 }
@@ -61,7 +61,7 @@ sc_prim_channel::sc_prim_channel()
 sc_prim_channel::sc_prim_channel( const char* name_ )
 : sc_object( name_ ),
   m_registry( simcontext()->get_prim_channel_registry() ),
-  m_queued_for_update( false )
+  m_update_next_p( 0 )
 {
     m_registry->insert( *this );
 }
@@ -368,13 +368,18 @@ sc_prim_channel_registry::perform_update()
 	m_async_update_list_p->accept_updates();
 #endif
 
+    sc_prim_channel* next_p; // Next update to perform.
+    sc_prim_channel* now_p;  // Update now performing.
 
     // Update the values for the primitive channels in the simulator's list.
 
-    sc_prim_channel* now_p;  // Update now performing.
-    while( m_update_list.size() > 0 ) {
-	m_update_list.back()->perform_update();
-	m_update_list.pop_back();
+    now_p = m_update_list_p;
+    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
+    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end;
+	now_p = next_p )
+    {
+	next_p = now_p->m_update_next_p;
+	now_p->perform_update();
     }
 }
 
@@ -385,6 +390,7 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   ,  m_construction_done(0)
   ,  m_prim_channel_vec()
   ,  m_simc( &simc_ )
+  ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
 {
 #   ifndef SC_DISABLE_ASYNC_UPDATES
         m_async_update_list_p = new async_update_list();
