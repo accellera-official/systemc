@@ -47,13 +47,11 @@ class SC_API sc_prim_channel
     friend class sc_prim_channel_registry;
 
 public:
-    enum { list_end = 0xdb };
-public:
     virtual const char* kind() const
         { return "sc_prim_channel"; }
 
     inline bool update_requested() 
-	{ return m_update_next_p != (sc_prim_channel*)list_end; }
+	{ return m_update_next_p != NULL; }
 
     // request the update method to be executed during the update phase
     inline void request_update();
@@ -245,8 +243,7 @@ public:
 
     bool pending_updates() const
     { 
-        return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
-               || pending_async_updates();
+        return m_update_list_p != m_update_list_end || pending_async_updates();
     }   
 
     bool pending_async_updates() const;
@@ -300,6 +297,7 @@ private:
     int                           m_construction_done;   // # of constructs.
     std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
     sc_simcontext*                m_simc;                // simulator context.
+    sc_prim_channel*              m_update_list_end;     // update list terminator.
     sc_prim_channel*              m_update_list_p;       // internal updates.
 };
 
