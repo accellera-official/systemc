@@ -552,13 +552,7 @@ sub get_systemc_arch
                 elsif ( $v_string =~ /.+Version 18\.00/) {   # 2013
                     $arch = "msvc12";
                 }
-                elsif ( $v_string =~ /.+Version 19\.00/) {   # 2015
-                    $arch = "msvc14";
-                }
-                elsif ( $v_string =~ /.+Version 19\.10/) {   # 2017
-                    $arch = "msvc14"; # reuse msvc14 identifier for now
-                }
-                elsif ( $v_string =~ /.+Version 19\.31/) {   # 2022
+                elsif ( $v_string =~ /.+Version 19\.\d{2}/) {   # >2015
                     $arch = "msvc14"; # reuse msvc14 identifier for now
                 }
                 else {
