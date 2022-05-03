@@ -172,7 +172,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 static sc_time::value_type
 sc_time_from_string( const std::string& str, sc_time_params* tp )
 {
-    std::regex reg("^(\\d+(?:\\.\\d+)?)((?:e[\\-,\\+]?\\d+)?)([f,p,n,u,m]?)(s?)$");
+    std::regex reg("^(\\d+(?:\\.\\d+)?)((?:[e,E][\\-,\\+]?\\d+)?)\\s?([f,p,n,u,m]?)(s?)$");
     // regex capturing groups
     // (0) full string
     // (1) value (mandatory)
@@ -181,15 +181,12 @@ sc_time_from_string( const std::string& str, sc_time_params* tp )
     // (4) unit (optional)
     std::smatch match; 
 
-    std::string s = std::regex_replace(str, std::regex("\\s"), ""); // remove all whitespaces first
-    std::transform(s.begin(), s.end(), s.begin(), ::tolower); // upper to lowercase
-
-    if( !std::regex_search(s, match, reg) ) {
+    if( !std::regex_search(str, match, reg) ) {
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
         return 0;
     }
 
-    char * endptr = NULL;
+    char* endptr = NULL;
     std::string sval = match.str(1) + match.str(2);
     double val = std::strtod(sval.c_str(), &endptr );
     std::string unit_str = match.str(3) + match.str(4);
