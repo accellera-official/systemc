@@ -404,7 +404,7 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   ,  m_construction_done(0)
   ,  m_prim_channel_vec()
   ,  m_simc( &simc_ )
-  ,  m_update_list_end((sc_prim_channel*)this)
+  ,  m_update_list_end((sc_prim_channel*)(void*)this)
   ,  m_update_list_p((sc_prim_channel*)this)
 {
 #   ifndef SC_DISABLE_ASYNC_UPDATES
