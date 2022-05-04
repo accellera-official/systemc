@@ -1,5 +1,4 @@
-Authors of SystemC / TLM
-========================
+# Authors
 
  *  Daniel Aarno (@DAarno)
  *  James Aldis
@@ -11,7 +10,7 @@ Authors of SystemC / TLM
  *  David Black (@dcblack)
  *  Bill Bunton (@bbunton)
  *  Gene Bushuyev
- *  Mark Burton (markfoodyburton)
+ *  Mark Burton (@markfoodyburton)
  *  Jerome Cornet (@jeromecornetst)
  *  Guillaume Delbergue (@guyguy333)
  *  Jack Donovan
@@ -53,3 +52,26 @@ Authors of SystemC / TLM
  *  Charles Wilson
  *  Richard Xia (@richardxia)
  *  Felix Yan (@felixonmars)
+
+# Companies
+
+ * ARM Ltd.
+ * Bern University of Applied Sciences
+ * Cadence Design Systems, Inc.
+ * Circuitsutra Technologies Pvt Ltd.
+ * COSEDA Technologies GmbH
+ * CoWare, Inc.
+ * Doulos, Inc.
+ * Ericsson AB
+ * Fraunhofer-Gesellschaft
+ * GreenSocs
+ * Intel Corporation
+ * Mentor Graphics Corporation
+ * NXP Semiconductors
+ * OFFIS eV
+ * Siemens
+ * STMicroelectronics
+ * Synopsys, Inc.
+ * Texas Instruments
+ * Université Pierre et Marie Curie
+ * XtremeEDA Corp.
