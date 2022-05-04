@@ -2,6 +2,7 @@
 
  *  Daniel Aarno (@DAarno)
  *  James Aldis
+ *  Bas Arts (@basarts)
  *  Guillaume Audeon (@gjaudeon)
  *  John Aynsley (aynsley)
  *  Mohamed Bamakhrama (@mohamed)
@@ -29,6 +30,7 @@
  *  Gino van Hauwermeiren
  *  Ulrich Holtmann
  *  Martin Janssen (@martin-janssen)
+ *  Lukas Jünger (@aut0)
  *  Vijay Kumar
  *  Joshua Landau (@JoshuaLandau-ARM)
  *  Stan Y. Liao
@@ -36,14 +38,14 @@
  *  Torsten Mähne (@maehne)
  *  Marcelo Montoreano
  *  Eric Paire (@epaire)
- *  Sonal Podder
+ *  Sonal Podder (@sonalpoddar)
  *  Roman I Popov (@ripopov)
  *  Cesar Quiroz
  *  Amit Rao
  *  Harish Sarin
  *  Stuart Swan
  *  Andres Takach (@andres-takach)
- *  Thomas Uhle
+ *  Thomas Uhle (@uhle)
  *  Bart Vanthournout (@bartvt)
  *  Dirk Vermeersch
  *  veeYceeY (@veeYceeY)
