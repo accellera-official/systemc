@@ -714,7 +714,6 @@ message (STATUS "===============================================================
 # Subdirectories
 ###############################################################################
 
-add_subdirectory (docs)
 add_subdirectory (src)
 add_subdirectory (examples)
 
