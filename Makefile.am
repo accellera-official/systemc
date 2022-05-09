@@ -36,7 +36,6 @@
 ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
-	docs \
 	src \
 	examples
 
