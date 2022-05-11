@@ -19,10 +19,9 @@
 
 /*****************************************************************************
 
-  simulation_callbacks_outside_sc_module.cpp -- Test of simulation stage callbacks
-  similar to simulation_callbacks, except reception is done outside a sc_module.
+  callbacks.cpp -- Test of stage callbacks
 
-  Note: requires simulation stage callback support enabled in the kernel
+  Note: requires stage callback support enabled in the kernel
         SC_ENABLE_STAGE_CALLBACKS / --enable-stage-callbacks
 
   Original Author: Philipp A. Hartmann, OFFIS, 2013-05-17
@@ -83,15 +82,16 @@ static const sc_dt::uint64 max_timed_triggers = NUM_TIMED_TRIGGERS;
 static const sc_dt::uint64 max_delta_triggers = NUM_DELTA_TRIGGERS;
 static const sc_time  delay(1, SC_NS);
 
-class stage_tracer : public sc_core::sc_stage_callback_if
+
+class stage_tracer : public sc_module, public sc_stage_callback_if
 {
 public:
-
-  stage_tracer(const std::string& name) 
-    : m_name(name), cb_count(0)
+  SC_HAS_PROCESS(stage_tracer);
+  stage_tracer( sc_module_name = sc_core::sc_gen_unique_name("stage_tracer") )
+    : cb_count(0)
   {
 #if REGISTER_CALLBACKS
-    sc_core::sc_register_stage_callback( *this, CALLBACK_MASK );
+    sc_register_stage_callback( *this, CALLBACK_MASK );
 #endif
   }
 
@@ -124,26 +124,21 @@ public:
   void print_static_stage_stats( const char* stage )
   {
 #if VERBOSE
-      std::cout << "stage tracer: " << stage << ": "
+      std::cout << name()
+                << ": " << stage << ": "
                 << cb_count << " callbacks called."
                 << std::endl;
 #endif
   }
-  
-  const std::string& name()
-  {
-      return m_name;
-  }
 
 private:
-  std::string   m_name;
   sc_dt::uint64 cb_count;
 };
 
 SC_MODULE(activities)
 {
   SC_CTOR(activities)
-    : pt("tracer"), timed_count(), delta_count()
+    : timed_count(), delta_count()
   {
     TIMED_PROCESS(timed);
       sensitive << timed_ev;
