@@ -125,7 +125,6 @@ class SC_API sc_object
     friend class sc_event;
     friend class sc_invoke_method;
     friend class sc_module;
-    friend class sc_module_dynalloc_list;
     friend class sc_object_host;
     friend class sc_object_manager;
     friend class sc_phase_callback_registry;
