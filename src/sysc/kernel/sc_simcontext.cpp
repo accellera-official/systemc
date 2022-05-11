@@ -430,6 +430,27 @@ sc_simcontext::~sc_simcontext()
     clean();
 }
 
+// +------------------------------------------------------------------------------------------------
+// |"sc_simcontext::get_thread_safe_status"
+// | 
+// | This method returns the current simulator status, and uses a mutex mechanism to guarantee
+// | thread safety. It may be called from pthreads other than the simulator's.
+// |
+// | Notes:
+// |     (1) Return from this function releases the mutex.
+// |     (2) Internal to the simulator thread get_status() should be used to avoid the overhead of
+// |         the mutex.
+// | Result:
+// |     Current simulator status (see the sc_status enum).
+// +------------------------------------------------------------------------------------------------
+sc_status sc_simcontext::get_thread_safe_status()
+{
+    sc_scoped_lock lock( m_get_status_mutex );
+    return m_simulation_status != SC_RUNNING ?
+                  m_simulation_status :
+                  (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
+}
+
 // +----------------------------------------------------------------------------
 // |"sc_simcontext::null_event"
 // |

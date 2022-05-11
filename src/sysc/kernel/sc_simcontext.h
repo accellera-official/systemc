@@ -37,6 +37,8 @@
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
 
+#include "sysc/communication/sc_host_mutex.h"
+
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::vector
@@ -223,6 +225,7 @@ public:
     sc_object_manager* get_object_manager();
 
     inline sc_status get_status() const;
+    sc_status get_thread_safe_status();
 
     sc_object_host* active_object();
 
@@ -414,6 +417,7 @@ private:
     sc_report*                  m_error;
     bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
+    sc_host_mutex               m_get_status_mutex;
     sc_status                   m_simulation_status;
     bool                        m_start_of_simulation_called;
 
@@ -451,9 +455,20 @@ sc_get_curr_simcontext()
 #else
     extern SC_API sc_simcontext* sc_get_curr_simcontext();
 #endif // 0
+
+
+// +------------------------------------------------------------------------------------------------
+// |"sc_get_status"
+// | 
+// | This method returns the current simulator status, and uses a mutex mechanism to guarantee
+// | thread safety. It may be called from pthreads other than the simulator's.
+// |
+// | Result:
+// |     Current simulator status (see the sc_status enum).
+// +------------------------------------------------------------------------------------------------
 inline sc_status sc_get_status()
 {
-    return sc_get_curr_simcontext()->get_status();
+    return sc_get_curr_simcontext()->get_thread_safe_status();
 }
 
 
@@ -467,6 +482,18 @@ sc_simcontext::elaboration_done() const
 }
 
 
+// +------------------------------------------------------------------------------------------------
+// |"sc_simcontext::get_status"
+// | 
+// | This method returns the current simulator status, but does not use a mutex mechanism. It is
+// | intended for use within the simulator's pthread.
+// |
+// | Notes:
+// |     (1) To get the status from outside the simulator's thread the get_thread_safe_status()
+// |         method should be used.
+// | Result:
+// |     Current simulator status (see the sc_status enum).
+// +------------------------------------------------------------------------------------------------
 inline sc_status sc_simcontext::get_status() const
 {
     return m_simulation_status != SC_RUNNING ? 
