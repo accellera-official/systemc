@@ -361,6 +361,8 @@ private:
     sc_method_handle remove_process( sc_method_handle );
     sc_thread_handle remove_process( sc_thread_handle );
 
+    inline void set_simulation_status(sc_status status);
+
 private:
 
     enum execution_phases {
@@ -417,8 +419,8 @@ private:
     sc_report*                  m_error;
     bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
-    sc_host_mutex               m_get_status_mutex;
     sc_status                   m_simulation_status;
+    sc_host_mutex               m_simulation_status_mutex;
     bool                        m_start_of_simulation_called;
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
@@ -428,6 +430,7 @@ private:
 
     int                         m_suspend;
     int                         m_unsuspendable;
+
 private:
 
     // disabled
@@ -666,6 +669,13 @@ sc_simcontext::get_current_writer() const
 {
     return m_current_writer;
 }
+
+inline void sc_simcontext::set_simulation_status(sc_status status)
+{
+    sc_scoped_lock lock( m_simulation_status_mutex );
+    m_simulation_status = status;
+}
+
 
 inline bool
 sc_simcontext::write_check() const

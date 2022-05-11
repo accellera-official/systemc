@@ -364,7 +364,7 @@ sc_simcontext::init()
     m_in_simulator_control = false;
     m_start_of_simulation_called = false;
     m_end_of_simulation_called = false;
-    m_simulation_status = SC_ELABORATION;
+    set_simulation_status(SC_ELABORATION);
     m_suspend = 0;
     m_unsuspendable = 0;
 }
@@ -445,7 +445,7 @@ sc_simcontext::~sc_simcontext()
 // +------------------------------------------------------------------------------------------------
 sc_status sc_simcontext::get_thread_safe_status()
 {
-    sc_scoped_lock lock( m_get_status_mutex );
+    sc_scoped_lock lock( m_simulation_status_mutex );
     return m_simulation_status != SC_RUNNING ?
                   m_simulation_status :
                   (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
@@ -673,7 +673,7 @@ sc_simcontext::elaborate()
     m_method_invoker_p =
       new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
 
-    m_simulation_status = SC_BEFORE_END_OF_ELABORATION;
+    set_simulation_status(SC_BEFORE_END_OF_ELABORATION);
     for( int cd = 0; cd != 4; /* empty */ )
     {
         cd  = m_port_registry->construction_done();
@@ -697,7 +697,7 @@ sc_simcontext::elaborate()
     // the process as being dynamic.
 
     m_elaboration_done = true;
-    m_simulation_status = SC_END_OF_ELABORATION;
+    set_simulation_status(SC_END_OF_ELABORATION);
 
     m_port_registry->elaboration_done();
     m_export_registry->elaboration_done();
@@ -730,7 +730,7 @@ sc_simcontext::prepare_to_simulate()
 
     // NOTIFY ALL OBJECTS THAT SIMULATION IS ABOUT TO START:
 
-    m_simulation_status = SC_START_OF_SIMULATION;
+    set_simulation_status(SC_START_OF_SIMULATION);
     m_port_registry->start_simulation();
     m_export_registry->start_simulation();
     m_prim_channel_registry->start_simulation();
@@ -753,7 +753,7 @@ sc_simcontext::prepare_to_simulate()
 	thread_p->prepare_for_simulation();
     }
 
-    m_simulation_status = SC_RUNNING;
+    set_simulation_status(SC_RUNNING);
     m_ready_to_simulate = true;
     m_runnable->init();
 
@@ -1004,7 +1004,7 @@ sc_simcontext::do_sc_stop_action()
 	end();
 	m_in_simulator_control = false;
     }
-    m_simulation_status = SC_STOPPED;
+    set_simulation_status(SC_STOPPED);
     SC_DO_PHASE_CALLBACK_(simulation_stopped);
 }
 
@@ -1071,7 +1071,7 @@ sc_simcontext::reset()
 void
 sc_simcontext::end()
 {
-    m_simulation_status = SC_END_OF_SIMULATION;
+    set_simulation_status(SC_END_OF_SIMULATION);
     m_ready_to_simulate = false;
     m_port_registry->simulation_done();
     m_export_registry->simulation_done();
