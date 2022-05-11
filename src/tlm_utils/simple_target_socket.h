@@ -548,7 +548,7 @@ private:
   bw_process m_bw_process;
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
-  transaction_type* m_current_transaction;
+  transaction_type* m_current_transaction = NULL;
 };
 
 template< typename MODULE, unsigned int BUSWIDTH = 32
