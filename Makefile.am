@@ -36,7 +36,6 @@
 ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
-	docs \
 	src \
 	examples
 
@@ -83,8 +82,5 @@ uninstall-hook:
 endif # SEPARATE_INSTALL_TREE
 
 ## ****************************************************************************
-
-doxygen:
-	@(cd docs && $(MAKE) $@)
 
 ## Taf!
