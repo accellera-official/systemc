@@ -70,11 +70,13 @@
 #  define TIMED_PROCESS SC_METHOD
 #endif
 
+#define NO_STAGE 0
+
 #if REGISTER_CALLBACKS
 #  define CALLBACK_MASK ( SC_POST_UPDATE | SC_PRE_TIMESTEP )
 #else
 // during SC_RUNNING (for EXTRA_METHOD)
-#  define CALLBACK_MASK ( SC_STAGE_NONE )
+#  define CALLBACK_MASK ( NO_STAGE )
 #endif
 
 static const sc_dt::uint64 max_rounds         = ROUNDS;
@@ -191,12 +193,12 @@ private:
   void extra()
   {
     if( sc_pending_activity_at_current_time() ) {
-      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
+      pt.stage_callback((sc_stage)(NO_STAGE));
       next_trigger(SC_ZERO_TIME);
     } else if (sc_time_to_pending_activity()== sc_max_time()-sc_time_stamp() ) {
       next_trigger();
     } else {
-      pt.stage_callback((sc_stage)(SC_STAGE_NONE));
+      pt.stage_callback((sc_stage)(NO_STAGE));
       next_trigger(sc_time_to_pending_activity());
     }
   }

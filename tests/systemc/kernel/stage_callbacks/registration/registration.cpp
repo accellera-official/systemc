@@ -41,6 +41,17 @@
 #include <systemc.h>
 
 #define VERBOSE 1
+#define STAGE_ANY  	(SC_POST_BEFORE_END_OF_ELABORATION | \
+			 SC_POST_END_OF_ELABORATION | \
+			 SC_POST_START_OF_SIMULATION | \
+			 SC_POST_UPDATE | \
+			 SC_PRE_TIMESTEP | \
+			 SC_PRE_PAUSE | \
+			 SC_PRE_SUSPEND | \
+			 SC_POST_SUSPEND | \
+			 SC_PRE_STOP | \
+			 SC_POST_END_OF_SIMULATION)
+
 
 class stage_tracer : public sc_module, public sc_stage_callback_if
 {
@@ -54,7 +65,7 @@ public:
     SC_METHOD(delta);
       sensitive << ev;
 
-    sc_register_stage_callback(*this, SC_STAGE_ANY);
+    sc_register_stage_callback(*this, STAGE_ANY);
 
   }
   
