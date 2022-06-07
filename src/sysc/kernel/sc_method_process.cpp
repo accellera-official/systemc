@@ -540,7 +540,7 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 
     // IF THE SIMULATION IS NOT ACTUALLY RUNNING THIS IS AN ERROR:
 
-    if (  sc_get_status() != SC_RUNNING )
+    if (  sc_get_curr_simcontext()->get_status() != SC_RUNNING )
     {
         report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ );
         return;

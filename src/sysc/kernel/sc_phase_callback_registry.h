@@ -108,8 +108,16 @@ private:
     struct scoped_status
     {
         scoped_status( sc_status& ref, sc_status s )
+	  #if 0
           : ref_(ref), prev_(ref) { ref_ = s;}
-        ~scoped_status() { ref_ = prev_; }
+	  #endif
+          : ref_(ref), prev_(ref) 
+	{ 
+	      sc_scoped_lock lock(sc_get_curr_simcontext()->m_simulation_status_mutex); ref_ = s;
+        }
+        ~scoped_status() { 
+	    sc_scoped_lock lock(sc_get_curr_simcontext()->m_simulation_status_mutex); ref_ = prev_; 
+	}
     private:
         sc_status& ref_;
         sc_status  prev_;

@@ -54,60 +54,6 @@
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
-//  CLASS : sc_module_dynalloc_list
-//
-//  Garbage collection for modules dynamically allocated with SC_NEW.
-// ----------------------------------------------------------------------------
-
-class sc_module_dynalloc_list
-{
-public:
-
-    sc_module_dynalloc_list() : m_list()
-        {}
-
-    ~sc_module_dynalloc_list();
-
-    void add( sc_module* p )
-        { m_list.push_back( p ); }
-
-private:
-
-    sc_plist<sc_module*> m_list;
-};
-
-
-//------------------------------------------------------------------------------
-//"~sc_module_dynalloc_list"
-//
-// Note we clear the m_parent field for the module being deleted. This because
-// we process the list front to back so the parent has already been deleted, 
-// and we don't want ~sc_object() to try to access the parent which may 
-// contain garbage.
-//------------------------------------------------------------------------------
-sc_module_dynalloc_list::~sc_module_dynalloc_list()
-{
-    sc_plist<sc_module*>::iterator it( m_list );
-    while( ! it.empty() ) {
-        (*it)->m_parent = 0;
-        delete *it;
-        it ++;
-    }
-}
-
-
-// ----------------------------------------------------------------------------
-
-SC_API sc_module*
-sc_module_dynalloc( sc_module* module_ )
-{
-    static sc_module_dynalloc_list dynalloc_list;
-    dynalloc_list.add( module_ );
-    return module_;
-}
-
-
-// ----------------------------------------------------------------------------
 //  STRUCT : sc_bind_proxy
 //
 //  Struct for temporarily storing a pointer to an interface or port.
