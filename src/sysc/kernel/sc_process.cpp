@@ -495,7 +495,7 @@ void sc_process_b::reset_process( reset_type rt,
       // If this is an sc_method only throw if it is active.
 
       case reset_asynchronous:
-	if ( sc_get_status() != SC_RUNNING )
+	if ( sc_get_curr_simcontext()->get_status() != SC_RUNNING )
 	{
 	    report_error(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_);
 	}
