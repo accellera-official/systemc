@@ -71,6 +71,10 @@ namespace sc_core {
 // This allows a null m_execute_p field in an sc_process_b instance to 
 // indicate that the instance has not on the queued. That prevents an sc_process_b 
 // instance from being queued twice.
+//
+// Not using a separate field in a runnable entry to indicate when it is queued 
+// saves instructions in a piece of code that gets executed millions of times in 
+// a simulation.
 
 #define SC_NO_METHODS m_methods_push_head
 #define SC_NO_THREADS m_threads_push_head
