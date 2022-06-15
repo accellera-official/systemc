@@ -402,8 +402,6 @@ public:
 #endif // SC_ALLOW_MACROS_WITHOUT_SEMICOLON
 
 extern SC_API sc_module* sc_module_dynalloc(sc_module*);
-#define SC_NEW(x) \
-  ::sc_core::sc_module_dynalloc(new x) SC_SEMICOLON_
 
 
 // -----------------------------------------------------------------------------
