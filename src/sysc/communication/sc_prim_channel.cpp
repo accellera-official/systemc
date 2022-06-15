@@ -374,9 +374,8 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels in the simulator's list.
 
     now_p = m_update_list_p;
-    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
-    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end;
-	now_p = next_p )
+    m_update_list_p = m_update_list_end;
+    for ( ; now_p != m_update_list_end; now_p = next_p )
     {
 	next_p = now_p->m_update_next_p;
 	now_p->perform_update();
@@ -385,12 +384,28 @@ sc_prim_channel_registry::perform_update()
 
 // constructor
 
+// +----------------------------------------------------------------------------
+// |"sc_prim_channel_registry::sc_prim_channel_registry"
+// |
+// | This is the object instance constructor for this class.
+// | 
+// | Notes:
+// |   (1) When an sc_prim_channel instance is on the update list its m_update_p
+// |       field will be non-null. To faciliate this a list-end value is used
+// |       to terminate the update list. That value is the same as this object
+// |       instance's address to guarantee an address that cannot have been
+// |       allocated as an sc_prim_channel instance.
+// | Arguments:
+// |    simc_ = sc_simcontext object this object instance is to be associated
+// |            with
+// +----------------------------------------------------------------------------
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   :  m_async_update_list_p(0)
   ,  m_construction_done(0)
   ,  m_prim_channel_vec()
   ,  m_simc( &simc_ )
-  ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+  ,  m_update_list_end((sc_prim_channel*)(void*)this)
+  ,  m_update_list_p((sc_prim_channel*)this)
 {
 #   ifndef SC_DISABLE_ASYNC_UPDATES
         m_async_update_list_p = new async_update_list();
