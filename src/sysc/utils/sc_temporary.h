@@ -31,7 +31,7 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 
 #include <cstddef>                // std::size_t
-#include <cstring>                //for memset
+#include <cstring>                // for memset
 
 namespace sc_core {
 
