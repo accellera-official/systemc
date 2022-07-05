@@ -1,5 +1,5 @@
 ==========================================
-README for TLM-2.0 (part of SystemC 2.3.1)
+README for TLM-2.0 (part of SystemC 2.3.4)
 ==========================================
 
 This is the proof of concept implementation for the OSCI TLM-2.0 standard,
@@ -28,21 +28,13 @@ Release Notes
 
 User Documentation
 
-   You can find documentation for this release in the docs directory.
+   You can find documentation for this release on www.systemc.org
    A doxygen.in configuration file is available which may be used to build
    documentation using Doxygen (www.doxygen.org).
 
    The TLM library is documented in the IEEE 1666-2011 SystemC Language
    Reference Manual.  This may be obtained by visiting the Accellera Systems
    Initiative at www.accellera.org.
-
-   Some older documentation has been retained in the docs/release directory.
-   It is    recommended that you start with the training presentation
-   (TLM_2_0_presentation.ppt) and then obtain and read the
-   SystemC Language Reference Manual.
-
-   See docs/release/README.txt for a description and status of the other
-   documentation.
 
 Directory Structure
 
