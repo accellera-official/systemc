@@ -1,0 +1,26 @@
+=============================================
+README for the archived SystemC documentation
+=============================================
+
+This archive directory contains old documentation, much of which is now out-of-date.
+SystemC is now defined by the IEEE Std 1666 Language Reference Manual, which may be obtained by visiting <http://www.accellera.org/>.
+
+The current directory contains the following files:
+
+WhitePaper20.pdf - Introduction to SystemC 2.0
+
+FuncSpec20.pdf   - Functional specification for SystemC 2.0
+
+UserGuide20.pdf  - SystemC 2.0 User's Guide
+
+SystemC_2_1_overview.pdf - An overview of new features in SystemC 2.1
+
+SystemC_2_1_features.pdf - A more detailed description of new features in 2.1
+
+Note that the SystemC 2.0 User's Guide covers primarily the SystemC 1.0
+language features. We recommend that you use the combination of the
+SystemC 2.0 User's Guide and the Functional Specification for SystemC 2.0
+as a User's Guide for the SystemC 2.0 language.
+
+If you don't have Adobe Acrobat Reader(tm) you can download it from:
+http://www.adobe.com/products/acrobat/
