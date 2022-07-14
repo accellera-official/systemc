@@ -50,7 +50,7 @@
 namespace sc_core {
 
 static
-double time_values[] = {  
+const double time_values[] = {  
     1e24, // s
     1e21, // ms
     1e18, // us
@@ -106,7 +106,7 @@ sc_time_tuple::init( value_type val )
     }
 
     m_value  = val;
-    m_unit   = static_cast<sc_time_unit>( 5-tu );
+    m_unit   = static_cast<sc_time_unit>( 5-tu ); // sc_time_unit constants have offset of 5
     m_offset = 1;
     for( scale %= 3; scale != 0 ; scale-- )
         m_offset *= 10;
@@ -130,7 +130,7 @@ sc_time_tuple::value() const
 const char *
 sc_time_tuple::unit_symbol() const
 {
-    return time_units[5-m_unit];
+    return time_units[5-m_unit]; // sc_time_unit constants have offset of 5
 }
 
 std::string
@@ -145,7 +145,7 @@ sc_time_tuple::to_string() const
         for( unsigned zeros = m_offset; zeros > 1; zeros /= 10 ) {
             oss << '0';
         }
-        oss << ' ' << time_units[5-m_unit];
+        oss << ' ' << time_units[5-m_unit]; // sc_time_unit constants have offset of 5
     }
     return oss.str();
 }
@@ -159,7 +159,7 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( v != 0 ) {
-        double scale_fac = time_values[5-tu] / tp->time_resolution;
+        double scale_fac = time_values[5-tu] / tp->time_resolution; // sc_time_unit constants have offset of 5
         // linux bug workaround; don't change next two lines
         volatile double tmp = v * scale_fac + 0.5;
         t = static_cast<sc_dt::int64>( tmp );
@@ -200,7 +200,7 @@ sc_time_from_string( const std::string& str, sc_time_params* tp )
        && std::strcmp( unit_str.c_str(), time_units[time_units_idx] ) != 0 )
     { ++time_units_idx; }
 
-    return from_value_and_unit(val, static_cast<sc_time_unit>(5-time_units_idx), tp );
+    return from_value_and_unit(val, static_cast<sc_time_unit>(5-time_units_idx), tp ); // sc_time_unit constants have offset of 5
 }
 
 } /* anonymous namespace */
@@ -414,7 +414,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // must be larger than or equal to 1 fs
-    volatile double resolution = v * time_values[5-tu];
+    volatile double resolution = v * time_values[5-tu]; // sc_time_unit constants have offset of 5
     if( resolution < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
                          "value smaller than 1 ys" );
@@ -487,6 +487,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     }
 
     // must be larger than or equal to the time resolution
+    // sc_time_unit constants have offset of 5
     volatile double time_unit = ( v * time_values[5-tu] ) /
                                   time_params->time_resolution;
     if( time_unit < 1.0 ) {
