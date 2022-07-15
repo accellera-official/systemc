@@ -37,12 +37,12 @@
 
 // test of function sc_set_time_resolution
 
-#include "systemc.h"
+#include <systemc>
 
 int
 sc_main( int, char*[] )
 {
-    sc_set_time_resolution( 0.1, SC_FS );
+    sc_core::sc_set_time_resolution( 0.1, sc_core::SC_YS );
 
     return 0;
 }
