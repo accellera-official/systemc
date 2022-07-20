@@ -41,16 +41,16 @@
 #include <systemc.h>
 
 #define VERBOSE 1
-#define STAGE_ANY  	(SC_POST_BEFORE_END_OF_ELABORATION | \
-			 SC_POST_END_OF_ELABORATION | \
-			 SC_POST_START_OF_SIMULATION | \
-			 SC_POST_UPDATE | \
-			 SC_PRE_TIMESTEP | \
-			 SC_PRE_PAUSE | \
-			 SC_PRE_SUSPEND | \
-			 SC_POST_SUSPEND | \
-			 SC_PRE_STOP | \
-			 SC_POST_END_OF_SIMULATION)
+#define STAGE_ANY (SC_POST_BEFORE_END_OF_ELABORATION | \
+                   SC_POST_END_OF_ELABORATION | \
+                   SC_POST_START_OF_SIMULATION | \
+                   SC_POST_UPDATE | \
+                   SC_PRE_TIMESTEP | \
+                   SC_PRE_PAUSE | \
+                   SC_PRE_SUSPEND | \
+                   SC_POST_SUSPEND | \
+                   SC_PRE_STOP | \
+                   SC_POST_END_OF_SIMULATION)
 
 
 class stage_tracer : public sc_module, public sc_stage_callback_if
@@ -68,7 +68,7 @@ public:
     sc_register_stage_callback(*this, STAGE_ANY);
 
   }
-  
+
   void timed()
   {
     std::cout
@@ -76,13 +76,16 @@ public:
       << ": " << sc_time_stamp()
       << ": " << timed_count
       << std::endl;
-    if( timed_count++ < 5 ) {
+    if( timed_count++ < 6 ) {
       next_trigger( 100, SC_NS );
+    }
+    if (timed_count == 4) {
+      sc_unregister_stage_callback(*this, SC_PRE_TIMESTEP);
     }
     if( delta_count < 5 )
       ev.notify( SC_ZERO_TIME );
 
-    if( timed_count>=6 )
+    if( timed_count>=7 )
       sc_stop();
   }
   void delta()
@@ -93,6 +96,9 @@ public:
       << ": " << delta_count
       << std::endl;
     delta_count++;
+    if (delta_count == 4) {
+      sc_unregister_stage_callback(*this, SC_POST_UPDATE);
+    }
   }
 
   void stage_callback(const sc_stage& stage)
@@ -119,14 +125,56 @@ public:
 
     switch( stage )
     {
+    case SC_POST_START_OF_SIMULATION:
+      std::cout << "SC_POST_START_OF_SIMULATION: Notifying event in callback in next delta, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+      ev.notify(SC_ZERO_TIME); // not allowed according to LRM
+      std::cout << "After notifying event in callback" << std::endl << std::endl;
+      std::cout << "SC_POST_START_OF_SIMULATION: Notifying event in callback with time argument, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+      ev.notify(1, SC_NS); // not allowed according to LRM
+      std::cout << "After notifying event in callback" << std::endl << std::endl;
+      std::cout << "SC_POST_START_OF_SIMULATION: Notifying event in callback with no argument (direct notification), expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+      ev.notify(1, SC_NS); // not allowed according to LRM
+      std::cout << "After notifying event in callback" << std::endl << std::endl;
+      break;
     case SC_POST_UPDATE:
+      if( timed_count == 3 ) {
+        std::cout << "SC_POST_UPDATE: Cancelling event in callback, expect no warning message" << std::endl;
+        ev.cancel(); // allowed according to LRM
+        std::cout << "After cancelling event in callback" << std::endl << std::endl;
+      }
+      // NOTE: warning is not always produced. 
+      // This is due to the early exit in sc_event::notify when m_notify_type == DELTA
+      // in that case, the new notification is silently ignored and thus no warning produced
+      
+      if( delta_count == 2 ) {
+        std::cout << "SC_POST_UPDATE: Notifying event in callback in next delta, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+        ev.notify(SC_ZERO_TIME); // not allowed according to LRM
+        std::cout << "After notifying event in callback" << std::endl << std::endl;
+      }
+      if( timed_count == 2 ) {
+        std::cout << "SC_POST_UPDATE: Notifying event in callback, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+        ev.notify( 1, SC_NS ); // not allowed according to LRM
+        std::cout << "After notifying event in callback" << std::endl << std::endl;
+      }
+      // NOTE: direct notification in this stage will trigger error: (E521) immediate notification is not allowed during update phase or elaboration
+      break;
     case SC_PRE_TIMESTEP:
-      if( timed_count == 3 )
-        ev.cancel(); // allowed?
-      if( delta_count == 2 )
-        ev.notify(SC_ZERO_TIME); // not allowed
-      if( timed_count == 2 )
-        ev.notify( 1, SC_NS ); // not allowed
+      if( timed_count == 3 ) {
+        std::cout << "SC_PRE_TIMESTEP: Cancelling event in callback, expect no warning message" << std::endl;
+        ev.cancel(); // allowed according to LRM
+        std::cout << "After cancelling event in callback" << std::endl << std::endl;
+      }
+      if( delta_count == 2 ) {
+        std::cout << "SC_PRE_TIMESTEP: Notifying event in callback in next delta, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+        ev.notify(SC_ZERO_TIME); // not allowed according to LRM
+        std::cout << "After notifying event in callback" << std::endl << std::endl;
+      }
+      if( timed_count == 2) {
+        std::cout << "SC_PRE_TIMESTEP: Notifying event in callback, expect: Warning: (W553) forbidden action in stage callback" << std::endl;
+        ev.notify( 1, SC_NS ); // not allowed according to LRM
+        std::cout << "After notifying event in callback" << std::endl << std::endl;
+      }
+      // NOTE: direct notification will trigger error: (E521) immediate notification is not allowed during update phase or elaboration
       break;
     default:
       // do nothing
@@ -166,8 +214,10 @@ private:
     sc_assert( sc_get_status() == SC_START_OF_SIMULATION );
     print_static_stage_stats( "start_of_simulation" );
 
-    // ignored - issues warning
-    sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION ); // SC_POST_BEFORE_END_OF_ELABORATION
+    // This registration is ignored - issues warning (W552) register stage callback: Elaboration done
+    std::cout << "start_of_simulation: registering stage_callback for SC_POST_OF_ELABORATION, expect: Warning: (W552) register stage callback: Elaboration done" << std::endl;
+    sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION );
+    std::cout << "After ignored registration" << std::endl << std::endl;
   }
 
   virtual void end_of_simulation()
