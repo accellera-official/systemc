@@ -277,7 +277,7 @@ sc_int_subref::operator = ( int_type v )
     int_type val = m_obj_p->m_val;
     uint_type mask = mask_int[m_left][m_right];
     val &= mask;
-    val |= (v << m_right) & ~mask;
+    val |= (static_cast<uint_type>(v) << m_right) & ~mask;
     m_obj_p->m_val = val;
     m_obj_p->extend_sign();
     return *this;
