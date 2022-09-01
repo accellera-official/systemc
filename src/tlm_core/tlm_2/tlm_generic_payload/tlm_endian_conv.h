@@ -326,8 +326,9 @@ inline void loop_generic0(int new_len, int new_stream_width,
 
         ptrdiff_t he_index = ((ie_addr++) ^ (sizeof_databus - 1))
           - new_start_address + new_sword;  // 64BITFIX //
+        ptrdiff_t be_index = ie_be ? (curr_byte % be_length) : 0;
         COPY(ie_data+curr_byte,
-             ie_be+(curr_byte % be_length),  // 64BITRISK no risk of overflow, always positive //
+             ie_be+be_index,  // 64BITRISK no risk of overflow, always positive //
              he_data+he_index, he_be+he_index);
       }
     }
@@ -468,8 +469,8 @@ template<class D,
 inline int loop_word1(
   int bytes_left, int len0, int lenN, int sizeof_databus,
   uchar *start, uchar *end, uchar *src, uchar *bsrc, uchar *dest, uchar *bdest) {
-  ptrdiff_t d2b_src = bsrc - src;  // 64BITFIX was int //
-  ptrdiff_t d2b_dest = bdest - dest;  // 64BITFIX was int //
+  ptrdiff_t d2b_src = bsrc ? bsrc - src : 0;  // 64BITFIX was int //
+  ptrdiff_t d2b_dest = bdest ? bdest - dest : 0;  // 64BITFIX was int //
   uchar *original_dest = dest;
 
   while(true) {
@@ -643,8 +644,8 @@ inline void copy_dbyb2(D *src1, D *src2, D *dest1, D *dest2) {
 template<class D, void COPY(D *src1, D *src2, D *dest1, D *dest2)>
 inline void loop_aligned2(D *src1, D *src2, D *dest1, D *dest2,
     int words, int words_per_bus) {
-  ptrdiff_t src1to2 = (char *)src2 - (char *)src1;  // 64BITFIX was int and operands were cast to int //
-  ptrdiff_t dest1to2 = (char *)dest2 - (char *)dest1;  // 64BITFIX was int and operands were cast to int //
+  ptrdiff_t src1to2 = src2 ? (char *)src2 - (char *)src1 : 0;  // 64BITFIX was int and operands were cast to int //
+  ptrdiff_t dest1to2 = dest2 ? (char *)dest2 - (char *)dest1 : 0;  // 64BITFIX was int and operands were cast to int //
 
   D *done = src1 + ptrdiff_t(words);  // 64BITFIX //
   D *bus_start = src1;
