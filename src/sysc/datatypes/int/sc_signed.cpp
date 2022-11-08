@@ -392,7 +392,7 @@ uint64 sc_signed::concat_get_uint64() const
 	result = -result;
 	if ( nbits < 64 )
 	{
-	    uint64 mask = ~0;
+	    uint64 mask = ~uint64(0);
 	    result = result & ~(mask << nbits);
 	}
 	break;

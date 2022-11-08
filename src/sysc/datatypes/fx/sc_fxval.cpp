@@ -460,7 +460,7 @@ print_other( scfx_string& s, const scfx_ieee_double& id, sc_numrep numrep,
 
     if( lsb > 0 && fmt == SC_F )
     {
-	for( int i = lsb / step; i > 0; i -- )
+	for( i = lsb / step; i > 0; i -- )
 	    s += '0';
     }
 
