@@ -36,6 +36,7 @@
  *  Stan Y. Liao
  *  David Long (@david-long-doulos)
  *  Torsten Mähne (@maehne)
+ *  Laurent Maillet-Contoz (@lmailletcontoz)
  *  Marcelo Montoreano
  *  Eric Paire (@epaire)
  *  Sonal Podder (@sonalpoddar)
