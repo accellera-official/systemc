@@ -34,13 +34,13 @@ e : 32768 : 0x08e+3
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 9.22337203685478e+18 : 0x7fffffffffffffff
+d : 9.22337203685478e+18 : 0x08e+15
 e : -9.22337203685478e+18 : 0x8e+15
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_ulong
 a : 0 : 0x0
 b : 1 : 0x1
-c : 1.84467440737096e+19 : 0x0ffffffffffffffff
-d : 1.84467440737096e+19 : 0x0ffffffffffffffff
+c : 1.84467440737096e+19 : 0x1e+16
+d : 1.84467440737096e+19 : 0x1e+16
 e : 9.22337203685478e+18 : 0x08e+15
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_float
 a : 0 : 0x0
@@ -89,13 +89,13 @@ e : 32768 : 0x000008000
 a : 0 : 0x000000000
 b : 1 : 0x000000001
 c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_ulong
 a : 0 : 0x000000000
 b : 1 : 0x000000001
-c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+c : 0 : 0x000000000
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_float
 a : 0 : 0x000000000
@@ -149,13 +149,13 @@ e : 32768 : 0x00008000
 a : 0 : 0x00000000
 b : 1 : 0x00000001
 c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fix_ulong
 a : 0 : 0x00000000
 b : 1 : 0x00000001
-c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+c : 0 : 0x00000000
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fix_float
 a : 0 : 0x00000000
@@ -204,13 +204,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : -1 : 0xff.0
-d : -1 : 0xff.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : -1 : 0xff.0
-d : -1 : 0xff.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_float
 a : 0 : 0x00.0
@@ -259,13 +259,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_float
 a : 0 : 0x00.0
@@ -308,13 +308,13 @@ e : 32768 : 0x08e+3
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 9.22337203685478e+18 : 0x7fffffffffffffff
+d : 9.22337203685478e+18 : 0x08e+15
 e : -9.22337203685478e+18 : 0x8e+15
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_ulong
 a : 0 : 0x0
 b : 1 : 0x1
-c : 1.84467440737096e+19 : 0x0ffffffffffffffff
-d : 1.84467440737096e+19 : 0x0ffffffffffffffff
+c : 1.84467440737096e+19 : 0x1e+16
+d : 1.84467440737096e+19 : 0x1e+16
 e : 9.22337203685478e+18 : 0x08e+15
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_float
 a : 0 : 0x0
@@ -357,13 +357,13 @@ e : 32768 : 0x000008000
 a : 0 : 0x000000000
 b : 1 : 0x000000001
 c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_ulong
 a : 0 : 0x000000000
 b : 1 : 0x000000001
-c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+c : 0 : 0x000000000
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_float
 a : 0 : 0x000000000
@@ -406,13 +406,13 @@ e : 32768 : 0x00008000
 a : 0 : 0x00000000
 b : 1 : 0x00000001
 c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fix_ulong
 a : 0 : 0x00000000
 b : 1 : 0x00000001
-c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+c : 0 : 0x00000000
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fix_float
 a : 0 : 0x00000000
@@ -455,13 +455,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : -1 : 0xff.0
-d : -1 : 0xff.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : -1 : 0xff.0
-d : -1 : 0xff.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_float
 a : 0 : 0x00.0
@@ -504,13 +504,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_float
 a : 0 : 0x00.0
@@ -553,13 +553,13 @@ e : 32768 : 0x08e+3
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 9.22337203685478e+18 : 0x7fffffffffffffff
+d : 9.22337203685478e+18 : 0x08e+15
 e : -9.22337203685478e+18 : 0x8e+15
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_float_ulong
 a : 0 : 0x0
 b : 1 : 0x1
-c : 1.84467440737096e+19 : 0x0ffffffffffffffff
-d : 1.84467440737096e+19 : 0x0ffffffffffffffff
+c : 1.84467440737096e+19 : 0x1e+16
+d : 1.84467440737096e+19 : 0x1e+16
 e : 9.22337203685478e+18 : 0x08e+15
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_float_float
 a : 0 : 0x0
@@ -602,13 +602,13 @@ e : 32768 : 0x000008000
 a : 0 : 0x000000000
 b : 1 : 0x000000001
 c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_ulong
 a : 0 : 0x000000000
 b : 1 : 0x000000001
-c : 4294967295 : 0x0ffffffff
-d : 4294967295 : 0x0ffffffff
+c : 0 : 0x000000000
+d : 0 : 0x000000000
 e : 0 : 0x000000000
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_float
 a : 0 : 0x000000000
@@ -651,13 +651,13 @@ e : 32768 : 0x00008000
 a : 0 : 0x00000000
 b : 1 : 0x00000001
 c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_fix_ulong
 a : 0 : 0x00000000
 b : 1 : 0x00000001
-c : -1 : 0xffffffff
-d : -1 : 0xffffffff
+c : 0 : 0x00000000
+d : 0 : 0x00000000
 e : 0 : 0x00000000
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_fix_float
 a : 0 : 0x00000000
@@ -700,13 +700,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : -1 : 0xff.0
-d : -1 : 0xff.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : -1 : 0xff.0
-d : -1 : 0xff.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_float
 a : 0 : 0x00.0
@@ -749,13 +749,13 @@ e : 0 : 0x00.0
 a : 0 : 0x00.0
 b : 1 : 0x01.0
 c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_ulong
 a : 0 : 0x00.0
 b : 1 : 0x01.0
-c : 31 : 0x1f.0
-d : 31 : 0x1f.0
+c : 0 : 0x00.0
+d : 0 : 0x00.0
 e : 0 : 0x00.0
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_float
 a : 0 : 0x00.0
@@ -792,8 +792,8 @@ b : -1 : 0xf
 c : -1 : 0xf
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_float_ulong
 a : 0 : 0x0
-b : 1.84467440737096e+19 : 0x0ffffffffffffffff
-c : 1.84467440737096e+19 : 0x0ffffffffffffffff
+b : 1.84467440737096e+19 : 0x1e+16
+c : 1.84467440737096e+19 : 0x1e+16
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_float_float
 a : 0 : 0x0
 b : -1 : 0xf
@@ -825,8 +825,8 @@ b : 4294967295 : 0x0ffffffff
 c : 4294967295 : 0x0ffffffff
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_ulong
 a : 0 : 0x000000000
-b : 4294967295 : 0x0ffffffff
-c : 4294967295 : 0x0ffffffff
+b : 0 : 0x000000000
+c : 0 : 0x000000000
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_float
 a : 0 : 0x000000000
 b : 4294967295 : 0x0ffffffff
@@ -858,8 +858,8 @@ b : -1 : 0xffffffff
 c : -1 : 0xffffffff
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_fix_ulong
 a : 0 : 0x00000000
-b : -1 : 0xffffffff
-c : -1 : 0xffffffff
+b : 0 : 0x00000000
+c : 0 : 0x00000000
 --assign-Inf-Inf-Inf-Inf-Inf- test_fx_fix_float
 a : 0 : 0x00000000
 b : -1 : 0xffffffff
@@ -982,13 +982,13 @@ a[3] : 9 : 0x09
 b[3] : 6 : 0x6
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_float_ulong
 a[0] : 0 : 0x0
-b[0] : 1.84467440737096e+19 : 0x0ffffffffffffffff
+b[0] : 1.84467440737096e+19 : 0x1e+16
 a[1] : 1 : 0x1
-b[1] : 1 : 0x1
+b[1] : 0 : 0x0
 a[2] : 4 : 0x4
-b[2] : 1.84467440737096e+19 : 0x0fffffffffffffffe
+b[2] : 0 : 0x0
 a[3] : 9 : 0x09
-b[3] : 6 : 0x6
+b[3] : 0 : 0x0
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_float_float
 a[0] : 0 : 0x0
 b[0] : -1.98765432834625 : 0xe.032916
@@ -1055,13 +1055,13 @@ a[3] : 9 : 0x000000009
 b[3] : 6 : 0x000000006
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_ulong
 a[0] : 0 : 0x000000000
-b[0] : 4294967295 : 0x0ffffffff
+b[0] : 0 : 0x000000000
 a[1] : 1 : 0x000000001
-b[1] : 1 : 0x000000001
+b[1] : 0 : 0x000000000
 a[2] : 4 : 0x000000004
-b[2] : 4294967294 : 0x0fffffffe
+b[2] : 0 : 0x000000000
 a[3] : 9 : 0x000000009
-b[3] : 6 : 0x000000006
+b[3] : 0 : 0x000000000
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_ufix_float
 a[0] : 0 : 0x000000000
 b[0] : 4294967294 : 0x0fffffffe
@@ -1128,13 +1128,13 @@ a[3] : 9 : 0x00000009
 b[3] : 6 : 0x00000006
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_fix_ulong
 a[0] : 0 : 0x00000000
-b[0] : -1 : 0xffffffff
+b[0] : 0 : 0x00000000
 a[1] : 1 : 0x00000001
-b[1] : 1 : 0x00000001
+b[1] : 0 : 0x00000000
 a[2] : 4 : 0x00000004
-b[2] : -2 : 0xfffffffe
+b[2] : 0 : 0x00000000
 a[3] : 9 : 0x00000009
-b[3] : 6 : 0x00000006
+b[3] : 0 : 0x00000000
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_fix_float
 a[0] : 0 : 0x00000000
 b[0] : -2 : 0xfffffffe
@@ -1203,11 +1203,11 @@ b[3] : 6 : 0x06.0
 a[0] : 0 : 0x00.0
 b[0] : 1 : 0x01.0
 a[1] : 1 : 0x01.0
-b[1] : -1 : 0xff.0
+b[1] : 0 : 0x00.0
 a[2] : 4 : 0x04.0
-b[2] : 2 : 0x02.0
+b[2] : 0 : 0x00.0
 a[3] : 9 : 0x09.0
-b[3] : -6 : 0xfa.0
+b[3] : 0 : 0x00.0
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_fixed_float
 a[0] : 0 : 0x00.0
 b[0] : -2 : 0xfe.0
@@ -1276,11 +1276,11 @@ b[3] : 6 : 0x06.0
 a[0] : 0 : 0x00.0
 b[0] : 1 : 0x01.0
 a[1] : 1 : 0x01.0
-b[1] : 31 : 0x1f.0
+b[1] : 0 : 0x00.0
 a[2] : 4 : 0x04.0
-b[2] : 2 : 0x02.0
+b[2] : 0 : 0x00.0
 a[3] : 9 : 0x09.0
-b[3] : 26 : 0x1a.0
+b[3] : 0 : 0x00.0
 --array-Inf-Inf-Inf-Inf-Inf- test_fx_ufixed_float
 a[0] : 0 : 0x00.0
 b[0] : 30 : 0x1e.0
