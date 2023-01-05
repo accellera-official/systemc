@@ -249,8 +249,8 @@ void traffic_generator::check_complete (void)
       unsigned int    read_data       = *reinterpret_cast<unsigned int*>(data_buffer_ptr);
     
       //-----------------------------------------------------------------------------
-      // The address for the “gp” is used as expected data.  The address filed of 
-      //  the “gp” is a mutable field and is changed by the SimpleBus interconnect. 
+      // The address for the gp is used as expected data.  The address filed of 
+      //  the gp is a mutable field and is changed by the SimpleBus interconnect. 
       //  The list significant 28 bits are not modified and are use for comparison.    
 
       const unsigned int data_mask ( 0x0FFFFFFF );

@@ -47,7 +47,7 @@
 ///  @details
 ///    This is the SystemC entry point for the example system.  The argc and argv 
 ///    parameters are not used.  Simulation runtime is not specified when 
-///    “sc_start()” is called, the example’s traffic generator will run to 
+///    â€œsc_start()â€œ is called, the exampleâ€™s traffic generator will run to 
 ///    completion, ending the simulation. 
 ///
 //=====================================================================
