@@ -157,6 +157,8 @@
 #                               to find the SystemC libraries under
 #                               lib-<target-arch>. (default: OFF)
 #
+# ENABLE_EXAMPLES               Build examples and tests. (default: OFF)
+#
 # Other configuration variables will be proposed by CMake depending on the OS
 # and detected processor, compiler, and libraries. For more information, please
 # refer to the CMake documentation or <http://www.cmake.org/>.
@@ -292,6 +294,7 @@ option (ENABLE_LEGACY_MEM_MGMT
         OFF)
 
 option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std 1666" OFF)
+option (ENABLE_EXAMPLES "Build examples and tests." OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
@@ -635,6 +638,7 @@ message (STATUS "SystemCTLM_VERSION = ${SystemCTLM_VERSION}")
 message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR}")
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
+message (STATUS "ENABLE_EXAMPLES = ${ENABLE_EXAMPLES}")
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
@@ -676,7 +680,9 @@ message (STATUS "===============================================================
 
 add_subdirectory (docs)
 add_subdirectory (src)
-add_subdirectory (examples)
+if (${ENABLE_EXAMPLES})
+  add_subdirectory (examples)
+endif()
 
 
 ###############################################################################
