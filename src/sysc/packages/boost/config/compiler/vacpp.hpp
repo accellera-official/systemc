@@ -1,7 +1,7 @@
 //  (C) Copyright John Maddock 2001 - 2003. 
 //  (C) Copyright Toon Knapen 2001 - 2003. 
 //  (C) Copyright Lie-Quan Lee 2001. 
-//  (C) Copyright Markus Schöpflin 2002 - 2003. 
+//  (C) Copyright Markus SchÃ¶pflin 2002 - 2003. 
 //  (C) Copyright Beman Dawes 2002 - 2003. 
 //  Use, modification and distribution are subject to the 
 //  Boost Software License, Version 1.0. (See accompanying file 
