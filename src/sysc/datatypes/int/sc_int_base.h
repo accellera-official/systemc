@@ -571,7 +571,15 @@ class SC_API sc_int_base : public sc_value_base
 #ifdef DEBUG_SYSTEMC
 	    check_value();
 #endif
-	    m_val = ( m_val << m_ulen >> m_ulen );
+	    if (m_len < 64) {
+	        if (m_val & (uint64)1 << (m_len - 1)) {
+	            // Sign bit set, fill with ones.
+	            m_val |= (((uint64)1 << m_ulen) - 1) << m_len;
+	        } else {
+	            // Sign bit unset, fill with zeroes.
+	            m_val &= ((uint64)1 << m_len) - 1;
+	        }
+	    }
 	}
 
 public:
