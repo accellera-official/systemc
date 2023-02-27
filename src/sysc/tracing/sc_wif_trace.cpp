@@ -1571,7 +1571,7 @@ void wif_trace_file::do_initialize()
     std::fprintf(fp, "init ;\n\n");
 
     //timescale:
-    std::sprintf(buf,"%d", static_cast<int>(log10(static_cast<double>(trace_unit_fs))));
+    std::snprintf(buf, 2000, "%d", static_cast<int>(log10(static_cast<double>(trace_unit_fs))));
     std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
     std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n"
@@ -1864,7 +1864,7 @@ std::string
 wif_trace_file::obtain_name()
 {
     char buf[32];
-    std::sprintf( buf, "O%d", wif_name_index ++ );
+    std::snprintf( buf, 32, "O%d", wif_name_index ++ );
     return buf;
 }
 

@@ -170,7 +170,7 @@ void parse_binary_bits(
                   default:
                     {
                         char msg[BUFSIZ];
-                        std::sprintf( msg, "character string '%s' is not valid", 
+                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
                         src_p );
                         SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
                     }
@@ -202,7 +202,7 @@ void parse_binary_bits(
               default:
                 {
                     char msg[BUFSIZ];
-                    std::sprintf( msg, "character string '%s' is not valid", 
+                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
                     src_p );
                     SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
                 }
@@ -325,7 +325,7 @@ void parse_hex_bits(
                   default:
                     {
                         char msg[BUFSIZ];
-                        std::sprintf( msg, "character string '%s' is not valid", 
+                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
                         src_p );
                         SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
                     }
@@ -377,7 +377,7 @@ void parse_hex_bits(
               default:
                 {
                     char msg[BUFSIZ];
-                    std::sprintf( msg, "character string '%s' is not valid", 
+                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
                     src_p );
                     SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
                 }

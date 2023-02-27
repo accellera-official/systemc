@@ -1189,8 +1189,8 @@ protected:
   {
       int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
       shift = shift > 0 ? shift : 0;
-      sc_digit high_digit = digit[ndigits-1];
-      digit[ndigits-1] = ( (std::make_signed<sc_digit>::type) (high_digit << shift) ) >> shift;
+      unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[ndigits-1] << shift);
+      digit[ndigits-1] = tmp >> shift;
   }
 
 
@@ -1369,7 +1369,7 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::sprintf( msg,
+        std::snprintf(msg, BUFSIZ,
 		    "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -1631,7 +1631,7 @@ sc_signed::sc_signed( int nb ) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::sprintf( msg, "%s::%s( int nb ) : nb = %d is not valid",
+        std::snprintf(msg, BUFSIZ, "%s::%s( int nb ) : nb = %d is not valid",
                  "sc_signed", "sc_signed", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }

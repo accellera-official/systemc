@@ -596,7 +596,7 @@ sc_unsigned::check_if_outside(int bit_num) const
 #ifdef DEBUG_SYSTEMC
       if( bit_num < 0 || bit_num >= nbits ) {
 	  char msg[BUFSIZ];
-	  std::sprintf( msg, "%s::check_if_outside( int bit_num ) : "
+	  std::snprintf(msg, BUFSIZ, "%s::check_if_outside( int bit_num ) : "
 		   "bit_num = %d is out of bounds",
 		   "sc_unsigned", bit_num );
 	  SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
