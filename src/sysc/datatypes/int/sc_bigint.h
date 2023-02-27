@@ -635,7 +635,8 @@ public:
     inline void adjust_hod()
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
-        digit[HOD] = ( (std::make_signed<sc_digit>::type) (digit[HOD] << shift) ) >> shift ;
+	unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[HOD] << shift);
+        digit[HOD] = tmp >> shift ;
     }
 
 public:
