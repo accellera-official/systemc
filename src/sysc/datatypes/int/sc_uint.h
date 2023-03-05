@@ -92,6 +92,13 @@ class sc_uint
 {
 public:
 
+    // assignment with sign extensions
+    
+    void assign( uint_type value )
+    {   
+	m_val = value & ( ~UINT_ZERO >> (SC_INTWIDTH-W) );
+    }
+
     // constructors
 
     sc_uint()
@@ -99,8 +106,8 @@ public:
 	{}
 
     sc_uint( uint_type v )
-	: sc_uint_base( v, W )
-	{}
+	: sc_uint_base( W )
+	{ assign(v); }
 
     sc_uint( const sc_uint<W>& a )
 	: sc_uint_base( a )
@@ -108,34 +115,34 @@ public:
 
     sc_uint( const sc_uint_base& a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( const sc_uint_subref_r& a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     template< class T >
     sc_uint( const sc_generic_base<T>& a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a->to_uint64() ); }
 
     template<int WO>
     sc_uint( const sc_bigint<WO>& a )
         : sc_uint_base( W )
-        { sc_uint_base::operator = ( a.to_uint64() ); }
+        { assign( a.to_uint64() ); }
 
     template<int WO>
     sc_uint( const sc_biguint<WO>& a )
         : sc_uint_base( W )
-        { sc_uint_base::operator = ( a.to_uint64() ); }
+        { assign( a.to_uint64() ); }
 
     sc_uint( const sc_signed& a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a.to_uint64() ); }
 
     sc_uint( const sc_unsigned& a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a.to_uint64() ); }
 
 #ifdef SC_INCLUDE_FX
 
@@ -171,23 +178,23 @@ public:
 
     sc_uint( unsigned long a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( long a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( unsigned int a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( int a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( int64 a )
 	: sc_uint_base( W )
-	{ sc_uint_base::operator = ( a ); }
+	{ assign( a ); }
 
     sc_uint( double a )
 	: sc_uint_base( W )
@@ -200,20 +207,20 @@ public:
 	{ sc_uint_base::operator = ( v ); return *this; }
 
     sc_uint<W>& operator = ( const sc_uint_base& a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( const sc_uint_subref_r& a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( const sc_uint<W>& a )
 	{ m_val = a.m_val; return *this; }
 
     template<class T>
     sc_uint<W>& operator = ( const sc_generic_base<T>& a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a->to_uint64() ); return *this; }
 
     sc_uint<W>& operator = ( const sc_signed& a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a.to_uint64() ); return *this; }
 
     template<int W1>
     inline
@@ -224,7 +231,7 @@ public:
     const sc_uint<W>& operator = ( const sc_biguint<W1>& a );
 
     sc_uint<W>& operator = ( const sc_unsigned& a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a.to_uint64() ); return *this; }
 
     sc_uint<W>& operator = ( const sc_signed_subref_r& a )
 	{ sc_uint_base::operator = ( a ); return *this; }
@@ -258,19 +265,19 @@ public:
 	{ sc_uint_base::operator = ( a ); return *this; }
 
     sc_uint<W>& operator = ( unsigned long a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( long a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( unsigned int a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( int a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( int64 a )
-	{ sc_uint_base::operator = ( a ); return *this; }
+	{ assign( a ); return *this; }
 
     sc_uint<W>& operator = ( double a )
 	{ sc_uint_base::operator = ( a ); return *this; }
