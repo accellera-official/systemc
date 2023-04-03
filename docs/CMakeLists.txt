@@ -42,7 +42,6 @@
 set (DOC_FILES
 	       DEVELOPMENT.md
 	       sysc/README
-	       #tlm/release/README.txt
 	       tlm/tlm_README)
 
 foreach (DOC_FILE ${DOC_FILES})
