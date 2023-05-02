@@ -36,10 +36,21 @@
 
 #include <iostream>
 
+#if SC_CPLUSPLUS >= 201703L
+#include <string_view>
+#endif
 
 namespace sc_core {
 
+// forward declarations
+
 class sc_simcontext;
+class sc_module;
+class sc_event_or_list;
+class sc_event_and_list;
+class sc_prim_channel;
+class sc_event;
+class SC_API sc_time_tuple;
 
 // friend operator declarations
 
@@ -50,24 +61,28 @@ class sc_simcontext;
     const sc_time operator / ( const sc_time&, double );
     double        operator / ( const sc_time&, const sc_time& );
 
+// ----------------------------------------------------------------------------
+// Internal time representation
+//
+// Implementation defined
+// LRM: Time shall be represented internally as an unsigned
+// integer of at least 64 bits declared as sc_time::value_type.
+// ----------------------------------------------------------------------------
+
+#define SC_TIME_DT sc_dt::uint64 
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
 //
 //  Enumeration of time units.
+//  NOTE: From IEEE Std 1666-2023 onwards, enumeration constant values are 
+//        implementation-defined. The constant values for SC_SEC, SC_MS, 
+//        SC_US, SC_NS, SC_PS and SC_FS follow IEEE Std 1666-2011 to enable 
+//        backwards compatibility.
 // ----------------------------------------------------------------------------
 
-enum sc_time_unit
-{
-    SC_FS = 0,
-    SC_PS,
-    SC_NS,
-    SC_US,
-    SC_MS,
-    SC_SEC
-};
-
-class SC_API sc_time_tuple;
+enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2, 
+                    SC_PS = 1, SC_FS = 0, SC_AS = -1, SC_ZS = -2, SC_YS = -3 };
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time
@@ -77,26 +92,46 @@ class SC_API sc_time_tuple;
 
 class SC_API sc_time
 {
+    friend class sc_module;
+    friend class sc_prim_channel;
+    friend class sc_event;
+    friend class sc_clock;
+
+    friend void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+    friend void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend void wait( const sc_time&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+
 public:
 
-    typedef sc_dt::uint64 value_type;
+    typedef SC_TIME_DT value_type;
 
     // constructors
 
     sc_time();
     sc_time( const sc_time& );
-
     sc_time( double, sc_time_unit );
-    sc_time( double, sc_time_unit, sc_simcontext* );
 
-    // convert time unit from string
-    // "fs"/"SC_FS"->SC_FS, "ps"/"SC_PS"->SC_PS, "ns"/"SC_NS"->SC_NS, ...
-    sc_time( double, const char* unit );
-    sc_time( double, const char* unit, sc_simcontext* );
-
-    static sc_time from_value( value_type );
-    static sc_time from_seconds( double );
-    static sc_time from_string( const char * str );
+    // convert time object from string
+    // For C++ versions prior to C++17, offer some (non-standard) backwards compatibility
+    // using std::string instead of std::string_view
+#if SC_CPLUSPLUS >= 201703L
+    explicit sc_time( std::string_view strv );
+    static sc_time from_string( std::string_view strv );
+#else
+    explicit sc_time( const std::string& str );
+    static sc_time from_string( const std::string& str );
+#endif
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
@@ -106,15 +141,16 @@ public:
 
     sc_time& operator = ( const sc_time& );
 
-
     // conversion functions
 
-    value_type value() const;      // relative to the time resolution
+    value_type value() const;  // relative to the time resolution
     double to_double() const;  // relative to the time resolution
-    double to_default_time_units() const;
     double to_seconds() const;
+    double to_default_time_units() const;
     const std::string to_string() const;
 
+    static sc_time from_value( value_type );
+    static sc_time from_seconds( double );
 
     // relational operators
 
@@ -125,32 +161,30 @@ public:
     bool operator >  ( const sc_time& ) const;
     bool operator >= ( const sc_time& ) const;
 
-
     // arithmetic operators
 
     sc_time& operator += ( const sc_time& );
     sc_time& operator -= ( const sc_time& );
-
-    friend const sc_time operator + ( const sc_time&, const sc_time& );
-    friend const sc_time operator - ( const sc_time&, const sc_time& );
-
     sc_time& operator *= ( double );
     sc_time& operator /= ( double );
     sc_time& operator %= ( const sc_time& );
 
+    friend const sc_time operator + ( const sc_time&, const sc_time& );
+    friend const sc_time operator - ( const sc_time&, const sc_time& );
     friend const sc_time operator * ( const sc_time&, double );
     friend const sc_time operator * ( double, const sc_time& );
     friend const sc_time operator / ( const sc_time&, double );
     friend double        operator / ( const sc_time&, const sc_time& );
     friend const sc_time operator % ( const sc_time&, const sc_time& );
 
-
     // print function
 
     void print( ::std::ostream& os = std::cout ) const;
 
-private:
+private: // implementation-defined
+    sc_time( double, sc_time_unit, sc_simcontext* );
 
+private:
     value_type m_value;
 };
 
@@ -191,10 +225,9 @@ private:
     unsigned     m_offset;
 };
 
-// print operator
+// stream operator for printing
 
 inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
-
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -427,7 +460,7 @@ operator % ( const sc_time& t1, const sc_time& t2 )
     return tmp %= t2;
 }
 
-// print operator
+// operator<< for printing
 
 inline
 ::std::ostream&
