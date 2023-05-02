@@ -43,9 +43,6 @@
     <ClCompile Include="..\..\src\sysc\utils\sc_mempool.cpp">
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sysc\utils\sc_optional.cpp">
-      <Filter>Source Files\sc_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\sysc\kernel\sc_method_process.cpp">
       <Filter>Source Files\sc_core</Filter>
     </ClCompile>
@@ -397,9 +394,6 @@
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\utils\sc_meta.h">
-      <Filter>Header Files\sc_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\utils\sc_optional.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sysc\kernel\sc_macros.h">
