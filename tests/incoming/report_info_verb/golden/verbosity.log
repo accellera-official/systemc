@@ -1,0 +1,97 @@
+SystemC Simulation
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is LOW
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level LOW
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is MEDIUM
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level LOW
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level MEDIUM
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is HIGH
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level LOW
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level MEDIUM
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level HIGH
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is FULL
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level LOW
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level MEDIUM
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level HIGH
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level FULL
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 
+--------------------------------------------------------------------------------
+Reporting level is DEBUG
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level NONE
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level LOW
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level MEDIUM
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level HIGH
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level FULL
+
+Info: /Accellera/SystemC/Verbosity-test: SC_REPORT_INFO_VERB message at level DEBUG
+
+Warning: /Accellera/SystemC/Verbosity-test: Verbosity doesn't affect warnings
+In file: <removed by verify.pl>
+
+Info: /Accellera/SystemC/Verbosity-test: 0 errors
+
+Info: /Accellera/SystemC/Verbosity-test: Test PASSED
