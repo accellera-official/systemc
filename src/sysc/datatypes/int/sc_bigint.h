@@ -434,10 +434,10 @@ to_uint64() const
     uint64 result;
 
     if ( W < 33 ) {
-        result = to_uint();
+        result = to_int();
     }
     else {
-        result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
+        result = to_int64(); // @@@@#### ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
     }
     return result;
 }
