@@ -36,6 +36,7 @@
 
 #include "sysc/kernel/sc_object.h"
 #include "sysc/utils/sc_meta.h"
+#include "sysc/kernel/sc_stage_callback_if.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -82,6 +83,9 @@ class sc_vector_element;  // opaque pointer
 
 class SC_API sc_vector_base
   : public sc_object
+#if SC_HAS_STAGE_CALLBACKS_
+  , public sc_stage_callback_if
+#endif
 {
 
   template<typename,typename> friend class sc_vector_assembly;
@@ -159,7 +163,7 @@ protected:
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
   void init_lock_cb();
-  void simulation_phase_callback(); // override callback
+  void stage_callback(const sc_stage & stage); // implement callback
 
 public: 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;

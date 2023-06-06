@@ -125,7 +125,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp
                      sysc/kernel/sc_object_manager.cpp
-                     sysc/kernel/sc_phase_callback_registry.cpp
+                     sysc/kernel/sc_stage_callback_registry.cpp
                      sysc/kernel/sc_process.cpp
                      sysc/kernel/sc_reset.cpp
                      sysc/kernel/sc_sensitive.cpp
@@ -254,7 +254,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_object.h
                      sysc/kernel/sc_object_int.h
                      sysc/kernel/sc_object_manager.h
-                     sysc/kernel/sc_phase_callback_registry.h
+                     sysc/kernel/sc_stage_callback_registry.h
                      sysc/kernel/sc_process.h
                      sysc/kernel/sc_process_handle.h
                      sysc/kernel/sc_reset.h
@@ -475,9 +475,9 @@ target_compile_definitions (
   $<$<BOOL:${ENABLE_EARLY_MAXTIME_CREATION}>:SC_ENABLE_EARLY_MAXTIME_CREATION>
   $<$<BOOL:${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}>:
     SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS>
-  $<$<BOOL:${ENABLE_PHASE_CALLBACKS}>:SC_ENABLE_SIMULATION_PHASE_CALLBACKS>
-  $<$<BOOL:${ENABLE_PHASE_CALLBACKS_TRACING}>:
-    SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING>
+  $<$<BOOL:${ENABLE_STAGE_CALLBACKS}>:SC_ENABLE_STAGE_CALLBACKS>
+  $<$<BOOL:${ENABLE_STAGE_CALLBACKS_TRACING}>:
+    SC_ENABLE_STAGE_CALLBACKS_TRACING>
   $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
   $<$<BOOL:${HAVE_POSIX_MEMALIGN}>:SC_HAVE_POSIX_MEMALIGN>
   $<$<BOOL:${ENABLE_LEGACY_MEM_MGMT}>:SC_LEGACY_MEM_MGMT>

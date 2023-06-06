@@ -43,11 +43,11 @@
 #include <cstdio>
 
 // use callback-based tracing implementation
-#if defined( SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING )
-#  define SC_TRACING_PHASE_CALLBACKS_ 1
-#  include "sysc/kernel/sc_object.h"
+#if defined( SC_ENABLE_STAGE_CALLBACKS_TRACING )
+#  define SC_TRACING_STAGE_CALLBACKS_ 1
+#  include "sysc/kernel/sc_stage_callback_if.h"
 #else
-#  define SC_TRACING_PHASE_CALLBACKS_ 0
+#  define SC_TRACING_STAGE_CALLBACKS_ 0
 #endif
 
 #include "sysc/tracing/sc_trace.h"
@@ -63,8 +63,8 @@ namespace sc_core {
 // shared implementation of trace files
 class SC_API sc_trace_file_base
   : public sc_trace_file
-#if SC_TRACING_PHASE_CALLBACKS_
-  , private sc_object // to be used as callback target
+#if SC_TRACING_STAGE_CALLBACKS_
+  , private sc_stage_callback_if // to be used as callback target
 #endif
 {
 public:
@@ -114,10 +114,10 @@ protected:
 
     static std::string fs_unit_to_str(sc_trace_file_base::unit_type tu);
 
-#if SC_TRACING_PHASE_CALLBACKS_
+#if SC_TRACING_STAGE_CALLBACKS_
 private:
-    virtual void simulation_phase_callback();
-#endif // SC_TRACING_PHASE_CALLBACKS_
+    virtual void stage_callback(const sc_stage & stage);
+#endif // SC_TRACING_STAGE_CALLBACKS_
 
 protected:
     FILE* fp;                          // pointer to the trace file

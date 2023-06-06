@@ -41,7 +41,7 @@
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_name_gen.h"
 #include "sysc/kernel/sc_object_manager.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_event.h"
@@ -274,9 +274,6 @@ sc_object::sc_object(const char* nm)
 
 sc_object::~sc_object()
 {
-#if SC_HAS_PHASE_CALLBACKS_
-    unregister_simulation_phase_callback( SC_STATUS_ANY );
-#endif
     detach();
     delete m_attr_cltn_p;
 }
@@ -409,34 +406,6 @@ sc_object::get_hierarchy_scope()
 {
     sc_object_host* parent = static_cast<sc_object_host*>( get_parent_object() );
     return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), parent ).move();
-}
-
-// ----------------------------------------------------------------------------
-// simulation phase callbacks
-
-
-sc_object::phase_cb_mask
-sc_object::register_simulation_phase_callback( phase_cb_mask mask )
-{
-    mask = simcontext()->m_phase_cb_registry
-                       ->register_callback(*this, mask);
-    return mask;
-}
-
-
-sc_object::phase_cb_mask
-sc_object::unregister_simulation_phase_callback( phase_cb_mask mask )
-{
-    mask = simcontext()->m_phase_cb_registry
-                       ->unregister_callback(*this, mask);
-    return mask;
-}
-
-
-void
-sc_object::simulation_phase_callback()
-{
-    SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_NOT_IMPLEMENTED_, name() );
 }
 
 // ----------------------------------------------------------------------------

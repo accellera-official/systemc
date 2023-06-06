@@ -33,7 +33,6 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 #include "sysc/kernel/sc_object_manager.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
 
 #include <sstream>
 
@@ -121,13 +120,13 @@ sc_vector_base::check_init( size_type n ) const
 void
 sc_vector_base::init_lock_cb()
 {
-#if SC_HAS_PHASE_CALLBACKS_
-    register_simulation_phase_callback(SC_START_OF_SIMULATION);
+#if SC_HAS_STAGE_CALLBACKS_
+    sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION);
 #endif
 }
 
 void
-sc_vector_base::simulation_phase_callback()
+sc_vector_base::stage_callback(const sc_stage & stage)
 {
     if (simcontext()->elaboration_done())
         lock();

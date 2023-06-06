@@ -44,7 +44,7 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_simcontext_int.h"
 
-#if SC_TRACING_PHASE_CALLBACKS_
+#if SC_TRACING_STAGE_CALLBACKS_
 #  include "sysc/kernel/sc_object_int.h"
 #endif
 
@@ -63,9 +63,6 @@ bool sc_trace_file_base::tracing_initialized_ = false;
 
 sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension )
   : sc_trace_file()
-#if SC_TRACING_PHASE_CALLBACKS_
-  , sc_object( sc_gen_unique_name("$$$$kernel_tracefile$$$$") )
-#endif
   , fp(0)
   , trace_unit_fs()
   , kernel_unit_fs()
@@ -83,11 +80,8 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
         ss.str().swap( filename_ );
     }
 
-#if SC_TRACING_PHASE_CALLBACKS_ == 1
-    // remove from hierarchy
-    sc_object::detach();
-    // register regular (non-delta) callbacks
-    sc_object::register_simulation_phase_callback( SC_BEFORE_TIMESTEP );
+#if SC_TRACING_STAGE_CALLBACKS_ == 1
+    sc_register_stage_callback( *this, SC_PRE_TIMESTEP );
 #else // explicitly register with simcontext
     sc_get_curr_simcontext()->add_trace_file( this );
 #endif
@@ -101,14 +95,14 @@ sc_trace_file_base::~sc_trace_file_base()
     if( fp )
         fclose(fp);
 
-#if SC_TRACING_PHASE_CALLBACKS_ == 0
+#if SC_TRACING_STAGE_CALLBACKS_ == 0
     // unregister from simcontext
     sc_get_curr_simcontext()->remove_trace_file( this );
 #endif
 }
 
 /*****************************************************************************/
-// simulation phase callback based trigger
+// stage-callback-based trigger
 //
 //  The tracing updates are triggered
 //    (- at the end of the initialization phase [disabled for now])
@@ -116,14 +110,14 @@ sc_trace_file_base::~sc_trace_file_base()
 //    - before returning to sc_start (via sc_pause() or sc_stop())
 //    - after an update phase (if delta cycles need to be traced)
 //
-#if SC_TRACING_PHASE_CALLBACKS_
+#if SC_TRACING_STAGE_CALLBACKS_
 void
-sc_trace_file_base::simulation_phase_callback()
+sc_trace_file_base::stage_callback(const sc_stage & stage)
 {
     // delta cycle is traced at the end of an update phase
-    cycle( simcontext()->get_status() == SC_END_OF_UPDATE );
+    cycle( sc_get_curr_simcontext()->get_stage() == SC_POST_UPDATE );
 }
-#endif // SC_TRACING_PHASE_CALLBACKS_
+#endif // SC_TRACING_STAGE_CALLBACKS_
 
 /*****************************************************************************/
 
@@ -189,11 +183,11 @@ void
 sc_trace_file_base::delta_cycles( bool flag )
 {
     trace_delta_cycles_ = flag;
-#if SC_TRACING_PHASE_CALLBACKS_
+#if SC_TRACING_STAGE_CALLBACKS_
     if( trace_delta_cycles_ ) {
-        sc_object::register_simulation_phase_callback( SC_END_OF_UPDATE );
+        sc_register_stage_callback( *this, SC_POST_UPDATE );
     } else {
-        sc_object::unregister_simulation_phase_callback( SC_END_OF_UPDATE );
+        sc_unregister_stage_callback( *this, SC_POST_UPDATE );
     }
 #endif
 }

@@ -31,7 +31,7 @@
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
+#include "sysc/kernel/sc_stage_callback_registry.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -107,15 +107,14 @@ sc_event::notify( const sc_time& t )
         return;
     }
     if( t == SC_ZERO_TIME ) {
-#       if SC_HAS_PHASE_CALLBACKS_
-            if( SC_UNLIKELY_( m_simc->get_status()
-                              & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+#       if SC_HAS_STAGE_CALLBACKS_
+            if( SC_UNLIKELY_( m_simc->get_stage() ) )
             {
                 std::stringstream msg;
-                msg << m_simc->get_status()
+                msg << "sc_stage = " << m_simc->get_stage()
                     << ":\n\t delta notification of `"
                     << name() << "' ignored";
-                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+                SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
                                  , msg.str().c_str() );
                 return;
             }
@@ -131,15 +130,14 @@ sc_event::notify( const sc_time& t )
         m_notify_type = DELTA;
         return;
     }
-#   if SC_HAS_PHASE_CALLBACKS_
-        if( SC_UNLIKELY_( m_simc->get_status()
-                        & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
+#   if SC_HAS_STAGE_CALLBACKS_
+        if( SC_UNLIKELY_( m_simc->get_stage() ) )
         {
             std::stringstream msg;
-            msg << m_simc->get_status()
+            msg << "sc_stage = " << m_simc->get_stage()
                 << ":\n\t timed notification of `"
                 << name() << "' ignored";
-            SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
+            SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
                              , msg.str().c_str() );
             return;
         }

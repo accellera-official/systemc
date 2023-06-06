@@ -724,20 +724,20 @@ settings to all build configurations.
    Note: _Only effective during library build._
 
 
- * `SC_ENABLE_SIMULATION_PHASE_CALLBACKS`  
-   `SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING`  
-   Enable a generic simulation phase callback mechanism (experimental)
+ * `SC_ENABLE_STAGE_CALLBACKS`  
+   `SC_ENABLE_STAGE_CALLBACKS_TRACING`  
+   Enable a generic stage callback mechanism
 
    This option is usually set by the `configure` option  
-     `--enable-phase-callbacks`, or  
-     `--enable-phase-callbacks=tracing`
+     `--enable-stage-callbacks`, or  
+     `--enable-stage-callbacks=tracing`
 
    See the `RELEASENOTES` for more information about this feature.
    The `*_TRACING` variant of this flag enables the `sc_trace`
-   implementation use these callbacks, instead of hard-coded updates
+   implementation to use these callbacks, instead of hard-coded updates
    from the main simulator loop.
 
-   Note: _Setting tracing flag includes the generic phase callback
+   Note: _Setting tracing flag includes the generic stage callback
      infrastructure automatically._  
 
    Note: _Only effective during library build._

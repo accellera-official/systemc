@@ -32,7 +32,6 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_simcontext_int.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
 
 namespace sc_core {
 
@@ -86,14 +85,6 @@ sc_hierarchy_scope::sc_hierarchy_scope( kernel_tag, sc_object_host* objh )
   }
 
   m_simc->hierarchy_push(m_scoped_top);
-}
-
-// -----------------------------------------------------------------------
-
-inline void
-sc_object::do_simulation_phase_callback()
-{
-    simulation_phase_callback();
 }
 
 } // namespace sc_core
