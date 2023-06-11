@@ -198,10 +198,10 @@ protected:
 
 private:
 
-#if SC_TRACING_PHASE_CALLBACKS_
+#if SC_TRACING_STAGE_CALLBACKS_
     // avoid hidden overload warnings
     virtual void trace( sc_trace_file* ) const;
-#endif // SC_TRACING_PHASE_CALLBACKS_
+#endif // SC_TRACING_STAGE_CALLBACKS_
 
     // Initialize the tracing mechanism
     virtual void do_initialize();

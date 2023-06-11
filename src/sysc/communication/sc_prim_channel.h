@@ -87,8 +87,8 @@ protected:
     // indicate that this channel is async and could call async_request_update
     // therefore, the kernel should arrange to suspend rather than exit while
     // this channel is attached.
-    bool async_attach_suspending();
-    bool async_detach_suspending();
+    void async_attach_suspending();
+    void async_detach_suspending();
 
 protected:
 
@@ -259,8 +259,8 @@ public:
     //  - presence of asynchronous channels leads async_suspend() to
     //    block until any external async updates have been received
     //    (instead of exiting the simulation upon starvation)
-    bool async_attach_suspending(sc_prim_channel&);
-    bool async_detach_suspending(sc_prim_channel&);
+    void async_attach_suspending(sc_prim_channel&);
+    void async_detach_suspending(sc_prim_channel&);
 
 private:
 
@@ -347,17 +347,17 @@ sc_prim_channel::async_request_update()
 }
 
 inline
-bool
+void
 sc_prim_channel::async_attach_suspending()
 {
-    return m_registry->async_attach_suspending(*this);
+    m_registry->async_attach_suspending(*this);
 }
 
 inline
-bool
+void
 sc_prim_channel::async_detach_suspending()
 {
-    return m_registry->async_detach_suspending(*this);
+    m_registry->async_detach_suspending(*this);
 }
 
 

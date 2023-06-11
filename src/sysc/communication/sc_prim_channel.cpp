@@ -197,7 +197,7 @@ public:
 	m_pop_queue.clear();
     }
 
-    bool attach_suspending( sc_prim_channel& p )
+    void attach_suspending( sc_prim_channel& p )
     {
         sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
@@ -205,13 +205,11 @@ public:
         if ( it == m_suspending_channels.end() ) {
             m_suspending_channels.push_back(&p);
             m_has_suspending_channels = true;
-            return true;
         }
-        return false;
         // return releases the mutex
     }
 
-    bool detach_suspending( sc_prim_channel& p )
+    void detach_suspending( sc_prim_channel& p )
     {
         sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
@@ -220,9 +218,7 @@ public:
             *it = m_suspending_channels.back();
             m_suspending_channels.pop_back();
             m_has_suspending_channels = (m_suspending_channels.size() > 0);
-            return true;
         }
-        return false;
         // return releases the mutex
     }
 
@@ -329,25 +325,23 @@ sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
 #endif
 }
 
-bool
+void
 sc_prim_channel_registry::async_attach_suspending(sc_prim_channel& p)
 {
 #ifndef SC_DISABLE_ASYNC_UPDATES
-    return m_async_update_list_p->attach_suspending( p );
+    m_async_update_list_p->attach_suspending( p );
 #else
     SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-    return false;
 #endif
 }
 
-bool
+void
 sc_prim_channel_registry::async_detach_suspending(sc_prim_channel& p)
 {
 #ifndef SC_DISABLE_ASYNC_UPDATES
-    return m_async_update_list_p->detach_suspending( p );
+    m_async_update_list_p->detach_suspending( p );
 #else
     SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-    return false;
 #endif
 }
 

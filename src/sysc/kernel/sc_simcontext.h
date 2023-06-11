@@ -34,6 +34,7 @@
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_status.h"
 #include "sysc/kernel/sc_time.h"
+#include "sysc/kernel/sc_stage_callback_if.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
 
@@ -62,7 +63,7 @@ class sc_name_gen;
 class sc_object;
 class sc_object_host;
 class sc_object_manager;
-class sc_phase_callback_registry;
+class sc_stage_callback_registry;
 class sc_process_handle;
 class sc_port_registry;
 class sc_prim_channel_registry;
@@ -140,10 +141,15 @@ SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
+SC_API void sc_register_stage_callback(sc_stage_callback_if & cb,
+                                       unsigned int mask);
+SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
+                                         unsigned int mask);
+
 class sc_invoke_method;
 
-SC_API void    sc_suspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
-SC_API void    sc_unsuspend_all( sc_simcontext* csc = sc_get_curr_simcontext() );
+SC_API void    sc_suspend_all();
+SC_API void    sc_unsuspend_all();
 SC_API void    sc_unsuspendable();
 SC_API void    sc_suspendable();
 
@@ -167,7 +173,7 @@ class SC_API sc_simcontext
     friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
-    friend class sc_phase_callback_registry;
+    friend class sc_stage_callback_registry;
     friend class sc_port_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
@@ -189,10 +195,15 @@ class SC_API sc_simcontext
     friend SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_current_time( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_future_time( const sc_simcontext* );
-    friend SC_API void sc_suspend_all(sc_simcontext*);
-    friend SC_API void sc_unsuspend_all(sc_simcontext*);
+    friend SC_API void sc_suspend_all();
+    friend SC_API void sc_unsuspend_all();
     friend SC_API void sc_unsuspendable();
     friend SC_API void sc_suspendable();
+
+    friend SC_API void sc_register_stage_callback(sc_stage_callback_if & cb,
+                                                  unsigned int mask);
+    friend SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
+                                                    unsigned int mask);
 
     enum sc_signal_write_check
     {
@@ -225,7 +236,10 @@ public:
     sc_object_manager* get_object_manager();
 
     inline sc_status get_status() const;
+
     sc_status get_thread_safe_status();
+
+    inline sc_stage get_stage() const;
 
     sc_object_host* active_object();
 
@@ -237,6 +251,7 @@ public:
     sc_port_registry* get_port_registry();
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
+    sc_stage_callback_registry* get_stage_cb_registry();
 
     std::string construct_hierarchical_name(const sc_object* parent,
                                             const std::string& name);
@@ -314,6 +329,9 @@ public:
     bool next_time( sc_time& t ) const; 
     bool pending_activity_at_current_time() const;
 
+    void pre_suspend() const;
+    void post_suspend() const;
+
 private:
     void hierarchy_push(sc_object_host*);
     sc_object_host* hierarchy_pop();
@@ -377,7 +395,7 @@ private:
     sc_port_registry*           m_port_registry;
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
-    sc_phase_callback_registry* m_phase_cb_registry;
+    sc_stage_callback_registry* m_stage_cb_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -421,6 +439,7 @@ private:
     bool                        m_end_of_simulation_called;
     sc_status                   m_simulation_status;
     sc_host_mutex               m_simulation_status_mutex;
+    sc_stage                    m_stage;
     bool                        m_start_of_simulation_called;
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
@@ -474,7 +493,6 @@ inline sc_status sc_get_status()
     return sc_get_curr_simcontext()->get_thread_safe_status();
 }
 
-
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 inline
@@ -501,7 +519,12 @@ inline sc_status sc_simcontext::get_status() const
 {
     return m_simulation_status != SC_RUNNING ? 
                   m_simulation_status :
-		  (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
+		  (m_in_simulator_control ? (m_suspend ? SC_SUSPENDED: SC_RUNNING) : SC_PAUSED);
+}
+
+inline sc_stage sc_simcontext::get_stage() const
+{
+    return m_stage;
 }
 
 inline
@@ -553,6 +576,12 @@ sc_simcontext::get_prim_channel_registry()
     return m_prim_channel_registry;
 }
 
+inline
+sc_stage_callback_registry*
+sc_simcontext::get_stage_cb_registry()
+{
+    return m_stage_cb_registry;
+}
 
 inline
 sc_curr_proc_handle
@@ -775,6 +804,14 @@ sc_dt::uint64 sc_delta_count_at_current_time()
 inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
+    static bool stop_assert_issued = false;
+    bool lrm_assert_condition_section_4_6_7_sc_is_running = ( ( sc_get_status() & (SC_RUNNING | SC_PAUSED | SC_SUSPENDED) ) != 0 );
+    if ( ( !stop_assert_issued ) &&
+         ( simc_p->m_ready_to_simulate != lrm_assert_condition_section_4_6_7_sc_is_running )
+       ) {
+        stop_assert_issued = true;  // This must be before the sc_assert!!!
+        sc_assert( simc_p->m_ready_to_simulate == lrm_assert_condition_section_4_6_7_sc_is_running );
+    }
     return simc_p->m_ready_to_simulate;
 }
 

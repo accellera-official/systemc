@@ -113,7 +113,6 @@ private:
     sc_object_host* m_scoped_top;
 }; // class sc_hierarchy_scope
 
-
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
 //
@@ -140,8 +139,6 @@ class SC_API sc_object
 #endif // SC_CPLUSPLUS >= 201103L
 
 public:
-    typedef unsigned phase_cb_mask;
-
     const char* name() const
         { return m_name.c_str(); }
 
@@ -194,16 +191,10 @@ protected:
     sc_object( const sc_object& );
     sc_object& operator=( const sc_object& );
 
-    phase_cb_mask register_simulation_phase_callback( phase_cb_mask );
-    phase_cb_mask unregister_simulation_phase_callback( phase_cb_mask );
-
     // restore SystemC hierarchy to current object's hierarchical scope
     SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
 
 private:
-            void do_simulation_phase_callback();
-    virtual void simulation_phase_callback();
-
     void detach();
     void sc_object_init(const char* nm);
 

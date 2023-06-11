@@ -19,44 +19,55 @@
 
 /*****************************************************************************
 
-  sc_status.h -- Definition of the simulation phases
+  sc_stage_callback_if.h -- Definition of the simulation phase callbacks interface
 
-  Original Author: Philipp A. Hartmann, OFFIS, 2013-02-15
+  Original Author: Jerome Cornet, STMicroelectronics, 2021-06-02
 
-  CHANGE LOG AT THE END OF THE FILE
+  CHANGE LOG AT END OF FILE
  *****************************************************************************/
 
-#ifndef SC_STATUS_H_INCLUDED_
-#define SC_STATUS_H_INCLUDED_
-
-#include <iosfwd>
+#ifndef SC_STAGE_CALLBACK_IF_H_INCLUDED_
+#define SC_STAGE_CALLBACK_IF_H_INCLUDED_
 
 #include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
 
-// simulation status codes
-
-const int SC_SIM_OK        = 0;
-const int SC_SIM_ERROR     = 1;
-const int SC_SIM_USER_STOP = 2;
-
-enum sc_status
-{   // sc_get_status values:
-    SC_ELABORATION               = 0x001, // during module hierarchy construction
-    SC_BEFORE_END_OF_ELABORATION = 0x002, // during before_end_of_elaboration()
-    SC_END_OF_ELABORATION        = 0x004, // during end_of_elaboration()
-    SC_START_OF_SIMULATION       = 0x008, // during start_of_simulation()
-
-    SC_RUNNING                   = 0x010, // initialization, evaluation or update
-    SC_PAUSED                    = 0x020, // when scheduler stopped by sc_pause()
-    SC_SUSPENDED                 = 0x040, // when scheduler stopped by sc_suspend_all()
-    SC_STOPPED                   = 0x080, // when scheduler stopped by sc_stop()
-    SC_END_OF_SIMULATION         = 0x100, // during end_of_simulation()
+enum sc_stage {
+    SC_POST_BEFORE_END_OF_ELABORATION = 0x001,
+    SC_POST_END_OF_ELABORATION        = 0x002,
+    SC_POST_START_OF_SIMULATION       = 0x004,
+    SC_POST_UPDATE                    = 0x008,
+    SC_PRE_TIMESTEP                   = 0x010,
+    SC_PRE_PAUSE                      = 0x020,
+    SC_PRE_SUSPEND                    = 0x040,
+    SC_POST_SUSPEND                   = 0x080,
+    SC_PRE_STOP                       = 0x100,
+    SC_POST_END_OF_SIMULATION         = 0x200,
 };
 
-// pretty-printing of sc_status values
-SC_API std::ostream& operator << ( std::ostream&, sc_status );
+// ----------------------------------------------------------------------------
+//  CLASS : sc_stage_callback_if
+//
+//  Interface defining the method to be called for stage callbacks.
+// ----------------------------------------------------------------------------
+
+class SC_API sc_stage_callback_if
+{
+public:
+
+  typedef unsigned int stage_cb_mask;
+
+  virtual ~sc_stage_callback_if() {}
+
+  virtual void stage_callback(const sc_stage & stage) = 0;
+
+};
+
+// utility helper to print a simulation stage
+SC_API std::ostream& operator << ( std::ostream& os, sc_stage s );
+
+// ------------------------------------------------------------------
 
 } // namespace sc_core
 
@@ -69,7 +80,6 @@ SC_API std::ostream& operator << ( std::ostream&, sc_status );
   Description of Modification:
 
  *****************************************************************************/
-
-#endif /* SC_STATUS_H_INCLUDED_ */
+#endif /* SC_STAGE_CALLBACK_IF_H_INCLUDED_ */
 // Taf!
 

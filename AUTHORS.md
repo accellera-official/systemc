@@ -27,6 +27,7 @@ Authors of SystemC / TLM
  *  Andreas Hedstrom,            Intel Corporation
  *  Ulrich Holtmann,             Synopsys, Inc.
  *  Martin Janssen,              Synopsys, Inc.
+ *  Peter de Jager,              Intel Corporation
  *  Vijay Kumar,                 CoWare, Inc.
  *  Joshua Landau,               ARM Ltd.
  *  Stan Y. Liao,                Synopsys, Inc.
