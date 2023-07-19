@@ -45,7 +45,13 @@ namespace sc_core {
 
 template<typename F, typename... Args>
 auto sc_bind( F&& f, Args&&... args )
+ -> decltype( std::bind( std::forward<F>(f), std::forward<Args>(args)... ) )
  { return std::bind( std::forward<F>(f), std::forward<Args>(args)... ); }
+
+template<typename R, typename F, typename... Args>
+auto sc_bind( F&& f, Args&&... args )
+ -> decltype( std::bind<R>( std::forward<F>(f), std::forward<Args>(args)... ) )
+ { return std::bind<R>( std::forward<F>(f), std::forward<Args>(args)... ); }
 
 template<typename T>
 auto sc_ref( T&& v )
