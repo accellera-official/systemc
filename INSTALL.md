@@ -724,25 +724,6 @@ settings to all build configurations.
    Note: _Only effective during library build._
 
 
- * `SC_ENABLE_STAGE_CALLBACKS`  
-   `SC_ENABLE_STAGE_CALLBACKS_TRACING`  
-   Enable a generic stage callback mechanism
-
-   This option is usually set by the `configure` option  
-     `--enable-stage-callbacks`, or  
-     `--enable-stage-callbacks=tracing`
-
-   See the `RELEASENOTES` for more information about this feature.
-   The `*_TRACING` variant of this flag enables the `sc_trace`
-   implementation to use these callbacks, instead of hard-coded updates
-   from the main simulator loop.
-
-   Note: _Setting tracing flag includes the generic stage callback
-     infrastructure automatically._  
-
-   Note: _Only effective during library build._
-
-
  * `SC_INCLUDE_DYNAMIC_PROCESSES`  
    Enable dynamic process support (sc_spawn, sc_bind)
 

@@ -459,26 +459,6 @@ AM_CONDITIONAL([USES_PTHREADS_LIB],dnl
 AC_MSG_RESULT($enable_pthreads)
 
 dnl
-dnl enable stage callbacks
-dnl
-AC_MSG_CHECKING([whether to enable stage callbacks by default])
-AC_ARG_ENABLE([stage-callbacks],
-  [AS_HELP_STRING([--enable-stage-callbacks],
-                  [enable stage callbacks
-                   @<:@yes(=default)|tracing|no@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_stage_callbacks=yes],
-    [tracing],   [enable_stage_callbacks=tracing],
-    [no|default],[enable_stage_callbacks=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-stage-callbacks])])],
-  [enable_stage_callbacks=yes])
-AM_CONDITIONAL([ENABLE_CALLBACKS],dnl
-               [test x"$enable_stage_callbacks" = xyes])
-AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
-               [test x"$enable_stage_callbacks" = xtracing])
-AC_MSG_RESULT($enable_stage_callbacks)
-
-dnl
 dnl enable simulation suspend_all
 dnl
 AC_MSG_CHECKING([whether to enable suspend_all by default])
@@ -627,10 +607,6 @@ AS_VAR_IF([enable_async_updates],[yes],dnl
 AS_VAR_IF([enable_suspend_all],[no],dnl
           [sysc_non_1666=yes])
 
-AS_VAR_IF([enable_stage_callbacks],[no],dnl
-          [sysc_non_1666=yes])
-
-
 AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
       [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
       [sysc_coroutine="WinFiber"])
@@ -711,7 +687,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Enable VCD scopes by default   : $enable_vcd_scopes
    Disable async_request_update   : $disable_async_updates
    Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
-   Stage callbacks                : $enable_stage_callbacks
    suspend_all                    : $enable_suspend_all
  ${sysc_additional}
 ---------------------------------------------------------------------

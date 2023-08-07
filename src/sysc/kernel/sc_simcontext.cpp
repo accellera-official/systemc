@@ -83,21 +83,11 @@
 #   define DEBUG_MSG(NAME,P,MSG)
 #endif
 
-#if SC_HAS_STAGE_CALLBACKS_
-#  define SC_DO_STAGE_CALLBACK_( Kind ) \
-    m_stage_cb_registry->Kind()
-#else
-#  define SC_DO_STAGE_CALLBACK_( Kind ) \
-    ((void)0) /* do nothing */
-#endif
+#define SC_DO_STAGE_CALLBACK_( Kind ) \
+  m_stage_cb_registry->Kind()
 
-#if defined( SC_ENABLE_STAGE_CALLBACKS_TRACING )
-// use callback based tracing
-#  define SC_SIMCONTEXT_TRACING_  0
-#else
-// enable tracing via explicit trace_cycle calls from simulator loop
-#  define SC_SIMCONTEXT_TRACING_  1
-#endif
+// disable callback based tracing
+#define SC_SIMCONTEXT_TRACING_  0
 
 namespace sc_core {
 
@@ -1199,9 +1189,8 @@ sc_simcontext::create_method_process(
     sc_method_handle handle =
         new sc_method_process(name_p, free_host, method_p, host_p, opt_p);
     if ( m_ready_to_simulate ) { // dynamic process
-	if ( !handle->dont_initialize() )
+        if ( !handle->dont_initialize() )
         {
-#ifdef SC_HAS_STAGE_CALLBACKS_
             if( SC_UNLIKELY_( m_stage ) )
             {
                 std::stringstream msg;
@@ -1212,7 +1201,6 @@ sc_simcontext::create_method_process(
                                  , msg.str().c_str() );
             }
             else
-#endif // SC_HAS_STAGE_CALLBACKS_
             {
                 push_runnable_method( handle );
             }
@@ -1222,14 +1210,11 @@ sc_simcontext::create_method_process(
             SC_REPORT_WARNING( SC_ID_DISABLE_WILL_ORPHAN_PROCESS_,
                                handle->name() );
         }
-
     } else {
 	m_process_table->push_front( handle );
     }
     return sc_process_handle(handle);
 }
-
-
 sc_process_handle
 sc_simcontext::create_thread_process(
     const char* name_p, bool free_host, sc_entry_func method_p,
@@ -1241,7 +1226,6 @@ sc_simcontext::create_thread_process(
 	handle->prepare_for_simulation();
         if ( !handle->dont_initialize() )
         {
-#ifdef SC_HAS_STAGE_CALLBACKS_
             if( SC_UNLIKELY_( m_stage ) )
             {
                 std::stringstream msg;
@@ -1250,10 +1234,7 @@ sc_simcontext::create_thread_process(
                        "`" << handle->name() << "' ignored";
                 SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
                                  , msg.str().c_str() );
-            }
-            else
-#endif // SC_HAS_STAGE_CALLBACKS_
-            {
+            } else {
                 push_runnable_thread( handle );
             }
         }

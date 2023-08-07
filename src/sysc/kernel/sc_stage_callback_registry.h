@@ -21,10 +21,6 @@
 
   sc_stage_callback_registry.h -- Definition of the simulation stage callbacks
 
-  The most critical functions are defined inline in this file.  Only active,
-  if SC_ENABLE_STAGE_CALLBACKS[_TRACING] is defined during the
-  SystemC library build.
-
   Original Author: Philipp A. Hartmann, OFFIS, 2013-02-15
 
   CHANGE LOG AT END OF FILE
@@ -32,13 +28,6 @@
 
 #ifndef SC_STAGE_CALLBACK_REGISTRY_H_INCLUDED_
 #define SC_STAGE_CALLBACK_REGISTRY_H_INCLUDED_
-
-#if defined( SC_ENABLE_STAGE_CALLBACKS ) \
- || defined( SC_ENABLE_STAGE_CALLBACKS_TRACING )
-#  define SC_HAS_STAGE_CALLBACKS_ 1
-#else
-#  define SC_HAS_STAGE_CALLBACKS_ 0
-#endif
 
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_object_int.h"
@@ -105,8 +94,6 @@ private:
     typedef std::vector<entry>    storage_type;
     typedef std::vector<cb_type*> single_storage_type;
 
-#if SC_HAS_STAGE_CALLBACKS_
-
     // set and restore simulation stage
     struct scoped_stage
     {
@@ -132,8 +119,6 @@ private:
     single_storage_type   m_cb_update_vec;   //  - update cb shortcut
     single_storage_type   m_cb_timestep_vec; //  - timestep cb shortcut
 
-#endif // SC_HAS_STAGE_CALLBACKS_
-
 private:
     // disabled
     sc_stage_callback_registry( const this_type& );
@@ -148,81 +133,65 @@ private:
 inline void
 sc_stage_callback_registry::construction_done() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_POST_BEFORE_END_OF_ELABORATION );
     do_callback( SC_POST_BEFORE_END_OF_ELABORATION );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::elaboration_done() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_POST_END_OF_ELABORATION );
     do_callback( SC_POST_END_OF_ELABORATION );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::start_simulation() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_POST_START_OF_SIMULATION );
     do_callback( SC_POST_START_OF_SIMULATION );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::pre_suspend() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_PRE_SUSPEND );
     do_callback( SC_PRE_SUSPEND );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::post_suspend() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_POST_SUSPEND );
     do_callback( SC_POST_SUSPEND );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::simulation_paused() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_PRE_PAUSE );
     do_callback( SC_PRE_PAUSE );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::simulation_stopped() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_PRE_STOP );
     do_callback( SC_PRE_STOP );
-#endif
 }
 
 inline void
 sc_stage_callback_registry::simulation_done() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
     scoped_stage scope( m_simc->m_stage
                        , SC_POST_END_OF_SIMULATION );
     do_callback( SC_POST_END_OF_SIMULATION );
-#endif
 }
 
 // -------------- specialized callback implementations --------------
@@ -230,7 +199,6 @@ sc_stage_callback_registry::simulation_done() const
 inline void
 sc_stage_callback_registry::update_done() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
 
     if( SC_LIKELY_(!m_cb_update_vec.size()) ) return;
     scoped_stage scope( m_simc->m_stage
@@ -241,14 +209,11 @@ sc_stage_callback_registry::update_done() const
  
     for(it_type it = vec.begin(), end = vec.end(); it != end; ++it)
         (*it)->stage_callback(SC_POST_UPDATE);
-#endif
 }
 
 inline void
 sc_stage_callback_registry::before_timestep() const
 {
-#if SC_HAS_STAGE_CALLBACKS_
-
     if( SC_LIKELY_(!m_cb_timestep_vec.size()) ) return;
 
     scoped_stage scope( m_simc->m_stage
@@ -258,7 +223,6 @@ sc_stage_callback_registry::before_timestep() const
 
     for(it_type it = vec.begin(), end = vec.end(); it != end; ++it)
         (*it)->stage_callback(SC_PRE_TIMESTEP);
-#endif
 }
 
 // ------------------------------------------------------------------
@@ -275,5 +239,6 @@ sc_stage_callback_registry::before_timestep() const
 
  *****************************************************************************/
 #endif /* SC_STAGE_CALLBACK_REGISTRY_H_INCLUDED_ */
+
 // Taf!
 

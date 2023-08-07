@@ -38,8 +38,6 @@
 
 namespace sc_core {
 
-#if SC_HAS_STAGE_CALLBACKS_
-
 sc_stage_callback_registry::sc_stage_callback_registry( sc_simcontext& simc )
   : m_simc( &simc )
   , m_cb_update_vec()
@@ -274,40 +272,6 @@ print_stage_expression( std::ostream& os, sc_stage s )
         os << ")";
     return os;
 }
-
-
-#else // ! SC_HAS_STAGE_CALLBACKS_
-
-sc_stage_callback_registry::sc_stage_callback_registry( sc_simcontext& ){}
-sc_stage_callback_registry::~sc_stage_callback_registry(){}
-
-static inline void
-warn_stage_callbacks()
-{
-    static bool warned = false;
-    if (!warned)
-    {
-        std::stringstream ss;
-        ss << "Please recompile SystemC with "
-              "\"SC_ENABLE_SIMULATION_STAGE_CALLBACKS\" defined.";
-        SC_REPORT_WARNING( SC_ID_STAGE_CALLBACKS_UNSUPPORTED_
-                         , ss.str().c_str() );
-    }
-}
-
-void
-sc_stage_callback_registry::register_callback( cb_type& cb, mask_type )
-{
-    warn_stage_callbacks();
-}
-
-void
-sc_stage_callback_registry::unregister_callback( cb_type& cb, mask_type )
-{
-    warn_stage_callbacks();
-}
-
-#endif // ! SC_HAS_STAGE_CALLBACKS_
 
 } // namespace sc_core
 

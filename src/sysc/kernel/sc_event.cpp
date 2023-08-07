@@ -107,18 +107,16 @@ sc_event::notify( const sc_time& t )
         return;
     }
     if( t == SC_ZERO_TIME ) {
-#       if SC_HAS_STAGE_CALLBACKS_
-            if( SC_UNLIKELY_( m_simc->get_stage() ) )
-            {
-                std::stringstream msg;
-                msg << "sc_stage = " << m_simc->get_stage()
-                    << ":\n\t delta notification of `"
-                    << name() << "' ignored";
-                SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
-                                 , msg.str().c_str() );
-                return;
-            }
-#       endif
+        if( SC_UNLIKELY_( m_simc->get_stage() ) )
+        {
+            std::stringstream msg;
+            msg << "sc_stage = " << m_simc->get_stage()
+                << ":\n\t delta notification of `"
+                << name() << "' ignored";
+            SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
+                             , msg.str().c_str() );
+            return;
+        }
         if( m_notify_type == TIMED ) {
             // remove this event from the timed events set
             sc_assert( m_timed != 0 );
@@ -130,18 +128,16 @@ sc_event::notify( const sc_time& t )
         m_notify_type = DELTA;
         return;
     }
-#   if SC_HAS_STAGE_CALLBACKS_
-        if( SC_UNLIKELY_( m_simc->get_stage() ) )
-        {
-            std::stringstream msg;
-            msg << "sc_stage = " << m_simc->get_stage()
-                << ":\n\t timed notification of `"
-                << name() << "' ignored";
-            SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
-                             , msg.str().c_str() );
-            return;
-        }
-#   endif
+    if( SC_UNLIKELY_( m_simc->get_stage() ) )
+    {
+        std::stringstream msg;
+        msg << "sc_stage = " << m_simc->get_stage()
+            << ":\n\t timed notification of `"
+            << name() << "' ignored";
+        SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
+                         , msg.str().c_str() );
+        return;
+    }
     if( m_notify_type == TIMED ) {
         sc_assert( m_timed != 0 );
         if( m_timed->m_notify_time <= m_simc->time_stamp() + t ) {

@@ -154,8 +154,7 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
        "attempt to restart simulation after error" )
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
        "uncaught exception" )
-SC_DEFINE_MESSAGE(SC_ID_STAGE_CALLBACKS_UNSUPPORTED_   , 550,
-       "stage callbacks not enabled")
+// available message number 550
 // available message number 551
 SC_DEFINE_MESSAGE(SC_ID_STAGE_CALLBACK_REGISTER_,        552,
        "register stage callback" )
