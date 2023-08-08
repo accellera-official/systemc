@@ -58,6 +58,8 @@ public:
   virtual sc_core::sc_type_index          get_protocol_types() const = 0;
   virtual tlm_socket_category             get_socket_category() const = 0;
 
+  virtual bool                            is_multi_socket() const = 0;
+
 protected:
   virtual ~tlm_base_socket_if() {}
 };

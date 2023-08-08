@@ -183,6 +183,8 @@ public:
     { return typeid(typename FW_IF::protocol_types); }
   virtual tlm_socket_category             get_socket_category() const
     { return TLM_TARGET_SOCKET; }
+  virtual bool                            is_multi_socket() const final
+    { return (N != 1); }
 
   // Implementation of tlm_base_target_socket_b functions
   virtual sc_core::sc_port_b<BW_IF> &       get_base_port()
