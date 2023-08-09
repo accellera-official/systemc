@@ -55,9 +55,9 @@ public:
     sc_register_stage_callback( *this, SC_POST_START_OF_SIMULATION );
     sc_register_stage_callback( *this, SC_POST_UPDATE );
     sc_register_stage_callback( *this, SC_PRE_TIMESTEP );
-    sc_register_stage_callback( *this, SC_PRE_PAUSE );    /* not tested here !! */
-    sc_register_stage_callback( *this, SC_PRE_SUSPEND );  /* not tested here !! */
-    sc_register_stage_callback( *this, SC_POST_SUSPEND ); /* not tested here !! */
+    sc_register_stage_callback( *this, SC_PRE_PAUSE );
+    sc_register_stage_callback( *this, SC_PRE_SUSPEND );  /* not tested here */
+    sc_register_stage_callback( *this, SC_POST_SUSPEND ); /* not tested here */
     sc_register_stage_callback( *this, SC_PRE_STOP );
     sc_register_stage_callback( *this, SC_POST_END_OF_SIMULATION );
   }
@@ -69,15 +69,23 @@ public:
       << ": " << sc_time_stamp()
       << ": " << timed_count
       << std::endl;
+
     if( timed_count++ < 5 ) {
       next_trigger( 100, SC_NS );
     }
+
     if( delta_count < 5 )
       ev.notify( SC_ZERO_TIME );
 
-    if( timed_count>=6 )
+    if( timed_count == 5 ) {
+      sc_pause();
+    }
+
+    if( timed_count >= 6 ) {
       sc_stop();
+    }
   }
+
   void delta()
   {
     std::cout
@@ -128,7 +136,20 @@ public:
   }
 
   ~stage_tracer()
-      { print_static_phase_stats( "[destructor]" ); }
+  { 
+    print_static_phase_stats( "[destructor]" ); 
+
+    sc_unregister_stage_callback( *this, SC_POST_BEFORE_END_OF_ELABORATION );
+    sc_unregister_stage_callback( *this, SC_POST_END_OF_ELABORATION );
+    sc_unregister_stage_callback( *this, SC_POST_START_OF_SIMULATION );
+    sc_unregister_stage_callback( *this, SC_POST_UPDATE );
+    sc_unregister_stage_callback( *this, SC_PRE_TIMESTEP );
+    sc_unregister_stage_callback( *this, SC_PRE_PAUSE );
+    sc_unregister_stage_callback( *this, SC_PRE_SUSPEND );
+    sc_unregister_stage_callback( *this, SC_POST_SUSPEND );
+    sc_unregister_stage_callback( *this, SC_PRE_STOP );
+    sc_unregister_stage_callback( *this, SC_POST_END_OF_SIMULATION );
+  }
 
   void print_static_phase_stats( const char* phase )
   {
@@ -166,8 +187,6 @@ private:
     print_static_phase_stats( "end_of_simulation" );
   }
 
-
-
 private:
   unsigned int cb_mask, old_mask;
   sc_dt::uint64 cb_count, timed_count, delta_count;
@@ -178,6 +197,7 @@ private:
 int sc_main(int, char*[])
 {
   stage_tracer tracer("tracer");
-  sc_start();
+  sc_start(); /* wait for sc_pause */
+  sc_start(); /* resume, wait for sc_stop */
   return 0;
 }
