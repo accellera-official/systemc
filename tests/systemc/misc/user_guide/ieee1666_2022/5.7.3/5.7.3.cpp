@@ -51,4 +51,5 @@ int sc_main( int argc, char* argv[] ) {
     mod_class mc("mc");
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

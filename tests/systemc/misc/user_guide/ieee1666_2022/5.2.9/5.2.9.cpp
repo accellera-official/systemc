@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// If this test compiles it verifies the SC_NAMED macro example.
+
 #include <systemc.h>
 
 SC_MODULE(M)
@@ -8,7 +12,7 @@ SC_MODULE(M)
 
     SC_CTOR(M) 
         : SC_NAMED(port_i),
-	  SC_NAMED(sig)
+	  SC_NAMED(sig,true)
     {
     }
     // . . .
@@ -19,4 +23,5 @@ int sc_main( int argc, char* argv[] ) {
     M m("m");
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

@@ -1,7 +1,12 @@
+// COMPLETE TEST
+//
+// If the execution log matches the golden log, the example compiles and executes
+// correctly
+
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
 
-int f() { return 0; }
+int f() { std::cout << "f()" << std::endl; return 0; }
 
 struct Functor {
     typedef int result_type;
@@ -10,11 +15,11 @@ struct Functor {
 
 Functor::result_type Functor::operator() () { return f(); }
 
-int h(int a, int& b, const int& c);
+int h(int a, int& b, const int& c) { std::cout << "h(a,b,c)" << std::endl; return 0; }
 
 struct MyMod : sc_core::sc_module {
     sc_core::sc_signal<int> SC_NAMED(sig);
-    void g();
+    void g() { std::cout << "MyMod::g()" << std::endl;}
 
     SC_CTOR(MyMod) {
         SC_THREAD(T);
@@ -48,5 +53,9 @@ struct MyMod : sc_core::sc_module {
 
 int sc_main( int argc, char* argv[] ) { 
 
+    MyMod mm("mm");
+    sc_start(SC_ZERO_TIME);
+
     std::cout << "program completed" << std::endl;
+    return 0;
 }

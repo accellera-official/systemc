@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// If the execution log matches the golden log this test is successful.
+
 #include <systemc.h>
 
 
@@ -18,4 +22,5 @@ int sc_main( int argc, char* argv[] ) {
     }
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

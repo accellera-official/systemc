@@ -1,3 +1,7 @@
+// THIS TEST NEEDS WORK
+//
+// It tests compilation, but not exeuction.
+
 #include <systemc.h>
 
 SC_MODULE(M) {
@@ -39,4 +43,5 @@ int sc_main( int argc, char* argv[] ) {
 
     M m("m");
     std::cout << "program completed" << std::endl;
+    return 0;
 }

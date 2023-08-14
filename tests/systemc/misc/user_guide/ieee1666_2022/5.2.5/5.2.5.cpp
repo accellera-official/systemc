@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// The example does not do much, so neither does the test.
+
 #include "systemc.h"
 
 SC_MODULE(M)
@@ -17,5 +21,7 @@ int sc_main( int argc, char* argv[] )
     M m("m");
     N n("n");
 
-    std::cout << "success" << std::endl;
+    sc_start(SC_ZERO_TIME);
+    std::cout << "program complete" << std::endl;
+    return 0;
 }

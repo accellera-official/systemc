@@ -1,3 +1,7 @@
+// NEEDS EXECUTION TESTING
+//
+// This will test compilation, but needs work to test execution.
+
 #include <systemc.h>
 
 SC_MODULE(Mod) {
@@ -25,4 +29,5 @@ int sc_main( int argc, char* argv[] ) {
 
     Mod mod("mod");
     std::cout << "program completed" << std::endl;
+    return 0;
 }

@@ -1,3 +1,8 @@
+// NEEDS EXECUTION CODE
+//
+// At present this test will validate the compilation syntax, but needs an execution 
+// component.
+
 #include <systemc.h>
 
 SC_MODULE(M) {
@@ -27,4 +32,5 @@ int sc_main( int argc, char* argv[] ) {
     M m("m");
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

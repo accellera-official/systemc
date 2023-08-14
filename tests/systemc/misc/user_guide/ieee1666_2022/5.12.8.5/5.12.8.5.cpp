@@ -1,3 +1,8 @@
+// COMPLETE TEST
+//
+// If the clock period is printed to the log file the before_end_of_elaboration() callback
+// was executed successfully.
+
 #include <systemc.h>
 
 SC_MODULE(Top) {

@@ -1,3 +1,7 @@
+// NEEDS EXECUTION WORK
+//
+// This tests compilation, but needs execution work.
+
 #include <systemc.h>
 
 SC_MODULE(M) {
@@ -18,5 +22,7 @@ SC_MODULE(M) {
 
 int sc_main( int argc, char* argv[] ) { 
 
+    M m("m");
     std::cout << "program completed" << std::endl;
+    return 0;
 }

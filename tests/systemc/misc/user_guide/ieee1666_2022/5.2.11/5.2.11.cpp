@@ -1,3 +1,7 @@
+// THIS TEST NEEDS WORK
+//
+// It tests compilation but not execution.
+
 #include <systemc.h>
 
 
@@ -22,4 +26,5 @@ int sc_main( int argc, char* argv[] ) {
     synchronous_module sm("sm");
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

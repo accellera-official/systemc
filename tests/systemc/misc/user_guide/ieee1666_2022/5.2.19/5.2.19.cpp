@@ -1,3 +1,8 @@
+// NEEDS EXECUTION WORK
+//
+// This test currently verifies compilation, but not execution. The issue with
+// execution is missing port binds, e.g., top2.E
+
 #include <systemc.h>
 
 SC_MODULE(M1) {
@@ -41,5 +46,7 @@ int sc_main( int argc, char* argv[] ) {
     Top1 top1("top1");
     Top2 top2("top2");
 
+    // sc_start(SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
+    return 0;
 }

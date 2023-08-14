@@ -35,7 +35,13 @@ struct M : sc_core::sc_module {
 
 int sc_main( int argc, char* argv[] ) { 
 
-    M m("m");
+    sc_signal<int> s;
 
+    M m("m");
+    m.p(s);
+
+
+    sc_start(SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
+    return 0;
 }

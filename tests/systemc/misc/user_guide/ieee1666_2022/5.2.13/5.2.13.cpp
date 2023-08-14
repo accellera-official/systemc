@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// If the execution log matches the golden log the example has been tested.
+
 #include <systemc.h>
 
 SC_MODULE(M)
@@ -37,4 +41,5 @@ int sc_main( int argc, char* argv[] ) {
     sc_start(1, SC_NS);
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

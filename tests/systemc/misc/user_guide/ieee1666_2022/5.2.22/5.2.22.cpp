@@ -1,3 +1,7 @@
+// NEEDS EXECUTION WORK
+//
+// This test verifies compilation, but lacks bindings for the bus.
+
 #include <systemc.h>
 
 class bus_interface : virtual public sc_core::sc_interface {
@@ -25,4 +29,5 @@ int sc_main( int argc, char* argv[] ) {
     bus_adapter ba("ba");
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

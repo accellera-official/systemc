@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// If this test executes and matches its golden log the bindings were successful.
+
 #include <systemc.h>
 
 struct iface : virtual sc_core::sc_interface {
@@ -41,4 +45,5 @@ int sc_main( int argc, char* argv[] ) {
     sc_start(SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

@@ -1,4 +1,8 @@
+// NEEDS REVIEW:
+//
 // THERE IS A WARMING ABOUT HIDING sc_object::print() by Chan::print()
+// There is a warming about hiding sc_object::print() by Chan::print(), so we need to
+// determine if that is okay, or do we want to change the signature.
 
 #include <systemc.h>
 

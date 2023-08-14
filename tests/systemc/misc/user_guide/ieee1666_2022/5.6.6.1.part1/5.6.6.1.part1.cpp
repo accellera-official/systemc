@@ -1,3 +1,8 @@
+// COMPLETE TEST
+// 
+// If the execution log matches the golden log this example compiled and executed
+// correctly.
+
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
 
@@ -58,4 +63,5 @@ int sc_main( int argc, char* argv[] ) {
     M1 m1("m1");
     sc_start();
     std::cout << "program completed" << std::endl;
+    return 0;
 }

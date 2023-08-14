@@ -1,3 +1,7 @@
+// COMPLETE TEST
+//
+// If this test does not assert it indicates the example is executing correctly.
+
 #include <systemc.h>
 
 int sc_main( int argc, char* argv[] ) { 
@@ -8,4 +12,5 @@ int sc_main( int argc, char* argv[] ) {
     sc_assert( list.size() == 1 );
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }

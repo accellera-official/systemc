@@ -1,3 +1,6 @@
+// COMPLETE TEST
+//
+// This test just makes sure all the ports are bound. It does not check what is bound to what.
 #include <systemc.h>
 
 SC_MODULE(M) {

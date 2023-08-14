@@ -1,3 +1,8 @@
+// NEEDS FURTHER INVESTIGATION
+//
+// If the execution log matches the golden log the compilation and normal execcution
+// are validated. But sc_is_unwinding(() being true is not being tested.
+
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
 
@@ -39,4 +44,5 @@ int sc_main( int argc, char* argv[] ) {
     sc_start(11, sc_core::SC_NS);
 
     std::cout << "program completed" << std::endl;
+    return 0;
 }
