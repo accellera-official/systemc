@@ -4,6 +4,9 @@
 //
 // (1) SomeModule::in is a declared a reference and needs to be an instance.
 // (2) ~sc_prim_channle is a protected method.
+//
+// @@@@ ISSUES @@@@
+
 
 #include <systemc.h>
 

@@ -1,6 +1,8 @@
 // NEEDS EXECUTION WORK
 //
 // This tests compilation, but needs execution work.
+//
+// @@@@ ISSUES @@@@
 
 #include <systemc.h>
 

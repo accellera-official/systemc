@@ -2,6 +2,8 @@
 //
 // This test currently verifies compilation, but not execution. The issue with
 // execution is missing port binds, e.g., top2.E
+//
+// @@@@ ISSUES @@@@
 
 #include <systemc.h>
 

@@ -2,6 +2,8 @@
 //
 // If the execution log matches the golden log the compilation and normal execcution
 // are validated. But sc_is_unwinding(() being true is not being tested.
+//
+// @@@@ ISSUES @@@@
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>

@@ -1,6 +1,7 @@
 // COMPLETE TEST
 //
 // If the log file matches the golden log the object scanner operated correctly.
+
 #include <systemc.h>
 
 void scan_hierarchy( sc_core::sc_object* obj ) {

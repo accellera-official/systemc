@@ -2,6 +2,8 @@
 //
 // At present this test will validate the compilation syntax, but needs an execution 
 // component.
+//
+// @@@@ ISSUES @@@@
 
 #include <systemc.h>
 

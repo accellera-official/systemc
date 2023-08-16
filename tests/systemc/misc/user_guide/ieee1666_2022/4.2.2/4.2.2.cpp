@@ -1,6 +1,7 @@
 // COMPLETE TEST: 
 //
 // If the golden log matches the output the proper names are being generated.
+
 #include <systemc>
 
 struct Mod : sc_core::sc_module {

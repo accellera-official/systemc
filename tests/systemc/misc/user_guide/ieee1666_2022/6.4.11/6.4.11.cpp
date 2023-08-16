@@ -10,6 +10,8 @@
 // cascade, so the program will loop forever.
 //
 //
+// @@@@ ISSUES @@@@
+//
 #include <systemc.h>
 
 SC_MODULE(M) {

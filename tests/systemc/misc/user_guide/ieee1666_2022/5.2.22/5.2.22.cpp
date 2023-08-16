@@ -1,6 +1,8 @@
 // NEEDS EXECUTION WORK
 //
 // This test verifies compilation, but lacks bindings for the bus.
+//
+// @@@@ ISSUES @@@@
 
 #include <systemc.h>
 

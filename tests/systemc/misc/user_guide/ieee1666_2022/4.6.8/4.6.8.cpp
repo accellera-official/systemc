@@ -5,6 +5,9 @@
 // 
 // The work around until this is fixed is to put a loop around what was the while pending
 // activity code.
+//
+// @@@@ ISSUES @@@@
+
 #include <systemc>
 using namespace sc_core;
 
