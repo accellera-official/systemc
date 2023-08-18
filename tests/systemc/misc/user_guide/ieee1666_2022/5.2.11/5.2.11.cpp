@@ -4,12 +4,12 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 
 SC_MODULE(synchronous_module)
 {
-    sc_in<bool> SC_NAMED(clock);
+    sc_core::sc_in<bool> SC_NAMED(clock);
 
     SC_CTOR(synchronous_module) {
         SC_THREAD(thread);

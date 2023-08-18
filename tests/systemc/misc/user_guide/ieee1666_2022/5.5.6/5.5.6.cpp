@@ -4,7 +4,7 @@
 // correctly
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
-#include <systemc.h>
+#include <systemc>
 
 int f() { std::cout << "f()" << std::endl; return 0; }
 
@@ -54,7 +54,7 @@ struct MyMod : sc_core::sc_module {
 int sc_main( int argc, char* argv[] ) { 
 
     MyMod mm("mm");
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

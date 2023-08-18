@@ -4,7 +4,7 @@
 // correctly
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
-#include <systemc.h>
+#include <systemc>
 
 int fa() { std::cout << "fa()" << std::endl; return 0; }
 int fb() { std::cout << "fb()" << std::endl; return 0; }
@@ -67,7 +67,7 @@ int sc_main( int argc, char* argv[] ) {
 
     M m("m");
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
     return 0;
 }

@@ -5,7 +5,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M) {
     SC_CTOR(M) {

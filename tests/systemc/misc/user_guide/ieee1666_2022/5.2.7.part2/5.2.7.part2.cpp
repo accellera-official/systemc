@@ -2,7 +2,7 @@
 //
 // This example illustrates SC_CTOR signatures and if it compiles it is complete.
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M1)
 {

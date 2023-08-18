@@ -3,8 +3,10 @@
 // If the binding was done correctly there should be no error messages. Note that the
 // LRM contains no definition for bus_interface, and a null body was added to properly
 // compile.
+//
+// @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 
 class bus_interface {};
@@ -30,7 +32,7 @@ class bus_channel : public bus_interface, public sc_core::sc_module {
 	    int j;
 	    peripheral_port[i]->peripheral_read(0,j);
 	    if ( i != j ) {
-	        std::cout << "memory read/write mismatch " << j << " != " << i << endl;
+	        std::cout << "memory read/write mismatch " << j << " != " << i << std::endl;
 	    }
 	}
     }
@@ -61,7 +63,7 @@ SC_MODULE(top_level) {
 int sc_main( int argc, char* argv[] ) { 
 
     top_level tlm("tlm");
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

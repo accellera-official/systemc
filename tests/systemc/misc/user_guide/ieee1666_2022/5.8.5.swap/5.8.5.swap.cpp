@@ -1,7 +1,7 @@
 // NEEDS EXECUTION WORK
 //
 // @@@@ ISSUES @@@@
-#include <systemc.h>
+#include <systemc>
 
 
 struct M : sc_core::sc_module {
@@ -37,13 +37,13 @@ struct M : sc_core::sc_module {
 
 int sc_main( int argc, char* argv[] ) { 
 
-    sc_signal<int> s;
+    sc_core::sc_signal<int> s;
 
     M m("m");
     m.p(s);
 
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
     return 0;
 }

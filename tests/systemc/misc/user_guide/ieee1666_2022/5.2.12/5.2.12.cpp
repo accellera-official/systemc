@@ -4,7 +4,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M) {
     sc_core::sc_in<bool> SC_NAMED(clock);

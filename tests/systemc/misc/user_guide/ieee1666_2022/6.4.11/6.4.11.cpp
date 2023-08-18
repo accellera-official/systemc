@@ -12,7 +12,7 @@
 //
 // @@@@ ISSUES @@@@
 //
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M) {
     sc_core::sc_signal<int> sig;
@@ -34,9 +34,9 @@ SC_MODULE(M) {
 
     void reader() {
         wait(sig.value_changed_event());
-	std::cout << sc_time_stamp() << " " <<  sig.read() << std::endl;
+	std::cout << sc_core::sc_time_stamp() << " " <<  sig.read() << std::endl;
 	wait(sig.value_changed_event());
-	std::cout << sc_time_stamp() << " " <<  sig.read() << std::endl;
+	std::cout << sc_core::sc_time_stamp() << " " <<  sig.read() << std::endl;
     }
     void writer2() {
         // sig.write(sig+1); // SHOULD CAUSE A WRITERERROR, BUT GENERATES AN INFINITE LOOP
@@ -48,7 +48,7 @@ SC_MODULE(M) {
 int sc_main( int argc, char* argv[] ) { 
 
     M m("m");
-    sc_start(200, sc_core::SC_NS);
+    sc_core::sc_start(200, sc_core::SC_NS);
     std::cout << "program completed" << std::endl;
     return 0;
 }

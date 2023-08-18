@@ -4,7 +4,7 @@
 // correclty.
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
-#include <systemc.h>
+#include <systemc>
 
 int f1() { std::cout << "f1()" << std::endl; return 0; }
 int f2() { std::cout << "f2()" << std::endl; return 0; }

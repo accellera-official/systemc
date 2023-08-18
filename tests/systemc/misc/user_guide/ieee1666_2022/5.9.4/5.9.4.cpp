@@ -3,7 +3,7 @@
 // If the execution log matches the golden log this test verifies compilation and
 // execution.
 
-#include <systemc.h>
+#include <systemc>
 
 using namespace sc_core;
 

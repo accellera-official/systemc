@@ -1,7 +1,7 @@
 // COMPLETE TEST
 //
 // If the execution log matches the golden log this example is verified.
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M) {
     sc_core::sc_in<bool> clk;
@@ -17,11 +17,11 @@ SC_MODULE(M) {
 
 int sc_main( int argc, char* argv[] ) { 
 
-    sc_clock clock;
+    sc_core::sc_clock clock;
     M m("m");
     m.clk(clock);
 
-    sc_start(1, sc_core::SC_NS);
+    sc_core::sc_start(1, sc_core::SC_NS);
 
     std::cout << "program completed" << std::endl;
     return 0;

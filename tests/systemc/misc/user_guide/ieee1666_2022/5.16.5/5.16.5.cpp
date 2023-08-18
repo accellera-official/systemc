@@ -2,7 +2,7 @@
 //
 // If the log file matches the golden log the test was successful.
 
-#include <systemc.h>
+#include <systemc>
 
 
 SC_MODULE(Mod) {
@@ -31,7 +31,7 @@ int sc_main( int argc, char* argv[] ) {
     Top top("top");
     std::cout << "top.name() = " << top.name() << std::endl;
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

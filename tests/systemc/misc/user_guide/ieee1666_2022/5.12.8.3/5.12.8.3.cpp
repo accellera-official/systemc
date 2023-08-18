@@ -1,8 +1,12 @@
 // COMPLETE TEST
 //
 // If this test executes and matches its golden log the bindings were successful.
+//
+// LRM has missing sc_core:: prefix on sc_port<iface> declaration, added in the test.
+//
+// @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 struct iface : virtual sc_core::sc_interface {
     virtual int read() const = 0;
@@ -42,7 +46,7 @@ int sc_main( int argc, char* argv[] ) {
 
     top top_module("top");
 
-    sc_start(SC_ZERO_TIME);
+    sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

@@ -27,7 +27,7 @@
 // @@@@ ISSUES @@@@
 
 
-#include <systemc.h>
+#include <systemc>
 
 int sc_main( int argc, char* argv[] ) { 
 

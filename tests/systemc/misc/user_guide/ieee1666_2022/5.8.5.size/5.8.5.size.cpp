@@ -2,7 +2,7 @@
 //
 // If this test does not assert it indicates the example is executing correctly.
 
-#include <systemc.h>
+#include <systemc>
 
 int sc_main( int argc, char* argv[] ) { 
 

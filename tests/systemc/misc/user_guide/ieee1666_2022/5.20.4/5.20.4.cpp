@@ -1,7 +1,7 @@
 //  COMPLETE TEST
 //
 //  If the execution log matches the golden log the example works.
-#include <systemc.h>
+#include <systemc>
 using namespace sc_core;
 
 

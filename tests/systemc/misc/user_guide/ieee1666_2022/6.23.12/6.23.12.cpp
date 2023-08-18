@@ -9,7 +9,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M)
 {
@@ -29,22 +29,22 @@ SC_MODULE(M)
 	fifo.print(std::cout);
 	std::cout << fifo.num_available() << std::endl;
 	std::cout << fifo.num_free() << std::endl;
-	std::cout << endl;
+	std::cout << std::endl;
 
 	fifo.read(d);
 	fifo.print(std::cout);
 	std::cout << fifo.num_available() << std::endl;
 	std::cout << fifo.num_free() << std::endl;
-	std::cout << endl;
+	std::cout << std::endl;
 
 	fifo.read(d);
 	fifo.print(std::cout);
 	fifo.read(d);
 	std::cout << fifo.num_available() << std::endl;
 	std::cout << fifo.num_free() << std::endl;
-	std::cout << endl;
+	std::cout << std::endl;
 
-	wait(SC_ZERO_TIME);
+	wait(sc_core::SC_ZERO_TIME);
 	std::cout << fifo.num_free() << std::endl;
     }
 };
@@ -53,7 +53,7 @@ int sc_main( int argc, char* argv[] ) {
 
     M m("m");
 
-    sc_start();
+    sc_core::sc_start();
     std::cout << "program completed" << std::endl;
     return 0;
 }

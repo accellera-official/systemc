@@ -2,7 +2,7 @@
 //
 // If the log file matches the golden log the object scanner operated correctly.
 
-#include <systemc.h>
+#include <systemc>
 
 void scan_hierarchy( sc_core::sc_object* obj ) {
     std::vector<sc_core::sc_object*> children = obj->get_child_objects();
@@ -42,7 +42,7 @@ void snoop()
 
 
 SC_MODULE(Bottom) {
-    sc_signal<int> SC_NAMED(sig1), SC_NAMED(sig2);
+    sc_core::sc_signal<int> SC_NAMED(sig1), SC_NAMED(sig2);
 
     SC_CTOR(Bottom) {}
 };

@@ -2,7 +2,7 @@
 //
 // If this test compiles it verifies the SC_NAMED macro example.
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M)
 {

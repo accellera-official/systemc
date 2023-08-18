@@ -2,7 +2,7 @@
 //
 // If the log file matches the golden log the insertion of an attribute was successful.
 
-#include <systemc.h>
+#include <systemc>
 
 int sc_main( int argc, char* argv[] ) { 
     using namespace sc_core;
@@ -14,7 +14,7 @@ int sc_main( int argc, char* argv[] ) {
     ap = (sc_attribute<int>*)sig.get_attribute("number");
     ++ap->value;
     ap = (sc_attribute<int>*)sig.get_attribute("number");
-    std::cout << "attribute is " << ap->value << endl;
+    std::cout << "attribute is " << ap->value << std::endl;
 
     std::cout << "program completed" << std::endl;
     return 0;

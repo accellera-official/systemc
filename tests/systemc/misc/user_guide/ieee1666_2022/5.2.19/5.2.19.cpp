@@ -5,7 +5,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M1) {
     sc_core::sc_inout<int> SC_NAMED(P), SC_NAMED(Q), SC_NAMED(R);
@@ -30,7 +30,7 @@ SC_MODULE(M2) {
     sc_core::sc_inout<int>* T;
     sc_core::sc_inout<int> SC_NAMED(U);
 
-    SC_CTOR(M2) { T = new sc_inout<int>("T"); }
+    SC_CTOR(M2) { T = new sc_core::sc_inout<int>("T"); }
 };
 
 SC_MODULE(Top2) {
@@ -48,7 +48,7 @@ int sc_main( int argc, char* argv[] ) {
     Top1 top1("top1");
     Top2 top2("top2");
 
-    // sc_start(SC_ZERO_TIME);
+    // sc_core::sc_start(SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
     return 0;
 }

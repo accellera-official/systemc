@@ -4,7 +4,7 @@
 // correctly.
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
-#include <systemc.h>
+#include <systemc>
 
 
 struct M3 : sc_core::sc_module {
@@ -63,7 +63,7 @@ struct M3 : sc_core::sc_module {
 int sc_main( int argc, char* argv[] ) { 
 
     M3 m3("m3");
-    sc_start();
+    sc_core::sc_start();
     std::cout << "program completed" << std::endl;
     return 0;
 }

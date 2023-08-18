@@ -3,7 +3,7 @@
 // If the execution log matches the golden log, the compilation and execution validate the
 // example.
 
-#include <systemc.h>
+#include <systemc>
 
 
 struct A : sc_core::sc_module {
@@ -42,7 +42,7 @@ int sc_main( int argc, char* argv[] ) {
 
     Top top("top");
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::vector<sc_core::sc_object*> tops = sc_core::sc_get_top_level_objects();
     for ( size_t i = 0; i < tops.size(); ++i ) {

@@ -3,7 +3,7 @@
 // If the execution log matches the golden log this example compiles and executes
 // correctly.
 
-#include <systemc.h>
+#include <systemc>
 
 
 SC_MODULE(M) 
@@ -31,7 +31,7 @@ int sc_main( int argc, char* argv[] ) {
 
     M m("m");
 
-    sc_start();
+    sc_core::sc_start();
 
     std::cout << "program completed" << std::endl;
     return 0;

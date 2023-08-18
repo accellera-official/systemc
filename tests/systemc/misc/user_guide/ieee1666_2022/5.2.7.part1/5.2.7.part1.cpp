@@ -1,7 +1,7 @@
 // COMPLETE TEST
 //
 // This example illustrates variable initialization, and compilation is sufficient.
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M1) 
 {
@@ -26,7 +26,7 @@ int  sc_main(int argc, char* argv[] ) {
     M1 m1("m1");
     M2 m2("m2");
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
     std::cout << "program complete" << std::endl;
     return 0;
 }

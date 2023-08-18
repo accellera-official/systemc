@@ -1,4 +1,9 @@
-#include <systemc.h>
+// COMPLETE TEST
+//
+// If the execution log matches the golden log this test compiles and executes 
+// correctly.
+
+#include <systemc>
 
 
 SC_MODULE(Mod) {
@@ -19,7 +24,7 @@ SC_MODULE(Mod) {
     }
 
     void M() {
-        std::cout << sc_time_stamp() << std::endl;
+        std::cout << sc_core::sc_time_stamp() << std::endl;
     }
 };
 
@@ -27,7 +32,7 @@ int sc_main( int argc, char* argv[] ) {
 
     Mod m("m");
 
-    sc_start();
+    sc_core::sc_start();
     std::cout << "program completed" << std::endl;
     return 0;
 }

@@ -1,4 +1,9 @@
-#include <systemc.h>
+// COMPLETE TEST
+//
+// If the execution matches the golden log this test compile and executes
+// correctly
+
+#include <systemc>
 	
 class U {
   public:
@@ -72,7 +77,7 @@ SC_MODULE(Top) {
 int sc_main( int argc, char* argv[] ) { 
 
     Top top("top");
-    sc_start();
+    sc_core::sc_start();
 
     std::cout << std::endl << "program completed" << std::endl;
     return 0;

@@ -2,7 +2,7 @@
 //
 // If this test runs through the sc_start call then the binding process has been tested.
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(M) 
 {
@@ -40,7 +40,7 @@ int sc_main( int argc, char* argv[] ) {
     top.A(X);
     top.B(Y);
 
-    sc_start(SC_ZERO_TIME);
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

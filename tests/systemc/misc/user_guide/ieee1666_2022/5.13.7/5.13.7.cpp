@@ -5,7 +5,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 struct i_f : virtual sc_core::sc_interface {
     virtual void print() = 0;

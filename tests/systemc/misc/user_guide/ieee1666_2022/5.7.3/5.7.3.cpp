@@ -2,7 +2,7 @@
 //
 // @@@@ ISSUES @@@@
 #define SC_INCLUDE_DYNAMIC_PROCESSE
-#include <systemc.h>
+#include <systemc>
 
 
 class if_class : public sc_core::sc_interface {

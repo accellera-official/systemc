@@ -3,7 +3,7 @@
 // If the execution log matches the golden log this test verifies compilation and
 // execution.
 
-#include <systemc.h>
+#include <systemc>
 
 #define NOTIFY1(ARG) { \
     std::cout << "FIRE: event.notify1(" << #ARG << ")" << std::endl; \

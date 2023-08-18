@@ -4,7 +4,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 class bus_interface : virtual public sc_core::sc_interface {
   public:

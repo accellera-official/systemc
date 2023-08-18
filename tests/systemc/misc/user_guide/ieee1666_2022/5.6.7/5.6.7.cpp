@@ -4,12 +4,12 @@
 // correctly.
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
-#include <systemc.h>
+#include <systemc>
 
 
 
 SC_MODULE(Mod) {
-    sc_in<bool> in;
+    sc_core::sc_in<bool> in;
     SC_CTOR(Mod) {
         SC_METHOD(run);
 	sensitive << in;
@@ -42,11 +42,11 @@ SC_MODULE(Mod) {
 
 int sc_main( int argc, char* argv[] ) { 
 
-    sc_clock clock;
-    Mod      mod("mod");
+    sc_core::sc_clock clock;
+    Mod               mod("mod");
     mod.in(clock);
 
-    sc_start(1, sc_core::SC_NS );
+    sc_core::sc_start(1, sc_core::SC_NS );
 
     std::cout << "program completed" << std::endl;
     return 0;

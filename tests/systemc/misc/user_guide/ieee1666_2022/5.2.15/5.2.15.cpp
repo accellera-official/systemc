@@ -4,7 +4,7 @@
 //
 // @@@@ ISSUES @@@@
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(Mod) {
     sc_core::sc_signal<bool> SC_NAMED(A), SC_NAMED(B), SC_NAMED(C),

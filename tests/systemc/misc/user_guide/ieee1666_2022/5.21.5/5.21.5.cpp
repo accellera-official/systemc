@@ -2,13 +2,13 @@
 //
 // If the execution log matches the golden log, the example s valid.
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(TopModule) { SC_CTOR(TopModule) {} };
 
 SC_MODULE(SomeModule)
 {
-    sc_in<bool> SC_NAMED(in);
+    sc_core::sc_in<bool> SC_NAMED(in);
     SC_CTOR(SomeModule) 
     {
         {
@@ -22,7 +22,7 @@ int sc_main( int argc, char* argv[] ) {
 
     SomeModule sm("sm");
 
-    std::vector<sc_object*> tops = sc_get_top_level_objects();
+    std::vector<sc_core::sc_object*> tops = sc_core::sc_get_top_level_objects();
 
     for ( size_t i = 0; i < tops.size(); ++i ) {
         std::cout << tops[i]->name() << std::endl;

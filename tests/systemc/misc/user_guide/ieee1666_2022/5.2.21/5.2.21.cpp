@@ -2,7 +2,7 @@
 //
 // If the execution log matches the golden log this test is successful.
 
-#include <systemc.h>
+#include <systemc>
 
 
 SC_MODULE(Top)

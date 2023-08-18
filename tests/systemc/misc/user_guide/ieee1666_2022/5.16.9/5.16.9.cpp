@@ -3,18 +3,18 @@
 // THE LRM EXAMPLE HAS ISSUES:
 //
 // (1) SomeModule::in is a declared a reference and needs to be an instance.
-// (2) ~sc_prim_channle is a protected method.
+// (2) ~sc_prim_channel is a protected method.
 //
 // @@@@ ISSUES @@@@
 
 
-#include <systemc.h>
+#include <systemc>
 
 SC_MODULE(SignalStub) {
     SC_CTOR(SignalStub) {}
     ~SignalStub() {
         for ( auto o : get_child_objects() ) {
-	    std::cout << o->name() << endl;
+	    std::cout << o->name() << std::endl;
 	    // delete dynamic_cast<sc_core::sc_prim_channel*>(o);
 	}
     }
