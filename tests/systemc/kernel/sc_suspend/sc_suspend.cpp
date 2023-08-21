@@ -21,8 +21,6 @@
 
   callbacks.cpp -- Test of stage callbacks
 
-  Note: requires sc_suspending support in the kernel
-
   Original Author: Mark Burton, Qualcomm, 2023-08-10
 
  *****************************************************************************/
@@ -38,23 +36,23 @@
  *****************************************************************************/
 #include <future>
 #include <queue>
-
+#include <sstream>
 #include <mutex>
 #include <systemc>
 #include <thread>
 
-class async_event : public sc_core::sc_prim_channel, public sc_core::sc_event
+class async_event : public sc_core::sc_prim_channel, public sc_core::sc_event, public sc_core::sc_stage_callback_if
 {
 private:
+    int outstanding;
     sc_core::sc_time m_delay;
     std::thread::id tid;
     std::mutex mutex; // Belt and braces
-    int outstanding;
 
 public:
     async_event(bool start_attached = true): outstanding(0)
     {
-        register_simulation_phase_callback(sc_core::SC_PAUSED | sc_core::SC_START_OF_SIMULATION);
+        sc_core::sc_register_stage_callback(*this, sc_core::SC_PRE_PAUSE | sc_core::SC_PRE_SUSPEND | sc_core::SC_POST_SUSPEND);
         tid = std::this_thread::get_id();
         outstanding = 0;
         enable_attach_suspending(start_attached);
@@ -99,20 +97,47 @@ private:
         mutex.unlock();
     }
 
-    void simulation_phase_callback()
+    void stage_callback(const sc_core::sc_stage& stage)
     {
-        mutex.lock();
-        if (outstanding) request_update();
-        mutex.unlock();
+        std::ostringstream stage_str;
+        stage_str << stage;
+        SC_REPORT_INFO("async_event", ("Called stage_callback at stage: " + stage_str.str()).c_str());
+        switch (stage) {
+            case sc_core::SC_PRE_PAUSE:    // execute for SC_PRE_PAUSE...
+            case sc_core::SC_PRE_SUSPEND:  // ...and SC_PRE_SUSPEND
+              mutex.lock();
+              if (outstanding) { request_update(); } 
+              mutex.unlock();
+              break;
+            default: /* no action for other callbacks*/
+              break;
+        }
     }
 };
 
 SC_MODULE (tester) {
-    sc_core::sc_event ctrlev;
-    async_event start;
     std::thread t;
+    async_event start;
+    sc_core::sc_event ctrlev;
     std::mutex mutex;
     std::condition_variable condition;
+
+    SC_CTOR (tester) :
+        t([&] {
+            std::unique_lock<decltype(mutex)> lock(mutex);
+            condition.wait(lock);
+            SC_REPORT_INFO("child thread", "Release child thread");
+            start.notify();
+        }),
+        start(false)
+    {
+        SC_THREAD(ticker);
+        SC_METHOD(control);
+        dont_initialize();
+        sensitive << ctrlev;
+        SC_THREAD(starter);
+        ctrlev.notify(sc_core::sc_time(350, sc_core::SC_US)); // notify in the future to 'hang'.
+    }
 
     void ticker()
     {
@@ -126,7 +151,7 @@ SC_MODULE (tester) {
     void control()
     {
         if (sc_core::sc_time_stamp() < sc_core::sc_time(400, sc_core::SC_US)) {
-            SC_REPORT_INFO("tester", ("Suspend all SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
+            SC_REPORT_INFO("tester", ("Suspend at SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
             sc_core::sc_suspend_all();
             start.async_attach_suspending(); // If we dont attach here, the simulation will finish at this point because
                                              // everything is suspended.
@@ -135,6 +160,7 @@ SC_MODULE (tester) {
             std::lock_guard<decltype(mutex)> lock(mutex);
             condition.notify_one();
         } else {
+            SC_REPORT_INFO("tester", ("Unsuspend at SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
             sc_core::sc_unsuspend_all();
         }
     }
@@ -154,23 +180,10 @@ SC_MODULE (tester) {
         sc_core::sc_suspendable();
         ctrlev.notify();
     }
-    SC_CTOR (tester) :
-        t([&] {
-            std::unique_lock<decltype(mutex)> lock(mutex);
-            condition.wait(lock);
-            SC_REPORT_INFO("child thread", "Release child thread");
-            start.notify();
-        }),
-        start(false)
-        {
-            SC_THREAD(ticker);
-            SC_METHOD(control);
-            dont_initialize();
-            sensitive << ctrlev;
-            SC_THREAD(starter);
-            ctrlev.notify(sc_core::sc_time(350, sc_core::SC_US)); // notify in the future to 'hang'.
-        }
+
 };
+
+
 int sc_main(int, char*[])
 {
     tester t1("mytester");
