@@ -31,18 +31,17 @@ const char* tlm_socket_category_name[] = {
   "TLM_INITIATOR_SOCKET",
   "TLM_TARGET_SOCKET" };
 
+template <typename T>
 SC_MODULE(mod)
 {
-  tlm::tlm_initiator_socket<32> initiator_socket;
+  T socket;
 
   std::unordered_map<std::type_index, std::string> tlm_base_protocol_types_names;
 
   SC_CTOR(mod)
   {
-    tlm::tlm_initiator_socket<32>* socket = &initiator_socket;
-  
     // check if derived from tlm_base_socket_if
-    tlm::tlm_base_socket_if* base = dynamic_cast<tlm::tlm_base_socket_if*>(socket);
+    tlm::tlm_base_socket_if* base = dynamic_cast<tlm::tlm_base_socket_if*>(&socket);
     sc_assert(base);
 
     tlm_base_protocol_types_names[std::type_index(typeid(tlm::tlm_base_protocol_types))] = "tlm_base_protocol_types";
@@ -81,7 +80,8 @@ SC_MODULE(mod)
 
 int sc_main(int argc, char* argv[])
 {
-  mod m("m");  
+  mod<tlm::tlm_initiator_socket<32> > m1("m1");  
+  mod<tlm::tlm_target_socket<16> > m2("m2");  
 
   return 0;
 }
