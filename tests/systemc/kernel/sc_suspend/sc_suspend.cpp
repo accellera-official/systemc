@@ -109,7 +109,7 @@ private:
               if (outstanding) { request_update(); } 
               mutex.unlock();
               break;
-            default: /* no action for other callbacks*/
+            default: // no action for other callbacks
               break;
         }
     }
@@ -136,7 +136,7 @@ SC_MODULE (tester) {
         dont_initialize();
         sensitive << ctrlev;
         SC_THREAD(starter);
-        ctrlev.notify(sc_core::sc_time(350, sc_core::SC_US)); // notify in the future to 'hang'.
+        ctrlev.notify(sc_core::sc_time(350, sc_core::SC_US)); // notify in the future to 'hang'
     }
 
     void ticker()
@@ -147,14 +147,13 @@ SC_MODULE (tester) {
         }
     }
 
-    // NB suspend/unsuspend must come from SAME process
-    void control()
+    void control()                       // NB suspend/unsuspend must come from SAME process
     {
         if (sc_core::sc_time_stamp() < sc_core::sc_time(400, sc_core::SC_US)) {
             SC_REPORT_INFO("tester", ("Suspend at SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
             sc_core::sc_suspend_all();
-            start.async_attach_suspending(); // If we dont attach here, the simulation will finish at this point because
-                                             // everything is suspended.
+            start.async_attach_suspending(); // if we don't attach here, the simulation will finish at this point because
+                                             // everything is suspended
 
             // triggure the other thread to release us !
             std::lock_guard<decltype(mutex)> lock(mutex);
@@ -164,15 +163,15 @@ SC_MODULE (tester) {
             sc_core::sc_unsuspend_all();
         }
     }
-    /* this is a thread, so it can call wait */
-    void starter()
+
+    void starter()                       // this is a thread, so it can call wait
     {
-        wait(start);                     // wait for the other thread to (async) notify us.
-        t.join();                        // We're done with that thread now.
-        start.async_detach_suspending(); // we dont need this any more, we should now just finish the SystemC simulation
+        wait(start);                     // wait for the other thread to (async) notify us
+        t.join();                        // we're done with that thread now
+        start.async_detach_suspending(); // we don't need this any more, we should now just finish the SystemC simulation
 
         SC_REPORT_INFO("tester", ("Restart SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
-        sc_core::sc_unsuspendable(); // If we dont mark this as unsuspendable, the simulation will end at this point!
+        sc_core::sc_unsuspendable(); // If we don't mark this as unsuspendable, the simulation will end at this point!
 
         SC_REPORT_INFO("tester", ("Start to advance SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
         wait(110, sc_core::SC_US);
