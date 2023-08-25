@@ -33,20 +33,20 @@ SC_MODULE(modc)
 
 SC_MODULE(modb)
 {
-  moda a1{"a1"}; /* warning: object already exists: b0.a1. Latter declaration will be renamed to b0.a1_0*/
+  moda a1{"a1"}; // warning: object already exists: b0.a1. Latter declaration will be renamed to b0.a1_0
   moda b1{"b1"};
   modc *c;
 
   SC_CTOR(modb)
   {
     bool ok;
-    ok = sc_core::sc_register_hierarchical_name("b0"); /* warning: name already exists: b0 (sc_module) */
+    ok = sc_core::sc_register_hierarchical_name("b0"); // warning: name already exists: b0 (sc_module)
     sc_assert(!ok);
 
-    ok = sc_core::sc_register_hierarchical_name(this, "c1"); /* valid */
+    ok = sc_core::sc_register_hierarchical_name(this, "c1"); // valid
     sc_assert(ok);
 
-    c = new modc("c1");  /* warning: object already exists: b0.c1. Latter declaration will be renamed to b0.c1_0 */
+    c = new modc("c1"); // warning: object already exists: b0.c1. Latter declaration will be renamed to b0.c1_0
     
     ok = sc_core::sc_unregister_hierarchical_name("b0");
     sc_assert(!ok);
@@ -65,8 +65,8 @@ int sc_main(int, char**)
   ok = sc_core::sc_register_hierarchical_name("b0.a1");
   sc_assert(ok);
 
-  moda a0("a0"); /* warning: object already exists: a0. Latter declaration will be renamed to a0_0 * */
-  modb b0("b0"); /* valid */
+  moda a0("a0"); // warning: object already exists: a0. Latter declaration will be renamed to a0_0
+  modb b0("b0"); // valid
 
   ok = sc_core::sc_unregister_hierarchical_name("a0");
   sc_assert(ok);
