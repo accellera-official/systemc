@@ -33,14 +33,14 @@ SC_MODULE(mod)
   sc_core::sc_in<int>                                  in;
   sc_core::sc_port<sc_core::sc_signal_inout_if<bool> > out1;
   sc_core::sc_out<int>                                 out2;
-  sc_core::sc_export<sc_core::sc_signal_in_if<int> >   exp;
+  sc_core::sc_export<sc_core::sc_signal_in_if<int> >   exp_in;
 
   SC_CTOR(mod)
   {
     sc_assert(in.get_interface_type() == std::type_index(typeid(sc_core::sc_signal_in_if<int>)));
     sc_assert(out1.get_interface_type() == std::type_index(typeid(sc_core::sc_signal_inout_if<bool>)));
     sc_assert(out2.get_interface_type() == std::type_index(typeid(sc_core::sc_signal_inout_if<int>)));
-    sc_assert(exp.get_interface_type() == std::type_index(typeid(sc_core::sc_signal_in_if<int>)));
+    sc_assert(exp_in.get_interface_type() == std::type_index(typeid(sc_core::sc_signal_in_if<int>)));
   }
 
 };
@@ -55,7 +55,7 @@ int sc_main(int, char**)
     mod1.in(s1);
     mod1.out1(s2);
     mod1.out2(s3);
-    mod1.exp(e1);
+    mod1.exp_in(e1);
 
   sc_core::sc_start();
 
