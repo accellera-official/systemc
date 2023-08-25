@@ -56,8 +56,8 @@ public:
     sc_register_stage_callback( *this, SC_POST_UPDATE );
     sc_register_stage_callback( *this, SC_PRE_TIMESTEP );
     sc_register_stage_callback( *this, SC_PRE_PAUSE );
-    sc_register_stage_callback( *this, SC_PRE_SUSPEND );  /* not tested here */
-    sc_register_stage_callback( *this, SC_POST_SUSPEND ); /* not tested here */
+    sc_register_stage_callback( *this, SC_PRE_SUSPEND );  // not tested here
+    sc_register_stage_callback( *this, SC_POST_SUSPEND ); // not tested here
     sc_register_stage_callback( *this, SC_PRE_STOP );
     sc_register_stage_callback( *this, SC_POST_END_OF_SIMULATION );
   }
@@ -120,18 +120,18 @@ public:
 
     switch( stage )
     {
-    case SC_POST_UPDATE:
-    case SC_PRE_TIMESTEP:
-      if( timed_count == 3 )
-        ev.cancel();
-      if( delta_count == 2 )
-        ev.notify(SC_ZERO_TIME);
-      if( timed_count == 2 )
-        ev.notify( 1, SC_NS );
-      break;
-    default:
-      // do nothing
-      break;
+      case SC_POST_UPDATE:   // for SC_POST_UPDATE..
+      case SC_PRE_TIMESTEP:  //  ..and SC_PRE_TIMESTEP 
+        if( timed_count == 3 )
+          ev.cancel();
+        if( delta_count == 2 )
+          ev.notify(SC_ZERO_TIME);
+        if( timed_count == 2 )
+          ev.notify( 1, SC_NS );
+        break;
+      default:
+        // do nothing
+        break;
     }
   }
 
@@ -197,7 +197,7 @@ private:
 int sc_main(int, char*[])
 {
   stage_tracer tracer("tracer");
-  sc_start(); /* wait for sc_pause */
-  sc_start(); /* resume, wait for sc_stop */
+  sc_start(); // wait for sc_pause
+  sc_start(); // resume, wait for sc_stop
   return 0;
 }
