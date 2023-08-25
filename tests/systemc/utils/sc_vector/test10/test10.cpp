@@ -51,23 +51,23 @@ SC_MODULE( module )
     sc_assert( vector_ev.size() == 1);
 
     // after init, only port3 can add elements
-    vector_port3.emplace_back(); /* add unnamed port */
+    vector_port3.emplace_back();                      // add unnamed port
     sc_assert( vector_port3.size() == 4 );
 
-    vector_port3.emplace_back_with_name("late_port"); /* add port by name*/
+    vector_port3.emplace_back_with_name("late_port"); // add port by name
     sc_assert( vector_port3.size() == 5 );
   }
 
   void end_of_elaboration()
   {
-    vector_ev.emplace_back_with_name("my_event"); /* note, this event in not printed, 
-                                                     since the call in top is before this one */
+    vector_ev.emplace_back_with_name("my_event"); // note, this event is not printed, 
+                                                  // since the call in top is before this one
     sc_assert( vector_ev.size() == 2 );
   }
 
   void start_of_simulation()
   {
-    vector_ev.emplace_back_with_name("my_late_event"); /* not allowed after elab, will through an error */
+    vector_ev.emplace_back_with_name("my_late_event"); // not allowed after elab, will throw an error
   }
 
 };
