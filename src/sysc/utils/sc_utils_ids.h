@@ -62,10 +62,6 @@ SC_DEFINE_MESSAGE(SC_ID_VECTOR_NONOBJECT_ELEMENTS_,
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_EMPLACE_LOCKED_,
                   809, "attempt to insert into locked sc_vector" )
 
-SC_DEFINE_MESSAGE(SC_ID_OPTIONAL_INIT_CALLED_TWICE_,
-                  820, "sc_optional::init has already been called,"
-                       " stored object is")
-
 /*****************************************************************************
 
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
