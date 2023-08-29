@@ -279,11 +279,10 @@ if (NOT CMAKE_BUILD_TYPE)
        FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-set (CMAKE_CXX_STANDARD 17 CACHE STRING
-     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
-set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
-     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
-mark_as_advanced (CMAKE_CXX_STANDARD_REQUIRED)
+#target_compile_features(systemc PUBLIC cxx_std_17)
+#set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
+     #"The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+#mark_as_advanced (CMAKE_CXX_STANDARD_REQUIRED)
 
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
@@ -763,6 +762,7 @@ install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
          COMPONENT dev)
+target_compile_features(systemc PUBLIC cxx_std_17)
 
 # Register the SystemCLanguage and SystemCTLM packages for use from the
 # build tree. (This registers the build tree with the global CMake-registry.)
