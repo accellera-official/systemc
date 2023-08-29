@@ -143,7 +143,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_hash.cpp
                      sysc/utils/sc_list.cpp
                      sysc/utils/sc_mempool.cpp
-                     sysc/utils/sc_optional.cpp
                      sysc/utils/sc_pq.cpp
                      sysc/utils/sc_report.cpp
                      sysc/utils/sc_report_handler.cpp
@@ -357,7 +356,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
                      sysc/utils/sc_meta.h
-                     sysc/utils/sc_optional.h
                      sysc/utils/sc_pq.h
                      sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h
@@ -468,7 +466,6 @@ target_compile_definitions (
   SC_BUILD
   SC_INCLUDE_FX
   $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
-  $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
   $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
   $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
@@ -484,7 +481,6 @@ target_compile_definitions (
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
   $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>
-  $<$<BOOL:${ENABLE_SUSPEND_ALL}>:SC_ENABLE_SUSPEND_ALL>
     )
 
 target_compile_options(

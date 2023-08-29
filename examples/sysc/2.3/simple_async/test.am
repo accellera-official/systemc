@@ -44,7 +44,6 @@
 ##   %C%: 2_3_simple_async
 
 # example requires async-update support
-if ! DISABLE_ASYNC_UPDATES
 
 examples_TESTS += 2.3/simple_async/test
 
@@ -94,6 +93,5 @@ examples_DIRS += 2.3/simple_async
 
 #2_3_simple_async_FILTER = 
 
-endif # ! DISABLE_ASYNC_UPDATES
 ## Taf!
 ## :vim:ft=automake:

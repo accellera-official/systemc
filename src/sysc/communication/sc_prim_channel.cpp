@@ -32,11 +32,8 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object_int.h"
-
-#ifndef SC_DISABLE_ASYNC_UPDATES
-#  include "sysc/communication/sc_host_mutex.h"
-#  include "sysc/communication/sc_host_semaphore.h"
-#endif
+#include "sysc/communication/sc_host_mutex.h"
+#include "sysc/communication/sc_host_semaphore.h"
 
 #include <algorithm> // std::find
 
@@ -151,7 +148,6 @@ sc_prim_channel::simulation_done()
 
 class sc_prim_channel_registry::async_update_list
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
 public:
 
     bool pending() const
@@ -232,7 +228,6 @@ private:
     std::vector< sc_prim_channel* > m_suspending_channels;
     bool                            m_has_suspending_channels;
 
-#endif // ! SC_DISABLE_ASYNC_UPDATES
 };
 
 // ----------------------------------------------------------------------------
@@ -288,61 +283,38 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
     m_prim_channel_vec[i] = m_prim_channel_vec.back();
     m_prim_channel_vec.pop_back();
 
-#ifndef SC_DISABLE_ASYNC_UPDATES
-    // remove, if async suspending channel
     m_async_update_list_p->detach_suspending(prim_channel_);
-#endif
 }
 
 bool
 sc_prim_channel_registry::pending_async_updates() const
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     return m_async_update_list_p->pending();
-#else
-    return false;
-#endif
 }
 
 bool
 sc_prim_channel_registry::async_suspend()
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->suspend();
     return !pending_async_updates();
-#else
-    return true;
-#endif
 }
 
 void
 sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->append( prim_channel_ );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, prim_channel_.name() );
-#endif
 }
 
 void
 sc_prim_channel_registry::async_attach_suspending(sc_prim_channel& p)
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->attach_suspending( p );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-#endif
 }
 
 void
 sc_prim_channel_registry::async_detach_suspending(sc_prim_channel& p)
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->detach_suspending( p );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-#endif
 }
 
 // +----------------------------------------------------------------------------
@@ -357,10 +329,8 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels set external to the
     // simulator.
 
-#ifndef SC_DISABLE_ASYNC_UPDATES
     if( m_async_update_list_p->pending() )
 	m_async_update_list_p->accept_updates();
-#endif
 
     sc_prim_channel* next_p; // Next update to perform.
     sc_prim_channel* now_p;  // Update now performing.
@@ -401,9 +371,7 @@ sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   ,  m_update_list_end((sc_prim_channel*)(void*)this)
   ,  m_update_list_p((sc_prim_channel*)this)
 {
-#   ifndef SC_DISABLE_ASYNC_UPDATES
-        m_async_update_list_p = new async_update_list();
-#   endif
+    m_async_update_list_p = new async_update_list();
 }
 
 

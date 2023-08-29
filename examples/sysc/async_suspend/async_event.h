@@ -22,8 +22,8 @@
 
  *****************************************************************************/
 
-#ifndef ASYNCEVENT_H
-#define ASYNCEVENT_H
+#ifndef ASYNC_EVENT_H
+#define ASYNC_EVENT_H
 
 /* this is a very simplistic implementation of an event that can be notified
  * from a different thread. Ensuring that the normal systemc semantics of
