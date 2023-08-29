@@ -454,6 +454,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      >)
 
 add_library (SystemC::systemc ALIAS systemc)
+target_compile_features(systemc PUBLIC cxx_std_17)
 
 target_compile_definitions (
   systemc
