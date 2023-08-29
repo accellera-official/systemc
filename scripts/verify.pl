@@ -751,6 +751,9 @@ sub init_globals
         'skip',               '              skipped              ',
         'unknown',            '          unknown problem          '
     );
+
+    $rt_systemc_run_tool = '';   # default: do not run tests under a tool
+
 }
 
 # -----------------------------------------------------------------------------
@@ -981,6 +984,8 @@ Usage: $0 [<options>] <directories|names>
       -quantify    Link tests with quantify.
       -Q           Run quick tests only.
       -recheck     Run previously failed tests (taken from $rt_output_file).
+      -run-tool    Specify a tool that the test will run under
+                   (e.g., valgrind or perf).
       -t <time>    Set the timeout for a test in minutes (default 5 minutes).
       -T           Measure runtime of tests in seconds.
       -v           Verbose output.
@@ -1179,6 +1184,12 @@ sub parse_args
             # verbose
             if( $arg =~ /^-v/ ) {
                 $rt_verbose = 1;
+                next;
+            }
+
+            if( $arg =~ /^-run-tool/ ) {
+                $arg = shift @arglist;
+                $rt_systemc_run_tool = $arg;
                 next;
             }
 
@@ -2556,7 +2567,8 @@ sub run_test
     # ***** SIMULATE *****
 
     # run simulation
-    $command = "./$rt_prodname";
+    $command = "$rt_systemc_run_tool";
+    $command .= " ./$rt_prodname";
     $command .= " $sym_opts";
 
     # add logfile
