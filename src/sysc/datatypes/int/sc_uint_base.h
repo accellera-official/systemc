@@ -834,13 +834,11 @@ public:
         { return uint64_to_double( m_val ); }
 
 
-#ifndef _32BIT_
     long long_low() const
 	{ return (long) (m_val & UINT64_32ONES); }
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
-#endif
 
     // explicit conversion to character string
 

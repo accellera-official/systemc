@@ -72,13 +72,8 @@ const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
 
 const small_type NB_DEFAULT_BASE = SC_DEC;
 
-#ifndef _32BIT_
 const uint64 UINT_ZERO = UINT64_ZERO;
 const uint64 UINT_ONE  = UINT64_ONE;
-#else
-const unsigned int UINT_ZERO = 0U;
-const unsigned int UINT_ONE  = 1U;
-#endif
 
 int byte_one_bits[256] = { 
     0, // 0x0
