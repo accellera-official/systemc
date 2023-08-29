@@ -150,6 +150,11 @@ public:
     char to_char() const
 	{ return sc_logic( value() ).to_char(); }
 
+    explicit operator bool () const
+        { return to_bool(); }
+
+    bool operator ! () const
+        { return !to_bool(); }
 
     // common methods
 

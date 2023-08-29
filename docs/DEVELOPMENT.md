@@ -366,6 +366,8 @@ performed by the maintainer
         git merge --no-commit master
         git rm <new-internal-file...> # drop new or changed "private" files
         git commit -m "merge master branch for x.x.x release"
+        
+        *NOTE:* `.gitignore` has to be removed in this branch otherwise Makefile.in files are missing in the commit as well as in the subsequent git archive step. 
 
 2. **Update the Autoconf (and other auto-generated) files**
 

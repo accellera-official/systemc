@@ -128,7 +128,6 @@
 
 #include "sysc/utils/sc_utils_ids.h"
 
-#include "sysc/utils/sc_optional.h"
 #include "sysc/utils/sc_pvector.h"
 #include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_vector.h"

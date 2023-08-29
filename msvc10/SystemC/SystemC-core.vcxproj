@@ -334,7 +334,7 @@
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_logic.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_lv_base.cpp" />
     <ClCompile Include="..\..\src\sysc\utils\sc_mempool.cpp" />
-    <ClCompile Include="..\..\src\sysc\utils\sc_optional.cpp" />
+
     <ClCompile Include="..\..\src\sysc\kernel\sc_method_process.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_module.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_module_name.cpp" />
@@ -519,7 +519,6 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_machine.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_meta.h" />
-    <ClInclude Include="..\..\src\sysc\utils\sc_optional.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pq.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_ptr_flag.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pvector.h" />

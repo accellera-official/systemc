@@ -144,7 +144,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_hash.cpp
                      sysc/utils/sc_list.cpp
                      sysc/utils/sc_mempool.cpp
-                     sysc/utils/sc_optional.cpp
                      sysc/utils/sc_pq.cpp
                      sysc/utils/sc_report.cpp
                      sysc/utils/sc_report_handler.cpp
@@ -369,7 +368,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
                      sysc/utils/sc_meta.h
-                     sysc/utils/sc_optional.h
                      sysc/utils/sc_pq.h
                      sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h

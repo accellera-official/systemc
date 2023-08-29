@@ -45,7 +45,6 @@ class SC_API sc_module;
 class sc_name_gen;
 class SC_API sc_object;
 class SC_API sc_object_host;
-class SC_API sc_optional_base;
 class sc_phase_callback_registry;
 class sc_runnable;
 class SC_API sc_simcontext;
@@ -64,7 +63,6 @@ class SC_API sc_hierarchy_scope
 {
     friend class sc_object;
     friend class sc_object_host;
-    friend class sc_optional_base;
     friend class sc_module;
 
     struct root_tag {};
