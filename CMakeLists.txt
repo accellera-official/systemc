@@ -736,12 +736,12 @@ install (FILES AUTHORS.md
 export (TARGETS systemc
         NAMESPACE SystemC::
         FILE SystemCLanguageTargets.cmake)
+target_compile_features(systemc PUBLIC cxx_std_17)
 # ... to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
          COMPONENT dev)
-target_compile_features(systemc PUBLIC cxx_std_17)
 
 # Register the SystemCLanguage and SystemCTLM packages for use from the
 # build tree. (This registers the build tree with the global CMake-registry.)
