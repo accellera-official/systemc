@@ -75,6 +75,8 @@ const small_type NB_DEFAULT_BASE = SC_DEC;
 const uint64 UINT_ZERO = UINT64_ZERO;
 const uint64 UINT_ONE  = UINT64_ONE;
 
+// Table providing the number of bits on in a byte, used in sc_vector_utils.h.
+
 int byte_one_bits[256] = { 
     0, // 0x0
     1, // 0x1

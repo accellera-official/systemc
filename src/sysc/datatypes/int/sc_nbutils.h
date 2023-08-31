@@ -63,7 +63,6 @@
 #ifndef SC_NBUTILS_H
 #define SC_NBUTILS_H
 
-
 #include <cmath>
 #include <limits>
 
@@ -78,26 +77,26 @@ namespace sc_dt
 
 // Parse a character string into its equivalent binary bits.
 extern
-SC_API void parse_binary_bits( 
+SC_API void parse_binary_bits(
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 
 // Parse a character string into its equivalent hexadecimal bits.
 extern
-SC_API void parse_hex_bits( 
+SC_API void parse_hex_bits(
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
 // ----------------------------------------------------------------------------
-//  Various utility functions. 
+//  Various utility functions.
 // ----------------------------------------------------------------------------
 
 // Concatenate the high part h and low part l. Assumes that h and l
 // are less than or equal to HALF_DIGIT_MASK;
 inline 
 sc_digit 
-concat(sc_digit h, sc_digit l) 
+concat(sc_digit h, sc_digit l)
 {
   return ((h << BITS_PER_HALF_DIGIT) | l);
 }
@@ -204,7 +203,7 @@ safe_set(int i, bool v, sc_digit *d)
 #endif
 
   int bit_num = SC_BIT_INDEX(i);
-  int digit_num = SC_DIGIT_INDEX(i);    
+  int digit_num = SC_DIGIT_INDEX(i);
   
   if (v)
     d[digit_num] |= one_and_zeros(bit_num);      
@@ -333,6 +332,5 @@ class SC_API sc_digit_heap {
 extern sc_digit_heap SC_API sc_temporary_digits;
 
 } // namespace sc_dt
-
 
 #endif

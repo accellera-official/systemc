@@ -76,8 +76,6 @@ if (ALIAS_INT_TO_BIGINT)
   add_definitions (-DALIAS_SC_INT)
 endif (ALIAS_INT_TO_BIGINT)
 
-
-
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
   # console applications with Visual Studio. Instead of _CONSOLE, _LIB may be

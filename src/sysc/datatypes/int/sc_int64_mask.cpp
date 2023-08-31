@@ -65,6 +65,8 @@
 namespace sc_dt
 {
 
+// 64-bit sign extensions masks.
+
 const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH] = 
 {
 {

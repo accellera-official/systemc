@@ -241,17 +241,9 @@ void sc_thread_process::enable_process(
     //
     // Well, actually wait for someone else to put it on the run queue until we fix
     // the tests in systemc/1666-2011-compliance, that assume things show up
-    // one clock later. @@@@####
+    // one clock later. 
 
     m_state = m_state & ~ps_bit_disabled;
-    #if 0 
-    if ( m_state == ps_bit_ready_to_run )
-    {
-        m_state = ps_normal;
-	if ( next_runnable() == 0 )
-	    simcontext()->push_runnable_thread(this);
-    }
-    #endif
 }
 
 

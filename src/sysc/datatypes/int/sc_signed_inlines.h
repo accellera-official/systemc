@@ -181,7 +181,6 @@ sc_signed::sc_signed(const sc_signed_subref_r& v) :
         vector_reverse_bits( digit, high_bit-low_bit, 0 );
     }
     adjust_hod();
-
 }
 
 inline

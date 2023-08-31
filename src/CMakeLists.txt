@@ -97,7 +97,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_pow10.cpp
                      sysc/datatypes/fx/scfx_rep.cpp
                      sysc/datatypes/fx/scfx_utils.cpp
-		     sysc/datatypes/int/sc_int32_mask.cpp
 		     sysc/datatypes/int/sc_int64_io.cpp
 		     sysc/datatypes/int/sc_int64_mask.cpp
 		     sysc/datatypes/int/sc_int_base.cpp
@@ -499,8 +498,7 @@ target_compile_definitions (
 
 
 
-MESSAGE(STATUS "Bigint config: " ${BIGINT_CONFIGURATION})
-
+MESSAGE(STATUS "Bigint configuration: " ${BIGINT_CONFIGURATION})
 if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_NO_BASE_CLASS")
   add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
 endif()

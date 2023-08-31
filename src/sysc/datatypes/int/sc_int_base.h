@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -343,7 +343,7 @@ public:
     // copy constructor
 
     sc_int_subref_r( const sc_int_subref_r& a ) :
-        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ), 
+        sc_value_base(a), m_left( a.m_left ), m_obj_p( a.m_obj_p ),
 	m_right( a.m_right )
         {}
 
@@ -1393,7 +1393,6 @@ operator >> ( ::std::istream& is, sc_int_base& a )
 }
 
 } // namespace sc_dt
-
 
 #endif
 

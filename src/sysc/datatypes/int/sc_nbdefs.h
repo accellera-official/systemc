@@ -225,7 +225,7 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 // Support for the long long type. This type is not in the standard
 // but is usually supported by compilers.
 #ifndef _WIN32
-#   if defined(__x86_64__) || defined(__aarch64_)
+#   if defined(__x86_64__) || defined(__aarch64__)
         typedef long long          int64;
         typedef unsigned long long uint64;
 #   else

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -190,7 +190,7 @@ bool sc_uint_subref_r::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     dst_i = SC_DIGIT_INDEX(low_i);
     left_shift = SC_BIT_INDEX(low_i);
-    high_i = low_i + (m_left-m_right); 
+    high_i = low_i + (m_left-m_right);
     end_i = SC_DIGIT_INDEX(high_i);
     mask = ~mask_int[m_left][m_right];
     val = (m_obj_p->m_val & mask) >> m_right;
@@ -384,7 +384,7 @@ sc_uint_base::check_value() const
 
 // constructors
 
-sc_uint_base::sc_uint_base( const sc_bv_base& v ) 
+sc_uint_base::sc_uint_base( const sc_bv_base& v )
     : m_val(0), m_len( v.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
@@ -483,7 +483,6 @@ sc_uint_base::operator = ( const char* a )
         std::stringstream msg;
         msg << "character string '" << a << "' is not valid";
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg.str().c_str() );
-
     }
     return *this;
 }
@@ -601,7 +600,7 @@ bool sc_uint_base::concat_get_data( sc_digit* dst_p, int low_i ) const
     // PROCESS THE FIRST WORD:
 
     mask = ~(~UINT_ZERO << left_shift);
-    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) | 
+    dst_p[dst_i] = (sc_digit)(((dst_p[dst_i] & mask)) |
 	SC_MASK_DIGIT(val << left_shift));
 
     switch ( end_i - dst_i )
@@ -651,7 +650,7 @@ void sc_uint_base::concat_set(const sc_signed& src, int low_i)
     if ( low_i < src.length() )
         *this = src >> low_i;                             
     else
-        *this = (src < 0) ? (int_type)-1 : 0; 
+        *this = (src < 0) ? (int_type)-1 : 0;
 }
 
 void sc_uint_base::concat_set(const sc_unsigned& src, int low_i)

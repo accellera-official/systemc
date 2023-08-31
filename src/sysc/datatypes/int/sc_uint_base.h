@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -19,16 +19,10 @@
 
 /*****************************************************************************
 
-  sc_uint_base.h -- A sc_uint is an unsigned integer whose length is less than
-               the machine's native integer length. We provide two
-               implementations (i) sc_uint with length between 1 - 64, and (ii)
-               sc_uint with length between 1 - 32. Implementation (i) is the
-               default implementation, while implementation (ii) can be used
-               only if compiled with -D_32BIT_. Unlike arbitrary precision,
-               arithmetic and bitwise operations are performed using the native
-               types (hence capped at 32/64 bits). The sc_uint integer is
-               useful when the user does not need arbitrary precision and the
-               performance is superior to sc_bigint/sc_biguint.
+  sc_uint_base.h -- A sc_uint is an unsigned integer whose length is between
+               1 and 64.  The sc_uint integer is useful when the user does 
+	       not need arbitrary precision and the performance is superior 
+	       to sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
 
@@ -312,7 +306,7 @@ class sc_uint_subref_r : public sc_value_base
 
 public:
     sc_uint_subref_r( const sc_uint_subref_r& init ) :
-        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p), 
+        sc_value_base(init), m_left(init.m_left), m_obj_p(init.m_obj_p),
 	m_right(init.m_right)
 	{}
 
@@ -1353,7 +1347,6 @@ operator >> ( ::std::istream& is, sc_uint_base& a )
 }
 
 } // namespace sc_dt
-
 
 #endif
 

@@ -184,5 +184,4 @@ operator << ( ::std::ostream& os, uint64 n )
 
 } // namespace sc_dt
 
-
 #endif

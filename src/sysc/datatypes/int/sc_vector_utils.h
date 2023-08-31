@@ -141,11 +141,11 @@ class ScNativeDigits<int64>
 {
   public:
     enum {
-        ACTUAL_WIDTH = 8*sizeof(int64),
-        DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
+	ACTUAL_WIDTH = 8*sizeof(int64),
+	DIGITS_N     = SC_DIGIT_COUNT(ACTUAL_WIDTH),
 	HOD          = SC_DIGIT_INDEX(ACTUAL_WIDTH-1),
 	WIDTH        = ACTUAL_WIDTH,
-	SIGNED           = 1
+	SIGNED       = 1
     };
 
   public:

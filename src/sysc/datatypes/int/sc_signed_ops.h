@@ -1557,4 +1557,3 @@ operator~(const sc_unsigned& u)
 
 #endif //  SC_SIGNED_OPS_H
 
-

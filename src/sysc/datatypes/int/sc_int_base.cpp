@@ -33,7 +33,6 @@
 
       Name, Affiliation, Date:
   Description of Modification:
-    
  *****************************************************************************/
 
 
@@ -159,7 +158,7 @@ sc_int_bitref::scan( ::std::istream& is )
 // ----------------------------------------------------------------------------
 
 bool sc_int_subref_r::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{    
+{
     int       dst_i;       // Word in dst_p now processing.
     int       end_i;       // Highest order word in dst_p to process.
     int       high_i;      // Index of high order bit in dst_p to set.
@@ -384,7 +383,6 @@ sc_int_base::invalid_index( int i ) const
         << " violates 0 <= index <= " << (m_len - 1);
     SC_REPORT_ERROR( sc_core::SC_ID_OUT_OF_BOUNDS_, msg.str().c_str() );
     sc_core::sc_abort(); // can't recover from here
-
 }
 
 void
@@ -412,7 +410,7 @@ sc_int_base::check_value() const
 
 
 // constructors
-sc_int_base::sc_int_base( const sc_bv_base& v ) 
+sc_int_base::sc_int_base( const sc_bv_base& v )
     : m_val(0), m_len( v.length() ), m_ulen( SC_INTWIDTH - m_len )
 {
     check_length();
@@ -460,7 +458,7 @@ sc_int_base::sc_int_base( const sc_unsigned& a )
 
 // assignment operators
 
-sc_int_base& 
+sc_int_base&
 sc_int_base::operator = ( const sc_signed& a )
 {
     m_val = a.to_int64();
@@ -468,7 +466,7 @@ sc_int_base::operator = ( const sc_signed& a )
     return *this;
 }
 
-sc_int_base& 
+sc_int_base&
 sc_int_base::operator = ( const sc_unsigned& a )
 {
     m_val = a.to_uint64();
@@ -565,7 +563,7 @@ sc_int_base::xor_reduce() const
 
 
 bool sc_int_base::concat_get_ctrl( sc_digit* dst_p, int low_i ) const
-{    
+{
     int        dst_i;       // Word in dst_p now processing.
     int        end_i;       // Highest order word in dst_p to process.
     int        left_shift;  // Left shift for val.

@@ -1,5 +1,5 @@
 /*****************************************************************************
-  
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -109,10 +109,12 @@ void parse_binary_bits(
     if( src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
+        return;
     }
     if( *src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
+        return;
     }
 
 
@@ -170,9 +172,10 @@ void parse_binary_bits(
                   default:
                     {
                         char msg[BUFSIZ];
-                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
+                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid",
                         src_p );
                         SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
+			return;
                     }
                     break;
                 }
@@ -202,9 +205,10 @@ void parse_binary_bits(
               default:
                 {
                     char msg[BUFSIZ];
-                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
+                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid",
                     src_p );
                     SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+		    return;
                 }
                 break;
             }
@@ -214,7 +218,7 @@ void parse_binary_bits(
         src_n = src_n - BITS_PER_DIGIT;
     }
 }
-        
+
 
 //------------------------------------------------------------------------------
 //"parse_hex_bits"
@@ -244,10 +248,12 @@ void parse_hex_bits(
     if( src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is zero" );
+        return;
     }
     if( *src_p == 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_,
                          "character string is empty" );
+        return;
     }
 
 
@@ -325,9 +331,10 @@ void parse_hex_bits(
                   default:
                     {
                         char msg[BUFSIZ];
-                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
+                        std::snprintf(msg, BUFSIZ, "character string '%s' is not valid",
                         src_p );
                         SC_REPORT_ERROR(sc_core::SC_ID_CONVERSION_FAILED_, msg);
+		        return;
                     }
                     break;
                 }
@@ -377,9 +384,10 @@ void parse_hex_bits(
               default:
                 {
                     char msg[BUFSIZ];
-                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid", 
+                    std::snprintf(msg, BUFSIZ, "character string '%s' is not valid",
                     src_p );
                     SC_REPORT_ERROR( sc_core::SC_ID_CONVERSION_FAILED_, msg );
+		    return;
                 }
                 break;
             }

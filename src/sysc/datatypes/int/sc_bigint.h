@@ -704,8 +704,6 @@ public: // field and template value accesses:
 
 };
 
-
 } // namespace sc_dt
-
 
 #endif
