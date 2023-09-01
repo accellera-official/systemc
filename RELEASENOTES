@@ -677,25 +677,6 @@ Note: Some of these features are not enabled in the default library
    time units (SC_FS, SC_PS, ...) is used or observed by the application.
 
 
- - Allow suspending simulation to receive asynchronous updates
-
-   When using asynchronous channels (updated from outside the simulation
-   via async_request_update), the simulation can run into event starvation
-   prematurely.
-
-   Two new functions are added to the sc_prim_channel base class
-      bool async_attach_suspending();
-      bool async_detach_suspending();
-
-   If any channel has attached itself to request suspension, instead
-   of ending the simulation when running out of internal events, the
-   simulation loop suspends until any external async_request_update()
-   call is received.
-
-   An example demonstrating the usage of this feature is provided in
-   examples/sysc/2.3/simple_async (requires C++11).
-
-
 8) Known Problems
 =================
 

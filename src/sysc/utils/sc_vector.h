@@ -76,7 +76,7 @@ sc_vector_do_operator_paren( Container & cont
 enum sc_vector_init_policy
 {
     SC_VECTOR_LOCK_AFTER_INIT,
-    SC_VECTOR_ALLOW_EMPLACE
+    SC_VECTOR_LOCK_AFTER_ELABORATION
 };
 
 class sc_vector_element;  // opaque pointer

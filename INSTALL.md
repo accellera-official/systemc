@@ -217,7 +217,6 @@ To install SystemC on a UNIX system, do the following steps:
        --disable-shared        do not build shared library (libsystemc.so)
        --enable-debug          include debugging symbols
        --disable-optimize      disable compiler optimization
-       --disable-async-updates disable request_async_update support
        --enable-pthreads       use POSIX threads for SystemC processes
        --enable-phase-callbacks
                                enable simulation phase callbacks (experimental)
@@ -631,24 +630,6 @@ settings to all build configurations.
          translation units of an application._
 
 
- * `SC_DISABLE_ASYNC_UPDATES`  
-   Exclude the `async_request_update` support
-
-   Note: _This option is usually set by the `configure` option
-     `--disable-async-update`, or
-     `--enable-async-update=no`_
-
-   On non-Automake platforms (e.g. Visual C++), this preprocessor
-   symbol can be used to manually build the library with this feature.
-
-   Note: _Only effective during library build._  
-   Note: _Enabling the asynchronous update support (default) may add a
-          dependency on the pthread library on non-Windows systems.
-          When linking an application against a static SystemC library,
-          you may need to explicitly link against the pthread library
-          as well (`-lpthread`). _
-
-
  * `SC_DISABLE_VCD_SCOPES`  
    Disable grouping of VCD trace variables in hierarchical scopes
    by default
@@ -834,14 +815,6 @@ settings to all build configurations.
    Needs to be set when building a SystemC DLL on Windows, as well
    as when building an application/library to be linked against a
    DLL version of SystemC.
-
- * SC_ENABLE_SUSPEND_ALL
-   This adds the (experimental) interface:
-     suspend_all(), unsuspend_all(), suspendable(), unsuspendable()
-   see https://github.com/OSCI-WG/systemc/pull/353 for more information.
-
-   This option is usually set by the `configure` option
-     `--enable-suspend-all`
 
 
 Influential environment variables

@@ -1390,10 +1390,8 @@ bool
 sc_simcontext::next_time( sc_time& result ) const
 {
     while( m_timed_events->size()
-#ifdef SC_ENABLE_SUSPEND_ALL
            && ( !m_suspend ||  m_unsuspendable )
-#endif
-        ) {
+         ) {
 	sc_event_timed* et = m_timed_events->top();
 	if( et->event() != 0 ) {
 	    result = et->notify_time();
@@ -1900,10 +1898,6 @@ SC_API bool sc_is_unwinding()
 
 SC_API void sc_suspend_all()
 {
-#ifndef SC_ENABLE_SUSPEND_ALL
-    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
-    return;
-#endif
     sc_process_b*                process_p;
 
     process_p = (sc_process_b*)sc_get_current_process_handle();
@@ -1922,10 +1916,6 @@ SC_API void sc_suspend_all()
 
 SC_API void sc_unsuspend_all()
 {
-#ifndef SC_ENABLE_SUSPEND_ALL
-    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
-    return;
-#endif
     sc_process_b*                process_p;
 
     process_p = (sc_process_b*)sc_get_current_process_handle();
@@ -1948,10 +1938,6 @@ SC_API void sc_unsuspend_all()
 
 SC_API void sc_suspendable()
 {
-#ifndef SC_ENABLE_SUSPEND_ALL
-    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
-    return;
-#endif
     sc_process_b*                process_p;
 
     process_p = (sc_process_b*)sc_get_current_process_handle();
@@ -1972,10 +1958,6 @@ SC_API void sc_suspendable()
 
 SC_API void sc_unsuspendable()
 {
-#ifndef SC_ENABLE_SUSPEND_ALL
-    SC_REPORT_ERROR(SC_SUSPEND_ALL_UNIMPLEMENTED_, "");
-    return;
-#endif
     sc_process_b*                process_p;
 
     process_p = (sc_process_b*)sc_get_current_process_handle();

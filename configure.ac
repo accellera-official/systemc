@@ -392,33 +392,6 @@ AM_CONDITIONAL([WANT_OPTIMIZE], [test x$enable_optimize = xyes])
 AC_MSG_RESULT($enable_optimize)
 
 dnl
-dnl async_request_update support
-dnl
-AC_MSG_CHECKING([whether to add support for asynchronous update requests])
-support_async_updates=no
-AS_IF([test x$ax_pthread_ok = xyes],[support_async_updates=pthread],
-      [test x$ax_pthread_ok = xno], [AS_CASE(["${TARGET_ARCH}"], dnl
-           dnl no pthreads needed on MSVC/MinGW
-           [mingw*|msvc*],[support_async_updates=native])])
-AC_ARG_ENABLE([async-updates],
-  AS_HELP_STRING([--disable-async-updates],
-                 [disable request_async_update support]),
-  [AS_CASE(["${enableval}"],dnl
-    [yes],[AS_IF([test $support_async_updates = no],dnl
-            [AC_MSG_WARN([no native/pthread support found, disabled])
-             enable_async_updates=no
-             support_async_updates=disabled])],
-    [no], [support_async_updates=disabled],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates])])],
-  [AS_IF([test ${support_async_updates} != no],
-      [enable_async_updates=yes],
-      [enable_async_updates=no])]dnl
-)
-AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
-               [test x"$enable_async_updates" = xno])
-AC_MSG_RESULT($enable_async_updates)
-
-dnl
 dnl use pthreads for SystemC processes
 dnl
 AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
@@ -455,25 +428,8 @@ AM_CONDITIONAL([WANT_QT_THREADS],dnl
      [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],dnl
-  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])
+  [test x"$enable_pthreads" = xyes])
 AC_MSG_RESULT($enable_pthreads)
-
-dnl
-dnl enable simulation suspend_all
-dnl
-AC_MSG_CHECKING([whether to enable suspend_all by default])
-AC_ARG_ENABLE([suspend-all],
-  [AS_HELP_STRING([--enable-suspend-all],
-                  [enable suspend_all
-                   @<:@yes(=default)|no@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_suspend_all=yes],
-    [no|default],[enable_suspend_all=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-suspend-all])])],
-  [enable_suspend_all=yes])
-AM_CONDITIONAL([ENABLE_SUSPEND_ALL],dnl
-               [test x"$enable_suspend_all" = xyes])
-AC_MSG_RESULT($enable_suspend_all)
 
 dnl
 dnl enable VCD scopes
@@ -598,15 +554,6 @@ dnl
 dnl print configuration summary
 dnl
 
-dnl invert "async_updates" setting for output
-AS_VAR_IF([enable_async_updates],[yes],dnl
-          [disable_async_updates=no],dnl
-          [disable_async_updates=yes
-           sysc_non_1666=yes])
-
-AS_VAR_IF([enable_suspend_all],[no],dnl
-          [sysc_non_1666=yes])
-
 AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
       [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
       [sysc_coroutine="WinFiber"])
@@ -685,9 +632,7 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Disable async_request_update   : $disable_async_updates
    Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
-   suspend_all                    : $enable_suspend_all
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF

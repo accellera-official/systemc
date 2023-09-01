@@ -118,8 +118,6 @@
 #
 # CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 #
-# DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
-#
 # DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
 #                               the application. (default: OFF)
 #
@@ -146,8 +144,6 @@
 # ENABLE_LEGACY_MEM_MGMT        Use std::malloc or posix_memalign to allocate the
 #                               stack of the coroutines instead of mmap. ASAN will
 #                               not work with this.
-#
-# ENABLE_SUSPEND_ALL            Enable the suspend_all mechanism (experimental).
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
@@ -291,8 +287,6 @@ endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
-option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
-
 option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
 
 option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
@@ -308,8 +302,6 @@ option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
-
-option (ENABLE_SUSPEND_ALL "Enable the suspend_all mechanism (experimental)." undef)
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
@@ -336,13 +328,11 @@ if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
 
-mark_as_advanced(DISABLE_ASYNC_UPDATES
-                 DISABLE_COPYRIGHT_MESSAGE
+mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  DISABLE_VIRTUAL_BIND
                  ENABLE_ASSERTIONS
                  ENABLE_EARLY_MAXTIME_CREATION
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-                 ENABLE_SUSPEND_ALL
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -530,13 +520,13 @@ if (WIN32 AND ENABLE_PTHREADS)
   message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
 endif (WIN32 AND ENABLE_PTHREADS)
 
-if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
+if (ENABLE_PTHREADS OR NOT QT_ARCH)
   set (THREADS_PREFER_PTHREAD_FLAG ON)
   find_package (Threads REQUIRED)
   if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
     message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
   endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
+endif (ENABLE_PTHREADS OR NOT QT_ARCH)
 
 
 ###############################################################################
@@ -639,11 +629,6 @@ message (STATUS "---------------------------------------------------------------
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-if (DISABLE_ASYNC_UPDATES)
-  message ("DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
-else (DISABLE_ASYNC_UPDATES)
-  message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
-endif (DISABLE_ASYNC_UPDATES)
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
@@ -664,7 +649,6 @@ else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
 message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
-message (STATUS "ENABLE_SUSPEND_ALL = ${ENABLE_SUSPEND_ALL}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
