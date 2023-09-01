@@ -1038,7 +1038,7 @@ extern SC_API bool sc_allow_process_control_corners;
 //  Andy Goodrich: update copyright notice.
 //
 // Revision 1.11  2011/02/13 21:34:35  acg
-//  Andy Goodrich: added SC_UNITIALIZED enum value to process status so
+//  Andy Goodrich: added SC_UNINITIALIZED enum value to process status so
 //  its possible to detect throws before initialization.
 //
 // Revision 1.10  2011/02/11 13:25:24  acg
