@@ -751,6 +751,7 @@ install (FILES AUTHORS.md
 export (TARGETS systemc
         NAMESPACE SystemC::
         FILE SystemCLanguageTargets.cmake)
+target_compile_features(systemc PUBLIC cxx_std_17)
 # ... to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
