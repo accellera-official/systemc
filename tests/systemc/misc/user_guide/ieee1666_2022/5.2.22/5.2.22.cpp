@@ -1,8 +1,7 @@
-// NEEDS EXECUTION WORK
+// COMPLETE TEST
 //
-// This test verifies compilation, but lacks bindings for the bus.
-//
-// @@@@ ISSUES @@@@
+// If the execution log matches the golden log this test compiled and
+// executes successfully.
 
 #include <systemc>
 
@@ -29,6 +28,20 @@ class bus_adapter : public bus_interface, public sc_core::sc_channel {
 int sc_main( int argc, char* argv[] ) { 
 
     bus_adapter ba("ba");
+    sc_core::sc_clock clock;
+    sc_core::sc_signal<bool> wr, rd;
+    sc_core::sc_signal<int> addr_bus;
+    sc_core::sc_signal<int> data_out;
+    sc_core::sc_signal<int> data_in;
+
+    ba.clock(clock);
+    ba.wr(wr);
+    ba.rd(rd);
+    ba.addr_bus(addr_bus);
+    ba.data_out(data_out);
+    ba.data_in(data_in);
+
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
     return 0;

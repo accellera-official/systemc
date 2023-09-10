@@ -1,12 +1,7 @@
-// POC ISSUE:
+// COMPLETE TEST
 //
-// This example is supposed to execute until the TB returns from its tb_thread, but instead
-// it executes forever, as the POC is treating the edges of the clock as pending activity. 
-// 
-// The work around until this is fixed is to put a loop around what was the while pending
-// activity code.
-//
-// @@@@ ISSUES @@@@
+// If the execution log matches the execution log this test compiled and
+// executed correctly.
 
 #include <systemc>
 using namespace sc_core;

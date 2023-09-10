@@ -1,8 +1,7 @@
-// THIS TEST NEEDS WORK
+// COMPLETE TEST
 //
-// It tests compilation, but not exeuction.
-//
-// @@@@ ISSUES @@@@
+// If the execution log matches the golden log this test compiles and executes
+// correctly.
 
 #include <systemc>
 
@@ -15,35 +14,56 @@ SC_MODULE(M) {
         SC_CTHREAD(CT1, clock.pos());
 	reset_signal_is(reset, true);
 	SC_CTHREAD(CT2, clock.pos());
-	async_reset_signal_is(async_reset, true);}
+	async_reset_signal_is(async_reset, true);
+    }
     void CT1() {
         if (reset.read()) {
-	    // ... Reset actions}
+	    std::cout << sc_core::sc_time_stamp() << " " << "CT1: reset true" << std::endl;
 	    while(true) {
 	        wait(true); // Wait for 1 clock cycle
-		// . . .
+		std::cout << sc_core::sc_time_stamp() << " " << "CT1: looping" << std::endl;
 	    }
+	}
+	else {
+	    std::cout << sc_core::sc_time_stamp() << " " << "CT1: reset false" << std::endl;
 	}
     }
 
     void CT2() {
-	// ... Reset actions
+	std::cout << sc_core::sc_time_stamp() << " " << "CT2: reset true" << std::endl;
 	while(true) {
 	        try {
-		while (true) {wait(); // Wait for 1 clock cycle
-		    // ... // Regular behavior}
+		while (true) {
+		    std::cout << sc_core::sc_time_stamp() << " " << "CT2: looping" << std::endl;
+		    wait(); // Wait for 1 clock cycle
 		}
-	    } catch (...) { 
-		// Some exception has been thrown
+	    } catch(sc_core::sc_unwind_exception& ex) {
+		std::cout << sc_core::sc_time_stamp() << " " << "CT2: unwind " << std::endl;
+	        throw ex;
 	    }
-	    // ... handle exception and go back to wait
 	}
     }
 };
 
 int sc_main( int argc, char* argv[] ) { 
 
+    sc_core::sc_signal<bool> async_reset;
+    sc_core::sc_clock        clock;
+    sc_core::sc_signal<bool> reset;
     M m("m");
+    m.clock(clock);
+    m.async_reset(async_reset);
+    m.reset(reset);
+
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
+    async_reset = true;
+    reset = true;
+    sc_core::sc_start(1, sc_core::SC_NS);
+    reset = false;
+    sc_core::sc_start(1, sc_core::SC_NS);
+    async_reset = false;
+    sc_core::sc_start(1, sc_core::SC_NS);
+
     std::cout << "program completed" << std::endl;
     return 0;
 }

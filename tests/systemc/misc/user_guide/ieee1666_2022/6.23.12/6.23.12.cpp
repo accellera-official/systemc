@@ -2,12 +2,6 @@
 //
 // If the execution log matches the golden log this example compiled and
 // executed correctly.
-//
-// NOTE HOWEVER:
-//     The output lines for fifo.num_available() and fifo.num_free()
-//     should really have << std::endl on the end of them.
-//
-// @@@@ ISSUES @@@@
 
 #include <systemc>
 

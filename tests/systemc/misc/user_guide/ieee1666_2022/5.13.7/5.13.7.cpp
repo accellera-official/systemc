@@ -1,6 +1,6 @@
 // NEEDS REVIEW:
 //
-// There is a warming about hiding sc_object::print() by Chan::print(), so we need to
+// There is a warning about hiding sc_object::print() by Chan::print(), so we need to
 // determine if that is okay, or do we want to change the signature.
 //
 // @@@@ ISSUES @@@@

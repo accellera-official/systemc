@@ -1,9 +1,7 @@
-// SEMI-COMPLETE TEST:
+// COMPLETE TEST:
 //
-// The SC_PAUSED report_info is generated, even though sc_stop() is never called, but rather
-// there are no processes to be run.
-//
-// @@@@ ISSUES @@@@ 
+// If the execution log matches the golden log this test compiled and executed
+// correctly.
 
 #include <systemc>
 SC_MODULE(Top)

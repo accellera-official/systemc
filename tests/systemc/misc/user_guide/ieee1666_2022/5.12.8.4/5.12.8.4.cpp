@@ -3,8 +3,6 @@
 // If the binding was done correctly there should be no error messages. Note that the
 // LRM contains no definition for bus_interface, and a null body was added to properly
 // compile.
-//
-// @@@@ ISSUES @@@@
 
 #include <systemc>
 
