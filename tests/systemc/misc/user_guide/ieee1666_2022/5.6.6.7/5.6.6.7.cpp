@@ -14,17 +14,19 @@ SC_MODULE(M) {
 
     void run()
     {
-        try {
-	    // .  .  .
-	} catch( const sc_core::sc_unwind_exception& ex ) {
-	    // perform clean up
-	    if ( ex.is_reset() ) {
-	        // .  .  .
+        for (;; ) {
+	    try {
+		sc_core::wait(1, sc_core::SC_NS);
+	    } catch( const sc_core::sc_unwind_exception& ex ) {
+		// perform clean up
+		if ( ex.is_reset() ) {
+		    std::cout << "Performing unwind reset" << std::endl;
+		}
+		else {
+		    std::cout << "Not performing unwind reset" << std::endl;
+		}
+		throw ex;
 	    }
-	    else {
-	        // .  .  .
-	    }
-	    throw ex;
 	}
     }
 };
@@ -32,6 +34,7 @@ SC_MODULE(M) {
 int sc_main( int argc, char* argv[] ) { 
 
     M m("m");
+    sc_core::sc_start(10, sc_core::SC_NS);
 
     std::cout << "program completed" << std::endl;
     return 0;

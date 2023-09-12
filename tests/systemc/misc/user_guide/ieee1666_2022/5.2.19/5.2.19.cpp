@@ -1,9 +1,7 @@
-// NEEDS EXECUTION WORK
+// COMPLETE TEST
 //
-// This test currently verifies compilation, but not execution. The issue with
-// execution is missing port binds, e.g., top2.E
-//
-// @@@@ ISSUES @@@@
+// If the execution log matches the golden log this test compiles
+// and executes correctly.
 
 #include <systemc>
 
@@ -45,10 +43,19 @@ SC_MODULE(Top2) {
         
 int sc_main( int argc, char* argv[] ) { 
 
-    Top1 top1("top1");
-    Top2 top2("top2");
+    sc_core::sc_signal<int> signalA;
+    sc_core::sc_signal<int> signalB;
+    sc_core::sc_signal<int> signalD;
+    sc_core::sc_signal<int> signalE;
+    Top1                    top1("top1");
+    Top2                    top2("top2");
 
-    // sc_core::sc_start(SC_ZERO_TIME);
+    top1.A(signalA);
+    top1.B(signalB);
+    top2.D(signalD);
+    top2.E(signalE);
+
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
     return 0;
 }
