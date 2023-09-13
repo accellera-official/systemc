@@ -1151,7 +1151,7 @@ protected:
   int      nbits;                                                  // number of bits in use.
   int      ndigits;                                                // number words in 'digits'
   sc_digit *digit;                                                 // storage for our value.
-  sc_digit small_vec[SC_SMALL_VEC_DIGITS>0?SC_SMALL_VEC_DIGITS:1]; // make small values faster.
+  sc_digit base_vec[SC_BASE_VEC_DIGITS>0?SC_BASE_VEC_DIGITS:1]; // make small values faster.
 
 #if !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
   bool m_free; // true if should free 'digit'.
@@ -1159,7 +1159,7 @@ public:
   inline bool digit_is_allocated() const { return m_free; }
 #else
 public:
-  inline bool digit_is_allocated() const { return digit != (sc_digit*)small_vec; }
+  inline bool digit_is_allocated() const { return digit != (sc_digit*)base_vec; }
 #endif
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
@@ -1374,12 +1374,12 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     }
     else  {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     makezero();
@@ -1575,8 +1575,8 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
     nbits(nb), ndigits( DIV_CEIL(nb) )
 {
 #   if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
-        if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
-            digit = small_vec;
+        if ( ndigits <= SC_BASE_VEC_DIGITS ) {
+            digit = base_vec;
         }
         else {
 	    digit = digits_p;
@@ -1602,8 +1602,8 @@ inline
 sc_signed::sc_signed( int nb, bool zero ) :
     nbits(nb), ndigits( DIV_CEIL(nb) )
 {
-    if ( ndigits <= SC_SMALL_VEC_DIGITS ) {
-        digit = small_vec;
+    if ( ndigits <= SC_BASE_VEC_DIGITS ) {
+        digit = base_vec;
         SC_FREE_DIGIT(false)
     }
     else {
@@ -1636,12 +1636,12 @@ sc_signed::sc_signed( int nb ) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > ( (int)(sizeof(small_vec)/sizeof(sc_digit)) ) ) {
+    if ( ndigits > ( (int)(sizeof(base_vec)/sizeof(sc_digit)) ) ) {
         digit = new sc_digit[ndigits];
         SC_FREE_DIGIT(true)
     }
     else {
-        digit = small_vec;
+        digit = base_vec;
         SC_FREE_DIGIT(false)
     }
     makezero();

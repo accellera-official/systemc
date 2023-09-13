@@ -98,12 +98,12 @@ inline
 sc_signed::sc_signed(const sc_signed& v) :
     sc_value_base(v), nbits(v.nbits), ndigits(v.ndigits), digit()
 {
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     }
     else  {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
 
@@ -116,11 +116,11 @@ sc_signed::sc_signed(const sc_unsigned& v) :
     sc_value_base(v), nbits(v.nbits), 
     ndigits(((nbits+BITS_PER_DIGIT-1)/BITS_PER_DIGIT)), digit()
 {
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
 
@@ -134,7 +134,7 @@ sc_signed::sc_signed(const sc_int_subref_r& v) :
 {
     nbits = v.length();
     ndigits = SC_DIGIT_COUNT(nbits);
-    digit = small_vec;
+    digit = base_vec;
     SC_FREE_DIGIT(false)
     *this = v.to_uint64();
 }
@@ -145,7 +145,7 @@ sc_signed::sc_signed(const sc_uint_subref_r& v) :
 {
     nbits = v.length();
     ndigits = SC_DIGIT_COUNT(nbits);
-    digit = small_vec;
+    digit = base_vec;
     SC_FREE_DIGIT(false)
     *this = v.to_uint64();
 }
@@ -156,11 +156,11 @@ sc_signed::sc_signed(const sc_signed_subref_r& v) :
 {
     nbits = v.length();
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-        digit = small_vec;
+        digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     int  low_bit;
@@ -189,11 +189,11 @@ sc_signed::sc_signed(const sc_unsigned_subref_r& v) :
 {
     nbits = v.length();
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
         digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-        digit = small_vec;
+        digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     digit[ndigits-1] = 0; 
@@ -231,11 +231,11 @@ sc_signed::sc_signed(const sc_bv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     *this = v;
@@ -255,11 +255,11 @@ sc_signed::sc_signed(const sc_lv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     *this = v;

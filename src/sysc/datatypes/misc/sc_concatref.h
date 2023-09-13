@@ -245,11 +245,11 @@ public:
 
             result_p->nbits = result_p->num_bits(m_len);
 	    result_p->ndigits = DIV_CEIL(result_p->nbits);
-	    if ( result_p->ndigits > SC_SMALL_VEC_DIGITS ) {
+	    if ( result_p->ndigits > SC_BASE_VEC_DIGITS ) {
 		result_p->digit = sc_temporary_digits.allocate( result_p->ndigits );
 	    }
 	    else {
-	        result_p->digit = result_p->small_vec;
+	        result_p->digit = result_p->base_vec;
 	    }
             m_right_p->concat_get_data( result_p->digit, 0 );
             m_left_p->concat_get_data(result_p->digit, m_len_r); 

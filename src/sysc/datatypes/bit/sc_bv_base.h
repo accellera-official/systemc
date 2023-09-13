@@ -138,7 +138,7 @@ public:
     // destructor
 
     virtual ~sc_bv_base()
-	{ if ( m_data != m_small_vec ) delete [] m_data; }
+	{ if ( m_data != m_base_vec ) delete [] m_data; }
 
 
     // assignment operators
@@ -224,7 +224,7 @@ protected:
     int     m_len;  // length in bits
     int     m_size; // size of data array
     sc_digit* m_data; // data array
-    sc_digit  m_small_vec[SC_SMALL_VEC_DIGITS > 0 ? SC_SMALL_VEC_DIGITS : 1];
+    sc_digit  m_base_vec[SC_BASE_VEC_DIGITS > 0 ? SC_BASE_VEC_DIGITS : 1];
 };
 
 

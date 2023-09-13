@@ -98,12 +98,12 @@ inline
 sc_unsigned::sc_unsigned(const sc_unsigned& v) :
     sc_value_base(v), nbits(v.nbits), ndigits(v.ndigits), digit()
 {
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     }
     else  {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
 
@@ -116,11 +116,11 @@ sc_unsigned::sc_unsigned(const sc_signed& v) :
     sc_value_base(v), nbits(v.nbits+1), 
     ndigits( SC_DIGIT_COUNT(nbits) ), digit()
 {
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
 
@@ -134,7 +134,7 @@ sc_unsigned::sc_unsigned(const sc_int_subref_r& v) :
 {
     nbits = v.length()+1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    digit = small_vec;
+    digit = base_vec;
     SC_FREE_DIGIT(false)
     *this = v.to_uint64();
 }
@@ -145,7 +145,7 @@ sc_unsigned::sc_unsigned(const sc_uint_subref_r& v) :
 {
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    digit = small_vec;
+    digit = base_vec;
     SC_FREE_DIGIT(false)
     makezero();
     *this = v.to_uint64();
@@ -161,11 +161,11 @@ sc_unsigned::sc_unsigned(const sc_signed_subref_r& v) :
 
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     if ( v.m_left >= v.m_right ) {
@@ -191,11 +191,11 @@ sc_unsigned::sc_unsigned(const sc_unsigned_subref_r& v) :
 {
     nbits = v.length() + 1;
     ndigits = SC_DIGIT_COUNT(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     digit[ndigits-1] = 0; 
@@ -232,11 +232,11 @@ sc_unsigned::sc_unsigned(const sc_bv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     *this = v;
@@ -256,11 +256,11 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
     ndigits = DIV_CEIL(nbits);
-    if ( ndigits > SC_SMALL_VEC_DIGITS ) {
+    if ( ndigits > SC_BASE_VEC_DIGITS ) {
 	digit = new sc_digit[ndigits];
 	SC_FREE_DIGIT(true)
     } else {
-	digit = small_vec;
+	digit = base_vec;
 	SC_FREE_DIGIT(false)
     }
     *this = v;

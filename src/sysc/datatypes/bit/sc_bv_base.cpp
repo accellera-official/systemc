@@ -81,11 +81,11 @@ sc_bv_base::init( int length_, bool init_value )
     // allocate memory for the data and control words
     m_len = length_;
     m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
-    if ( m_size > (int)(sizeof(m_small_vec) / sizeof(sc_digit)) ) {
+    if ( m_size > (int)(sizeof(m_base_vec) / sizeof(sc_digit)) ) {
 	m_data = new sc_digit[m_size];
     }
     else {
-        m_data = m_small_vec;
+        m_data = m_base_vec;
     }
 
     // initialize the bits to 'init_value'
