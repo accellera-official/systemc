@@ -1582,7 +1582,7 @@ sc_signed::sc_signed( int nb, sc_digit* digits_p ) :
 	    digit = digits_p;
         }
 	SC_FREE_DIGIT(false)
-#   else
+#   else // TEMPLATE_CLASS_HAS_NO_BASE_CLASS
         digit = digits_p;
         SC_FREE_DIGIT(false)
 #   endif
