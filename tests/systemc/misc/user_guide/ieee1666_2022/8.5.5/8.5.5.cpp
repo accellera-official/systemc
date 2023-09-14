@@ -1,6 +1,6 @@
 // ISSUES
 //
-// (1) Missing sc_core:: prefix on the sc_bind() call.
+// (1) In the LRM missing sc_core:: prefix on the sc_bind() call.
 //
 // @@@@ ISSUES @@@@
 

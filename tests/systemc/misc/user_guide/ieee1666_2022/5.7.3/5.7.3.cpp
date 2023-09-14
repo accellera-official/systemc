@@ -1,6 +1,8 @@
-// NEEDS EXECUTION CODE
+// COMPLETE TEST
 //
-// @@@@ ISSUES @@@@
+// If the execution log matches the golden log this test compiles
+// and executes correctly.
+
 #define SC_INCLUDE_DYNAMIC_PROCESSE
 #include <systemc>
 
@@ -35,7 +37,7 @@ SC_MODULE(mod_class)
         sensitive << port_var.event_finder();
     }
 
-    void method() {}
+    void method() { std::cout << "method" << std::endl; }
 
     void end_of_elaboration() {
         SC_METHOD(method2);
@@ -44,14 +46,22 @@ SC_MODULE(mod_class)
 	}
     }
 
-    void method2() { }
+    void method2() { std::cout << "method2" << std::endl; }
 };
         
 
 int sc_main( int argc, char* argv[] ) { 
 
-    mod_class mc("mc");
+    mod_class  mc("mc");
+    chan_class sig0;
+    chan_class sig1;
+    chan_class sig2;
 
+    mc.port_var(sig0);
+    mc.multiport(sig1);
+    mc.multiport(sig2);
+
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
     std::cout << "program completed" << std::endl;
     return 0;
 }

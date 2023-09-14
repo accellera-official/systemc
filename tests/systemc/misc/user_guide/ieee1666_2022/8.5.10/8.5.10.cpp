@@ -1,4 +1,4 @@
-// NEEDS WORK
+// BIND DOES NOT START AT THE POINT IT WAS PREVIOUSLY CALLED IN THE TARGET
 //
 // 
 // We have the following binding:
