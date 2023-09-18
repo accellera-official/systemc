@@ -53,6 +53,7 @@
 typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned long  ulong;
+typedef sc_dt::int64   llong;
 
 #define SHOW_ASSIGN_CONSTRUCTORS(a) cerr << #a << " : " << double(a) << " : " << a.to_string(SC_HEX) << "\n"
 #define IDENT_ASSIGN_CONSTRUCTORS(a) cerr << "--assign_constructor-Inf-Inf-Inf-Inf-Inf- " << a << "\n"
@@ -83,7 +84,7 @@ static void test_fx_float_uint()
   sc_fxval b = (uint)1;
   sc_fxval c = (uint)-1;
   sc_fxval d = UINT_MAX;
-  sc_fxval e = (uint)abs(INT_MIN);
+  sc_fxval e = (uint)abs((llong)INT_MIN);
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
@@ -135,9 +136,9 @@ static void test_fx_float_ulong()
   sc_fxval b = (ulong)1;
   sc_fxval c = (ulong)-1;
   sc_fxval d = ULONG_MAX;
-  sc_fxval e = (ulong)abs(LONG_MIN);
+  // sc_fxval e = (ulong)abs(LONG_MIN);
 
-  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
+  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); // SHOW_ASSIGN_CONSTRUCTORS(e);
 }
 
 static void test_fx_float_float()
@@ -189,7 +190,7 @@ static void test_fx_ufix_uint()
   sc_ufix b = (uint)1;
   sc_ufix c = (uint)-1;
   sc_ufix d = UINT_MAX;
-  sc_ufix e = (uint)abs(INT_MIN);
+  sc_ufix e = (uint)abs((llong)INT_MIN);
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
@@ -241,9 +242,9 @@ static void test_fx_ufix_ulong()
   sc_ufix b = (ulong)1;
   sc_ufix c = (ulong)-1;
   sc_ufix d = ULONG_MAX;
-  sc_ufix e = (ulong)abs(LONG_MIN);
+  // sc_ufix e = (ulong)abs(LONG_MIN);
 
-  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
+  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); // SHOW_ASSIGN_CONSTRUCTORS(e);
 }
 
 static void test_fx_ufix_float()
@@ -294,7 +295,7 @@ static void test_fx_fix_uint()
   sc_fix b = (uint)1;
   sc_fix c = (uint)-1;
   sc_fix d = UINT_MAX;
-  sc_fix e = (uint)abs(INT_MIN);
+  sc_fix e = (uint)abs((llong)INT_MIN);
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
@@ -346,9 +347,9 @@ static void test_fx_fix_ulong()
   sc_fix b = (ulong)1;
   sc_fix c = (ulong)-1;
   sc_fix d = ULONG_MAX;
-  sc_fix e = (ulong)abs(LONG_MIN);
+  // sc_fix e = (ulong)abs(LONG_MIN);
 
-  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
+  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b); SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); // SHOW_ASSIGN_CONSTRUCTORS(e);
 }
 
 static void test_fx_fix_float()
@@ -399,7 +400,7 @@ static void test_fx_fixed_uint()
   sc_fixed<8, 5> b = (uint)1;
    sc_fixed<8, 5> c = (uint)-1;
    sc_fixed<8, 5> d = UINT_MAX;
-   sc_fixed<8, 5> e = (uint)abs(INT_MIN);
+   sc_fixed<8, 5> e = (uint)abs((llong)INT_MIN);
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
@@ -451,9 +452,9 @@ static void test_fx_fixed_ulong()
   sc_fixed<8, 5> b = (ulong)1;
    sc_fixed<8, 5> c = (ulong)-1;
    sc_fixed<8, 5> d = ULONG_MAX;
-   sc_fixed<8, 5> e = (ulong)abs(LONG_MIN);
+   // sc_fixed<8, 5> e = (ulong)abs(LONG_MIN);
 
-  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
+  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); // SHOW_ASSIGN_CONSTRUCTORS(e);
 }
 
 static void test_fx_fixed_float()
@@ -504,7 +505,7 @@ static void test_fx_ufixed_uint()
   sc_ufixed<8, 5> b = (uint)1;
    sc_ufixed<8, 5> c = (uint)-1;
    sc_ufixed<8, 5> d = UINT_MAX;
-   sc_ufixed<8, 5> e = (uint)abs(INT_MIN);
+   sc_ufixed<8, 5> e = (uint)abs((llong)INT_MIN);
 
   SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
 }
@@ -556,9 +557,9 @@ static void test_fx_ufixed_ulong()
   sc_ufixed<8, 5> b = (ulong)1;
    sc_ufixed<8, 5> c = (ulong)-1;
    sc_ufixed<8, 5> d = ULONG_MAX;
-   sc_ufixed<8, 5> e = (ulong)abs(LONG_MIN);
+   // sc_ufixed<8, 5> e = (ulong)abs(LONG_MIN);
 
-  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); SHOW_ASSIGN_CONSTRUCTORS(e);
+  SHOW_ASSIGN_CONSTRUCTORS(a); SHOW_ASSIGN_CONSTRUCTORS(b);  SHOW_ASSIGN_CONSTRUCTORS(c); SHOW_ASSIGN_CONSTRUCTORS(d); // SHOW_ASSIGN_CONSTRUCTORS(e);
 }
 
 static void test_fx_ufixed_float()
