@@ -1,10 +1,6 @@
 // COMPLETE TEST
 //
-// If this test executes and matches its golden log the bindings were successful.
-//
-// LRM has missing sc_core:: prefix on sc_port<iface> declaration, added in the test.
-//
-// @@@@ ISSUES @@@@
+// If the execute log matches the golden log the bindings were successful.
 
 #include <systemc>
 

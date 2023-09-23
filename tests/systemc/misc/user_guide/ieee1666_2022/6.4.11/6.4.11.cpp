@@ -1,4 +1,4 @@
-// NEEDS WORK
+// COMPLETE TEST
 //
 // As designed this code will not detect the second writer and instead will loop infinitely,
 // at least with the POC.
@@ -9,9 +9,10 @@
 // because it writes a new value each time it is entered we end up in an infinite update
 // cascade, so the program will loop forever.
 //
+// At coded below only SC_THREAD instances are used, so we get the expected error.
 //
 // @@@@ ISSUES @@@@
-//
+
 #include <systemc>
 
 SC_MODULE(M) {
@@ -19,8 +20,8 @@ SC_MODULE(M) {
     SC_CTOR(M) {
         SC_THREAD(writer);
 	SC_THREAD(reader);
-	// SC_THREAD(writer2); // Error
-	SC_METHOD(writer2); // No error
+	SC_THREAD(writer2); // Error
+	// SC_METHOD(writer2); // Infinite loop, no error
 	sensitive << sig;
     }
     void writer() {
@@ -39,7 +40,7 @@ SC_MODULE(M) {
 	std::cout << sc_core::sc_time_stamp() << " " <<  sig.read() << std::endl;
     }
     void writer2() {
-        // sig.write(sig+1); // SHOULD CAUSE A WRITERERROR, BUT GENERATES AN INFINITE LOOP
+        sig.write(sig+1); // SHOULD CAUSE A WRITERERROR, BUT GENERATES AN INFINITE LOOP
     }
 };
 

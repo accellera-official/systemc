@@ -1,8 +1,7 @@
-// ISSUES
+// COMPLETE TEST
 //
-// (1) In the LRM missing sc_core:: prefix on the sc_bind() call.
-//
-// @@@@ ISSUES @@@@
+// If the execution log matches the golden log this test compiles and
+// executes correctly.
 
 #define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>

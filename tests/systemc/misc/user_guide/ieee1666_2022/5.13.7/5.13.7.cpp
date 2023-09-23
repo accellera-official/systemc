@@ -1,9 +1,10 @@
-// NEEDS REVIEW:
+// COMPLETE TEST:
+//
+// If the excution log matches the golden log this test compiles and executes 
+// correctly.
 //
 // There is a warning about hiding sc_object::print() by Chan::print(), so we need to
 // determine if that is okay, or do we want to change the signature.
-//
-// @@@@ ISSUES @@@@
 
 #include <systemc>
 
@@ -52,6 +53,7 @@ struct Top : sc_core::sc_module {
 int sc_main( int argc, char* argv[] ) { 
 
     Top top("top");
+    sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
 }
