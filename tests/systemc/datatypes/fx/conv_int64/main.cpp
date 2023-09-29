@@ -38,9 +38,10 @@
 // test conversion of fixed point objects to uint64
 
 #define SC_INCLUDE_FX
-#include "systemc.h"
+#include <systemc>
 
 using namespace std;
+using namespace sc_dt;
 
 template<typename T>
 void f ( const T& v) {
