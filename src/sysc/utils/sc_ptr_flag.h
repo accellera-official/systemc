@@ -28,6 +28,8 @@
 #ifndef SC_PTR_FLAG_H_INCLUDED_
 #define SC_PTR_FLAG_H_INCLUDED_
 
+#include <cstdint>
+
 #include "sysc/kernel/sc_cmnhdr.h"
 
 namespace sc_core {
