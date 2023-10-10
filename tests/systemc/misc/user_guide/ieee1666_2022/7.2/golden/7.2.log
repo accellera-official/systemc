@@ -1,0 +1,39 @@
+SystemC Simulation
+
+================ 7.2.4 ==================
+
+int_array[0].length() = 10
+var1.length() = 10
+var2.length() = 12
+var3.length() = 14
+var4.length() = 12
+var5.length() = 10
+
+================ 7.2.4 ==================
+
+v1 = 0010
+
+================ 7.2.6 ==================
+
+v2 = 0a
+v3 = 0a
+v4 = 0f0
+
+================ 7.2.6 ==================
+
+(true, u1.range(3,0), u2, u2[0]) = 093
+u3 = 093
+before (u2[0],u1[0],u1.range(7,1)) = (u1[7],u1)
+u1 = 002
+u2 = 1
+after (u2[0],u1[0],u1.range(7,1)) = (u1[7],u1)
+u1 = 004
+u2 = 0
+before concat(u2[0],concat(u1[0],u1.range(7,1))) = concat(u1[7],u1)
+u1 = 002
+u2 = 1
+after concat(u2[0],concat(u1[0],u1.range(7,1))) = concat(u1[7],u1)
+u1 = 004
+u2 = 0
+
+program completed

@@ -1,0 +1,21 @@
+SystemC Simulation
+
+================ 7.2.4 ==================
+
+int_array[0].length() = 10
+var1.length() = 10
+var2.length() = 12
+var3.length() = 14
+var4.length() = 12
+var5.length() = 10
+
+================ 7.2.4 ==================
+
+v1 = 0010
+
+================ 7.2.6 ==================
+
+v2 = 0a
+v3 = 0a
+v4 = 0f0
+program completed

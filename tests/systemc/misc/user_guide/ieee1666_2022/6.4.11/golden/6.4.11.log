@@ -1,0 +1,9 @@
+SystemC Simulation
+0 s 1
+
+Error: (E115) sc_signal<T> cannot have more than one driver: 
+ signal `m.signal_0' (sc_signal)
+ first driver `m.writer2' (sc_thread_process)
+ second driver `m.writer' (sc_thread_process)
+In file: <removed by verify.pl>
+In process: m.writer @ 50 ns

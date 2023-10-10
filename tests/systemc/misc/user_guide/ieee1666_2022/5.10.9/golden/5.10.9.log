@@ -1,0 +1,9 @@
+SystemC Simulation
+FIRE: event.notify1(SC_ZERO_TIME)
+FIRE: event.notify1(1.0,SC_NS)
+FIRE: event.notify1()
+FIRE: event.notify1(2.0,SC_NS)
+FIRE: event.notify1(1.0,SC_NS)
+FIRE: event.notify1(SC_ZERO_TIME)
+0 s event1
+program completed
