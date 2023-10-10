@@ -171,12 +171,16 @@
 #if _MSC_VER < 1200
 #error "Compiler not supported or configured - please reconfigure"
 #endif
+
 //
-// last known and checked version is 19.16.27032.1 (VC++ 2017, Update 9):
-#if defined(SC_BOOST_CONFIG_CHECK_MSVC) && (_MSC_VER >= 1920)
-#  if defined(SC_BOOST_ASSERT_CONFIG)
-#     error "Unknown compiler version - please run the configure tests and report the results"
-#  else
-#     pragma message("Unknown compiler version - please run the configure tests and report the results")
+// last known and checked version is 19.20.27508 (VC++ 2019 RC3):
+#if (_MSC_VER > 1920)
+#  if defined(BOOST_ASSERT_CONFIG)
+#     error "Boost.Config is older than your current compiler version."
+#  elif !defined(BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE)
+      //
+      // Disabled as of March 2018 - the pace of VS releases is hard to keep up with
+      // and in any case, we have relatively few defect macros defined now.
+      // BOOST_PRAGMA_MESSAGE("Info: Boost.Config is older than your compiler version - probably nothing bad will happen - but you may wish to look for an updated Boost version. Define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE to suppress this message.")
 #  endif
 #endif
