@@ -97,15 +97,15 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_pow10.cpp
                      sysc/datatypes/fx/scfx_rep.cpp
                      sysc/datatypes/fx/scfx_utils.cpp
-                     sysc/datatypes/int/sc_int_base.cpp
-                     sysc/datatypes/int/sc_int_mask.cpp
-                     sysc/datatypes/int/sc_length_param.cpp
-                     sysc/datatypes/int/sc_nbexterns.cpp
-                     sysc/datatypes/int/sc_nbutils.cpp
-                     sysc/datatypes/int/sc_signed.cpp
-                     sysc/datatypes/int/sc_uint_base.cpp
-                     sysc/datatypes/int/sc_unsigned.cpp
-                     sysc/datatypes/misc/sc_concatref.cpp
+		     sysc/datatypes/int/sc_int64_io.cpp
+		     sysc/datatypes/int/sc_int64_mask.cpp
+		     sysc/datatypes/int/sc_int_base.cpp
+		     sysc/datatypes/int/sc_length_param.cpp
+		     sysc/datatypes/int/sc_nbdefs.cpp
+		     sysc/datatypes/int/sc_nbutils.cpp
+		     sysc/datatypes/int/sc_signed.cpp
+		     sysc/datatypes/int/sc_uint_base.cpp
+		     sysc/datatypes/int/sc_unsigned.cpp
                      sysc/datatypes/misc/sc_value_base.cpp
                      sysc/kernel/sc_attribute.cpp
                      sysc/kernel/sc_cor_fiber.cpp
@@ -120,7 +120,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_method_process.cpp
                      sysc/kernel/sc_module.cpp
                      sysc/kernel/sc_module_name.cpp
-                     sysc/kernel/sc_initializer_function.h
+		     sysc/kernel/sc_initializer_function.h
                      sysc/kernel/sc_module_registry.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp
@@ -215,19 +215,29 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_rep.h
                      sysc/datatypes/fx/scfx_string.h
                      sysc/datatypes/fx/scfx_utils.h
-                     sysc/datatypes/int/sc_bigint.h
-                     sysc/datatypes/int/sc_biguint.h
-                     sysc/datatypes/int/sc_int.h
-                     sysc/datatypes/int/sc_int_base.h
-                     sysc/datatypes/int/sc_int_ids.h
-                     sysc/datatypes/int/sc_length_param.h
-                     sysc/datatypes/int/sc_nbdefs.h
-                     sysc/datatypes/int/sc_nbexterns.h
-                     sysc/datatypes/int/sc_nbutils.h
-                     sysc/datatypes/int/sc_signed.h
-                     sysc/datatypes/int/sc_uint.h
-                     sysc/datatypes/int/sc_uint_base.h
-                     sysc/datatypes/int/sc_unsigned.h
+		     sysc/datatypes/int/sc_bigint.h 
+		     sysc/datatypes/int/sc_bigint_inlines.h 
+		     sysc/datatypes/int/sc_big_ops.h 
+		     sysc/datatypes/int/sc_biguint.h 
+		     sysc/datatypes/int/sc_biguint_inlines.h 
+		     sysc/datatypes/int/sc_int.h 
+		     sysc/datatypes/int/sc_int_base.h 
+		     sysc/datatypes/int/sc_int_ids.h 
+		     sysc/datatypes/int/sc_int_inlines.h 
+		     sysc/datatypes/int/sc_length_param.h 
+		     sysc/datatypes/int/sc_nbdefs.h 
+		     sysc/datatypes/int/sc_nbutils.h 
+		     sysc/datatypes/int/sc_signed.h 
+		     sysc/datatypes/int/sc_signed_friends.h 
+		     sysc/datatypes/int/sc_signed_inlines.h 
+		     sysc/datatypes/int/sc_signed_ops.h 
+		     sysc/datatypes/int/sc_uint.h 
+		     sysc/datatypes/int/sc_uint_base.h 
+		     sysc/datatypes/int/sc_uint_inlines.h 
+		     sysc/datatypes/int/sc_unsigned.h 
+		     sysc/datatypes/int/sc_unsigned_friends.h 
+		     sysc/datatypes/int/sc_unsigned_inlines.h 
+                     sysc/datatypes/int/sc_vector_utils.h
                      sysc/datatypes/misc/sc_concatref.h
                      sysc/datatypes/misc/sc_value_base.h
                      sysc/kernel/sc_attribute.h
@@ -352,6 +362,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/tracing/sc_vcd_trace.h
                      sysc/tracing/sc_wif_trace.h
                      sysc/utils/sc_hash.h
+                     sysc/utils/sc_iostream.h
                      sysc/utils/sc_list.h
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
@@ -467,6 +478,8 @@ target_compile_definitions (
   SC_BUILD
   SC_INCLUDE_FX
   $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
+  $<$<BOOL:${ALIAS_INT_TO_BIGINT}>:ALIAS_SC_INT>
+  $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
   $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
   $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
@@ -478,8 +491,23 @@ target_compile_definitions (
   $<$<BOOL:${ENABLE_LEGACY_MEM_MGMT}>:SC_LEGACY_MEM_MGMT>
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
-  $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>
-    )
+  $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
+
+
+
+MESSAGE(STATUS "Bigint configuration: " ${BIGINT_CONFIGURATION})
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_NO_BASE_CLASS")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "BASE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE )
+endif()
+
+MESSAGE(STATUS "SC_BASE_VEC_DIGITS config: " ${BASE_VEC_DIGITS_CONFIG})
+add_definitions( -DSC_BASE_VEC_DIGITS=${BASE_VEC_DIGITS_CONFIG} )
 
 target_compile_options(
   systemc
@@ -534,3 +562,9 @@ install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
          FILES_MATCHING PATTERN "*.hpp")
+
+# Uncomment correct #define in the install: 
+install (CODE "set(BIGINT_CONFIGURATION ${BIGINT_CONFIGURATION})")
+install (CODE "set(SC_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_FULL_INCLUDEDIR})")
+install (CODE "set(BASE_VEC_DIGITS_CONFIG ${BASE_VEC_DIGITS_CONFIG})")
+install (SCRIPT "${CMAKE_SOURCE_DIR}/PostInstall.cmake")

@@ -55,8 +55,13 @@ namespace sc_dt
 {
 
 // classes defined in this module
+
 template <int W> class sc_bv;
 
+// forward class references
+
+template <int W> class sc_bigint;
+template <int W> class sc_biguint;
 
 // ----------------------------------------------------------------------------
 //  CLASS TEMPLATE : sc_bv<W>
@@ -100,9 +105,14 @@ public:
 	: sc_bv_base( W )
 	{ sc_bv_base::operator = ( a ); }
 
+
     sc_bv( const sc_signed& a )
 	: sc_bv_base( W )
 	{ sc_bv_base::operator = ( a ); }
+
+    template<int WO> sc_bv( const sc_bigint<WO>& a );
+
+    template<int WO> sc_bv( const sc_biguint<WO>& a );
 
     sc_bv( const sc_uint_base& a )
 	: sc_bv_base( W )
@@ -163,6 +173,7 @@ public:
 
     sc_bv<W>& operator = ( const sc_logic* a )
 	{ sc_bv_base::operator = ( a ); return *this; }
+
 
     sc_bv<W>& operator = ( const sc_unsigned& a )
 	{ sc_bv_base::operator = ( a ); return *this; }

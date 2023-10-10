@@ -385,7 +385,7 @@ DEFN_BIN_FUN(bool,not_equal)
 
 inline
 ::std::ostream&
-operator << ( ::std::ostream& os, sc_bit a )
+operator << ( ::std::ostream& os, const sc_bit& a )
 {
     a.print( os );
     return os;

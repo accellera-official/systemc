@@ -60,6 +60,22 @@ if (ENABLE_ASSERTIONS)
   add_definitions (-DSC_ENABLE_ASSERTIONS)
 endif (ENABLE_ASSERTIONS)
 
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_NO_BASE_CLASS")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "TEMPLATE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE )
+endif()
+if (BIGINT_CONFIGURATION STREQUAL "BASE_CLASS_HAS_STORAGE")
+  add_definitions( -DSC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE )
+endif()
+
+add_definitions( -DSC_BASE_VEC_DIGITS=${BASE_VEC_DIGITS_CONFIG} )
+
+if (ALIAS_INT_TO_BIGINT)
+  add_definitions (-DALIAS_SC_INT)
+endif (ALIAS_INT_TO_BIGINT)
+
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
   # console applications with Visual Studio. Instead of _CONSOLE, _LIB may be

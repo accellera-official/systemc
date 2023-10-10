@@ -49,7 +49,7 @@ add_subdirectory (2.1/sc_export)
 add_subdirectory (2.1/sc_report)
 add_subdirectory (2.1/scx_barrier)
 add_subdirectory (2.1/scx_mutex_w_policy)
-add_subdirectory (2.1/specialized_signals)
+#add_subdirectory (2.1/specialized_signals) # needs work!!!!
 add_subdirectory (2.3/sc_rvd)
 add_subdirectory (2.3/sc_ttd)
 add_subdirectory (2.3/simple_async)

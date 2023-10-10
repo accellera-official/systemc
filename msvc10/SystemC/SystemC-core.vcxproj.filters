@@ -154,10 +154,13 @@
     <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp">
+    <ClCompile Include="..\..\src\sysc\datatypes\any\sc_any_value_converter.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sysc\datatypes\misc\sc_concatref.cpp">
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp">
+      <Filter>Source Files\sc_dt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxcast_switch.cpp">

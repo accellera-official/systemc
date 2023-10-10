@@ -63,10 +63,12 @@
 
 
 #include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/utils/sc_iostream.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/datatypes/bit/sc_bit.h"
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/bit/sc_logic.h"
@@ -808,7 +810,7 @@ assign_v_( sc_proxy<X>& px, const sc_signed& a )
 {
     X& x = px.back_cast();
 	int i;
-    bool sign = a < 0;
+    bool sign = a.is_negative();
     int len_x = x.length();
     int len_a = a.length();
     if ( len_a > len_x ) len_a = len_x;

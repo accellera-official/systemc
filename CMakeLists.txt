@@ -90,6 +90,11 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
+# BIGINT_CONFIGURATION          Configuration of big integer datatypes
+#                               (one of BASE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_STORAGE
+#                                       TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
+#
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON if not targetting Windows).
 #
@@ -278,6 +283,16 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
   set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+
+
+set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
+#set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+set(BIGINT_CONFIGURATION "TEMPLATE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
+set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BigIntConfigs})
+set(BASE_VEC_DIGITS_CONFIG "8" CACHE STRING "Size of default allocation of SC_BASE_VEC_DIGITS in sc_unsigned/sc_signed.")
+set_property(CACHE BASE_VEC_DIGITS_CONFIG PROPERTY VALUE ${BASE_VEC_DIGITS_CONFIG} )
+
+option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
@@ -722,6 +737,7 @@ install (FILES AUTHORS.md
 export (TARGETS systemc
         NAMESPACE SystemC::
         FILE SystemCLanguageTargets.cmake)
+target_compile_features(systemc PUBLIC cxx_std_17)
 # ... to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::

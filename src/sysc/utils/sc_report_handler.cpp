@@ -58,7 +58,7 @@ const std::string sc_report_compose_message(const sc_report& rep)
     if ( rep.get_id() >= 0 ) // backward compatibility with 2.0+
     {
 	char idstr[64];
-	std::sprintf(idstr, "(%c%d) ",
+	std::snprintf(idstr, 64, "(%c%d) ",
 		"IWEF"[rep.get_severity()], rep.get_id());
 	str += idstr;
     }
@@ -75,7 +75,7 @@ const std::string sc_report_compose_message(const sc_report& rep)
 	str += "\nIn file: ";
 	str += rep.get_file_name();
 	str += ":";
-	std::sprintf(line_number_str, "%d", rep.get_line_number());
+	std::snprintf(line_number_str, 16, "%d", rep.get_line_number());
 	str += line_number_str;
 	sc_simcontext* simc = sc_get_curr_simcontext();
 

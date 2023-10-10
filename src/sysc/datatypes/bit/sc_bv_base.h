@@ -58,6 +58,7 @@
 #include "sysc/datatypes/bit/sc_bit_proxies.h"
 #include "sysc/datatypes/bit/sc_proxy.h"
 #include "sysc/datatypes/int/sc_length_param.h"
+#include "sysc/datatypes/int/sc_nbdefs.h"
 
 
 namespace sc_dt
@@ -137,7 +138,7 @@ public:
     // destructor
 
     virtual ~sc_bv_base()
-	{ delete [] m_data; }
+	{ if ( m_data != m_base_vec ) delete [] m_data; }
 
 
     // assignment operators
@@ -223,6 +224,7 @@ protected:
     int     m_len;  // length in bits
     int     m_size; // size of data array
     sc_digit* m_data; // data array
+    sc_digit  m_base_vec[SC_BASE_VEC_DIGITS > 0 ? SC_BASE_VEC_DIGITS : 1];
 };
 
 

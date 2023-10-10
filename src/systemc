@@ -100,10 +100,23 @@
 #include "sysc/datatypes/bit/sc_bv.h"
 #include "sysc/datatypes/bit/sc_lv.h"
 
+#include "sysc/datatypes/int/sc_signed.h"
+#include "sysc/datatypes/int/sc_unsigned.h"
+
 #include "sysc/datatypes/int/sc_bigint.h"
 #include "sysc/datatypes/int/sc_biguint.h"
 #include "sysc/datatypes/int/sc_int.h"
 #include "sysc/datatypes/int/sc_uint.h"
+
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_int_inlines.h"
+#include "sysc/datatypes/int/sc_uint_inlines.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
+#include "sysc/datatypes/int/sc_bigint_inlines.h"
+#include "sysc/datatypes/int/sc_biguint_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_big_ops.h"
 
 #include "sysc/datatypes/misc/sc_concatref.h"
 

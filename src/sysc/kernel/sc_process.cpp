@@ -380,15 +380,6 @@ sc_process_b::report_immediate_self_notification() const
 void sc_process_b::reset_changed( bool async, bool asserted )
 {
 
-    // Error out on the corner case:
-
-    if ( !sc_allow_process_control_corners && !async &&
-         (m_state & ps_bit_suspended) )
-    {
-	report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	              "synchronous reset changed on a suspended process" );
-    }
-
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
 
     if ( m_state & ps_bit_zombie ) return;
