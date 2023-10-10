@@ -43,10 +43,7 @@
 #include "sysc/tracing/sc_trace_file_base.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_simcontext_int.h"
-
-#if SC_TRACING_STAGE_CALLBACKS_
-#  include "sysc/kernel/sc_object_int.h"
-#endif
+#include "sysc/kernel/sc_object_int.h"
 
 #ifndef UINT64_C
 #if defined(_WIN32) && !defined(__MINGW32__)
@@ -80,11 +77,7 @@ sc_trace_file_base::sc_trace_file_base( const char* name, const char* extension 
         ss.str().swap( filename_ );
     }
 
-#if SC_TRACING_STAGE_CALLBACKS_ == 1
     sc_register_stage_callback( *this, SC_PRE_TIMESTEP );
-#else // explicitly register with simcontext
-    sc_get_curr_simcontext()->add_trace_file( this );
-#endif
 }
 
 sc_trace_file_base::~sc_trace_file_base()
@@ -95,10 +88,8 @@ sc_trace_file_base::~sc_trace_file_base()
     if( fp )
         fclose(fp);
 
-#if SC_TRACING_STAGE_CALLBACKS_ == 0
     // unregister from simcontext
     sc_get_curr_simcontext()->remove_trace_file( this );
-#endif
 }
 
 /*****************************************************************************/
@@ -110,14 +101,14 @@ sc_trace_file_base::~sc_trace_file_base()
 //    - before returning to sc_start (via sc_pause() or sc_stop())
 //    - after an update phase (if delta cycles need to be traced)
 //
-#if SC_TRACING_STAGE_CALLBACKS_
+
 void
 sc_trace_file_base::stage_callback(const sc_stage & stage)
 {
     // delta cycle is traced at the end of an update phase
     cycle( sc_get_curr_simcontext()->get_stage() == SC_POST_UPDATE );
 }
-#endif // SC_TRACING_STAGE_CALLBACKS_
+
 
 /*****************************************************************************/
 
@@ -183,13 +174,11 @@ void
 sc_trace_file_base::delta_cycles( bool flag )
 {
     trace_delta_cycles_ = flag;
-#if SC_TRACING_STAGE_CALLBACKS_
     if( trace_delta_cycles_ ) {
         sc_register_stage_callback( *this, SC_POST_UPDATE );
     } else {
         sc_unregister_stage_callback( *this, SC_POST_UPDATE );
     }
-#endif
 }
 
 void

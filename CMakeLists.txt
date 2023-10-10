@@ -138,12 +138,6 @@
 #                               changes in IEEE Std 1666-2011 (see
 #                               sc_event::notify, 5.10.6).
 #
-# ENABLE_PHASE_CALLBACKS        Enable the simulation phase callbacks (experimental).
-#
-# ENABLE_PHASE_CALLBACKS_TRACING  Enable usage of the (experimental) simulation
-#                               phase callbacks for the implementation of
-#                               sc_trace().
-#
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
@@ -299,10 +293,6 @@ option (ENABLE_EARLY_MAXTIME_CREATION "Allow creation of sc_time objects with a 
 
 option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
 
-option (ENABLE_PHASE_CALLBACKS "Enable the simulation phase callbacks (experimental)." OFF)
-
-option (ENABLE_PHASE_CALLBACKS_TRACING "Enable the use of the (experimental) simulation phase callbacks for the sc_trace() implementation." ON)
-
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
@@ -337,8 +327,6 @@ mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  ENABLE_ASSERTIONS
                  ENABLE_EARLY_MAXTIME_CREATION
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-                 ENABLE_PHASE_CALLBACKS
-                 ENABLE_PHASE_CALLBACKS_TRACING
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -649,8 +637,6 @@ if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
 else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
 endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-message (STATUS "ENABLE_PHASE_CALLBACKS = ${ENABLE_PHASE_CALLBACKS}")
-message (STATUS "ENABLE_PHASE_CALLBACKS_TRACING = ${ENABLE_PHASE_CALLBACKS_TRACING}")
 if (ENABLE_PTHREADS)
   message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 else (ENABLE_PTHREADS)

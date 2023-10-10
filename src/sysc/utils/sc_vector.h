@@ -83,9 +83,7 @@ class sc_vector_element;  // opaque pointer
 
 class SC_API sc_vector_base
   : public sc_object
-#if SC_HAS_STAGE_CALLBACKS_
   , public sc_stage_callback_if
-#endif
 {
 
   template<typename,typename> friend class sc_vector_assembly;
