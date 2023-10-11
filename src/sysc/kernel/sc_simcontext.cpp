@@ -1260,9 +1260,11 @@ sc_simcontext::add_trace_file( sc_trace_file* tf )
 void
 sc_simcontext::remove_trace_file( sc_trace_file* tf )
 {
-    m_trace_files.erase(
-        std::remove( m_trace_files.begin(), m_trace_files.end(), tf )
-    );
+    std::vector<sc_trace_file*>::iterator it = std::remove( m_trace_files.begin(), 
+                                                            m_trace_files.end(), tf );
+    if ( m_trace_files.end() != it ) { 
+        m_trace_files.erase(it);
+    }
     m_something_to_trace = ( m_trace_files.size() > 0 );
 }
 
