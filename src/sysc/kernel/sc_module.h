@@ -412,9 +412,12 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
     struct user_module_name : ::sc_core::sc_module
 
 #if SC_CPLUSPLUS >= 201103L
-    #define SC_HAS_PROCESS(user_module_name)                                  \
-        static_assert(true, "SC_HAS_PROCESS is a no-op, avoid stray ; token")
-        // TODO: add deprecation warning?
+    [[deprecated]] inline void SC_HAS_PROCESS() {};
+    #define SC_HAS_PROCESS(user_module_name)                    \
+        typedef user_module_name SC_CURRENT_USER_MODULE;        \
+        void _SC_HAS_PROCESS() {                                \
+            SC_HAS_PROCESS();                                   \
+        }
 
     #define SC_CURRENT_USER_MODULE_TYPE \
         std::remove_reference<decltype(*this)>::type
