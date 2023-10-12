@@ -1,9 +1,6 @@
 SystemC Simulation
 
-Warning: (W212) sc_logic value 'X' cannot be converted to bool
-In file: <removed by verify.pl>
-
-Warning: (W211) sc_logic value 'Z' cannot be converted to bool
+Warning: (W206) vector contains 4-value logic
 In file: <removed by verify.pl>
 01ZX
-7
+5
