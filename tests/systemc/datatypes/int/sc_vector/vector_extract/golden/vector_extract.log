@@ -1,0 +1,12 @@
+SystemC Simulation
+
+extract from sc_digit(20) filled with ffffffff
+
+extract from sc_digit(384) filled with ffffffff
+
+extract from sc_digit(128) filled with 66666666
+
+extract from sc_digit(128) filled with aaaaaaaa
+
+extract from sc_digit(128) filled with 87654321
+Program completed
