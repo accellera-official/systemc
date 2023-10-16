@@ -1,0 +1,6 @@
+SystemC Simulation
+10 ns event1
+20 ns event2
+30 ns event1
+30 ns event2
+program completed

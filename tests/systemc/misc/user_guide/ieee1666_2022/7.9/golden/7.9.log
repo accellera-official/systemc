@@ -1,0 +1,15 @@
+SystemC Simulation
+
+================ 7.9.3.6 ==================
+
+b.to_string(sc_dt::SC_BIN,false) = 01111
+b.to_string(sc_dt::SC_BIN) = 0b01111
+b.to_string() = 1111
+
+================ 7.9.4.6 ==================
+
+l.to_string(sc_dt::SC_BIN,false) = 01111
+l.to_string(sc_dt::SC_BIN) = 0b01111
+l.to_string() = 1111
+
+program completed

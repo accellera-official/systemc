@@ -1,0 +1,41 @@
+SystemC Simulation
+
+Info: tester: Tick SystemC time: 100 us
+
+Info: tester: Tick SystemC time: 200 us
+
+Info: tester: Tick SystemC time: 300 us
+
+Info: tester: Suspend at SystemC time: 350 us
+
+Info: async_event: Called stage_callback at stage: SC_PRE_SUSPEND
+
+Info: child thread: Release child thread
+
+Info: tester: Restart SystemC time: 350 us
+
+Info: tester: Start to advance SystemC time: 350 us
+
+Info: tester: Tick SystemC time: 400 us
+
+Info: tester: SystemC time: 460 us
+
+Info: tester: Unsuspend at SystemC time: 460 us
+
+Info: async_event: Called stage_callback at stage: SC_POST_SUSPEND
+
+Info: tester: Tick SystemC time: 500 us
+
+Info: tester: Tick SystemC time: 600 us
+
+Info: tester: Tick SystemC time: 700 us
+
+Info: tester: Tick SystemC time: 800 us
+
+Info: tester: Tick SystemC time: 900 us
+
+Info: tester: Tick SystemC time: 1 ms
+
+Info: tester: test complete SystemC time: 1 ms
+
+Info: /OSCI/SystemC: Simulation stopped by user.

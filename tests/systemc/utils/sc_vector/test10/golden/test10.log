@@ -1,0 +1,17 @@
+SystemC Simulation
+mod.vector_port1: top1.mod.vector_port1_0
+mod.vector_port2: top1.mod.vector_port2_0
+mod.vector_port2: top1.mod.vector_port2_1
+mod.vector_port3: top1.mod.vector_port3_0
+mod.vector_port3: top1.mod.vector_port3_1
+mod.vector_port3: top1.mod.vector_port3_2
+mod.vector_port3: top1.mod.vector_port3_3
+mod.vector_port3: top1.mod.late_port
+mod.vector_port4: top1.mod.vector_port4_0
+mod.vector_port4: top1.mod.vector_port4_1
+mod.vector_port4: top1.mod.vector_port4_2
+mod.vector_port4: top1.mod.vector_port4_3
+mod.vector_ev: top1.mod.vector_event_0
+
+Error: (E809) attempt to insert into locked sc_vector: top1.mod.vector_event
+In file: <removed by verify.pl>

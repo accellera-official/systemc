@@ -1,0 +1,14 @@
+SystemC Simulation
+
+Warning: /Acme_IP: Overflow
+In file: <removed by verify.pl>
+
+Warning: /Acme_IP: Conflict
+In file: <removed by verify.pl>
+
+Warning: /Acme_IP: Misuse
+In file: <removed by verify.pl>
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+program completed
