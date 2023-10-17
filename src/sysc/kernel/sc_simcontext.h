@@ -291,9 +291,6 @@ public:
 
     int next_proc_id();
 
-    void add_trace_file( sc_trace_file* );
-    void remove_trace_file( sc_trace_file* );
-
     friend SC_API void    sc_set_time_resolution( double, sc_time_unit );
     friend SC_API sc_time sc_get_time_resolution();
     friend SC_API void    sc_set_default_time_unit( double, sc_time_unit );
