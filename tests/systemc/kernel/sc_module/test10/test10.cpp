@@ -38,24 +38,34 @@
 
 #include "systemc.h"
 
+#define STACK_SIZE 0x600000 
+#define ARRAY_SIZE ((long)(STACK_SIZE/4.79267))
+
+void my_dump( const long value )
+{       
+    std::cout << "0x" << std::hex << value << " (" << std::dec << value << ") = ";
+}  
+
 SC_MODULE(A)
 {
 	SC_CTOR(A)
 	{
 		SC_THREAD(thread);
 		sensitive << m_clk;
-		set_stack_size(0x600000);
+		set_stack_size(STACK_SIZE);
 	}
 	void thread()
 	{
-		int  x[0x100000];    // Grab a lot of stack...
-		x[0x100000-1] = 42;  // ... and then modify the last location`
+	    int  x[ARRAY_SIZE];    // Grab a lot of stack...
 
 	    for (;;) 
-		{
-			cout << sc_time_stamp() << endl;
-			wait();
-		}
+	    {
+		// modify the first and last locations:
+		x[ARRAY_SIZE-1] = ~x[ARRAY_SIZE-1];
+		x[0] = ~x[0];
+		std::cout << sc_time_stamp() <<std:: endl;
+		wait();
+	    }
 	}
 	sc_in_clk m_clk;
 };
@@ -66,7 +76,11 @@ int sc_main(int argc, char* argv[])
 	A        a("a");
 	a.m_clk(clock);
 
-	sc_start(2, SC_NS);
+        my_dump(STACK_SIZE); std::cout << "stack size" << std::endl;
+        my_dump(4*ARRAY_SIZE); std::cout << "array size" << std::endl;
+        my_dump( (STACK_SIZE-(4*ARRAY_SIZE)) ); std::cout << "stack margin" << std::endl;
 
+	sc_start(2, SC_NS);
+        std::cout << "Program complete" << std::endl;
 	return 0;
 }
