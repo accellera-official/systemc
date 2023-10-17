@@ -253,7 +253,6 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator & ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    std::cout << WL << " " << WR << " " << sc_big_op_info<WL,true,WR,false>::bit_result::HOD << std::endl;
     typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
