@@ -39,7 +39,7 @@
 #include "systemc.h"
 
 #define STACK_SIZE 0x600000 
-#define ARRAY_SIZE ((long)(STACK_SIZE/4.79267))
+#define ARRAY_SIZE ((long)(STACK_SIZE/4 * 0.85))
 
 void my_dump( const long value )
 {       
