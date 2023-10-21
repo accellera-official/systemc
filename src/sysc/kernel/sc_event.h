@@ -301,7 +301,7 @@ public:
     bool triggered() const;
 
     // never notified event
-    static const sc_event none;
+    static const sc_event& none() { return sc_get_curr_simcontext()->null_event(); }
 
 private:
 

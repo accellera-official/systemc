@@ -66,7 +66,7 @@ extern SC_API const std::string  sc_copyright_string;
 #define IEEE_1666_SYSTEMC     201101L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2022 by all Contributors,\n" \
+  "Copyright (c) 1996-2023 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
