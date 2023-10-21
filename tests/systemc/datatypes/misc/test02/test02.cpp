@@ -46,10 +46,10 @@ void
 write1( const T& a )
 {
     cout << endl;
-    cout << a.to_int() << endl;
-    cout << a.to_uint() << endl;
-    cout << a.to_long() << endl;
-    cout << a.to_ulong() << endl;
+    cout << "   to_int()   = " << a.to_int() << endl;
+    cout << "   to_uint()  = " << a.to_uint() << endl;
+    cout << "   to_long()  = " << a.to_long() << endl;
+    cout << "   to_ulong() = " << a.to_ulong() << endl;
 }
 
 template <class T>
@@ -57,7 +57,7 @@ void
 write2( const T& a )
 {
     write1( a );
-    cout << a.to_double() << endl;
+    cout << "   to_double  = " << a.to_double() << endl;
 }
 
 template <class T>
@@ -65,20 +65,22 @@ void
 write3( const T& a )
 {
     write2( a );
-    cout << a.to_int64() << endl;
-    cout << a.to_uint64() << endl;
+    cout << "   to_int64   = "<< a.to_int64() << endl;
+    cout << "   to_uint64  = "<< a.to_uint64() << endl;
 }
 
 
 void
 test_bit()
 {
-    cout << "\n*** test_bit()" << endl;
+    cout << "\n*** test_bit() --------------------------" << endl;
 
+    cout << endl << "testing: sc_bv<8> a( \"10101010\" )" << endl;
     sc_bv<8> a( "10101010" );
     write1( a );
     write1( a.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_lv<8> b( \"11001100\" )" << endl;
     sc_lv<8> b( "11001100" );
     write1( b );
     write1( b.range( 3, 0 ) );
@@ -89,20 +91,24 @@ test_bit()
 void
 test_fx()
 {
-    cout << "\n*** test_fx()" << endl;
+    cout << "\n*** test_fx() ---------------------------" << endl;
 
+    cout << endl << "testing: sc_fixed<8,4> a( \"0b1010.1010\" )" << endl;
     sc_fixed<8,4> a( "0b1010.1010" );
     write2( a );
     write1( a.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_fixed_fast<8,4> b( \"0b1010.1010\" )" << endl;
     sc_fixed_fast<8,4> b( "0b1010.1010" );
     write2( b );
     write1( b.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_ufixed<8,4> c( \"0b1010.1010\" )" << endl;
     sc_ufixed<8,4> c( "0b1010.1010" );
     write2( c );
     write1( c.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_ufixed_fast<8,4> d( \"0b1010.1010\" )" << endl;
     sc_ufixed_fast<8,4> d( "0b1010.1010" );
     write2( d );
     write1( d.range( 3, 0 ) );
@@ -111,21 +117,25 @@ test_fx()
 void
 test_int()
 {
-    cout << "\n*** test_int()" << endl;
+    cout << "\n*** test_int() --------------------------" << endl;
 
+    cout << endl << "testing: sc_bigint<8> a( \"0b10101010\" )" << endl;
     sc_bigint<8> a( "0b10101010" );
     write3( a );
     write3( a.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_biguint<8> b( \"0b10101010\" )" << endl;
     sc_biguint<8> b( "0b10101010" );
     write3( b );
     write3( b.range( 3, 0 ) );
 
+    cout << endl << "testing: sc_int<8> c( -86 )" << endl;
     sc_int<8> c( -86 );
     write3( c );
     write3( c.range( 3, 0 ) );
     write3( ( c.range( 7, 4 ), c.range( 3, 0 ) ) );
 
+    cout << endl << "testing: sc_uint<8> d( 170 )" << endl;
     sc_uint<8> d( 170 );
     write3( d );
     write3( d.range( 3, 0 ) );
