@@ -39,7 +39,6 @@
 
 SC_MODULE( pr130 )
 {
-    SC_HAS_PROCESS( pr130 );
 
     sc_in_clk clk;
 
@@ -58,7 +57,6 @@ SC_MODULE( pr130 )
 
 SC_MODULE( pr130_2 )
 {
-    SC_HAS_PROCESS( pr130_2 );
 
     sc_in_clk clk;
 

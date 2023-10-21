@@ -45,7 +45,6 @@ bar(int* x, int* y, int q)
 
 SC_MODULE( pr233 )
 {
-    SC_HAS_PROCESS( pr233 );
 
     sc_in_clk clk;
 

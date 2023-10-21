@@ -43,7 +43,6 @@
 
 SC_MODULE( tb )
 {
-        SC_HAS_PROCESS( tb );
 
         sc_in_clk clk;
 

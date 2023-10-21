@@ -46,7 +46,6 @@
 
 SC_MODULE( syncproc )
 {
-  SC_HAS_PROCESS( syncproc );
 
   sc_in<bool> clk;
 
@@ -84,7 +83,6 @@ SC_MODULE( syncproc )
 
 SC_MODULE( asyncproc )
 {
-  SC_HAS_PROCESS( asyncproc );
 
   const sc_signal<int>& in;
   sc_signal<int>& out;
@@ -115,7 +113,6 @@ SC_MODULE( asyncproc )
 
 SC_MODULE( asyncblock )
 {
-  SC_HAS_PROCESS( asyncblock );
 
   const sc_signal<int>& in;
   sc_signal<int>& out;

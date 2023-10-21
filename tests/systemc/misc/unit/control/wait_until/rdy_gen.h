@@ -41,7 +41,6 @@
 
 SC_MODULE( RDY_GEN )
 {
-    SC_HAS_PROCESS( RDY_GEN );
 
     sc_in_clk clk;
 

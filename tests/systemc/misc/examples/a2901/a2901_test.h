@@ -42,7 +42,6 @@
 
 SC_MODULE( a2901_test )
 {
-    SC_HAS_PROCESS( a2901_test );
 
     // clock
     const sc_clock& CLK;

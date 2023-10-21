@@ -41,7 +41,6 @@
 
 SC_MODULE( monitor )
 {
-    SC_HAS_PROCESS( monitor );
 
     sc_in_clk clk;
 

@@ -75,7 +75,6 @@ struct mod : public sc_core::sc_module
   sc_core::sc_in<T> inp;
   sc_core::sc_out<T> outp;
 
-  SC_HAS_PROCESS(mod);
 
   mod(sc_core::sc_module_name nm): inp("inp"), outp("outp")
   {

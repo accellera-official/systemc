@@ -39,7 +39,6 @@
 
 SC_MODULE( yow )
 {
-    SC_HAS_PROCESS( yow );
 
     sc_in_clk clk;
 

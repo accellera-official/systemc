@@ -42,7 +42,6 @@
 
 SC_MODULE( numgen )
 {
-  SC_HAS_PROCESS( numgen );
 
   sc_in_clk clk;
 

@@ -56,7 +56,6 @@
 class stage_tracer : public sc_module, public sc_stage_callback_if
 {
 public:
-  SC_HAS_PROCESS(stage_tracer);
   stage_tracer( sc_module_name nm
                   = sc_core::sc_gen_unique_name("stage_tracer") )
     : cb_count(0), timed_count(), delta_count()

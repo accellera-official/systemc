@@ -37,7 +37,6 @@
 
 SC_MODULE( while_fsm )
 {
-    SC_HAS_PROCESS( while_fsm );
 
     sc_in_clk clk;
 

@@ -7,7 +7,6 @@ class Mod : public sc_module
   sc_in_clk clk;
   sc_in<sc_uint<37> >     a;
 
-  SC_HAS_PROCESS(Mod);
   void foo()
   {
     cout << sc_time_stamp() << "\n";

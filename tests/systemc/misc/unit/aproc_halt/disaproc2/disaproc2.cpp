@@ -49,7 +49,6 @@ int val2[19] = {   239,   923,  1240,   129,  191,   101,  1010,   190,
 
 SC_MODULE( aproc1 )
 {
-    SC_HAS_PROCESS( aproc1 );
 
     const sc_signal_bool_vector& a;
     const sc_signal_bool_vector& b;
@@ -85,7 +84,6 @@ aproc1::entry()
 
 SC_MODULE( aproc2 )
 {
-    SC_HAS_PROCESS( aproc2 );
 
     const sc_signal_bool_vector& a;
     const sc_signal_bool_vector& b;
@@ -140,7 +138,6 @@ aproc2::entry()
 
 SC_MODULE( sync1 )
 {
-    SC_HAS_PROCESS( sync1 );
 
     sc_in_clk clk;
 

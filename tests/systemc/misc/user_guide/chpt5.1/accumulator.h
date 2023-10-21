@@ -42,7 +42,6 @@
 
 SC_MODULE( accumulator )
 {
-  SC_HAS_PROCESS( accumulator );
 
   sc_in_clk clk;
 

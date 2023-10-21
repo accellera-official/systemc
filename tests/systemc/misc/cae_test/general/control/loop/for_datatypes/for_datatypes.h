@@ -40,7 +40,6 @@
 
 SC_MODULE( for_datatypes )
 {
-    SC_HAS_PROCESS( for_datatypes );
 
     sc_in_clk clk;
 

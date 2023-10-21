@@ -42,7 +42,6 @@
 
 SC_MODULE( a2901_alu )
 {
-    SC_HAS_PROCESS( a2901_alu );
 
     // inputs
     const sig9& I;

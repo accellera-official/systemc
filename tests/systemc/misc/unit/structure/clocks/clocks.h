@@ -43,7 +43,6 @@
 
 SC_MODULE( CLK_POS )
 {
-    SC_HAS_PROCESS( CLK_POS );
 
     sc_in_clk clk;
 
@@ -83,7 +82,6 @@ CLK_POS::entry()
 
 SC_MODULE( CLK_NEG )
 {
-    SC_HAS_PROCESS( CLK_NEG );
 
     sc_in_clk clk;
 
@@ -122,7 +120,6 @@ CLK_NEG::entry()
 
 SC_MODULE( CLK2_POS )
 {
-    SC_HAS_PROCESS( CLK2_POS );
 
     sc_in_clk clk;
 
@@ -161,7 +158,6 @@ CLK2_POS::entry()
 
 SC_MODULE( CLK2_NEG )
 {
-    SC_HAS_PROCESS( CLK2_NEG );
 
     sc_in_clk clk;
 

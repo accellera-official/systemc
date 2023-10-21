@@ -52,7 +52,6 @@ struct rgb_t {
 
 SC_MODULE( some_process )
 {
-  SC_HAS_PROCESS( some_process );
 
   sc_in_clk clk;
 

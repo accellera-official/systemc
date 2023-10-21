@@ -359,7 +359,6 @@ struct Top: sc_module
     yield_event_2.notify();
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

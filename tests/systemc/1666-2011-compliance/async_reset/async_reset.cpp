@@ -562,7 +562,6 @@ struct Top: sc_module
     m.sync_reset_off();
   }  
     
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

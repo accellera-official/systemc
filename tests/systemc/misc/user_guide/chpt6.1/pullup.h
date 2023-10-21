@@ -42,7 +42,6 @@
 
 SC_MODULE( pullup )
 {
-  SC_HAS_PROCESS( pullup );
 
   sc_in_clk clk;
 

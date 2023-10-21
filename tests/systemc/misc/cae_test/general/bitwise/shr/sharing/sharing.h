@@ -40,7 +40,6 @@
 
 SC_MODULE( sharing )
 {
-    SC_HAS_PROCESS( sharing );
 
     sc_in_clk clk;
 

@@ -40,7 +40,6 @@
 
 SC_MODULE( bitwidth )
 {
-    SC_HAS_PROCESS( bitwidth );
 
     sc_in_clk clk;
 

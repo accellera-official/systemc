@@ -40,7 +40,6 @@
 
 SC_MODULE( xor_1 )
 {
-    SC_HAS_PROCESS( xor_1 );
 
     sc_in_clk clk;
 

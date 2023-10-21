@@ -42,7 +42,6 @@ struct memory : sc_module {
   sc_in<bool>          in_valid1;     
   sc_out<bool>         out_valid1;    
 
-  SC_HAS_PROCESS( memory );
 
   memory (const  char    *NAME)
         : sc_module (NAME)    

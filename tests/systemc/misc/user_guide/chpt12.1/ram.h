@@ -42,7 +42,6 @@
 
 SC_MODULE( ram )
 {
-  SC_HAS_PROCESS( ram );
 
   const signal_bool_vector32& datain; //input
   const sc_signal<bool>& cs;        //input

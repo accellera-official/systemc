@@ -181,7 +181,6 @@ struct Top: sc_module
     next_trigger(ev);
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

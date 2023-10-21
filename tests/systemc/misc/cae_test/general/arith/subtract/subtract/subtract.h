@@ -40,7 +40,6 @@
 
 SC_MODULE( subtraction )
 {
-    SC_HAS_PROCESS( subtraction );
 
     sc_in_clk clk;
 

@@ -37,7 +37,6 @@
 
 SC_MODULE( MYNAME )
 {
-    SC_HAS_PROCESS( MYNAME );
 
     sc_in_clk clk;
 

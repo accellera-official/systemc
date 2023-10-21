@@ -42,7 +42,6 @@
 
 SC_MODULE( proc1 )
 {
-    SC_HAS_PROCESS( proc1 );
 
     sc_in_clk            clk;
     sc_in<unsigned int>  ready;

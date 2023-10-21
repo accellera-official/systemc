@@ -39,7 +39,6 @@
 
 SC_MODULE( array )
 {
-    SC_HAS_PROCESS( array );
 
     sc_in_clk clk;
 

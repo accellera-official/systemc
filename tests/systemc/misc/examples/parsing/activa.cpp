@@ -39,7 +39,6 @@
 
 SC_MODULE( activa )
 {
-    SC_HAS_PROCESS( activa );
 
     sc_in_clk clk;
 
