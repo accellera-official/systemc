@@ -96,7 +96,7 @@ sc_lv_base::init( int length_, const sc_logic& init_value )
 
     m_len = length_;
     m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
-    m_data = m_size <= SC_BASE_VEC_DIGITS ? m_base_vec : new sc_digit[m_size+1];
+    m_data = m_size <= SC_BASE_VEC_DIGITS ? m_base_vec : new sc_digit[m_size*2];
     m_ctrl = m_data + m_size;
 
     // initialize the bits to 'init_value'

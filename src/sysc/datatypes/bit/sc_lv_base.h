@@ -239,7 +239,7 @@ protected:
     int     m_size;  // size of the data array
     sc_digit* m_data;  // data array
     sc_digit* m_ctrl;  // dito (control part)
-    sc_digit  m_base_vec[SC_BASE_VEC_DIGITS > 0 ? 2*SC_BASE_VEC_DIGITS : 1];
+    sc_digit  m_base_vec[SC_BASE_VEC_DIGITS > 0 ? 2*SC_BASE_VEC_DIGITS : 2];
 };
 
 
