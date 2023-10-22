@@ -113,7 +113,6 @@ proc2::entry()
 
 SC_MODULE( proc3 )
 {
-  SC_HAS_PROCESS( proc3 );
 
   const sc_signal_resolved& in;
 
