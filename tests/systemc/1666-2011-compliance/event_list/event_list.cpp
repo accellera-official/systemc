@@ -79,7 +79,6 @@ struct Mod: sc_module
     return or_list;
   }  
  
-  SC_HAS_PROCESS(Mod);
 };
 
 struct Top: sc_module
@@ -299,7 +298,6 @@ struct Top: sc_module
     ++count;
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

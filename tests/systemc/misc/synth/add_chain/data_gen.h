@@ -43,7 +43,6 @@
 
 SC_MODULE( DATA_GEN )
 {
-    SC_HAS_PROCESS( DATA_GEN );
 
     sc_in_clk clk;
 

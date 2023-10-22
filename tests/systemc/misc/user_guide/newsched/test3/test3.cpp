@@ -44,7 +44,6 @@
 
 SC_MODULE( asyncproc )
 {
-  SC_HAS_PROCESS( asyncproc );
 
   sc_in<bool> clock;
 
@@ -73,7 +72,6 @@ SC_MODULE( asyncproc )
 
 SC_MODULE( asyncblock )
 {
-  SC_HAS_PROCESS( asyncblock );
 
   sc_in<bool> clock;
 

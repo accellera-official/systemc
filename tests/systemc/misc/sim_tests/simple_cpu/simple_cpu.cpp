@@ -42,7 +42,6 @@
 
 SC_MODULE( exec_decode )
 {
-  SC_HAS_PROCESS( exec_decode );
 
   sc_in<unsigned>  instruction;
   sc_signal<unsigned>& program_counter;
@@ -188,7 +187,6 @@ exec_decode::entry()
 
 SC_MODULE( fetch )
 {
-  SC_HAS_PROCESS( fetch );
 
   sc_in<unsigned> program_counter;
   sc_signal<unsigned>& instruction;

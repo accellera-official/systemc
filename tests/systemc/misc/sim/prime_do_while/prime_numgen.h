@@ -43,7 +43,6 @@
 
 SC_MODULE( prime_numgen )
 {
-  SC_HAS_PROCESS( prime_numgen );
 
   sc_in_clk clk;
 

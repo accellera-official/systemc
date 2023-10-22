@@ -42,7 +42,6 @@
 
 SC_MODULE( delay_line )
 {
-  SC_HAS_PROCESS( delay_line );
 
   sc_in_clk clk;
 

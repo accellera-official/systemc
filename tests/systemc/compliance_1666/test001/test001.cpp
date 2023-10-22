@@ -77,7 +77,6 @@ struct MyMod: Mod         //// Class derived from an SC_MODULE DOULOS050
   void p1() { ch.write(333); }
   void p2() { int i; ch.read(i); sc_assert(i == 333); }
 
-  SC_HAS_PROCESS(MyMod);
 };
 
 

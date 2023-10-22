@@ -39,7 +39,6 @@
 
 SC_MODULE( dub )
 {
-    SC_HAS_PROCESS( dub );
 
     sc_in_clk clk;
 

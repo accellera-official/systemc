@@ -39,7 +39,6 @@
 
 SC_MODULE( matrix )
 {
-    SC_HAS_PROCESS( matrix );
 
     sc_in_clk clk;
 

@@ -41,7 +41,6 @@
 
 SC_MODULE( stimgen )
 {
-    SC_HAS_PROCESS( stimgen );
 
     // Inputs
     sc_in_clk  clk;
@@ -78,7 +77,6 @@ SC_MODULE( stimgen )
 
 SC_MODULE( datawidth )
 {
-    SC_HAS_PROCESS( datawidth );
 
     // Inputs
     sc_in_clk      clk;

@@ -65,7 +65,6 @@ struct M2: sc_module
     }
   }
   
-  SC_HAS_PROCESS(M2);
 };
 
 int sc_main(int argc, char* argv[])

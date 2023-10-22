@@ -42,7 +42,6 @@
 
 SC_MODULE( a2901_alu_inputs )
 {
-    SC_HAS_PROCESS( a2901_alu_inputs );
 
     // shared state
     long* RAM;

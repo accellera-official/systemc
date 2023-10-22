@@ -40,7 +40,6 @@
 
 SC_MODULE( display )
 {
-    SC_HAS_PROCESS( display );
 
     sc_in_clk clk;
 

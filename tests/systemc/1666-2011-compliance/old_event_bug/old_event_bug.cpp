@@ -128,7 +128,6 @@ struct Top: sc_module
     ++countb;
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

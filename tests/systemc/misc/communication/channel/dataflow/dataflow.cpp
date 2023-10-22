@@ -39,7 +39,6 @@
 
 SC_MODULE( sawtooth )
 {
-  SC_HAS_PROCESS( sawtooth );
 
   sc_in_clk clk;
 
@@ -73,7 +72,6 @@ void sawtooth::entry()
 
 SC_MODULE( delay )
 {
-  SC_HAS_PROCESS( delay );
 
   sc_in_clk clk;
 
@@ -106,7 +104,6 @@ void delay::entry()
 
 SC_MODULE( downsample )
 {
-  SC_HAS_PROCESS( downsample );
 
   sc_in_clk clk;
 
@@ -139,7 +136,6 @@ void downsample::entry()
 
 SC_MODULE( upsample )
 {
-  SC_HAS_PROCESS( upsample );
 
   sc_in_clk clk;
 
@@ -170,7 +166,6 @@ void upsample::entry()
 
 SC_MODULE( adder )
 {
-  SC_HAS_PROCESS( adder );
 
   sc_in_clk clk;
 

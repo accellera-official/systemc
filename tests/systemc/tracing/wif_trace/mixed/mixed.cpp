@@ -42,7 +42,6 @@ QTIsaac<8> rng;
 
 SC_MODULE( adder )
 {
-    SC_HAS_PROCESS( adder );
 
     sc_in<bool> clk;
     sc_in<int>  a;
@@ -75,7 +74,6 @@ adder::entry()
 
 SC_MODULE( stim )
 {
-    SC_HAS_PROCESS( stim );
 
     sc_in_clk   clk;
     sc_out<int> a;

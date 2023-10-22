@@ -43,7 +43,6 @@
 
 SC_MODULE( datawidth )
 {
-    SC_HAS_PROCESS( datawidth );
 
     sc_in_clk clk;
 

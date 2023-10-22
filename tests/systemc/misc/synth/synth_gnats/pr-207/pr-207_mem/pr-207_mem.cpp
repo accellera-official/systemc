@@ -48,7 +48,6 @@ typedef sc_signal<unsigned char> sig_uchar;
 
 SC_MODULE( pr207 )
 {
-    SC_HAS_PROCESS( pr207 );
 
     sc_in_clk clk;
 

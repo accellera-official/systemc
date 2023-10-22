@@ -39,7 +39,6 @@
 
 SC_MODULE( foo )
 {
-    SC_HAS_PROCESS( foo );
 
     const sc_signal<bool> &input;
     sc_signal<bool> &output;

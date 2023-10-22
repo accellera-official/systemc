@@ -41,7 +41,6 @@
 
 SC_MODULE( fsm_recognizer )
 {
-  SC_HAS_PROCESS( fsm_recognizer );
 
   sc_in_clk clk;
 

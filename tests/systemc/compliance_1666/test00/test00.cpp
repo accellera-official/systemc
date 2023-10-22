@@ -90,7 +90,6 @@ struct Chan: i_f, sc_object
 struct M_src: sc_core::sc_behavior
 {
   sc_port<i_f>* p;
-  SC_HAS_PROCESS(M_src);
 
   M_src(sc_module_name _name)
   {
@@ -107,7 +106,6 @@ struct M_src: sc_core::sc_behavior
 struct M_dest: sc_core::sc_channel
 {
   sc_export<i_f>* xp;
-  SC_HAS_PROCESS(M_dest);
 
   M_dest(sc_module_name _name)
   {
@@ -216,7 +214,6 @@ struct CM: sc_module
   sc_in_clk clk;
   sc_in<bool> reset;
 
-  SC_HAS_PROCESS(CM);
 
   CM(sc_module_name _name)
   : first(true)

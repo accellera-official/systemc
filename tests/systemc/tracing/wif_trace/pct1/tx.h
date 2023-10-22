@@ -42,7 +42,6 @@
 
 SC_MODULE( sio_tx )
 {
-  SC_HAS_PROCESS( sio_tx );
 
   sc_in_clk    clk;
   sc_in<bool>  two_stop_bits;

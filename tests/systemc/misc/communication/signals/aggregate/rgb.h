@@ -57,7 +57,6 @@ operator << ( ostream& os, const rgb_t& a )
 
 SC_MODULE( some_process )
 {
-    SC_HAS_PROCESS( some_process );
 
     sc_in_clk     clk;
     sc_in<rgb_t>  color_in;

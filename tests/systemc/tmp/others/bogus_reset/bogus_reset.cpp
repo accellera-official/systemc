@@ -46,7 +46,6 @@ struct M5: sc_module
     cout << "Target called at " << sc_time_stamp() << endl;
   }
 
-  SC_HAS_PROCESS(M5);
 };
 
 int sc_main(int argc, char* argv[])

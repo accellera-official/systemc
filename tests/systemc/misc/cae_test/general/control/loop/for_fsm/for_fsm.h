@@ -40,7 +40,6 @@
 
 SC_MODULE( for_fsm )
 {
-    SC_HAS_PROCESS( for_fsm );
 
     sc_in_clk clk;
 

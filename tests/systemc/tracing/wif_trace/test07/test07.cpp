@@ -39,7 +39,6 @@
 
 SC_MODULE( proc1 )
 {
-  SC_HAS_PROCESS( proc1 );
 
   sc_in<bool>       clk;
   sc_signal<sc_bv<4> >& bv;

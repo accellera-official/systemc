@@ -176,7 +176,6 @@ tb2::tb2_proc()
 
 SC_MODULE( monitor )
 {
-    SC_HAS_PROCESS( monitor );
 
     const sc_signal<int>& a;
     const sc_signal<int>& b;

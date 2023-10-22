@@ -43,7 +43,6 @@ struct test : sc_module {
   sc_out<sc_uint<8> >  dato;
   sc_out<bool> done;
 
-  SC_HAS_PROCESS( test );
   
   test (const char *NAME) : sc_module(NAME) {
     SC_CTHREAD( reset_loop, clk.pos() );

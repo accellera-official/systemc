@@ -40,7 +40,6 @@ class adapt_ext2gp : public sc_core::sc_module
     target_socket_type  target_socket;
     initiator_socket_type initiator_socket;
 
-    SC_HAS_PROCESS(adapt_ext2gp);
     adapt_ext2gp(sc_core::sc_module_name name_)
         : sc_core::sc_module(name_)
     {
@@ -112,7 +111,6 @@ class adapt_gp2ext : public sc_core::sc_module
     target_socket_type  target_socket;
     initiator_socket_type initiator_socket;
 
-    SC_HAS_PROCESS(adapt_gp2ext);
     adapt_gp2ext(sc_core::sc_module_name name_)
         : sc_core::sc_module(name_)
     {

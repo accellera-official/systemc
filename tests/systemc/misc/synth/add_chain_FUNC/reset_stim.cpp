@@ -45,7 +45,6 @@ bool_vector8 mem[LIMIT + 1];  // Stimulus input memory
 
 SC_MODULE( RESET_STIM )
 {
-    SC_HAS_PROCESS( RESET_STIM );
 
     sc_in_clk clk;
 

@@ -43,7 +43,6 @@
 
 SC_MODULE( array_range )
 {
-  SC_HAS_PROCESS( array_range );
 
   sc_in_clk clk;
 

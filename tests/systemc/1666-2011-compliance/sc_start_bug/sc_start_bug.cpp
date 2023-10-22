@@ -55,7 +55,6 @@ struct Top: sc_module
     sc_pause();
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

@@ -53,7 +53,6 @@
 
 SC_MODULE( triga )
 {
-  SC_HAS_PROCESS( triga );
 
   sc_in<bool> clock;
   sc_signal<int>& out;
@@ -80,7 +79,6 @@ SC_MODULE( triga )
 
 SC_MODULE( watcher )
 {
-  SC_HAS_PROCESS( watcher );
 
   sc_in<bool> clock1;
   sc_in<bool> clock2;
@@ -123,7 +121,6 @@ SC_MODULE( watcher )
 
 SC_MODULE( trigp )
 {
-  SC_HAS_PROCESS( trigp );
 
   sc_in<bool> clk;
 

@@ -40,7 +40,6 @@
 
 SC_MODULE( balancing )
 {
-  SC_HAS_PROCESS( balancing );
 
   sc_in_clk clk;
 

@@ -39,7 +39,6 @@
 
 SC_MODULE( gcd_cc )
 {
-    SC_HAS_PROCESS( gcd_cc );
 
     sc_in_clk clk;
 

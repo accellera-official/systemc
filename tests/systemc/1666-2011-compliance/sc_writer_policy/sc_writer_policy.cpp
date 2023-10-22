@@ -116,7 +116,6 @@ struct M: sc_module
     }
   }
   
-  SC_HAS_PROCESS(M);
 };
 
 struct Top: sc_module
@@ -290,7 +289,6 @@ struct Top: sc_module
     sc_assert( buffy.read() == SC_LOGIC_0 );
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 

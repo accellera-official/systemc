@@ -42,7 +42,6 @@
 
 SC_MODULE( ts_buf )
 {
-  SC_HAS_PROCESS( ts_buf );
 
   sc_in<bool> in;
   sc_in<bool> control;
