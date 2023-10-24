@@ -1,0 +1,20 @@
+# ignore common patterns
+.*.sw?
+.#*
+*~
+*.exe
+*.l[oa]
+*.[oa]
+*.Plo
+*.so
+
+# ignore project specific settings
+.project
+.project/
+.settings/
+.vscode/
+
+# ignore test execution results
+rundir/
+scripts/systemc/
+scripts/tlm/
