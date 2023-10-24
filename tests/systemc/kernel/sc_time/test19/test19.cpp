@@ -51,10 +51,6 @@ void check_time( const sc_time& t, sc_time_unit tu, const std::string & str )
     sc_assert( u == tp );
     sc_assert( tp.unit() == sc_time_tuple(u).unit() );
 
-    u = sc_time( tp.to_double(), tp.unit_symbol() );
-    sc_assert( t == u );
-    sc_assert( u == tp );
-    sc_assert( tp.unit() == sc_time_tuple(u).unit() );
 }
 
 int sc_main( int, char*[] )

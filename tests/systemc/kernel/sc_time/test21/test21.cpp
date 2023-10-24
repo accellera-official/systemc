@@ -19,30 +19,39 @@
 
 /*****************************************************************************
 
-  test09.cpp -- 
+  test21.cpp -- Test sc_time constructor using enum and its constants
 
-  Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
-
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
+  Original Author: Martin Barnasconi, NXP Semiconductors
 
  *****************************************************************************/
 
-// test of function sc_set_time_resolution
+/* 
+  Test backwards compatibility for implementations using enum sc_time_unit 
+  with predefined constants.
+  Time units SC_AS, SC_ZS and SC_YS not tested, since these are not part of
+  IEEE 1666-2011. 
+*/
 
 #include <systemc>
 
-int
-sc_main( int, char*[] )
+
+void check_time( const sc_core::sc_time& t1, const sc_core::sc_time& t2 )
 {
-    sc_core::sc_set_time_resolution( 0.1, sc_core::SC_YS );
+    sc_assert( t1 == t2 );
+}
+
+int sc_main( int, char*[] )
+{
+    using namespace sc_core;
+
+    sc_set_time_resolution( 1.0, SC_PS );
+
+    check_time( sc_time(1.0, SC_FS), sc_time(1.0, sc_time_unit(0)) );
+    check_time( sc_time(1.0, SC_PS), sc_time(1.0, sc_time_unit(1)) );
+    check_time( sc_time(1.0, SC_NS), sc_time(1.0, sc_time_unit(2)) );
+    check_time( sc_time(1.0, SC_US), sc_time(1.0, sc_time_unit(3)) );
+    check_time( sc_time(1.0, SC_MS), sc_time(1.0, sc_time_unit(4)) );
+    check_time( sc_time(1.0, SC_SEC), sc_time(1.0, sc_time_unit(5)) );
 
     return 0;
 }
