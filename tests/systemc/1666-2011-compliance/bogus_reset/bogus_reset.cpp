@@ -17,21 +17,7 @@
 
  *****************************************************************************/
 
-// test04.cpp -- Quick Test Of Synchronous Reset sc_process_handle Support
-//
-//  Original Author: John Aynsley, Doulos
-//
-// MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-//
-// $Log: test04.cpp,v $
-// Revision 1.1  2011/02/05 21:13:26  acg
-//  Andy Goodrich: move of tests John Aynsley will replace.
-//
-// Revision 1.1  2011/01/20 16:55:07  acg
-//  Andy Goodrich: changes for IEEE 1666 2011.
-//
-
-#define SC_INCLUDE_DYNAMIC_PROCESSES
+//// Bogus reset
 
 #include <systemc>
 
@@ -39,16 +25,18 @@ using namespace sc_core;
 using std::cout;
 using std::endl;
 
-struct M: sc_module
+struct M5: sc_module
 {
-  M(sc_module_name _name)
+  M5(sc_module_name _name)
   {
     SC_THREAD(ticker);
     SC_THREAD(calling);
-    SC_THREAD(target);
+    SC_METHOD(target);
+      sensitive << ev;
+      dont_initialize();
       t = sc_get_current_process_handle();
   }
-  
+
   sc_process_handle t;
   sc_event ev;
 
@@ -60,48 +48,31 @@ struct M: sc_module
       ev.notify();
     }
   }
-   
+
   void calling()
   {
     wait(15, SC_NS);
-    // Target runs at time 10 NS due to notification
-    
-    t.sync_reset_on();
-    // Target does not run at time 15 NS 
-    
-    wait(10, SC_NS);
-    // Target is reset at time 20 NS due to notification 
-    
-    wait(10, SC_NS);
-    // Target is reset again at time 30 NS due to notification 
-    
-    t.sync_reset_off();
-    // Target does not run at time 35 NS 
-    
-    wait(10, SC_NS);
-    // Target runs at time 40 NS due to notification
-    
+    // target runs at 10 NS due to notification of ev
+
+    t.reset();
+    // target runs at 15 NS due to reset.
+
     sc_stop();
   }
 
   void target()
   {
-    cout << "Target called/reset at " << sc_time_stamp() << endl;
-    for (;;)
-    {
-      wait(ev);
-      cout << "Target awoke at " << sc_time_stamp() << endl;
-    }
+    cout << "Target called at " << sc_time_stamp() << endl;
   }
-  
 };
 
 int sc_main(int argc, char* argv[])
 {
-  M m("m");
-  
+  M5 m("m");
+
   sc_start();
-  
+
+  cout << endl << "Success" << endl;
   return 0;
 }
-  
+
