@@ -41,7 +41,6 @@
 
 SC_MODULE( proc1 )
 {
-  SC_HAS_PROCESS( proc1 );
 
   sc_in<bool> clock;
   sc_in<bool> irq[MAX_NUM];

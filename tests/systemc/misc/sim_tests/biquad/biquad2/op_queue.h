@@ -42,7 +42,6 @@
 
 SC_MODULE( op_queue )
 {
-  SC_HAS_PROCESS( op_queue );
 
   sc_in_clk clk;
 

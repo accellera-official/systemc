@@ -40,7 +40,6 @@ typedef sc_signal<sc_bv<8> > sc_signal_bool_vector;
 
 SC_MODULE( mem0 )
 {
-    SC_HAS_PROCESS( mem0 );
 
     sc_in_clk clk;
 

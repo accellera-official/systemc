@@ -43,7 +43,6 @@
 
 SC_MODULE( concat_port )
 {
-  SC_HAS_PROCESS( concat_port );
 
   sc_in_clk clk;
 

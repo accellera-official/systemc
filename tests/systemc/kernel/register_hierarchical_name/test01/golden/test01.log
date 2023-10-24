@@ -1,0 +1,13 @@
+SystemC Simulation
+
+Warning: (W505) object already exists: a0. Latter declaration will be renamed to a0_0
+In file: <removed by verify.pl>
+
+Warning: (W505) object already exists: b0.a1. Latter declaration will be renamed to b0.a1_0
+In file: <removed by verify.pl>
+
+Warning: (W534) name already exists: b0 (sc_module)
+In file: <removed by verify.pl>
+
+Warning: (W505) object already exists: b0.c1. Latter declaration will be renamed to b0.c1_0
+In file: <removed by verify.pl>

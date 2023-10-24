@@ -2,9 +2,9 @@ SystemC Simulation
 
 INTEGER SIZE 		= 4 bytes
 SHORT INTEGER SIZE 	= 2 bytes
-LONG INTEGER SIZE 	= 4 bytes
-UNSIGNED LONG SIZE 	= 4 bytes
-SIGNED LONG SIZE 	= 4 bytes
+LONG INTEGER SIZE 	= 8 bytes
+UNSIGNED LONG SIZE 	= 8 bytes
+SIGNED LONG SIZE 	= 8 bytes
 
 std_ulogic_vector 	<=	 C++ string
 -------------------------------------------
@@ -93,12 +93,12 @@ TU4 = 1101 					 13	(00001101)
 
 std_ulogic_vector 		<=		 to_int()
 -----------------------------------------------------------------
-TS1 = 				          1001	 -7
+TS1 = 				          1001	 9
 TS2 =         11111111111111111111101111111001	 -1031
 TS3 = 0000000111111111111111111111101111111001	 -1031
 TS4 = 11001 					 1	      (001)
 TS4 = 11001 					 -7	    (11001)
-TS4 = 11001 					 -7	(111111001)
+TS4 = 11001 					 25	(000011001)
 
 std_ulogic_vector 		<=		 Typecast sc_unsigned
 -----------------------------------------------------------------

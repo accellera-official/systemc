@@ -40,7 +40,6 @@
 
 SC_MODULE( mult )
 {
-    SC_HAS_PROCESS( mult );
 
     sc_in_clk clk;
 

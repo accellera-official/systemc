@@ -43,7 +43,6 @@
 
 SC_MODULE( BUBBLE )
 {
-    SC_HAS_PROCESS( BUBBLE );
 
     sc_in_clk clk;
 

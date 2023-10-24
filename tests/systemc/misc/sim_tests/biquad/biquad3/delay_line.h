@@ -42,7 +42,6 @@
 
 SC_MODULE( delay_line )
 {
-  SC_HAS_PROCESS( delay_line );
 
   sc_in<float>  in;
   sc_out<float> out;

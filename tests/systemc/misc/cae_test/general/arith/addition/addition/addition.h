@@ -39,7 +39,6 @@
 
 SC_MODULE( addition )
 {
-    SC_HAS_PROCESS( addition );
 
     sc_in_clk clk;
 

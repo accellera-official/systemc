@@ -14,7 +14,6 @@ class Mod : public sc_module
 
  
 
-	 SC_HAS_PROCESS(Mod);
 
 	 void foo()
 	 {

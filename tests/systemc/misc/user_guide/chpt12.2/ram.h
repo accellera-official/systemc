@@ -42,7 +42,6 @@
 
 SC_MODULE( ram )
 {
-  SC_HAS_PROCESS( ram );
 
   sc_in_clk clk;
 

@@ -47,7 +47,6 @@ struct gcd_cc : public sc_module {
 
     void gcd_compute();
 
-    SC_HAS_PROCESS( gcd_cc );
 
     gcd_cc( sc_module_name name )
     {
@@ -108,7 +107,6 @@ struct testbench : public sc_module {
     void stimu_gen();
     void display();
 
-    SC_HAS_PROCESS( testbench );
 
     testbench( sc_module_name name )
     {

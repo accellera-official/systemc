@@ -43,7 +43,6 @@ typedef sc_signal<sc_bv<24> > signal_bool_vector;
 
 SC_MODULE( mean )
 {
-  SC_HAS_PROCESS( mean );
 
   sc_in_clk clk;
 

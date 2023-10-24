@@ -192,7 +192,6 @@ struct Top: sc_module
     }
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 

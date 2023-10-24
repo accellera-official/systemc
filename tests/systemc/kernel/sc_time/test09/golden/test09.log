@@ -1,4 +1,4 @@
 SystemC Simulation
 
-Error: (E514) set time resolution failed: value smaller than 1 fs
+Error: (E514) set time resolution failed: value smaller than 1 ys
 In file: <removed by verify.pl>

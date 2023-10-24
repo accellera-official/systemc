@@ -40,7 +40,6 @@
 
 SC_MODULE( not_1 )
 {
-    SC_HAS_PROCESS( not_1 );
 
     sc_in_clk clk;
 

@@ -44,7 +44,6 @@
 
 SC_MODULE( DISPLAY )
 {
-    SC_HAS_PROCESS( DISPLAY );
 
   /*** Input and Output Ports ***/
   const sc_signal<bool>&       	ready;	// Input

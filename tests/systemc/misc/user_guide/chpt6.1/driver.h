@@ -42,7 +42,6 @@
 
 SC_MODULE( driver )
 {
-  SC_HAS_PROCESS( driver );
 
   sc_in_clk clk;
 

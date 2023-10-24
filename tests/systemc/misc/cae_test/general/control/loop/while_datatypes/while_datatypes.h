@@ -40,7 +40,6 @@
 
 SC_MODULE( while_datatypes )
 {
-    SC_HAS_PROCESS( while_datatypes );
 
     sc_in_clk clk;
 

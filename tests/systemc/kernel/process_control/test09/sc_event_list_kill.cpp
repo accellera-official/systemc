@@ -34,7 +34,7 @@ public:
 
 	void thread_2() {
 		sc_event_or_list event_list;
-		event_list |= sc_event::none;
+		event_list |= sc_event::none();
 		SC_REPORT_INFO("thread_2","waiting on sc_event_list");
 		sc_core::wait(event_list); // will never finish
 		SC_REPORT_INFO("thread_2","this will never be printed");

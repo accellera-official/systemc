@@ -222,7 +222,6 @@ AES_Base::SchedKey(sc_uint<8> k[4][4], sc_uint<8> W[11][4][4])
 
 class AES_Decrypt : public AES_Base {
 public:
-	SC_HAS_PROCESS(AES_Decrypt);
 	AES_Decrypt(sc_module_name name,
 		sc_clock& pCLK, 
 		sc_signal<bool>& pRST_X,
@@ -655,7 +654,6 @@ AES_Decrypt::dmule(const sc_uint<8> B)
 
 class AES_Encrypt : public AES_Base {
 public:
-	SC_HAS_PROCESS(AES_Encrypt);
 	AES_Encrypt(sc_module_name name,
 		    sc_clock& pCLK, 
 		    sc_signal<bool>& pRST_X,

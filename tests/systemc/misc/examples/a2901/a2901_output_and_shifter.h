@@ -42,7 +42,6 @@
 
 SC_MODULE( a2901_output_and_shifter )
 {
-    SC_HAS_PROCESS( a2901_output_and_shifter );
 
     // inputs
     const sig9& I;

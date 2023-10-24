@@ -71,7 +71,6 @@ struct Top: sc_module
     target_handle.kill();
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

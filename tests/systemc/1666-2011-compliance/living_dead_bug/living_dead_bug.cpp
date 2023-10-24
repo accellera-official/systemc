@@ -70,7 +70,6 @@ struct Top: sc_module
     sc_assert( false );  // FAILS!!!!!!
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

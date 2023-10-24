@@ -37,7 +37,6 @@
 
 SC_MODULE( for_nest )
 {
-    SC_HAS_PROCESS( for_nest );
 
     sc_in_clk clk;
 

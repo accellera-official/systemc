@@ -42,7 +42,6 @@
 
 SC_MODULE( ts_buf )
 {
-  SC_HAS_PROCESS( ts_buf );
 
   const sc_signal<bool>& in; //input
   const sc_signal<bool>& control; //input

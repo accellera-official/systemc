@@ -42,7 +42,6 @@
 
 SC_MODULE( a2901_edge )
 {
-    SC_HAS_PROCESS( a2901_edge );
 
     // clock
     const sc_clock& CLK;

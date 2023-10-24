@@ -39,7 +39,6 @@
 
 SC_MODULE( proc1 )
 {
-  SC_HAS_PROCESS( proc1 );
 
   sc_in_clk clk;
 
@@ -77,7 +76,6 @@ SC_MODULE( proc1 )
 
 SC_MODULE( proc2 )
 {
-  SC_HAS_PROCESS( proc2 );
 
   sc_in_clk clk;
 

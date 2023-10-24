@@ -43,7 +43,6 @@
 
 SC_MODULE( STIM )
 {
-  SC_HAS_PROCESS( STIM );
 
   sc_in_clk clk;
 

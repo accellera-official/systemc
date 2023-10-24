@@ -43,7 +43,6 @@
 
 SC_MODULE( RDY )
 {
-    SC_HAS_PROCESS( RDY );
 
     sc_in_clk clk;
 

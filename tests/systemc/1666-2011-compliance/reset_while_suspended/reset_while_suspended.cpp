@@ -66,8 +66,6 @@ struct M4: sc_module
       ++count;
     }
   }
-  
-  SC_HAS_PROCESS(M4);
 };
 
 int sc_main(int argc, char* argv[])

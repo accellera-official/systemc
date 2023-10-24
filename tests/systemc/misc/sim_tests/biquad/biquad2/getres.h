@@ -42,7 +42,6 @@
 
 SC_MODULE( getres )
 {
-  SC_HAS_PROCESS( getres );
 
   sc_in_clk clk;
 

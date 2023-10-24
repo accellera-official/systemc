@@ -1,0 +1,23 @@
+SystemC Simulation
+producer put: 10
+consumer get: 10
+producer put: 11
+consumer get: 11
+producer put: 12
+consumer get: 12
+producer put: 13
+consumer get: 13
+producer put: 14
+consumer get: 14
+producer put: 15
+consumer get: 15
+producer put: 16
+consumer get: 16
+producer put: 17
+consumer get: 17
+producer put: 18
+consumer get: 18
+producer put: 19
+consumer get: 19
+
+Info: /OSCI/SystemC: Simulation stopped by user.

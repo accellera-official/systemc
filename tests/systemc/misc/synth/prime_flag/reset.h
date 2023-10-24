@@ -43,7 +43,6 @@
 
 SC_MODULE( resetp )
 {
-    SC_HAS_PROCESS( resetp );
 
     sc_in_clk clk;
 

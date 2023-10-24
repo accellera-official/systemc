@@ -39,7 +39,6 @@
 
 SC_MODULE( inverter )
 {
-    SC_HAS_PROCESS( inverter );
 
     sc_in_clk clk;
 

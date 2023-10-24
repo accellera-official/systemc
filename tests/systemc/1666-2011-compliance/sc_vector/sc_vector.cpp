@@ -59,7 +59,6 @@ struct Sub: sc_module
     }
   }
   
-  SC_HAS_PROCESS(Sub);
 };
 
 
@@ -103,7 +102,6 @@ struct Initiator: sc_module
       ports[i]->method();  // Use operator[] with vector
     }
   }
-  SC_HAS_PROCESS(Initiator);
 };
 
 
@@ -122,7 +120,6 @@ struct Initiator1: sc_module
     wait(10, SC_NS);
     port->method();
   }
-  SC_HAS_PROCESS(Initiator1);
 };
 
 
@@ -288,7 +285,6 @@ struct M: sc_module
     }
   }
   
-  SC_HAS_PROCESS(M);
 };
 
 struct Top: sc_module
@@ -357,7 +353,6 @@ struct Top: sc_module
     sc_assert( children.size() == 5 ); // sc_vector itself + 4 X my_object
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 

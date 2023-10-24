@@ -72,7 +72,6 @@ struct Top: sc_module
     f0 = 1;
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

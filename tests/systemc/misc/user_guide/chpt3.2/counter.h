@@ -41,7 +41,6 @@
 
 SC_MODULE( counter )
 {
-  SC_HAS_PROCESS( counter );
 
   sc_in_clk clk;
 

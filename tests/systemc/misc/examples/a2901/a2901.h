@@ -52,6 +52,12 @@ SC_MODULE( a2901 )
     sig4 RE, S, F, Q, A;
     sig5 R_ext, S_ext;
 
+    // components
+    a2901_alu*                a2901_alu_p;
+    a2901_alu_inputs*         a2901_alu_inputs_p;
+    a2901_edge*               a2901_edge_p;
+    a2901_output_and_shifter* a2901_output_and_shifter_p;
+
     // constructor
     a2901( sc_module_name,
            const sc_clock& CLK_,
@@ -77,27 +83,34 @@ SC_MODULE( a2901 )
            sig1&       F3_,
            sig1&       F30_ )
     {
-        SC_NEW( a2901_alu( "alu",
+        a2901_alu_p = new  a2901_alu( "alu",
                            I_, RE, S, C0_,
                            R_ext, S_ext, F, OVR_, C4_, Pbar_, Gbar_,
-                           F3_, F30_ ) );
-        SC_NEW( a2901_alu_inputs( "alu_inputs",
+                           F3_, F30_ );
+        a2901_alu_inputs_p = new a2901_alu_inputs( "alu_inputs",
                                   RAM,
                                   I_, Aadd_, Badd_, D_, Q,
-                                  RE, S, A ) );
-        SC_NEW( a2901_output_and_shifter( "o_and_s",
+                                  RE, S, A );
+        a2901_output_and_shifter_p = new a2901_output_and_shifter( "o_and_s",
                                            I_, OEbar_, A, F, Q,
                                            Y_, t_RAM0_, t_RAM3_,
-                                           t_Q0_, t_Q3_ ) );
-        SC_NEW( a2901_edge( "edge",
+                                           t_Q0_, t_Q3_ );
+        a2901_edge_p = new a2901_edge( "edge",
                             CLK_,
                             RAM,
                             I_, Badd_, F, Q3_, Q0_, RAM3_, RAM0_,
-                            Q ) );
+                            Q );
         // initialize the RAM (to get rid of UMRs)
         for( int i = 0; i < 15; ++ i ) {
             RAM[0] = 0;
         }
+    }
+    ~a2901()
+    {
+        delete a2901_alu_inputs_p;
+        delete a2901_alu_p;
+        delete a2901_edge_p;
+        delete a2901_output_and_shifter_p;
     }
 };
 

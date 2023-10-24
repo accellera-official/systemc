@@ -1,0 +1,22 @@
+SystemC Simulation
+
+================ 7.10.8.1 ==================
+
+a = 10
+b = .0999908447265625
+res = .999908447265625
+
+c = 10
+d = .1000000000000000055511151231257827021181583404541015625
+res = 1
+
+
+================ 7.10.9.1 ==================
+
+a.to_string(sc_dt::SC_DEC = -1.5
+a.to_string(sc_dt::SC_BIN = 0b1110.100
+b.to_string(sc_dt::SC_BIN = 0b10.1
+b.to_string(sc_dt::SC_BIN,false,sc_dt::SC_F) = 10.1
+b.to_string(sc_dt::SC_BIN,false,sc_dt::SC_E) = 10.1
+
+program completed

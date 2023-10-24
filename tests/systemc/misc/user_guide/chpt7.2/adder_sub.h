@@ -42,7 +42,6 @@
 
 SC_MODULE( adder_sub )
 {
-  SC_HAS_PROCESS( adder_sub );
 
   sc_in_clk clk;
 

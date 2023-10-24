@@ -39,7 +39,6 @@
 
 SC_MODULE( arst )
 {
-    SC_HAS_PROCESS( arst );
 
     sc_in_clk clk;
 

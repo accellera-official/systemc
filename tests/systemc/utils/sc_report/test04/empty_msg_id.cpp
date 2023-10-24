@@ -40,10 +40,11 @@ int sc_main(int,char*[])
     cout << sc_report_handler::get_count(empty_msg) << endl;
     sc_assert( sc_report_handler::get_count(empty_msg) == 1 );
 
+#if 0 // deprecated
   SC_REPORT_INFO( 1, "empty msg id" ); // integer ID
     cout << sc_report_handler::get_count("") << endl;
     sc_assert( sc_report_handler::get_count(empty_msg) == 2 );
-
+#endif
 
   SC_REPORT_INFO( null_msg,  "null msg id" );
     cout << sc_report_handler::get_count(null_msg) << endl;

@@ -42,7 +42,7 @@
 int
 sc_main( int, char*[] )
 {
-    sc_set_time_resolution( 0.1, SC_FS );
+    sc_set_time_resolution( 0.1, SC_YS );
 
     return 0;
 }

@@ -43,7 +43,6 @@
 
 SC_MODULE( ADD_CHAIN )
 {
-    SC_HAS_PROCESS( ADD_CHAIN );
 
     sc_in_clk clk;
 

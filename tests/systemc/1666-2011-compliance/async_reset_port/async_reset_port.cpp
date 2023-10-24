@@ -186,7 +186,6 @@ struct M: sc_module
     }
   }
   
-  SC_HAS_PROCESS(M);
 };
 
 struct Top: sc_module
@@ -320,7 +319,6 @@ struct Top: sc_module
     wait(5, SC_NS);
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

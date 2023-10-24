@@ -42,7 +42,6 @@
 
 SC_MODULE( stage1 )
 {
-  SC_HAS_PROCESS( stage1 );
 
   sc_in_clk clk;
 
