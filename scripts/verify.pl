@@ -821,11 +821,13 @@ sub add_to_ldpath
         push @candidates, "$dir$local$suffix"          if ( -d "$dir$local$suffix" );
 
     } else {
-        my $lib  = "/lib";
-        my $arch = "-$rt_systemc_arch";
+        my $lib   = "/lib";
+        my $lib64 = "/lib64";
+        my $arch  = "-$rt_systemc_arch";
         push @candidates, "$dir$lib$arch"        if ( -d "$dir$lib$arch" );
         push @candidates, "$dir$arch"            if ( -d "$dir$arch" );
         push @candidates, "$dir$lib"             if ( -d "$dir$lib" );
+        push @candidates, "$dir$lib64"           if ( -d "$dir$lib64" );
     }
 
     # use given (existing) directory directly
