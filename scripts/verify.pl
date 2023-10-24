@@ -651,6 +651,7 @@ sub init_globals
     chop( $rt_output_dir = `pwd` );     # directory for output logs
     $rt_prodname = "systemc.exe";       # simulation executable name
     $rt_quick_tests = 0;
+    $rt_makefile = 0;
     $rt_tests_dir = "$rt_systemc_test/tests";
     $rt_common_include_dir = "include/common"; # relative to $rt_systemc_test
     $rt_time_tests = 0;
@@ -987,6 +988,7 @@ Usage: $0 [<options>] <directories|names>
       -m           Send mail with results.
       -o <opts>    Additional (custom) compiler options.
       -O           Compile tests with optimize flag.
+      -M           Generate Makefile for running tests (in parallel)
       -purecov     Link tests with purecov.
       -purify      Link tests with purify.
       -quantify    Link tests with quantify.
@@ -1035,12 +1037,15 @@ sub parse_args
             # do not cleanup
             if( $arg =~ /^-no-cleanup/ ) {
                 $rt_cleanup = 0;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
+            # override SystemC architecture.
             if( $arg =~ /^-arch/ ) {
                 $arg = shift @arglist;
                 $rt_systemc_arch = $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1052,6 +1057,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_defines, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1059,12 +1065,14 @@ sub parse_args
             if( $arg =~ /^-f/ ) {
                 $arg = shift @arglist;
                 $files .= ( $files eq '' ) ? "$arg" : " $arg";
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # compile with debug flag
             if( $arg =~ /^-g/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'debug' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1076,6 +1084,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_includes, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1087,6 +1096,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldpaths, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1098,6 +1108,7 @@ sub parse_args
                     $arg = shift @arglist;
                 }
                 push @rt_add_ldlibs, $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1105,6 +1116,7 @@ sub parse_args
             if( $arg =~ /^-M(D|T)d?$/ ) {
                 $rt_msvc_runtime     = $arg;
                 $rt_msvc_runtime_dbg = $arg; # override both runtimes explicitly
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1114,12 +1126,14 @@ sub parse_args
                 # force DLL-based runtimes
                 $rt_msvc_runtime     =~ s/T/D/;
                 $rt_msvc_runtime_dbg =~ s/T/D/;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # send mail with results
             if( $arg =~ /^-m/ ) {
                 $rt_mail = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1127,36 +1141,48 @@ sub parse_args
             if( $arg =~ /^-o/ ) {
                 $arg = shift @arglist;
                 $rt_opts .= ( $rt_opts eq '' ) ? "$arg" : " $arg";
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # compile with optimize flag
             if( $arg =~ /^-O/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'optimize' };
+                $rt_mk_opts .= "$arg ";
+                next;
+            }
+
+            # Generate Makefile
+            if( $arg =~ /^-M/ ) {
+                $rt_makefile = 1;
                 next;
             }
 
             # link with purecov
             if( $arg =~ /^-purecov/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'purecov' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # link with purify
             if( $arg =~ /^-purify/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'purify' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # link with quantify
             if( $arg =~ /^-quantify/ ) {
                 $rt_props = $rt_props | $rt_test_props{ 'quantify' };
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # run quick tests only
             if( $arg =~ /^-Q/ ) {
                 $rt_quick_tests = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1173,6 +1199,7 @@ sub parse_args
                     }
                 }
                 close OLD_OUTPUT_FH;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1180,18 +1207,28 @@ sub parse_args
             if( $arg =~ /^-t/ ) {
                 $arg = shift @arglist;
                 $rt_timeout = $arg;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # time tests
             if( $arg =~ /^-T/ ) {
                 $rt_time_tests = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
             # verbose
             if( $arg =~ /^-v/ ) {
                 $rt_verbose = 1;
+                $rt_mk_opts .= "$arg ";
+                next;
+            }
+
+            # suppress error messages
+            if( $arg =~ /^-e/ ) {
+                $rt_err_wrn_msg = 1;
+                $rt_mk_opts .= "$arg ";
                 next;
             }
 
@@ -1208,6 +1245,10 @@ sub parse_args
         else {
             $tests .= ( $tests eq '' ) ? "$arg" : " $arg";
         }
+    }
+
+    if ($tests eq '' && $rt_makefile == 1) {
+        $tests = '.'
     }
 
     # print usage if no tests specified
@@ -1670,30 +1711,15 @@ sub get_testlist
 
 sub create_dir
 {
+    use File::Path qw(make_path);
     local( $dir ) = @_;
 
-    # remove first / from $dir
-    $dir =~ s|/||;
-
-    # start at the root directory
-    chdir( '/' );
-
-    local( $d );
-    foreach $d ( split( '/', $dir ) ) {
-        # create directory $d if it doesn't exist
-        if( ! ( -d "$d" ) ) {
-            if( ! mkdir( $d, $rt_dir_permissions ) ) {
-                &print_log( "Error: cannot create directory '$d'\n" );
-                # failed
-                return 0;
-            }
-        }
-        # go to directory $d
-        if( ! chdir( $d ) ) {
-            &print_log( "Error: cannot go to directory '$d'\n" );
-            # failed
-            return 0;
-        }
+    make_path( $dir, { mode => $rt_dir_permissions} );
+    # go to directory $dir
+    if( ! chdir( $dir ) ) {
+        &print_log( "Error: cannot go to directory '$dir'\n" );
+        # failed
+        return 0;
     }
 
     # succeeded
@@ -2527,7 +2553,7 @@ sub run_test
     }
 
     #
-    # create compile command line for makefile with .mk extension
+    # create compile command line for Makefile with .mk extension
     #
     if( $type =~ /$rt_test_type{'c'}/ ) {
 
@@ -2661,6 +2687,99 @@ sub clean_up
     1;
 }
 
+sub test_dirs {
+    my $t;
+    my @tests;
+    foreach $t ( sort( keys %rt_testlist ) ) {
+        my $dir = (split(/ /, $t))[0];
+        push(@tests, File::Spec->canonpath($dir));
+    }
+
+    @tests;
+}
+
+sub gen_deps {
+    use Data::Dumper;
+
+    my @tests = @_;
+    my %deps;
+    my $t;
+    foreach $t (@tests) {
+        my @parts = File::Spec->splitdir($t);
+        for(my $n = 1; $n < scalar @parts; $n = $n + 1){
+            my $base = File::Spec->catdir(@parts[0..$n - 1]);
+            my $dep =  File::Spec->catdir(($base, $parts[$n]));
+            $deps{$base}{$dep} = 0;
+        }
+    }
+
+    %deps;
+}
+
+sub write_base_rules {
+    my %deps = @_;
+    my @bases;
+    my $b;
+    my $verify = File::Spec->catdir($rt_systemc_test, "scripts", "verify.pl");
+
+    foreach $b (keys %deps) {
+        if (File::Spec->splitdir($b) == 1) {
+            push(@bases, $b);
+        }
+    }
+
+    print <<"EOT";
+test: clean
+	\@\$(MAKE) all
+
+all: @bases
+
+	touch pass.log fail.log
+	echo -n pass: > result.log
+	wc -l < pass.log >> result.log
+	echo -n fail: >> result.log
+	wc -l < fail.log >> result.log
+	cat result.log
+
+clean:
+	rm -rf result.log pass.log fail.log @bases
+
+	touch pass.log fail.log
+
+.PHONY: clean
+.PHONY: all
+.PHONY: test
+
+%.log:
+	$verify $rt_mk_opts \"\$*\" && echo \"\$*\" >> pass.log || echo \"\$*\" >> fail.log
+EOT
+}
+
+sub write_deps {
+    my %deps = @_;
+    my $base;
+    foreach $base (keys %deps) {
+        my @depstr = keys %{ $deps{$base} };
+        print ".PHONY:\n";
+        print "$base: @depstr\n\n";
+    }
+}
+
+sub write_targets {
+    my @tests = @_;
+    my $t;
+    foreach $t (@tests) {
+        print ".PHONY: $t\n$t: $t.log\n\n";
+    }
+}
+
+sub gen_makefile {
+    my @tests = test_dirs();
+    my %deps = gen_deps(@tests);
+    write_base_rules(%deps);
+    write_deps(%deps);
+    write_targets(@tests);
+}
 
 # -----------------------------------------------------------------------------
 #  SUB : main
@@ -2679,10 +2798,16 @@ sub main
 
     &prepare_environment;
 
+    &get_testlist( $tests, $files ) || exit 1;
+ 
+    if( $rt_makefile ) {
+        gen_makefile();
+        exit 0;
+    }
+
     &print_intro;
 
-    &get_testlist( $tests, $files ) || exit 1;
-
+    my $exit_code = 0;
     local( $t );
     $rt_test_number = 0;
     foreach $t ( sort( keys %rt_testlist ) ) {
@@ -2694,11 +2819,14 @@ sub main
             &clean_up if( $rt_cleanup );
         } else {
             push( @rt_fail, "$error_code : $t" );
+            $exit_code ++;
         }
         &print_log( "(", $#rt_pass + 1, ":", $#rt_fail + 1, ")\n" );
     }
 
     &compile_results;
+
+    exit $exit_code;
 }
 
 
