@@ -113,7 +113,6 @@ struct Child: sc_module
     p->meth();
   }
 
-  SC_HAS_PROCESS(Child);
 };
 
 struct Top: sc_module
@@ -137,7 +136,6 @@ struct Top: sc_module
     child->xp->meth();
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

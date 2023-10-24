@@ -65,7 +65,6 @@ SC_MODULE(B)
     B(sc_module_name name, sc_signal<bool>* reset_p ):
 		sc_module(name), m_reset_p(reset_p)
 	{
-		SC_HAS_PROCESS(B);
 		SC_CTHREAD(test,m_clk.pos());
 		reset_signal_is( *m_reset_p, false );
 	}

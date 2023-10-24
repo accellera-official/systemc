@@ -39,7 +39,6 @@
 
 SC_MODULE( peripheral )
 {
-  SC_HAS_PROCESS( peripheral );
 
   sc_in_clk clk;
 

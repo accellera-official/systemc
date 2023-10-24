@@ -40,7 +40,6 @@
 
 SC_MODULE( decrement )
 {
-    SC_HAS_PROCESS( decrement );
 
     sc_in_clk clk;
 

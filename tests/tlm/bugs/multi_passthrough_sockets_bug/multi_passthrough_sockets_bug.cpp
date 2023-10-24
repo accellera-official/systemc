@@ -29,7 +29,6 @@ class initiator_module : public sc_core::sc_module
 public:
   
   tlm_utils::simple_initiator_socket<initiator_module> initiator_socket;
-  SC_HAS_PROCESS(initiator_module);
   explicit initiator_module(sc_core::sc_module_name module_name)
     : sc_core::sc_module(module_name)
     , initiator_socket("initiator_socket")
@@ -120,7 +119,6 @@ class introspector_module : public sc_core::sc_module
 {
 public:
   
-  SC_HAS_PROCESS(introspector_module);
   introspector_module(sc_core::sc_module_name module_name) :
     sc_core::sc_module(module_name)
   {

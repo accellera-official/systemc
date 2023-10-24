@@ -39,7 +39,6 @@
 
 SC_MODULE( increment )
 {
-    SC_HAS_PROCESS( increment );
 
     sc_in_clk clk;
 

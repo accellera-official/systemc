@@ -44,7 +44,6 @@
 
 SC_MODULE( cgater )
 {
-  SC_HAS_PROCESS( cgater );
 
   const sc_signal<bool>& gate;
   sc_in<bool>  clock_in;
@@ -71,7 +70,6 @@ SC_MODULE( cgater )
 
 SC_MODULE( watcher )
 {
-  SC_HAS_PROCESS( watcher );
 
   const sc_signal<bool>& gate;
   sc_in<bool> clock;
@@ -110,7 +108,6 @@ SC_MODULE( watcher )
 
 SC_MODULE( gategen )
 {
-  SC_HAS_PROCESS( gategen );
 
   sc_in<bool> clk;
 
@@ -137,7 +134,6 @@ SC_MODULE( gategen )
 
 SC_MODULE( trigp )
 {
-  SC_HAS_PROCESS( trigp );
 
   sc_in<bool> clk;
 

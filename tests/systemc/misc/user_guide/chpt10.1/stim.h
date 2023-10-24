@@ -42,7 +42,6 @@
 
 SC_MODULE( stim )
 {
-  SC_HAS_PROCESS( stim );
 
   sc_in_clk clk;
 

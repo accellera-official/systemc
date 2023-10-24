@@ -42,7 +42,6 @@
 
 SC_MODULE( biquad )
 {
-  SC_HAS_PROCESS( biquad );
 
   sc_in_clk clk;
 

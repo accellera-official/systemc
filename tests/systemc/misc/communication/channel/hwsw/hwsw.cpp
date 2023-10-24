@@ -46,7 +46,6 @@ static int randc[] = { 3419, 82093, 9013, 1831, 74372, 233861,
 
 SC_MODULE( adder_sub )
 {
-  SC_HAS_PROCESS( adder_sub );
 
   sc_in_clk clk;
 
@@ -107,7 +106,6 @@ void adder_sub::entry()
 
 SC_MODULE( testbench )
 {
-  SC_HAS_PROCESS( testbench );
 
   sc_in_clk clk;
 

@@ -42,7 +42,6 @@
 
 SC_MODULE( seqgen )
 {
-  SC_HAS_PROCESS( seqgen );
 
   sc_in<bool> clock_i;
   sc_out<int> data_o;
@@ -88,7 +87,6 @@ void seqgen::entry()
 
 SC_MODULE( codegen )
 {
-  SC_HAS_PROCESS( codegen );
 
   sc_in<int>  data_i;
   sc_out<int> code_o;

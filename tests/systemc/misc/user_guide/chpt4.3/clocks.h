@@ -44,7 +44,6 @@
 // First process
 SC_MODULE( clk_pos )
 {
-  SC_HAS_PROCESS( clk_pos );
 
   sc_in_clk clk;
 
@@ -75,7 +74,6 @@ clk_pos::entry()
 // Second process
 SC_MODULE( clk_neg )
 {
-  SC_HAS_PROCESS( clk_neg );
 
   sc_in_clk clk;
 
@@ -106,7 +104,6 @@ clk_neg::entry()
 // Third process
 SC_MODULE( clk2_pos )
 {
-  SC_HAS_PROCESS( clk2_pos );
 
   sc_in_clk clk;
 
@@ -137,7 +134,6 @@ clk2_pos::entry()
 // Fourth process
 SC_MODULE( clk2_neg )
 {
-  SC_HAS_PROCESS( clk2_neg );
 
   sc_in_clk clk;
 

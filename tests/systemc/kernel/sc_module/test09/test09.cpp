@@ -55,7 +55,6 @@ SC_MODULE(ModuleBase)
 class NonModuleDerived : public ModuleBase
 {
   public:
-	SC_HAS_PROCESS(NonModuleDerived);
 	NonModuleDerived(sc_module_name name_) : ModuleBase(name_)
 	{
 		SC_METHOD(base_method);

@@ -40,7 +40,6 @@
 
 SC_MODULE( inlining )
 {
-  SC_HAS_PROCESS( inlining );
 
   sc_in_clk clk;
 

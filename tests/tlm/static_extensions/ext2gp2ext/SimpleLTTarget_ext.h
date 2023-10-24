@@ -42,7 +42,6 @@ public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTTarget_ext);
   SimpleLTTarget_ext(sc_core::sc_module_name name,
                      sc_core::sc_time invalidate_dmi_time = sc_core::sc_time(25, sc_core::SC_NS)) :
     sc_core::sc_module(name),

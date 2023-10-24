@@ -42,7 +42,6 @@
 
 SC_MODULE( display )
 {
-  SC_HAS_PROCESS( display );
 
   const sc_signal_resolved& bus; //input
 

@@ -92,7 +92,6 @@ private:
   unsigned int m_target_count;  //number of connected targets (see bindTargetSocket for explanation)
 
 public:
-  SC_HAS_PROCESS(MultiSocketSimpleSwitchAT);
   MultiSocketSimpleSwitchAT(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     target_socket("target_socket"),

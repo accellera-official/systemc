@@ -73,7 +73,6 @@ private:
   int r;
 public:
 
-  SC_HAS_PROCESS(module1);
 
   module1(sc_module_name name, sc_event& event) : sc_module(name), 
     ev(event), method_count(0), r(0)

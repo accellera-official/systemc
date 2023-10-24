@@ -135,7 +135,6 @@ struct stack_el {
 
 SC_MODULE( cycle_model )
 {
-  SC_HAS_PROCESS( cycle_model );
 
   sc_in_clk clk;
 

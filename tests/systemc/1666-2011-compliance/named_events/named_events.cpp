@@ -132,7 +132,6 @@ struct Top: sc_module
     T_done = true;
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

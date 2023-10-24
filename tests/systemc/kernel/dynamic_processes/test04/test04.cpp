@@ -50,7 +50,6 @@ private:
   int method_count;
 public:
 
-  SC_HAS_PROCESS(module1);
 
   module1(sc_module_name name) : sc_module(name), 
     method_count(0)

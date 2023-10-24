@@ -39,7 +39,6 @@
 
 SC_MODULE( delay1 )
 {
-  SC_HAS_PROCESS( delay1 );
 
   sc_in<int>  data_i;
   sc_out<int> data_o;
@@ -75,7 +74,6 @@ void delay1::entry()
 
 SC_MODULE( state_machine )
 {
-  SC_HAS_PROCESS( state_machine );
 
   sc_in<int>  data_i1;
   sc_in<int>  data_i2;

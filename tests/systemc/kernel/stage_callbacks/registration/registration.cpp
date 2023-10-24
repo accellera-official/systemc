@@ -56,7 +56,6 @@
 class stage_tracer : public sc_module, public sc_stage_callback_if
 {
 public:
-  SC_HAS_PROCESS(stage_tracer);
   stage_tracer( sc_module_name nm
                   = sc_core::sc_gen_unique_name("stage_tracer") )
     : cb_count(0), timed_count(), delta_count()
@@ -236,10 +235,6 @@ private:
 
 int sc_main(int, char*[])
 {
-  // don't run without callbacks enabled
-  sc_report_handler::set_actions( SC_ID_STAGE_CALLBACKS_UNSUPPORTED_
-                                , SC_DEFAULT_ERROR_ACTIONS );
-
   stage_tracer st("my_tracer");
   sc_start();
   return 0;

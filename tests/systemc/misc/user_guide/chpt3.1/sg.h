@@ -41,7 +41,6 @@
 
 SC_MODULE( stimgen )
 {
-  SC_HAS_PROCESS( stimgen );
 
   sc_in_clk clk;
 

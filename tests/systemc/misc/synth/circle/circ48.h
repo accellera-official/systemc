@@ -39,7 +39,6 @@
 
 SC_MODULE( circ48 )
 {
-    SC_HAS_PROCESS( circ48 );
 
     sc_in_clk clk;
 

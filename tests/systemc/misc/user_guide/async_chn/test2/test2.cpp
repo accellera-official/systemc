@@ -39,7 +39,6 @@
 
 SC_MODULE( p1 )
 {
-  SC_HAS_PROCESS( p1 );
 
   sc_fifo<int>& a;
   sc_fifo<int>& b;
@@ -76,7 +75,6 @@ SC_MODULE( p1 )
 
 SC_MODULE( p2 )
 {
-  SC_HAS_PROCESS( p2 );
 
   sc_in_clk clk;
 

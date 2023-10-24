@@ -1,6 +1,10 @@
 SystemC Simulation
+0x600000 (6291456) = stack size
+0x501f50 (5250896) = array size
+0xfe0b0 (1040560) = stack margin
 0 s
 0 s
 500 ps
 1 ns
 1500 ps
+Program complete

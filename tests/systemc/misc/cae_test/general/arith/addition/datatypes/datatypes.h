@@ -39,7 +39,6 @@
 
 SC_MODULE( datatypes )
 {
-    SC_HAS_PROCESS( datatypes );
 
     sc_in_clk clk;
 

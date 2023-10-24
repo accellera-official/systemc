@@ -92,7 +92,6 @@ struct Top: sc_module
     sc_assert( me.get_parent_object() ); // Parent handle shall still be valid
   }
   
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

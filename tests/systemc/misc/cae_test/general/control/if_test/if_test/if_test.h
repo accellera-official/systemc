@@ -40,7 +40,6 @@
 
 SC_MODULE( if_test )
 {
-  SC_HAS_PROCESS( if_test );
 
   sc_in_clk clk;
 

@@ -42,7 +42,6 @@
 
 SC_MODULE( nor )
 {
-  SC_HAS_PROCESS( nor );
 
   sc_in<bool>  a;
   sc_in<bool>  b;

@@ -41,7 +41,6 @@ typedef sc_signal_rv<5> sc_signal_resolved_vector;
 
 SC_MODULE( proc1 )
 {
-  SC_HAS_PROCESS( proc1 );
 
   sc_signal_resolved_vector& out;
   sc_in<bool> in;
@@ -80,7 +79,6 @@ proc1::entry()
 
 SC_MODULE( proc2 )
 {
-  SC_HAS_PROCESS( proc2 );
 
   sc_signal_resolved_vector& out;
   sc_in<bool> in;
@@ -118,7 +116,6 @@ proc2::entry()
 
 SC_MODULE( proc3 )
 {
-  SC_HAS_PROCESS( proc3 );
 
   const sc_signal_resolved_vector& in;
 

@@ -42,7 +42,6 @@
 
 SC_MODULE( testbench )
 {
-  SC_HAS_PROCESS( testbench );
 
   sc_in_clk clk;
 

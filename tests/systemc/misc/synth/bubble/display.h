@@ -49,7 +49,6 @@ ofstream lout ("systemc.log");                   // Output log file
 
 SC_MODULE( DISPLAY )
 {
-    SC_HAS_PROCESS( DISPLAY );
 
 // INPUTS & OUTPUTS TO DISPLAY
 

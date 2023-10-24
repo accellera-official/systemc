@@ -42,7 +42,6 @@
 
 SC_MODULE( accessor )
 {
-  SC_HAS_PROCESS( accessor );
 
   sc_in_clk clk;
 

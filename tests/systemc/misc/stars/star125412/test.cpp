@@ -54,7 +54,6 @@ and below that I've provided a proposed fix for the bug.
 class top : public sc_module
 {
    public:
-     SC_HAS_PROCESS(top);
 
      top(sc_module_name name) : sc_module(name)
      {

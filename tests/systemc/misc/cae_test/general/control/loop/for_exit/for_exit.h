@@ -40,7 +40,6 @@
 
 SC_MODULE( for_exit )
 {
-    SC_HAS_PROCESS( for_exit );
 
     sc_in_clk clk;
 

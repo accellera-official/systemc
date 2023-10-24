@@ -83,21 +83,20 @@ struct Top: sc_module
     count = 2;
     try {
       t1.disable();
-      sc_assert(false);
+      f7 = 1;
     }
     catch (sc_exception ex) {
-      //cout << "Exception caught at " << sc_time_stamp() << endl;
-      f7 = 1;
+      cout << "Exception caught at " << sc_time_stamp() << endl;
     }
 
     try {
       t2.disable();
-      sc_assert(false);
-    }
-    catch (sc_exception ex) {
-      //cout << "Exception caught at " << sc_time_stamp() << endl;
       f8 = 1;
     }
+    catch (sc_exception ex) {
+      cout << "Exception caught at " << sc_time_stamp() << endl;
+    }
+    
     wait(SC_ZERO_TIME);
     t1.kill();
     t2.kill();
@@ -175,7 +174,7 @@ struct Top: sc_module
     wait(10, SC_NS);
    
     count = 11;
-    t5.reset(); // On reset, dynamic sensit is cleared, then target is called again
+    t5.reset(); // On reset, dynamic sensitivity is cleared, then target is called again
     wait(SC_ZERO_TIME);
     
     count = 12;
@@ -191,10 +190,10 @@ struct Top: sc_module
     count = 14;
     try {
       t5.disable();  // Disabling a process waiting on a time-out
+      f21 = 1;
     }
     catch (sc_exception ex) {
-      //cout << "Exception caught at " << sc_time_stamp() << endl;
-      f21 = 1;
+      cout << "Exception caught at " << sc_time_stamp() << endl;
     }
     wait(sc_time(500, SC_NS) - sc_time_stamp());
     
@@ -203,6 +202,7 @@ struct Top: sc_module
     wait(10, SC_NS);
     
     count = 16;
+    t5.enable(); // @@@@@@@@@@@@
     ev4.notify();
     wait(10, SC_NS);
 
@@ -211,7 +211,7 @@ struct Top: sc_module
 
   void target1()
   {
-    //cout << "target1() called at " << sc_time_stamp() << " count = " << count << endl;
+    if(0) {cout << "target1() called at " << sc_time_stamp() << " count = " << count << endl;}
     switch (count)
     {
         case  0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) ); f1=1; break;
@@ -221,7 +221,7 @@ struct Top: sc_module
     for (;;)
     {
       wait(10, SC_NS);
-      //cout << "target1() awoke at " << sc_time_stamp() << " count = " << count << endl;
+      if(0) {cout << "target1() awoke at " << sc_time_stamp() << " count = " << count << endl;}
       switch (count)
       {
         case  1: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) ); f5=1; break;
@@ -232,7 +232,7 @@ struct Top: sc_module
 
   void target2()
   {
-    //cout << "target2() called at " << sc_time_stamp() << " count = " << count << endl;
+    if(0) {cout << "target2() called at " << sc_time_stamp() << " count = " << count << endl;}
     switch (count)
     {
         case  0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) ); f2=1; break;
@@ -244,7 +244,7 @@ struct Top: sc_module
     
   void target3()
   {
-    //cout << "target3() called at " << sc_time_stamp() << " count = " << count << endl;
+    if(0) {cout << "target3() called at " << sc_time_stamp() << " count = " << count << endl;}
     switch (count)
     {
         case  0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) ); f3=1; break;
@@ -255,7 +255,7 @@ struct Top: sc_module
     for (;;)
     {
       wait(ev1 & ev2 & ev3);
-      //cout << "target3() awoke at " << sc_time_stamp() << " count = " << count << endl;
+      if(0) {cout << "target3() awoke at " << sc_time_stamp() << " count = " << count << endl;}
       switch (count)
       {
         case  6: sc_assert( sc_time_stamp() == sc_time(140, SC_NS) ); f9=1; break;
@@ -268,7 +268,7 @@ struct Top: sc_module
 
   void target4()
   {
-    //cout << "target4() called at " << sc_time_stamp() << " count = " << count << endl;
+    if(0) {cout << "target4() called at " << sc_time_stamp() << " count = " << count << endl;}
     switch (count)
     {
         case  0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) ); f4=1; break;
@@ -282,7 +282,7 @@ struct Top: sc_module
   
   void target5()
   {
-    //cout << "target5() called at " << sc_time_stamp() << " count = " << count << endl;
+    if (0) {cout << "target5() called at " << sc_time_stamp() << " count = " << count << endl;}
     switch (count)
     {
         case  9: sc_assert( sc_time_stamp() == sc_time(400, SC_NS) ); f16=1; break;
@@ -302,7 +302,6 @@ struct Top: sc_module
       next_trigger();
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 int sc_main(int argc, char* argv[])

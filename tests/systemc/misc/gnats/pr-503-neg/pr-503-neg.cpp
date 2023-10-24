@@ -70,7 +70,6 @@ struct EXC_CTRL : sc_module {
     sc_out<sc_int<14> > RHC_ADDR2;
     sc_out<sc_int<3> > EXC_ERR_NO;
 
-    SC_HAS_PROCESS( EXC_CTRL );
 
     EXC_CTRL(char *name) : sc_module(name) {
         SC_CTHREAD( start_always, RHC_RPHB_CLK.pos() );

@@ -40,7 +40,6 @@
 
 SC_MODULE( stimulus )
 {
-        SC_HAS_PROCESS( stimulus );
 
         sc_in_clk clk;
 

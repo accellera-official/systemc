@@ -32,7 +32,6 @@ struct M: sc_module
         wait(sc_time(1, SC_NS));
   }
 
-  SC_HAS_PROCESS(M);
 };
 
 struct Top: sc_module
@@ -54,7 +53,6 @@ struct Top: sc_module
     multi_sig_1.write(true);  
   }
 
-  SC_HAS_PROCESS(Top);
 };
 
 

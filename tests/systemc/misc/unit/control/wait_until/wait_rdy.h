@@ -41,7 +41,6 @@
 
 SC_MODULE( WAIT_RDY )
 {
-    SC_HAS_PROCESS( WAIT_RDY );
 
     sc_in_clk clk;
 
