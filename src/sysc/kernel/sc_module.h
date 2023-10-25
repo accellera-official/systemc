@@ -411,12 +411,16 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#if SC_CPLUSPLUS >= 201402L
-    [[deprecated]] inline void SC_HAS_PROCESS() {};
-    #define SC_HAS_PROCESS(user_module_name)                    \
-        void _SC_HAS_PROCESS() {                                \
-            SC_HAS_PROCESS();                                   \
-        }
+#if !defined(SC_ALLOW_DEPRECATED_IEEE_1666_2023) && SC_CPLUSPLUS >= 201403L
+    [[deprecated("SC_HAS_PROCESS(user_module_name) is obsolete in IEEE 1666-2023, define SC_ALLOW_DEPRECATED_IEEE_1666_2023 to suppress.")]]
+#endif
+#if SC_CPLUSPLUS >= 201703L
+    [[maybe_unused]] 
+#endif
+#if SC_CPLUSPLUS >= 201103L
+    static inline constexpr bool sc_has_process_used = true;
+    #define SC_HAS_PROCESS(user_module_type) \
+        static_assert(sc_core::sc_has_process_used, "no-op to avoid stray ';'")
 
     #define SC_CURRENT_USER_MODULE_TYPE \
         std::remove_reference<decltype(*this)>::type
@@ -435,12 +439,10 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 
 // SC_CTOR( user_module_name )
 #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
-        SC_HAS_PROCESS(user_module_name);                                 \
         user_module_name( ::sc_core::sc_module_name )
 
 // SC_CTOR( user_module_name , ... )
 #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
-        SC_HAS_PROCESS(user_module_name);                                 \
         user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
 
 #define SC_CTOR_IMPL_(...)                                                \
