@@ -174,6 +174,8 @@ namespace report
 {
   std::string print (const tlm::tlm_sync_enum status); 
   std::string print (const tlm::tlm_phase phase);
+  std::string print (const tlm::tlm_response_status);
+
 
   void print
   ( const int                 &ID              ///< Target ID/Initiator/?ID
