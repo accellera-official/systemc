@@ -411,7 +411,7 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#if !defined(SC_ALLOW_DEPRECATED_IEEE_1666_2023) && SC_CPLUSPLUS >= 201403L
+#if !defined(SC_ALLOW_DEPRECATED_IEEE_1666_2023) && SC_CPLUSPLUS >= 201402L
     [[deprecated("SC_HAS_PROCESS(user_module_name) is obsolete in IEEE 1666-2023, define SC_ALLOW_DEPRECATED_IEEE_1666_2023 to suppress.")]]
 #endif
 #if SC_CPLUSPLUS >= 201703L
