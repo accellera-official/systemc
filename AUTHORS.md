@@ -29,6 +29,7 @@
  *  Philipp A. Hartmann (@pah)
  *  Gino van Hauwermeiren
  *  Ulrich Holtmann
+ *  Peter de Jager (@peterdejager-github)
  *  Martin Janssen (@martin-janssen)
  *  Lukas Jünger (@aut0)
  *  Vijay Kumar
