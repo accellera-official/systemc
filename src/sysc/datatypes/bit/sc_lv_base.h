@@ -394,9 +394,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator & ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x & y );                                                         \
+    return ( x &= b );                                                        \
 }
 DEFN_BITWISE_AND_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_AND_OP_T_NATIVE(long)
@@ -530,9 +528,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x | y );                                                         \
+    return ( x |= b );                                                         \
 }
 DEFN_BITWISE_OR_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_OR_OP_T_NATIVE(long)
@@ -665,9 +661,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x ^ y );                                                         \
+    return ( x ^= b );                                                         \
 }
 DEFN_BITWISE_XOR_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_XOR_OP_T_NATIVE(long)
