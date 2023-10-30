@@ -437,16 +437,28 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_CTOR(...)                                                      \
         SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
 
-// SC_CTOR( user_module_name )
-#define SC_CTOR_IMPL_ONE_(user_module_name)                               \
+#if SC_CPLUSPLUS >= 201103L
+    // SC_CTOR( user_module_name )
+    #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
         user_module_name( ::sc_core::sc_module_name )
 
-// SC_CTOR( user_module_name , ... )
-#define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
+    // SC_CTOR( user_module_name , ... )
+    #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
         user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
+#else
+    // SC_CTOR( user_module_name )
+    #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
+        SC_HAS_PROCESS(user_module_name);                                 \
+        user_module_name( ::sc_core::sc_module_name )
 
+    // SC_CTOR( user_module_name , ... )
+    #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
+        SC_HAS_PROCESS(user_module_name);                                 \
+        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
+#endif
 #define SC_CTOR_IMPL_(...)                                                \
       SC_CONCAT_HELPER_(SC_CTOR_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
+
 
 // ----------------------------------------------------------------------------
 
