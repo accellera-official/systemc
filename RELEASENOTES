@@ -1,7 +1,7 @@
                 Release Notes for SystemC 2.3.4
                 ===============================
 
-        Philipp A. Hartmann, Intel Corporation
+        Laurent Maillet-Contoz, STMicroelectronics
         Andrew C. Goodrich
 
 CONTENTS
@@ -31,48 +31,39 @@ CONTENTS
 IMPORTANT
 ---------
 
-This is the release of the SystemC 2.3.3 Class Library.
-This release includes TLM 2.0.5 (Transaction Level Modeling) code,
+This is the release of the SystemC 2.3.4 Class Library.
+This release includes TLM 2.0.6 (Transaction Level Modeling) code,
 as described in the IEEE 1666-2011 Language Reference Manual.
 
 -------------------------------------------------------------------------------
 
 
-1. This is the release of SystemC 2.3.3. This release contains bug fixes
-   for SystemC 2.3.2 (and earlier) as well as adding some minor features.
+1. This is the release of SystemC. This release contains bug fixes
+   for SystemC 2.3.3 (and earlier).
 
 2. This release is supported on the following platform combinations for
    which it has been tested:
 
    * 64-bit Linux (x86_64)
-      (RedHat Enterprise 6; SuSE Enterprise Linux 11; Debian 9)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
-      - Clang C++ compiler versions clang-3.4 through clang-6.0
-      - Intel C++ Compiler (ICC 15.0.0)
-
-   * 64-bit Linux (x86_64) with 32-bit compiler (--host=i686-linux-gnu)
-      (SuSE Enterprise Linux 11)
-      - GNU C++ compiler versions gcc-4.2.2 through gcc-8.2.0
-      - Intel C++ Compiler (ICC 15.0.0)
+      (RedHat Enterprise 7 & 8)
+      - GNU C++ compiler versions gcc-4.8.5 through gcc-11.1.0
+      - Clang C++ compiler versions clang-11.1 through clang-13.0.0
 
    * 64-bit Linux (aarch64)
-      (Ubuntu 16.04)
-      - GNU C++ compiler version gcc-4.5.0
+      (Ubuntu 18 & 20)
+      - GNU C++ compiler version gcc-7.4 and gcc-9.3
 
    * 64-bit Mac OS X (x86_64)
-      (10.12 Sierra)
-      - Apple LLVM version 8.0 (clang-800.0.42.1)
-      - GNU C++ compiler (MacPorts) versions gcc-4.9.0, gcc-5.4.0, gcc-6.3.0
+      (11.4)
+      - Apple LLVM version 12.0 and 13.0 
 
    * Microsoft Windows
-      (Windows Server 2008, Windows 10 Enterprise)
-      - Microsoft Visual Studio 2010 (10.0) (Win32 and x64)
-      - Microsoft Visual Studio 2013 (12.0) (Win32 and x64)
       - Microsoft Visual Studio 2015 (14.0) (Win32 and x64)
       - Microsoft Visual Studio 2017 (14.1) (Win32 and x64)
+      - Microsoft Visual Studio 2019 (14.2) (Win32 and x64)
 
    Warning: The fixed-point datatypes are not working as defined on
-   MSVC 2015/2017 (x64) in Release mode.  See RELEASENOTES.
+   MSVC 2015/2017 (x64) in Release mode. 
 
    * Windows Server 2008 (WoW64), Msys 1.0.17(0.48/3/2)
       - MinGW-w64 GNU C++ compiler version 4.9.2 (x86_64)
