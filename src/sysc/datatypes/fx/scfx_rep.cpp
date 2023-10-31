@@ -1245,7 +1245,7 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 
     if( lsb > 0 && fmt == SC_F )
     {
-	for( int i = lsb / step; i > 0; i -- )
+	for( i = lsb / step; i > 0; i -- )
 	    s += '0';
     }
 

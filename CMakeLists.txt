@@ -105,7 +105,7 @@
 #                               generators. (default: Release).
 #
 # CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-#                               values are 98, 11, and 14. (default: 98)
+#                               values are 98, 11, 14, and 17. (default: 98)
 #
 # CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
 #                               is a requirement. (default: ON)
