@@ -2444,7 +2444,7 @@ vector_divide( const int       numerator_n,
 	    //       sense, so flip it.
 
 	    if ( !carry_is_minus && (product_hob_one || carry_was_minus ) ) {
-		carry |= (std::numeric_limits<unsigned long int>::max() << 32);
+		carry |= (std::numeric_limits<uint64_t>::max() << 32);
 	    }
 	    else if ( carry_is_minus && product_hob_one && carry_was_minus ) {
 		carry ^= (1LL << 32);
