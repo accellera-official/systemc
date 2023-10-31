@@ -474,12 +474,6 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
   // Initialize buf to zero.
   vector_zero(0, buf_ndigits, buf);
 
-  const sc_digit *digit_or_d;
-
-    sc_digit* d = sc_temporary_digits.allocate(buf_ndigits);
-
-    digit_or_d = digit;
-
   // Copy the bits from digit to buf. The division and mod operations
   // below can be converted to addition/subtraction and comparison
   // operations at the expense of complicating the code. We can do it
@@ -487,7 +481,7 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
 
   for (int i = length() - 1; i >= 0; --i) {
 
-    if ((digit_or_d[SC_DIGIT_INDEX(i)] & one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
+    if ((digit[SC_DIGIT_INDEX(i)] & one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
 
       buf[i / BITS_PER_DIGIT_TYPE] |=
         one_and_zeros(SC_BIT_INDEX(i)); // Set.
