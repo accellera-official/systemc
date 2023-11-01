@@ -232,15 +232,15 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
         typedef int64_t            int64;
         typedef uint64_t           uint64;
 #   endif
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
+    static const uint64 UINT64_ZERO   = 0ULL;
+    static const uint64 UINT64_ONE    = 1ULL;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
+    static const uint64 UINT64_ZERO   = 0i64;
+    static const uint64 UINT64_ONE    = 1i64;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
 #endif
 #if BITS_PER_DIGIT < 32
     typedef unsigned int sc_carry;    // type of carry temporaries.
@@ -285,8 +285,8 @@ extern const small_type NB_DEFAULT_BASE ;
 typedef int64 int_type;
 typedef uint64 uint_type;
 #define SC_INTWIDTH 64
-extern const uint64 UINT_ZERO;
-extern const uint64 UINT_ONE;
+static const uint64 UINT_ZERO = UINT64_ZERO;
+static const uint64 UINT_ONE = UINT64_ONE;
 
 } // namespace sc_dt
 
