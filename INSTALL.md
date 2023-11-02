@@ -816,21 +816,6 @@ settings to all build configurations.
    as when building an application/library to be linked against a
    DLL version of SystemC.
 
- * `SC_BIGINT_CONFIGURATION=<storage_type>`
-   Configuration of big integer datatypes sc_bigint and sc_biguint
-
-   Supported values:
-    * `TEMPLATE_CLASS_HAS_STORAGE` 
-       Storage in sc_bigint or sc_biguint class (default)
-    * `BASE_CLASS_HAS_STORAGE`
-       Storage in base class sc_signed or sc_unsigned
-    * `TEMPLATE_CLASS_HAS_NO_BASE_CLASS`
-       sc_bigint and sc_biguint do not have parent classes
-
-  * `SC_BASE_VEC_DIGITS_CONFIG`
-    Size of default allocation of `SC_BASE_VEC_DIGITS` in class sc_unsigned
-    and sc_signed. Default size is 8.
-
 
 Influential environment variables
 ---------------------------------
