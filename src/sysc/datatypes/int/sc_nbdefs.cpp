@@ -19,8 +19,8 @@
 
 /*****************************************************************************
 
-  sc_nbdefs.cpp -- Top level file for arbitrary precision signed/unsigned
-                   arithmetic.
+  sc_nbdefs.h -- Top level header file for arbitrary precision signed/unsigned
+                 arithmetic. This file defines all the constants needed.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
   
@@ -53,6 +53,7 @@
 //
 
 #include "sysc/datatypes/int/sc_nbdefs.h"
+
 
 namespace sc_dt
 {
