@@ -100,21 +100,16 @@ namespace sc_dt
 //     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
 //     for their values. This includes the small vector support to eliminate malloc and free
 //     for smaller values. (See SC_BASE_VEC_DIGITS below).
-// 
-// NOTICE: the 3 commented out #define below is necessary for PostInstall.make
 
 // #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+#define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
 // #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
 #if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
     !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
     !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
-
-    #error no BIGINT_CONFIG specified in CMakefile.txt!!!
+#error no BIGINT_CONFIG specified!
 #endif
-
-
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
 // dispense with having an m_free boolean value, since it is sufficient to check the value of
@@ -132,13 +127,11 @@ namespace sc_dt
 // sc_unsigned values. This buffer is used in place of a malloc of storage for the object
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
-//
-// NOTICE: the commented out #define below is necessary for PostInstall.make
 
-// #define SC_BASE_VEC_DIGITS BASE_VEC_DIGITS_CONFIG
+#define SC_BASE_VEC_DIGITS 8
 
 #if !defined(SC_BASE_VEC_DIGITS)
-#   error no SC_BASE_VEC_DIGITS specified
+#error no SC_BASE_VEC_DIGITS specified!
 #endif
 
 typedef unsigned char uchar;
