@@ -58,22 +58,7 @@
 namespace sc_dt
 {
 
-// Support for the long long type. This type is not in the standard
-// but is usually supported by compilers.
-#if !defined(WIN32) || defined(__MINGW32__)
-const uint64 UINT64_ZERO   = 0ULL;
-const uint64 UINT64_ONE    = 1ULL;
-const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
-#else
-const uint64 UINT64_ZERO   = 0i64;
-const uint64 UINT64_ONE    = 1i64;
-const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
-#endif
-
 const small_type NB_DEFAULT_BASE = SC_DEC;
-
-const uint64 UINT_ZERO = UINT64_ZERO;
-const uint64 UINT_ONE  = UINT64_ONE;
 
 // Table providing the number of bits on in a byte, used in sc_vector_utils.h.
 
