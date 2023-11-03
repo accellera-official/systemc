@@ -514,6 +514,14 @@ Note: These features partly add functionality beyond the current
 5) Incompatibilities with previous releases
 ===========================================
 
+Here is a list of known incompatibilities between this release and 2.3.4
+(and earlier):
+
+  - MSVC project files have been upgraded to MSVC 2019.  Building SystemC
+    for earlier versions of MSVC might still be possible, as long as C++17
+    is supported by the compiler.
+
+
 Here is a list of known incompatibilities between this release and 2.3.1
 (and earlier):
 

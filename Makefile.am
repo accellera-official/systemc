@@ -60,12 +60,12 @@ EXTRA_DIST = \
 	cmake/SystemCTLMConfig.cmake.in \
 	cmake/run_test.cmake \
 	\
-	msvc10/SystemC/SystemC.sln \
-	msvc10/SystemC/SystemC.props \
-	msvc10/SystemC/SystemC.vcxproj \
-	msvc10/SystemC/SystemC.vcxproj.filters \
-	msvc10/SystemC/SystemC-core.vcxproj \
-	msvc10/SystemC/SystemC-core.vcxproj.filters
+	msvc16/SystemC/SystemC.sln \
+	msvc16/SystemC/SystemC.props \
+	msvc16/SystemC/SystemC.vcxproj \
+	msvc16/SystemC/SystemC.vcxproj.filters \
+	msvc16/SystemC/SystemC-core.vcxproj \
+	msvc16/SystemC/SystemC-core.vcxproj.filters
 
 ## ****************************************************************************
 
