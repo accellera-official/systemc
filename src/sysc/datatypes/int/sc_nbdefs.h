@@ -100,21 +100,18 @@ namespace sc_dt
 //     Configure sc_bigint and sc_biguint so that sc_signed and sc_unsigned provide the storage
 //     for their values. This includes the small vector support to eliminate malloc and free
 //     for smaller values. (See SC_BASE_VEC_DIGITS below).
+// 
+// NOTICE: the 3 commented out #define below is necessary for PostInstall.make
 
-#if !defined(SC_BIGINT_CONFIGURATION)
-#  define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-#else
-# if (SC_BIGINT_CONFIGURATION == TEMPLATE_CLASS_HAS_STORAGE)
-#   define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
-# endif
-# if (SC_BIGINT_CONFIGURATION == BASE_CLASS_HAS_STORAGE)
-#   define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
-# endif
-# if (SC_BIGINT_CONFIGURATION == TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-#   define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-# endif
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
+#define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
+
+#if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
+    !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE) && \
+    !defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+#error no BIGINT_CONFIG specified!
 #endif
-
 
 // SC_FREE_DIGIT - this macro is present to allow SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE to
 // dispense with having an m_free boolean value, since it is sufficient to check the value of
@@ -133,13 +130,10 @@ namespace sc_dt
 // instance's value. The compile-time buffer's size is a trade-off between preventing malloc/free
 // invocations for the storage, and the footprint of sc_signed and sc_unsigned instances.
 
-#if !defined(SC_BASE_VEC_DIGITS_CONFIG) && \
-    !defined(SC_BASE_VEC_DIGITS)
-#  define SC_BASE_VEC_DIGITS 8
-#endif
-#if defined(SC_BASE_VEC_DIGITS_CONFIG) && \
-    !defined(SC_BASE_VEC_DIGITS)
-#  define SC_BASE_VEC_DIGITS SC_BASE_VEC_DIGITS_CONFIG
+#define SC_BASE_VEC_DIGITS 8
+
+#if !defined(SC_BASE_VEC_DIGITS)
+#error no SC_BASE_VEC_DIGITS specified!
 #endif
 
 typedef unsigned char uchar;
@@ -233,16 +227,24 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
         typedef int64_t            int64;
         typedef uint64_t           uint64;
 #   endif
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
 #else
     typedef __int64            int64;
     typedef unsigned __int64   uint64;
-    extern const uint64        UINT64_ZERO;
-    extern const uint64        UINT64_ONE;
-    extern const uint64        UINT64_32ONES;
 #endif
+
+#if !defined(_WIN32) || defined(__MINGW32__)
+    static const uint64 UINT64_ZERO   = 0ULL;
+    static const uint64 UINT64_ONE    = 1ULL;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+#else
+    static const uint64 UINT64_ZERO   = 0i64;
+    static const uint64 UINT64_ONE    = 1i64;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
+#endif
+
+static const uint64 UINT_ZERO = UINT64_ZERO;
+static const uint64 UINT_ONE = UINT64_ONE;
+
 #if BITS_PER_DIGIT < 32
     typedef unsigned int sc_carry;    // type of carry temporaries.
 #else

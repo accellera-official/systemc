@@ -861,6 +861,9 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_stage_callback_if.h">
       <Filter>Header Files\sc_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sysc\communication\sc_stub.h">
+      <Filter>Header Files\sc_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
