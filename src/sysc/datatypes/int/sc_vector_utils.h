@@ -151,10 +151,10 @@ class ScNativeDigits<int64>
   public:
     ScNativeDigits( int64 init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
         for ( int digit_i = 1; digit_i < DIGITS_N; ++digit_i ) {
 	    init >>= BITS_PER_DIGIT;
-	    m_digits[digit_i] = init;
+	    m_digits[digit_i] = (sc_digit)init;
 	}
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
@@ -183,10 +183,10 @@ class ScNativeDigits<uint64>
   public:
     ScNativeDigits( uint64 init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
         for ( int digit_i = 1; digit_i < DIGITS_N; ++digit_i ) {
 	    init >>= BITS_PER_DIGIT;
-	    m_digits[digit_i] = init;
+	    m_digits[digit_i] = (sc_digit)init;
 	}
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
@@ -215,10 +215,10 @@ class ScNativeDigits<long>
   public:
     ScNativeDigits( long init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
         for ( int digit_i = 1; digit_i < DIGITS_N; ++digit_i ) {
 	    init >>= (ACTUAL_WIDTH > BITS_PER_DIGIT) ? BITS_PER_DIGIT : 0;
-	    m_digits[digit_i] = init;
+	    m_digits[digit_i] = (sc_digit)init;
 	}
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
@@ -247,11 +247,11 @@ class ScNativeDigits<unsigned long>
   public:
     ScNativeDigits( unsigned long init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
 	unsigned long long llinit = init;
         for ( int digit_i = 1; digit_i < DIGITS_N; ++digit_i ) {
 	    llinit >>= BITS_PER_DIGIT;
-	    m_digits[digit_i] = llinit;
+	    m_digits[digit_i] = (sc_digit)llinit;
 	}
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
@@ -280,7 +280,7 @@ class ScNativeDigits<int>
   public:
     ScNativeDigits( int init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
     const sc_digit* get_digits() const        { return m_digits; }
@@ -308,7 +308,7 @@ class ScNativeDigits<unsigned int>
   public:
     ScNativeDigits( unsigned long init )
     {
-        m_digits[0] = init;
+        m_digits[0] = (sc_digit)init;
 	m_digits[1] = 0;
     }
     int             get_actual_length() const { return ACTUAL_WIDTH; }
