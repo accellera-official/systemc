@@ -11,6 +11,7 @@ constructor 1e-03 s: valid construct.
 constructor 1e-003 s: valid construct.
 constructor 1.0e-3 s: valid construct.
 constructor 1.0e+3 us: valid construct.
+constructor 1ms as stringview: valid construct.
 constructor 1ms as string: valid construct.
 constructor 1ms as const char*: valid construct.
 constructor uses sc_time output string from stream: valid construct.
