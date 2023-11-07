@@ -98,35 +98,22 @@
 //   201103L (C++11, ISO/IEC 14882:2011)
 //   201402L (C++14, ISO/IEC 14882:2014)
 //   201703L (C++17, ISO/IEC 14882:2017)
+//   202002L (C++20, ISO/IEC 14882:2020)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
 //
 #ifndef SC_CPLUSPLUS
-# ifdef _MSC_VER // don't rely on __cplusplus for MSVC
-// Instead, we select the C++ standard with reasonable support.
-// If some features still need to be excluded on specific MSVC
-// versions, we'll do so at the point of definition.
-
-#   if defined(_MSVC_LANG) // MSVC'2015 Update 3 or later, use compiler setting
-#     define SC_CPLUSPLUS _MSVC_LANG
-#   elif _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
-#     define SC_CPLUSPLUS 199711L
-#   elif _MSC_VER < 1900   // MSVC'2013, assume C++11
-#     define SC_CPLUSPLUS 201103L
-#   else                   // MSVC'2015 before Update 3, assume C++14
-#     define SC_CPLUSPLUS 201402L
-#   endif
-
-# else // not _MSC_VER
+# if defined(_MSVC_LANG) // MSVC 2015 Update 3 or later, use compiler setting
+#   define SC_CPLUSPLUS _MSVC_LANG
+# else  // not _MSVC_LANG
 // use compiler setting
 #   define SC_CPLUSPLUS __cplusplus
-
-# endif // not _MSC_VER
+# endif
 #endif // SC_CPLUSPLUS
 
-// SystemC adds some features under C++11 already (see RELEASENOTES)
-#define SC_CPLUSPLUS_BASE_ 201103L
+// SystemC reference implementation requires C++17
+#define SC_CPLUSPLUS_BASE_ 201703L
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific

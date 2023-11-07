@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "at_1_phase", "..\tlm\at_1_phase\build-msvc\at_1_phase.vcxproj", "{54F8C078-369E-4AA4-9859-264839C6F89A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "at_2_phase", "..\tlm\at_2_phase\build-msvc\at_2_phase.vcxproj", "{487A123F-10AC-4532-8D27-48DB8F6D4684}"
@@ -122,5 +124,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C66266C9-22BF-4BDD-9D4B-57AABCC0FE36}
 	EndGlobalSection
 EndGlobal

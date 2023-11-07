@@ -94,7 +94,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = ( int64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -144,7 +144,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = ( uint64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
