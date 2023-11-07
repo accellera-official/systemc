@@ -636,7 +636,7 @@ public:
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
 	unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[HOD] << shift);
-        digit[HOD] = tmp >> shift ;
+        digit[HOD] = (sc_digit)(tmp >> shift) ;
     }
 
 public:

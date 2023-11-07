@@ -296,7 +296,7 @@ sc_signed::operator = ( int64 from )
 {
     int to_hod = get_hod();
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( to_hod > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -333,7 +333,7 @@ sc_signed::operator = ( uint64 from )
 {
     int to_hod = get_hod();
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( to_hod > 0 ) {
         *to_p++ = from >> 32;
     }

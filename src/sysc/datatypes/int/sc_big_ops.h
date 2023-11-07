@@ -104,7 +104,7 @@ sc_big_add( RESULT& result, const LEFT&  left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value + right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     else if ( (int)LEFT::HOD >= (int)RIGHT::HOD ) {
@@ -533,7 +533,7 @@ sc_big_divide( RESULT& result, const LEFT&  left, const RIGHT& right )
 	}
 	if ( right_value != 0 ) {
 	    result_value = left_value / right_value;
-	    *result_p = result_value;
+	    *result_p = (sc_digit)result_value;
 	    result_p[1] = (result_value >> BITS_PER_DIGIT);
 	    ok = true;
 	}
@@ -649,7 +649,7 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
         }
 	if ( 0 != right_value ) {
 	    result_value = left_value % right_value;
-	    *result_p = result_value;
+	    *result_p = (sc_digit)result_value;
 	    result_p[1] = (result_value >> BITS_PER_DIGIT);
 	    ok = true;
 	}
@@ -762,7 +762,7 @@ sc_big_multiply( RESULT& result, const LEFT& left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value * right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     vector_multiply( LEFT::HOD,   left.get_digits(), 
@@ -857,7 +857,7 @@ sc_big_subtract( RESULT& result, const LEFT&  left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value - right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     else if ( (const int)LEFT::HOD > (const int)RIGHT::HOD ) {
