@@ -1090,7 +1090,7 @@ public:
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
-          result.digit[0] = tmp;
+          result.digit[0] = (sc_digit)tmp;
           if ( nb > 32 ) {
               result.digit[1] = (tmp >>32);
           }

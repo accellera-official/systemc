@@ -1097,7 +1097,7 @@ public:
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
-          result.digit[0] = tmp;
+          result.digit[0] = (sc_digit)tmp;
           if ( nb > 32 ) {
               result.digit[1] = (tmp >>32);
           }
@@ -1190,7 +1190,7 @@ protected:
       int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
       shift = shift > 0 ? shift : 0;
       unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[ndigits-1] << shift);
-      digit[ndigits-1] = tmp >> shift;
+      digit[ndigits-1] = (sc_digit)(tmp >> shift);
   }
 
 
@@ -1545,7 +1545,7 @@ inline
 long
 sc_signed::to_long() const
 {
-    long result =  ( sizeof(long) < 5 ) ? to_int() : to_int64();
+    long result = ( sizeof(long) < 5 ) ? to_int() : (long)to_int64();
     return result;
 }
 
@@ -1555,7 +1555,7 @@ unsigned long
 sc_signed::to_ulong() const
 {
     unsigned long result =
-        ( sizeof(unsigned long) < 5 ) ? to_uint() : to_uint64();
+        ( sizeof(unsigned long) < 5 ) ? to_uint() : (unsigned long)to_uint64();
     return result;
 }
 

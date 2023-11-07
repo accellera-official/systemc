@@ -47,11 +47,11 @@ For convenience, a simple recursing Makefile is available as well.
 Microsoft Visual C++
 --------------------
 
-Project files for Microsoft Visual C++ 2010 (10.0) are provided in the 
+Project files for Microsoft Visual C++ 2019 (16.0) are provided in the 
 subdidrectory containing each of these examples.
 
 Each project file has the correct settings to build the example in either
 Debug or Release modes.
 
 The project files assume an environment variable name SYSTEMC_HOME and MSVC is set and 
-contains the path to the mscv10 subdirectory. Update MSVC entry in SystemC_examples properties file. 
+contains the path to the mscv16 subdirectory. Update MSVC entry in SystemC_examples properties file. 

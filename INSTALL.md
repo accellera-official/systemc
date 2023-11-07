@@ -433,8 +433,7 @@ Use the `--help` option to print a list.
 Installation Notes for Windows
 ==========================================================================
 
-This release has been tested on Visual C++ versions 2010 through 2015,
-running on Windows 8.1 and Windows 10.
+This release has been tested on Visual C++ version 2019 running Windows 10.
 
 Note: _This section covers the installation based on Microsoft Visual C++.
       For Cygwin or MinGW-based installations, see Section 1._
@@ -452,16 +451,16 @@ Note: _If you experience spurious errors about missing files in the
 
 
 
-Microsoft Visual C++ 2010 (compiler version 10.0) or later
+Microsoft Visual C++ 2017 (compiler version 15.0) or later
 ----------------------------------------------------------
 
-The download directory contains two subdirectories: `msvc10` and
+The download directory contains two subdirectories: `msvc16` and
 `examples/build-msvc`.
 
-The 'msvc10' directory contains the project and workspace files to
+The 'msvc16' directory contains the project and workspace files to
 compile the 'systemc.lib' library. Double-click on the 'SystemC.sln'
-file to launch Visual C++ 2010 with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 2010.
+file to launch Visual C++ 2019 with the workspace file. The workspace file
+will have the proper switches set to compile for Visual C++ 2019.
 Select `Build SystemC` under the Build menu or press F7 to build
 `systemc.lib`.
 
@@ -469,7 +468,7 @@ The `examples/build-msvc` directory contains the project and workspace
 files to compile the SystemC examples. Go to one of the examples
 subdirectories and double-click on the .vcxproj file to launch Visual C++
 with the workspace file. The workspace file will have the proper switches
-set to compile for Visual C++ 2010. Select 'Build <example>.exe' under the
+set to compile for Visual C++ 2019. Select 'Build <example>.exe' under the
 Build menu or press F7 to build the example executable.
 
 For convenience, a combined solution file 'SystemC_examples.sln' with
@@ -525,11 +524,11 @@ projects:
 
 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\systemc-2.3.2\msvc10\systemc\debug
+3. Select the 'New' icon and browse to: C:\systemc-3.0.0\msvc16\systemc\debug
 
 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\systemc-2.3.2\src
+5. Select the 'New' icon and browse to: C:\systemc-3.0.0\src
 
 To add the include file and library directory search paths for the current
 project only:
@@ -542,7 +541,7 @@ project only:
   'Additional include directories' (e.g. the examples use `..\..\..\src`).
 
 3. From the Linker tab, select the General properties and type the path to
-   the SystemC library:   ...\systemc-2.3.2\msvc10\systemc\debug
+   the SystemC library:   ...\systemc-3.0.0\msvc16\systemc\debug
    in the 'Additional Library Directories:' box.
 
 9. Click OK.
@@ -557,7 +556,7 @@ several changes are needed.
 
 1. Adjust the linker library directory settings to reference `DebugDLL`
    (or `ReleaseDLL`) instead of `Debug` or `Release`, respecitvely:  
-      `...\systemc-2.3.3\msvc10\systemc\DebugDLL`
+      `...\systemc-3.0.0\msvc16\systemc\DebugDLL`
 
 2. Add the preprocessor switch `SC_WIN_DLL` to your project's properties  
    (C/C++ -> Preprocessor -> Preprocessor Definitions).
@@ -604,10 +603,8 @@ settings to all build configurations.
    underlying C++ standard on the current platform.  By default,
    the latest supported version is chosen.
    Supported values are
-     * `SC_CPLUSPLUS=199711L` (C++03, ISO/IEC 14882:1998, 14882:2003)
-     * `SC_CPLUSPLUS=201103L` (C++11, ISO/IEC 14882:2011)
-     * `SC_CPLUSPLUS=201402L` (C++14, ISO/IEC 14882:2014)
      * `SC_CPLUSPLUS=201703L` (C++17, ISO/IEC 14882:2017)
+     * `SC_CPLUSPLUS=202002L` (C++20, ISO/IEC 14882:2020)
 
    Note: _This symbol needs to be consistently defined in the library
             and any application linking against the built library._

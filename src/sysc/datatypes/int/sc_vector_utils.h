@@ -462,7 +462,7 @@ vector_add( const int       longer_hod,
     for ( digit_i = 0; digit_i < shorter_hod; ++digit_i ) {
         carry += *shorter_p++;
         carry += *longer_p++;
-	*result_p++ = carry;
+	*result_p++ = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
     }
 
@@ -472,7 +472,7 @@ vector_add( const int       longer_hod,
     if ( longer_hod == shorter_hod ) {
 	carry += (int64)(int)*shorter_p++;
 	carry += (int64)(int)*longer_p++;
-	*result_p++ = carry;
+	*result_p++ = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
     }
 
@@ -485,17 +485,17 @@ vector_add( const int       longer_hod,
     else {
 	carry += (int64)(int)*shorter_p++;
 	carry += *longer_p++;
-	*result_p++ = carry;
+	*result_p++ = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
 
 	for ( digit_i = shorter_hod+1; digit_i < longer_hod; ++digit_i ) {
 	    carry += *longer_p++;
-	    *result_p++ = carry;
+	    *result_p++ = (sc_digit)carry;
 	    carry >>= BITS_PER_DIGIT;
 	}
 
 	carry += (int64)(int)*longer_p++;
-	*result_p++ = carry;
+	*result_p++ = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
     }
 
@@ -504,7 +504,7 @@ vector_add( const int       longer_hod,
     // carry value:
 
     if ( result_hod > longer_hod ) {
-        *result_p = carry;
+        *result_p = (sc_digit)carry;
     }
 }
 
@@ -1312,11 +1312,11 @@ class vector_mac
 	          << m_low_bits << "]" << std::endl;
     }
 
-    sc_digit low_bits() { return m_low_bits; }
+    sc_digit low_bits() { return (sc_digit)m_low_bits; }
 
     inline sc_digit shift_down()
     {
-        sc_digit result = m_low_bits;
+        sc_digit result = (sc_digit)m_low_bits;
         m_high_bits += (m_low_bits >> BITS_PER_DIGIT);
 	m_low_bits = (sc_digit)m_high_bits;
 	m_high_bits >>= BITS_PER_DIGIT;
@@ -1744,7 +1744,7 @@ vector_shift_left( const int       from_digits_n,
 	    to_p[to_i] = from_p[from_i];
         }
 	if ( to_i <= to_hod ) {
-	    sc_digit fill = 0 > (int)from_p[from_hod] ? -1 : 0;
+	    fill = 0 > (int)from_p[from_hod] ? -1 : 0;
 	    for ( ; to_i <= to_hod; ++to_i ) {
 	        to_p[to_i] = fill;
 	    }
@@ -1839,13 +1839,13 @@ vector_shift_left( const int target_n,
     sc_digit* target_end_p = target_iter_p + target_n;
 
     int carry_shift = BITS_PER_DIGIT - shift_remaining;
-    sc_digit mask = one_and_ones(carry_shift);
+    sc_digit mask = (sc_digit)one_and_ones(carry_shift);
 
     sc_carry carry = 0;
 
     while (target_iter_p < target_end_p) {
       sc_digit target_value = (*target_iter_p);
-      (*target_iter_p++) = (((target_value & mask) << shift_remaining) | carry);
+      (*target_iter_p++) = (sc_digit)(((target_value & mask) << shift_remaining) | carry);
       carry = target_value >> carry_shift;
     }
 }
@@ -1990,7 +1990,7 @@ vector_subtract_longer( const int       longer_hod,
     for ( digit_i = 0; digit_i < shorter_hod; ++digit_i ) {
         borrow += *shorter_p++;
         borrow -= *longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2000,7 +2000,7 @@ vector_subtract_longer( const int       longer_hod,
     if ( longer_hod == shorter_hod ) {
 	borrow += (int64)(int)*shorter_p++;
 	borrow -= (int64)(int)*longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2013,17 +2013,17 @@ vector_subtract_longer( const int       longer_hod,
     else {
 	borrow += (int64)(int)*shorter_p++;
 	borrow -= *longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
 
 	for ( ++digit_i; digit_i < longer_hod; ++digit_i ) {
 	    borrow -= *longer_p++;
-	    *result_p++ = borrow;
+	    *result_p++ = (sc_digit)borrow;
 	    borrow >>= BITS_PER_DIGIT;
 	}
 
 	borrow -= (int64)(int)*longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2031,7 +2031,7 @@ vector_subtract_longer( const int       longer_hod,
     // borrow value:
 
     if ( result_hod > longer_hod ) {
-        *result_p = borrow;
+        *result_p = (sc_digit)borrow;
     }
 }
 
@@ -2095,7 +2095,7 @@ vector_subtract_shorter( const int       longer_hod,
     for ( digit_i = 0; digit_i < shorter_hod; ++digit_i ) {
         borrow -= *shorter_p++;
         borrow += *longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2105,7 +2105,7 @@ vector_subtract_shorter( const int       longer_hod,
     if ( longer_hod == shorter_hod ) {
 	borrow -= (int64)(int)*shorter_p++;
 	borrow += (int64)(int)*longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2118,17 +2118,17 @@ vector_subtract_shorter( const int       longer_hod,
     else {
 	borrow -= (int64)(int)*shorter_p++;
 	borrow += *longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
 
 	for ( ++digit_i; digit_i < longer_hod; ++digit_i ) {
 	    borrow += *longer_p++;
-	    *result_p++ = borrow;
+	    *result_p++ = (sc_digit)borrow;
 	    borrow >>= BITS_PER_DIGIT;
 	}
 
 	borrow += (int64)(int)*longer_p++;
-	*result_p++ = borrow;
+	*result_p++ = (sc_digit)borrow;
 	borrow >>= BITS_PER_DIGIT;
     }
 
@@ -2136,7 +2136,7 @@ vector_subtract_shorter( const int       longer_hod,
     // borrow value:
 
     if ( result_hod > longer_hod ) {
-        *result_p = borrow;
+        *result_p = (sc_digit)borrow;
     }
 }
 
@@ -2157,7 +2157,7 @@ vector_twos_complement( const int target_n,
     long long carry = 0;
     for ( int digit_i = 0; digit_i < target_n; ++digit_i ) {
         carry -= target_p[digit_i];
-	target_p[digit_i] = carry;
+	target_p[digit_i] = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
     }
 }
@@ -2182,7 +2182,7 @@ vector_twos_complement( const int       source_hod,
     long long carry = 0;
     for ( int digit_i = 0; digit_i <= source_hod; ++digit_i ) {
         carry -= *source_p++;
-	*target_p++ = carry;
+	*target_p++ = (sc_digit)carry;
 	carry >>= BITS_PER_DIGIT;
     }
 }
@@ -2404,7 +2404,7 @@ vector_divide( const int       numerator_n,
 	                    low_order_bits;
 	}
 
-	sc_digit quot_guess = numer_value / denom_value;
+	sc_digit quot_guess = (sc_digit)(numer_value / denom_value);
 	if ( quot_guess >> 16 ) {
 	    quot_guess--;
 	}
@@ -2422,7 +2422,7 @@ vector_divide( const int       numerator_n,
 	    product = denominator_p[denom_32_i] * quot_term;
 	    bool product_hob_one = (product < 0);
 	    carry -= product;
-	    remain_work_p[quot_32_i + denom_32_i] = carry;
+	    remain_work_p[quot_32_i + denom_32_i] = (sc_digit)carry;
 	    bool carry_is_minus = carry < 0;
 	    carry >>= 32;
 
@@ -2457,7 +2457,7 @@ vector_divide( const int       numerator_n,
 
 	if ( quot_16_odd || denom_16_hod_odd ) {
 	    carry += remain_work_p[quot_32_i + denom_32_hod + 1];
-	    remain_work_p[quot_32_i + denom_32_hod + 1] = carry;
+	    remain_work_p[quot_32_i + denom_32_hod + 1] = (sc_digit)carry;
 	}
 
 	// If the carry is negative we overshot by one in our approximation
@@ -2470,11 +2470,11 @@ vector_divide( const int       numerator_n,
 		carry += (int64)denominator_p[restore_i] <<
 		                 (quot_16_odd ? 16:0);
 		carry += remain_work_p[quot_32_i + restore_i];
-		remain_work_p[quot_32_i + restore_i] = carry;
+		remain_work_p[quot_32_i + restore_i] = (sc_digit)carry;
 		carry >>= BITS_PER_DIGIT;
 	    }
 	    if ( quot_16_odd | denom_16_hod_odd ) {
-		remain_work_p[quot_32_i+denom_32_hod+1] += carry;
+		remain_work_p[quot_32_i+denom_32_hod+1] += (sc_digit)carry;
 	    }
 	    quot_guess--;
 	}

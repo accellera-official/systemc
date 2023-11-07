@@ -104,7 +104,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( int64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -141,7 +141,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( int from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
 	vector_fill( from < 0 ? -1 : 0, HOD-1, to_p );
     }
@@ -154,7 +154,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( uint64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -224,7 +224,7 @@ sc_bigint<W>::operator - ()
     sc_digit* result_digits = result.get_digits();
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
         carry += ~digit[digit_i];
-        result_digits[digit_i] = carry;
+        result_digits[digit_i] = (sc_digit)carry;
 	carry >>=BITS_PER_DIGIT;
     }
     return result;

@@ -55,6 +55,9 @@ Makefile.in
 *.opensdf
 *.db
 
+# exception vcsproj filters
+!*.vcxproj.filters
+
 .vs/
 .vscode/
 Release/

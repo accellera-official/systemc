@@ -307,6 +307,8 @@ option (ENABLE_LEGACY_MEM_MGMT
         "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
         OFF)
 
+option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std 1666" OFF)
+
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
 else (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
