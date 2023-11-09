@@ -42,7 +42,6 @@ class lt_target_extension_mandatory
                                          , extension_initiator_id>
                                     target_socket_type;           ///< initiator socket type
 
-  SC_HAS_PROCESS ( lt_target_extension_mandatory );
 
   lt_target_extension_mandatory                                   ///< constructor
   ( sc_core::sc_module_name name                                  ///< instance name

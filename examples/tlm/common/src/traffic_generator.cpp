@@ -54,7 +54,6 @@ static const char *filename = "traffic_generator.cpp";  ///< filename for report
 
 /// Constructor
 
-SC_HAS_PROCESS(traffic_generator);
 
 //-----------------------------------------------------------------------------
 //

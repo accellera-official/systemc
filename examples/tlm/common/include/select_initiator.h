@@ -39,7 +39,6 @@ class select_initiator                              /// TLM AT select_initiator
 :         public sc_core::sc_module                 /// inherit from SC module base clase
 , virtual public tlm::tlm_bw_transport_if<>         /// inherit from TLM "backward interface"
 {
-  SC_HAS_PROCESS(select_initiator);
 
 //==============================================================================
 // Ports, exports and Sockets

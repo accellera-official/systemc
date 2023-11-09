@@ -48,7 +48,6 @@
 //
 //==============================================================================
 
-SC_HAS_PROCESS(lt_dmi_top);
 
 lt_dmi_top::lt_dmi_top  
 ( sc_core::sc_module_name name             

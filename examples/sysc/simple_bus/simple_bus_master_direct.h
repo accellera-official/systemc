@@ -50,7 +50,6 @@ SC_MODULE(simple_bus_master_direct)
   sc_in_clk clock;
   sc_port<simple_bus_direct_if> bus_port;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
 
   // constructor
   simple_bus_master_direct(sc_module_name name_

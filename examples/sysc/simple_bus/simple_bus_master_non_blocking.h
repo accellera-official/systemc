@@ -51,7 +51,6 @@ SC_MODULE(simple_bus_master_non_blocking)
   sc_in_clk clock;
   sc_port<simple_bus_non_blocking_if> bus_port;
 
-  SC_HAS_PROCESS(simple_bus_master_non_blocking);
 
   // constructor
   simple_bus_master_non_blocking(sc_module_name _name
