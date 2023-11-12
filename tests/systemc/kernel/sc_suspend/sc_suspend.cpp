@@ -116,11 +116,11 @@ private:
 };
 
 SC_MODULE (tester) {
+    std::mutex mutex;
+    std::condition_variable condition;
     std::thread t;
     async_event start;
     sc_core::sc_event ctrlev;
-    std::mutex mutex;
-    std::condition_variable condition;
 
     SC_CTOR (tester) :
         t([&] {
