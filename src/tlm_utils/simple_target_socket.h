@@ -68,6 +68,7 @@ public:
     : base_type(n)
     , m_fw_process(this)
     , m_bw_process(this)
+    , m_current_transaction()
   {
     bind(m_fw_process);
   }

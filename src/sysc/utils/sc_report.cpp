@@ -180,6 +180,20 @@ static const char unknown_id[] = "unknown id";
 void sc_report_handler::report(sc_severity severity_,
 			       int         id_,
 			       const char* msg_,
+                               int         verbosity_,
+			       const char* file_,
+			       int         line_ )
+{
+    sc_report_handler::report(severity_,
+			                     id_,
+                                             msg_,
+			                     file_,
+                                             line_ );
+}
+
+void sc_report_handler::report(sc_severity severity_,
+			       int         id_,
+			       const char* msg_,
 			       const char* file_,
 			       int         line_ )
 {
