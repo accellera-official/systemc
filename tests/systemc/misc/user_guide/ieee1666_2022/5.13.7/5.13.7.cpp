@@ -56,4 +56,6 @@ int sc_main( int argc, char* argv[] ) {
     sc_core::sc_start(sc_core::SC_ZERO_TIME);
 
     std::cout << "program completed" << std::endl;
+
+    return 0;
 }
