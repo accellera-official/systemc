@@ -42,7 +42,6 @@ class lt_initiator_extension_mandatory
                                             , extension_initiator_id>
                                     initiator_socket_type;  ///< initiator socket type
 
-  SC_HAS_PROCESS( lt_initiator_extension_mandatory );
   
   lt_initiator_extension_mandatory                      ///< constructor
   ( sc_core::sc_module_name name                        ///< instance name

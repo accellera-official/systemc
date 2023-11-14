@@ -58,7 +58,6 @@ static const char *filename = "me_traffic_generator.cpp";  ///< filename for rep
 
 /// Constructor
 
-SC_HAS_PROCESS(me_traffic_generator);
 //-----------------------------------------------------------------------------
 //
 me_traffic_generator::me_traffic_generator            // constructor

@@ -63,7 +63,6 @@ int ref_function(const double& d)
 class top : public sc_module
 {
 public:
-  SC_HAS_PROCESS(top);
 
   top(sc_module_name name) : sc_module(name) 
   {

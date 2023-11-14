@@ -40,7 +40,6 @@ using namespace std;
 
 static const char *filename = "at_target_4_phase.cpp";	///< filename for reporting
 
-SC_HAS_PROCESS(at_target_4_phase);
 
 ///Constructor
 

@@ -118,7 +118,6 @@ private:
 class top : public sc_module
 {
 public:
-  SC_HAS_PROCESS(top);
 
   top(sc_module_name name) : sc_module(name), mutex_(scx_mutex_w_policy::FIFO)
   {
