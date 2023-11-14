@@ -34,7 +34,6 @@ class async_event : public sc_core::sc_prim_channel, public sc_event
 private:
     sc_core::sc_time m_delay;
 public:
-    SC_HAS_PROCESS(async_event);
     async_event(sc_module_name n = "")
     {
         async_attach_suspending();

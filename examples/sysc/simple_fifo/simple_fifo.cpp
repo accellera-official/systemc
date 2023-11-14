@@ -96,7 +96,6 @@ class producer : public sc_module
    public:
      sc_port<write_if> out;
 
-     SC_HAS_PROCESS(producer);
 
      producer(sc_module_name name) : sc_module(name)
      {
