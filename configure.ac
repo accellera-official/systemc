@@ -208,7 +208,7 @@ AS_CASE([${TARGET_ARCH}],
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
        [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH} -x assembler"],
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
     ],
 

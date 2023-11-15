@@ -499,8 +499,12 @@ target_compile_options(
   PUBLIC
   $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
   PRIVATE
-  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
+  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
     -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -xassembler-with-cpp>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -Qunused-arguments>
   $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
 
 target_include_directories(systemc
