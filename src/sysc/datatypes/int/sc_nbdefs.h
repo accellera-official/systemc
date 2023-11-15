@@ -68,8 +68,12 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 
 #include <climits>
-#include <cstdint>
 
+#if defined(__sun) || defined(__sun__)
+#  include <inttypes.h>
+#elif !defined(WIN32) && !defined(_WIN32)
+#  include <stdint.h>
+#endif
 
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_string.h"       // For sc_numrep
@@ -211,14 +215,32 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 // store x bits. x is a positive number.
 #define DIV_CEIL(x) DIV_CEIL2(x, BITS_PER_DIGIT)
 
+// Support for the long long type. This type is not in the standard
+// but is usually supported by compilers.
+// Note: we cannot use (u)int64_t here as it causes ambiguities in the
+// SystemC datatype definition
+#ifndef _WIN32
+#   if defined(__x86_64__) || defined(__aarch64__)
+        typedef long long          int64;
+        typedef unsigned long long uint64;
+#   else
+        typedef int64_t            int64;
+        typedef uint64_t           uint64;
+#   endif
+#else
+    typedef __int64            int64;
+    typedef unsigned __int64   uint64;
+#endif
 
-typedef int64_t            int64;
-typedef uint64_t           uint64;
-
-static const uint64 UINT64_ZERO   = UINT64_C(0);
-static const uint64 UINT64_ONE    = UINT64_C(1);
-static const uint64 UINT64_32ONES = UINT64_C(0x00000000ffffffff);
-
+#if !defined(_WIN32) || defined(__MINGW32__)
+    static const uint64 UINT64_ZERO   = 0ULL;
+    static const uint64 UINT64_ONE    = 1ULL;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+#else
+    static const uint64 UINT64_ZERO   = 0i64;
+    static const uint64 UINT64_ONE    = 1i64;
+    static const uint64 UINT64_32ONES = 0x00000000ffffffffi64;
+#endif
 #if BITS_PER_DIGIT < 32
     typedef unsigned int sc_carry;    // type of carry temporaries.
 #else
