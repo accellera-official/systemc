@@ -211,8 +211,6 @@ class consumer : public sc_module
   public:
     sc_port<read_if> in;
 
-    SC_HAS_PROCESS(consumer);
-
     consumer(sc_module_name name) : sc_module(name)
     {
       SC_THREAD(main);
