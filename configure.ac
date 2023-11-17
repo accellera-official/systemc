@@ -188,6 +188,10 @@ AS_CASE([${TARGET_ARCH}],
     [LDFLAG_RPATH="-Wl,-rpath -Wl,"
      # check CPU architecture
      AS_CASE([${target_cpu}], dnl
+       [arm|aarch64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}aarch64"
+          QT_ARCH="aarch64"
+          CPU_ARCH="arm64"],
        [x86_64|amd64], dnl
          [TARGET_ARCH="${TARGET_ARCH}64"
           CPU_ARCH="x86_64"
