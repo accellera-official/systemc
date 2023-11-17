@@ -215,9 +215,9 @@ typedef unsigned int sc_digit;        // type holding "digits" in big values.
 using int64  = long long;
 using uint64 = unsigned long long;
 
-static const uint64 UINT64_ZERO   = 0ULL;
-static const uint64 UINT64_ONE    = 1ULL;
-static const uint64 UINT64_32ONES = 0x00000000ffffffffULL;
+constexpr uint64 UINT64_ZERO   = 0ULL;
+constexpr uint64 UINT64_ONE    = 1ULL;
+constexpr uint64 UINT64_32ONES = 0x00000000ffffffffULL;
 
 #if BITS_PER_DIGIT < 32
     typedef unsigned int sc_carry;    // type of carry temporaries.
@@ -258,8 +258,8 @@ extern const small_type NB_DEFAULT_BASE ;
 typedef int64 int_type;
 typedef uint64 uint_type;
 #define SC_INTWIDTH 64
-static const uint64 UINT_ZERO = UINT64_ZERO;
-static const uint64 UINT_ONE = UINT64_ONE;
+constexpr uint64 UINT_ZERO = UINT64_ZERO;
+constexpr uint64 UINT_ONE = UINT64_ONE;
 
 } // namespace sc_dt
 
