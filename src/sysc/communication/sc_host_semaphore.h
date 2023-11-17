@@ -35,13 +35,17 @@
 #if SC_CPLUSPLUS >= 201103L
 # include <mutex>
 # include <condition_variable>
-#elif !defined(WIN32) && !defined(_WIN32) // use POSIX semaphore
-# include <semaphore.h>
-#else // use Windows semaphore
+#elif defined(WIN32) && !defined(_WIN32) // use Windows semaphore
 # ifndef SC_INCLUDE_WINDOWS_H
 #   define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
 #   include "sysc/kernel/sc_cmnhdr.h"
 # endif
+#elif defined (__APPLE__)  // use Mach semaphore
+# include <mach/mach_init.h>
+# include <mach/task.h>
+# include <mach/semaphore.h>
+#else // use POSIX semaphore
+# include <semaphore.h>
 #endif // SC_CPLUSPLUS
 
 namespace sc_core {
@@ -105,6 +109,27 @@ class SC_API sc_host_semaphore : public sc_semaphore_if
       { ReleaseSemaphore( m_sem, 1, NULL ); }
     void do_destroy()
       { CloseHandle( m_sem ); }
+
+#elif defined(__APPLE__) // use Mach semaphore
+
+    typedef semaphore_t underlying_type;
+
+    void do_init(int init)
+    {
+      kern_return_t semaphore_initialized = semaphore_create( mach_task_self(),
+                                              &m_sem,
+                                              SYNC_POLICY_FIFO,
+                                              init );
+      sc_assert(semaphore_initialized == KERN_SUCCESS);
+    }
+    void do_wait()         { semaphore_wait( m_sem ); }
+    bool do_trywait()
+    {
+      const mach_timespec_t zero = { 0, 0 };
+      return ( semaphore_timedwait( m_sem, zero ) == KERN_SUCCESS );
+    }
+    void do_post()         { semaphore_signal( m_sem ); }
+    void do_destroy()      { semaphore_destroy( mach_task_self(), m_sem ); }  
 
 #else // use POSIX semaphore
 
