@@ -55,7 +55,7 @@ AC_CONFIG_MACRO_DIR([config])
 dnl
 dnl Some simple checks.
 dnl
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
@@ -271,7 +271,7 @@ dnl    detect C++ library dependencies, esp. for cross-compilation
 CXXFLAGS_USER="${CXXFLAGS}"
 CXXFLAGS="${EXTRA_CXXFLAGS} ${CXXFLAGS}"
 dnl
-AC_PROG_LIBTOOL
+LT_INIT
 dnl  - restore user-given CXXFLAGS
 CXXFLAGS="${CXXFLAGS_USER}"
 
@@ -583,7 +583,7 @@ AC_SUBST(QT_ARCH)
 dnl
 dnl Create the Makefiles.
 dnl
-AC_OUTPUT(
+AC_CONFIG_FILES([
  Makefile 
  src/Makefile 
  src/systemc.pc
@@ -600,7 +600,8 @@ AC_OUTPUT(
  docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
-)
+])
+AC_OUTPUT
 
 dnl
 dnl print configuration summary
