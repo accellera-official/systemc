@@ -32,14 +32,6 @@
 
 namespace sc_core {
 
-// Maximum number of bits for arbitrary precision arithmetic. If
-// defined, the arithmetic becomes faster. If not defined, the
-// arithmetic becomes slower and the precision becomes infinite.  It
-// is a good idea to define this constant as a multiple of
-// BITS_PER_DIGIT, which is defined in numeric_bit/sc_nbdefs.h.
-//#define SC_MAX_NBITS    510    // 17 * BITS_PER_DIGIT
-
-
 // deprecated in 1666-2005 and later, but kept for backwards compatibility
 //  - can be set by defining SC_OVERRIDE_DEFAULT_STACK_SIZE
 //  - defaults defined in sc_thread_process.cpp
