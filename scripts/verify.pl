@@ -503,7 +503,7 @@ sub get_systemc_arch
                 }
             }
 
-        } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
+        } elsif( $uname_s =~ /^(CYGWIN|MINGW32|MINGW64)_NT/ ) {
 
                 # check windows compiler
             if( $cxx_comp =~ /^cl(\.exe)?/i ) {
@@ -579,8 +579,14 @@ sub get_systemc_arch
                     # TODO: detect 64-bit capability
                     $arch  = "cygwin";
                 } else {
-                    # TODO: detect 64-bit capability
-                    $arch  = "mingw";
+                    if( ($uname_m eq "i686") || ($uname_m eq "x86_64") )
+                    {
+                       $arch = "mingw64";
+                    }
+                    else
+                    {
+                       $arch  = "mingw"; # 32-bit
+                    }
                 }
             }
         }
@@ -2460,7 +2466,11 @@ sub run_test
             $command .= "-o $rt_prodname ";
             $command .= "$testname.o ";
             $command .= "-L. ";
-            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            if($rt_systemc_arch =~ /^mingw/ ) {
+                $command .= join('', map { "-L$_ " } @rt_ldpaths);
+            }else{
+	        $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            }
             $command .= join('', map { "-l$_ " } @rt_ldlibs);
         }
 
@@ -2531,7 +2541,11 @@ sub run_test
         } else {
             $command .= "-o $rt_prodname ";
             $command .= "$ofiles ";
-            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            if($rt_systemc_arch =~ /^mingw/ ) {
+                $command .= join('', map { "-L$_ " } @rt_ldpaths);
+            }else{
+	        $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            }
             $command .= join('', map { "-l$_ " } @rt_ldlibs);
         }
 
