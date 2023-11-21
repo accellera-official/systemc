@@ -129,7 +129,6 @@ CXX_FILES += \
 	datatypes/int/sc_int64_mask.cpp \
 	datatypes/int/sc_int_base.cpp \
 	datatypes/int/sc_length_param.cpp \
-	datatypes/int/sc_nbdefs.cpp \
 	datatypes/int/sc_nbutils.cpp \
 	datatypes/int/sc_signed.cpp \
 	datatypes/int/sc_uint_base.cpp \

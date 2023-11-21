@@ -384,7 +384,6 @@
     <ClCompile Include="..\..\src\sysc\datatypes\int\sc_uint_base.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\int\sc_unsigned.cpp" />
     <ClInclude Include="..\..\src\sysc\communication\sc_stub.h" />
-    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbdefs.cpp" />
     <ClCompile Include="..\..\src\sysc\utils\sc_utils_ids.cpp" />
     <ClCompile Include="..\..\src\sysc\datatypes\misc\sc_value_base.cpp" />
     <ClCompile Include="..\..\src\sysc\tracing\sc_vcd_trace.cpp" />

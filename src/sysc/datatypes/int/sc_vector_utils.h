@@ -33,7 +33,6 @@ template<int W> class sc_bigint;
 template<int W> class sc_biguint;
 class sc_signed;
 class sc_unsigned;
-extern const int byte_one_bits[256]; // count of bits on in a byte.
 
 // +============================================================================
 // |"sc_big_op_type<WIDTH,SIGNED>

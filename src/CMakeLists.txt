@@ -86,7 +86,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/int/sc_int64_mask.cpp
                      sysc/datatypes/int/sc_int_base.cpp
                      sysc/datatypes/int/sc_length_param.cpp
-                     sysc/datatypes/int/sc_nbdefs.cpp
                      sysc/datatypes/int/sc_nbutils.cpp
                      sysc/datatypes/int/sc_signed.cpp
                      sysc/datatypes/int/sc_uint_base.cpp
