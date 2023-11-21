@@ -138,7 +138,7 @@ dnl
 dnl Prepare architecture alias (to be refined later)
 dnl
 AS_CASE([$target],
-  [*-apple-*],        [TARGET_ARCH=macosx],
+  [*-apple-*],        [TARGET_ARCH=macos],
   [*linux*],          [TARGET_ARCH=linux],
   [*bsd*|*dragonfly*],[TARGET_ARCH=bsd],
   [*mingw*],          [TARGET_ARCH=mingw],
@@ -184,14 +184,18 @@ AS_CASE([${TARGET_ARCH}],
        [mingw*],[QT_ARCH="none"])
     ],
 
-  [macosx],dnl
+  [macos],dnl
     [LDFLAG_RPATH="-Wl,-rpath -Wl,"
      # check CPU architecture
      AS_CASE([${target_cpu}], dnl
        [x86_64|amd64], dnl
-         [TARGET_ARCH="${TARGET_ARCH}64"
+         [TARGET_ARCH="${TARGET_ARCH}x64"
           CPU_ARCH="x86_64"
           QT_ARCH="x86_64"],
+       [aarch64|arm64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}arm64"
+          CPU_ARCH="arm64"
+          QT_ARCH="aarch64"],
        [x*86|i*86], dnl
          [CPU_ARCH="i386"
           QT_ARCH="iX86"],
@@ -202,13 +206,13 @@ AS_CASE([${TARGET_ARCH}],
        [powerpc], dnl
          [TARGET_ARCH="${TARGET_ARCH}ppc"
           CPU_ARCH="ppc"
-          QT_ARCH="powerpc-apple-macosx"],
+          QT_ARCH="pthreads"],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
        [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH} -x assembler"],
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
     ],
 

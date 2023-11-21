@@ -50,21 +50,6 @@ if (QT_ARCH STREQUAL "sparc")
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s)
 endif (QT_ARCH STREQUAL "sparc")
 
-if (APPLE)
-  if (N_OSX_ARCHITECTURES EQUAL 1)
-    if (QT_ARCH STREQUAL "i386")
-      set (CMAKE_ASM_FLAGS "-arch i386")
-    elseif (QT_ARCH STREQUAL "x86_64")
-      set (CMAKE_ASM_FLAGS "-arch x86_64")
-    elseif (QT_ARCH STREQUAL "powerpc_mach")
-      set (CMAKE_ASM_FLAGS "-arch ppc")
-    endif(QT_ARCH STREQUAL "i386")
-  else (N_OSX_ARCHITECTURES EQUAL 1)
-    set (CMAKE_ASM_FLAGS "")
-  endif (N_OSX_ARCHITECTURES EQUAL 1)
-endif (APPLE)
-
-
 ###############################################################################
 # Build rules for SystemC library
 ###############################################################################
@@ -442,12 +427,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                        $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
                        $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
                        $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
-                       $<$<STREQUAL:${QT_ARCH},powerpc_mach>:
-                         sysc/packages/qt/md/powerpc_mach.s
-                         sysc/packages/qt/md/powerpc.c>
-                       $<$<STREQUAL:${QT_ARCH},powerpc_sys5>:
-                         sysc/packages/qt/md/powerpc_sys5.s
-                         sysc/packages/qt/md/powerpc.c>
+                       $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
                        sysc/packages/qt/md/aarch64.h
                        sysc/packages/qt/md/axp.h
                        sysc/packages/qt/md/hppa.h
@@ -499,8 +479,12 @@ target_compile_options(
   PUBLIC
   $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
   PRIVATE
-  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
+  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
     -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -xassembler-with-cpp>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -Qunused-arguments>
   $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
 
 target_include_directories(systemc

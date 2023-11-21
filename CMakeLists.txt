@@ -64,7 +64,7 @@
 #
 # - Linux (GCC): aarch64
 #
-# - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
+# - macOS >= 11.6 (Xcode/AppleClang): arm64, x86_64
 #
 # - Windows (MingW32 GCC + optionally MSYS): x86
 #
@@ -76,8 +76,6 @@
 # - Linux (GCC, Clang): sparc, powerpc
 #
 # - Linux (Clang): aarch64
-#
-# - Mac OS X <= 10.5 (GCC): ppc, ppc64
 #
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 #
@@ -343,29 +341,26 @@ message (STATUS "Checking OS and processor type.")
 
 if (APPLE)
   list (LENGTH CMAKE_OSX_ARCHITECTURES N_OSX_ARCHITECTURES)
+  set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "")
+  if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "${CMAKE_OSX_ARCHITECTURES_CACHED}")
+    set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "" FORCE)
+    unset(SystemC_TARGET_ARCH CACHE)
+    unset(HAS__aarch64__DEFINED CACHE)
+    unset(HAS__i386_DEFINED CACHE)
+    unset(HAS__x86_64__DEFINED CACHE)
+  endif()
 endif (APPLE)
 
-if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
-  if (APPLE)
-    if (N_OSX_ARCHITECTURES EQUAL 1)
-      message (STATUS "The target architecture will be passed explicitly to the Apple compiler.")
-      set (CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_OSX_ARCHITECTURES}")
-    endif (N_OSX_ARCHITECTURES EQUAL 1)
-    unset (HAS__i386_DEFINED CACHE)
-    unset (HAS__x86_64__DEFINED CACHE)
-    unset (HAS__ppc__DEFINED CACHE)
-  endif (APPLE)
-  include (CheckSymbolExists)
-  check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
-  check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
-  check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
-  check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
-  check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
-  check_symbol_exists (__i386 "" HAS__i386_DEFINED)
-  check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
-  check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
-  check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
-endif (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
+include (CheckSymbolExists)
+check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
+check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
+check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
+check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
+check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
+check_symbol_exists (__i386 "" HAS__i386_DEFINED)
+check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
+check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
+check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 
 
 # Set SystemC_TARGET_ARCH according to the detected
@@ -376,17 +371,13 @@ if (NOT SystemC_TARGET_ARCH)
     set (_TARGET_ARCH $ENV{SYSTEMC_TARGET_ARCH})
   elseif (APPLE)
     if (N_OSX_ARCHITECTURES GREATER 1)
-      set (_TARGET_ARCH "macosxuniversal")
-    elseif (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosx")
+      set (_TARGET_ARCH "macosuniversal")
+    elseif (HAS__aarch64__DEFINED)
+      set (_TARGET_ARCH "macosarm64")
     elseif (HAS__x86_64__DEFINED)
       set (_TARGET_ARCH "macosx64")
-    elseif (HAS__ppc__DEFINED)
-      set (_TARGET_ARCH "macosxppc")
-    elseif (HAS__ppc64__DEFINED)
-      set (_TARGET_ARCH "macosxppc64")
-    else (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosxunknown")
+    else (N_OSX_ARCHITECTURES GREATER 1)
+      set (_TARGET_ARCH "macosunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     if (HAS__i386_DEFINED)
@@ -474,7 +465,13 @@ if (ENABLE_PTHREADS)
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
-  set (QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
+  foreach(arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+    if (arch MATCHES "^(arm64|i386|x86_64)$")
+      set(QT_ARCH "multi")
+    else()
+      message (FATAL_ERROR "QuickThreads is not supported on macOS ${arch} universal build.")
+    endif()
+  endforeach()
 elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
   set (QT_ARCH "sparc")
 elseif (HAS__hppa_DEFINED)
@@ -485,10 +482,6 @@ elseif (HAS__i386_DEFINED)
   set (QT_ARCH "i386")
 elseif (HAS__aarch64__DEFINED)
   set (QT_ARCH "aarch64")
-elseif (HAS__ppc__DEFINED)
-  set (QT_ARCH "powerpc_mach")
-elseif (HAS__powerpc__DEFINED)
-  set (QT_ARCH "powerpc_sys5")
 else (ENABLE_PTHREADS)
   message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
   set (QT_ARCH "IGNORE")

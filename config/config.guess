@@ -1238,7 +1238,7 @@ EOF
 		      UNAME_PROCESSOR="x86_64"
 		  fi
 		fi ;;
-	    powerpc | unknown)
+	    powerpc)
 		UNAME_PROCESSOR=powerpc
 		eval $set_cc_for_build
 		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
@@ -1247,6 +1247,17 @@ EOF
 		      grep IS_64BIT_ARCH >/dev/null
 		  then
 		      UNAME_PROCESSOR="powerpc64"
+		  fi
+		fi ;;
+	    arm | unknown)
+		UNAME_PROCESSOR=arm
+		eval $set_cc_for_build
+		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+		      grep IS_64BIT_ARCH >/dev/null
+		  then
+		      UNAME_PROCESSOR="aarch64"
 		  fi
 		fi ;;
 	esac
