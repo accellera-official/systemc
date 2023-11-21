@@ -774,7 +774,7 @@ settings to all build configurations.
    Previous versions of SystemC allowed using some macros
    without a trailing semicolon.  This is no longer supported by
    default.  Defining the above macro restores the old behavior.
-   Affected macros: `SC_METHOD`, `SC_(C)THREAD`, `SC_NEW`.
+   Affected macros: `SC_METHOD`, `SC_(C)THREAD`.
 
    Note: _Only effective when building an application._
 
