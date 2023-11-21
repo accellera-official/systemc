@@ -75,11 +75,7 @@ static std::size_t sc_pagesize()
     static std::size_t pagesize = 0;
 
     if( pagesize == 0 ) {
-#     if defined(__ppc__)
-        pagesize = getpagesize();
-#     else
         pagesize = sysconf( _SC_PAGESIZE );
-#     endif
     }
 
     sc_assert( pagesize != 0 );
