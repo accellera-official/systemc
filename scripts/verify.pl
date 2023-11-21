@@ -470,17 +470,12 @@ sub get_systemc_arch
         } elsif( $uname_s eq "Darwin" ) {
             if( cxx_is_gcc_compatible($cxx) )
             {
-                if ( $uname_m =~ /x86_64|[ix].86/ ) {
-                    $arch = "macosx";
-                } else {
-                    $arch = "macosxppc";
+                $arch = "macos";
+                if ( $uname_m eq "x86_64" || $uname_m eq "amd64" ) {
+                    $arch .= "x64";
                 }
-                my $macosx64_chk="( echo '#ifdef __LP64__' ;"
-                                ." echo IS_64BIT_ARCH ; "
-                                ." echo '#endif' )";
-                $macosx64_chk=` $macosx64_chk | $cxx -E - 2>/dev/null `;
-                if ( $macosx64_chk =~ /IS_64BIT_ARCH/ ) {
-                    $arch.="64";
+                elsif ( $uname_m eq "arm64" ) {
+                    $arch .= "arm64";
                 }
             }
 
@@ -503,7 +498,7 @@ sub get_systemc_arch
                 }
             }
 
-        } elsif( $uname_s =~ /^(CYGWIN|MINGW32)_NT/ ) {
+        } elsif( $uname_s =~ /^(CYGWIN|MINGW32|MINGW64)_NT/ ) {
 
                 # check windows compiler
             if( $cxx_comp =~ /^cl(\.exe)?/i ) {
@@ -579,8 +574,14 @@ sub get_systemc_arch
                     # TODO: detect 64-bit capability
                     $arch  = "cygwin";
                 } else {
-                    # TODO: detect 64-bit capability
-                    $arch  = "mingw";
+                    if( ($uname_m eq "i686") || ($uname_m eq "x86_64") )
+                    {
+                       $arch = "mingw64";
+                    }
+                    else
+                    {
+                       $arch  = "mingw"; # 32-bit
+                    }
                 }
             }
         }
@@ -593,13 +594,9 @@ sub get_systemc_arch
 
     # check arch and set architecture specific options
 
-    if( $arch =~ /^macosx(ppc)?(64)?/ ) {
-        if( $1 eq 'ppc' ) {
-            if( $2 eq '64' ) {
-                $rt_cpuarch = "ppc64";
-            } else {
-                $rt_cpuarch = "ppc";
-            }
+    if( $arch =~ /^macos(x|arm)?(64)?/ ) {
+        if( $1 eq 'arm' ) {
+            $rt_cpuarch = "arm$2";
         } else {
             if( $2 eq '64' ) {
                 $rt_cpuarch = "x86_64";
@@ -892,7 +889,7 @@ sub prepare_environment
     } elsif( $rt_systemc_arch =~ /^(free)?bsd(64)?/ ) {
         $rt_ccflags      .= " -m${rt_cpuarch}";
         $rt_ldflags       = $rt_ccflags;
-    } elsif( $rt_systemc_arch =~ /^macosx(ppc)?(64)?/ ) {
+    } elsif( $rt_systemc_arch =~ /^macos(x|arm)?(64)?/ ) {
         $rt_ccflags      .= " -arch ${rt_cpuarch} ";
         $rt_ldflags       = $rt_ccflags;
         $rt_optimize_flag = "-O3";
@@ -2460,7 +2457,11 @@ sub run_test
             $command .= "-o $rt_prodname ";
             $command .= "$testname.o ";
             $command .= "-L. ";
-            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            if($rt_systemc_arch =~ /^mingw/ ) {
+                $command .= join('', map { "-L$_ " } @rt_ldpaths);
+            }else{
+	        $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            }
             $command .= join('', map { "-l$_ " } @rt_ldlibs);
         }
 
@@ -2531,7 +2532,11 @@ sub run_test
         } else {
             $command .= "-o $rt_prodname ";
             $command .= "$ofiles ";
-            $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            if($rt_systemc_arch =~ /^mingw/ ) {
+                $command .= join('', map { "-L$_ " } @rt_ldpaths);
+            }else{
+	        $command .= join('', map { "-L$_ $rt_ldrpath$_ " } @rt_ldpaths);
+            }
             $command .= join('', map { "-l$_ " } @rt_ldlibs);
         }
 
