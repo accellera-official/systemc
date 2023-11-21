@@ -59,6 +59,7 @@
 
 # Companies
 
+ * Apple Inc.
  * ARM Ltd.
  * Bern University of Applied Sciences
  * Cadence Design Systems, Inc.
