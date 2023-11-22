@@ -553,10 +553,8 @@ class sc_unsigned : public sc_value_base
     friend class sc_signed_subref_r;
     template<int W> friend class sc_bigint;
     template<int W> friend class sc_biguint;
-#ifndef ALIAS_SC_INT
     template<int W> friend class sc_int;
     template<int W> friend class sc_uint;
-#endif
 
   // Needed for types using sc_unsigned.
   typedef bool elemtype;

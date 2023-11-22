@@ -277,8 +277,6 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
   set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
 endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
-
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
 option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
