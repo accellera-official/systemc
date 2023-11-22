@@ -528,7 +528,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    if ( sizeof(tp)*8 > x.length() ) {                                        \
+    if ( sizeof(tp)*8 > static_cast<unsigned>(x.length()) ) {                 \
         sc_lv_base y( sizeof(tp)*8 );                                         \
         y = x;                                                                \
         return y |= b;                                                        \
@@ -667,7 +667,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    if ( sizeof(tp)*8 > x.length() ) {                                        \
+    if ( sizeof(tp)*8 > static_cast<unsigned>(x.length()) ) {                 \
         sc_lv_base y( sizeof(tp)*8 );                                         \
         y = x;                                                                \
         return y ^= b;                                                        \
