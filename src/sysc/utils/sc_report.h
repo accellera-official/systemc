@@ -200,12 +200,7 @@ typedef std::exception sc_exception;
 // ----------------------------------------------------------------------------
 
 #define SC_REPORT_INFO( msg_type, msg )    \
-  do { \
-      if( ::sc_core::SC_MEDIUM <= ::sc_core::sc_report_handler::get_verbosity_level() ) \
-          ::sc_core::sc_report_handler::report(                 \
-              ::sc_core::SC_INFO, msg_type, msg, ::sc_core::SC_MEDIUM, __FILE__ , __LINE__ \
-          ); \
-  } while(false)
+  SC_REPORT_INFO_VERB( msg_type, msg, ::sc_core::SC_MEDIUM )
 
 #define SC_REPORT_INFO_VERB( msg_type, msg, verbosity ) \
   do { \
