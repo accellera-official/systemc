@@ -13,9 +13,10 @@
  *  Gene Bushuyev
  *  Mark Burton (@markfoodyburton)
  *  Jerome Cornet (@jeromecornetst)
+ *  Ali Dasdan
  *  Guillaume Delbergue (@guyguy333)
  *  Jack Donovan
- *  Ali Dasdan
+ *  Frederic Doucet (@frdoucet)
  *  Paul Ehrlich (@eactor)
  *  Karsten Einwich (@Einwich)
  *  Alan Fitch (@apfitch)
@@ -74,6 +75,7 @@
  * Mentor Graphics Corporation
  * NXP Semiconductors
  * OFFIS eV
+ * Qualcomm Technologies, Inc
  * Siemens
  * STMicroelectronics
  * Synopsys, Inc.
