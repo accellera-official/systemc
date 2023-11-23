@@ -652,29 +652,6 @@ Note: Some of these features are not enabled in the default library
       configuration and need to be explicitly activated during at
       library build time.  See INSTALL file.
 
- - Allow creation of sc_max_time() objects before fixing the sc_time
-   resolution
-
-   Currently. IEEE 1666-2011 requires that any call to
-
-     sc_core::sc_set_time_resolution( double, sc_time_unit )
-
-   happens before the construction of the first non-SC_ZERO_TIME
-   sc_time object.
-
-   This can be inconvenient in cases, where an "uninitialized sc_time value"
-   is needed, which needs to be separate from SC_ZERO_TIME in some cases.
-
-   A relaxation of the strict sc_time construction rules wrt. to
-   the simulation time resolution can be optionally enabled via the
-   preprocessor switch SC_ENABLE_EARLY_MAXTIME_CREATION (see INSTALL).
-
-   When this option is enabled, the creation of time objects with the
-   values SC_ZERO_TIME and 'sc_max_time()' are allowed before fixing the
-   time resolution.  The resolution is still fixed once the actual
-   relationship between the internal time representation and the physical
-   time units (SC_FS, SC_PS, ...) is used or observed by the application.
-
 
 8) Known Problems
 =================

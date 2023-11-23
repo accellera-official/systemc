@@ -681,27 +681,6 @@ settings to all build configurations.
    Note: _Only effective during library build._
 
 
- * `SC_ENABLE_EARLY_MAXTIME_CREATION`  
-   Allow creation of sc_time objects with a value of `sc_max_time()`
-   before finalizing the time resolution
-
-   In IEEE 1666-2011, it is not allowed to create `sc_time` objects with
-   a non-`SC_ZERO_TIME` value before setting/changing the time resolution.
-   This preprocessor switch activates an extension to allow the
-   initialization of `sc_time` variables with `sc_max_time()` while
-   still accepting changes to the time resolution afterwards.
-
-   ```cpp
-   sc_time t = sc_max_time();
-   sc_set_time_resolution( 1, SC_NS ); // OK, with this extension
-   ```
-   The time resolution will still be fixed, once you have explicitly or
-   implicitly relied on the physical value (i.e., the relation to seconds)
-   of any sc_time object.
-
-   Note: _Only effective during library build._
-
-
  * `SC_INCLUDE_DYNAMIC_PROCESSES`  
    Enable dynamic process support (sc_spawn, sc_bind)
 
