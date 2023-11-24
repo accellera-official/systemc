@@ -294,7 +294,7 @@ sc_time
 sc_time::from_value( value_type v )
 {
     sc_time t;
-    if( v != 0 && && v != ~sc_dt::UINT64_ZERO ) {
+    if( v != 0 && v != ~sc_dt::UINT64_ZERO ) {
         sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
         time_params->time_resolution_fixed = true;
     }
