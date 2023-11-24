@@ -1,4 +1,4 @@
-                Release Notes for SystemC 2.3.4
+                Release Notes for SystemC 3.0.0
                 ===============================
 
         Laurent Maillet-Contoz, STMicroelectronics
@@ -11,13 +11,13 @@ CONTENTS
   
   2) What's new in this release?
 
-  3) Bug fixes and enhancements
+  3) New features 
 
-  4) New features
+  4) Bug fixes and enhancements
 
-  5) Incompatibitilies with previous releases
+  5) Incompatibilities with previous releases
 
-  6) Initial support for C++11/14
+  6) C++17 support
 
   7) Experimental features
 
@@ -25,51 +25,39 @@ CONTENTS
 
   9) Fixed-point library
 
-  10) TLM Release Notes
-
 
 IMPORTANT
 ---------
 
-This is the release of the SystemC 2.3.4 Class Library.
-This release includes TLM 2.0.6 (Transaction Level Modeling) code,
-as described in the IEEE 1666-2011 Language Reference Manual.
+This is the release of the SystemC 3.0.0 Class Library.
+This release implements the IEEE 1666-2023 Language Reference Manual.
 
 -------------------------------------------------------------------------------
-
-
-1. This is the release of SystemC. This release contains bug fixes
-   for SystemC 2.3.3 (and earlier).
 
 2. This release is supported on the following platform combinations for
    which it has been tested:
 
    * 64-bit Linux (x86_64)
       (RedHat Enterprise 7 & 8)
-      - GNU C++ compiler versions gcc-4.8.5 through gcc-11.1.0
+      - GNU C++ compiler versions gcc-9.3.0 through gcc-11.1.0
       - Clang C++ compiler versions clang-11.1 through clang-13.0.0
 
    * 64-bit Linux (aarch64)
       (Ubuntu 18 & 20)
-      - GNU C++ compiler version gcc-7.4 and gcc-9.3
+      - GNU C++ compiler version gcc-9.3
 
-   * 64-bit Mac OS X (x86_64)
-      (11.4)
-      - Apple LLVM version 12.0 and 13.0 
+   * 64-bit MacOS (macosarm64, macosx64, macosuniversal, macosunknown)
+      (macOS 11.6 (Big Sur) until 14.1 (Sonoma))
+      - Xcode/AppleClang compiler version 12.0 until version 15.0
 
    * Microsoft Windows
-      - Microsoft Visual Studio 2015 (14.0) (Win32 and x64)
-      - Microsoft Visual Studio 2017 (14.1) (Win32 and x64)
       - Microsoft Visual Studio 2019 (14.2) (Win32 and x64)
 
    Warning: The fixed-point datatypes are not working as defined on
    MSVC 2015/2017 (x64) in Release mode. 
 
-   * Windows Server 2008 (WoW64), Msys 1.0.17(0.48/3/2)
-      - MinGW-w64 GNU C++ compiler version 4.9.2 (x86_64)
 
-
-  This release has not yet been tested or is known not to work as expected
+  This release has not been tested or is known not to work as expected
   on the following formerly supported platforms:
 
    * GNU C++ compiler versions prior to 4.2.x (all platforms)
@@ -93,581 +81,135 @@ as described in the IEEE 1666-2011 Language Reference Manual.
     - Operating systems or OS versions
 
   Some differences might be caught at link time, while other incompatibilities
-  could just sliently lead to undefined behavior during simulation.  Please
+  could just silently lead to undefined behavior during simulation.  Please
   carefully ensure a consistent build configuration, when integrating binary
   SystemC models built from separate sources.
 
-
 -------------------------------------------------------------------------------
-
-
 
 2) What's new in this release?
 ==============================
 
 This version of SystemC contains the "Proof of Concept" simulator
-for the IEEE 1666-2011 SystemC standard. Please consult the IEEE Std
-1666-2011 SystemC Language Reference Manual for details about the
+for the IEEE 1666-2023 SystemC standard. Please consult the IEEE Std
+1666-2023 SystemC Language Reference Manual for details about the
 current SystemC standard.
 
-TLM-2.0 is merged into the main SystemC release since 2.3.0.
-Please see section 10) below for more details related to TLM.
 
-Compared to the 2.3.0 release, this release has the following new items:
+Compared to the 2.3.4 release, this release has the following new items:
 
-  - New features, partially beyond the current IEEE 1666-2011 standard,
-    see section 4.
+  - New features and API changes implemented to reflect the IEEE 1666-2023 revision, see section 3.
+  
+  - Bug fixes and enhancements, see section 4.
 
-  - Experimental features (some disabled by default), see section 5.
+  - Deprecated features, see section 5.
+
+  - Experimental features (some disabled by default), see section 7.
     Testing and feedback welcome via the Accellera SystemC forums
     at http://forums.accellera.org/forum/9-systemc/.
-
-  - Bug fixes, see section 3.
-
+    
   - Updated platform support, see the README.md.
 
 
-3) Bug fixes and enhancements
-=============================
-
-For bug fixes added in 2.3.1 (or before) already, please refer to the previous
-RELEASENOTES.
-
-  - For fixes and enhancements of the embedded TLM-2.0 implementation,
-    please see section 10.
-
-  - Additional changes and cleanups leading to incompatibilities with
-    earlier versions of SystemC are described in section 4.
-
-Following is the list of bug fixes and enhancements for the 2.3.4 release:
-
-  - sc_thread_process: remove dynamic sensitivity before dying
-
-  - sc_cor_qt::stack_protect: don't try to add PROC_EXEC
-
-  - Mark QuickThreads stack non-executable on supported platforms
-
-  - tracing: fix buffer overflow for big datatypes
-
-Following is the list of bug fixes and enhancements for the 2.3.3 release:
-
-  - sc_fxval: consider carry bit during addition/subtraction
-
-  - sc_trace: fix overflow check for tracing signed C integer types
-
-  - sc_trace: fix division by zero when closing an empty trace file
-
-  - sc_trace_file::set_time_unit: report error for invalid timescale units
-
-  - sc_elab_and_sim: guard against modification of argv from sc_main
-
-  - sc_event: remove dynamic sensitivity of processes in destructor
-
-  - Report error when calling wait/next_trigger on empty event lists
-
-  - sc_vector_iter: avoid using std::iterator (deprecated in C++17)
-
-  - Use proper bit in sc_signed_bitref::concat_set
-
-  - Fix immediate triggering of reset during wait(n)
-
-  - Detect calling wait(n) with n <= 0 in (clocked) threads
-
-  - Fix memory corruption during simulation teardown when processes were
-    spawned during end_of_elaboration/start_of_simulation
-
-  - AArch64: fix stack corruption with optimizations disabled
-
-  - sc_fifo_in/out: delete event finder objects
-
-  - sc_port_base: free bind info in destructor
-
-  - sc_host_mutex/semaphore: use C++11, if available
-
-  - sc_start(): detect delta event notifications as activity
-
-Following is the list of bug fixes and enhancements for the 2.3.2 release:
-
-  - Adding support for modern compilers and related cleanups
-    (MSVC 2015, recent GCC/Clang versions)
-
-  - Remove conflict with external Boost library on Intel compiler
-
-  - Fix bitvector element comparisons with char literals
-
-    In 2.3.1, a new boolean conversion for sc_bitref_r had been
-    added, breaking comparisons like bv[0] == '0'.  This extension
-    has been reverted in 2.3.2 and replaced by an "explicit" boolean
-    conversion instead (requires C++11, see section 5).
-
-  - Improve sc_name_gen memory footprint
-
-  - Add support for binding an sc_export during the
-    before_end_of_elaboration() phase.
-
-  - Detect instantiation of an sc_export outside of an sc_module
-
-  - Detect invalid immediate notification of events during elaboration
-    (report an error, instead of causing a crash in some cases)
-
-  - Guard against self-assignment of sc_(and|or)_event_list objects
-
-  - Fix incomplete time advance under the SC_RUN_TO_TIME starvation policy,
-    causing incorrect sc_signal::event() values in some corner cases
-
-  - Fix memory corruption when starting processes in asynchronous
-    reset state (async_reset_signal_is asserted at startup)
-
-  - Avoid accessing invalid memory in the sc_signal writer check
-    in case conflicting writer processes have already terminated.
-
-  - Correctly detect all conflicting signal writes under the
-    SC_MANY_WRITERS writer policy.
-
-  - Improved error checking in sc_fifo implementation
-
-  - Minor enhancements of sc_vector-related classes
-     - enable initialization from outside the current SystemC hierarchy
-     - add stricter check of custom Creator compatibility
-     - sc_vector_iter: enable comparison of compatible iterators
-
-  - Avoid deleting the main fiber on Windows in some cases
-
-  - Improve robustness of non-standard SC_WAIT macros to avoid
-    giving wrong information when mixed with non-macro wait() calls
-
-  - Fix timestamps when enabling tracing of delta cycles,
-    improved tracing implementation
-
-  - Catch unexpected calls to sc_start (e.g. from within a SystemC process)
-
-  - Properly clean up (terminated) processes, releasing their resources
-    once no longer referenced through a process handle
-
-  - Add check for matching C++ standard selection (see section 5)
-
-  - When using pthreads for SystemC thread processes, create them in
-    the "detached" state to reduce resource pressure
-
-  - In the default report handler, close the current and open a new logfile
-    when calling sc_report_handler::set_log_file_name during simulation
-
-  - Fix non-standard sc_simcontext::reset
-     - properly handle sc_reset::reconcile_resets
-     - delete elements in reverse order of creation
-
-  - Cleanup systemc.h
-     - Drop inclusion of 'cstring', 'sstream' by default (see section 4)
-     - Avoid referencing deprecated 'std::gets' on C++11
-
-
-4) New features
+3) New features
 ===============
 
-Here is an overview of changes in 2.3.x compared to 2.3.0.
+Here is an overview of the new features available in 3.0.0.
 
-Note: These features partly add functionality beyond the current
-      IEEE Std. 1666-2011.
+  - New class sc_core::sc_stage_callback_if provides an interface to enable user-defined callbacks during elaboration or simulation stages that are otherwise not available to the application
 
-  - [2.3.4] sc_pvector, removed constructor taking unused int argument
+  - New functions to suspend and unsuspend the simulation kernel
 
-  - [2.3.3] SC_NAMED, a convenience macro for named entities
+  - The constructor macro SC_CTOR now supports additional constructor parameters
 
-    The new macro SC_NAMED(var,args...)  can be used to construct a variable
-    with a SystemC matching name. It passes the identifier converted to a
-    string literal as (first) constructor parameter.  Additional arguments
-    are passed unmodified.  Example:
+  - Class sc_core::sc_event introduces the member function triggered to determine whether an event has recently been triggered
 
-      SC_MODULE(module)
-      {
-        SC_CTOR(module)
-          : SC_NAMED(port_i)    // works in C++03
-          , SC_NAMED(sig, true) // supports multiple parameters
-        {}
-        sc_in<bool>  port_i;
-        sc_out<bool> SC_NAMED(port_o); // in-class member init., requires C++11
-        sc_signal<bool> sig;
-      };
+  - The enumeration type sc_core::sc_time_unit now supports attosecond (sc_core::SC_AS), zeptosecond (sc_core::SC_ZS), and yoctosecond (sc_core::SC_YS)
 
+  - Class sc_core::sc_time supports a constructor passing the time as string argument
 
-  - [2.3.3] Add sc_process_handle::basename() function
+  - New class sc_core::sc_hierarchy_scope provides an interface to allow an application to place objects
+of type sc_core::sc_object in an object hierarchy outside the current hierarchical scope
 
-  - [2.3.2] Extend hierarchical name registry
+  - New functions are defined to register and un-register hierarchical names
 
-    In addition to `sc_hierarchical_name_exists`, four new functions
-    have been added to register a name with the SystemC name hierarchy:
+  - New static object sc_core::sc_unbound can be used in an application to make an unbound (open) connection to a port. In addition, the function sc_core::sc_tie::value(const &T) can be used to tie a
+port to a specified value of type T
 
-      bool sc_register_hierarchical_name(const char* hierarchical_name);
-      bool sc_register_hierarchical_name(const sc_object* parent, const char* name);
-      bool sc_unregister_hierarchical_name(const char* hierarchical_name);
-      bool sc_unregister_hierarchical_name(const sc_object* parent, const char* name);
+  - New definition supports tracing of types sc_core::sc_event and sc_core::sc_time using sc_core::sc_trace
 
-    These functions enable (un)registering an external hierarchical name with
-    the SystemC name hierarchy, e.g. used by the CCI configuration standard.
-    Additionally, two new functions enable obtaining the persistent name pointers
-    stored in the name registry, if they exist:
+  - New functions sc_core::sc_vector::emplace_back and
+sc_core::sc_vector::emplace_back_with_name support making incremental additions to sc_core::sc_vector
 
-      const char* sc_get_hierarchical_name(const char* hierarchical_name);
-      const char* sc_get_hierarchical_name(const sc_object* parent, const char* name);
 
+4) Bug fixes and enhancements
+=============================
 
-  - [2.3.2] Add new RTTI queries and helper class
+For bug fixes added in 2.3.4 (or before) already, please refer to the previous
+RELEASENOTES.
 
-    A new class `sc_type_index` (with C++11 just a typedef to `std::type_index`)
-    is introduced, which helps writing RTTI-related code.
+Following is the list of bug fixes and enhancements for the 3.0.0 release:
 
-    This new type is used by two new inspection functions added to sc_port_base,
-    and sc_export_base, respectively (implemented in their corresponding template
-    classes) to query the RTTI information of the interface types:
+  - Execution speed improvements for the SystemC datatypes
 
-      virtual sc_type_index   sc_port_base::get_interface_type() const = 0;
-      virtual sc_type_index sc_export_base::get_interface_type() const = 0;
+  - Fixed MSVC warnings in examples
 
+  - Fixed automake flow fo datatypes
 
-  - [2.3.2] Add never-notified event: const sc_event sc_event::none
 
-      wait( sc_event::none ); // never triggered
+5) Deprecated features
+======================
 
+Here is an overview of deprecated features:
 
-  - [2.3.2] Add new `sc_time::from_string` functions, `sc_time_tuple` class
+  - Macro SC_HAS_PROCESS is not required anymore and has been deprecated
 
-    With sc_time::from_string, it is now possible to conveniently create
-    time objects from string repesentations (e.g. configuration files):
+  - constructor: sc_time(double,bool) has been deprecated
 
-      sc_time( double v, const char* unit );
-      static sc_time from_string(const char* v);
+  - constructor: sc_time(uint64,bool) has been deprecated
 
-    To simplify the reverse direction, a new class `sc_time_tuple` is
-    introduced, providing separate access to the value and the unit of
-    the time object:
+  - function: sc_set_default_time_unit has been deprecated
 
-      class sc_time_tuple
-      {
-        // ...
-        value_type   value() const; // normalized value (wrt. unit)
-        sc_time_unit unit()  const; // normalized unit
-        const char * unit_symbol() const;
-      };
+  - function: sc_get_default_time_unit has been deprecated 
 
-      sc_time tuple tt = sc_time(10000, SC_NS);
-        tt.value() == 10
-        tt.unit()  == SC_US
 
+6) C++17 support
+================
 
-  - [2.3.1] Improved conversion between the underlying integral time
-    representation and sc_time objects:
-
-    - Add a nested typedef "value_type" to sc_time to enable an
-      implementation-independent use of the underlying integral
-      time representation (see IEEE 1666-2011, 5.11.1).
-
-    - Adding an inverse to the 'sc_time::value()' function to
-      convert a plain value back to an sc_time object:
-        static sc_time sc_time::from_value( value_type t );
-
-    - Adding modulus operators (%, %=) to compute time offsets from
-      clock or quantum boundaries:
-
-        sc_time operator%(const sc_time& lhs, const sc_time& rhs);
-
-        sc_time& sc_time::operator%=();
-
-      Note: These operators are missing from IEEE 1666-2011, which
-            make e.g. the tlm_global_quantum implementation nearly
-            impossible within the limits of the SystemC standard.
-
-
-  - [2.3.1] Add function to determine the current object hierarchy:
-
-      sc_object* sc_core::sc_get_current_object()
-
-    Returns a pointer to the sc_object instance (or NULL) that would
-    currently become the parent object of a newly created sc_object
-    instance (i.e. the current module during elaboration, and the
-    currently active process during simulation).
-
-
-  - [2.3.1] Add an sc_signal initialization which does not create an
-    event via newly provided constructors to the signal classes:
-
-     sc_signal<T>::sc_signal( const char* name
-                            , const T&    initial_value );
-
-    (similarly for sc_buffer and sc_signal_resolved)
-
-    Compared to calling the "write()" function on a signal during
-    the elaboration, these constructors will set the initial value
-    of the signal without triggering an event at the beginning of the
-    simulation (and therefore may avoid triggering sensitive processes).
-
-
-  - [2.3.2] Add common signal base class `sc_signal_channel`
-
-    The new base class for all signal channels reduces the code duplication
-    in the template-based signal implementations.
-
-
-  - [2.3.2] Add support for SC_SIGNAL_WRITE_CHECK=CONFLICT
-
-    Instead of disabling all runtime signal write checks via the
-    environment setting SC_SIGNAL_WRITE_CHECK=DISABLE, setting the
-    variable to SC_SIGNAL_WRITE_CHECK=CONFLICT allows detecting
-    conflicting writes to a signal within a single evaluation phase
-    (see INSTALL).
-
-
-  - [2.3.2] Promote SC_DEFAULT_*_ACTIONS to enum constants
-
-    Previously, the SC_DEFAULT_(INFO,WARNING,ERROR,FATAL)_ACTIONS were
-    defined as macros.  In this release, they are moved into the actions
-    enumeration as constants.
-
-
-  - [2.3.2] Call report handler for exceptions caught outside of sc_main:
-
-    With two new functions added to the sc_report_handler:
-
-      static sc_actions get_catch_actions();
-      static sc_actions set_catch_actions(sc_actions);
-
-    and the new
-
-      SC_DEFAULT_CATCH_ACTIONS = SC_DISPLAY
-
-    it is now possible to externally influence the handling of
-    exceptions caught outside of sc_main.
-
-
-  - [2.3.1] Add a static function to sc_report_handler to query the
-    current report handler function:
-
-      static sc_report_handler_proc sc_report_handler::get_handler();
-
-    Additionally, sc_report_handler::set_handler() now returns the
-    previously set handler (c.f. sc_report_handler::set_actions).
-
-
-  - [2.3.2] Improved conversion from bitvector element references to bool
-
-    Elements of a sc_bv can now be used in an boolean context
-    (requires C++11, see section 5). This enables the following
-    coding style:
-
-      sc_bv<8> mybits;
-      // ...
-      if( mybits[0] ) // no longer a compiler error here!
-        /* do something */ ;
-
-    Note: For logic vectors, the bit-references still need to be
-          converted to bool explicitly (e.g. via the "to_bool()"
-          function.
-
-
-  - [2.3.2] Support for scoped names in VCD trace files
-
-    In VCD trace files, traced variables are now automatically
-    grouped in hierarchical scopes (according to the '.'
-    separators in the trace names).
-
-    This feature can be disabled at compile-time or runtime.
-    See INSTALL.
-
-
-  - [2.3.2] Add VCD tracing support for sc_time and sc_event
-
-    The VCD format supports tracing of "time" and "event"
-    variables by default.  Added new overloads to sc_trace
-    and a corresponding implementation for VCD:
-
-      void sc_trace( sc_trace_file* tf, const sc_time&, const std::string& );
-      void sc_trace( sc_trace_file* tf, const sc_event&, const std::string& );
-
-
-  - [2.3.1] Enhanced Autoconf/Automake build system
-    - better control of the installation directories
-    - improved libtool library dependency detection, especially
-      in cross-compilation scenarios (--host=...)
-    - support for pkg-config for SystemC and TLM
-      (see http://www.freedesktop.org/wiki/Software/pkg-config/)
-    - accept arbitrary GCC-compatible compilers
-      (e.g. Clang, Intel compiler, compiler-wrappers like scan-build)
-    - avoid deprecation warnings, cleanup implementation
-    - less recursive build, silent rules by default
-    - improved "make check" test handling
-
-
-  - [2.3.2] Add support for AArch64 architecture (on Linux)
-
-
-  - [2.3.2] Updated MS Visual C++ project and solution files to include
-    support for Visual Studio 2010 and later
-    - support for 32-bit and 64-bit builds
-    - support for building SystemC dynamic link library (DLL) (see INSTALL)
-    - switch to DLL-based runtime by default (/MD[d])
-
-
-  - [2.3.2] New CMake-based build system (experimental)
-    - unified configuration of the SystemC on different platforms
-    - see cmake/INSTALL_USING_CMAKE
-
-
-5) Incompatibilities with previous releases
-===========================================
-
-Here is a list of known incompatibilities between this release and 2.3.4
-(and earlier):
-
-  - MSVC project files have been upgraded to MSVC 2019.  Building SystemC
-    for earlier versions of MSVC might still be possible, as long as C++17
-    is supported by the compiler.
-
-
-Here is a list of known incompatibilities between this release and 2.3.1
-(and earlier):
-
-  - MSVC project files have been upgraded to MSVC 2010.  Building SystemC
-    for earlier versions of MSVC might still be possible with the new
-    CMake build system (see cmake/INSTALL_USING_CMAKE).
-
-  - Switch to MSVC DLL-based Runtime Library (/MD[d]) instead of using
-    the no longer recommended static variants.
-
-  - The non-standard functions `interface_count` and `if_typename` in
-    sc_port_base have been marked as private.
-
-  - The non-standard, 32-bit implementation of sc_(u)int has been removed.
-
-  - The non-standard macros WAIT, WAITN and WAIT_UNTIL have been
-    renamed to SC_WAIT, SC_WAITN, SC_WAIT_UNTIL.
-
-  - The non-standard macros SCAST, CCAST, RCAST have been removed.
-
-  - The implicit inclusions of the system-headers "cstring" and "sstream"
-    have been removed.  See INSTALL.
-
-
-Here is a list of known incompatibilities between this release and 2.3.0
-(and earlier):
-
-  - The non-standard sc_time constructors
-      - sc_time( uint64, bool scale )
-      - sc_time( double, bool scale )
-    have been deprecated and issue a warning when being used.
-    Use the new 'sc_time::from_value' function instead (see section 3).
-
-  - The non-standard function 'sc_object::get_parent()' has been
-    deprecated, use 'sc_object::get_parent_object()' instead.
-
-  - The non-standard function 'sc_signal::get_new_value()' has been
-    deprecated (as required by IEEE 1666-2011).
-
-  - The 'sc_string_old' class is no longer available by default.
-    Define 'SC_USE_SC_STRING_OLD' before including "systemc.h",
-    see INSTALL.
-
-  - The implicit inclusions of the system-headers "windows.h" (on Windows),
-    "cstring", "sstream" and (deprecated) "strstream" have been removed.
-    See INSTALL.
-
-
-Here is a list of known incompatibilities between this release and 2.2.0:
-
-  - The order that processes (SC_METHODs and SC_THREADs) are dispatched
-    for execution may be different than the order with SystemC 2.2.0 for
-    some SystemC programs. This is related to the new starvation policy
-    support for the sc_start() function introduced with IEEE 1666_2011.
-
-
-6) Initial support for C++11/14
-===============================
-
-This package includes an initial implementation of the C++11/14 proposal,
-presented at DVCon Europe 2016 ("Moving SystemC to a new C++ Standard").
-
-This includes the addition of two new preprocessor symbols:
-
- - IEEE_1666_CPLUSPLUS (read-only)
-
-   This symbol indicates the availability of certain SystemC features
-   which depend on a particular version of the ISO C++ standard (see below).
-
- - SC_CPLUSPLUS (overridable)
-
-   By default, the most recent supported version of the C++ standard for the
-   current platform/compiler is automatically detected and reflected by the
-   SC_CPLUSPLUS macro.
-
-   Users can override (i.e. usually downgrade) the assumed C++ standard to an
-   earlier version for compatiblity.  The value of this macro has to be set
-   consistently across the SystemC library build and all linked models
-   (see INSTALL).
-
-
-The values of these macros follow the values defined by the C++ standards.
-Currently supported versions are:
-
- - 199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
- - 201103L (C++11, ISO/IEC 14882:2011)
- - 201402L (C++14, ISO/IEC 14882:2014)
- - 201703L (C++17, ISO/IEC 14882:2017)
-
-
-The following features currently require a dedicated C++ standard version
-beyond ISO/IEC 14882:2003 (aka C++03):
-
- - C++11 (IEEE_1666_CPLUSPLUS==201103L)
-
-   o explicit sc_bitref_r<>::operator bool() const
-
-     Restricts direct boolean conversion of bitvector element references
-     to explicit boolean contexts (e.g. `if` expressions).
-     Use the `to_bool()` function on earlier setups.
-
-   o On C++11-enabled platforms, the embedded Boost implementation is
-     superseded by using standard C++11 features.
-
-   o Convert sc_bind/sc_(c)ref macros to functions
-
-     With the support of perfect forwarding since C++11, the dynamic process
-     support macros sc_bind/sc(c)ref have been propagated to real functions
-     in the namespace sc_core.
-
-     For backwards compatibility, these functions are still made visible
-     in the global namespace, unless the macro SC_BIND_IN_GLOBAL_NAMESPACE
-     is explicitly defined to 0.
-
-   o On C++11-enabled platforms, SC_NAMED uses uniform initialization
-     syntax (regular () form on C++03)
-
-In the future, further language features depending on modern C++ language
-constructs may be added.
+IEEE 1666-2023 mandates C++17 as the baseline for SystemC implementations. 
+string_view is used in new APIs. However, const char * are still used 
+in several locations and will be progressively cleaned-up in the upcoming releases.
 
 
 7) Experimental features
 ========================
 
-In this section the experimental features of this release are listed.
-
-Note: Some of these features are not enabled in the default library
-      configuration and need to be explicitly activated during at
-      library build time.  See INSTALL file.
+Some of these features are not enabled in the default library
+configuration and need to be explicitly activated during at
+library build time.  See INSTALL file.
 
 
 8) Known Problems
 =================
 
-  - When building SystemC on Cygwin for the x86_64 platform with
-    QuickThreads support, thread processes are not starting properly.
-    Build with pthreads on this platform instead:
-      ../configure --enable-pthreads ...
+  - This implementation currently truncates "small" sc_time objects to  SC_ZERO_TIME,
+    while "too big” objects wrap-around sc_max_time() and lead to a value modulo the
+    maximum time.  In both cases, no warning is generated, even though such a warning
+    is mandated by IEEE 1666-2023
+
+  - Some typos have not been fixed in the version of the IEEE 1666-2023 document available 
+    online, but have been implemented in this release:
+      - the following stage callbacks are implemented
+        void sc_register_stage_callback( sc_stage_callback_if&, int );
+        void sc_unregister_stage_callback( sc_stage_callback_if&, int );
+      - static const sc_event & none(); is implemented
+      - IEEE_1666_SYSTEMC is set to 202301L
 
 
-  - IEEE 1666-2011 does not explicitly define the behaviour in the corner
-    cases of attempting to create sc_time objects smaller than the time
-    resolution or bigger than sc_max_time().  This implementation currently
-    truncates "small" sc_time objects to SC_ZERO_TIME, while "too big"
-    objects wrap-around sc_max_time() and lead to a value modulo the
-    maximum time.  In both cases, no warning is generated.
+  - The SystemC non regression test suite still available does not take into account 
+    all the alignments done in the reference implementation to align to IEEE 1666-2023. 
+    Therefore, the non regression tests might not compile or not behave as expected, 
+    this will be fixed in an upcoming delivery.
 
 
   - The sign-extension of mixed-signedness logic expressions (&,|)
@@ -718,17 +260,6 @@ Note: Some of these features are not enabled in the default library
 
 SystemC contains a fixed-point datatypes package.
 
-Changes compared to SystemC 2.0.1
-
-  - support for explicit construction from "float" values
-
-  - removing a conversion ambiguity by marking some constructors of
-    sc_fxval[_fast] classes as 'explicit'
-
-  - sc_fxnum::to_{integer} fully defined and accurate
-
-  - read-only fixed-point bitrefs/subrefs returned from const values
-
 Compile-time macro SC_INCLUDE_FX must be defined in order to build
 applications that use fixed point types. You can specify a compiler
 flag, e.g., g++ -DSC_INCLUDE_FX ... or use a define statement before
@@ -745,106 +276,3 @@ types sc_int, sc_uint, sc_bigint, sc_biguint), compilation time can be
 reduced by defining compile-time macro SC_FX_EXCLUDE_OTHER (in addition
 to SC_INCLUDE_FX).
 
-
-10) TLM Release Notes
-====================
-
-CONTENTS
-========
-
-  1) Supported SystemC versions
-  2) What's changed in this kit?
-  3) Known issues
-
-
-10.1) Supported SystemC versions
-===============================
-
-Starting with the current release, only the bundled SystemC version is supported.
-Parts of the TLM implementation are now linked into the kernel library.
-
-
-10.2) What's changed in this kit?
-================================
-
-Compared to the TLM 2.0.3 kit (part of SystemC 2.3.1), the following has changed:
-
- - [2.0.6] tlm_fifo_get_if: resolve nb_peek ambiguity
-
- - [2.0.6] tlm_base_*_socket: implement get_protocol_types()
-
- - [2.0.6] tlm_base_socket_if: match existing functions in tlm_base_*_socket_b
-
- - [2.0.5] Fixed a regression introduced in 2.0.4, now allowing hierarchical
-   binding of multi_passthrough_target_sockets again.
-
- - [2.0.5] tlm_req_rsp_channel: remove erroneous private inheritance
-
-
- - [2.0.4] A new base interface `tlm_socket_base_if` has been added to the TLM
-   socket classes, providing a non-templated access to some socket information:
-
-    o querying of protocol types (returning an `sc_type_index`, see above)
-    o querying of socket category
-      (TLM_INITIATOR_SOCKET, TLM_TARGET_SOCKET, TLM_MULTI_*_SOCKET)
-    o querying port/export base (`get_base_port`/`get_base_export`)
-    o querying bus width
-
-
- - [2.0.4] Move parts of TLM-2.0 library into prebuilt SystemC (shared) library
-
-   By moving the TLM extension and phase registries and the global quantum
-   handling into the prebuilt SystemC library, the global variables in these
-   parts of TLM are more deterministically handled in case of dynamically
-   linked models.
-
-   Note: With this change, the TLM-2.0 headers from this package can only
-         be used in conjunction with the matching SystemC kernel sources.
-
-
- - [2.0.4] Improved error handling in convenience sockets
-
-   All error checking on the convenience sockets now consistently report
-   the affected socket name (and kind) to help tracking down their origin.
-
-
- - [2.0.4] tlm_utils::simple_target_socket: only spawn b2nb_thread, if needed
-
-   The blocking-to-nonblocking conversion thread is only spawned in
-   case there is no b_transport callback but only an nb_transport callback
-   registered.
-
-   Note: With this change, classes inheriting from simple_target_socket
-         need to call the base class' start_of_simulation() callback
-         in case it is overridden in the derived class.
-
-
- - [2.0.4] Fix regression introduced in 2.0.3 to allow using the optional
-   sc_port_policy SC_ZERO_OR_MORE_BOUND for
-   tlm_utils::multi_passthrough_target_socket again.
-
- - [2.0.4] Fix memory corruption in tlm::circular_buffer<T>::clear.
-
- - [2.0.4] Prefer using `sc_assert' over plain `assert'.
-
- - [2.0.4] Hide warnings on some compilers about hidden overloads of virtual
-   bind functions in TLM target socket.
-
- - [2.0.4] Minor cleanups and improved compiler support.
-
-
-10.3) Known issues
-=================
-
-a. The tlm_simple_target_socket in tlm_utils does not obey the END_REQ rule
-   when only an nb_ call is registered, an b_ call is being handled in the
-   socket and there is an nb_ call coming in at the same time. In this case
-   the incoming nb_ call will be forwarded to the registered nb_ call without
-   checking whether the earlier b_ call has passed the END_REQ timing point.
-
-b. The implementation of the PEQ 'peq_with_get' in tlm_utils does not properly
-   distinguish between immediate notifications and delta notifications. In the
-   case that a immediate and delta notification happen at the same simulation
-   time both types of notifications emerge from the PEQ in the same evaluation
-   phase. This is wrong immediate notifications should overtake delta
-   notifications.
