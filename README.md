@@ -65,7 +65,7 @@ About Accellera SystemC Working Groups
 --------------------------------------
 
   Accellera's SystemC [Language Working Group][3] (SystemC LWG) is one of the
-  16 Accellera Working Groups that produce effective and efficient Electronic
+  Accellera Working Groups that produce effective and efficient Electronic
   Design Automation (EDA) and Intellectual Property (IP) standards for today's
   advanced IC designs and embedded systems.  The SystemC LWG is responsible for
   the definition and development of the SystemC and TLM core languages, the

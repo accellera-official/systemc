@@ -30,7 +30,6 @@ How to Contribute
 [5]: https://forums.accellera.org/forum/9-systemc/
 [6]: https://workspace.accellera.org/site/login
 
-
 ---------------------------------------------------------------------
 Issue reporting
 ---------------------------------------------------------------------
