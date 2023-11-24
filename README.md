@@ -57,7 +57,7 @@ About SystemC
 
   * [SystemC community website](https://systemc.org/)
 
-  * [Community discussion forum ](https://forums.accellera.org/forum/9-systemc/)
+  * [Community discussion forum](https://forums.accellera.org/forum/9-systemc/)
 
 About Accellera SystemC Working Groups
 --------------------------------------
