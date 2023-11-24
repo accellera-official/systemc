@@ -76,6 +76,7 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
+class sc_stub_registry;
 
 extern sc_simcontext* sc_get_curr_simcontext();
 
@@ -252,6 +253,7 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
     sc_stage_callback_registry* get_stage_cb_registry();
+    sc_stub_registry* get_stub_registry();
 
     std::string construct_hierarchical_name(const sc_object* parent,
                                             const std::string& name);
@@ -393,6 +395,7 @@ private:
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
     sc_stage_callback_registry* m_stage_cb_registry;
+    sc_stub_registry*           m_stub_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -578,6 +581,13 @@ sc_stage_callback_registry*
 sc_simcontext::get_stage_cb_registry()
 {
     return m_stage_cb_registry;
+}
+
+inline
+sc_stub_registry*
+sc_simcontext::get_stub_registry()
+{
+    return m_stub_registry;
 }
 
 inline
