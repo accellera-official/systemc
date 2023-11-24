@@ -290,7 +290,7 @@ sc_lv_base::set_bit( int i, value_type value )
     sc_digit mask = SC_DIGIT_ONE << bi;
     m_data[wi] |= mask; // set bit to 1
     m_ctrl[wi] |= mask; // set bit to 1
-    m_data[wi] &= value << bi | ~mask;
+    m_data[wi] &= (value&1) << bi | ~mask;
     m_ctrl[wi] &= value >> 1 << bi | ~mask;
 }
 
