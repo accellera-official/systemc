@@ -45,6 +45,7 @@ class SC_API sc_prim_channel
 : public sc_object
 {
     friend class sc_prim_channel_registry;
+    friend class sc_stub_registry;
 
 public:
     virtual const char* kind() const
