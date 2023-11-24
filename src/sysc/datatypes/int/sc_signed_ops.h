@@ -205,7 +205,7 @@ const sc_signed operator+( const sc_int_base& left, const sc_signed& right )
     { return operator+((int64)left, right); }
 
 inline
-const sc_signed operator+( const sc_uint_base& left, sc_signed& right )
+const sc_signed operator+( const sc_uint_base& left, const sc_signed& right )
     { return operator+((uint64)left, right); }
 
 inline
