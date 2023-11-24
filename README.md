@@ -13,7 +13,7 @@ About SystemC
   functional verification, and high-level synthesis.  The SystemC API and
   its semantics are developed by the [Accellera Systems Initiative][1] and
   formally standardized and governed by the IEEE in the
-  [IEEE Std. 1666-2013][2] standard.
+  [IEEE Std. 1666-2023][2] standard.
 
   This version of SystemC is the **reference implementation** provided by
   the [Accellera Systems Initiative][1] and is mainly developed by the following
@@ -55,11 +55,9 @@ About SystemC
 
 ### SystemC Community
 
-  * SystemC community website  
-    https://systemc.org/
+  * [SystemC community website](https://systemc.org/)
 
-  * Community discussion forum  
-    https://forums.accellera.org/forum/9-systemc/
+  * [Community discussion forum ](https://forums.accellera.org/forum/9-systemc/)
 
 About Accellera SystemC Working Groups
 --------------------------------------
