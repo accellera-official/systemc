@@ -41,6 +41,21 @@
 
 QTIsaac<8> rng;		// Platform independent random number generator.
 
+// sign_bit = number of sign bit from 1 to 32
+
+signed int  sign_extend(signed int target, unsigned int sign_bit)
+{                   
+    signed int result;
+    unsigned int bit_mask = (1u << (sign_bit-1));
+    if ( target & bit_mask ) {
+        result = target | (~0u << (sign_bit-1));
+    }               
+    else {          
+        result = target & ~(~0u << (sign_bit-1));
+    }                   
+    return result;  
+}
+
 void
 check_string( const sc_signed& z, int v )
 {
@@ -78,12 +93,8 @@ sc_main( int argc, char* argv[] )
                     signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
                     signed int tqi;
 
-                    if (qi & (1 << (i - 1))) {
-                        qi = (qi << (32 - i)) >> (32 - i);
-                    }
-                    if (qj & (1 << (j - 1))) {
-                        qj = (qj << (32 - j)) >> (32 - j);
-                    }
+		    qi = sign_extend(qi,i);
+		    qj = sign_extend(qj,j);
 
                     x = qi;
                     tqi = qi;
@@ -105,21 +116,21 @@ sc_main( int argc, char* argv[] )
 
                     x += y;
                     tqi += qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x -= y;
                     tqi -= qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x *= y;
                     tqi *= qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     if (y != 0) {
@@ -127,14 +138,14 @@ sc_main( int argc, char* argv[] )
                         tqi = qi;
                         x /= y;
                         tqi /= qj;
-                        tqi = (tqi << (32 - i)) >> (32 - i);
+                        tqi = sign_extend(tqi,i);
                         sc_assert( x == tqi );
 
                         x = qi;
                         tqi = qi;
                         x %= y;
                         tqi %= qj;
-                        tqi = (tqi << (32 - i)) >> (32 - i);
+                        tqi = sign_extend(tqi,i);
                         sc_assert( x == tqi );
                     }
 
@@ -142,36 +153,36 @@ sc_main( int argc, char* argv[] )
                     tqi = qi;
                     x &= y;
                     tqi &= qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x |= y;
                     tqi |= qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     x = qi;
                     tqi = qi;
                     x ^= y;
                     tqi ^= qj;
-                    tqi = (tqi << (32 - i)) >> (32 - i);
+                    tqi = sign_extend(tqi,i);
                     sc_assert( x == tqi );
 
                     if (jj < i - 1) {
                         x = qi;
                         tqi = qi;
                         x <<= jj;
-                        tqi <<= jj;
-                        tqi = (tqi << (32 - i)) >> (32 - i);
+                        tqi = ((unsigned int)tqi) << jj;
+                        tqi = sign_extend(tqi,i);
                         sc_assert( x == tqi );
 
                         x = qi;
                         tqi = qi;
                         x >>= jj;
                         tqi >>= jj;
-                        tqi = (tqi << (32 - i)) >> (32 - i);
+                        tqi = sign_extend(tqi,i);
                         sc_assert( x == tqi );
                     }
                 }

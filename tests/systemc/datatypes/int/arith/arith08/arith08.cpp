@@ -46,6 +46,21 @@ QTIsaac<8> rng;		// Platform independent random number generator.
         cout << #A << " (" << A << ") != " << #B << "(" << B << ")" << endl; \
 }
 
+// sign_bit = number of sign bit from 1 to 32
+
+inline signed int  sign_extend(signed int target, unsigned int sign_bit)
+{                   
+    signed int result;
+    unsigned int bit_mask = (1u << (sign_bit-1));
+    if ( target & bit_mask ) {
+        result = target | (~0u << (sign_bit-1));
+    }               
+    else {          
+        result = target & ~(~0u << (sign_bit-1));
+    }                   
+    return result;  
+}
+
 int
 sc_main(int, char**)
 {
@@ -72,12 +87,8 @@ sc_main(int, char**)
                     signed int qj = (jj < 5) ? valj[jj] :
 		                               (rng.rand() & ((1 << j) - 1));
 
-                    if (qi & (1 << (i - 1))) {
-                        qi = (qi << (32 - i)) >> (32 - i);
-                    }
-                    if (qj & (1 << (j - 1))) {
-                        qj = (qj << (32 - j)) >> (32 - j);
-                    }
+		    qi = (qi << (32 - i)) >> (32 - i);
+		    qj = sign_extend(qj,j);
 
                     x = qi;
                     y = qj;
