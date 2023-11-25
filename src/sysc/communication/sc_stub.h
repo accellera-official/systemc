@@ -31,10 +31,69 @@
 
 #include "sysc/communication/sc_signal_ifs.h"
 #include "sysc/communication/sc_prim_channel.h"
+#include "sysc/communication/sc_communication_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 
 namespace sc_core {
+
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_stub_registry (implementation-defined)
+//
+//  Registry for stubs. 
+// ----------------------------------------------------------------------------
+
+class sc_stub_registry
+{
+  friend class sc_simcontext;
+
+public:
+  void insert( sc_prim_channel* stub_ ) {
+    if( sc_is_running() ) {
+      SC_REPORT_ERROR( SC_ID_INSERT_STUB_, "simulation running" );
+      return;
+    }
+
+    if( m_simc->elaboration_done() ) {
+      SC_REPORT_ERROR( SC_ID_INSERT_STUB_, "elaboration done" );
+      return;
+    }
+
+    // insert
+    m_stub_vec.push_back( stub_ );
+  }
+
+  int size() const { 
+    return static_cast<int>(m_stub_vec.size());
+  }
+
+  void clear() { 
+    for (int i = 0; i < size(); i++) {
+      delete m_stub_vec[i];
+    }
+  }
+
+private:
+  // constructor
+  explicit sc_stub_registry( sc_simcontext& simc_ )
+  :  m_stub_vec(),  m_simc( &simc_ ) { }
+
+  // destructor
+  ~sc_stub_registry() {
+    clear();
+  };
+
+private:
+    std::vector<sc_prim_channel*> m_stub_vec;
+    sc_simcontext*                m_simc;
+
+private:
+    // disabled
+    sc_stub_registry();
+    sc_stub_registry( const sc_stub_registry& );
+    sc_stub_registry& operator = ( const sc_stub_registry& );
+};
 
 
 // ----------------------------------------------------------------------------
@@ -105,7 +164,9 @@ struct sc_unbound_impl // implementation-defined
   template < typename T >
   operator sc_core::sc_signal_inout_if<T> & () const
   {
-    return *(new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_unbound")));
+    sc_core::sc_stub<T>* stub = new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_unbound"));
+    sc_get_curr_simcontext()->get_stub_registry()->insert(dynamic_cast<sc_core::sc_prim_channel*>(stub));
+    return *stub;
   }
 }; // struct sc_unbound_impl
 
@@ -155,7 +216,9 @@ namespace sc_tie {
   template < typename T >
   sc_core::sc_signal_in_if<T>& value(const T& val)
   {
-    return *(new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_tie::value"), val));
+    sc_core::sc_stub<T>* stub = new sc_core::sc_stub<T>(sc_core::sc_gen_unique_name("sc_tie::value"), val);
+    sc_get_curr_simcontext()->get_stub_registry()->insert(dynamic_cast<sc_core::sc_prim_channel*>(stub));
+    return *stub;
   }
 
 } // namespace sc_tie

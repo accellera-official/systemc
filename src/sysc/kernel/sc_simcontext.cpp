@@ -51,6 +51,7 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_prim_channel.h"
+#include "sysc/communication/sc_stub.h"
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_list.h"
@@ -310,6 +311,7 @@ sc_simcontext::init()
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
     m_stage_cb_registry = new sc_stage_callback_registry( *this );
+    m_stub_registry = new sc_stub_registry( *this );
     m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
@@ -366,6 +368,7 @@ sc_simcontext::clean()
     // remove remaining zombie processes
     do_collect_processes();
 
+    delete m_stub_registry;
     delete m_method_invoker_p;
     delete m_error;
     delete m_cor_pkg;
@@ -398,7 +401,7 @@ sc_simcontext::clean()
 sc_simcontext::sc_simcontext() :
     m_object_manager(0), m_module_registry(0), m_port_registry(0),
     m_export_registry(0), m_prim_channel_registry(0),
-    m_stage_cb_registry(0), m_name_gen(0),
+    m_stage_cb_registry(0), m_stub_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
     m_write_check(SC_SIGNAL_WRITE_CHECK_DEFAULT_), m_next_proc_id(-1),
     m_child_events(), m_child_objects(), m_delta_events(), m_timed_events(0),

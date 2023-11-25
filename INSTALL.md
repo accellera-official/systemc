@@ -7,7 +7,7 @@ Installation Notes for SystemC
  * [SystemC Library Configuration Switches][config]
 
 > **Note**  
->  A new CMake-based build system for SystemC is part of this distribution,
+>  A CMake-based build system for SystemC is part of this distribution,
 >  which unifies the configuration of the SystemC sources on different Unix
 >  and Windows platforms. It is able to generate the necessary files to
 >  compile/install SystemC using different command-line build tools (e.g.
@@ -25,7 +25,6 @@ SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
   * Linux
     * Architectures
-      - x86 (32-bit)
       - x86_64 (64-bit)
       - x86 (32-bit) application running on x86_64 (64-bit) kernel  
         (`../configure --host=i686-linux-gnu`)
@@ -36,37 +35,17 @@ SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
   * Mac OS X
     * Architectures
-      - x86 (32-bit)
       - x86_64 (64-bit)
       - powerpc (32-bit)   [deprecated]
       - powerpc64 (64-bit) [deprecated]
     * Compilers
-      - GNU C++ compiler
-      - Clang C++ compiler
-      - or compatible
-
-  * Solaris
-    * Architectures
-      - SPARC (32-bit)
-    * Compilers
-      - GNU C++ compiler
-      - Sun/Solaris Studio
-
-  * BSD
-    * Architectures
-      - x86 (32-bit)
-      - x86_64 (64-bit)
-    * Compilers
-      - GNU C++ compiler
       - Clang C++ compiler
       - or compatible
 
   * Windows
     * Compatibility layer
-      - Cygwin
       - MinGW / MSYS
     * Architectures
-      - x86 (32-bit)
       - x86_64 (64-bit)
     * Compilers
       - GNU C++ compiler
@@ -86,8 +65,8 @@ Sources for Compilers and Related Tools
 To build, install, and use SystemC on UNIX platforms, you need
 the following tools:
 
-  1. GNU C++ compiler (version 3.4 or later), or
-     Clang C++ compiler (version 3.0 or later)
+  1. GNU C++ compiler (version 9.3 or later), or
+     Clang C++ compiler (version 13.0 or later)
   2. GNU Make (gmake)
 
 GCC, Clang, and gmake are free software that you can
@@ -103,7 +82,7 @@ Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
-  1. Change to the top level directory (e.g. `systemc-2.3.3`)
+  1. Change to the top level directory (e.g. `systemc-3.0.0`)
 
   2. Create a temporary directory, e.g.,
      ```bash
@@ -156,16 +135,16 @@ To install SystemC on a UNIX system, do the following steps:
      need to use the `sh ../configure` command instead of `../configure`.
      Otherwise, 'csh' will attempt to 'configure' itself.
 
-     SystemC 2.3 includes a fixed-point package that is always built.
+     SystemC 3.0 includes a fixed-point package that is always built.
      When compiling your applications with fixed-point types, you still have
-     to use compiler flag `-DSC_INCLUDE_FX`. Note that compile times increase
+     to use compiler flag `-DSC_INCLUDE_FX`. Note that compile times might increase
      when using this compiler flag.
 
      In case you want to install the package in another place than the
      top level directory, configure the package e.g. as follows:
 
      ```bash
-     ../configure --prefix=/usr/local/systemc-2.3.3
+     ../configure --prefix=/usr/local/systemc-3.0.0
      ```
 
      Note: _Make sure you have created the target directory before installing
