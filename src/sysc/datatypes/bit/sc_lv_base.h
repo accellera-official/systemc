@@ -290,7 +290,7 @@ sc_lv_base::set_bit( int i, value_type value )
     sc_digit mask = SC_DIGIT_ONE << bi;
     m_data[wi] |= mask; // set bit to 1
     m_ctrl[wi] |= mask; // set bit to 1
-    m_data[wi] &= value << bi | ~mask;
+    m_data[wi] &= (value&1) << bi | ~mask;
     m_ctrl[wi] &= value >> 1 << bi | ~mask;
 }
 
@@ -301,12 +301,13 @@ sc_lv_base::clean_tail()
 {
     int wi = m_size - 1;
     int bi = m_len % SC_DIGIT_SIZE;
-    sc_digit mask = ~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - bi);
-	if ( mask )
-	{
-		m_data[wi] &= mask;
-		m_ctrl[wi] &= mask;
-	}
+    sc_digit mask = ~SC_DIGIT_ZERO;
+    if ( bi != 0 ) { mask = mask >> (SC_DIGIT_SIZE - bi); }
+    if ( mask )
+    {
+        m_data[wi] &= mask;
+        m_ctrl[wi] &= mask;
+    }
 }
 
 
