@@ -188,11 +188,14 @@ using namespace sc_dt;
 
 void adjust_signed_hod( size_t width, sc_dt::sc_digit* digits )
 {
-    int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(width-1);
-    shift = shift > 0 ? shift : 0;
+    int hob = SC_BIT_INDEX(width-1);
     int hod = SC_DIGIT_COUNT(width) - 1;
-    std::make_signed<sc_digit>::type  high_digit = digits[hod];
-    digits[hod] = ( (high_digit << shift) >> shift);
+    sc_digit high_digit = digits[hod];
+    if ( (1u << hob) & high_digit ) 
+        high_digit = high_digit | (~0u << hob) ;
+    else
+        high_digit = high_digit & ~(~0u << hob);
+    digits[hod] = high_digit;
 }
 
 void adjust_unsigned_hod( size_t width, sc_dt::sc_digit* digits )

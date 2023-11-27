@@ -41,6 +41,20 @@
 
 QTIsaac<8> rng;		// Platform independent random number generator.
 
+signed int  sign_extend(signed int target, unsigned int sign_bit)
+{
+    signed int result;
+    unsigned int bit_mask = (1u << sign_bit);
+    if ( target & bit_mask ) {
+        result = target | (~0u << sign_bit);
+    }
+    else {
+        result = target & ~(~0u << sign_bit); 
+    }
+    return result;
+}
+
+
 void
 check_string( const sc_signed& z, int v )
 {
@@ -82,12 +96,8 @@ sc_main( int argc, char* argv[] )
                     signed int qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
                     signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
 
-                    if (qi & (1 << (i - 1))) {
-                        qi = (qi << (32 - i)) >> (32 - i);
-                    }
-                    if (qj & (1 << (j - 1))) {
-                        qj = (qj << (32 - j)) >> (32 - j);
-                    }
+		    qi = sign_extend(qi, i-1);
+		    qj = sign_extend(qj, j-1);
 
                     x = qi;
                     sc_assert( x == qi );
