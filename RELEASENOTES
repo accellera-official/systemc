@@ -54,18 +54,18 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
       - Microsoft Visual Studio 2019 (14.2) (Win32 and x64)
 
    Warning: The fixed-point datatypes are not working as defined on
-   MSVC 2015/2017 (x64) in Release mode. 
+   MSVC 2017 and later in Release x64 mode. 
 
 
   This release has not been tested or is known not to work as expected
   on the following formerly supported platforms:
 
-   * GNU C++ compiler versions prior to 4.2.x (all platforms)
+   * GNU C++ compiler versions prior to 9.3.0 (all platforms)
    * FreeBSD 9.0 or later (x86, x86_64) with GNU C++ compiler
    * HP-UX 11.00 or later with GNU C++ or HP C++ compiler
    * Sun/Oracle Solaris, with GNU C++ or Sun/Solaris Studio compiler
    * Mac OS X prior to 10.12 (Sierra) and/or on the x86, PowerPC architectures
-   * Microsoft Visual C++ versions prior to 10.0 (2010)
+   * Microsoft Visual C++ versions prior to 2017 (15.0)
    * Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
    * Msys/MinGW32 GNU C++ compiler
 
@@ -154,7 +154,7 @@ Following is the list of bug fixes and enhancements for the 3.0.0 release:
 
   - Fixed MSVC warnings in examples
 
-  - Fixed automake flow fo datatypes
+  - Fixed automake flow for datatypes
 
 
 5) Deprecated features
