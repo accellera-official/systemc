@@ -324,7 +324,7 @@ sc_time::to_seconds() const
         return 0.0;
     time_params->time_resolution_fixed = true;
     return ( sc_dt::uint64_to_double( m_value ) *
-        time_params->time_resolution  / time_values[0] ); 
+        ( time_params->time_resolution / time_values[0] ) ); 
 }
 
 
