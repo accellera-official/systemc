@@ -1,5 +1,4 @@
-Installation Notes for SystemC
-==============================
+# Installation Notes for SystemC
 
 **Contents**
  * [Installation Notes for Unix][unix]
@@ -15,11 +14,9 @@ Installation Notes for SystemC
 >  or Kdevelop). The installation notes for SystemC using CMake can be
 >  found in the file [cmake/INSTALL_USING_CMAKE][cmake].
 
-Installation Notes for Unix
-===========================
+# Installation Notes for Unix
 
-System Requirements
--------------------
+## System Requirements
 
 SystemC can be installed on the following UNIX, or UNIX-like platforms:
 
@@ -59,8 +56,7 @@ The [RELEASENOTES](RELEASENOTES.md) file contains a list of detailed platforms,
 architectures, and compiler versions that have been used for testing this release.
 
 
-Sources for Compilers and Related Tools
----------------------------------------
+## Sources for Compilers and Related Tools
 
 To build, install, and use SystemC on UNIX platforms, you need
 the following tools:
@@ -77,22 +73,13 @@ obtain from the following sources:
   * gmake   http://www.gnu.org/software/make/make.html
 
 
-Basic SystemC Installation
---------------------------
+## Basic SystemC Installation
 
 To install SystemC on a UNIX system, do the following steps:
 
   1. Change to the top level directory (e.g. `systemc-3.0.0`)
 
-  2. Create a temporary directory, e.g.,
-     ```bash
-     mkdir objdir
-     ```
-  3. Change to the temporary directory, e.g.,
-     ```bash
-     cd objdir
-     ```
-  4. Choose your compiler by setting the `CXX` environment variable
+  2. Choose your compiler by setting the `CXX` environment variable
      (the configure script tries to guess the default compiler, if
       this step is omitted).
      If you use a POSIX-compatible shell (e.g. bash):
@@ -112,14 +99,29 @@ To install SystemC on a UNIX system, do the following steps:
      ```sh
      setenv CXX g++
      ```
-     For the Sun/Solaris Studio compilers, use
-     ```bash
-     setenv CXX CC
-     ```
      You can also specify an absolute path to the compiler of your choice.
      See also the Section [Compilation and Linking Options][comp] below.
 
-  5. **Configure the package** for your system, e.g.,
+  3. Generate the configuration executable (only for git clone)
+
+     Note: _This step is required when using a git clone. It requires  the GNU auto-tools `libtoolize`, `aclocal`, `automake`, and `autoconf`.
+     A SystemC release already contains the configuration executable so this step can be ignored._
+
+     ```bash
+     ./config/bootstrap
+     ```
+
+  4. Create a temporary directory, e.g.,
+     ```bash
+     mkdir objdir
+     ```
+
+  5. Change to the temporary directory, e.g.,
+     ```bash
+     cd objdir
+     ```
+
+  6. **Configure the package** for your system, e.g.,
      (The `configure` script is explained below.)
 
      ```bash
@@ -197,8 +199,6 @@ To install SystemC on a UNIX system, do the following steps:
        --enable-debug          include debugging symbols
        --disable-optimize      disable compiler optimization
        --enable-pthreads       use POSIX threads for SystemC processes
-       --enable-phase-callbacks
-                               enable simulation phase callbacks (experimental)
      ```
 
      See the section on the general usage of the `configure` script and
@@ -212,7 +212,7 @@ To install SystemC on a UNIX system, do the following steps:
             package already, you should run a `gmake clean` before
             recompiling._
 
-  6. **Compile the package**
+  7. **Compile the package**
 
      ```bash
      gmake
@@ -222,7 +222,7 @@ To install SystemC on a UNIX system, do the following steps:
             been removed in this package.  Use the corresponding
             options to the configure script instead._
 
-  7. At this point you may wish to verify the compiled package by
+  8. At this point you may wish to verify the compiled package by
      testing the example suite.
 
      ```bash
@@ -232,32 +232,32 @@ To install SystemC on a UNIX system, do the following steps:
      This will compile and run the examples in the subdirectory
      examples.
 
-  8. **Install the package**
+  9. **Install the package**
 
      ```bash
      gmake install
      ```
 
-  9. You can now remove the temporary directory, .e.g,
+  10. You can now remove the temporary directory, .e.g,
 
-     ```bash
-     cd ..
-     rm -rf objdir
-     ```
+      ```bash
+      cd ..
+      rm -rf objdir
+      ```
 
-     Alternatively, you can keep the temporary directory to allow you to
-     1) Experiment with the examples.
-     2) Later uninstall the package.
+      Alternatively, you can keep the temporary directory to allow you to
+      1) Experiment with the examples.
+      2) Later uninstall the package.
      
-     To clean up the temporary directory, enter:
-     ```bash
-     gmake clean
-     ```
+      To clean up the temporary directory, enter:
+      ```bash
+      gmake clean
+      ```
 
-     To uninstall the package, enter:
-     ```bash
-     gmake uninstall
-     ```
+      To uninstall the package, enter:
+      ```bash
+      gmake uninstall
+      ```
 
 ### Running the Examples
 
@@ -323,8 +323,7 @@ Note for (key) developers:
     GNU auto-tools `aclocal`, `automake`, and `autoconf`.
 
 
-Compilation and Linking Options
--------------------------------
+## Compilation and Linking Options
 
 Some systems require compilation or linking options that the `configure`
 script does not define. You can define the initial values for these
@@ -335,7 +334,7 @@ Instead of passing the variables via the environment, it is preferred
 to pass the values as options to the configure script:
 
 ```sh
-../configure CXX=g++-4.4 LIBS=-lposix
+../configure CXX=g++-9.3 LIBS=-lposix
 ```
 
 
@@ -408,9 +407,8 @@ Other options that are rarely used are available in the `configure` script.
 Use the `--help` option to print a list.
 
 
---------------------------------------------------------------------------
-Installation Notes for Windows
-==========================================================================
+---
+# Installation Notes for Windows
 
 This release has been tested on Visual C++ version 2019 running Windows 10.
 
@@ -430,8 +428,7 @@ Note: _If you experience spurious errors about missing files in the
 
 
 
-Microsoft Visual C++ 2017 (compiler version 15.0) or later
-----------------------------------------------------------
+## Microsoft Visual C++ 2017 (compiler version 15.0) or later
 
 The download directory contains two subdirectories: `msvc16` and
 `examples/build-msvc`.
@@ -464,9 +461,7 @@ files include support for building a SystemC DLL (configurations `DebugDLL`,
 `ReleaseDLL`).
 
 
-
-Creating SystemC Applications
------------------------------
+## Creating SystemC Applications
 
 1. Start Visual Studio. From the Start Page select New Project and Win32
    Console Project. Type the project name and select a suitable location
@@ -526,8 +521,7 @@ project only:
 9. Click OK.
 
 
-Building against a SystemC DLL
-------------------------------
+## Building against a SystemC DLL
 
 In order to link your application against a DLL-build of SystemC (build
 configurations `DebugDLL`, `ReleaseDLL` in the SystemC library build),
@@ -544,9 +538,8 @@ several changes are needed.
    SystemC DLL to your `PATH` variable.
 
 
---------------------------------------------------------------------------
-SystemC Library Configuration Switches
-==========================================================================
+---
+# SystemC Library Configuration Switches
 
 In addition to the explicitly selectable feature given as options to
 the `configure` script (see 1.), some aspects of the library
@@ -558,8 +551,7 @@ implementation can be controlled via
 
 The currently supported switches are documented in this section.
 
-Preprocessor switches
----------------------
+## Preprocessor switches
 
 Additional preprocessor switches for the library build can be passed
 to the configure script via the `CXXFLAGS` variable:
@@ -772,8 +764,7 @@ settings to all build configurations.
    DLL version of SystemC.
 
 
-Influential environment variables
----------------------------------
+## Influential environment variables
 
 Currently, three environment variables are checked at library load time
 and influence the SystemC library's behaviour:
