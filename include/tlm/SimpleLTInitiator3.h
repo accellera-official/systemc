@@ -50,7 +50,6 @@ public:
   initiator_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTInitiator3);
   SimpleLTInitiator3(sc_core::sc_module_name name,
                   unsigned int nrOfTransactions = 0x5,
                   unsigned int baseAddress = 0x0) :

@@ -40,7 +40,6 @@ public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleATTarget1);
   SimpleATTarget1(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     socket("socket"),
