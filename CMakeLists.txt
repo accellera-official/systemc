@@ -97,12 +97,6 @@
 # CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
 #                               generators. (default: Release).
 #
-# CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-#                               values are 98, 11, 14, and 17. (default: 98)
-#
-# CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
-#                               is a requirement. (default: ON)
-#
 # CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
 #                               installation (defaults to $ENV{SYSTEMC_HOME}
 #                               if set to an absolute path and otherwise to either
@@ -642,8 +636,6 @@ message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
-message (STATUS "CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")
-message (STATUS "CMAKE_CXX_STANDARD_REQUIRED = ${CMAKE_CXX_STANDARD_REQUIRED}")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
