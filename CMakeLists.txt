@@ -697,7 +697,7 @@ install (FILES AUTHORS.md
                LICENSE
                NOTICE
                README.md
-               RELEASENOTES
+               RELEASENOTES.md
          DESTINATION ${CMAKE_INSTALL_DOCDIR}
          COMPONENT doc)
 

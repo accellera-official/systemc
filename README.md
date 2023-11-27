@@ -50,7 +50,7 @@ About SystemC
 
 ### Release Notes
 
-  See the separate [RELEASENOTES](RELEASENOTES) file that provides
+  See the separate [RELEASENOTES.md](RELEASENOTES.md) file that provides
   up-to-date information about this release of SystemC.
 
 ### SystemC Community
