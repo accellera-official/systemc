@@ -63,14 +63,14 @@ the following tools:
 
   1. GNU C++ compiler (version 9.3 or later), or
      Clang C++ compiler (version 13.0 or later)
-  2. GNU Make (gmake)
+  2. GNU Make (make)
 
-GCC, Clang, and gmake are free software that you can
+GCC, Clang, and make are free software that you can
 obtain from the following sources:
 
   * GCC     http://www.gnu.org/software/gcc/gcc.html
   * Clang   http://clang.llvm.org/
-  * gmake   http://www.gnu.org/software/make/make.html
+  * make    http://www.gnu.org/software/make/make.html
 
 
 ## Basic SystemC Installation
@@ -104,7 +104,7 @@ To install SystemC on a UNIX system, do the following steps:
 
   3. Generate the configuration executable (only for git clone)
 
-     Note: _This step is required when using a git clone. It requires  the GNU auto-tools `libtoolize`, `aclocal`, `automake`, and `autoconf`.
+     Note: _This step is required when using a git clone. It requires the GNU Autotools `libtoolize`, `aclocal`, `automake`, and `autoconf`.
      A SystemC release already contains the configuration executable so this step can be ignored._
 
      ```bash
@@ -209,16 +209,16 @@ To install SystemC on a UNIX system, do the following steps:
             pthread library as well (`-lpthread`)._
 
      Note: _If you change the configuration after having compiled the
-            package already, you should run a `gmake clean` before
+            package already, you should run a `make clean` before
             recompiling._
 
   7. **Compile the package**
 
      ```bash
-     gmake
+     make
      ```
 
-     Note: _The explicit gmake targets `opt` and `debug`, etc. have
+     Note: _The explicit make targets `opt` and `debug`, etc. have
             been removed in this package.  Use the corresponding
             options to the configure script instead._
 
@@ -226,7 +226,7 @@ To install SystemC on a UNIX system, do the following steps:
      testing the example suite.
 
      ```bash
-     gmake check
+     make check
      ```
 
      This will compile and run the examples in the subdirectory
@@ -235,7 +235,7 @@ To install SystemC on a UNIX system, do the following steps:
   9. **Install the package**
 
      ```bash
-     gmake install
+     make install
      ```
 
   10. You can now remove the temporary directory, .e.g,
@@ -251,12 +251,12 @@ To install SystemC on a UNIX system, do the following steps:
      
       To clean up the temporary directory, enter:
       ```bash
-      gmake clean
+      make clean
       ```
 
       To uninstall the package, enter:
       ```bash
-      gmake uninstall
+      make uninstall
       ```
 
 ### Running the Examples
@@ -313,7 +313,7 @@ Note for (key) developers:
 
   - Use 
     ```bash
-    gmake distclean
+    make distclean
     ```
     to remove the generated `configure` script, the generated `aclocal.m4`
    file and the generated `Makefile.in` files.
@@ -331,7 +331,7 @@ options by setting them in your environment before running the
 `configure` script.
 
 Instead of passing the variables via the environment, it is preferred
-to pass the values as options to the configure script:
+to pass the values as options to the configure script, e.g.:
 
 ```sh
 ../configure CXX=g++-9.3 LIBS=-lposix
