@@ -33,11 +33,10 @@ SystemC can be installed on the following UNIX, or UNIX-like platforms:
       - Clang C++ compiler
       - or compatible
 
-  * Mac OS X
+  * macOS
     * Architectures
+      - Apple Silicon
       - x86_64 (64-bit)
-      - powerpc (32-bit)   [deprecated]
-      - powerpc64 (64-bit) [deprecated]
     * Compilers
       - Clang C++ compiler
       - or compatible
