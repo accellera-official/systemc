@@ -42,8 +42,7 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
    * 64-bit Linux (aarch64), Ubuntu 18 & 20
       - GNU C++ compiler version gcc-9.3
 
-   * 64-bit MacOS (macosarm64, macosx64, macosuniversal, macosunknown), macOS 11.6 (Big Sur) until 14.1 (Sonoma)
-
+   * 64-bit macOS (macosarm64, macosx64, macosuniversal, macosunknown), macOS 11.6 (Big Sur) until 14.1 (Sonoma)
       - Xcode/AppleClang compiler version 12.0 until version 15.0
 
    * Microsoft Windows 10
@@ -59,7 +58,7 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
    * FreeBSD 9.0 or later (x86, x86_64) with GNU C++ compiler
    * HP-UX 11.00 or later with GNU C++ or HP C++ compiler
    * Sun/Oracle Solaris, with GNU C++ or Sun/Solaris Studio compiler
-   * Mac OS X prior to 10.12 (Sierra) and/or on the x86, PowerPC architectures
+   * macOS prior to 11.6 (Big Sur) and/or on the x86, PowerPC architectures
    * Microsoft Visual C++ versions prior to 2017 (15.0)
    * Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
    * Msys/MinGW32 GNU C++ compiler
