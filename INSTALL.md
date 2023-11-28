@@ -51,7 +51,7 @@ Note: _Not all combinations are equally well-tested and some combinations
       may not work as expected.  Please report your findings by following
       the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
 
-The [RELEASENOTES](RELEASENOTES.md) file contains a list of detailed platforms,
+The [RELEASENOTES.md](RELEASENOTES.md) file contains a list of detailed platforms,
 architectures, and compiler versions that have been used for testing this release.
 
 
