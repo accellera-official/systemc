@@ -30,11 +30,10 @@ SystemC can be installed on the following UNIX, or UNIX-like platforms:
       - Clang C++ compiler
       - or compatible
 
-  * Mac OS X
+  * macOS
     * Architectures
+      - Apple Silicon
       - x86_64 (64-bit)
-      - powerpc (32-bit)   [deprecated]
-      - powerpc64 (64-bit) [deprecated]
     * Compilers
       - Clang C++ compiler
       - or compatible
@@ -136,6 +135,13 @@ To install SystemC on a UNIX system, do the following steps:
      If you are using 'csh' on an older version of System V, you might
      need to use the `sh ../configure` command instead of `../configure`.
      Otherwise, 'csh' will attempt to 'configure' itself.
+
+     Note: _As IEEE 1666-2023 mandates C++17 as the baseline for SystemC implementations, 
+           make sure you enable the compiler flag to select C++17, e.g.:
+
+     ```bash
+     ../configure 'CXXFLAGS=-std=c++17'
+     ```
 
      SystemC 3.0 includes a fixed-point package that is always built.
      When compiling your applications with fixed-point types, you still have
