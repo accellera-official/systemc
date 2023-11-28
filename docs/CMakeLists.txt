@@ -42,7 +42,7 @@
 set (DOC_FILES
 	       DEVELOPMENT.md
 	       sysc/README
-	       tlm/tlm_README)
+	       tlm/tlm_README.md)
 
 foreach (DOC_FILE ${DOC_FILES})
   get_filename_component (DOC_INSTALL_PATH ${DOC_FILE} PATH)
