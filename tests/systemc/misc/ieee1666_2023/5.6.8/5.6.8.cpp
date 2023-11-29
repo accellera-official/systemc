@@ -32,7 +32,7 @@ struct wait_on_exit {
     ~wait_on_exit() noexcept(false) {
         if ( !sc_core::sc_is_unwinding() ) {
 	    std::cout << sc_core::sc_time_stamp() << " waiting in ~wait_on_exit()" << std::endl;
-	    wait(10.0, sc_core::SC_NS);
+	    sc_core::wait(10.0, sc_core::SC_NS);
 	}
 	else {
 	    std::cout << sc_core::sc_time_stamp() << " unwinding in ~wait_on_exit()" << std::endl;
