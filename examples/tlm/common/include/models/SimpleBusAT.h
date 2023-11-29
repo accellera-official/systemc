@@ -43,7 +43,6 @@ public:
   initiator_socket_type initiator_socket[NR_OF_TARGETS];
 
 public:
-  SC_HAS_PROCESS(SimpleBusAT);
   SimpleBusAT(sc_core::sc_module_name name) :
     sc_core::sc_module(name),
     mRequestPEQ("requestPEQ"),
@@ -79,7 +78,7 @@ public:
     return portId << 28;
   }
 
-  sc_dt::uint64 getAddressMask(unsigned int portId)
+  sc_dt::uint64 getAddressMask(unsigned int /*portId*/)
   {
     return 0xfffffff;
   }
@@ -240,7 +239,7 @@ public:
     return tlm::TLM_ACCEPTED;
   }
 
-  sync_enum_type targetNBTransport(int portId,
+  sync_enum_type targetNBTransport(int /*portId*/,
                                    transaction_type& trans,
                                    phase_type& phase,
                                    sc_core::sc_time& t)
@@ -259,7 +258,7 @@ public:
     return tlm::TLM_ACCEPTED;
   }
 
-  unsigned int transportDebug(int initiator_id, transaction_type& trans)
+  unsigned int transportDebug(int /*initiator_id*/, transaction_type& trans)
   {
     unsigned int portId = decode(trans.get_address());
     assert(portId < NR_OF_TARGETS);
@@ -289,7 +288,7 @@ public:
     return true;
   }
 
-  bool getDMIPointer(int initiator_id,
+  bool getDMIPointer(int /*initiator_id*/,
                      transaction_type& trans,
                      tlm::tlm_dmi&  dmi_data)
   {

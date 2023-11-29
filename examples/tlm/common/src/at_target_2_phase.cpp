@@ -36,7 +36,6 @@ using namespace  std;
 
 static const char *filename = "at_target_2_phase.cpp";	///< filename for reporting
 
-SC_HAS_PROCESS(at_target_2_phase);
 ///Constructor
 at_target_2_phase::at_target_2_phase                      
 ( sc_core::sc_module_name module_name               // module name
@@ -324,8 +323,8 @@ void at_target_2_phase::begin_response_method (void)
 // Not implemented for this example but required by interface
 bool                                            
 at_target_2_phase::get_direct_mem_ptr    
-  (tlm::tlm_generic_payload   &payload,             ///< address + extensions
-   tlm::tlm_dmi               &data                 ///< dmi data
+  (tlm::tlm_generic_payload & /*payload*/,            ///< address + extensions
+   tlm::tlm_dmi &             /*data*/                ///< dmi data
   )
 {
   // THis is not a fatal, print first as warning
@@ -345,7 +344,7 @@ at_target_2_phase::get_direct_mem_ptr
 // Not implemented for this example but required by interface
 unsigned int                                        // result
 at_target_2_phase::transport_dbg            
-( tlm::tlm_generic_payload   &payload               ///< debug payload
+( tlm::tlm_generic_payload & /*payload*/            ///< debug payload
 )
 {
   std::ostringstream  msg; 

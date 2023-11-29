@@ -38,7 +38,6 @@ class at_initiator_temporal_decoupling              ///< at_initiator_temporal_d
 :         public sc_core::sc_module                 ///< SC module
 , virtual public tlm::tlm_bw_nb_transport_if<>      ///< initiator socket
 {
-  SC_HAS_PROCESS(at_initiator_temporal_decoupling);
 
   // Ports, exports and Sockets
 

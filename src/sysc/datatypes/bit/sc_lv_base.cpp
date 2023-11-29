@@ -86,16 +86,21 @@ void
 sc_lv_base::init( int length_, const sc_logic& init_value )
 {
     // check the length
+
     if( length_ <= 0 ) {
         SC_REPORT_ERROR( sc_core::SC_ID_ZERO_LENGTH_, 0 );
         sc_core::sc_abort(); // can't recover from here
     }
+
     // allocate memory for the data and control words
+
     m_len = length_;
     m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
-    m_data = new sc_digit[m_size * 2];
+    m_data = m_size <= SC_BASE_VEC_DIGITS ? m_base_vec : new sc_digit[m_size*2];
     m_ctrl = m_data + m_size;
+
     // initialize the bits to 'init_value'
+
     sc_digit dw = data_array[init_value.value()];
     sc_digit cw = ctrl_array[init_value.value()];
     int sz = m_size;
@@ -149,7 +154,7 @@ sc_lv_base::sc_lv_base( const sc_lv_base& a )
     : sc_proxy<sc_lv_base>(),
       m_len( a.m_len ),
       m_size( a.m_size ),
-      m_data( new sc_digit[m_size * 2] ),
+      m_data( a.m_size <= SC_BASE_VEC_DIGITS ? m_base_vec : new sc_digit[m_size * 2] ),
       m_ctrl( m_data + m_size )
 {
     // copy the bits

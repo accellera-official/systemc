@@ -52,13 +52,15 @@ SC_DEFINE_MESSAGE(SC_ID_BACK_ON_EMPTY_LIST_,
 SC_DEFINE_MESSAGE(SC_ID_IEEE_1666_DEPRECATION_,
 		  804, "/IEEE_Std_1666/deprecated" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_INIT_CALLED_TWICE_,
-                  805, "sc_vector::init has already been called" )
+                  805, "sc_vector::init called for non-empty vector" )
 // available message number 806
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_BIND_EMPTY_,
                   807, "sc_vector::bind called with empty range" )
 SC_DEFINE_MESSAGE(SC_ID_VECTOR_NONOBJECT_ELEMENTS_,
                   808, "sc_vector::get_elements called for element type "
                        "not derived from sc_object" )
+SC_DEFINE_MESSAGE(SC_ID_VECTOR_EMPLACE_LOCKED_,
+                  809, "attempt to insert into locked sc_vector" )
 
 /*****************************************************************************
 

@@ -34,12 +34,13 @@ rem    vsvars.bat [version] [platform] # load MSVC [version] for [platform]
 rem
 rem    vsvars.bat 2010 amd64  # load 64-bit tools for MSVC 10.0
 rem    vsvars.bat 11.0        # load default (x86) tools for MSVC 2012
-rem    vsvars.vat x86_amd64   # load x64 cross-tools for MSVC 2010
+rem    vsvars.bat x86_amd64   # load x64 cross-tools for MSVC 2010
 rem
 rem ***************************************************************************
 
 set SYSTEMC_MSVC_VERSION=
 set SYSTEMC_MSVC_PLATFORM=
+set VCVARSDIR=
 
 if "%1" == "8.0"   goto check_MSVC80
 if "%1" == "2005"  goto check_MSVC80
@@ -55,6 +56,10 @@ if "%1" == "2013"  goto check_MSVC120
 if "%1" == "2014"  goto check_MSVC120
 if "%1" == "14.0"  goto check_MSVC140
 if "%1" == "2015"  goto check_MSVC140
+if "%1" == "15.0"  goto check_MSVC150
+if "%1" == "2017"  goto check_MSVC150
+if "%1" == "16.0"  goto check_MSVC160
+if "%1" == "2019"  goto check_MSVC160
 
 if not "%1" == "" set SYSTEMC_MSVC_PLATFORM=%1
 if     "%1" == "" set SYSTEMC_MSVC_PLATFORM=x86
@@ -62,6 +67,11 @@ goto check_MSVC100
 
 rem We rely on the variables VSXXXCOMNTOOLS to be set by the MSVC
 rem installation.  This should be usually the case by default.
+
+rem For MSVC 2017 and newer, VSXXXCOMNTOOLS is not defined anymore,
+rem and we need to set the variable ourselves. We will check for the
+rem Community and Professions release in the most commonly used 
+rem install directories 
 
 :check_MSVC80
 set SYSTEMC_MSVC_VERSION=8.0 (2005)
@@ -99,11 +109,33 @@ set VSINSTALLDIR=%VS140COMNTOOLS%..\..\
 set MSVC=msvc14
 goto load_MSVC
 
+:check_MSVC150
+set SYSTEMC_MSVC_VERSION=15.0 (2017)
+set MSVC=msvc15
+set VCVARSDIR=Auxiliary\Build\
+set VS150COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools\
+set VSINSTALLDIR=%VS150COMNTOOLS%..\..\
+if exist "%VSINSTALLDIR%" goto load_MSVC
+set VS160COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\Common7\Tools\
+set VSINSTALLDIR=%VS160COMNTOOLS%..\..\
+goto load_MSVC
+
+:check_MSVC160
+set SYSTEMC_MSVC_VERSION=16.0 (2019)
+set MSVC=msvc16
+set VCVARSDIR=Auxiliary\Build\
+set VS160COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\
+set VSINSTALLDIR=%VS160COMNTOOLS%..\..\
+if exist "%VSINSTALLDIR%" goto load_MSVC
+set VS160COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\Tools\
+set VSINSTALLDIR=%VS160COMNTOOLS%..\..\
+goto load_MSVC
+
 :load_MSVC
 if "%SYSTEMC_MSVC_PLATFORM%" == "" set SYSTEMC_MSVC_PLATFORM=%2
 if "%SYSTEMC_MSVC_PLATFORM%" == "" set SYSTEMC_MSVC_PLATFORM=x86
 if not exist "%VSINSTALLDIR%" goto error_no_MSVC_VERSION
-set VCINSTALLDIR=%VSINSTALLDIR%VC\
+set VCINSTALLDIR=%VSINSTALLDIR%VC\%VCVARSDIR%
 if not exist "%VCINSTALLDIR%vcvarsall.bat" goto error_no_MSVC_VERSION
 echo Loading settings for MS Visual C++ %SYSTEMC_MSVC_VERSION% (%SYSTEMC_MSVC_PLATFORM% platform)
 call "%VCINSTALLDIR%vcvarsall.bat" %SYSTEMC_MSVC_PLATFORM%

@@ -64,7 +64,7 @@
 #
 # - Linux (GCC): aarch64
 #
-# - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
+# - macOS >= 11.6 (Xcode/AppleClang): arm64, x86_64
 #
 # - Windows (MingW32 GCC + optionally MSYS): x86
 #
@@ -76,8 +76,6 @@
 # - Linux (GCC, Clang): sparc, powerpc
 #
 # - Linux (Clang): aarch64
-#
-# - Mac OS X <= 10.5 (GCC): ppc, ppc64
 #
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 #
@@ -99,12 +97,6 @@
 # CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
 #                               generators. (default: Release).
 #
-# CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-#                               values are 98, 11, and 14. (default: 98)
-#
-# CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
-#                               is a requirement. (default: ON)
-#
 # CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
 #                               installation (defaults to $ENV{SYSTEMC_HOME}
 #                               if set to an absolute path and otherwise to either
@@ -118,8 +110,6 @@
 #
 # CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 #
-# DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
-#
 # DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
 #                               the application. (default: OFF)
 #
@@ -131,23 +121,17 @@
 # ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
 #                               (default: ON)
 #
-# ENABLE_EARLY_MAXTIME_CREATION Allow creation of sc_time objects with a value
-#                               of sc_max_time() before finalizing the time
-#                               resolution.
-#
 # ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 #                               processes, which is no longer supported due to
 #                               changes in IEEE Std 1666-2011 (see
 #                               sc_event::notify, 5.10.6).
 #
-# ENABLE_PHASE_CALLBACKS        Enable the simulation phase callbacks (experimental).
-#
-# ENABLE_PHASE_CALLBACKS_TRACING  Enable usage of the (experimental) simulation
-#                               phase callbacks for the implementation of
-#                               sc_trace().
-#
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
+#
+# ENABLE_LEGACY_MEM_MGMT        Use std::malloc or posix_memalign to allocate the
+#                               stack of the coroutines instead of mmap. ASAN will
+#                               not work with this.
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
@@ -273,12 +257,6 @@ if (NOT CMAKE_BUILD_TYPE)
        FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-set (CMAKE_CXX_STANDARD 98 CACHE STRING
-     "C++ standard to build all targets. Supported values are 98, 11, and 14.")
-set (CMAKE_CXX_STANDARD_REQUIRED ON CACHE BOOL
-     "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
-mark_as_advanced (CMAKE_CXX_STANDARD_REQUIRED)
-
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
 else (NOT (WIN32 OR CYGWIN))
@@ -291,8 +269,6 @@ endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
-option (DISABLE_ASYNC_UPDATES "Disable async_request_update() support." OFF)
-
 option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when starting the application." OFF)
 
 option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
@@ -301,13 +277,7 @@ option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions 
 
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
-option (ENABLE_EARLY_MAXTIME_CREATION "Allow creation of sc_time objects with a value of sc_max_time() before finalizing the time resolution." ON)
-
 option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
-
-option (ENABLE_PHASE_CALLBACKS "Enable the simulation phase callbacks (experimental)." OFF)
-
-option (ENABLE_PHASE_CALLBACKS_TRACING "Enable the use of the (experimental) simulation phase callbacks for the sc_trace() implementation." ON)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
@@ -316,6 +286,12 @@ option (ENABLE_PTHREADS
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
         OFF)
+
+option (ENABLE_LEGACY_MEM_MGMT
+        "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
+        OFF)
+
+option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std 1666" OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
@@ -334,14 +310,11 @@ if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
 
-mark_as_advanced(DISABLE_ASYNC_UPDATES
-                 DISABLE_COPYRIGHT_MESSAGE
+mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  DISABLE_VIRTUAL_BIND
                  ENABLE_ASSERTIONS
                  ENABLE_EARLY_MAXTIME_CREATION
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-                 ENABLE_PHASE_CALLBACKS
-                 ENABLE_PHASE_CALLBACKS_TRACING
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -354,29 +327,26 @@ message (STATUS "Checking OS and processor type.")
 
 if (APPLE)
   list (LENGTH CMAKE_OSX_ARCHITECTURES N_OSX_ARCHITECTURES)
+  set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "")
+  if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "${CMAKE_OSX_ARCHITECTURES_CACHED}")
+    set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "" FORCE)
+    unset(SystemC_TARGET_ARCH CACHE)
+    unset(HAS__aarch64__DEFINED CACHE)
+    unset(HAS__i386_DEFINED CACHE)
+    unset(HAS__x86_64__DEFINED CACHE)
+  endif()
 endif (APPLE)
 
-if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
-  if (APPLE)
-    if (N_OSX_ARCHITECTURES EQUAL 1)
-      message (STATUS "The target architecture will be passed explicitly to the Apple compiler.")
-      set (CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_OSX_ARCHITECTURES}")
-    endif (N_OSX_ARCHITECTURES EQUAL 1)
-    unset (HAS__i386_DEFINED CACHE)
-    unset (HAS__x86_64__DEFINED CACHE)
-    unset (HAS__ppc__DEFINED CACHE)
-  endif (APPLE)
-  include (CheckSymbolExists)
-  check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
-  check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
-  check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
-  check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
-  check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
-  check_symbol_exists (__i386 "" HAS__i386_DEFINED)
-  check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
-  check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
-  check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
-endif (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
+include (CheckSymbolExists)
+check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
+check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
+check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
+check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
+check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
+check_symbol_exists (__i386 "" HAS__i386_DEFINED)
+check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
+check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
+check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 
 
 # Set SystemC_TARGET_ARCH according to the detected
@@ -387,17 +357,13 @@ if (NOT SystemC_TARGET_ARCH)
     set (_TARGET_ARCH $ENV{SYSTEMC_TARGET_ARCH})
   elseif (APPLE)
     if (N_OSX_ARCHITECTURES GREATER 1)
-      set (_TARGET_ARCH "macosxuniversal")
-    elseif (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosx")
+      set (_TARGET_ARCH "macosuniversal")
+    elseif (HAS__aarch64__DEFINED)
+      set (_TARGET_ARCH "macosarm64")
     elseif (HAS__x86_64__DEFINED)
       set (_TARGET_ARCH "macosx64")
-    elseif (HAS__ppc__DEFINED)
-      set (_TARGET_ARCH "macosxppc")
-    elseif (HAS__ppc64__DEFINED)
-      set (_TARGET_ARCH "macosxppc64")
-    else (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosxunknown")
+    else (N_OSX_ARCHITECTURES GREATER 1)
+      set (_TARGET_ARCH "macosunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     if (HAS__i386_DEFINED)
@@ -485,7 +451,13 @@ if (ENABLE_PTHREADS)
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
-  set (QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
+  foreach(arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+    if (arch MATCHES "^(arm64|i386|x86_64)$")
+      set(QT_ARCH "multi")
+    else()
+      message (FATAL_ERROR "QuickThreads is not supported on macOS ${arch} universal build.")
+    endif()
+  endforeach()
 elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
   set (QT_ARCH "sparc")
 elseif (HAS__hppa_DEFINED)
@@ -496,16 +468,16 @@ elseif (HAS__i386_DEFINED)
   set (QT_ARCH "i386")
 elseif (HAS__aarch64__DEFINED)
   set (QT_ARCH "aarch64")
-elseif (HAS__ppc__DEFINED)
-  set (QT_ARCH "powerpc_mach")
-elseif (HAS__powerpc__DEFINED)
-  set (QT_ARCH "powerpc_sys5")
 else (ENABLE_PTHREADS)
   message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
   set (QT_ARCH "IGNORE")
 endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
+  # QuickThreads stack protection can benefit from posix_memalign
+  include(CheckSymbolExists)
+  check_symbol_exists(posix_memalign "stdlib.h" HAVE_POSIX_MEMALIGN)
+
   # To build QuickThreads, enable the assembler support.
   enable_language (ASM)
 else (QT_ARCH)
@@ -525,13 +497,13 @@ if (WIN32 AND ENABLE_PTHREADS)
   message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
 endif (WIN32 AND ENABLE_PTHREADS)
 
-if (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
+if (ENABLE_PTHREADS OR NOT QT_ARCH)
   set (THREADS_PREFER_PTHREAD_FLAG ON)
   find_package (Threads REQUIRED)
   if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
     message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
   endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-endif (ENABLE_PTHREADS OR (QT_ARCH AND NOT DISABLE_ASYNC_UPDATES) OR NOT QT_ARCH)
+endif (ENABLE_PTHREADS OR NOT QT_ARCH)
 
 
 ###############################################################################
@@ -634,11 +606,6 @@ message (STATUS "---------------------------------------------------------------
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-if (DISABLE_ASYNC_UPDATES)
-  message ("DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
-else (DISABLE_ASYNC_UPDATES)
-  message (STATUS "DISABLE_ASYNC_UPDATES = ${DISABLE_ASYNC_UPDATES}")
-endif (DISABLE_ASYNC_UPDATES)
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
@@ -653,13 +620,12 @@ if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
 else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
   message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
 endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-message (STATUS "ENABLE_PHASE_CALLBACKS = ${ENABLE_PHASE_CALLBACKS}")
-message (STATUS "ENABLE_PHASE_CALLBACKS_TRACING = ${ENABLE_PHASE_CALLBACKS_TRACING}")
 if (ENABLE_PTHREADS)
   message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
@@ -670,8 +636,6 @@ message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
-message (STATUS "CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")
-message (STATUS "CMAKE_CXX_STANDARD_REQUIRED = ${CMAKE_CXX_STANDARD_REQUIRED}")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
@@ -719,15 +683,13 @@ add_subdirectory (examples)
 # Install README files
 ###############################################################################
 
-install (FILES AUTHORS
-               ChangeLog
-               INSTALL
+install (FILES AUTHORS.md
+               INSTALL.md
                cmake/INSTALL_USING_CMAKE
                LICENSE
-               NEWS
                NOTICE
-               README
-               RELEASENOTES
+               README.md
+               RELEASENOTES.md
          DESTINATION ${CMAKE_INSTALL_DOCDIR}
          COMPONENT doc)
 

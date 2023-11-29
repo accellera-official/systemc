@@ -34,6 +34,7 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
+#include "sysc/utils/sc_ptr_flag.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -49,6 +50,7 @@ class sc_event_list;
 class sc_event_or_list;
 class sc_event_and_list;
 class sc_object;
+class sc_object_host;
 class sc_signal_channel;
 
 // friend function declarations
@@ -256,7 +258,7 @@ class SC_API sc_event
     friend class sc_event_list;
     friend class sc_event_timed;
     friend class sc_simcontext;
-    friend class sc_object;
+    friend class sc_object_host;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_method_process;
@@ -279,10 +281,13 @@ public:
 
     void cancel();
 
-    const char* name() const             { return m_name.c_str(); }
     const char* basename() const;
-    sc_object* get_parent_object() const { return m_parent_p; }
-    bool in_hierarchy() const            { return m_name.length() != 0; }
+    const char* name() const
+      { return m_name.c_str(); }
+    sc_object* get_parent_object() const
+      { return m_parent_with_hierarchy_flag; }
+    bool in_hierarchy() const
+      { return m_parent_with_hierarchy_flag.get_flag() == true; }
 
     void notify();
     void notify( const sc_time& );
@@ -301,7 +306,7 @@ public:
     bool triggered() const;
 
     // never notified event
-    static const sc_event none;
+    static const sc_event& none() { return sc_get_curr_simcontext()->null_event(); }
 
 private:
 
@@ -327,8 +332,6 @@ private:
 
     enum notify_t { NONE, DELTA, TIMED };
 
-    std::string     m_name;     // name of object.
-    sc_object*      m_parent_p; // parent sc_object for this event.
     sc_simcontext*  m_simc;
     sc_dt::uint64   m_trigger_stamp; // delta of last trigger
     notify_t        m_notify_type;
@@ -339,6 +342,10 @@ private:
     mutable std::vector<sc_method_handle> m_methods_dynamic;
     mutable std::vector<sc_thread_handle> m_threads_static;
     mutable std::vector<sc_thread_handle> m_threads_dynamic;
+
+    std::string                 m_name;     // name of the event
+    sc_ptr_flag<sc_object_host> m_parent_with_hierarchy_flag; // parent object of
+    // the event, extra flag is set to true, if event is registered in hierarchy
 
 private:
     static struct kernel_tag {} kernel_event;

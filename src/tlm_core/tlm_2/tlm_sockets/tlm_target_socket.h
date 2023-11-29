@@ -183,6 +183,8 @@ public:
     { return typeid(typename FW_IF::protocol_types); }
   virtual tlm_socket_category             get_socket_category() const
     { return TLM_TARGET_SOCKET; }
+  virtual bool                            is_multi_socket() const final
+    { return (N != 1); }
 
   // Implementation of tlm_base_target_socket_b functions
   virtual sc_core::sc_port_b<BW_IF> &       get_base_port()
@@ -219,22 +221,18 @@ class tlm_target_socket :
                             tlm_bw_transport_if<TYPES>,
                             N, POL>
 {
+  typedef tlm_base_target_socket<BUSWIDTH,
+                                 tlm_fw_transport_if<TYPES>,
+                                 tlm_bw_transport_if<TYPES>,
+                                 N, POL> base_socket_type;
 public:
-  tlm_target_socket() :
-    tlm_base_target_socket<BUSWIDTH,
-                      tlm_fw_transport_if<TYPES>,
-                      tlm_bw_transport_if<TYPES>,
-                      N, POL>()
-  {
-  }
+  tlm_target_socket()
+    : base_socket_type()
+  {}
 
-  explicit tlm_target_socket(const char* name) :
-    tlm_base_target_socket<BUSWIDTH,
-                      tlm_fw_transport_if<TYPES>,
-                      tlm_bw_transport_if<TYPES>,
-                      N, POL>(name)
-  {
-  }
+  explicit tlm_target_socket(const char* name)
+    : base_socket_type(name)
+  {}
 
   virtual const char* kind() const
   {

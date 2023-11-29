@@ -319,7 +319,7 @@ sc_string_old sc_string_old::substr(int first,int last) const
 sc_string_old sc_string_old::make_str(long n) // convert integer to string
 {
   char buf[32];
-  ::std::sprintf(buf,"%ld",n);
+  ::std::snprintf(buf,32,"%ld",n);
   return sc_string_old(buf);
 }
 

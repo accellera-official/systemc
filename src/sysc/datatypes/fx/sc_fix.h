@@ -197,7 +197,7 @@ public:
 
     // unary bitwise operators
 
-    const sc_fix operator ~ () const;
+    sc_fix operator ~ () const;
 
 
     // unary bitwise functions
@@ -207,15 +207,15 @@ public:
 
     // binary bitwise operators
 
-    friend const sc_fix operator & ( const sc_fix&, const sc_fix& );
-    friend const sc_fix operator & ( const sc_fix&, const sc_fix_fast& );
-    friend const sc_fix operator & ( const sc_fix_fast&, const sc_fix& );
-    friend const sc_fix operator | ( const sc_fix&, const sc_fix& );
-    friend const sc_fix operator | ( const sc_fix&, const sc_fix_fast& );
-    friend const sc_fix operator | ( const sc_fix_fast&, const sc_fix& );
-    friend const sc_fix operator ^ ( const sc_fix&, const sc_fix& );
-    friend const sc_fix operator ^ ( const sc_fix&, const sc_fix_fast& );
-    friend const sc_fix operator ^ ( const sc_fix_fast&, const sc_fix& );
+    friend sc_fix operator & ( const sc_fix&, const sc_fix& );
+    friend sc_fix operator & ( const sc_fix&, const sc_fix_fast& );
+    friend sc_fix operator & ( const sc_fix_fast&, const sc_fix& );
+    friend sc_fix operator | ( const sc_fix&, const sc_fix& );
+    friend sc_fix operator | ( const sc_fix&, const sc_fix_fast& );
+    friend sc_fix operator | ( const sc_fix_fast&, const sc_fix& );
+    friend sc_fix operator ^ ( const sc_fix&, const sc_fix& );
+    friend sc_fix operator ^ ( const sc_fix&, const sc_fix_fast& );
+    friend sc_fix operator ^ ( const sc_fix_fast&, const sc_fix& );
 
 
     // binary bitwise functions
@@ -288,8 +288,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval operator ++ ( int );
-    const sc_fxval operator -- ( int );
+    sc_fxval operator ++ ( int );
+    sc_fxval operator -- ( int );
 
     sc_fix& operator ++ ();
     sc_fix& operator -- ();
@@ -432,7 +432,7 @@ public:
 
     // unary bitwise operators
 
-    const sc_fix_fast operator ~ () const;
+    sc_fix_fast operator ~ () const;
 
 
     // unary bitwise functions
@@ -442,11 +442,11 @@ public:
 
     // binary bitwise operators
 
-    friend const sc_fix_fast operator & ( const sc_fix_fast&,
+    friend sc_fix_fast operator & ( const sc_fix_fast&,
 					  const sc_fix_fast& );
-    friend const sc_fix_fast operator ^ ( const sc_fix_fast&,
+    friend sc_fix_fast operator ^ ( const sc_fix_fast&,
 					  const sc_fix_fast& );
-    friend const sc_fix_fast operator | ( const sc_fix_fast&,
+    friend sc_fix_fast operator | ( const sc_fix_fast&,
 					  const sc_fix_fast& );
 
 
@@ -514,8 +514,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval_fast operator ++ ( int );
-    const sc_fxval_fast operator -- ( int );
+    sc_fxval_fast operator ++ ( int );
+    sc_fxval_fast operator -- ( int );
 
     sc_fix_fast& operator ++ ();
     sc_fix_fast& operator -- ();
@@ -1022,7 +1022,7 @@ sc_fix::sc_fix( const sc_fix& a )
 // unary bitwise operators
 
 inline
-const sc_fix
+sc_fix
 sc_fix::operator ~ () const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
@@ -1054,18 +1054,18 @@ b_not( sc_fix& c, const sc_fix& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-const sc_fix                                                                  \
+sc_fix                                                                        \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
     b.observer_read();                                                        \
     int iwl_a = a.iwl();                                                      \
     int iwl_b = b.iwl();                                                      \
-    int iwl_c = sc_max( iwl_a, iwl_b );                              \
-    int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );            \
+    int iwl_c = sc_max( iwl_a, iwl_b );                                       \
+    int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );                     \
     sc_fix c( iwl_c + fwl_c, iwl_c );                                         \
     for( int i = -fwl_c; i < iwl_c; ++ i )                                    \
-	c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
+        c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
     return sc_fix( c, iwl_c + fwl_c, iwl_c );                                 \
 }
 
@@ -1203,14 +1203,14 @@ DEFN_ASN_OP_T(^=,!=,sc_fix_fast)
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval
+sc_fxval
 sc_fix::operator ++ ( int )
 {
     return sc_fxval( sc_fxnum::operator ++ ( 0 ) );
 }
 
 inline
-const sc_fxval
+sc_fxval
 sc_fix::operator -- ( int )
 {
     return sc_fxval( sc_fxnum::operator -- ( 0 ) );
@@ -1736,7 +1736,7 @@ sc_fix_fast::sc_fix_fast( const sc_fix_fast& a )
 // unary bitwise operators
 
 inline
-const sc_fix_fast
+sc_fix_fast
 sc_fix_fast::operator ~ () const
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -1768,7 +1768,7 @@ b_not( sc_fix_fast& c, const sc_fix_fast& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-const sc_fix_fast                                                             \
+sc_fix_fast                                                                   \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
@@ -1901,14 +1901,14 @@ DEFN_ASN_OP_T(^=,!=,sc_fix_fast)
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fix_fast::operator ++ ( int )
 {
     return sc_fxval_fast( sc_fxnum_fast::operator ++ ( 0 ) );
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fix_fast::operator -- ( int )
 {
     return sc_fxval_fast( sc_fxnum_fast::operator -- ( 0 ) );

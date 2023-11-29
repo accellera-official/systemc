@@ -46,19 +46,6 @@
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
-//  File static variables.
-// ----------------------------------------------------------------------------
-
-// main coroutine
-
-static sc_cor_fiber main_cor;
-#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
-// current coroutine
-static sc_cor_fiber* curr_cor;
-#endif
-
-
-// ----------------------------------------------------------------------------
 //  CLASS : sc_cor_fiber
 //
 //  Coroutine class implemented with Windows fibers.
@@ -79,37 +66,29 @@ sc_cor_fiber::~sc_cor_fiber()
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_pkg_fiber
 //
-//  Coroutine package class implemented with QuickThreads.
+//  Coroutine package class implemented with Windows fibers.
 // ----------------------------------------------------------------------------
-
-int sc_cor_pkg_fiber::instance_count = 0;
-
 
 // constructor
 
 sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
-: sc_cor_pkg( simc )
+  : sc_cor_pkg( simc )
+  , m_main_cor()
+#if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
+  , m_curr_cor( &m_main_cor ) // initialize the current coroutine
+#endif
 {
-    if( ++ instance_count == 1 ) {
-        // initialize the main coroutine
-        sc_assert( main_cor.m_fiber == 0 );
-        main_cor.m_fiber = ConvertThreadToFiber( 0 );
-        main_cor.m_pkg = this;
+    // initialize the main coroutine
+    m_main_cor.m_fiber = ConvertThreadToFiber( 0 );
+    m_main_cor.m_pkg = this;
 
-        if( !main_cor.m_fiber && GetLastError() == ERROR_ALREADY_FIBER ) {
-            // conversion of current thread to fiber has failed, because
-            // someone else already converted the main thread to a fiber
-            // -> store current fiber
-            main_cor.m_fiber = GetCurrentFiber();
-        }
-        sc_assert( main_cor.m_fiber != 0 );
-
-#       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
-            // initialize the current coroutine
-            sc_assert( curr_cor == 0 );
-            curr_cor = &main_cor;
-#       endif
+    if( !m_main_cor.m_fiber && GetLastError() == ERROR_ALREADY_FIBER ) {
+        // conversion of current thread to fiber has failed, because
+        // someone else already converted the main thread to a fiber
+        // -> store current fiber
+        m_main_cor.m_fiber = GetCurrentFiber();
     }
+    sc_assert( m_main_cor.m_fiber != 0 );
 }
 
 
@@ -117,15 +96,6 @@ sc_cor_pkg_fiber::sc_cor_pkg_fiber( sc_simcontext* simc )
 
 sc_cor_pkg_fiber::~sc_cor_pkg_fiber()
 {
-    if( -- instance_count == 0 ) {
-        // cleanup the main coroutine
-        main_cor.m_fiber = 0;
-        main_cor.m_pkg = 0;
-#       if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__
-            // cleanup the current coroutine
-            curr_cor = 0;
-#       endif
-    }
 }
 
 
@@ -138,7 +108,7 @@ sc_cor_pkg_fiber::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor->m_pkg = this;
     cor->m_stack_size = stack_size;
     cor->m_fiber = CreateFiberEx( cor->m_stack_size / 2, cor->m_stack_size, 0,
-			        (LPFIBER_START_ROUTINE) fn, arg );
+                                  (LPFIBER_START_ROUTINE) fn, arg );
     return cor;
 }
 
@@ -153,7 +123,7 @@ sc_cor_pkg_fiber::yield( sc_cor* next_cor )
         // Switch SJLJ exception handling function contexts
         _Unwind_SjLj_Register(&curr_cor->m_eh);
         _Unwind_SjLj_Unregister(&new_cor->m_eh);
-        curr_cor = new_cor;
+        m_pkg->m_curr_cor = new_cor;
 #   endif
     SwitchToFiber( new_cor->m_fiber );
 }
@@ -169,7 +139,7 @@ sc_cor_pkg_fiber::abort( sc_cor* next_cor )
         // Switch SJLJ exception handling function contexts
         _Unwind_SjLj_Register(&curr_cor->m_eh);
         _Unwind_SjLj_Unregister(&new_cor->m_eh);
-        curr_cor = new_cor;
+        m_pkg->m_curr_cor = new_cor;
 #   endif
     SwitchToFiber( new_cor->m_fiber );
 }
@@ -180,7 +150,7 @@ sc_cor_pkg_fiber::abort( sc_cor* next_cor )
 sc_cor*
 sc_cor_pkg_fiber::get_main()
 {
-    return &main_cor;
+    return &m_main_cor;
 }
 
 } // namespace sc_core

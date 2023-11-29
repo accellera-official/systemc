@@ -38,33 +38,21 @@ DOXYGEN=doxygen
 
 ## Core documentation (see also root directory)
 
-DOC_FILES =
+DOC_FILES = \
+	DEVELOPMENT.md
 
 ##
 ## SystemC documentation
 ##   find sysc -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 DOC_FILES += \
-	sysc/README \
-	sysc/archived/README \
-	sysc/archived/FuncSpec20.pdf \
-	sysc/archived/WhitePaper20.pdf \
-	sysc/archived/UserGuide20.pdf \
-	sysc/archived/SystemC_2_1_overview.pdf \
-	sysc/archived/SystemC_2_1_features.pdf \
-	sysc/SystemC_2011_New_Features.pdf
+	sysc/README 
 
 ##
 ## TLM-2.0 documentation
 ##   find tlm -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 ##
 DOC_FILES += \
-	tlm/ChangeLog \
-	tlm/release/TLM_2_0_requirements.pdf \
-	tlm/release/TLM_2_0_white_paper.pdf \
-	tlm/release/README.txt \
-	tlm/release/TLM_2_0_presentation.ppt \
-	tlm/release/TLM_2_0_presentation.pdf \
-	tlm/tlm_README
+	tlm/tlm_README.md
 
 ## ****************************************************************************
 
@@ -80,11 +68,9 @@ nobase_doc_DATA += \
 	tlm/doxygen/Doxyfile
 
 DOCDIRS = \
-	sysc/archived \
 	sysc/doxygen \
 	sysc \
 	tlm/doxygen \
-	tlm/release \
 	tlm
 
 uninstall-hook:

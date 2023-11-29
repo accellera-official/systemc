@@ -45,15 +45,14 @@ class SC_API sc_prim_channel
 : public sc_object
 {
     friend class sc_prim_channel_registry;
+    friend class sc_stub_registry;
 
-public:
-    enum { list_end = 0xdb };
 public:
     virtual const char* kind() const
         { return "sc_prim_channel"; }
 
     inline bool update_requested() 
-	{ return m_update_next_p != (sc_prim_channel*)list_end; }
+	{ return m_update_next_p != NULL; }
 
     // request the update method to be executed during the update phase
     inline void request_update();
@@ -89,8 +88,8 @@ protected:
     // indicate that this channel is async and could call async_request_update
     // therefore, the kernel should arrange to suspend rather than exit while
     // this channel is attached.
-    bool async_attach_suspending();
-    bool async_detach_suspending();
+    void async_attach_suspending();
+    void async_detach_suspending();
 
 protected:
 
@@ -192,12 +191,6 @@ protected:
 	{ return sc_core::timed_out( simcontext() ); }
 
 
-#if 0 // @@@@####
-    // delta count maintenance
-    sc_dt::uint64 delta_count()
-	{ return simcontext()->m_delta_count; }
-#endif
-
 private:
 
     // called during the update phase of a delta cycle (if requested)
@@ -251,8 +244,7 @@ public:
 
     bool pending_updates() const
     { 
-        return m_update_list_p != (sc_prim_channel*)sc_prim_channel::list_end 
-               || pending_async_updates();
+        return m_update_list_p != m_update_list_end || pending_async_updates();
     }   
 
     bool pending_async_updates() const;
@@ -268,8 +260,8 @@ public:
     //  - presence of asynchronous channels leads async_suspend() to
     //    block until any external async updates have been received
     //    (instead of exiting the simulation upon starvation)
-    bool async_attach_suspending(sc_prim_channel&);
-    bool async_detach_suspending(sc_prim_channel&);
+    void async_attach_suspending(sc_prim_channel&);
+    void async_detach_suspending(sc_prim_channel&);
 
 private:
 
@@ -306,6 +298,7 @@ private:
     int                           m_construction_done;   // # of constructs.
     std::vector<sc_prim_channel*> m_prim_channel_vec;    // existing channels.
     sc_simcontext*                m_simc;                // simulator context.
+    sc_prim_channel*              m_update_list_end;     // update list terminator.
     sc_prim_channel*              m_update_list_p;       // internal updates.
 };
 
@@ -355,17 +348,17 @@ sc_prim_channel::async_request_update()
 }
 
 inline
-bool
+void
 sc_prim_channel::async_attach_suspending()
 {
-    return m_registry->async_attach_suspending(*this);
+    m_registry->async_attach_suspending(*this);
 }
 
 inline
-bool
+void
 sc_prim_channel::async_detach_suspending()
 {
-    return m_registry->async_detach_suspending(*this);
+    m_registry->async_detach_suspending(*this);
 }
 
 

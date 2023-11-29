@@ -133,15 +133,16 @@ sc_abs( const T& a )
 #endif // SC_CPLUSPLUS
 
 #define SC_NAMED_IMPL_(...) \
-  SC_CONCAT_HELPER_(SC_NAMED_IMPL_, SC_NAMED_IMPL_EXPAND_(__VA_ARGS__))
-#define SC_NAMED_IMPL_EXPAND_(...) \
-  SC_EXPAND_HELPER_( SC_NAMED_IMPL_EXPAND_SEQ_( \
+  SC_CONCAT_HELPER_(SC_NAMED_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
+
+#define SC_VARARG_HELPER_EXPAND_(...) \
+  SC_EXPAND_HELPER_( SC_VARARG_HELPER_EXPAND_SEQ_( \
     __VA_ARGS__,                                        \
     MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
     MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
     MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,    \
     MORE_,MORE_,MORE_,MORE_,MORE_,MORE_,ONE_, FAIL_ ) )
-#define SC_NAMED_IMPL_EXPAND_SEQ_( \
+#define SC_VARARG_HELPER_EXPAND_SEQ_( \
    _1, _2, _3, _4, _5, _6, _7, _8, \
    _9,_10,_11,_12,_13,_14,_15,_16, \
   _17,_18,_19,_20,_21,_22,_23,_24, \

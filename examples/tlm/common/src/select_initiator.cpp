@@ -59,7 +59,7 @@ select_initiator::select_initiator                  // constructor
   SC_THREAD(initiator_thread);
 
   // register method process
-  SC_METHOD(send_end_rsp_method)
+  SC_METHOD(send_end_rsp_method);
     sensitive << m_send_end_rsp_PEQ.get_event();
     dont_initialize();
 }
@@ -496,8 +496,8 @@ void select_initiator::send_end_rsp_method(void)    // send end response method
 //=============================================================================
 
 void select_initiator::invalidate_direct_mem_ptr  // invalidate_direct_mem_ptr
-( sc_dt::uint64 start_range                       // start range
-, sc_dt::uint64 end_range                         // end range
+( sc_dt::uint64 /*start_range*/                   // start range
+, sc_dt::uint64 /*end_range*/                     // end range
 )
 {
   std::ostringstream       msg;                   // log message

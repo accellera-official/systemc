@@ -39,7 +39,9 @@
 #if !defined(sc_process_handle_h_INCLUDED)
 #define sc_process_handle_h_INCLUDED
 
-#include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_cmnhdr.h"
+#include "sysc/kernel/sc_object.h"
+#include "sysc/kernel/sc_process.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -147,7 +149,7 @@ class SC_API sc_process_handle {
   protected:
     static std::vector<sc_event*>  empty_event_vector;  // If m_target_p == 0.
     static std::vector<sc_object*> empty_object_vector; // If m_target_p == 0.
-    static sc_event                non_event;           // If m_target_p == 0.
+    static sc_event&               non_event();         // If m_target_p == 0.
 };
 
 inline bool operator == (
@@ -399,7 +401,7 @@ inline sc_event& sc_process_handle::reset_event() const
     else
     {
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "reset()");
-        return sc_process_handle::non_event;
+        return non_event();
     }
 }
 
@@ -476,7 +478,7 @@ inline sc_event& sc_process_handle::terminated_event()
     else
     {
         SC_REPORT_WARNING( SC_ID_EMPTY_PROCESS_HANDLE_, "terminated_event()");
-        return sc_process_handle::non_event;
+        return non_event();
     }
 }
 

@@ -61,16 +61,23 @@
 
 namespace sc_core {
 
-// The values below are used to indicate when a queue is empty. A non-zero     
-// non-legal pointer value is used for this so that a zero value in the
-// m_execute_p field of an sc_process_b instance can be used to indicate      
-// that is has not been queued for run. (If we did not use a non-zero
-// queue empty indicator then a sc_process_b instance that was queued
-// twice in a row might end up on the queue twice if it were the first
-// one that was queued!)
+// The address of the queue heads for the method and thread runnable queuss
+// are used as the "end of queue" values in the m_execute_p field of an 
+// sc_process_b instance. The queues are processed by walking the m_execute_p 
+// values of the sc_process_b instances in the queue. When the m_execute_p value 
+// is the queue head that indicates that sc_process_b instance is the last entry 
+// in the queue.
+//
+// This allows a null m_execute_p field in an sc_process_b instance to 
+// indicate that the instance has not on the queued. That prevents an sc_process_b 
+// instance from being queued twice.
+//
+// Not using a separate field in a runnable entry to indicate when it is queued 
+// saves instructions in a piece of code that gets executed millions of times in 
+// a simulation.
 
-#define SC_NO_METHODS ((sc_method_handle)0xdb)
-#define SC_NO_THREADS ((sc_thread_handle)0xdb)
+#define SC_NO_METHODS m_methods_push_head
+#define SC_NO_THREADS m_threads_push_head
 
 
 //------------------------------------------------------------------------------
@@ -134,25 +141,25 @@ inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::init()
 {
-    m_methods_pop = SC_NO_METHODS;
     if ( !m_methods_push_head )
     {
         m_methods_push_head = new sc_method_process("methods_push_head", true, 
-	                                           (SC_ENTRY_FUNC)0, 0, 0);
+                                                    sc_entry_func(), 0, 0);
         m_methods_push_head->dont_initialize(true);
 	m_methods_push_head->detach();
     }
+    m_methods_pop = SC_NO_METHODS;
     m_methods_push_tail = m_methods_push_head;
     m_methods_push_head->set_next_runnable(SC_NO_METHODS);
 
-    m_threads_pop = SC_NO_THREADS;
     if ( !m_threads_push_head )
     {
         m_threads_push_head = new sc_thread_process("threads_push_head", true, 
-	                                            (SC_ENTRY_FUNC)0, 0, 0);
+                                                    sc_entry_func(), 0, 0);
         m_threads_push_head->dont_initialize(true);
 	m_threads_push_head->detach();
     }
+    m_threads_pop = SC_NO_THREADS;
     m_threads_push_head->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail = m_threads_push_head;
 }
@@ -336,7 +343,7 @@ inline void sc_runnable::remove_method( sc_method_handle remove_p )
     // Search the push queue:
 
     prior_p = m_methods_push_head;
-    for ( now_p = m_methods_push_head; now_p!= SC_NO_METHODS; 
+    for ( now_p = m_methods_push_head->next_runnable(); now_p!= SC_NO_METHODS; 
 	    now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )
@@ -393,7 +400,7 @@ inline void sc_runnable::remove_thread( sc_thread_handle remove_p )
     // Search the push queue:
 
     prior_p = m_threads_push_head;
-    for ( now_p = m_threads_push_head; now_p != SC_NO_THREADS; 
+    for ( now_p = m_threads_push_head->next_runnable(); now_p != SC_NO_THREADS; 
 	  now_p = now_p->next_runnable() )
     {
         if ( remove_p == now_p )

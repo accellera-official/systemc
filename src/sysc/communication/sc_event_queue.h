@@ -81,8 +81,6 @@ class SC_API sc_event_queue:
 {
  public:
 
-    SC_HAS_PROCESS( sc_event_queue );
-
     sc_event_queue( sc_module_name name_ = sc_gen_unique_name("event_queue") );
     ~sc_event_queue();
 

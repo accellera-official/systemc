@@ -48,7 +48,7 @@ void sc_cthread_process::dont_initialize( bool /* dont */ )
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_cthread_process::sc_cthread_process( const char* name_p, 
-    bool free_host, SC_ENTRY_FUNC method_p, 
+    bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p 
 ):
     sc_thread_process(name_p, free_host, method_p, host_p, opt_p)

@@ -52,7 +52,6 @@ public:
   // ports
   sc_in_clk clock;
 
-  SC_HAS_PROCESS(simple_bus_slow_mem);
 
   // constructor
   simple_bus_slow_mem(sc_module_name name_

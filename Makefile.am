@@ -36,19 +36,17 @@
 ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
-	docs \
 	src \
 	examples
 
 DOC_FILES = \
-	AUTHORS \
+	AUTHORS.md \
 	NOTICE \
-	ChangeLog \
-	INSTALL \
+	CONTRIBUTING.md \
+	INSTALL.md \
 	LICENSE \
-	NEWS \
-	README \
-	RELEASENOTES \
+	README.md \
+	RELEASENOTES.md \
 	cmake/INSTALL_USING_CMAKE
 
 EXTRA_DIST = \
@@ -62,12 +60,12 @@ EXTRA_DIST = \
 	cmake/SystemCTLMConfig.cmake.in \
 	cmake/run_test.cmake \
 	\
-	msvc10/SystemC/SystemC.sln \
-	msvc10/SystemC/SystemC.props \
-	msvc10/SystemC/SystemC.vcxproj \
-	msvc10/SystemC/SystemC.vcxproj.filters \
-	msvc10/SystemC/SystemC-core.vcxproj \
-	msvc10/SystemC/SystemC-core.vcxproj.filters
+	msvc16/SystemC/SystemC.sln \
+	msvc16/SystemC/SystemC.props \
+	msvc16/SystemC/SystemC.vcxproj \
+	msvc16/SystemC/SystemC.vcxproj.filters \
+	msvc16/SystemC/SystemC-core.vcxproj \
+	msvc16/SystemC/SystemC-core.vcxproj.filters
 
 ## ****************************************************************************
 
@@ -84,8 +82,5 @@ uninstall-hook:
 endif # SEPARATE_INSTALL_TREE
 
 ## ****************************************************************************
-
-doxygen:
-	@(cd docs && $(MAKE) $@)
 
 ## Taf!

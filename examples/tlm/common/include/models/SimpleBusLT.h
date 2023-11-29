@@ -41,7 +41,6 @@ public:
   initiator_socket_type initiator_socket[NR_OF_TARGETS];
 
 public:
-  SC_HAS_PROCESS(SimpleBusLT);
   SimpleBusLT(sc_core::sc_module_name name) :
     sc_core::sc_module(name)
   {
@@ -71,7 +70,7 @@ public:
     return portId << 28;
   }
 
-  sc_dt::uint64 getAddressMask(unsigned int portId)
+  sc_dt::uint64 getAddressMask(unsigned int /*portId*/)
   {
     return 0xfffffff;
   }
@@ -92,7 +91,7 @@ public:
   // LT protocol
   // - forward each call to the target/initiator
   //
-  void initiatorBTransport(int SocketId,
+  void initiatorBTransport(int /*SocketId*/,
                            transaction_type& trans,
                            sc_core::sc_time& t)
   {
@@ -105,7 +104,7 @@ public:
     (*decodeSocket)->b_transport(trans, t);
   }
 
-  unsigned int transportDebug(int SocketId,
+  unsigned int transportDebug(int /*SocketId*/,
                               transaction_type& trans)
   {
     unsigned int portId = decode(trans.get_address());
@@ -136,7 +135,7 @@ public:
     return true;
   }
 
-  bool getDMIPointer(int SocketId,
+  bool getDMIPointer(int /*SocketId*/,
                      transaction_type& trans,
                      tlm::tlm_dmi&  dmi_data)
   {

@@ -39,7 +39,6 @@ class at_initiator_annotated                          // TLM AT at_initiator_ann
   :         public sc_core::sc_module                 /// inherit from SC module base clase
   , virtual public tlm::tlm_bw_transport_if<>         /// inherit from TLM "backward interface"
 {
-  SC_HAS_PROCESS(at_initiator_annotated);
 
 //==============================================================================
 // Ports, exports and Sockets

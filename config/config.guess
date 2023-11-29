@@ -2,7 +2,7 @@
 # Attempt to guess a canonical system name.
 #   Copyright 1992-2013 Free Software Foundation, Inc.
 
-timestamp='2013-06-10'
+timestamp='2023-11-29'
 
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -1256,21 +1256,40 @@ EOF
 	exit ;;
     *:Darwin:*:*)
 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
-	eval $set_cc_for_build
-	if test "$UNAME_PROCESSOR" = unknown ; then
-	    UNAME_PROCESSOR=powerpc
-	fi
-	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
-	    if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
-		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
-		grep IS_64BIT_ARCH >/dev/null
-	    then
-		case $UNAME_PROCESSOR in
-		    i386) UNAME_PROCESSOR=x86_64 ;;
-		    powerpc) UNAME_PROCESSOR=powerpc64 ;;
-		esac
-	    fi
-	fi
+	case $UNAME_PROCESSOR in
+	    i386)
+		eval $set_cc_for_build
+		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+		      grep IS_64BIT_ARCH >/dev/null
+		  then
+		      UNAME_PROCESSOR="x86_64"
+		  fi
+		fi ;;
+	    powerpc)
+		UNAME_PROCESSOR=powerpc
+		eval $set_cc_for_build
+		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+		      grep IS_64BIT_ARCH >/dev/null
+		  then
+		      UNAME_PROCESSOR="powerpc64"
+		  fi
+		fi ;;
+	    arm | unknown)
+		UNAME_PROCESSOR=arm
+		eval $set_cc_for_build
+		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
+		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
+		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
+		      grep IS_64BIT_ARCH >/dev/null
+		  then
+		      UNAME_PROCESSOR="aarch64"
+		  fi
+		fi ;;
+	esac
 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
 	exit ;;
     *:procnto*:*:* | *:QNX:[0123456789]*:*)

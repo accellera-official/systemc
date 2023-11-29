@@ -45,13 +45,17 @@
 
 H_FILES += \
 	utils/sc_hash.h \
+	utils/sc_iostream.h \
 	utils/sc_list.h \
 	utils/sc_machine.h \
 	utils/sc_mempool.h \
+	utils/sc_meta.h \
 	utils/sc_pq.h \
+	utils/sc_ptr_flag.h \
 	utils/sc_pvector.h \
 	utils/sc_report.h \
 	utils/sc_report_handler.h \
+	utils/sc_stop_here.h \
 	utils/sc_string.h \
 	utils/sc_string_view.h \
 	utils/sc_temporary.h \

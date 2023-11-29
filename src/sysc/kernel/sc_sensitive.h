@@ -98,6 +98,18 @@ public:
     sc_sensitive& operator << ( const sc_interface& );
     sc_sensitive& operator << ( const sc_port_base& );
     sc_sensitive& operator << ( sc_event_finder& );
+#if SC_CPLUSPLUS >= 201103L
+    template <typename C, typename =
+    // enable if element of collection C can be added to sensitivity
+    decltype(std::declval<sc_sensitive&>() << *std::begin(std::declval<C&>()))>
+    sc_sensitive& operator << ( const C& collection)
+    {
+        for (auto it = std::begin(collection); it != std::end(collection); ++ it)
+            *this << *it;
+        return *this;
+    }
+#endif // C++11
+
 
     sc_sensitive& operator () ( sc_cthread_handle, sc_event_finder& );
     sc_sensitive& operator () ( sc_cthread_handle, const in_if_b_type& );

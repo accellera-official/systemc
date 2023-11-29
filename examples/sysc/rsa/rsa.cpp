@@ -102,7 +102,7 @@ randomize( int seed  )
 
   in_seed = ( seed <= 0 ? static_cast<long>(time( 0 )) : seed );
 
-#ifndef WIN32
+#if (!defined(WIN32) && !defined(_WIN32))
   srand48( in_seed );
 #else
   srand( ( unsigned ) in_seed );
@@ -113,7 +113,7 @@ randomize( int seed  )
 
 // Flip a coin with probability p.
 
-#ifndef WIN32
+#if (!defined(WIN32) && !defined(_WIN32))
 
 inline
 bool
@@ -404,8 +404,14 @@ find_prime( const bigint& r )
   sc_bigint<NBITS> niter = 0;
 #endif
 
+#if defined(SC_BIGINT_CONFIG_HOLLOW) // Remove when we fix hollow support!!
   while ( ! miller_rabin( p ) ) {
     p = ( p + 2 ) % r;
+#else
+  size_t increment;
+  for ( increment = 0; increment < 100000 && !miller_rabin( p ); ++increment ) {
+    p = ( p + 2 ) % r;
+#endif
 
 #ifdef DEBUG_SYSTEMC
     assert( ++niter > 0 );

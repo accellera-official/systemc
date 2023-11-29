@@ -1,6 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "reset_signal_is", "reset_signal_is.vcxproj", "{2B8E2069-D45C-4CE2-8D65-DBFB2B205889}"
 EndProject
 Global

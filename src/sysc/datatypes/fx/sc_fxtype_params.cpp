@@ -65,7 +65,7 @@ template class SC_API sc_context<sc_fxtype_params>;
 //  Fixed-point type parameters class.
 // ----------------------------------------------------------------------------
 
-const std::string
+std::string
 sc_fxtype_params::to_string() const
 {
     std::stringstream ss;
