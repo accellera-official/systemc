@@ -1,13 +1,11 @@
 # README for TLM-2.0
 
-This is the proof of concept implementation for the OSCI TLM-2.0 standard,
-as defined by the IEEE 1666-2011 SystemC Language Reference Manual.
+This is the proof of concept implementation for the TLM-2.0 standard,
+as defined by the IEEE 1666-2023 SystemC Language Reference Manual.
 
 # IMPORTANT
 
-This version of the TLM-2.0 code is version 2.0.3. It has some minor changes
-compared to the previous version. For details of changes, please refer to the
-SystemC RELEASENOTES file.
+This version of the TLM-2.0 code contains updates compared to the previous version. For details of changes, please refer to the IEEE 1666-2023 SystemC Language Reference Manual.
 
 # Licensing and Copyright
 
@@ -51,7 +49,7 @@ Makefiles work hierarchically.  `build` is the default target; `clean`,
 `run` (executes built `tests/examples`) and `check` (against expected 
 results) targets are also provided.
 
-On Unix/Linux/MacOS, the `$SYSTEMC_HOME` environment variable should be set to
+On Unix/Linux/macOS, the `$SYSTEMC_HOME` environment variable should be set to
 point to the SystemC root location; `$TARGET_ARCH` (or `$ARCH_SUFFIX`) should be
 defined such that `$SYSTEMC_HOME/lib-$TARGET_ARCH` (or `lib$ARCH_SUFFIX`) is a
 directory containing the SystemC library.
