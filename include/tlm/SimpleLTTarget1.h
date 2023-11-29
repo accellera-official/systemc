@@ -40,7 +40,6 @@ public:
   target_socket_type socket;
 
 public:
-  SC_HAS_PROCESS(SimpleLTTarget1);
   SimpleLTTarget1(sc_core::sc_module_name name, bool invalidate = false) :
       sc_core::sc_module(name),
       socket("socket"),

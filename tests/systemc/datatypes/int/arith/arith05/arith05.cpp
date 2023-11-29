@@ -74,8 +74,8 @@ sc_main( int argc, char* argv[] )
 
             for (unsigned ii = 0; ii < 100; ++ii) {
                 for (unsigned jj = 0; jj < 100; ++jj) {
-                    unsigned qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
-                    unsigned qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
+                    unsigned qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1u << i) - 1));
+                    unsigned qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1u << j) - 1));
                     unsigned tqi;
 
                     if (qi & (1 << (i - 1))) {
