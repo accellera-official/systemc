@@ -37,14 +37,52 @@
 
 
 #include "systemc.h"
+#define STACK_SIZE  0x600000 
 
-#define STACK_SIZE 0x600000 
-#define ARRAY_SIZE ((long)(STACK_SIZE/4 * 0.85))
+// The #if bracketed code below will work with quick threads
 
-void my_dump( const long value )
+#if 0
+#include "/Users/acg/work/sysc/2.4.osci_wg_issues/src/sysc/kernel/sc_thread_process.h"
+#include "/Users/acg/work/sysc/2.4.osci_wg_issues/src/sysc/kernel/sc_cor_qt.h"
+
+
+void my_dump( size_t value )
 {       
     std::cout << "0x" << std::hex << value << " (" << std::dec << value << ") = ";
 }  
+
+void* thread_stack_location()
+{
+    sc_cor_qt* qt_p = (sc_cor_qt*)get_cor_pointer(sc_get_current_process_b());
+    return qt_p->m_stack;
+}
+
+void* thread_stack_pointer()
+{
+    sc_cor_qt* qt_p = (sc_cor_qt*)get_cor_pointer(sc_get_current_process_b());
+    return qt_p->m_sp;
+}
+
+size_t thread_stack_size()
+{
+    sc_cor_qt* qt_p = (sc_cor_qt*)get_cor_pointer(sc_get_current_process_b());
+    return qt_p->m_stack_size;
+}
+
+void qt_stack_info()
+{
+    size_t stack_start = (size_t)thread_stack_location();
+    size_t sp = (size_t)thread_stack_pointer();
+    size_t stack_end = stack_start + STACK_SIZE;
+
+    my_dump( thread_stack_size() );    std::cout << "stack size " << std::endl;
+    my_dump( stack_start );            std::cout << "stack start " << std::endl;
+    my_dump( stack_end );              std::cout << "stack end" << std::endl;
+    my_dump( sp );                     std::cout << "m_sp " << std::endl;
+    my_dump( stack_end - sp );         std::cout << "stack_end - m_sp " << std::endl;
+    my_dump( sp - stack_start );       std::cout << "m_sp - start" << std::endl;
+}
+#endif
 
 SC_MODULE(A)
 {
@@ -54,21 +92,27 @@ SC_MODULE(A)
 		sensitive << m_clk;
 		set_stack_size(STACK_SIZE);
 	}
+
 	void thread()
 	{
-	    int  x[ARRAY_SIZE];    // Grab a lot of stack...
-
-	    for (;;) 
-	    {
-		// modify the first and last locations:
-		x[ARRAY_SIZE-1] = ~x[ARRAY_SIZE-1];
-		x[0] = ~x[0];
-		std::cout << sc_time_stamp() <<std:: endl;
-		wait();
+	    int sum = 0;
+	    int x[0];
+	    size_t stack_end = (size_t)x;
+	    size_t stack_start = (size_t)stack_end - 0x500000;
+	    for ( size_t stack_p = stack_start+0x1000; stack_p <  stack_end;  stack_p += 0x1000 ) {
+#if 0
+	        std::cout << "access at 0x" << std::hex << stack_p
+		          << std::hex << " " << (stack_end - stack_p) << " " 
+			  << *(int*)stack_p << std::endl;
+#else
+                sum = sum + *(int*)stack_p;
+#endif
 	    }
-	}
+	    std::cout << sum << std::endl;
+	} 
 	sc_in_clk m_clk;
 };
+
 
 int sc_main(int argc, char* argv[])
 {
@@ -76,11 +120,10 @@ int sc_main(int argc, char* argv[])
 	A        a("a");
 	a.m_clk(clock);
 
-        my_dump(STACK_SIZE); std::cout << "stack size" << std::endl;
-        my_dump(4*ARRAY_SIZE); std::cout << "array size" << std::endl;
-        my_dump( (STACK_SIZE-(4*ARRAY_SIZE)) ); std::cout << "stack margin" << std::endl;
+	std::cout << "stack size = 0x" << std::hex << STACK_SIZE << " (" << std::dec 
+	          << STACK_SIZE << ")" << std::endl;
 
-	sc_start(2, SC_NS);
+	sc_start(1, SC_NS );
         std::cout << "Program complete" << std::endl;
 	return 0;
 }
