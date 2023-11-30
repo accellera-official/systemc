@@ -88,9 +88,6 @@
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
 #
-# BUILD_SHARED_LIBS             Build shared instead of static libraries
-#                               (default: ON if not targetting Windows).
-#
 # BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
 #                               (default: OFF).
 #
@@ -135,6 +132,9 @@
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
+#
+# SYSTEMC_BUILD_SHARED_LIBS     Build shared instead of static libraries
+#                               (default: ON if not targeting Windows).
 #
 # SystemC_TARGET_ARCH           Target architecture according to the
 #                               Accellera SystemC conventions set either from
@@ -258,14 +258,19 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 if (NOT (WIN32 OR CYGWIN))
-  option (BUILD_SHARED_LIBS "Build shared libraries." ON)
+  option (SYSTEMC_BUILD_SHARED_LIBS "Build shared libraries." ON)
 else (NOT (WIN32 OR CYGWIN))
-  option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
+  option (SYSTEMC_BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
-if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
-  set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
-endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+
+set(SC_LIB_TYPE STATIC)
+if (SYSTEMC_BUILD_SHARED_LIBS OR BUILD_SHARED_LIBS)
+  if (WIN32 OR CYGWIN)
+    message (FATAL_ERROR "The compilation of SystemC as a DLL on Windows is currently not supported!")
+  else ()
+    set(SC_LIB_TYPE SHARED)
+  endif ()
+endif ()
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
@@ -603,7 +608,7 @@ endif ("${isSystemDir}" STREQUAL "-1")
 message (STATUS "========================================================================")
 message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemCLanguage_VERSION_RELEASE_DATE}) and TLM ${SystemCTLM_VERSION} (${SystemCTLM_VERSION_RELEASE_DATE})")
 message (STATUS "------------------------------------------------------------------------")
-message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
+message (STATUS "SYSTEMC_BUILD_SHARED_LIBS = ${SYSTEMC_BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
 message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")

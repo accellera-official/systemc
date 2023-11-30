@@ -146,9 +146,6 @@ variables offered to the user in the CMake console and GUI (ccmake and
 cmake-gui, respectively). Each variable is annotated with a brief
 documentation string. The most important variables are:
 
-BUILD_SHARED_LIBS             Build shared instead of static libraries
-                              (default: ON if not targetting Windows).
-
 BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
                               (default: OFF).
 
@@ -192,6 +189,9 @@ ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 
 ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
                               of QuickThreads on Unix or Fiber on Windows.
+
+SYSTEMC_BUILD_SHARED_LIBS     Build shared instead of static libraries
+                              (default: ON if not targeting Windows).
 
 SystemC_TARGET_ARCH           Target architecture according to the
                               Accellera SystemC conventions set either from
