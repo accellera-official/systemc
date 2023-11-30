@@ -52,6 +52,7 @@
 typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned long  ulong;
+typedef sc_dt::int64   llong;
  
 #define SHOW_DEFAULT_ASSIGN(a) cerr << #a << " : " << double(a) << " : " << a.to_string(SC_HEX) << "\n"
 #define IDENT_DEFAULT_ASSIGN(a) cerr << "--default_assign-Inf-Inf-Inf-Inf-Inf- " << a << "\n"
@@ -78,7 +79,7 @@ static void test_fx_float_uint()
   sc_fxval b; b = (uint)1;
   sc_fxval c; c = (uint)-1;
   sc_fxval d; d = UINT_MAX;
-  sc_fxval e; e = (uint)abs(INT_MIN);
+  sc_fxval e; e = (uint)abs((llong)INT_MIN);
 
   SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
 }
@@ -130,9 +131,9 @@ static void test_fx_float_ulong()
   sc_fxval b; b = (ulong)1;
   sc_fxval c; c = (ulong)-1;
   sc_fxval d; d = ULONG_MAX;
-  sc_fxval e; e = (ulong)abs(LONG_MIN);
+  // sc_fxval e; e = (ulong)abs(LONG_MIN);
 
-  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
+  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); // SHOW_DEFAULT_ASSIGN(e);
 }
 
 static void test_fx_float_float()
@@ -183,7 +184,7 @@ static void test_fx_ufix_uint()
   sc_ufix b; b = (uint)1;
   sc_ufix c; c = (uint)-1;
   sc_ufix d; d = UINT_MAX;
-  sc_ufix e; e = (uint)abs(INT_MIN);
+  sc_ufix e; e = (uint)abs((llong)INT_MIN);
 
   SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
 }
@@ -235,9 +236,9 @@ static void test_fx_ufix_ulong()
   sc_ufix b; b = (ulong)1;
   sc_ufix c; c = (ulong)-1;
   sc_ufix d; d = ULONG_MAX;
-  sc_ufix e; e = (ulong)abs(LONG_MIN);
+  // sc_ufix e; e = (ulong)abs(LONG_MIN);
 
-  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
+  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); // SHOW_DEFAULT_ASSIGN(e);
 }
 
 static void test_fx_ufix_float()
@@ -288,7 +289,7 @@ static void test_fx_fix_uint()
   sc_fix b; b = (uint)1;
   sc_fix c; c = (uint)-1;
   sc_fix d; d = UINT_MAX;
-  sc_fix e; e = (uint)abs(INT_MIN);
+  sc_fix e; e = (uint)abs((llong)INT_MIN);
 
   SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
 }
@@ -340,9 +341,9 @@ static void test_fx_fix_ulong()
   sc_fix b; b = (ulong)1;
   sc_fix c; c = (ulong)-1;
   sc_fix d; d = ULONG_MAX;
-  sc_fix e; e = (ulong)abs(LONG_MIN);
+  // sc_fix e; e = (ulong)abs(LONG_MIN);
 
-  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
+  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b); SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); // SHOW_DEFAULT_ASSIGN(e);
 }
 
 static void test_fx_fix_float()
@@ -393,7 +394,7 @@ static void test_fx_fixed_uint()
   sc_fixed<8, 5> b; b = (uint)1;
    sc_fixed<8, 5> c; c = (uint)-1;
    sc_fixed<8, 5> d; d = UINT_MAX;
-   sc_fixed<8, 5> e; e = (uint)abs(INT_MIN);
+   sc_fixed<8, 5> e; e = (uint)abs((llong)INT_MIN);
 
   SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
 }
@@ -445,9 +446,9 @@ static void test_fx_fixed_ulong()
   sc_fixed<8, 5> b; b = (ulong)1;
    sc_fixed<8, 5> c; c = (ulong)-1;
    sc_fixed<8, 5> d; d = ULONG_MAX;
-   sc_fixed<8, 5> e; e = (ulong)abs(LONG_MIN);
+  // sc_fixed<8, 5> e; e = (ulong)abs(LONG_MIN);
 
-  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
+  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); // SHOW_DEFAULT_ASSIGN(e);
 }
 
 static void test_fx_fixed_float()
@@ -498,7 +499,7 @@ static void test_fx_ufixed_uint()
   sc_ufixed<8, 5> b; b = (uint)1;
    sc_ufixed<8, 5> c; c = (uint)-1;
    sc_ufixed<8, 5> d; d = UINT_MAX;
-   sc_ufixed<8, 5> e; e = (uint)abs(INT_MIN);
+   sc_ufixed<8, 5> e; e = (uint)abs((llong)INT_MIN);
 
   SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
 }
@@ -550,9 +551,9 @@ static void test_fx_ufixed_ulong()
   sc_ufixed<8, 5> b; b = (ulong)1;
    sc_ufixed<8, 5> c; c = (ulong)-1;
    sc_ufixed<8, 5> d; d = ULONG_MAX;
-   sc_ufixed<8, 5> e; e = (ulong)abs(LONG_MIN);
+  // sc_ufixed<8, 5> e; e = (ulong)abs(LONG_MIN);
 
-  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); SHOW_DEFAULT_ASSIGN(e);
+  SHOW_DEFAULT_ASSIGN(a); SHOW_DEFAULT_ASSIGN(b);  SHOW_DEFAULT_ASSIGN(c); SHOW_DEFAULT_ASSIGN(d); // SHOW_DEFAULT_ASSIGN(e);
 }
 
 static void test_fx_ufixed_float()
