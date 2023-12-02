@@ -65,7 +65,6 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
-#include <stdlib.h>    // drand48, srand48
 #include "systemc.h"
 
 #define DEBUG_SYSTEMC // #undef this to disable assertions.
@@ -90,6 +89,19 @@ abs_val( const sc_signed& x )
   return ( x < 0 ? -x : x );
 }
 
+static unsigned long next = 1;
+
+/* RAND_MAX assumed to be 32767 */
+int rand(void) {
+   next = next * 1103515245 + 12345;
+   return((unsigned)(next/65536) % 32768);
+}
+
+void srand(unsigned int seed) {
+   next = seed;
+}
+
+
 // Initialize the random number generator. If seed == -1, the
 // generator will be initialized with the system time. If not, it will
 // be initialized with the given seed. This way, an experiment with
@@ -102,27 +114,12 @@ randomize( int seed  )
 
   in_seed = ( seed <= 0 ? static_cast<long>(time( 0 )) : seed );
 
-#if (!defined(WIN32) && !defined(_WIN32))
-  srand48( in_seed );
-#else
   srand( ( unsigned ) in_seed );
-#endif
 
   return in_seed;
 }
 
 // Flip a coin with probability p.
-
-#if (!defined(WIN32) && !defined(_WIN32))
-
-inline
-bool
-flip( double p )
-{
-  return ( drand48() < p );
-}
-
-#else
 
 inline
 bool
@@ -135,8 +132,6 @@ flip( double p )
   // with p.
   return ( rand() < ( int ) ( p * MAX_VAL ) );
 }
-
-#endif
 
 // Randomly generate a bit string with nbits bits.  str has a length
 // of nbits + 1. This function is used to generate random messages to
