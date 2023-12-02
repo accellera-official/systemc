@@ -89,6 +89,13 @@ abs_val( const sc_signed& x )
   return ( x < 0 ? -x : x );
 }
 
+
+// +------------------------------------------------------------------------------------------------
+// |"home-made rand and srand"
+// | 
+// | These two functions are defined in "srand(3) - Linux man page"
+// |
+// +------------------------------------------------------------------------------------------------
 static unsigned long next = 1;
 
 /* RAND_MAX assumed to be 32767 */
