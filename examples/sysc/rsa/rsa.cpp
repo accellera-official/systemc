@@ -65,6 +65,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
+#include <stdlib.h>    // drand48, srand48
 #include "systemc.h"
 
 #define DEBUG_SYSTEMC // #undef this to disable assertions.
@@ -89,26 +90,6 @@ abs_val( const sc_signed& x )
   return ( x < 0 ? -x : x );
 }
 
-
-// +------------------------------------------------------------------------------------------------
-// |"home-made rand and srand"
-// | 
-// | These two functions are defined in "srand(3) - Linux man page"
-// |
-// +------------------------------------------------------------------------------------------------
-static unsigned long next = 1;
-
-/* RAND_MAX assumed to be 32767 */
-int rand(void) {
-   next = next * 1103515245 + 12345;
-   return((unsigned)(next/65536) % 32768);
-}
-
-void srand(unsigned int seed) {
-   next = seed;
-}
-
-
 // Initialize the random number generator. If seed == -1, the
 // generator will be initialized with the system time. If not, it will
 // be initialized with the given seed. This way, an experiment with
@@ -132,12 +113,11 @@ inline
 bool
 flip( double p )
 {
-  const int MAX_VAL = ( 1 << 15 );
+  // rand() produces an integer between 0 and RAND_MAX so 
+  // rand() / RAND_MAXMAX is a number between 0 and 1, 
+  // which is required to compare with p.
 
-  // rand() produces an integer between 0 and 2^15-1, so rand() /
-  // MAX_VAL is a number between 0 and 1, which is required to compare
-  // with p.
-  return ( rand() < ( int ) ( p * MAX_VAL ) );
+  return ( rand() < ( int ) ( p * RAND_MAX ) );
 }
 
 // Randomly generate a bit string with nbits bits.  str has a length
