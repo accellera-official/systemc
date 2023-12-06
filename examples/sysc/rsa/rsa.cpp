@@ -114,9 +114,8 @@ bool
 flip( double p )
 {
   // rand() produces an integer between 0 and RAND_MAX so 
-  // rand() / RAND_MAXMAX is a number between 0 and 1, 
+  // rand() / RAND_MAX is a number between 0 and 1, 
   // which is required to compare with p.
-
   return ( rand() < ( int ) ( p * RAND_MAX ) );
 }
 
