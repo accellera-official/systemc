@@ -75,9 +75,9 @@ class SC_API sc_hierarchy_scope
         sc_simcontext*  simc;
         sc_object_host* scope;
     };
-    SC_NODISCARD_ move_tag move();
+    [[nodiscard]] move_tag move();
 #else
-    SC_NODISCARD_ sc_hierarchy_scope move()
+    [[nodiscard]] sc_hierarchy_scope move()
       { return std::move(*this); }
 #endif // C++03
 
@@ -190,7 +190,7 @@ protected:
     sc_object& operator=( const sc_object& );
 
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
+    [[nodiscard]] virtual hierarchy_scope get_hierarchy_scope();
 
 private:
     void detach();
@@ -240,7 +240,7 @@ public:
 
 protected:
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
+    [[nodiscard]] virtual hierarchy_scope get_hierarchy_scope();
 
 private:
     virtual void add_child_event( sc_event* event_p );

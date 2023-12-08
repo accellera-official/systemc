@@ -133,33 +133,6 @@
 # define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
 
 // ----------------------------------------------------------------------------
-// indicate, that a function result shall not be discarded
-
-#ifndef SC_NODISCARD_
-
-#if defined(__has_cpp_attribute)
-# if __has_cpp_attribute(nodiscard)
-#   define SC_NODISCARD_ [[nodiscard]]
-# endif
-#endif // __has_cpp_attribute(nodiscard)
-
-#if !defined(SC_NODISCARD_) && defined(__has_attribute)
-# if __has_attribute(warn_unused_result)
-#   define SC_NODISCARD_ __attribute__((warn_unused_result))
-# endif
-#endif // __has_attribute(warn_unused_result)
-
-#if !defined(SC_NODISCARD_) && defined(_Check_return_)
-# define SC_NODISCARD_ _Check_return_
-#endif // _Check_result_
-
-#ifndef SC_NODISCARD_
-# define SC_NODISCARD_ /* nothing */
-#endif
-
-#endif // SC_NODISCARD_
-
-// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>
