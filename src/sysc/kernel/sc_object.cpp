@@ -110,7 +110,7 @@ sc_hierarchy_scope::move()
 
 #endif // SC_CPLUSPLUS >= 201103L
 
-sc_hierarchy_scope::~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false)
+sc_hierarchy_scope::~sc_hierarchy_scope() noexcept(false)
 {
     if (m_simc)
     {

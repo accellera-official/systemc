@@ -72,7 +72,7 @@ public:
     sc_module_name( const sc_module_name& );
 
     // might throw from initializer function
-    ~sc_module_name() SC_NOEXCEPT_EXPR_(false);
+    ~sc_module_name() noexcept(false);
 
     operator const char*() const;
 

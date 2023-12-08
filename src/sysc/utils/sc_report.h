@@ -127,7 +127,7 @@ public:
 
     sc_report & operator=(const sc_report&);
 
-    virtual ~sc_report() SC_NOEXCEPT_;
+    virtual ~sc_report() noexcept;
 
     const char * get_msg_type() const;
 
@@ -152,7 +152,7 @@ public:
 
     bool valid () const;
 
-    virtual const char* what() const SC_NOEXCEPT_
+    virtual const char* what() const noexcept
         {
 	    return m_what;
 	}
