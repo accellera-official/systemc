@@ -41,9 +41,9 @@
 
 // The #if bracketed code below will work with quick threads
 
-#if 0
-#include "/Users/acg/work/sysc/2.4.osci_wg_issues/src/sysc/kernel/sc_thread_process.h"
-#include "/Users/acg/work/sysc/2.4.osci_wg_issues/src/sysc/kernel/sc_cor_qt.h"
+#if 0 
+#include "sysc/kernel/sc_thread_process.h"
+#include "sysc/kernel/sc_cor_qt.h"
 
 
 void my_dump( size_t value )
