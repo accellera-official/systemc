@@ -127,12 +127,6 @@
 #endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------
-// (no) exception specifiers
-
-# define SC_NOEXCEPT_            noexcept
-# define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
-
-// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>

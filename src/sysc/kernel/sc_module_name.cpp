@@ -55,7 +55,7 @@ sc_module_name::sc_module_name( const sc_module_name& name_ )
   m_pushed( false )
 {}
 
-sc_module_name::~sc_module_name() SC_NOEXCEPT_EXPR_(false)
+sc_module_name::~sc_module_name() noexcept(false)
 {
     if( m_pushed ) {
         sc_module_name* smn = m_simc->get_object_manager()->pop_module_name();

@@ -84,7 +84,7 @@ class SC_API sc_hierarchy_scope
     sc_hierarchy_scope(kernel_tag, sc_object*);
     sc_hierarchy_scope(kernel_tag, sc_object_host*);
 public:
-    ~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false);
+    ~sc_hierarchy_scope() noexcept(false);
 
     // get root scope
     static sc_hierarchy_scope get_root() { return sc_hierarchy_scope(sc_core::sc_hierarchy_scope::root); }
