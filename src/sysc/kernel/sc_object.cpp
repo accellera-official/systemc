@@ -79,36 +79,12 @@ sc_hierarchy_scope::sc_hierarchy_scope( root_tag )
     }
 }
 
-#if SC_CPLUSPLUS >= 201103L
-
 sc_hierarchy_scope::sc_hierarchy_scope(sc_hierarchy_scope&& that)
   : m_simc(that.m_simc)
   , m_scoped_top(that.m_scoped_top)
 {
     that.m_simc = nullptr;
 }
-
-#else // SC_CPLUSPLUS >= 201103L
-
-sc_hierarchy_scope::sc_hierarchy_scope(move_tag from)
-  : m_simc(from.simc)
-  , m_scoped_top(from.scope)
-{}
-
-sc_hierarchy_scope::move_tag::move_tag( sc_hierarchy_scope& s )
-  : simc( s.m_simc )
-  , scope( s.m_scoped_top )
-{
-    s.m_simc = NULL;
-}
-
-sc_hierarchy_scope::move_tag
-sc_hierarchy_scope::move()
-{
-  return move_tag( *this );
-}
-
-#endif // SC_CPLUSPLUS >= 201103L
 
 sc_hierarchy_scope::~sc_hierarchy_scope() noexcept(false)
 {

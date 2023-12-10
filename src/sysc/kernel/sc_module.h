@@ -42,9 +42,7 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/utils/sc_list.h"
 
-#if SC_CPLUSPLUS >= 201103L
 # include <type_traits> // std::remove_reference
-#endif
 
 namespace sc_core {
 
@@ -411,51 +409,29 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#if !defined(SC_ALLOW_DEPRECATED_IEEE_API) && SC_CPLUSPLUS >= 201402L
+#if !defined(SC_ALLOW_DEPRECATED_IEEE_API) 
     [[deprecated("SC_HAS_PROCESS(user_module_name) is obsolete in IEEE 1666-2023, define SC_ALLOW_DEPRECATED_IEEE_API to suppress.")]]
 #endif
-#if SC_CPLUSPLUS >= 201703L
     [[maybe_unused]] 
-#endif
-#if SC_CPLUSPLUS >= 201103L
-    static inline constexpr bool sc_has_process_used = true;
-    #define SC_HAS_PROCESS(user_module_type) \
-        static_assert(sc_core::sc_has_process_used, "no-op to avoid stray ';'")
+static inline constexpr bool sc_has_process_used = true;
+#define SC_HAS_PROCESS(user_module_type) \
+    static_assert(sc_core::sc_has_process_used, "no-op to avoid stray ';'")
 
-    #define SC_CURRENT_USER_MODULE_TYPE \
-        std::remove_reference<decltype(*this)>::type
-#else
-    // the SC_HAS_PROCESS macro call must be followed by a ;
-    #define SC_HAS_PROCESS(user_module_name)                                  \
-        typedef user_module_name SC_CURRENT_USER_MODULE
-
-    #define SC_CURRENT_USER_MODULE_TYPE SC_CURRENT_USER_MODULE
-#endif
+#define SC_CURRENT_USER_MODULE_TYPE \
+    std::remove_reference<decltype(*this)>::type
 
 // SC_CTOR  --------------------------------------------------------------------
 
 #define SC_CTOR(...)                                                      \
         SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
 
-#if SC_CPLUSPLUS >= 201103L
-    // SC_CTOR( user_module_name )
-    #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
-        user_module_name( ::sc_core::sc_module_name )
+// SC_CTOR( user_module_name )
+#define SC_CTOR_IMPL_ONE_(user_module_name)                               \
+    user_module_name( ::sc_core::sc_module_name )
 
-    // SC_CTOR( user_module_name , ... )
-    #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
-        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
-#else
-    // SC_CTOR( user_module_name )
-    #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
-        SC_HAS_PROCESS(user_module_name);                                 \
-        user_module_name( ::sc_core::sc_module_name )
-
-    // SC_CTOR( user_module_name , ... )
-    #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
-        SC_HAS_PROCESS(user_module_name);                                 \
-        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
-#endif
+// SC_CTOR( user_module_name , ... )
+#define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
+    user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
 #define SC_CTOR_IMPL_(...)                                                \
       SC_CONCAT_HELPER_(SC_CTOR_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
 

@@ -410,7 +410,6 @@ public:
   void init( size_type n, Creator c,
              sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT);
 
-#if SC_CPLUSPLUS >= 201103L
   // Append element with automatically generated name
   // T(generated_name, args...)
   template< typename... Args >
@@ -419,7 +418,6 @@ public:
   // Append element with user-defined name
   template< typename... Args >
   void emplace_back_with_name(Args &&... args);
-#endif
 
   static element_type * create_element( const char* prefix, size_type index );
 
@@ -673,8 +671,6 @@ sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
   }
 }
 
-#if SC_CPLUSPLUS >= 201103L
-
 template< typename T >
 template< typename... Args >
 void sc_vector<T>::emplace_back( Args&&... args ) {
@@ -695,8 +691,6 @@ void sc_vector<T>::emplace_back_with_name(Args &&... args) {
     base_type::push_back(p);
   }
 }
-
-#endif // SC_CPLUSPLUS >= 201103L
 
 template< typename T >
 void

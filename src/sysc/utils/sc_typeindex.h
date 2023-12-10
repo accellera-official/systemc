@@ -31,56 +31,15 @@
 #ifndef SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 #define SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 
-#include "sysc/kernel/sc_cmnhdr.h" // SC_CPLUSPLUS
+#include "sysc/kernel/sc_cmnhdr.h" 
 
 #include <typeinfo>
 
-#if SC_CPLUSPLUS >= 201103L
 #include <typeindex> // C++11 has std::typeindex to serve our needs
 
 namespace sc_core {
 typedef std::type_index sc_type_index;
 } // namespace sc_core
 
-#else // C++03 implementation
-
-namespace sc_core {
-
-class sc_type_index
-{
-public:
-  sc_type_index(const std::type_info& ti)
-    : info_(&ti)
-  {}
-
-  bool operator==( const sc_type_index& rhs ) const
-    { return *info_ == *rhs.info_; }
-
-  bool operator!=( const sc_type_index& rhs ) const
-    { return *info_ != *rhs.info_; }
-
-  bool operator< ( const sc_type_index& rhs ) const
-    { return info_->before( *rhs.info_ ); }
-
-  bool operator<=( const sc_type_index& rhs ) const
-    { return !(*this > rhs); }
-
-  bool operator> ( const sc_type_index& rhs ) const
-    { return rhs.info_->before( *info_ ); }
-
-  bool operator>=( const sc_type_index& rhs ) const
-    { return !(*this < rhs); }
-
-  const char* name() const
-    { return info_->name(); }
-
-private:
-  std::type_info const* info_;
-
-}; // class sc_type_index
-
-} // namespace sc_core
-
-#endif // SC_CPLUSPLUS < 201103L
 #endif // SYSC_UTILS_SC_TYPEINDEX_H_INCLUDED_
 // Taf!
