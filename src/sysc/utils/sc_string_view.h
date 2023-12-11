@@ -35,7 +35,6 @@
 #include "sysc/kernel/sc_cmnhdr.h"
 #include <string>
 #include <type_traits> // std::enable_if, std::is_convertible
-
 #include <string_view>
 
 namespace sc_core {
@@ -53,12 +52,10 @@ public:
     using base_type::base_type;
 
     // allow same conversions as base class, needed for C++17
-# if !defined(_MSC_VER) || _MSC_VER >= 1910 // internal compiler error on MSVC 2015
     template<typename T>
     /* constexpr */ sc_string_view( const T& s
                                   , typename enable_if_convertible<T>::type* = 0)
       : base_type(s) {}
-# endif // MSVC 2015 or earlier
 
   // helper function to create an explicit string copy
   inline std::string str() const

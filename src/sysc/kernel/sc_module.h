@@ -42,7 +42,7 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/utils/sc_list.h"
 
-# include <type_traits> // std::remove_reference
+#include <type_traits> // std::remove_reference
 
 namespace sc_core {
 
@@ -425,11 +425,11 @@ static inline constexpr bool sc_has_process_used = true;
 #define SC_CTOR(...)                                                      \
         SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
 
-// SC_CTOR( user_module_name )
+// SC_CTOR(user_module_name)
 #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
     user_module_name( ::sc_core::sc_module_name )
 
-// SC_CTOR( user_module_name , ... )
+// SC_CTOR(user_module_name, ...)
 #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
     user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
 #define SC_CTOR_IMPL_(...)                                                \
