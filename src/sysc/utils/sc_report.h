@@ -229,7 +229,7 @@ typedef std::exception sc_exception;
 //  but may print additional information.
 // ----------------------------------------------------------------------------
 
-noreturn SC_API void sc_abort();
+[[noreturn]] SC_API void sc_abort();
 
 // ----------------------------------------------------------------------------
 //  MACRO : sc_assert(expr)
@@ -251,7 +251,7 @@ noreturn SC_API void sc_abort();
 
 #endif // defined(NDEBUG) && !defined(SC_ENABLE_ASSERTIONS)
 
-noreturn SC_API  void
+[[noreturn]] SC_API  void
 sc_assertion_failed(const char* msg, const char* file, int line);
 
 extern SC_API const char SC_ID_UNKNOWN_ERROR_[];
