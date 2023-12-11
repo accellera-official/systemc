@@ -19,13 +19,12 @@
 
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_phase.h"
 #include "sysc/utils/sc_string_view.h"
-#include "sysc/utils/sc_typeindex.h"
 #include "sysc/utils/sc_report.h"
 #include <cstring>
 #include <map>
+#include <typeindex>
 
 using sc_core::sc_string_view;
-using sc_core::sc_type_index;
 
 namespace tlm {
 /* anonymous */ namespace {
@@ -37,7 +36,7 @@ struct tlm_phase_registry
   static tlm_phase_registry& instance()
     { static tlm_phase_registry inst; return inst; }
 
-  unsigned int register_phase(sc_type_index type, sc_string_view name)
+  unsigned int register_phase(std::type_index type, sc_string_view name)
   {
     type_map::const_iterator it = ids_.find( type );
 
@@ -69,7 +68,7 @@ struct tlm_phase_registry
   }
 
 private:
-  typedef std::map<sc_type_index, key_type> type_map;
+  typedef std::map<std::type_index, key_type> type_map;
   typedef std::vector<std::string> name_table;
 
   type_map   ids_;

@@ -179,7 +179,7 @@ public:
   // Implementation of tlm_base_socket_if functions
   virtual unsigned int                    get_bus_width() const
     { return BUSWIDTH; }
-  virtual sc_core::sc_type_index          get_protocol_types() const
+  virtual std::type_index                 get_protocol_types() const
     { return typeid(typename FW_IF::protocol_types); }
   virtual tlm_socket_category             get_socket_category() const
     { return TLM_TARGET_SOCKET; }
