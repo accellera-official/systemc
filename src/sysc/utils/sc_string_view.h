@@ -64,6 +64,21 @@ public:
   inline std::string str() const
     { return std::string( data(), size() ); }
 
+#if SC_CPLUSPLUS <= 201703L // before C++20
+  /* constexpr */ bool starts_with(base_type sv) const /* noexcept */
+    { return size() >= sv.size() && compare(0, sv.size(), sv) == 0; }
+  /* constexpr */ bool starts_with(char c) const /* noexcept */
+    { return !empty() && front() == c; }
+  /* constexpr */ bool starts_with(const char* s) const /* noexcept */
+    { return starts_with( sc_string_view(s) ); }
+
+  /* constexpr */ bool ends_with(base_type sv) const /* noexcept */
+    { return size() >= sv.size() && compare(size() - sv.size(), npos, sv) == 0; }
+  /* constexpr */ bool ends_with(char c) const /* noexcept */
+    { return !empty() && back() == c; }
+  /* constexpr */ bool ends_with(const char* s) const /* noexcept */
+    { return ends_with( sc_string_view(s) ); }
+#endif // before C++20
 };     // class sc_string_view
 
 /// non-owning, constant reference to null-terminated string
