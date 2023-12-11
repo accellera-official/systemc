@@ -29,7 +29,6 @@
 
 #ifndef SC_EXPORT_H
 #define SC_EXPORT_H
-#include <typeinfo>
 #include <typeindex>
 
 #include "sysc/communication/sc_communication_ids.h"

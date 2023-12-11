@@ -29,7 +29,7 @@
 #ifndef SC_PORT_H
 #define SC_PORT_H
 
-#include <typeinfo>
+// #include <typeinfo>
 #include <typeindex>
 
 #include "sysc/communication/sc_communication_ids.h"
