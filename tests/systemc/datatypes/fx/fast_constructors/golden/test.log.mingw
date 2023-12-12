@@ -46,8 +46,8 @@ e : 2147483648 : 0x08e+7
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 3.40282346638529e+038 : 0x0ffffffe+26
-e : 1.17549435082229e-038 : 0x.4e-31
+d : 3.40282346638529e+38 : 0x0ffffffe+26
+e : 1.17549435082229e-38 : 0x.4e-31
 --default_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_double
 a : 0 : 0x0
 b : 1 : 0x1
@@ -320,8 +320,8 @@ e : 2147483648 : 0x08e+7
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 3.40282346638529e+038 : 0x0ffffffe+26
-e : 1.17549435082229e-038 : 0x.4e-31
+d : 3.40282346638529e+38 : 0x0ffffffe+26
+e : 1.17549435082229e-38 : 0x.4e-31
 --assign_constructor-Inf-Inf-Inf-Inf-Inf- test_fx_float_double
 a : 0 : 0x0
 b : 1 : 0x1
@@ -565,8 +565,8 @@ e : 2147483648 : 0x08e+7
 a : 0 : 0x0
 b : 1 : 0x1
 c : -1 : 0xf
-d : 3.40282346638529e+038 : 0x0ffffffe+26
-e : 1.17549435082229e-038 : 0x.4e-31
+d : 3.40282346638529e+38 : 0x0ffffffe+26
+e : 1.17549435082229e-38 : 0x.4e-31
 --default_assign-Inf-Inf-Inf-Inf-Inf- test_fx_float_double
 a : 0 : 0x0
 b : 1 : 0x1
