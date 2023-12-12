@@ -18,10 +18,10 @@
  *****************************************************************************/
 
 #include "tlm_utils/instance_specific_extensions_int.h"
-#include "sysc/utils/sc_typeindex.h" // sc_typeindex
 
 #include <map>
 #include <iostream>
+#include <typeindex>
 
 namespace tlm {
 template class SC_API tlm_array<tlm_utils::ispex_base*>;
@@ -32,7 +32,7 @@ namespace tlm_utils {
 class ispex_registry // copied from tlm_gp.cpp
 {
   typedef unsigned int key_type;
-  typedef std::map<sc_core::sc_type_index, key_type> type_map;
+  typedef std::map<std::type_index, key_type> type_map;
 public:
   static ispex_registry& instance()
   {
@@ -41,7 +41,7 @@ public:
     return *instance_;
   }
 
-  unsigned int register_extension(sc_core::sc_type_index type)
+  unsigned int register_extension(std::type_index type)
   {
     type_map::const_iterator it = ids_.find( type );
 

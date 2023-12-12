@@ -76,11 +76,9 @@ sc_module_name::operator const char*() const
 
 void sc_module_name::execute_initializers()
 {
-#if SC_CPLUSPLUS >= 201103L
     for (auto& initializer_fn : m_initializer_fn_vec)
         initializer_fn();
     m_initializer_fn_vec.clear();
-#endif // C++11
 }
 
 } // namespace sc_core

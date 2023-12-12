@@ -29,13 +29,14 @@
 #ifndef SC_PORT_H
 #define SC_PORT_H
 
+// #include <typeinfo>
+#include <typeindex>
 
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_interface.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_process.h"
-#include "sysc/utils/sc_typeindex.h"
 
 #if ! defined( SC_DISABLE_VIRTUAL_BIND )
 #  define SC_VIRTUAL_ virtual
@@ -101,7 +102,7 @@ public:
         { return "sc_port_base"; }
 
     // return RTTI information of associated interface
-    virtual sc_type_index get_interface_type() const = 0;
+    virtual std::type_index get_interface_type() const = 0;
 
 protected:
 
@@ -327,7 +328,7 @@ public:
         { return m_interface; }
 
     // return RTTI information of associated interface
-    virtual sc_type_index get_interface_type() const;
+    virtual std::type_index get_interface_type() const;
 
 protected:
 
@@ -573,7 +574,7 @@ sc_port_b<IF>::add_interface( sc_interface* interface_ )
 
 template <class IF>
 inline
-sc_type_index
+std::type_index
 sc_port_b<IF>::get_interface_type() const
 {
     return typeid( IF );

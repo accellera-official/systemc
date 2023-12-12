@@ -30,7 +30,7 @@
 #ifndef SC_MACROS_H
 #define SC_MACROS_H
 
-#include "sysc/kernel/sc_cmnhdr.h" // SC_CPLUSPLUS
+#include "sysc/kernel/sc_cmnhdr.h" 
 
 namespace sc_dt {
 
@@ -120,17 +120,10 @@ sc_abs( const T& a )
 #define SC_NAMED(...) \
   SC_NAMED_IMPL_(__VA_ARGS__)(__VA_ARGS__)
 
-#if SC_CPLUSPLUS >= 201103L // use uniform initialization in C++11 or later
 # define SC_NAMED_IMPL_ONE_(inst) \
     inst { SC_STRINGIFY_HELPER_(inst) }
 # define SC_NAMED_IMPL_MORE_(inst, ...) \
     inst { SC_STRINGIFY_HELPER_(inst), __VA_ARGS__ }
-#else // use regular init
-# define SC_NAMED_IMPL_ONE_(inst) \
-    inst ( SC_STRINGIFY_HELPER_(inst) )
-# define SC_NAMED_IMPL_MORE_(inst, ...) \
-    inst ( SC_STRINGIFY_HELPER_(inst), __VA_ARGS__ )
-#endif // SC_CPLUSPLUS
 
 #define SC_NAMED_IMPL_(...) \
   SC_CONCAT_HELPER_(SC_NAMED_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))

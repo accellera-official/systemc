@@ -29,12 +29,11 @@
 
 #ifndef SC_EXPORT_H
 #define SC_EXPORT_H
-#include <typeinfo>
+#include <typeindex>
 
 #include "sysc/communication/sc_communication_ids.h"
 #include "sysc/communication/sc_interface.h"
 #include "sysc/kernel/sc_object.h"
-#include "sysc/utils/sc_typeindex.h"
 
 #if ! defined( SC_DISABLE_VIRTUAL_BIND )
 #  define SC_VIRTUAL_ virtual
@@ -65,7 +64,7 @@ public:
     virtual       const sc_interface* get_interface() const = 0;
 
     // return RTTI information of associated interface
-    virtual sc_type_index get_interface_type() const = 0;
+    virtual std::type_index get_interface_type() const = 0;
 
 protected:
     
@@ -200,7 +199,7 @@ public: // identification:
     virtual const char* kind() const { return "sc_export"; }
 
     // return RTTI information of associated interface
-    virtual sc_type_index get_interface_type() const
+    virtual std::type_index get_interface_type() const
     {
         return typeid( IF );
     }

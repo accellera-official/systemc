@@ -59,7 +59,6 @@ H_FILES += \
 	utils/sc_string.h \
 	utils/sc_string_view.h \
 	utils/sc_temporary.h \
-	utils/sc_typeindex.h \
 	utils/sc_utils_ids.h \
 	utils/sc_vector.h
 

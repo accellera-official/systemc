@@ -360,7 +360,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_string.h
                      sysc/utils/sc_string_view.h
                      sysc/utils/sc_temporary.h
-                     sysc/utils/sc_typeindex.h
                      sysc/utils/sc_utils_ids.h
                      sysc/utils/sc_vector.h
                      systemc

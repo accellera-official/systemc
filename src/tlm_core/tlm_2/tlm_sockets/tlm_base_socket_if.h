@@ -20,9 +20,9 @@
 #ifndef TLM_CORE_TLM_BASE_SOCKET_IF_H_INCLUDED_
 #define TLM_CORE_TLM_BASE_SOCKET_IF_H_INCLUDED_
 
+#include <typeindex>
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_port.h"
-#include "sysc/utils/sc_typeindex.h"
 
 namespace tlm {
 
@@ -55,7 +55,7 @@ public:
 #endif // SC_ENABLE_COVARIANT_VIRTUAL_BASE
 
   virtual unsigned int                    get_bus_width() const = 0;
-  virtual sc_core::sc_type_index          get_protocol_types() const = 0;
+  virtual std::type_index                 get_protocol_types() const = 0;
   virtual tlm_socket_category             get_socket_category() const = 0;
 
   virtual bool                            is_multi_socket() const = 0;
