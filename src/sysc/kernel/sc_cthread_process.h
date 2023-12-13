@@ -57,7 +57,7 @@ class sc_cthread_process : public sc_thread_process {
 
   public:
     sc_cthread_process( const char* name_p, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p, 
+        sc_entry_func method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
     virtual void dont_initialize( bool dont );
@@ -67,7 +67,7 @@ class sc_cthread_process : public sc_thread_process {
 private:
 
     sc_cthread_process( const char*   nm,
-            SC_ENTRY_FUNC fn,
+            sc_entry_func fn,
             sc_process_host*    host );
 
     // may not be deleted manually (called from sc_process_b)

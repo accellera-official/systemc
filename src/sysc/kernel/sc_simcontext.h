@@ -34,8 +34,11 @@
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_status.h"
 #include "sysc/kernel/sc_time.h"
+#include "sysc/kernel/sc_stage_callback_if.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
+
+#include "sysc/communication/sc_host_mutex.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -51,13 +54,16 @@ class sc_cor_pkg;
 class sc_event;
 class sc_event_timed;
 class sc_export_registry;
+class sc_hierarchy_scope;
+class sc_initializer_function;
 class sc_module;
 class sc_module_name;
 class sc_module_registry;
 class sc_name_gen;
 class sc_object;
+class sc_object_host;
 class sc_object_manager;
-class sc_phase_callback_registry;
+class sc_stage_callback_registry;
 class sc_process_handle;
 class sc_port_registry;
 class sc_prim_channel_registry;
@@ -70,7 +76,9 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
+class sc_stub_registry;
 
+extern sc_simcontext* sc_get_curr_simcontext();
 
 template< typename > class sc_plist;
 typedef sc_plist< sc_process_b* > sc_process_list;
@@ -134,7 +142,17 @@ SC_API bool    sc_pending_activity_at_current_time( const sc_simcontext* );
 SC_API bool    sc_pending_activity_at_future_time( const sc_simcontext* );
 SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
 
-struct sc_invoke_method; 
+SC_API void sc_register_stage_callback(sc_stage_callback_if & cb,
+                                       unsigned int mask);
+SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
+                                         unsigned int mask);
+
+class sc_invoke_method;
+
+SC_API void    sc_suspend_all();
+SC_API void    sc_unsuspend_all();
+SC_API void    sc_unsuspendable();
+SC_API void    sc_suspendable();
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
@@ -144,15 +162,20 @@ struct sc_invoke_method;
 
 class SC_API sc_simcontext
 {
-    friend struct sc_invoke_method; 
     friend class sc_event;
+    friend class sc_export_registry;
+    friend class sc_hierarchy_scope;
+    friend class sc_initializer_function;
+    friend class sc_invoke_method;
     friend class sc_module;
     friend class sc_object;
+    friend class sc_object_host;
     friend class sc_time;
     friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
-    friend class sc_phase_callback_registry;
+    friend class sc_stage_callback_registry;
+    friend class sc_port_registry;
     friend class sc_process_b;
     friend class sc_process_handle;
     friend class sc_prim_channel;
@@ -172,6 +195,15 @@ class SC_API sc_simcontext
     friend SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_current_time( const sc_simcontext* );
     friend SC_API bool sc_pending_activity_at_future_time( const sc_simcontext* );
+    friend SC_API void sc_suspend_all();
+    friend SC_API void sc_unsuspend_all();
+    friend SC_API void sc_unsuspendable();
+    friend SC_API void sc_suspendable();
+
+    friend SC_API void sc_register_stage_callback(sc_stage_callback_if & cb,
+                                                  unsigned int mask);
+    friend SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
+                                                    unsigned int mask);
 
     enum sc_signal_write_check
     {
@@ -205,11 +237,12 @@ public:
 
     inline sc_status get_status() const;
 
-    sc_object* active_object();
+    sc_status get_thread_safe_status();
 
-    void hierarchy_push( sc_module* );
-    sc_module* hierarchy_pop();
-    sc_module* hierarchy_curr() const;
+    inline sc_stage get_stage() const;
+
+    sc_object_host* active_object();
+
     sc_object* first_object();
     sc_object* next_object();
     sc_object* find_object( const char* name );
@@ -218,6 +251,8 @@ public:
     sc_port_registry* get_port_registry();
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
+    sc_stage_callback_registry* get_stage_cb_registry();
+    sc_stub_registry* get_stub_registry();
 
     std::string construct_hierarchical_name(const sc_object* parent,
                                             const std::string& name);
@@ -237,15 +272,15 @@ public:
 
     // process creation
     sc_process_handle create_cthread_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_method_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_process_handle create_thread_process( 
-    const char* name_p, bool free_host, SC_ENTRY_FUNC method_p, 
+    const char* name_p, bool free_host, sc_entry_func method_p,
     sc_process_host* host_p, const sc_spawn_options* opt_p );
 
     sc_curr_proc_handle get_curr_proc_info();
@@ -256,9 +291,6 @@ public:
     void reset_curr_proc();
 
     int next_proc_id();
-
-    void add_trace_file( sc_trace_file* );
-    void remove_trace_file( sc_trace_file* );
 
     friend SC_API void    sc_set_time_resolution( double, sc_time_unit );
     friend SC_API sc_time sc_get_time_resolution();
@@ -287,13 +319,21 @@ public:
 
     const ::std::vector<sc_object*>& get_child_objects() const;
 
+    sc_event& null_event();
+
     void elaborate();
     void prepare_to_simulate();
     inline void initial_crunch( bool no_crunch );
     bool next_time( sc_time& t ) const; 
     bool pending_activity_at_current_time() const;
 
+    void pre_suspend() const;
+    void post_suspend() const;
+
 private:
+    void hierarchy_push(sc_object_host*);
+    sc_object_host* hierarchy_pop();
+    sc_object_host* hierarchy_curr() const;
 
     void add_child_event( sc_event* );
     void add_child_object( sc_object* );
@@ -337,6 +377,8 @@ private:
     sc_method_handle remove_process( sc_method_handle );
     sc_thread_handle remove_process( sc_thread_handle );
 
+    inline void set_simulation_status(sc_status status);
+
 private:
 
     enum execution_phases {
@@ -351,7 +393,8 @@ private:
     sc_port_registry*           m_port_registry;
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
-    sc_phase_callback_registry* m_phase_cb_registry;
+    sc_stage_callback_registry* m_stage_cb_registry;
+    sc_stub_registry*           m_stub_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -368,6 +411,8 @@ private:
 
     std::vector<sc_event*>      m_delta_events;
     sc_ppq<sc_event_timed*>*    m_timed_events;
+
+    sc_event*                   m_null_event_p;
 
     std::vector<sc_trace_file*> m_trace_files;
     bool                        m_something_to_trace;
@@ -392,12 +437,17 @@ private:
     bool                        m_in_simulator_control;   
     bool                        m_end_of_simulation_called;
     sc_status                   m_simulation_status;
+    sc_host_mutex               m_simulation_status_mutex;
+    sc_stage                    m_stage;
     bool                        m_start_of_simulation_called;
 
     sc_cor_pkg*                 m_cor_pkg; // the simcontext's coroutine package
     sc_cor*                     m_cor;     // the simcontext's coroutine
 
     sc_reset_finder*            m_reset_finder_q; // Q of reset finders to reconcile.
+
+    int                         m_suspend;
+    int                         m_unsuspendable;
 
 private:
 
@@ -426,11 +476,21 @@ sc_get_curr_simcontext()
 #else
     extern SC_API sc_simcontext* sc_get_curr_simcontext();
 #endif // 0
+
+
+// +------------------------------------------------------------------------------------------------
+// |"sc_get_status"
+// | 
+// | This method returns the current simulator status, and uses a mutex mechanism to guarantee
+// | thread safety. It may be called from pthreads other than the simulator's.
+// |
+// | Result:
+// |     Current simulator status (see the sc_status enum).
+// +------------------------------------------------------------------------------------------------
 inline sc_status sc_get_status()
 {
-    return sc_get_curr_simcontext()->get_status();
+    return sc_get_curr_simcontext()->get_thread_safe_status();
 }
-
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
@@ -442,11 +502,28 @@ sc_simcontext::elaboration_done() const
 }
 
 
+// +------------------------------------------------------------------------------------------------
+// |"sc_simcontext::get_status"
+// | 
+// | This method returns the current simulator status, but does not use a mutex mechanism. It is
+// | intended for use within the simulator's pthread.
+// |
+// | Notes:
+// |     (1) To get the status from outside the simulator's thread the get_thread_safe_status()
+// |         method should be used.
+// | Result:
+// |     Current simulator status (see the sc_status enum).
+// +------------------------------------------------------------------------------------------------
 inline sc_status sc_simcontext::get_status() const
 {
     return m_simulation_status != SC_RUNNING ? 
                   m_simulation_status :
-		  (m_in_simulator_control ? SC_RUNNING : SC_PAUSED);
+		  (m_in_simulator_control ? (m_suspend ? SC_SUSPENDED: SC_RUNNING) : SC_PAUSED);
+}
+
+inline sc_stage sc_simcontext::get_stage() const
+{
+    return m_stage;
 }
 
 inline
@@ -498,6 +575,19 @@ sc_simcontext::get_prim_channel_registry()
     return m_prim_channel_registry;
 }
 
+inline
+sc_stage_callback_registry*
+sc_simcontext::get_stage_cb_registry()
+{
+    return m_stage_cb_registry;
+}
+
+inline
+sc_stub_registry*
+sc_simcontext::get_stub_registry()
+{
+    return m_stub_registry;
+}
 
 inline
 sc_curr_proc_handle
@@ -615,6 +705,13 @@ sc_simcontext::get_current_writer() const
     return m_current_writer;
 }
 
+inline void sc_simcontext::set_simulation_status(sc_status status)
+{
+    sc_scoped_lock lock( m_simulation_status_mutex );
+    m_simulation_status = status;
+}
+
+
 inline bool
 sc_simcontext::write_check() const
 {
@@ -713,6 +810,14 @@ sc_dt::uint64 sc_delta_count_at_current_time()
 inline 
 bool sc_is_running( const sc_simcontext* simc_p = sc_get_curr_simcontext() )
 {
+    static bool stop_assert_issued = false;
+    bool lrm_assert_condition_section_4_6_7_sc_is_running = ( ( sc_get_status() & (SC_RUNNING | SC_PAUSED | SC_SUSPENDED) ) != 0 );
+    if ( ( !stop_assert_issued ) &&
+         ( simc_p->m_ready_to_simulate != lrm_assert_condition_section_4_6_7_sc_is_running )
+       ) {
+        stop_assert_issued = true;  // This must be before the sc_assert!!!
+        sc_assert( simc_p->m_ready_to_simulate == lrm_assert_condition_section_4_6_7_sc_is_running );
+    }
     return simc_p->m_ready_to_simulate;
 }
 
@@ -760,6 +865,21 @@ bool
 sc_end_of_simulation_invoked()
 {
     return sc_get_curr_simcontext()->m_end_of_simulation_called;
+}
+
+inline
+const char*
+sc_get_current_process_name( const char * if_empty = NULL )
+{
+    sc_process_b* active_p; // active process to get name of.
+    const char*   result;   // name of active process.
+
+    active_p = sc_get_curr_simcontext()->get_curr_proc_info()->process_handle;
+    if ( active_p )
+        result = active_p->name();
+    else
+        result = if_empty;
+    return result;
 }
 
 inline
@@ -924,7 +1044,7 @@ extern SC_API bool sc_allow_process_control_corners;
 //  Andy Goodrich: update copyright notice.
 //
 // Revision 1.11  2011/02/13 21:34:35  acg
-//  Andy Goodrich: added SC_UNITIALIZED enum value to process status so
+//  Andy Goodrich: added SC_UNINITIALIZED enum value to process status so
 //  its possible to detect throws before initialization.
 //
 // Revision 1.10  2011/02/11 13:25:24  acg

@@ -26,6 +26,7 @@
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
+#include "sysc/kernel/sc_object.h"
 
 #include <cstdlib>
 #include <cassert>
@@ -33,13 +34,14 @@
 #include <cstdio>
 #include <cstring>
 #include <cctype>
+#include <sstream>
 
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
-#include "sysc/kernel/sc_object.h"
+#include "sysc/kernel/sc_name_gen.h"
 #include "sysc/kernel/sc_object_manager.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_event.h"
@@ -50,8 +52,6 @@
 
 namespace sc_core {
 
-typedef int (*STRCMP)(const void*, const void*);
-
 const char SC_HIERARCHY_CHAR = '.';
 
 /* This will be gotten rid after multiple-processes
@@ -59,6 +59,75 @@ const char SC_HIERARCHY_CHAR = '.';
    problems. */
 bool sc_enable_name_checking = true;
 
+// ----------------------------------------------------------------------------
+//  CLASS : sc_hierarchy_scope
+//
+//  Scoped manipulation of the current SystemC object hierarchy
+// ----------------------------------------------------------------------------
+
+const sc_hierarchy_scope::root_tag sc_hierarchy_scope::root = {};
+
+sc_hierarchy_scope::sc_hierarchy_scope( root_tag )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_scoped_top(NULL)
+{
+    if( m_simc->active_object() == NULL ) {
+        m_simc = NULL; // nothing to do
+    } else {
+        // explicitly push NULL to object hierarchy
+        m_simc->hierarchy_push( m_scoped_top );
+    }
+}
+
+#if SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::sc_hierarchy_scope(sc_hierarchy_scope&& that)
+  : m_simc(that.m_simc)
+  , m_scoped_top(that.m_scoped_top)
+{
+    that.m_simc = nullptr;
+}
+
+#else // SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::sc_hierarchy_scope(move_tag from)
+  : m_simc(from.simc)
+  , m_scoped_top(from.scope)
+{}
+
+sc_hierarchy_scope::move_tag::move_tag( sc_hierarchy_scope& s )
+  : simc( s.m_simc )
+  , scope( s.m_scoped_top )
+{
+    s.m_simc = NULL;
+}
+
+sc_hierarchy_scope::move_tag
+sc_hierarchy_scope::move()
+{
+  return move_tag( *this );
+}
+
+#endif // SC_CPLUSPLUS >= 201103L
+
+sc_hierarchy_scope::~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false)
+{
+    if (m_simc)
+    {
+        sc_object* active = m_simc->active_object();
+        if( SC_UNLIKELY_(active != m_scoped_top) )
+        {
+            std::stringstream sstr;
+            sstr << "current scope: "
+                 << ((active) ? active->name() : "(root)" )
+                 << ", expected scope: "
+                 << ((m_scoped_top) ? m_scoped_top->name() : "(root)");
+            SC_REPORT_ERROR(SC_ID_CORRUPT_HIERARCHY_SCOPE_, sstr.str().c_str() );
+            sc_abort();
+        }
+        m_simc->hierarchy_pop();
+    }
+}
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_object
@@ -66,18 +135,19 @@ bool sc_enable_name_checking = true;
 //  Abstract base class of all SystemC `simulation' objects.
 // ----------------------------------------------------------------------------
 
-void
-sc_object::add_child_event( sc_event* event_p )
+static const std::vector<sc_event*>  no_child_events;
+static const std::vector<sc_object*> no_child_objects;
+
+const std::vector<sc_event*>&
+sc_object::get_child_events() const
 {
-    // no check if event_p is already in the set
-    m_child_events.push_back( event_p );
+    return no_child_events;
 }
 
-void
-sc_object::add_child_object( sc_object* object_ )
+const std::vector<sc_object*>&
+sc_object::get_child_objects() const
 {
-    // no check if object_ is already in the set
-    m_child_objects.push_back( object_ );
+    return no_child_objects;
 }
 
 const char*
@@ -102,55 +172,6 @@ sc_object::dump(::std::ostream& os) const
 }
 
 // +----------------------------------------------------------------------------
-// |"sc_object::remove_child_event"
-// | 
-// | This virtual method removes the supplied event from the list of child
-// | events if it is present.
-// |
-// | Arguments:
-// |     event_p -> event to be removed.
-// | Returns true if the event was present, false if not.
-// +----------------------------------------------------------------------------
-bool
-sc_object::remove_child_event( sc_event* event_p )
-{
-    int size = m_child_events.size();
-    for( int i = 0; i < size; ++ i ) {
-        if( event_p == m_child_events[i] ) {
-            m_child_events[i] = m_child_events[size - 1];
-            m_child_events.pop_back();
-            return true;
-        }
-    }
-    return false;
-}
-
-// +----------------------------------------------------------------------------
-// |"sc_object::remove_child_object"
-// | 
-// | This virtual method removes the supplied object from the list of child
-// | objects if it is present.
-// |
-// | Arguments:
-// |     object_p -> object to be removed.
-// | Returns true if the object was present, false if not.
-// +----------------------------------------------------------------------------
-bool
-sc_object::remove_child_object( sc_object* object_p )
-{
-    int size = m_child_objects.size();
-    for( int i = 0; i < size; ++ i ) {
-        if( object_p == m_child_objects[i] ) {
-            m_child_objects[i] = m_child_objects[size - 1];
-            m_child_objects.pop_back();
-	    object_p->m_parent = NULL;
-            return true;
-        }
-    }
-    return false;
-}
-
-// +----------------------------------------------------------------------------
 // |"sc_object::sc_object_init"
 // | 
 // | This method initializes this object instance and places it in to the
@@ -160,7 +181,7 @@ sc_object::remove_child_object( sc_object* object_p )
 // |     nm = leaf name for the object.
 // +----------------------------------------------------------------------------
 void 
-sc_object::sc_object_init(const char* nm) 
+sc_object::sc_object_init(const char* nm)
 { 
     // SET UP POINTERS TO OBJECT MANAGER, PARENT, AND SIMULATION CONTEXT: 
     //
@@ -186,16 +207,16 @@ sc_object::sc_object_init(const char* nm)
         m_simc->add_child_object( this );
 } 
 
-sc_object::sc_object() : 
-    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
-    m_parent(0), m_simc(0)
+sc_object::sc_object()
+  : m_attr_cltn_p(0), m_name()
+  , m_parent(0), m_simc(0)
 {
     sc_object_init( sc_gen_unique_name("object") );
 }
 
-sc_object::sc_object( const sc_object& that ) : 
-    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
-    m_parent(0), m_simc(0)
+sc_object::sc_object( const sc_object& that )
+  : m_attr_cltn_p(0), m_name()
+  , m_parent(0), m_simc(0)
 {
     sc_object_init( sc_gen_unique_name( that.basename() ) );
 }
@@ -207,9 +228,9 @@ object_name_illegal_char(char ch)
     return (ch == SC_HIERARCHY_CHAR) || std::isspace(ch);
 }
 
-sc_object::sc_object(const char* nm) : 
-    m_attr_cltn_p(0), m_child_events(), m_child_objects(), m_name(),
-    m_parent(0), m_simc(0)
+sc_object::sc_object(const char* nm)
+  : m_attr_cltn_p(0), m_name()
+  , m_parent(0), m_simc(0)
 {
     int namebuf_alloc = 0;
     char* namebuf = 0;
@@ -253,9 +274,6 @@ sc_object::sc_object(const char* nm) :
 
 sc_object::~sc_object()
 {
-#if SC_HAS_PHASE_CALLBACKS_
-    unregister_simulation_phase_callback( SC_STATUS_ANY );
-#endif
     detach();
     delete m_attr_cltn_p;
 }
@@ -275,68 +293,15 @@ void sc_object::detach()
         sc_object_manager* object_manager = m_simc->get_object_manager();
         object_manager->remove_object(m_name);
 
-		// REMOVE OBJECT FROM PARENT'S LIST OF OBJECTS:
+        // REMOVE OBJECT FROM PARENT'S LIST OF OBJECTS:
 
         if ( m_parent )
-	    m_parent->remove_child_object( this );
-	else
-	    m_simc->remove_child_object( this );
-
-        // ORPHAN THIS OBJECT'S CHILDREN:
-
-#if 0 // ####
-	    ::std::<sc_object*> children_p = &get_child_objects();
-		int                 child_n = children_p->size();
-		sc_object*          parent_p;
-
-		for ( int child_i = 0; child_i < child_n; child_i++ )
-		{
-			(*children_p)[child_i]->m_parent = 0;
-		}
-#endif
-
+            m_parent->remove_child_object( this );
+        else
+            m_simc->remove_child_object( this );
     }
 }
 
-// +----------------------------------------------------------------------------
-// |"sc_object::orphan_child_events"
-// | 
-// | This method moves the children of this object instance to be children
-// | of the simulator.
-// +----------------------------------------------------------------------------
-void sc_object::orphan_child_events()
-{
-    std::vector< sc_event* > const & events = get_child_events();
-
-    std::vector< sc_event* >::const_iterator
-            it  = events.begin(), end = events.end();
-
-    for( ; it != end; ++it  )
-    {
-        (*it)->m_parent_p = NULL;
-        simcontext()->add_child_event(*it);
-    }
-}
-
-// +----------------------------------------------------------------------------
-// |"sc_object::orphan_child_objects"
-// | 
-// | This method moves the children of this object instance to be children
-// | of the simulator.
-// +----------------------------------------------------------------------------
-void sc_object::orphan_child_objects()
-{
-    std::vector< sc_object* > const & children = get_child_objects();
-
-    std::vector< sc_object* >::const_iterator
-            it  = children.begin(), end = children.end();
-
-    for( ; it != end; ++it  )
-    {
-        (*it)->m_parent = NULL;
-        simcontext()->add_child_object(*it);
-    }
-}
 
 void
 sc_object::trace( sc_trace_file * /* unused */) const
@@ -436,34 +401,155 @@ sc_object::get_parent() const
     return get_parent_object();
 }
 
+SC_NODISCARD_ sc_object::hierarchy_scope
+sc_object::get_hierarchy_scope()
+{
+    sc_object_host* parent = static_cast<sc_object_host*>( get_parent_object() );
+    return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), parent ).move();
+}
+
 // ----------------------------------------------------------------------------
-// simulation phase callbacks
+//  CLASS : sc_object_host
+//
+//  Abstract (implementation-defined) base class of all SystemC objects, that
+//  can hold child objects/events (i.e. _modules and processes)
+// ----------------------------------------------------------------------------
 
-
-sc_object::phase_cb_mask
-sc_object::register_simulation_phase_callback( phase_cb_mask mask )
+sc_object_host::~sc_object_host()
 {
-    mask = simcontext()->m_phase_cb_registry
-                       ->register_callback(*this, mask);
-    return mask;
+    orphan_child_events();
+    orphan_child_objects();
+    delete m_name_gen_p;
 }
-
-
-sc_object::phase_cb_mask
-sc_object::unregister_simulation_phase_callback( phase_cb_mask mask )
-{
-    mask = simcontext()->m_phase_cb_registry
-                       ->unregister_callback(*this, mask);
-    return mask;
-}
-
 
 void
-sc_object::simulation_phase_callback()
+sc_object_host::add_child_event( sc_event* event_p )
 {
-    SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_NOT_IMPLEMENTED_, name() );
+    // no check if event_p is already in the set
+    m_child_events.push_back( event_p );
 }
 
+void
+sc_object_host::add_child_object( sc_object* object_p )
+{
+    // no check if object_ is already in the set
+    m_child_objects.push_back( object_p );
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_host::remove_child_event"
+// |
+// | This virtual method removes the supplied event from the list of child
+// | events if it is present.
+// |
+// | Arguments:
+// |     event_p -> event to be removed.
+// | Returns true if the event was present, false if not.
+// +----------------------------------------------------------------------------
+bool
+sc_object_host::remove_child_event( sc_event* event_p )
+{
+    std::vector< sc_event* > & events = m_child_events;
+    std::vector< sc_event* >::iterator it  = events.begin(), end = events.end();
+
+    for( ; it != end; ++it  ) {
+        if( *it == event_p )
+        {
+            (*it)->m_parent_with_hierarchy_flag = NULL;
+            *it = events.back();
+            events.pop_back();
+            return true;
+        }
+    }
+    return false;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_host::remove_child_object"
+// |
+// | This virtual method removes the supplied object from the list of child
+// | objects if it is present.
+// |
+// | Arguments:
+// |     object_p -> object to be removed.
+// | Returns true if the object was present, false if not.
+// +----------------------------------------------------------------------------
+bool
+sc_object_host::remove_child_object( sc_object* object_p )
+{
+    std::vector< sc_object* > & objects = m_child_objects;
+    std::vector< sc_object* >::iterator it  = objects.begin(), end = objects.end();
+
+    for( ; it != end; ++it  ) {
+        if( *it == object_p )
+        {
+            (*it)->m_parent = NULL;
+            *it = objects.back();
+            objects.pop_back();
+            return true;
+        }
+    }
+    return false;
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_host::orphan_child_events"
+// |
+// | This method moves the children of this object instance to be children
+// | of the simulator.
+// +----------------------------------------------------------------------------
+void sc_object_host::orphan_child_events()
+{
+    std::vector< sc_event* > const & events = m_child_events;
+
+    std::vector< sc_event* >::const_iterator
+            it  = events.begin(), end = events.end();
+    for( ; it != end; ++it  )
+    {
+        (*it)->m_parent_with_hierarchy_flag = NULL;
+        simcontext()->add_child_event(*it);
+    }
+    m_child_events.clear();
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_host::orphan_child_objects"
+// |
+// | This method moves the children of this object instance to be children
+// | of the simulator.
+// +----------------------------------------------------------------------------
+void sc_object_host::orphan_child_objects()
+{
+    std::vector< sc_object* > const & children = m_child_objects;
+
+    std::vector< sc_object* >::const_iterator
+            it  = children.begin(), end = children.end();
+    for( ; it != end; ++it  )
+    {
+        (*it)->m_parent = NULL;
+        simcontext()->add_child_object(*it);
+    }
+    m_child_objects.clear();
+}
+
+// +----------------------------------------------------------------------------
+// |"sc_object_host::gen_unique_name"
+// |
+// | This method generates a unique name within this object instance's namespace.
+// +----------------------------------------------------------------------------
+const char*
+sc_object_host::gen_unique_name( const char* basename_, bool preserve_first )
+{
+    if ( ! m_name_gen_p )
+        m_name_gen_p = new sc_name_gen;
+    return m_name_gen_p->gen_unique_name( basename_, preserve_first );
+}
+
+SC_NODISCARD_ sc_object::hierarchy_scope
+sc_object_host::get_hierarchy_scope()
+{
+    return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), this ).move();
+}
 
 } // namespace sc_core
 

@@ -67,7 +67,6 @@ public:
   sc_port<simple_bus_arbiter_if> arbiter_port;
   sc_port<simple_bus_slave_if, 0> slave_port;
 
-  SC_HAS_PROCESS(simple_bus);
 
   // constructor
   simple_bus(sc_module_name name_

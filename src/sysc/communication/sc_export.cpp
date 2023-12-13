@@ -68,8 +68,7 @@ sc_export_base::before_end_of_elaboration()
 void
 sc_export_base::construction_done()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -90,8 +89,7 @@ sc_export_base::elaboration_done()
         // may continue, if suppressed
     }
 
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
@@ -106,8 +104,7 @@ sc_export_base::start_of_simulation()
 void
 sc_export_base::start_simulation()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
@@ -122,8 +119,7 @@ sc_export_base::end_of_simulation()
 void
 sc_export_base::simulation_done()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 
@@ -169,7 +165,7 @@ sc_export_registry::insert( sc_export_base* export_ )
     }
 #endif
 
-    sc_module* curr_module = m_simc->hierarchy_curr();
+    sc_module* curr_module = static_cast<sc_module*>( m_simc->hierarchy_curr() );
     if( curr_module == 0 ) {
         export_->report_error( SC_ID_EXPORT_OUTSIDE_MODULE_ );
         return;

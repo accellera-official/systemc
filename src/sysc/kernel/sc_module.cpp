@@ -37,7 +37,6 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_module_registry.h"
-#include "sysc/kernel/sc_name_gen.h"
 #include "sysc/kernel/sc_object_manager.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
@@ -53,60 +52,6 @@
 #include "sysc/utils/sc_utils_ids.h"
 
 namespace sc_core {
-
-// ----------------------------------------------------------------------------
-//  CLASS : sc_module_dynalloc_list
-//
-//  Garbage collection for modules dynamically allocated with SC_NEW.
-// ----------------------------------------------------------------------------
-
-class sc_module_dynalloc_list
-{
-public:
-
-    sc_module_dynalloc_list() : m_list()
-        {}
-
-    ~sc_module_dynalloc_list();
-
-    void add( sc_module* p )
-        { m_list.push_back( p ); }
-
-private:
-
-    sc_plist<sc_module*> m_list;
-};
-
-
-//------------------------------------------------------------------------------
-//"~sc_module_dynalloc_list"
-//
-// Note we clear the m_parent field for the module being deleted. This because
-// we process the list front to back so the parent has already been deleted, 
-// and we don't want ~sc_object() to try to access the parent which may 
-// contain garbage.
-//------------------------------------------------------------------------------
-sc_module_dynalloc_list::~sc_module_dynalloc_list()
-{
-    sc_plist<sc_module*>::iterator it( m_list );
-    while( ! it.empty() ) {
-        (*it)->m_parent = 0;
-        delete *it;
-        it ++;
-    }
-}
-
-
-// ----------------------------------------------------------------------------
-
-SC_API sc_module*
-sc_module_dynalloc( sc_module* module_ )
-{
-    static sc_module_dynalloc_list dynalloc_list;
-    dynalloc_list.add( module_ );
-    return module_;
-}
-
 
 // ----------------------------------------------------------------------------
 //  STRUCT : sc_bind_proxy
@@ -172,18 +117,17 @@ sc_module::sc_module_init()
  */
 
 sc_module::sc_module()
-: sc_object(::sc_core::sc_get_curr_simcontext()
-                  ->get_object_manager()
-                  ->top_of_module_name_stack()
-                  ->operator const char*()),
-  sensitive(this),
-  sensitive_pos(this),
-  sensitive_neg(this),
-  m_end_module_called(false),
-  m_port_vec(),
-  m_port_index(0),
-  m_name_gen(0),
-  m_module_name_p(0)
+  : sc_object_host(sc_core::sc_get_curr_simcontext()
+                      ->get_object_manager()
+                      ->top_of_module_name_stack_name())
+  , sensitive(this)
+  , sensitive_pos(this)
+  , sensitive_neg(this)
+  , m_end_module_called(false)
+  , m_port_vec()
+  , m_port_index(0)
+  , m_name_gen(0)
+  , m_module_name_p(0)
 {
     /* When this form is used, we better have a fresh sc_module_name
        on the top of the stack */
@@ -199,18 +143,16 @@ sc_module::sc_module()
 }
 
 sc_module::sc_module( const sc_module_name& )
-: sc_object(::sc_core::sc_get_curr_simcontext()
-                  ->get_object_manager()
-                  ->top_of_module_name_stack()
-                  ->operator const char*()),
-  sensitive(this),
-  sensitive_pos(this),
-  sensitive_neg(this),
-  m_end_module_called(false),
-  m_port_vec(),
-  m_port_index(0),
-  m_name_gen(0),
-  m_module_name_p(0)
+  : sc_object_host(sc_core::sc_get_curr_simcontext()
+                      ->get_object_manager()
+                      ->top_of_module_name_stack_name())
+  , sensitive(this)
+  , sensitive_pos(this)
+  , sensitive_neg(this)
+  , m_end_module_called(false)
+  , m_port_vec()
+  , m_port_index(0)
+  , m_module_name_p(0)
 {
     /* For those used to the old style of passing a name to sc_module,
        this constructor will reduce the chance of making a mistake */
@@ -235,14 +177,13 @@ sc_module::sc_module( const sc_module_name& )
  *   sc_module( const std::string& )
  */
 sc_module::sc_module( const char* nm )
-: sc_object(nm),
+: sc_object_host(nm),
   sensitive(this),
   sensitive_pos(this),
   sensitive_neg(this),
   m_end_module_called(false),
   m_port_vec(),
   m_port_index(0),
-  m_name_gen(0),
   m_module_name_p(0)
 {
     SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, nm );
@@ -250,14 +191,13 @@ sc_module::sc_module( const char* nm )
 }
 
 sc_module::sc_module( const std::string& s )
-: sc_object( s.c_str() ),
+: sc_object_host( s.c_str() ),
   sensitive(this),
   sensitive_pos(this),
   sensitive_neg(this),
   m_end_module_called(false),
   m_port_vec(),
   m_port_index(0),
-  m_name_gen(0),
   m_module_name_p(0)
 {
     SC_REPORT_WARNING( SC_ID_BAD_SC_MODULE_CONSTRUCTOR_, s.c_str() );
@@ -269,21 +209,12 @@ sc_module::sc_module( const std::string& s )
 sc_module::~sc_module()
 {
     delete m_port_vec;
-    delete m_name_gen;
-    orphan_child_objects();
     if ( m_module_name_p )
     {
 	m_module_name_p->clear_module( this ); // must be before end_module()
     	end_module();
     }
     simcontext()->get_module_registry()->remove( *this );
-}
-
-
-const ::std::vector<sc_object*>&
-sc_module::get_child_objects() const
-{
-    return m_child_objects;
 }
 
 // set SC_THREAD asynchronous reset sensitivity
@@ -313,21 +244,66 @@ sc_module::async_reset_signal_is(const sc_signal_in_if<bool>& iface, bool level)
 }
 
 void
+sc_module::finalize_module()
+{
+    /* TBD: Can check here to alert the user that end_module
+              was not called for a previous module. */
+    (void)sc_get_curr_simcontext()->hierarchy_pop();
+    sc_get_curr_simcontext()->reset_curr_proc();
+    sensitive.reset();
+    sensitive_pos.reset();
+    sensitive_neg.reset();
+    m_module_name_p = 0; // make sure we are not called in ~sc_module().
+}
+
+void
 sc_module::end_module()
 {
-    if( ! m_end_module_called ) {
-	/* TBD: Can check here to alert the user that end_module
-                was not called for a previous module. */
-	(void)sc_get_curr_simcontext()->hierarchy_pop();
-	sc_get_curr_simcontext()->reset_curr_proc(); 
-	sensitive.reset();
-	sensitive_pos.reset();
-	sensitive_neg.reset();
-	m_end_module_called = true;
-	m_module_name_p = 0; // make sure we are not called in ~sc_module().
+    if( ! m_end_module_called )
+    {
+        m_end_module_called = true;
+
+        if (m_module_name_p) try {
+            m_module_name_p->execute_initializers();
+        } catch (...) {
+            finalize_module();
+            throw; // propagate exception
+        }
+
+        finalize_module();
     }
 }
 
+// create processes via SC_METHOD, SC_THREAD, SC_CTHREAD
+
+void
+sc_module::declare_method_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_method_process( name, false, func, this, 0 );
+    sensitive << handle;
+    sensitive_pos << handle;
+    sensitive_neg << handle;
+}
+
+void
+sc_module::declare_thread_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_thread_process( name, false, func, this, 0 );
+    sensitive << handle;
+    sensitive_pos << handle;
+    sensitive_neg << handle;
+}
+
+sc_process_handle
+sc_module::declare_cthread_process( sc_entry_func func, const char* name )
+{
+    sc_process_handle handle =
+      simcontext()->create_cthread_process( name, false, func, this, 0 );
+    return handle;
+    // sensitivity is handled in template function
+}
 
 // to prevent initialization for SC_METHODs and SC_THREADs
 
@@ -364,15 +340,6 @@ sc_module::reset_signal_is( const sc_signal_in_if<bool>& iface, bool level )
 	sc_reset::reset_signal_is(false, iface, level);
 }
 
-// to generate unique names for objects in an MT-Safe way
-
-const char*
-sc_module::gen_unique_name( const char* basename_, bool preserve_first )
-{
-    if( !m_name_gen ) m_name_gen = new sc_name_gen;
-    return m_name_gen->gen_unique_name( basename_, preserve_first );
-}
-
 
 // called by construction_done 
 
@@ -386,7 +353,7 @@ sc_module::before_end_of_elaboration()
 void
 sc_module::construction_done()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -412,7 +379,7 @@ sc_module::elaboration_done( bool& error_ )
         }
         error_ = true;
     }
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
@@ -425,7 +392,7 @@ sc_module::start_of_simulation()
 void
 sc_module::start_simulation()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
@@ -438,7 +405,7 @@ sc_module::end_of_simulation()
 void
 sc_module::simulation_done()
 {
-    hierarchy_scope scope(this);
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 

@@ -84,7 +84,7 @@ public:
     friend bool operator != ( const sc_fxcast_switch&,
 			      const sc_fxcast_switch& );
 
-    const std::string to_string() const;
+    std::string to_string() const;
 
     void print( ::std::ostream& = ::std::cout ) const;
     void dump( ::std::ostream& = ::std::cout ) const;

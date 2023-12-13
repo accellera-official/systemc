@@ -1,9 +1,8 @@
 This directory allows the examples to be launched from 
 the command line on Windows.
 
-It has been tested on Windows 10 with the following compiler versions:
+It has been tested on Windows 10 with the following compiler(s):
 
-  Microsoft Visual C++ 2015 Express Edition
   Microsoft Visual C++ 2019 Express Edition
 
 Note
@@ -21,7 +20,7 @@ Usage
   be sufficient to set the SYSTEMC_HOME environment and MSVC environment.
 
   If you want to use SystemC with different versions of MSVC, 
-  it is recommended to copy the MSVC10 project
+  it is recommended to copy the 'msvc16' project
   files to a new subdirectory (msvc<version>/SystemC) before upgrading
   the project files.  Afterwards, update the MSVC variable to point
   to the newly versions msvc directory.

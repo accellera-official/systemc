@@ -211,10 +211,8 @@ private:
     const sc_dt::uint64& extract_ref(const sc_event& object) const
       { return event_trigger_stamp(object); }
 
-#if SC_TRACING_PHASE_CALLBACKS_
     // avoid hidden overload warnings
     virtual void trace( sc_trace_file* ) const;
-#endif // SC_TRACING_PHASE_CALLBACKS_
 
     // Initialize the VCD tracing
     virtual void do_initialize();

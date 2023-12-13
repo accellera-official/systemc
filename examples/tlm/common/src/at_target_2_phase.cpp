@@ -36,7 +36,6 @@ using namespace  std;
 
 static const char *filename = "at_target_2_phase.cpp";	///< filename for reporting
 
-SC_HAS_PROCESS(at_target_2_phase);
 ///Constructor
 at_target_2_phase::at_target_2_phase                      
 ( sc_core::sc_module_name module_name               // module name

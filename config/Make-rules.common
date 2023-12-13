@@ -20,7 +20,7 @@ if WANT_OPTIMIZE
     AM_CFLAGS+=$(OPT_CXXFLAGS)
 endif
 
-# either for async_update locking or pthread processes
+# for pthread processes
 if USES_PTHREADS_LIB
   AM_CXXFLAGS+=$(PTHREAD_CFLAGS)
     AM_CFLAGS+=$(PTHREAD_CFLAGS)

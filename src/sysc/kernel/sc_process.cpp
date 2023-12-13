@@ -29,7 +29,9 @@
  CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-#include "sysc/kernel/sc_name_gen.h"
+
+#include "sysc/kernel/sc_process.h"
+#include "sysc/kernel/sc_object_int.h"
 #include "sysc/kernel/sc_cthread_process.h"
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
@@ -47,7 +49,7 @@ namespace sc_core {
 
 std::vector<sc_event*>  sc_process_handle::empty_event_vector;
 std::vector<sc_object*> sc_process_handle::empty_object_vector;
-sc_event                sc_process_handle::non_event( sc_event::kernel_event );
+sc_event&               sc_process_handle::non_event() { return sc_get_curr_simcontext()->null_event(); }
 
 // Last process that was created:
 
@@ -229,18 +231,6 @@ std::string sc_process_b::dump_state() const
 
 
 //------------------------------------------------------------------------------
-//"sc_process_b::gen_unique_name"
-//
-// This method generates a unique name within this object instance's namespace.
-//------------------------------------------------------------------------------
-const char* sc_process_b::gen_unique_name( const char* basename_,
-    bool preserve_first )
-{
-    if ( ! m_name_gen_p ) m_name_gen_p = new sc_name_gen;
-    return m_name_gen_p->gen_unique_name( basename_, preserve_first );
-}
-
-//------------------------------------------------------------------------------
 //"sc_process_b::remove_dynamic_events"
 //
 // This method removes this object instance from the events in its dynamic
@@ -390,15 +380,6 @@ sc_process_b::report_immediate_self_notification() const
 void sc_process_b::reset_changed( bool async, bool asserted )
 {
 
-    // Error out on the corner case:
-
-    if ( !sc_allow_process_control_corners && !async &&
-         (m_state & ps_bit_suspended) )
-    {
-	report_error( SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-	              "synchronous reset changed on a suspended process" );
-    }
-
     // IF THIS OBJECT IS PUSHING UP DAISIES WE ARE DONE:
 
     if ( m_state & ps_bit_zombie ) return;
@@ -454,6 +435,7 @@ sc_event& sc_process_b::reset_event()
 {
     if ( !m_reset_event_p )
     {
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_reset_event_p = new sc_event( sc_event::kernel_event, "reset_event" );
     }
     return *m_reset_event_p;
@@ -504,7 +486,7 @@ void sc_process_b::reset_process( reset_type rt,
       // If this is an sc_method only throw if it is active.
 
       case reset_asynchronous:
-	if ( sc_get_status() != SC_RUNNING )
+	if ( sc_get_curr_simcontext()->get_status() != SC_RUNNING )
 	{
 	    report_error(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_);
 	}
@@ -543,10 +525,10 @@ void sc_process_b::reset_process( reset_type rt,
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
-     SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+     sc_entry_func method_p, sc_process_host* host_p,
      const sc_spawn_options* /* opt_p  */
 ) :
-    sc_object( name_p ),
+    sc_object_host( name_p ),
     file(0),
     lineno(0),
     proc_id( simcontext()->next_proc_id()),
@@ -563,7 +545,6 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_has_stack(false),
     m_is_thread(is_thread),
     m_last_report_p(0),
-    m_name_gen_p(0),
     m_process_kind(SC_NO_PROC_),
     m_references_n(1),
     m_resets(),
@@ -581,7 +562,9 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
     m_timed_out(false),
     m_timeout_event_p(0),
     m_trigger_type(STATIC),
-    m_unwinding(false)
+    m_unwinding(false),
+    m_unsuspendable(false),
+    m_suspend_all_req(false)
 {
     // Check spawn phase: m_ready_to_simulate is set *after* elaboration_done()
     unsigned spawned = SPAWN_ELAB;
@@ -602,30 +585,18 @@ sc_process_b::sc_process_b( const char* name_p, bool is_thread, bool free_host,
 //------------------------------------------------------------------------------
 sc_process_b::~sc_process_b()
 {
-
-    // REDIRECT ANY CHILDREN AS CHILDREN OF THE SIMULATION CONTEXT:
-
-    orphan_child_objects();
-
-
     // DELETE SEMANTICS OBJECTS IF NEED BE:
 
     if ( m_free_host ) delete m_semantics_host_p;
-#   if !defined(SC_USE_MEMBER_FUNC_PTR) // Remove invocation object.
-        delete m_semantics_method_p;
-#   endif
-
 
     // REMOVE ANY STRUCTURES THAT MAY HAVE BEEN BUILT:
 
     delete m_last_report_p;
-    delete m_name_gen_p;
     delete m_reset_event_p;
     delete m_resume_event_p;
     delete m_term_event_p;
     delete m_throw_helper_p;
     delete m_timeout_event_p;
-
 }
 
 //------------------------------------------------------------------------------
@@ -638,6 +609,7 @@ sc_event& sc_process_b::terminated_event()
 {
     if ( !m_term_event_p )
     {
+        sc_hierarchy_scope scope( get_hierarchy_scope() );
         m_term_event_p = new sc_event( sc_event::kernel_event, "term_event" );
     }
     return *m_term_event_p;

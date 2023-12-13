@@ -74,6 +74,14 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/datatypes/int/sc_signed.h"
+#include "sysc/datatypes/int/sc_unsigned.h"
+#include "sysc/datatypes/int/sc_int_base.h"
+#include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_wif_trace.h"
 
@@ -1563,7 +1571,7 @@ void wif_trace_file::do_initialize()
     std::fprintf(fp, "init ;\n\n");
 
     //timescale:
-    std::sprintf(buf,"%d", static_cast<int>(log10(static_cast<double>(trace_unit_fs))));
+    std::snprintf(buf, 2000, "%d", static_cast<int>(log10(static_cast<double>(trace_unit_fs))));
     std::fprintf(fp,"header  %s \"%s\" ;\n\n", buf, sc_version());
 
     std::fprintf(fp, "comment \"ASCII WIF file produced on date:  %s\" ;\n"
@@ -1608,12 +1616,10 @@ void wif_trace_file::do_initialize()
     std::fprintf(fp, "\n");
 }
 
-#if SC_TRACING_PHASE_CALLBACKS_
 void wif_trace_file::trace( sc_trace_file* ) const {
     SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_
                    , "invalid call to wif_trace_file::trace(sc_trace_file*)" );
 }
-#endif // SC_TRACING_PHASE_CALLBACKS_
 
 // ----------------------------------------------------------------------------
 
@@ -1856,7 +1862,7 @@ std::string
 wif_trace_file::obtain_name()
 {
     char buf[32];
-    std::sprintf( buf, "O%d", wif_name_index ++ );
+    std::snprintf( buf, 32, "O%d", wif_name_index ++ );
     return buf;
 }
 

@@ -68,10 +68,6 @@ enum sc_writer_policy
   SC_UNCHECKED_WRITERS = 3  ///< even allow delta cycle conflicts (non-standard)
 };
 
-// signal forward declaration
-template< typename T, sc_writer_policy POL = SC_DEFAULT_WRITER_POLICY >
-class sc_signal;
-
 template< sc_writer_policy >
 struct sc_writer_policy_check;
 

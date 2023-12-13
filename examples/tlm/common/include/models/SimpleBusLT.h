@@ -41,7 +41,6 @@ public:
   initiator_socket_type initiator_socket[NR_OF_TARGETS];
 
 public:
-  SC_HAS_PROCESS(SimpleBusLT);
   SimpleBusLT(sc_core::sc_module_name name) :
     sc_core::sc_module(name)
   {

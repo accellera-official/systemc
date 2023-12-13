@@ -68,6 +68,7 @@ public:
     : base_type(n)
     , m_fw_process(this)
     , m_bw_process(this)
+    , m_current_transaction()
   {
     bind(m_fw_process);
   }
@@ -271,6 +272,8 @@ private:
           process_handle_class * ph = m_process_handle.get_handle(&trans);
 
           if (!ph) { // create new dynamic process
+            sc_core::sc_hierarchy_scope scope( m_owner->get_hierarchy_scope() );
+
             ph = new process_handle_class(&trans);
             m_process_handle.put_handle(ph);
 

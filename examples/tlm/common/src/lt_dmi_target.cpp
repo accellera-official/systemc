@@ -35,7 +35,6 @@ using namespace  std;
 
 static const char *filename = "lt_dmi_target.cpp"; ///< filename for reporting
 
-SC_HAS_PROCESS(lt_dmi_target);
 
 ///Constructor
 lt_dmi_target::lt_dmi_target

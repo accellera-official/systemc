@@ -35,68 +35,13 @@
 #include <algorithm> // std::swap
 
 #include "sysc/kernel/sc_object.h"
-
-#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
-# include <type_traits>
-#else // use Boost for type traits
-# include "sysc/packages/boost/config.hpp"
-# include "sysc/packages/boost/utility/enable_if.hpp"
-#endif // type traits
+#include "sysc/utils/sc_meta.h"
+#include "sysc/kernel/sc_stage_callback_if.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::vector
 #endif
-
-namespace sc_core {
-namespace sc_meta {
-
-#if SC_CPLUSPLUS >= 201103L // use C++11 for type traits
-  using std::enable_if;
-  using std::remove_const;
-  using std::is_same;
-  using std::is_const;
-
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    static const Type Value
-
-#else // use Boost/local implementation for type traits
-  template<bool Cond, typename T = void>
-  struct enable_if : sc_boost::enable_if_c<Cond, T> {};
-
-# define SC_STATIC_CONSTANT_(Type,Value) \
-    SC_BOOST_STATIC_CONSTANT(Type,Value)
-
-  // simplistic version to reduce Boost usage
-  template< typename T > struct remove_const          { typedef T type; };
-  template< typename T > struct remove_const<const T> { typedef T type; };
-
-  template< typename T, typename U >
-  struct is_same      { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_same<T,T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
-
-  template< typename T >
-  struct is_const           { SC_BOOST_STATIC_CONSTANT( bool, value = false ); };
-  template< typename T >
-  struct is_const< const T> { SC_BOOST_STATIC_CONSTANT( bool, value = true );  };
-
-#endif // type traits
-
-  template< typename CT, typename T >
-  struct is_more_const {
-    SC_STATIC_CONSTANT_( bool, value
-       = ( is_same< typename remove_const<CT>::type
-                 , typename remove_const<T>::type
-                 >::value
-          && ( is_const<CT>::value >= is_const<T>::value ) ) );
-  };
-
-  struct special_result {};
-  template< typename T > struct remove_special_fptr {};
-  template< typename T > 
-  struct remove_special_fptr< special_result& (*)( T ) >
-    { typedef T type; };
 
 #define SC_RPTYPE_(Type)                                   \
   ::sc_core::sc_meta::remove_special_fptr         \
@@ -106,8 +51,7 @@ namespace sc_meta {
   typename ::sc_core::sc_meta::enable_if                   \
     < SC_RPTYPE_(Cond) >::type * = NULL
 
-} // namespace sc_meta
-
+namespace sc_core {
 // forward declarations
 template< typename T >              class sc_vector;
 template< typename T, typename MT > class sc_vector_assembly;
@@ -129,10 +73,17 @@ sc_vector_do_operator_paren( Container & cont
                            , ArgumentIterator  last
                            , typename Container::iterator from );
 
+enum sc_vector_init_policy
+{
+    SC_VECTOR_LOCK_AFTER_INIT,
+    SC_VECTOR_LOCK_AFTER_ELABORATION
+};
+
 class sc_vector_element;  // opaque pointer
 
 class SC_API sc_vector_base
   : public sc_object
+  , public sc_stage_callback_if
 {
 
   template<typename,typename> friend class sc_vector_assembly;
@@ -152,6 +103,10 @@ public:
   size_type size() const
     { return vec_.size(); }
 
+  void lock() { locked = true; };
+
+  bool is_locked() const { return locked; }
+
 protected:
 
   // begin implementation defined
@@ -165,7 +120,10 @@ protected:
     : sc_object( prefix )
     , vec_()
     , objs_vec_(0)
-  {}
+    , locked(false)
+  {
+      init_lock_cb();
+  }
 
   ~sc_vector_base()
     { delete objs_vec_; }
@@ -185,6 +143,7 @@ protected:
   void push_back( void* item )
     { vec_.push_back( static_cast<handle_type>(item) ); }
 
+  bool check_locked() const;
   void check_index( size_type i ) const;
   bool check_init( size_type n )  const;
 
@@ -201,13 +160,8 @@ protected:
   sc_object* implicit_cast( sc_object* p ) const { return p; }
   sc_object* implicit_cast( ... /* incompatible */ )  const;
 
-  class SC_API context_scope
-  {
-    sc_vector_base* owner_;
-  public:
-    explicit context_scope(sc_vector_base* owner);
-    ~context_scope();
-  };
+  void init_lock_cb();
+  void stage_callback(const sc_stage & stage); // implement callback
 
 public: 
   void report_empty_bind( const char* kind_, bool dst_range_ ) const;
@@ -215,6 +169,7 @@ public:
 private:
   storage_type vec_;
   mutable std::vector< sc_object* >* objs_vec_;
+  bool locked;
 
   // disabled
   sc_vector_base( const sc_vector_base& );
@@ -418,15 +373,19 @@ public:
     : base_type( prefix )
   {}
 
-  explicit sc_vector( const char* prefix, size_type n )
-    : base_type( prefix )
-    { init(n); }
-
-  template< typename Creator >
-  sc_vector( const char* prefix, size_type n, Creator creator )
+  sc_vector( const char* prefix, size_type n,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT)
     : base_type( prefix )
   {
-    init( n, creator );
+    init(n, init_pol);
+  }
+
+  template< typename Creator >
+  sc_vector( const char* prefix, size_type n, Creator creator,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT )
+    : base_type( prefix )
+  {
+    init( n, creator, init_pol );
   }
 
   virtual ~sc_vector();
@@ -443,11 +402,24 @@ public:
   const element_type& at( size_type i ) const
     { check_index(i); return (*this)[i]; }
 
-  void init( size_type n )
-    { init( n, &this_type::create_element ); }
+  void init( size_type n,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT )
+    { init( n, &this_type::create_element, init_pol ); }
 
   template< typename Creator >
-  void init( size_type n, Creator c );
+  void init( size_type n, Creator c,
+             sc_vector_init_policy init_pol = SC_VECTOR_LOCK_AFTER_INIT);
+
+#if SC_CPLUSPLUS >= 201103L
+  // Append element with automatically generated name
+  // T(generated_name, args...)
+  template< typename... Args >
+  void emplace_back( Args&&... args );
+
+  // Append element with user-defined name
+  template< typename... Args >
+  void emplace_back_with_name(Args &&... args);
+#endif
 
   static element_type * create_element( const char* prefix, size_type index );
 
@@ -669,14 +641,14 @@ sc_vector<T>::create_element( const char* name, size_type /* idx */ )
 template< typename T >
 template< typename Creator >
 void
-sc_vector<T>::init( size_type n, Creator c )
+sc_vector<T>::init( size_type n, Creator c, sc_vector_init_policy init_pol )
 {
   if ( base_type::check_init(n) )
   {
-    // restore SystemC hierarchy context, if needed
-    sc_vector_base::context_scope scope( this );
-
     base_type::reserve( n );
+
+    // restore SystemC hierarchy context, if needed
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     try
     {
       for ( size_type i = 0; i<n; ++i )
@@ -694,8 +666,37 @@ sc_vector<T>::init( size_type n, Creator c )
       clear();
       throw;
     }
+
+    if (init_pol == SC_VECTOR_LOCK_AFTER_INIT)
+        base_type::lock();
+
   }
 }
+
+#if SC_CPLUSPLUS >= 201103L
+
+template< typename T >
+template< typename... Args >
+void sc_vector<T>::emplace_back( Args&&... args ) {
+  if (check_locked()) {
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
+    T* p = new T( make_name( basename(), size()).c_str() ,
+                  std::forward<Args>(args)...);
+    base_type::push_back(p);
+  }
+}
+
+template< typename T >
+template< typename... Args >
+void sc_vector<T>::emplace_back_with_name(Args &&... args) {
+  if (check_locked()) {
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
+    T *p = new T(std::forward<Args>(args)...);
+    base_type::push_back(p);
+  }
+}
+
+#endif // SC_CPLUSPLUS >= 201103L
 
 template< typename T >
 void
@@ -769,7 +770,6 @@ sc_vector_assembly<T,MT>::get_elements() const
 
 } // namespace sc_core
 
-#undef SC_STATIC_CONSTANT_
 #undef SC_RPTYPE_
 #undef SC_ENABLE_IF_
 

@@ -59,7 +59,7 @@ select_initiator::select_initiator                  // constructor
   SC_THREAD(initiator_thread);
 
   // register method process
-  SC_METHOD(send_end_rsp_method)
+  SC_METHOD(send_end_rsp_method);
     sensitive << m_send_end_rsp_PEQ.get_event();
     dont_initialize();
 }

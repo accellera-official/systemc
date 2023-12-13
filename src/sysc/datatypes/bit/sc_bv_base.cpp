@@ -81,7 +81,13 @@ sc_bv_base::init( int length_, bool init_value )
     // allocate memory for the data and control words
     m_len = length_;
     m_size = (m_len - 1) / SC_DIGIT_SIZE + 1;
-    m_data = new sc_digit[m_size];
+    if ( m_size > (int)(sizeof(m_base_vec) / sizeof(sc_digit)) ) {
+	m_data = new sc_digit[m_size];
+    }
+    else {
+        m_data = m_base_vec;
+    }
+
     // initialize the bits to 'init_value'
     sc_digit dw = init_value ? ~SC_DIGIT_ZERO : SC_DIGIT_ZERO;
     int sz = m_size;
@@ -164,7 +170,7 @@ sc_bv_base::operator = ( const char* a )
 
 // convert formatted string to binary string
 
-SC_API const std::string
+SC_API std::string
 convert_to_bin( const char* s )
 {
     // Beware: logic character strings cannot start with '0x' or '0X',
@@ -233,7 +239,7 @@ convert_to_bin( const char* s )
 
 // convert binary string to formatted string
 
-SC_API const std::string
+SC_API std::string
 convert_to_fmt( const std::string& s, sc_numrep numrep, bool w_prefix )
 {
     int n = s.length();

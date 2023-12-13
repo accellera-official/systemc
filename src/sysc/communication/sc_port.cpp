@@ -580,8 +580,7 @@ sc_port_base::free_binding()
 void
 sc_port_base::construction_done()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -592,24 +591,21 @@ sc_port_base::elaboration_done()
     delete m_bind_info;
     m_bind_info = 0;
 
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
 void
 sc_port_base::start_simulation()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
 void
 sc_port_base::simulation_done()
 {
-    sc_module* parent = static_cast<sc_module*>( get_parent_object() );
-    sc_object::hierarchy_scope scope( parent );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 
@@ -645,7 +641,7 @@ sc_port_registry::insert( sc_port_base* port_ )
 #endif
 
     // append the port to the current module's vector of ports
-    sc_module* curr_module = m_simc->hierarchy_curr();
+    sc_module* curr_module = static_cast<sc_module*>( m_simc->hierarchy_curr() );
     if( curr_module == 0 ) {
         port_->report_error( SC_ID_PORT_OUTSIDE_MODULE_ );
         return;

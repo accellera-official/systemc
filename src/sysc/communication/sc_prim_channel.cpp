@@ -32,11 +32,8 @@
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_object_int.h"
-
-#ifndef SC_DISABLE_ASYNC_UPDATES
-#  include "sysc/communication/sc_host_mutex.h"
-#  include "sysc/communication/sc_host_semaphore.h"
-#endif
+#include "sysc/communication/sc_host_mutex.h"
+#include "sysc/communication/sc_host_semaphore.h"
 
 #include <algorithm> // std::find
 
@@ -92,7 +89,7 @@ void sc_prim_channel::before_end_of_elaboration()
 void
 sc_prim_channel::construction_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     before_end_of_elaboration();
 }
 
@@ -108,7 +105,7 @@ sc_prim_channel::end_of_elaboration()
 void
 sc_prim_channel::elaboration_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_elaboration();
 }
 
@@ -123,7 +120,7 @@ sc_prim_channel::start_of_simulation()
 void
 sc_prim_channel::start_simulation()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     start_of_simulation();
 }
 
@@ -138,7 +135,7 @@ sc_prim_channel::end_of_simulation()
 void
 sc_prim_channel::simulation_done()
 {
-    sc_object::hierarchy_scope scope( get_parent_object() );
+    sc_hierarchy_scope scope( get_hierarchy_scope() );
     end_of_simulation();
 }
 
@@ -151,7 +148,6 @@ sc_prim_channel::simulation_done()
 
 class sc_prim_channel_registry::async_update_list
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
 public:
 
     bool pending() const
@@ -197,7 +193,7 @@ public:
 	m_pop_queue.clear();
     }
 
-    bool attach_suspending( sc_prim_channel& p )
+    void attach_suspending( sc_prim_channel& p )
     {
         sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
@@ -205,13 +201,11 @@ public:
         if ( it == m_suspending_channels.end() ) {
             m_suspending_channels.push_back(&p);
             m_has_suspending_channels = true;
-            return true;
         }
-        return false;
         // return releases the mutex
     }
 
-    bool detach_suspending( sc_prim_channel& p )
+    void detach_suspending( sc_prim_channel& p )
     {
         sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
@@ -220,9 +214,7 @@ public:
             *it = m_suspending_channels.back();
             m_suspending_channels.pop_back();
             m_has_suspending_channels = (m_suspending_channels.size() > 0);
-            return true;
         }
-        return false;
         // return releases the mutex
     }
 
@@ -236,7 +228,6 @@ private:
     std::vector< sc_prim_channel* > m_suspending_channels;
     bool                            m_has_suspending_channels;
 
-#endif // ! SC_DISABLE_ASYNC_UPDATES
 };
 
 // ----------------------------------------------------------------------------
@@ -292,63 +283,38 @@ sc_prim_channel_registry::remove( sc_prim_channel& prim_channel_ )
     m_prim_channel_vec[i] = m_prim_channel_vec.back();
     m_prim_channel_vec.pop_back();
 
-#ifndef SC_DISABLE_ASYNC_UPDATES
-    // remove, if async suspending channel
     m_async_update_list_p->detach_suspending(prim_channel_);
-#endif
 }
 
 bool
 sc_prim_channel_registry::pending_async_updates() const
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     return m_async_update_list_p->pending();
-#else
-    return false;
-#endif
 }
 
 bool
 sc_prim_channel_registry::async_suspend()
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->suspend();
     return !pending_async_updates();
-#else
-    return true;
-#endif
 }
 
 void
 sc_prim_channel_registry::async_request_update( sc_prim_channel& prim_channel_ )
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
     m_async_update_list_p->append( prim_channel_ );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, prim_channel_.name() );
-#endif
 }
 
-bool
+void
 sc_prim_channel_registry::async_attach_suspending(sc_prim_channel& p)
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
-    return m_async_update_list_p->attach_suspending( p );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-    return false;
-#endif
+    m_async_update_list_p->attach_suspending( p );
 }
 
-bool
+void
 sc_prim_channel_registry::async_detach_suspending(sc_prim_channel& p)
 {
-#ifndef SC_DISABLE_ASYNC_UPDATES
-    return m_async_update_list_p->detach_suspending( p );
-#else
-    SC_REPORT_ERROR( SC_ID_NO_ASYNC_UPDATE_, p.name() );
-    return false;
-#endif
+    m_async_update_list_p->detach_suspending( p );
 }
 
 // +----------------------------------------------------------------------------
@@ -363,10 +329,8 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels set external to the
     // simulator.
 
-#ifndef SC_DISABLE_ASYNC_UPDATES
     if( m_async_update_list_p->pending() )
 	m_async_update_list_p->accept_updates();
-#endif
 
     sc_prim_channel* next_p; // Next update to perform.
     sc_prim_channel* now_p;  // Update now performing.
@@ -374,9 +338,8 @@ sc_prim_channel_registry::perform_update()
     // Update the values for the primitive channels in the simulator's list.
 
     now_p = m_update_list_p;
-    m_update_list_p = (sc_prim_channel*)sc_prim_channel::list_end;
-    for ( ; now_p != (sc_prim_channel*)sc_prim_channel::list_end;
-	now_p = next_p )
+    m_update_list_p = m_update_list_end;
+    for ( ; now_p != m_update_list_end; now_p = next_p )
     {
 	next_p = now_p->m_update_next_p;
 	now_p->perform_update();
@@ -385,16 +348,30 @@ sc_prim_channel_registry::perform_update()
 
 // constructor
 
+// +----------------------------------------------------------------------------
+// |"sc_prim_channel_registry::sc_prim_channel_registry"
+// |
+// | This is the object instance constructor for this class.
+// | 
+// | Notes:
+// |   (1) When an sc_prim_channel instance is on the update list its m_update_p
+// |       field will be non-null. To faciliate this a list-end value is used
+// |       to terminate the update list. That value is the same as this object
+// |       instance's address to guarantee an address that cannot have been
+// |       allocated as an sc_prim_channel instance.
+// | Arguments:
+// |    simc_ = sc_simcontext object this object instance is to be associated
+// |            with
+// +----------------------------------------------------------------------------
 sc_prim_channel_registry::sc_prim_channel_registry( sc_simcontext& simc_ )
   :  m_async_update_list_p(0)
   ,  m_construction_done(0)
   ,  m_prim_channel_vec()
   ,  m_simc( &simc_ )
-  ,  m_update_list_p((sc_prim_channel*)sc_prim_channel::list_end)
+  ,  m_update_list_end((sc_prim_channel*)(void*)this)
+  ,  m_update_list_p((sc_prim_channel*)this)
 {
-#   ifndef SC_DISABLE_ASYNC_UPDATES
-        m_async_update_list_p = new async_update_list();
-#   endif
+    m_async_update_list_p = new async_update_list();
 }
 
 

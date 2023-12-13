@@ -35,7 +35,6 @@ using namespace  std;
 
 static const char *filename = "lt_synch_target.cpp"; ///< filename for reporting
 
-SC_HAS_PROCESS(lt_synch_target);
 ///Constructor
 lt_synch_target::lt_synch_target
 ( sc_core::sc_module_name module_name               // module name

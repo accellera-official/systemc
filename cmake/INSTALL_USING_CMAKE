@@ -174,8 +174,6 @@ CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
 
 CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
 
-DISABLE_ASYNC_UPDATES         Disable async_request_update() support.
-
 DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
                               the application. (default: OFF)
 

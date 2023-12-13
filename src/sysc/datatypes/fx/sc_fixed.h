@@ -174,8 +174,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval operator ++ ( int );
-    const sc_fxval operator -- ( int );
+    sc_fxval operator ++ ( int );
+    sc_fxval operator -- ( int );
 
     sc_fixed& operator ++ ();
     sc_fixed& operator -- ();
@@ -298,8 +298,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval_fast operator ++ ( int );
-    const sc_fxval_fast operator -- ( int );
+    sc_fxval_fast operator ++ ( int );
+    sc_fxval_fast operator -- ( int );
 
     sc_fixed_fast& operator ++ ();
     sc_fixed_fast& operator -- ();
@@ -448,7 +448,7 @@ DEFN_ASN_OP_T(^=,const sc_fix_fast&)
 
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N>
 inline
-const sc_fxval
+sc_fxval
 sc_fixed<W,I,Q,O,N>::operator ++ ( int )
 {
     return sc_fxval( sc_fix::operator ++ ( 0 ) );
@@ -456,7 +456,7 @@ sc_fixed<W,I,Q,O,N>::operator ++ ( int )
 
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N>
 inline
-const sc_fxval
+sc_fxval
 sc_fixed<W,I,Q,O,N>::operator -- ( int )
 {
     return sc_fxval( sc_fix::operator -- ( 0 ) );
@@ -620,7 +620,7 @@ DEFN_ASN_OP_T(^=,const sc_fix_fast&)
 
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N>
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fixed_fast<W,I,Q,O,N>::operator ++ ( int )
 {
     return sc_fxval_fast( sc_fix_fast::operator ++ ( 0 ) );
@@ -628,7 +628,7 @@ sc_fixed_fast<W,I,Q,O,N>::operator ++ ( int )
 
 template<int W, int I, sc_q_mode Q, sc_o_mode O, int N>
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_fixed_fast<W,I,Q,O,N>::operator -- ( int )
 {
     return sc_fxval_fast( sc_fix_fast::operator -- ( 0 ) );

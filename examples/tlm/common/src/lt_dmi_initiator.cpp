@@ -56,7 +56,6 @@ static const char *filename = "lt_dmi_initiator.cpp"; ///< filename for reportin
 ///    This is the class constructor.
 ///
 //==============================================================================
-SC_HAS_PROCESS(lt_dmi_initiator);
 lt_dmi_initiator::lt_dmi_initiator                // constructor
 ( sc_module_name name                             // module name
 , const unsigned int  ID                          // initiator ID

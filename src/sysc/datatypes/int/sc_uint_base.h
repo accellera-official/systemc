@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -19,13 +19,10 @@
 
 /*****************************************************************************
 
-  sc_uint_base.h -- An unsigned integer whose length is less than 64 bits.
-
-               Unlike arbitrary precision, arithmetic and bitwise operations
-               are performed using the native types (hence capped at 64 bits).
-               The sc_uint integer is useful when the user does not need
-               arbitrary precision and the performance is superior to
-               sc_bigint/sc_biguint.
+  sc_uint_base.h -- A sc_uint is an unsigned integer whose length is between
+               1 and 64.  The sc_uint integer is useful when the user does 
+	       not need arbitrary precision and the performance is superior 
+	       to sc_bigint/sc_biguint.
 
   Original Author: Amit Rao, Synopsys, Inc.
 
@@ -76,6 +73,7 @@
 #include "sysc/datatypes/int/sc_length_param.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/fx/scfx_ieee.h"
+#include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
 
 
@@ -104,17 +102,8 @@ class sc_fxval_fast;
 class sc_fxnum;
 class sc_fxnum_fast;
 
-} // namespace sc_dt
 
-// extern template instantiations
-namespace sc_core {
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_uint_bitref>;
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_uint_subref>;
-} // namespace sc_core
-
-namespace sc_dt {
-
-extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     inline bool operator == ( const sc_uint_base& a, const sc_uint_base& b );
@@ -132,7 +121,7 @@ extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_uint bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class SC_API sc_uint_bitref_r : public sc_value_base
+class sc_uint_bitref_r : public sc_value_base
 {
     friend class sc_uint_base;
     friend class sc_uint_signal;
@@ -170,17 +159,17 @@ public:
 	{ if ( xz_present_p ) *xz_present_p = false; return 1; }
     virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const
         {
-            int  bit_mask = 1 << (low_i % BITS_PER_DIGIT);
-            int  word_i = low_i / BITS_PER_DIGIT;
+            int  bit_mask = 1 << SC_BIT_INDEX(low_i);
+            int  word_i = SC_DIGIT_INDEX(low_i);
 
 	    dst_p[word_i] &= ~bit_mask;
 	    return false;
         }
     virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const
         {
-            int  bit_mask = 1 << (low_i % BITS_PER_DIGIT);
+            int  bit_mask = 1 << SC_BIT_INDEX(low_i);
 	    bool result;             // True is non-zero.
-            int  word_i = low_i / BITS_PER_DIGIT;
+            int  word_i = SC_DIGIT_INDEX(low_i);
 
             if ( operator uint64() )
 	    {
@@ -253,7 +242,7 @@ operator << ( ::std::ostream&, const sc_uint_bitref_r& );
 //  Proxy class for sc_uint bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class SC_API sc_uint_bitref
+class sc_uint_bitref
     : public sc_uint_bitref_r
 {
     friend class sc_uint_base;
@@ -292,9 +281,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_uint_bitref> m_pool;
-
 };
 
 
@@ -310,7 +296,7 @@ operator >> ( ::std::istream&, sc_uint_bitref& );
 //  Proxy class for sc_uint part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class SC_API sc_uint_subref_r : public sc_value_base
+class sc_uint_subref_r : public sc_value_base
 {
     friend class sc_uint_base;
 	friend class sc_uint_subref;
@@ -438,7 +424,7 @@ operator << ( ::std::ostream&, const sc_uint_subref_r& );
 //  Proxy class for sc_uint part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class SC_API sc_uint_subref
+class sc_uint_subref
     : public sc_uint_subref_r
 {
     friend class sc_uint_base;
@@ -509,9 +495,6 @@ public:
 
     void scan( ::std::istream& is = ::std::cin );
 
-protected:
-    static sc_core::sc_vpool<sc_uint_subref> m_pool;
-
 };
 
 
@@ -527,7 +510,7 @@ operator >> ( ::std::istream&, sc_uint_subref& );
 //  Base class for sc_uint.
 // ----------------------------------------------------------------------------
 
-class SC_API sc_uint_base : public sc_value_base
+class sc_uint_base : public sc_value_base
 {
     friend class sc_uint_bitref_r;
     friend class sc_uint_bitref;
@@ -577,7 +560,8 @@ public:
 	{}
 
     explicit sc_uint_base( const sc_uint_subref_r& a )
-        : m_val( a ), m_len( a.length() ), m_ulen( SC_INTWIDTH - m_len )
+        : m_val( a ), m_len( a.length() ), 
+	  m_ulen( SC_INTWIDTH - m_len )
         { extend_sign(); }
 
     template<class T>
@@ -618,6 +602,9 @@ public:
 
     sc_uint_base& operator = ( const sc_signed& a );
     sc_uint_base& operator = ( const sc_unsigned& a );
+
+    inline sc_uint_base& operator = ( const sc_signed_subref_r& a );
+    inline sc_uint_base& operator = ( const sc_unsigned_subref_r& a );
 
 #ifdef SC_INCLUDE_FX
     sc_uint_base& operator = ( const sc_fxval& a );
@@ -692,13 +679,13 @@ public:
     sc_uint_base& operator ++ () // prefix
 	{ ++ m_val; extend_sign(); return *this; }
 
-    const sc_uint_base operator ++ ( int ) // postfix
+    sc_uint_base operator ++ ( int ) // postfix
 	{ sc_uint_base tmp( *this ); ++ m_val; extend_sign(); return tmp; }
 
     sc_uint_base& operator -- () // prefix
 	{ -- m_val; extend_sign(); return *this; }
 
-    const sc_uint_base operator -- ( int ) // postfix
+    sc_uint_base operator -- ( int ) // postfix
 	{ sc_uint_base tmp( *this ); -- m_val; extend_sign(); return tmp; }
 
 
@@ -731,6 +718,12 @@ public:
     sc_uint_bitref&         bit( int i );
     const sc_uint_bitref_r& bit( int i ) const;
 
+    sc_uint_bitref* temporary_bitref() const
+    {
+        static sc_core::sc_vpool<sc_uint_bitref> pool(9);
+        return pool.allocate();
+    }
+
 
     // part selection
 
@@ -739,6 +732,12 @@ public:
 
     sc_uint_subref&         range( int left, int right );
     const sc_uint_subref_r& range( int left, int right ) const;
+
+    sc_uint_subref* temporary_subref() const
+    {
+        static sc_core::sc_vpool<sc_uint_subref> pool(9);
+        return pool.allocate();
+    }
 
 
     // bit access, without bounds checking or sign extension
@@ -834,7 +833,6 @@ public:
 
     long long_high() const
 	{ return (long) ((m_val >> 32) & UINT64_32ONES); }
-
 
     // explicit conversion to character string
 
@@ -1205,7 +1203,7 @@ sc_uint_bitref&
 sc_uint_base::operator [] ( int i )
 {
     check_index( i );
-    sc_uint_bitref* result_p = sc_uint_bitref::m_pool.allocate();
+    sc_uint_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1215,7 +1213,7 @@ const sc_uint_bitref_r&
 sc_uint_base::operator [] ( int i ) const
 {
     check_index( i );
-    sc_uint_bitref* result_p = sc_uint_bitref::m_pool.allocate();
+    sc_uint_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1226,7 +1224,7 @@ sc_uint_bitref&
 sc_uint_base::bit( int i )
 {
     check_index( i );
-    sc_uint_bitref* result_p = sc_uint_bitref::m_pool.allocate();
+    sc_uint_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1236,7 +1234,7 @@ const sc_uint_bitref_r&
 sc_uint_base::bit( int i ) const
 {
     check_index( i );
-    sc_uint_bitref* result_p = sc_uint_bitref::m_pool.allocate();
+    sc_uint_bitref* result_p = temporary_bitref();
     result_p->initialize(this, i);
     return *result_p;
 }
@@ -1249,7 +1247,7 @@ sc_uint_subref&
 sc_uint_base::operator () ( int left, int right )
 {
     check_range( left, right );
-    sc_uint_subref* result_p = sc_uint_subref::m_pool.allocate();
+    sc_uint_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1259,7 +1257,7 @@ const sc_uint_subref_r&
 sc_uint_base::operator () ( int left, int right ) const
 {
     check_range( left, right );
-    sc_uint_subref* result_p = sc_uint_subref::m_pool.allocate();
+    sc_uint_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1270,7 +1268,7 @@ sc_uint_subref&
 sc_uint_base::range( int left, int right )
 {
     check_range( left, right );
-    sc_uint_subref* result_p = sc_uint_subref::m_pool.allocate();
+    sc_uint_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }
@@ -1280,7 +1278,7 @@ const sc_uint_subref_r&
 sc_uint_base::range( int left, int right ) const
 {
     check_range( left, right );
-    sc_uint_subref* result_p = sc_uint_subref::m_pool.allocate();
+    sc_uint_subref* result_p = temporary_subref();
     result_p->initialize(this, left, right);
     return *result_p;
 }

@@ -42,7 +42,6 @@
 //
 //=====================================================================
 
-SC_HAS_PROCESS(example_system_top);
 
 example_system_top::example_system_top  
 ( sc_core::sc_module_name name             

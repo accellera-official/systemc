@@ -28,8 +28,8 @@
  *****************************************************************************/
 
 
-#if !defined(sc_process_h_INCLUDED)
-#define sc_process_h_INCLUDED
+#ifndef SC_PROCESS_H_INCLUDED_
+#define SC_PROCESS_H_INCLUDED_
 
 #include "sysc/kernel/sc_constants.h"
 #include "sysc/kernel/sc_object.h"
@@ -48,7 +48,6 @@ class sc_process_handle;
 class sc_thread_process;
 class sc_reset;
 
-SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
 SC_API  sc_process_handle sc_get_current_process_handle();
 void sc_thread_cor_fn( void* arg );
 SC_API bool timed_out( sc_simcontext* );
@@ -117,89 +116,22 @@ class SC_API sc_process_monitor {
 };
 inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 
-//------------------------------------------------------------------------------
-// PROCESS INVOCATION METHOD OR FUNCTION:
+//-----------------------------------------------------------------------------
+// PROCESS INVOCATION FUNCTION:
 //
-//  Define SC_USE_MEMBER_FUNC_PTR if we want to use member function pointers
-//  to implement process dispatch. Otherwise, we'll use a hack that involves
-//  creating a templated invocation object which will invoke the member
-//  function. This should not be necessary, but some compilers (e.g., VC++)
-//  do not allow the conversion from `void (callback_tag::*)()' to
-//  `void (sc_process_host::*)()'. This is supposed to be OK as long as the
-//  dynamic type is correct.  C++ Standard 5.4 "Explicit type conversion",
-//  clause 7: a pointer to member of derived class type may be explicitly
-//  converted to a pointer to member of an unambiguous non-virtual base class
-//  type.
+//  We use member function pointers to implement process dispatch.
+//  The required conversion from  `void (callback_tag::*)()' to
+//  `void (sc_process_host::*)()' is supposed to be OK as long as the
+//  dynamic type is correct.
+//
+//  C++ Standard 5.4 "Explicit type conversion", clause 7:
+//    A pointer to member of derived class type may be explicitly converted to
+//    a pointer to member of an unambiguous non-virtual base class type.
 //-----------------------------------------------------------------------------
 
-#if defined(_MSC_VER)
-#if ( _MSC_VER > 1200 )
-#   define SC_USE_MEMBER_FUNC_PTR
-#endif
-#else
-#   define SC_USE_MEMBER_FUNC_PTR
-#endif
-
-
-// COMPILER DOES SUPPORT CAST TO void (sc_process_host::*)() from (T::*)():
-
-#if defined(SC_USE_MEMBER_FUNC_PTR)
-
-    typedef void (sc_process_host::*SC_ENTRY_FUNC)();
-#   define SC_DECL_HELPER_STRUCT(callback_tag, func) /*EMPTY*/
-#   define SC_MAKE_FUNC_PTR(callback_tag, func) \
-        static_cast<sc_core::SC_ENTRY_FUNC>(&callback_tag::func)
-
-
-// COMPILER NOT DOES SUPPORT CAST TO void (sc_process_host::*)() from (T::*)():
-
-#else // !defined(SC_USE_MEMBER_FUNC_PTR)
-    class SC_API sc_process_call_base {
-      public:
-        inline sc_process_call_base()
-        {
-        }
-
-        virtual ~sc_process_call_base()
-        {
-        }
-
-        virtual void invoke(sc_process_host* host_p)
-        {
-        }
-    };
-    extern sc_process_call_base sc_process_defunct;
-
-    template<class T>
-    class sc_process_call : public sc_process_call_base {
-      public:
-        sc_process_call( void (T::*method_p)() ) :
-            sc_process_call_base()
-        {
-             m_method_p = method_p;
-        }
-
-        virtual ~sc_process_call()
-        {
-        }
-
-        virtual void invoke(sc_process_host* host_p)
-        {
-            (((T*)host_p)->*m_method_p)();
-        }
-
-      protected:
-        void (T::*m_method_p)();  // Method implementing the process.
-    };
-
-    typedef sc_process_call_base* SC_ENTRY_FUNC;
-#   define SC_DECL_HELPER_STRUCT(callback_tag, func) /*EMPTY*/
-#   define SC_MAKE_FUNC_PTR(callback_tag, func) \
-        (::sc_core::SC_ENTRY_FUNC) (new \
-        ::sc_core::sc_process_call<callback_tag>(&callback_tag::func))
-
-#endif // !defined(SC_USE_MEMBER_FUNC_PTR)
-
+typedef void (sc_process_host::*sc_entry_func)();
+#define SC_MAKE_FUNC_PTR(callback_tag, func) \
+    static_cast<sc_core::sc_entry_func>(&callback_tag::func)
 
 extern SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 
@@ -270,7 +202,7 @@ class sc_throw_it : public sc_throw_it_helper
 //       method call: sync_reset_on - sync_reset_off.
 //
 //==============================================================================
-class SC_API sc_process_b : public sc_object {
+class SC_API sc_process_b : public sc_object_host {
     friend class sc_simcontext;      // Allow static processes to have base.
     friend class sc_cthread_process; // Child can access parent.
     friend class sc_method_process;  // Child can access parent.
@@ -291,10 +223,14 @@ class SC_API sc_process_b : public sc_object {
     friend class sc_reset_finder;
     friend class sc_unwind_exception;
 
-    friend SC_API const char* sc_gen_unique_name( const char*, bool preserve_first );
     friend SC_API sc_process_handle sc_get_current_process_handle();
     friend void sc_thread_cor_fn( void* arg );
     friend SC_API bool timed_out( sc_simcontext* );
+
+    friend void sc_suspend_all();
+    friend void sc_unsuspend_all();
+    friend void sc_suspendable();
+    friend void sc_unsuspendable();
 
   public:
     enum process_throw_type {
@@ -340,7 +276,7 @@ class SC_API sc_process_b : public sc_object {
 
   public:
     sc_process_b( const char* name_p, bool is_thread, bool free_host,
-        SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+        sc_entry_func method_p, sc_process_host* host_p,
         const sc_spawn_options* opt_p );
 
   protected:
@@ -352,7 +288,6 @@ class SC_API sc_process_b : public sc_object {
     bool dont_initialize() const { return m_dont_init; }
     virtual void dont_initialize( bool dont );
     std::string dump_state() const;
-    const ::std::vector<sc_object*>& get_child_objects() const;
     inline sc_curr_proc_kind proc_kind() const;
     sc_event& reset_event();
     sc_event& terminated_event();
@@ -362,14 +297,16 @@ class SC_API sc_process_b : public sc_object {
 
   protected:
     virtual void add_child_object( sc_object* );
+    virtual void add_child_event( sc_event* );
+    virtual bool remove_child_object( sc_object* );
+    virtual bool remove_child_event( sc_event* );
+
     void add_static_event( const sc_event& );
     bool dynamic() const { return m_dynamic_proc != SPAWN_ELAB; }
-    const char* gen_unique_name( const char* basename_, bool preserve_first );
     inline sc_report* get_last_report() { return m_last_report_p; }
     inline bool is_disabled() const;
     inline bool is_runnable() const;
     static inline sc_process_b* last_created_process_base();
-    virtual bool remove_child_object( sc_object* );
     void remove_dynamic_events( bool skip_timeout = false );
     void remove_static_events();
     inline void set_last_report( sc_report* last_p )
@@ -411,6 +348,10 @@ class SC_API sc_process_b : public sc_object {
     inline void reference_decrement();
     inline void reference_increment();
 
+  private:
+    sc_process_b(const sc_process_b&) /* = delete */;
+    sc_process_b& operator=(const sc_process_b&) /* = delete */;
+
   protected:
     inline void semantics();
 
@@ -435,7 +376,6 @@ class SC_API sc_process_b : public sc_object {
     bool                         m_has_stack;       // true is stack present.
     bool                         m_is_thread;       // true if this is thread.
     sc_report*                   m_last_report_p;   // last report this process.
-    sc_name_gen*                 m_name_gen_p;      // subprocess name generator
     sc_curr_proc_kind            m_process_kind;    // type of process.
     int                          m_references_n;    // outstanding handles.
     std::vector<sc_reset*>       m_resets;          // resets for process.
@@ -443,7 +383,7 @@ class SC_API sc_process_b : public sc_object {
     sc_event*                    m_resume_event_p;  // resume event.
     sc_process_b*                m_runnable_p;      // sc_runnable link
     sc_process_host*             m_semantics_host_p;   // host for semantics.
-    SC_ENTRY_FUNC                m_semantics_method_p; // method for semantics.
+    sc_entry_func                m_semantics_method_p; // method for semantics.
     int                          m_state;           // process state.
     std::vector<const sc_event*> m_static_events;   // static events waiting on.
     bool                         m_sticky_reset;    // see note 3 above.
@@ -455,44 +395,55 @@ class SC_API sc_process_b : public sc_object {
     trigger_t                    m_trigger_type;    // type of trigger using.
     bool                         m_unwinding;       // true if unwinding stack.
 
+    bool                         m_unsuspendable;   // This process should not
+                                                    // be suspended
+    bool                         m_suspend_all_req; // This process is
+                                                    // requesting global suspension.
+
   protected:
     static sc_process_b* m_last_created_process_p; // Last process created.
 };
-
-typedef sc_process_b sc_process_b;  // For compatibility.
 
 
 //------------------------------------------------------------------------------
 //"sc_process_b::XXXX_child_YYYYY"
 //
-// These methods provide child object support.
+// These methods provide child object/event support.
 //------------------------------------------------------------------------------
+
 inline void
 sc_process_b::add_child_object( sc_object* object_p )
 {
-    sc_object::add_child_object( object_p );
+    sc_object_host::add_child_object( object_p );
+    reference_increment();
+}
+
+inline void
+sc_process_b::add_child_event( sc_event* event_p )
+{
+    sc_object_host::add_child_event( event_p );
     reference_increment();
 }
 
 inline bool
 sc_process_b::remove_child_object( sc_object* object_p )
 {
-    if ( sc_object::remove_child_object( object_p ) ) {
-	    reference_decrement();
-            return true;
+    if ( sc_object_host::remove_child_object( object_p ) ) {
+        reference_decrement();
+        return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
-inline const ::std::vector<sc_object*>&
-sc_process_b::get_child_objects() const
+inline bool
+sc_process_b::remove_child_event( sc_event* event_p )
 {
-    return m_child_objects;
+    if ( sc_object_host::remove_child_event( event_p ) ) {
+        reference_decrement();
+        return true;
+    }
+    return false;
 }
-
 
 //------------------------------------------------------------------------------
 //"sc_process_b::initially_in_reset"
@@ -679,11 +630,7 @@ inline void sc_process_b::semantics()
 
     // Dispatch the actual semantics for the process:
 
-#   ifndef SC_USE_MEMBER_FUNC_PTR
-        m_semantics_method_p->invoke( m_semantics_host_p );
-#   else
-        (m_semantics_host_p->*m_semantics_method_p)();
-#   endif
+    (m_semantics_host_p->*m_semantics_method_p)();
 }
 
 
@@ -903,4 +850,4 @@ inline bool sc_process_b::timed_out() const
 // Revision 1.3  2006/01/13 18:44:30  acg
 // Added $Log to record CVS changes into the source.
 
-#endif // !defined(sc_process_h_INCLUDED)
+#endif // SC_PROCESS_H_INCLUDED_

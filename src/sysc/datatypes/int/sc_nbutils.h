@@ -23,7 +23,7 @@
                   sc_unsigned classes.
 
   Original Author: Ali Dasdan, Synopsys, Inc.
-
+ 
  *****************************************************************************/
 
 /*****************************************************************************
@@ -69,71 +69,11 @@
 #include "sysc/datatypes/bit/sc_bit_ids.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_nbdefs.h"
+#include "sysc/utils/sc_string.h"
 #include "sysc/utils/sc_report.h"
-#include <ios>
-#include <ostream>
 
 namespace sc_dt
 {
-
-//-----------------------------------------------------------------------------
-//"sc_io_base"
-//
-// This inline function returns the type of an i/o stream's base as a SystemC
-// base designator.
-//   stream_object = reference to the i/o stream whose base is to be returned.
-//
-//"sc_io_show_base"
-//
-// This inline function returns true if the base should be shown when a SystemC
-// value is displayed via the supplied stream operator.
-//   stream_object = reference to the i/o stream to return showbase value for.
-//-----------------------------------------------------------------------------
-#if defined(__GNUC__) || defined(_MSC_VER) || defined(__SUNPRO_CC)
-    inline sc_numrep
-    sc_io_base( ::std::ostream& os, sc_numrep def_base )
-    {
-        std::ios::fmtflags flags = os.flags() & std::ios::basefield;
-        if ( flags & ::std::ios::dec ) return  SC_DEC;
-        if ( flags & ::std::ios::hex ) return  SC_HEX;
-        if ( flags & ::std::ios::oct ) return  SC_OCT;
-        return def_base;
-    }
-
-    inline bool
-    sc_io_show_base( ::std::ostream& os )
-    {
-        return (os.flags() & ::std::ios::showbase) != 0 ;
-    }
-#else   // Other
-    inline sc_numrep
-    sc_io_base( ::std::ostream& /*unused*/, sc_numrep /*unused*/ )
-    {
-        return SC_DEC;
-    }
-    inline bool
-    sc_io_show_base( ::std::ostream& /*unused*/ )
-    {
-        return false;
-    }
-#endif
-
-const std::string to_string( sc_numrep );
-
-inline
-::std::ostream&
-operator << ( ::std::ostream& os, sc_numrep numrep )
-{
-    os << to_string( numrep );
-    return os;
-}
-
-// ----------------------------------------------------------------------------
-
-// One transition of the FSM to find base and sign of a number.
-extern
-SC_API small_type
-fsm_move(char c, small_type &b, small_type &s, small_type &state);
 
 // Parse a character string into its equivalent binary bits.
 extern
@@ -148,207 +88,14 @@ SC_API void parse_hex_bits(
     const char* src_p, int dst_n, sc_digit* data_p, sc_digit* ctrl_p=0
 );
 
-
-// Find the base and sign of a number in v.
-extern
-SC_API const char *
-get_base_and_sign(const char *v, small_type &base, small_type &sign);
-
-// Create a number out of v in base.
-extern
-SC_API small_type
-vec_from_str(int unb, int und, sc_digit *u,
-             const char *v, sc_numrep base = SC_NOBASE) ;
-
-
-// ----------------------------------------------------------------------------
-//  Naming convention for the vec_ functions below:
-//    vec_OP(u, v, w)  : computes w = u OP v.
-//    vec_OP_on(u, v)  : computes u = u OP v if u has more digits than v.
-//    vec_OP_on2(u, v) : computes u = u OP v if u has fewer digits than v.
-//    _large           : parameters are vectors.
-//    _small           : one of the parameters is a single digit.
-//    Xlen             : the number of digits in X.
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-//  Functions for vector addition: w = u + v or u += v.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_add(int ulen, const sc_digit *u,
-        int vlen, const sc_digit *v, sc_digit *w);
-
-extern
-SC_API void
-vec_add_on(int ulen, sc_digit *u,
-           int vlen, const sc_digit *v);
-
-extern
-SC_API void
-vec_add_on2(int ulen, sc_digit *u,
-            int vlen, const sc_digit *v);
-
-extern
-SC_API void
-vec_add_small(int ulen, const sc_digit *u,
-              sc_digit v, sc_digit *w);
-
-extern
-SC_API void
-vec_add_small_on(int ulen, sc_digit *u, sc_digit v);
-
-
-// ----------------------------------------------------------------------------
-//  Functions for vector subtraction: w = u - v, u -= v, or u = v - u.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_sub(int ulen, const sc_digit *u,
-        int vlen, const sc_digit *v, sc_digit *w);
-
-extern
-SC_API void
-vec_sub_on(int ulen, sc_digit *u,
-           int vlen, const sc_digit *v);
-
-extern
-SC_API void
-vec_sub_on2(int ulen, sc_digit *u,
-            int vlen, const sc_digit *v);
-
-extern
-SC_API void
-vec_sub_small(int ulen, const sc_digit *u,
-              sc_digit v, sc_digit *w);
-
-extern
-SC_API void
-vec_sub_small_on(int ulen, sc_digit *u, sc_digit v);
-
-
-// ----------------------------------------------------------------------------
-//  Functions for vector multiplication: w = u * v or u *= v.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_mul(int ulen, const sc_digit *u,
-        int vlen, const sc_digit *v, sc_digit *w);
-
-extern
-SC_API void
-vec_mul_small(int ulen, const sc_digit *u,
-              sc_digit v, sc_digit *w);
-
-extern
-SC_API void
-vec_mul_small_on(int ulen, sc_digit *u, sc_digit v);
-
-
-// ----------------------------------------------------------------------------
-//  Functions for vector division: w = u / v.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_div_large(int ulen, const sc_digit *u,
-              int vlen, const sc_digit *v, sc_digit *w);
-
-extern
-SC_API void
-vec_div_small(int ulen, const sc_digit *u,
-              sc_digit v, sc_digit *w);
-
-
-// ----------------------------------------------------------------------------
-//  Functions for vector remainder: w = u % v or u %= v.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_rem_large(int ulen, const sc_digit *u,
-              int vlen, const sc_digit *v, sc_digit *w);
-
-extern
-SC_API sc_digit
-vec_rem_small(int ulen, const sc_digit *u, sc_digit v);
-
-extern
-SC_API sc_digit
-vec_rem_on_small(int ulen, sc_digit *u, sc_digit v);
-
-
-// ----------------------------------------------------------------------------
-//  Functions to convert between vectors of char and sc_digit.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API int
-vec_to_char(int ulen, const sc_digit *u,
-            int vlen, uchar *v);
-
-extern
-SC_API void
-vec_from_char(int ulen, const uchar *u,
-              int vlen, sc_digit *v);
-
-
-// ----------------------------------------------------------------------------
-//  Functions to shift left or right, or to create a mirror image of vectors.
-// ----------------------------------------------------------------------------
-
-extern
-SC_API void
-vec_shift_left(int ulen, sc_digit *u, int nsl);
-
-extern
-SC_API void
-vec_shift_right(int vlen, sc_digit *u, int nsr, sc_digit fill = 0);
-
-extern
-SC_API void
-vec_reverse(int unb, int und, sc_digit *ud,
-            int l, int r = 0);
-
-
 // ----------------------------------------------------------------------------
 //  Various utility functions.
 // ----------------------------------------------------------------------------
 
-// Return the low half part of d.
-inline
-sc_digit
-low_half(sc_digit d)
-{
-  return (d & HALF_DIGIT_MASK);
-}
-
-// Return the high half part of d. The high part of the digit may have
-// more bits than BITS_PER_HALF_DIGIT due to, e.g., overflow in the
-// multiplication. Hence, in other functions that use high_half(),
-// make sure that the result contains BITS_PER_HALF_DIGIT if
-// necessary. This is done by high_half_masked().
-inline
-sc_digit
-high_half(sc_digit d)
-{
-  return (d >> BITS_PER_HALF_DIGIT);
-}
-
-inline
-sc_digit
-high_half_masked(sc_digit d)
-{
-  return (high_half(d) & HALF_DIGIT_MASK);
-}
-
 // Concatenate the high part h and low part l. Assumes that h and l
 // are less than or equal to HALF_DIGIT_MASK;
-inline
-sc_digit
+inline 
+sc_digit 
 concat(sc_digit h, sc_digit l)
 {
   return ((h << BITS_PER_HALF_DIGIT) | l);
@@ -356,226 +103,19 @@ concat(sc_digit h, sc_digit l)
 
 // Create a number with n 1's.
 inline
-sc_digit
+sc_carry
 one_and_ones(int n)
 {
-  return (((sc_digit) 1 << n) - 1);
+  return (((sc_carry) 1 << n) - 1);
 }
 
 // Create a number with one 1 and n 0's.
 inline
-sc_digit
+sc_carry
 one_and_zeros(int n)
 {
-  return ((sc_digit) 1 << n);
+  return ((sc_carry) 1 << n);
 }
-
-
-// ----------------------------------------------------------------------------
-
-// Find the digit that bit i is in.
-inline
-int
-digit_ord(int i)
-{
-  return (i / BITS_PER_DIGIT);
-}
-
-// Find the bit in digit_ord(i) that bit i corressponds to.
-inline
-int
-bit_ord(int i)
-{
-  return (i % BITS_PER_DIGIT);
-}
-
-
-// ----------------------------------------------------------------------------
-//  Functions to compare, zero, complement vector(s).
-// ----------------------------------------------------------------------------
-
-// Compare u and v and return r
-//  r = 0 if u == v
-//  r < 0 if u < v
-//  r > 0 if u > v
-// - Assume that all the leading zero digits are already skipped.
-// - ulen and/or vlen can be zero.
-// - Every digit is less than or equal to DIGIT_MASK;
-inline
-int
-vec_cmp(int ulen, const sc_digit *u,
-        int vlen, const sc_digit *v)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // sc_assert((ulen <= 0) || (u != NULL));
-  // sc_assert((vlen <= 0) || (v != NULL));
-
-  // ulen and vlen can be equal to 0 because vec_cmp can be called
-  // after vec_skip_leading_zeros.
-  sc_assert((ulen >= 0) && (u != NULL));
-  sc_assert((vlen >= 0) && (v != NULL));
-  // If ulen > 0, then the leading digit of u must be non-zero.
-  sc_assert((ulen <= 0) || (u[ulen - 1] != 0));
-  sc_assert((vlen <= 0) || (v[vlen - 1] != 0));
-#endif
-
-  if (ulen != vlen)
-    return (ulen - vlen);
-
-  // ulen == vlen >= 1
-  while ((--ulen >= 0) && (u[ulen] == v[ulen]))
-    ;
-
-  if (ulen < 0)
-    return 0;
-
-#ifdef DEBUG_SYSTEMC
-  // Test to see if the result is wrong due to the presence of
-  // overflow bits.
-  sc_assert((u[ulen] & DIGIT_MASK) != (v[ulen] & DIGIT_MASK));
-#endif
-
-  return (int) (u[ulen] - v[ulen]);
-
-}
-
-// Find the index of the first non-zero digit.
-// - ulen (before) = the number of digits in u.
-// - the returned value = the index of the first non-zero digit.
-// A negative value of -1 indicates that every digit in u is zero.
-inline
-int
-vec_find_first_nonzero(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // sc_assert((ulen <= 0) || (u != NULL));
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  while ((--ulen >= 0) && (! u[ulen]))
-    ;
-
-  return ulen;
-
-}
-
-// Skip all the leading zero digits.
-// - ulen (before) = the number of digits in u.
-// - the returned value = the number of non-zero digits in u.
-// - the returned value is non-negative.
-inline
-int
-vec_skip_leading_zeros(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // sc_assert((ulen <= 0) || (u != NULL));
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  return (1 + vec_find_first_nonzero(ulen, u));
-
-}
-
-// Compare u and v and return r
-//  r = 0 if u == v
-//  r < 0 if u < v
-//  r > 0 if u > v
-inline
-int
-vec_skip_and_cmp(int ulen, const sc_digit *u,
-                 int vlen, const sc_digit *v)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((ulen > 0) && (u != NULL));
-  sc_assert((vlen > 0) && (v != NULL));
-#endif
-
-  ulen = vec_skip_leading_zeros(ulen, u);
-  vlen = vec_skip_leading_zeros(vlen, v);
-  // ulen and/or vlen can be equal to zero here.
-  return vec_cmp(ulen, u, vlen, v);
-
-}
-
-// Set u[i] = 0 where i = from ... (ulen - 1).
-inline
-void
-vec_zero(int from, int ulen, sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  for(int i = from; i < ulen; i++)
-    u[i] = 0;
-
-}
-
-// Set u[i] = 0 where i = 0 .. (ulen - 1).
-inline
-void
-vec_zero(int ulen, sc_digit *u)
-{
-  vec_zero(0, ulen, u);
-}
-
-// Copy n digits from v to u.
-inline
-void
-vec_copy(int n, sc_digit *u, const sc_digit *v)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((n > 0) && (u != NULL) && (v != NULL));
-#endif
-
-  for (int i = 0; i < n; ++i)
-    u[i] = v[i];
-}
-
-// Copy v to u, where ulen >= vlen, and zero the rest of the digits in u.
-inline
-void
-vec_copy_and_zero(int ulen, sc_digit *u,
-                  int vlen, const sc_digit *v)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((ulen > 0) && (u != NULL));
-  sc_assert((vlen > 0) && (v != NULL));
-  sc_assert(ulen >= vlen);
-#endif
-
-  vec_copy(vlen, u, v);
-  vec_zero(vlen, ulen, u);
-
-}
-
-// 2's-complement the digits in u.
-inline
-void
-vec_complement(int ulen, sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  sc_digit carry = 1;
-
-  for (int i = 0; i < ulen; ++i) {
-    carry += (~u[i] & DIGIT_MASK);
-    u[i] = carry & DIGIT_MASK;
-    carry >>= BITS_PER_DIGIT;
-  }
-
-}
-
 
 // ----------------------------------------------------------------------------
 //  Functions to handle built-in types or signs.
@@ -590,15 +130,15 @@ from_uint(int ulen, sc_digit *u, Type v)
 {
 
 #ifdef DEBUG_SYSTEMC
-  // sc_assert((ulen <= 0) || (u != NULL));
-  sc_assert((ulen > 0) && (u != NULL));
-  sc_assert(v >= 0);
+  // assert((ulen <= 0) || (u != NULL));
+  assert((ulen > 0) && (u != NULL));
+  assert(v >= 0);
 #endif
 
   int i = 0;
 
   while (v && (i < ulen)) {
-#ifndef _WIN32
+#ifndef WIN32
     u[i++] = static_cast<sc_digit>( v & DIGIT_MASK );
 #else
     u[i++] = ((sc_digit) v) & DIGIT_MASK;
@@ -606,69 +146,15 @@ from_uint(int ulen, sc_digit *u, Type v)
     v >>= BITS_PER_DIGIT;
   }
 
-  vec_zero(i, ulen, u);
+  for ( int digit_i = i; digit_i < ulen; ++digit_i ) { u[digit_i] = 0; }
 
 }
 
-
-// Get u's sign and return its absolute value.
-// u can be long, unsigned long, int64, or uint64.
-template< class Type >
-inline
-small_type
-get_sign(Type &u)
-{
-  if (u > 0)
-    return SC_POS;
-
-  if (u == 0)
-    return SC_ZERO;
-
-  // no positive number representable for minimum value,
-  // leave as is to avoid Undefined Behaviour
-  if( SC_LIKELY_( u > (std::numeric_limits<Type>::min)() ) )
-    u = -u;
-
-  return SC_NEG;
-}
-
-
-// Return us * vs:
-// - Return SC_ZERO if either sign is SC_ZERO.
-// - Return SC_POS if us == vs
-// - Return SC_NEG if us != vs.
-inline
-small_type
-mul_signs(small_type us, small_type vs)
-{
-  if ((us == SC_ZERO) || (vs == SC_ZERO))
-    return SC_ZERO;
-
-  if (us == vs)
-    return SC_POS;
-
-  return SC_NEG;
-}
 
 
 // ----------------------------------------------------------------------------
 //  Functions to test for errors and print out error messages.
 // ----------------------------------------------------------------------------
-
-#ifdef SC_MAX_NBITS
-
-SC_API void test_bound_failed(int nb);
-
-inline void
-test_bound(int nb)
-{
-  if (nb > SC_MAX_NBITS) {
-    test_bound_failed( nb );
-    sc_core::sc_abort(); // can't recover from here
-  }
-}
-
-#endif
 
 template< class Type >
 inline
@@ -678,59 +164,7 @@ div_by_zero(Type s)
   if (s == 0) {
       SC_REPORT_ERROR( sc_core::SC_ID_OPERATION_FAILED_,
 		       "div_by_zero<Type>( Type ) : division by zero" );
-      sc_core::sc_abort(); // can't recover from here
   }
-}
-
-
-// ----------------------------------------------------------------------------
-//  Functions to check if a given vector is zero or make one.
-// ----------------------------------------------------------------------------
-
-// If u[i] is zero for every i = 0,..., ulen - 1, return SC_ZERO,
-// else return s.
-inline
-small_type
-check_for_zero(small_type s, int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // sc_assert(ulen >= 0);
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  if (vec_find_first_nonzero(ulen, u) < 0)
-    return SC_ZERO;
-
-  return s;
-
-}
-
-// If u[i] is zero for every i = 0,..., ulen - 1, return true,
-// else return false.
-inline
-bool
-check_for_zero(int ulen, const sc_digit *u)
-{
-
-#ifdef DEBUG_SYSTEMC
-  // sc_assert(ulen >= 0);
-  sc_assert((ulen > 0) && (u != NULL));
-#endif
-
-  if (vec_find_first_nonzero(ulen, u) < 0)
-    return true;
-
-  return false;
-
-}
-
-inline
-small_type
-make_zero(int nd, sc_digit *d)
-{
-  vec_zero(nd, d);
-  return SC_ZERO;
 }
 
 
@@ -748,221 +182,11 @@ void
 trim(small_type added, int nb, int nd, sc_digit *d)
 {
 #ifdef DEBUG_SYSTEMC
-  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
+  assert((nb > 0) && (nd > 0) && (d != NULL));
 #endif
 
-  d[nd - 1] &= one_and_ones(bit_ord(nb - 1) + added);
+  d[nd - 1] &= one_and_ones(SC_BIT_INDEX(nb - 1) + added);    
 }
-
-// Convert an (un)signed number from sign-magnitude representation to
-// 2's complement representation and trim the extra bits.
-inline
-void
-convert_SM_to_2C_trimmed(small_type added,
-                         small_type s, int nb, int nd, sc_digit *d)
-{
-  if (s == SC_NEG) {
-    vec_complement(nd, d);
-    trim(added, nb, nd, d);
-  }
-}
-
-// Convert an (un)signed number from sign-magnitude representation to
-// 2's complement representation but do not trim the extra bits.
-inline
-void
-convert_SM_to_2C(small_type s, int nd, sc_digit *d)
-{
-  if (s == SC_NEG)
-    vec_complement(nd, d);
-}
-
-
-// ----------------------------------------------------------------------------
-//  Functions to convert between sign-magnitude (SM) and 2's complement
-//  (2C) representations of signed numbers.
-// ----------------------------------------------------------------------------
-
-// Trim the extra leading bits off a signed number.
-inline
-void
-trim_signed(int nb, int nd, sc_digit *d)
-{
-#ifdef DEBUG_SYSTEMC
-  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
-#endif
-
-  d[nd - 1] &= one_and_ones(bit_ord(nb - 1) + 1);
-}
-
-// Convert a signed number from 2's complement representation to
-// sign-magnitude representation, and return its sign. nd is d's
-// actual size, without zeros eliminated.
-inline
-small_type
-convert_signed_2C_to_SM(int nb, int nd, sc_digit *d)
-{
-
-#ifdef DEBUG_SYSTEMC
-  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
-#endif
-
-  small_type s;
-
-  int xnb = bit_ord(nb - 1) + 1;
-
-  // Test the sign bit.
-  if (d[nd - 1] & one_and_zeros(xnb - 1)) {
-    s = SC_NEG;
-    vec_complement(nd, d);
-  }
-  else
-    s = SC_POS;
-
-  // Trim the last digit.
-  d[nd - 1] &= one_and_ones(xnb);
-
-  // Check if the new number is zero.
-  if (s == SC_POS)
-    return check_for_zero(s, nd, d);
-
-  return s;
-
-}
-
-// Convert a signed number from sign-magnitude representation to 2's
-// complement representation, get its sign, convert back to
-// sign-magnitude representation, and return its sign. nd is d's
-// actual size, without zeros eliminated.
-inline
-small_type
-convert_signed_SM_to_2C_to_SM(small_type s, int nb, int nd, sc_digit *d)
-{
-  convert_SM_to_2C(s, nd, d);
-  return convert_signed_2C_to_SM(nb, nd, d);
-}
-
-// Convert a signed number from sign-magnitude representation to 2's
-// complement representation and trim the extra bits.
-inline
-void
-convert_signed_SM_to_2C_trimmed(small_type s, int nb, int nd, sc_digit *d)
-{
-  convert_SM_to_2C_trimmed(1, s, nb, nd, d);
-}
-
-// Convert a signed number from sign-magnitude representation to 2's
-// complement representation but do not trim the extra bits.
-inline
-void
-convert_signed_SM_to_2C(small_type s, int nd, sc_digit *d)
-{
-  convert_SM_to_2C(s, nd, d);
-}
-
-
-// ----------------------------------------------------------------------------
-//  Functions to convert between sign-magnitude (SM) and 2's complement
-//  (2C) representations of unsigned numbers.
-// ----------------------------------------------------------------------------
-
-// Trim the extra leading bits off an unsigned number.
-inline
-void
-trim_unsigned(int nb, int nd, sc_digit *d)
-{
-#ifdef DEBUG_SYSTEMC
-  sc_assert((nb > 0) && (nd > 0) && (d != NULL));
-#endif
-
-  d[nd - 1] &= one_and_ones(bit_ord(nb - 1));
-}
-
-// Convert an unsigned number from 2's complement representation to
-// sign-magnitude representation, and return its sign. nd is d's
-// actual size, without zeros eliminated.
-inline
-small_type
-convert_unsigned_2C_to_SM(int nb, int nd, sc_digit *d)
-{
-  trim_unsigned(nb, nd, d);
-  return check_for_zero(SC_POS, nd, d);
-}
-
-// Convert an unsigned number from sign-magnitude representation to
-// 2's complement representation, get its sign, convert back to
-// sign-magnitude representation, and return its sign. nd is d's
-// actual size, without zeros eliminated.
-inline
-small_type
-convert_unsigned_SM_to_2C_to_SM(small_type s, int nb, int nd, sc_digit *d)
-{
-  convert_SM_to_2C(s, nd, d);
-  return convert_unsigned_2C_to_SM(nb, nd, d);
-}
-
-// Convert an unsigned number from sign-magnitude representation to
-// 2's complement representation and trim the extra bits.
-inline
-void
-convert_unsigned_SM_to_2C_trimmed(small_type s, int nb, int nd, sc_digit *d)
-{
-  convert_SM_to_2C_trimmed(0, s, nb, nd, d);
-}
-
-// Convert an unsigned number from sign-magnitude representation to
-// 2's complement representation but do not trim the extra bits.
-inline
-void
-convert_unsigned_SM_to_2C(small_type s, int nd, sc_digit *d)
-{
-  convert_SM_to_2C(s, nd, d);
-}
-
-
-// ----------------------------------------------------------------------------
-//  Functions to copy one (un)signed number to another.
-// ----------------------------------------------------------------------------
-
-// Copy v to u.
-inline
-void
-copy_digits_signed(small_type &us,
-                   int unb, int und, sc_digit *ud,
-                   int vnb, int vnd, const sc_digit *vd)
-{
-
-  if (und <= vnd) {
-
-    vec_copy(und, ud, vd);
-
-    if (unb <= vnb)
-      us = convert_signed_SM_to_2C_to_SM(us, unb, und, ud);
-
-  }
-  else // und > vnd
-    vec_copy_and_zero(und, ud, vnd, vd);
-
-}
-
-// Copy v to u.
-inline
-void
-copy_digits_unsigned(small_type &us,
-                     int unb, int und, sc_digit *ud,
-                     int /* vnb */, int vnd, const sc_digit *vd)
-{
-
-  if (und <= vnd)
-    vec_copy(und, ud, vd);
-
-  else // und > vnd
-    vec_copy_and_zero(und, ud, vnd, vd);
-
-  us = convert_unsigned_SM_to_2C_to_SM(us, unb, und, ud);
-
-}
-
 
 // ----------------------------------------------------------------------------
 //  Faster set(i, v), without bound checking.
@@ -975,17 +199,17 @@ safe_set(int i, bool v, sc_digit *d)
 {
 
 #ifdef DEBUG_SYSTEMC
-  sc_assert((i >= 0) && (d != NULL));
+  assert((i >= 0) && (d != NULL));
 #endif
 
-  int bit_num = bit_ord(i);
-  int digit_num = digit_ord(i);
-
+  int bit_num = SC_BIT_INDEX(i);
+  int digit_num = SC_DIGIT_INDEX(i);
+  
   if (v)
-    d[digit_num] |= one_and_zeros(bit_num);
+    d[digit_num] |= one_and_zeros(bit_num);      
   else
     d[digit_num] &= ~(one_and_zeros(bit_num));
-
+  
 }
 
 
@@ -1019,7 +243,94 @@ is_bad_double(double v)
 		         "v is not finite - NaN or Inf" );
 }
 
-} // namespace sc_dt
+//--------------------------------------------------------------------------------------------------
+// sc_digit_heap - CLASS MANAGING A TEMPORARY HEAP OF BYTES
+//
+// This facility implements a heap of temporary sc_digit allocations. Once a
+// request has been allocated it is not freed. However the entire heap 
+// wraps and the storage is reused. This means that no allocations should
+// be assumed as permanent. Allocations are double-word aligned. This is
+// raw storage, so objects which contain virtual methods cannot be allocated
+// with this object. See the sc_vpool object for that type of storage 
+// allocation.
+//
+// sc_digit* allocate( int digits_n )
+//   This method returns a pointer to block of digit_n sc_digits. The block
+//   returned is the next available one in the heap. If the current heap
+//   cannot fullfil the request it will be rewound and storage allocated from
+//   its start. All allocations start on an 8-byte boundary.
+//       digits_n = number of sc_digits to be allocated.
+//
+// void initialize( int heap_size=0x100000 )
+//   This method allocates the storage to be managed. If there is already
+//   a block of storage under management it is freed. If no argument is
+//   provided for the heap size, 0x10000 sc_digit instances will be allocated.
+//       heap_size = number of sc_digit instances to allocate for the heap.
+//
+// unsigned int length()
+//   This method returns the size of this object's heap in bytes.
+//
+// sc_digit_heap()
+//   This is the non-initialized object instance constructor. It does not 
+//   allocate the heap storage, that is done by the initialize() method.
+//
+// sc_digit_heap(int heap_size)
+//   This is the initializing object instance constructor. It does allocates
+//   a heap of the specified number of sc_digit instances.
+//       heap_size = number of sc_digit instances to allocate for the heap.
+//--------------------------------------------------------------------------------------------------
+class SC_API sc_digit_heap {
+  public:
+    sc_digit*  m_bgn_p;  // Beginning of heap storage.
+    sc_digit*  m_end_p;  // End of heap storage.
+    sc_digit*  m_next_p; // Next heap location to be allocated.
 
+    inline sc_digit* allocate( size_t digits_n )
+    {
+        sc_digit*   result_p;
+        result_p = m_next_p;
+        m_next_p += digits_n;
+        if ( m_next_p >= m_end_p )
+        {
+            result_p = m_bgn_p;
+            m_next_p = m_bgn_p + digits_n;
+        }
+        return result_p; 
+    }
+
+    inline void initialize( size_t heap_size=0x100000 )
+    {
+        delete [] m_bgn_p;
+        m_bgn_p = new sc_digit[heap_size];
+        m_end_p = &m_bgn_p[heap_size];
+        m_next_p = m_bgn_p;
+    }
+
+    inline size_t length()
+    {
+	return (size_t)(m_end_p - m_bgn_p);
+    }
+
+    inline sc_digit_heap() : m_bgn_p(0), m_end_p(0), m_next_p(0)
+    {
+    }
+
+    inline sc_digit_heap( size_t heap_size ) : m_bgn_p(0), m_end_p(0), m_next_p(0)
+    {
+	initialize( heap_size );
+    }
+
+    inline ~sc_digit_heap()
+    {
+	    delete [] m_bgn_p;
+    }
+
+};
+
+// Reference to the sc_digit_heap instance present in sc_nbutils.cpp:
+
+extern sc_digit_heap SC_API sc_temporary_digits;
+
+} // namespace sc_dt
 
 #endif

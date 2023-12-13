@@ -82,6 +82,7 @@ include rsa/test.am
 include simple_bus/test.am
 include simple_fifo/test.am
 include simple_perf/test.am
+include async_suspend/test.am
 
 ## 2.1 examples
 

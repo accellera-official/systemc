@@ -205,7 +205,7 @@ public:
     DEFN_ASN_OP_T(op, bool)                        \
     DEFN_ASN_OP_T(op, char)                        \
     DEFN_ASN_OP_T(op, int )                        \
-    DEFN_ASN_OP_T(op, const sc_bit& )
+    DEFN_ASN_OP_T(op, sc_bit )
 
     sc_logic& operator = ( const sc_logic& a )
         { m_val = a.m_val; return *this; }

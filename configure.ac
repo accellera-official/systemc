@@ -39,7 +39,7 @@ dnl
 dnl Initialization.
 dnl
 AC_INIT([SystemC],
-        [2.3.4],
+        [3.0.0],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
         [http://accellera.org/],
@@ -138,7 +138,7 @@ dnl
 dnl Prepare architecture alias (to be refined later)
 dnl
 AS_CASE([$target],
-  [*-apple-*],        [TARGET_ARCH=macosx],
+  [*-apple-*],        [TARGET_ARCH=macos],
   [*linux*],          [TARGET_ARCH=linux],
   [*bsd*|*dragonfly*],[TARGET_ARCH=bsd],
   [*mingw*],          [TARGET_ARCH=mingw],
@@ -184,14 +184,18 @@ AS_CASE([${TARGET_ARCH}],
        [mingw*],[QT_ARCH="none"])
     ],
 
-  [macosx],dnl
+  [macos],dnl
     [LDFLAG_RPATH="-Wl,-rpath -Wl,"
      # check CPU architecture
      AS_CASE([${target_cpu}], dnl
        [x86_64|amd64], dnl
-         [TARGET_ARCH="${TARGET_ARCH}64"
+         [TARGET_ARCH="${TARGET_ARCH}x64"
           CPU_ARCH="x86_64"
           QT_ARCH="x86_64"],
+       [aarch64|arm64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}arm64"
+          CPU_ARCH="arm64"
+          QT_ARCH="aarch64"],
        [x*86|i*86], dnl
          [CPU_ARCH="i386"
           QT_ARCH="iX86"],
@@ -202,13 +206,13 @@ AS_CASE([${TARGET_ARCH}],
        [powerpc], dnl
          [TARGET_ARCH="${TARGET_ARCH}ppc"
           CPU_ARCH="ppc"
-          QT_ARCH="powerpc-apple-macosx"],
+          QT_ARCH="pthreads"],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
        [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH} -x assembler"],
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
     ],
 
@@ -392,33 +396,6 @@ AM_CONDITIONAL([WANT_OPTIMIZE], [test x$enable_optimize = xyes])
 AC_MSG_RESULT($enable_optimize)
 
 dnl
-dnl async_request_update support
-dnl
-AC_MSG_CHECKING([whether to add support for asynchronous update requests])
-support_async_updates=no
-AS_IF([test x$ax_pthread_ok = xyes],[support_async_updates=pthread],
-      [test x$ax_pthread_ok = xno], [AS_CASE(["${TARGET_ARCH}"], dnl
-           dnl no pthreads needed on MSVC/MinGW
-           [mingw*|msvc*],[support_async_updates=native])])
-AC_ARG_ENABLE([async-updates],
-  AS_HELP_STRING([--disable-async-updates],
-                 [disable request_async_update support]),
-  [AS_CASE(["${enableval}"],dnl
-    [yes],[AS_IF([test $support_async_updates = no],dnl
-            [AC_MSG_WARN([no native/pthread support found, disabled])
-             enable_async_updates=no
-             support_async_updates=disabled])],
-    [no], [support_async_updates=disabled],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-async-updates])])],
-  [AS_IF([test ${support_async_updates} != no],
-      [enable_async_updates=yes],
-      [enable_async_updates=no])]dnl
-)
-AM_CONDITIONAL([DISABLE_ASYNC_UPDATES],
-               [test x"$enable_async_updates" = xno])
-AC_MSG_RESULT($enable_async_updates)
-
-dnl
 dnl use pthreads for SystemC processes
 dnl
 AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
@@ -455,28 +432,8 @@ AM_CONDITIONAL([WANT_QT_THREADS],dnl
      [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],dnl
-  [test x"$enable_pthreads" = xyes -o x"$support_async_updates" = xpthread ])
+  [test x"$enable_pthreads" = xyes])
 AC_MSG_RESULT($enable_pthreads)
-
-dnl
-dnl enable simulation phase callbacks (experimental)
-dnl
-AC_MSG_CHECKING([whether to enable simulation phase callbacks (experimental)])
-AC_ARG_ENABLE([phase-callbacks],
-  [AS_HELP_STRING([--enable-phase-callbacks],
-                  [enable simulation phase callbacks (experimental)
-                   @<:@yes|tracing|no(=default)@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_phase_callbacks=yes],
-    [tracing],   [enable_phase_callbacks=tracing],
-    [no|default],[enable_phase_callbacks=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-phase-callbacks])])],
-  [enable_phase_callbacks=no])
-AM_CONDITIONAL([ENABLE_CALLBACKS],dnl
-               [test x"$enable_phase_callbacks" = xyes])
-AM_CONDITIONAL([ENABLE_CALLBACKS_TRACING],dnl
-               [test x"$enable_phase_callbacks" = xtracing])
-AC_MSG_RESULT($enable_phase_callbacks)
 
 dnl
 dnl enable VCD scopes
@@ -553,9 +510,6 @@ dnl
 AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],dnl
   [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
    sysc_non_1666=yes])
-AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],dnl
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"
-   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
@@ -585,7 +539,6 @@ AC_OUTPUT(
  src/systemc.pc
  src/tlm.pc
  src/sysc/Makefile 
- src/sysc/packages/boost/Makefile 
  src/sysc/packages/qt/Makefile 
  src/tlm_core/Makefile
  src/tlm_utils/Makefile
@@ -601,12 +554,6 @@ AC_OUTPUT(
 dnl
 dnl print configuration summary
 dnl
-
-dnl invert "async_updates" setting for output
-AS_VAR_IF([enable_async_updates],[yes],dnl
-          [disable_async_updates=no],dnl
-          [disable_async_updates=yes
-           sysc_non_1666=yes])
 
 AS_IF([test -z "${WANT_QT_THREADS_TRUE}"],[sysc_coroutine="QuickThreads"],
       [test -z "${WANT_PTHREADS_THREADS_TRUE}"],[sysc_coroutine="Pthreads"],
@@ -686,16 +633,14 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Disable async_request_update   : $disable_async_updates
    Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
-   Phase callbacks (experimental) : $enable_phase_callbacks
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
 AS_IF([${sysc_non_1666+:} false],[dnl
 cat <<EOF | tee -a config.log
 WARNING: The selected SystemC library configuration is non-conforming
-         to IEEE Std. 1666-2011. See INSTALL.
+         to IEEE Std. 1666-2022. See INSTALL.
 ---------------------------------------------------------------------
 EOF])
 

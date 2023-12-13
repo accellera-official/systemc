@@ -83,7 +83,7 @@
 // force 16-byte alignment on coroutine entry functions, needed for
 // QuickThreads (32-bit, see also fixes in qt/md/{i386,iX86_64}.[hs]),
 // and MinGW32 / Cygwin32 compilers on Windows platforms
-#if defined(__GNUC__) && !defined(__ICC) && !defined(__x86_64__) && \
+#if defined(__GNUC__) && !defined(__ICC) && defined(__i386__) && \
     (__GNUC__ > 4 || __GNUC__ == 4 && __GNUC_MINOR__ > 1 )
 # define SC_ALIGNED_STACK_ \
     __attribute__((force_align_arg_pointer))
@@ -166,6 +166,11 @@ void sc_thread_cor_fn( void* arg )
 // This virtual method suspends this process and its children if requested to.
 //     descendants = indicator of whether this process' children should also
 //                   be suspended
+//
+// Notes:
+//   (1) See note 1 in the header for sc_simcontext::prepare_to_simulate (in 
+//       file sc_simcontext.cpp) for a diagram showing the state transitions 
+//       for processes.
 //------------------------------------------------------------------------------
 void sc_thread_process::disable_process(
     sc_descendant_inclusion_info descendants )
@@ -182,25 +187,6 @@ void sc_thread_process::disable_process(
         {
             sc_process_b* child_p = dynamic_cast<sc_process_b*>(children[child_i]);
             if ( child_p ) child_p->disable_process(descendants);
-        }
-    }
-
-    // DON'T ALLOW CORNER CASE BY DEFAULT:
-
-    if ( !sc_allow_process_control_corners )
-    {
-        switch( m_trigger_type )
-        {
-          case AND_LIST_TIMEOUT:
-          case EVENT_TIMEOUT:
-          case OR_LIST_TIMEOUT:
-          case TIMEOUT:
-            report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-                   "attempt to disable a thread with timeout wait");
-            // may continue, if suppressed
-            break;
-          default:
-            break;
         }
     }
 
@@ -225,6 +211,11 @@ void sc_thread_process::disable_process(
 // will be dispatched in the next delta cycle. Otherwise the state will be
 // adjusted to indicate it is no longer suspended, but no immediate execution
 // will occur.
+//
+// Notes:
+//   (1) See note 1 in the header for sc_simcontext::prepare_to_simulate (in 
+//       file sc_simcontext.cpp) for a diagram showing the state transitions 
+//       for processes.
 //------------------------------------------------------------------------------
 void sc_thread_process::enable_process(
     sc_descendant_inclusion_info descendants )
@@ -247,14 +238,12 @@ void sc_thread_process::enable_process(
     // ENABLE THIS OBJECT INSTANCE:
     //
     // If it was disabled and ready to run then put it on the run queue.
+    //
+    // Well, actually wait for someone else to put it on the run queue until we fix
+    // the tests in systemc/1666-2011-compliance, that assume things show up
+    // one clock later. 
 
     m_state = m_state & ~ps_bit_disabled;
-    if ( m_state == ps_bit_ready_to_run && sc_allow_process_control_corners )
-    {
-        m_state = ps_normal;
-	if ( next_runnable() == 0 )
-	    simcontext()->push_runnable_thread(this);
-    }
 }
 
 
@@ -364,17 +353,6 @@ void sc_thread_process::resume_process(
         }
     }
 
-    // BY DEFAULT THE CORNER CASE IS AN ERROR:
-
-    if ( !sc_allow_process_control_corners && (m_state & ps_bit_disabled) &&
-         (m_state & ps_bit_suspended) )
-    {
-        m_state = m_state & ~ps_bit_suspended;
-        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-                     "call to resume() on a disabled suspended thread");
-        // may continue, if suppressed
-    }
-
     // CLEAR THE SUSPENDED BIT:
 
     m_state = m_state & ~ps_bit_suspended;
@@ -396,7 +374,7 @@ void sc_thread_process::resume_process(
 // This is the object instance constructor for this class.
 //------------------------------------------------------------------------------
 sc_thread_process::sc_thread_process( const char* name_p, bool free_host,
-    SC_ENTRY_FUNC method_p, sc_process_host* host_p,
+    sc_entry_func method_p, sc_process_host* host_p,
     const sc_spawn_options* opt_p
 ):
     sc_process_b(
@@ -528,23 +506,6 @@ void sc_thread_process::suspend_process(
         }
     }
 
-    // CORNER CASE CHECKS, THE FOLLOWING ARE ERRORS:
-    //   (a) if this thread has a reset_signal_is specification
-    //   (b) if this thread is in synchronous reset
-
-    if ( !sc_allow_process_control_corners && m_has_reset_signal )
-    {
-        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-                     "attempt to suspend a thread that has a reset signal");
-        // may continue, if suppressed
-    }
-    else if ( !sc_allow_process_control_corners && m_sticky_reset )
-    {
-        report_error(SC_ID_PROCESS_CONTROL_CORNER_CASE_,
-                     "attempt to suspend a thread in synchronous reset");
-        // may continue, if suppressed
-    }
-
     // SUSPEND OUR OBJECT INSTANCE:
     //
     // (1) If we are on the runnable queue then set suspended and ready_to_run,
@@ -638,7 +599,7 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 
     // IF THE SIMULATION IS NOT ACTAULLY RUNNING THIS IS AN ERROR:
 
-    if ( sc_get_status() != SC_RUNNING )
+    if ( sc_get_curr_simcontext()->get_status() != SC_RUNNING )
     {
         report_error( SC_ID_THROW_IT_WHILE_NOT_RUNNING_ );
         return;
@@ -704,6 +665,11 @@ void sc_thread_process::throw_user( const sc_throw_it_helper& helper,
 //
 // Result is true if this process should be removed from the event's list,
 // false if not.
+//
+// Notes:
+//   (1) See note 1 in the header for sc_simcontext::prepare_to_simulate (in 
+//       file sc_simcontext.cpp) for a diagram showing the state transitions 
+//       for processes.
 //------------------------------------------------------------------------------
 bool sc_thread_process::trigger_dynamic( sc_event* e )
 {

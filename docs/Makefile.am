@@ -52,7 +52,7 @@ DOC_FILES += \
 ##   find tlm -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 ##
 DOC_FILES += \
-	tlm/tlm_README
+	tlm/tlm_README.md
 
 ## ****************************************************************************
 

@@ -66,6 +66,10 @@
 #include "sysc/datatypes/int/sc_unsigned.h"
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
 #include "sysc/datatypes/fx/fx.h"
 #include "sysc/tracing/sc_vcd_trace.h"
 #include "sysc/utils/sc_report.h" // sc_assert
@@ -117,7 +121,7 @@ public:
     // Make this virtual as some derived classes may overwrite
     virtual void print_variable_declaration_line(FILE* f, const char* scoped_name);
 
-    void compose_data_line(char* rawdata, char* compdata);
+    void compose_data_line(char* rawdata, char* compdata, int compdata_n);
     std::string compose_line(const std::string& data);
 
     virtual ~vcd_trace();
@@ -139,7 +143,7 @@ vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
 }
 
 void
-vcd_trace::compose_data_line(char* rawdata, char* compdata)
+vcd_trace::compose_data_line(char* rawdata, char* compdata, int compdata_n)
 {
     sc_assert(rawdata != compdata);
 
@@ -157,7 +161,7 @@ vcd_trace::compose_data_line(char* rawdata, char* compdata)
         else
         {
             const char* effective_begin = strip_leading_bits(rawdata);
-            std::sprintf(compdata, "b%s %s", effective_begin, vcd_name.c_str());
+            std::snprintf(compdata, compdata_n, "b%s %s", effective_begin, vcd_name.c_str());
         }
     }
 }
@@ -188,7 +192,7 @@ vcd_trace::print_variable_declaration_line(FILE* f, const char* scoped_name)
 
     if ( bit_width == 1 )
     {
-        std::sprintf(buf, "$var %s  % 3d  %s  %s       $end\n",
+        std::snprintf(buf, 2000, "$var %s  % 3d  %s  %s       $end\n",
                      vcd_types[vcd_var_type],
                      bit_width,
                      vcd_name.c_str(),
@@ -196,7 +200,7 @@ vcd_trace::print_variable_declaration_line(FILE* f, const char* scoped_name)
     }
     else
     {
-        std::sprintf(buf, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
+        std::snprintf(buf, 2000, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
                      vcd_types[vcd_var_type],
                      bit_width,
                      vcd_name.c_str(),
@@ -518,7 +522,7 @@ vcd_sc_unsigned_trace::write(FILE* f)
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0]);
+    compose_data_line(&rawdata[0], &compdata[0], 1024);
 
     std::fputs(&compdata[0], f);
     old_value = object;
@@ -579,7 +583,7 @@ vcd_sc_signed_trace::write(FILE* f)
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0]);
+    compose_data_line(&rawdata[0], &compdata[0], 1024);
 
     std::fputs(&compdata[0], f);
     old_value = object;
@@ -635,7 +639,7 @@ vcd_sc_uint_base_trace::write(FILE* f)
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
 
     std::fputs(compdata, f);
     old_value = object;
@@ -690,7 +694,7 @@ vcd_sc_int_base_trace::write(FILE* f)
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
 
     std::fputs(compdata, f);
     old_value = object;
@@ -845,7 +849,7 @@ vcd_sc_fxnum_trace::write( FILE* f )
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( &rawdata[0], &compdata[0] );
+    compose_data_line( &rawdata[0], &compdata[0], 1024 );
 
     std::fputs( &compdata[0], f );
     old_value = object;
@@ -915,7 +919,7 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line( &rawdata[0], &compdata[0] );
+    compose_data_line( &rawdata[0], &compdata[0], 1024 );
 
     std::fputs( &compdata[0], f );
     old_value = object;
@@ -987,7 +991,7 @@ vcd_unsigned_int_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1050,7 +1054,7 @@ vcd_unsigned_short_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1111,7 +1115,7 @@ void vcd_unsigned_char_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1174,7 +1178,7 @@ void vcd_unsigned_long_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1234,7 +1238,7 @@ void vcd_signed_int_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1294,7 +1298,7 @@ void vcd_signed_short_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1353,7 +1357,7 @@ void vcd_signed_char_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1416,7 +1420,7 @@ void vcd_int64_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1481,7 +1485,7 @@ void vcd_uint64_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1572,7 +1576,7 @@ void vcd_signed_long_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1720,7 +1724,7 @@ void vcd_enum_trace::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata);
+    compose_data_line(rawdata, compdata, 1000);
     std::fputs(compdata, f);
     old_value = object;
 }
@@ -1865,12 +1869,10 @@ vcd_trace_file::do_initialize()
     std::fputs("$end\n\n", fp);
 }
 
-#if SC_TRACING_PHASE_CALLBACKS_
 void vcd_trace_file::trace( sc_trace_file* ) const {
     SC_REPORT_ERROR( sc_core::SC_ID_INTERNAL_ERROR_
                    , "invalid call to vcd_trace_file::trace(sc_trace_file*)" );
 }
-#endif // SC_TRACING_PHASE_CALLBACKS_
 
 // ----------------------------------------------------------------------------
 
@@ -2124,7 +2126,7 @@ vcd_trace_file::obtain_name()
     char char2 = static_cast<char>(result % used_types_count);
 
     char buf[20];
-    std::sprintf(buf, "%c%c%c%c%c",
+    std::snprintf(buf, 20, "%c%c%c%c%c",
             char2 + first_type_used,
             char3 + first_type_used,
             char4 + first_type_used,

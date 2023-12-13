@@ -52,7 +52,7 @@ const sc_event&
 sc_interface::default_event() const
 {
     SC_REPORT_WARNING( SC_ID_NO_DEFAULT_EVENT_, 0 );
-    return sc_event::none;
+    return sc_event::none();
 }
 
 

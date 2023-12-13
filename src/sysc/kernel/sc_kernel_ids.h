@@ -85,8 +85,8 @@ SC_DEFINE_MESSAGE(SC_ID_DEFAULT_TIME_UNIT_CHANGED_   , 516,
 	"default time unit changed to time resolution" )
 SC_DEFINE_MESSAGE(SC_ID_INCONSISTENT_API_CONFIG_     , 517,
 	"inconsistent library configuration detected" )
-SC_DEFINE_MESSAGE(SC_ID_STACK_SETUP_FAILED_          , 518,
-	"stack setup failed" )
+SC_DEFINE_MESSAGE(SC_ID_COROUTINE_ERROR_             , 518,
+	"coroutine package error" )
 SC_DEFINE_MESSAGE(SC_ID_WAIT_NOT_ALLOWED_            , 519,
 	"wait() is only allowed in SC_THREADs and SC_CTHREADs" )
 SC_DEFINE_MESSAGE(SC_ID_NEXT_TRIGGER_NOT_ALLOWED_    , 520,
@@ -154,14 +154,12 @@ SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_AFTER_ERROR_, 548,
        "attempt to restart simulation after error" )
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_UNCAUGHT_EXCEPTION_, 549,
        "uncaught exception" )
-SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACKS_UNSUPPORTED_   , 550,
-       "simulation phase callbacks not enabled")
-SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_NOT_IMPLEMENTED_, 551,
-       "empty simulation phase callback called" )
-SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_REGISTER_,        552,
-       "register simulation phase callback" )
-SC_DEFINE_MESSAGE(SC_ID_PHASE_CALLBACK_FORBIDDEN_,       553,
-       "forbidden action in simulation phase callback" )
+// available message number 550
+// available message number 551
+SC_DEFINE_MESSAGE(SC_ID_STAGE_CALLBACK_REGISTER_,        552,
+       "register stage callback" )
+SC_DEFINE_MESSAGE(SC_ID_STAGE_CALLBACK_FORBIDDEN_,       553,
+       "forbidden action in stage callback" )
 SC_DEFINE_MESSAGE( SC_ID_SIMULATION_START_UNEXPECTED_, 554,
         "sc_start called unexpectedly" )
 // available message number 555
@@ -187,7 +185,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNKNOWN_PROCESS_TYPE_,       566,
 	"Unknown process type" )
 SC_DEFINE_MESSAGE(SC_ID_TIME_CONVERSION_FAILED_, 567,
         "sc_time conversion failed")
-// available number 568
+SC_DEFINE_MESSAGE(SC_ID_INSERT_INITIALIZER_FN_, 568,
+        "failed to insert initializer function" )
 SC_DEFINE_MESSAGE(SC_ID_BAD_SC_MODULE_CONSTRUCTOR_  , 569,
         "sc_module(const char*), sc_module(const std::string&) "
         "have been deprecated, use sc_module(const sc_module_name&)" )
@@ -201,7 +200,14 @@ SC_DEFINE_MESSAGE(SC_ID_RESET_PROCESS_WHILE_NOT_RUNNING_  , 573,
         "a process may not be asynchronously reset while the simulation is not running" )
 SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
         "throw_it not allowed unless simulation is running " )
-
+SC_DEFINE_MESSAGE(SC_ID_CORRUPT_HIERARCHY_SCOPE_, 575,
+        "corrupted sc_hierarchy_scope unwinding" )
+SC_DEFINE_MESSAGE(SC_ID_UNMATCHED_SUSPENDABLE_  , 576,
+        "Unmatched unsuspendable/suspendable request " )
+SC_DEFINE_MESSAGE(SC_ID_UNSUSPENDABLE_NOTHREAD_  , 577,
+        "unsuspendable/suspendable only valid inside a process" )
+SC_DEFINE_MESSAGE(SC_ID_UNBALANCED_UNSUSPENDALL_ , 578,
+        "Unmatched unsuspendall/suspendall" )
 
 /*****************************************************************************
 
@@ -210,7 +216,7 @@ SC_DEFINE_MESSAGE(SC_ID_THROW_IT_WHILE_NOT_RUNNING_  , 574,
 
       Name, Affiliation, Date:
   Description of Modification:
-    
+
  *****************************************************************************/
 
 // $Log: sc_kernel_ids.h,v $

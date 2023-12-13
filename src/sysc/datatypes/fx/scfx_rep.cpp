@@ -932,6 +932,14 @@ scfx_rep::to_uint64() const
 
     // Ignore bits off the top; they modulo out.
     // Ignore bits off the bottom; we're truncating.
+
+    // If bottom integer word is zero, skip over them:
+    while (idx < m_lsw)
+    {
+        shift += bits_in_word;
+        idx += 1;
+    }
+
     while (shift < 64 && m_msw >= idx && idx >= m_lsw)
     {
         result += static_cast<uint64>(m_mant[idx]) << shift;
@@ -2804,7 +2812,7 @@ scfx_rep::dump( ::std::ostream& os ) const
     for( int i = size() - 1; i >= 0; i -- )
     {
 	char buf[BUFSIZ];
-	std::sprintf( buf, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
+	std::snprintf( buf, BUFSIZ, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
 	os << buf << ::std::endl;
     }
 

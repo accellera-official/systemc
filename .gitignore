@@ -55,6 +55,11 @@ Makefile.in
 *.opensdf
 *.db
 
+# exception vcsproj filters
+!*.vcxproj.filters
+
+.vs/
+.vscode/
 Release/
 Debug/
 DebugDLL/
@@ -70,7 +75,9 @@ _UpgradeReport_Files/
 #/msvc*/SystemC/DebugDLL/
 #/msvc*/SystemC/_UpgradeReport_Files/
 
+.clang-format
 
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
 /docs/*/doxygen/*.tag
+/.project

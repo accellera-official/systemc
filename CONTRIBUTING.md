@@ -15,7 +15,7 @@ How to Contribute
  join Accellera and its working groups.
  Find out more information at http://www.accellera.org/about/join.
  If your company, organization or university is already an Accellera member,
- you can request to [join the SystemC Language Working Group here][4].
+ you can create an account [here][6] and once logged in, request to [join the SystemC Language Working Group][4] by clicking on the "Join" button of the SystemC Language Working Group (LWG) section.
 
 ### Join the SystemC community
 
@@ -26,8 +26,9 @@ How to Contribute
 [1]: https://www.accellera.org
 [2]: https://accellera.org/activities/working-groups/systemc-language
 [3]: https://accellera.org/about/policies-and-procedures
-[4]: https://workspace.accellera.org/apps/org/workgroup/lwg/
+[4]: https://workspace.accellera.org/workgroup/index
 [5]: https://forums.accellera.org/forum/9-systemc/
+[6]: https://workspace.accellera.org/site/login
 
 ---------------------------------------------------------------------
 Issue reporting
@@ -54,9 +55,9 @@ the following information (if applicable):
 >  Please report them to the compiler vendor.
 
 Accellera WG members have access to the WG-internal issue tracking
-at GitHub, as described [here][6].
+at GitHub, as described [here][7].
 
-[6]: docs/DEVELOPMENT.md#issue-tracking
+[7]: docs/DEVELOPMENT.md#issue-tracking
 
 ---------------------------------------------------------------------
 Patch submission
@@ -122,10 +123,7 @@ can be found at:
  * https://github.com/OSCI-WG/systemc             (core SystemC library)
  * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
 
-A read-only, **public** copy of these repositories can be found at
-
- * https://github.com/accellera-official/systemc             (core SystemC library)
- * https://github.com/accellera-official/systemc-regressions (regression test suite)
+A read-only, **public** copy of the core SystemC library repository can be found at https://github.com/accellera-official/systemc
 
 To obtain access to the repositories and the GitHub organization in general,
 LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>

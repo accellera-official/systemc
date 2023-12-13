@@ -94,39 +94,26 @@
 // C++ standard
 //
 // Selected C++ standard baseline, supported values are
-//   199711L (C++03, ISO/IEC 14882:1998, 14882:2003)
-//   201103L (C++11, ISO/IEC 14882:2011)
-//   201402L (C++14, ISO/IEC 14882:2014)
 //   201703L (C++17, ISO/IEC 14882:2017)
+//   202002L (C++20, ISO/IEC 14882:2020)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
 //
 #ifndef SC_CPLUSPLUS
-# ifdef _MSC_VER // don't rely on __cplusplus for MSVC
-// Instead, we select the C++ standard with reasonable support.
-// If some features still need to be excluded on specific MSVC
-// versions, we'll do so at the point of definition.
-
-#   if defined(_MSVC_LANG) // MSVC'2015 Update 3 or later, use compiler setting
-#     define SC_CPLUSPLUS _MSVC_LANG
-#   elif _MSC_VER < 1800   // MSVC'2010 and earlier, assume C++03
-#     define SC_CPLUSPLUS 199711L
-#   elif _MSC_VER < 1900   // MSVC'2013, assume C++11
-#     define SC_CPLUSPLUS 201103L
-#   else                   // MSVC'2015 before Update 3, assume C++14
-#     define SC_CPLUSPLUS 201402L
-#   endif
-
-# else // not _MSC_VER
+# if defined(_MSVC_LANG) // MSVC 2015 Update 3 or later, use compiler setting
+#   define SC_CPLUSPLUS _MSVC_LANG
+# else  // not _MSVC_LANG
 // use compiler setting
 #   define SC_CPLUSPLUS __cplusplus
-
-# endif // not _MSC_VER
+# endif
 #endif // SC_CPLUSPLUS
 
-// SystemC adds some features under C++11 already (see RELEASENOTES)
-#define SC_CPLUSPLUS_BASE_ 201103L
+// SystemC reference implementation requires C++17
+#define SC_CPLUSPLUS_BASE_ 201703L
+#if SC_CPLUSPLUS < SC_CPLUSPLUS_BASE_
+#   error **** SystemC requires a C++ compiler version of at least C++17 ****
+#endif
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific
@@ -142,15 +129,35 @@
 // ----------------------------------------------------------------------------
 // (no) exception specifiers
 
-#ifndef SC_NOEXCEPT_
-#if SC_CPLUSPLUS >= 201103L && !(defined(_MSC_VER) && _MSC_VER < 1900)
 # define SC_NOEXCEPT_            noexcept
 # define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
-#else
-# define SC_NOEXCEPT_            throw()
-# define SC_NOEXCEPT_EXPR_(expr) /* nothing */
+
+// ----------------------------------------------------------------------------
+// indicate, that a function result shall not be discarded
+
+#ifndef SC_NODISCARD_
+
+#if defined(__has_cpp_attribute)
+# if __has_cpp_attribute(nodiscard)
+#   define SC_NODISCARD_ [[nodiscard]]
+# endif
+#endif // __has_cpp_attribute(nodiscard)
+
+#if !defined(SC_NODISCARD_) && defined(__has_attribute)
+# if __has_attribute(warn_unused_result)
+#   define SC_NODISCARD_ __attribute__((warn_unused_result))
+# endif
+#endif // __has_attribute(warn_unused_result)
+
+#if !defined(SC_NODISCARD_) && defined(_Check_return_)
+# define SC_NODISCARD_ _Check_return_
+#endif // _Check_result_
+
+#ifndef SC_NODISCARD_
+# define SC_NODISCARD_ /* nothing */
 #endif
-#endif // SC_NOEXCEPT_
+
+#endif // SC_NODISCARD_
 
 // ----------------------------------------------------------------------------
 
@@ -164,11 +171,7 @@
 // declare certain template instantiations as "extern" during library build
 // and adding an explicit instantiation into the (shared) SystemC library
 
-#if defined(__GNUC__) && SC_CPLUSPLUS < 201103L
-# define SC_TPLEXTERN_ __extension__ extern
-#else
 # define SC_TPLEXTERN_ extern
-#endif
 
 // build SystemC DLL on Windows
 #if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))

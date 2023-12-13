@@ -76,32 +76,35 @@ H_FILES += \
 	datatypes/fx/scfx_string.h \
 	datatypes/fx/scfx_utils.h \
 	\
+	datatypes/int/sc_big_ops.h \
 	datatypes/int/sc_bigint.h \
+	datatypes/int/sc_bigint_inlines.h \
 	datatypes/int/sc_biguint.h \
+	datatypes/int/sc_biguint_inlines.h \
 	datatypes/int/sc_int.h \
 	datatypes/int/sc_int_base.h \
 	datatypes/int/sc_int_ids.h \
+	datatypes/int/sc_int_inlines.h \
 	datatypes/int/sc_length_param.h \
 	datatypes/int/sc_nbdefs.h \
-	datatypes/int/sc_nbexterns.h \
 	datatypes/int/sc_nbutils.h \
 	datatypes/int/sc_signed.h \
+	datatypes/int/sc_signed_friends.h \
+	datatypes/int/sc_signed_inlines.h \
+	datatypes/int/sc_signed_ops.h \
 	datatypes/int/sc_uint.h \
 	datatypes/int/sc_uint_base.h \
+	datatypes/int/sc_uint_inlines.h \
 	datatypes/int/sc_unsigned.h \
+	datatypes/int/sc_unsigned_friends.h \
+	datatypes/int/sc_unsigned_inlines.h \
+	datatypes/int/sc_vector_utils.h \
 	\
 	datatypes/misc/sc_concatref.h \
 	datatypes/misc/sc_value_base.h
 
 NO_H_FILES += \
-	datatypes/int/sc_nbcommon.inc \
-	datatypes/int/sc_nbfriends.inc \
-	datatypes/int/sc_signed_bitref.inc \
-	datatypes/int/sc_signed_subref.inc \
-	datatypes/int/sc_unsigned_bitref.inc \
-	datatypes/int/sc_unsigned_subref.inc \
-	\
-	datatypes/fx/scfx_pow10.h
+	datatypes/fx/scfx_pow10.h 
 
 CXX_FILES += \
 	datatypes/bit/sc_bit.cpp \
@@ -121,23 +124,24 @@ CXX_FILES += \
 	datatypes/fx/scfx_rep.cpp \
 	datatypes/fx/scfx_utils.cpp \
 	\
+	datatypes/int/sc_int32_mask.cpp \
+	datatypes/int/sc_int64_io.cpp \
+	datatypes/int/sc_int64_mask.cpp \
 	datatypes/int/sc_int_base.cpp \
-	datatypes/int/sc_int_mask.cpp \
 	datatypes/int/sc_length_param.cpp \
-	datatypes/int/sc_nbexterns.cpp \
 	datatypes/int/sc_nbutils.cpp \
 	datatypes/int/sc_signed.cpp \
 	datatypes/int/sc_uint_base.cpp \
 	datatypes/int/sc_unsigned.cpp \
 	\
-	datatypes/misc/sc_concatref.cpp \
-	datatypes/misc/sc_value_base.cpp
+	datatypes/misc/sc_value_base.cpp 
 
 INCDIRS += \
   datatypes/bit \
   datatypes/fx \
   datatypes/int \
   datatypes/misc \
+  datatypes/any \
   datatypes
 
 ## Taf!

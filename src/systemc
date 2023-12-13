@@ -72,6 +72,7 @@
 #include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_except.h"
 #include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_initializer_function.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_ver.h"
@@ -92,16 +93,30 @@
 #include "sysc/communication/sc_signal_resolved_ports.h"
 #include "sysc/communication/sc_signal_rv.h"
 #include "sysc/communication/sc_signal_rv_ports.h"
+#include "sysc/communication/sc_stub.h"
 
 #include "sysc/datatypes/bit/sc_bit.h"
 #include "sysc/datatypes/bit/sc_logic.h"
 #include "sysc/datatypes/bit/sc_bv.h"
 #include "sysc/datatypes/bit/sc_lv.h"
 
+#include "sysc/datatypes/int/sc_signed.h"
+#include "sysc/datatypes/int/sc_unsigned.h"
+
 #include "sysc/datatypes/int/sc_bigint.h"
 #include "sysc/datatypes/int/sc_biguint.h"
 #include "sysc/datatypes/int/sc_int.h"
 #include "sysc/datatypes/int/sc_uint.h"
+
+#include "sysc/datatypes/int/sc_vector_utils.h"
+#include "sysc/datatypes/int/sc_int_inlines.h"
+#include "sysc/datatypes/int/sc_uint_inlines.h"
+#include "sysc/datatypes/int/sc_signed_inlines.h"
+#include "sysc/datatypes/int/sc_unsigned_inlines.h"
+#include "sysc/datatypes/int/sc_bigint_inlines.h"
+#include "sysc/datatypes/int/sc_biguint_inlines.h"
+#include "sysc/datatypes/int/sc_signed_ops.h"
+#include "sysc/datatypes/int/sc_big_ops.h"
 
 #include "sysc/datatypes/misc/sc_concatref.h"
 

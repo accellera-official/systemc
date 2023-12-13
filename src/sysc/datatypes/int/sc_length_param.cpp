@@ -1,5 +1,5 @@
 /*****************************************************************************
-
+ 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
   more contributor license agreements.  See the NOTICE file distributed
   with this work for additional information regarding copyright ownership.
@@ -71,16 +71,23 @@ template class SC_API sc_context<sc_length_param>;
 const std::string
 sc_length_param::to_string() const
 {
-    std::stringstream ss;
-    print(ss);
-    return ss.str();
+    std::string s;
+
+    char buf[BUFSIZ];
+
+    s += "(";
+    std::snprintf(buf, BUFSIZ, "%d", m_len );
+    s += buf;
+    s += ")";
+
+    return s;
 }
 
 
 void
 sc_length_param::print( ::std::ostream& os ) const
 {
-    os << "(" << m_len << ")";
+    os << to_string();
 }
 
 void

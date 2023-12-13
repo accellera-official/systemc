@@ -50,21 +50,6 @@ if (QT_ARCH STREQUAL "sparc")
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s)
 endif (QT_ARCH STREQUAL "sparc")
 
-if (APPLE)
-  if (N_OSX_ARCHITECTURES EQUAL 1)
-    if (QT_ARCH STREQUAL "i386")
-      set (CMAKE_ASM_FLAGS "-arch i386")
-    elseif (QT_ARCH STREQUAL "x86_64")
-      set (CMAKE_ASM_FLAGS "-arch x86_64")
-    elseif (QT_ARCH STREQUAL "powerpc_mach")
-      set (CMAKE_ASM_FLAGS "-arch ppc")
-    endif(QT_ARCH STREQUAL "i386")
-  else (N_OSX_ARCHITECTURES EQUAL 1)
-    set (CMAKE_ASM_FLAGS "")
-  endif (N_OSX_ARCHITECTURES EQUAL 1)
-endif (APPLE)
-
-
 ###############################################################################
 # Build rules for SystemC library
 ###############################################################################
@@ -97,15 +82,14 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_pow10.cpp
                      sysc/datatypes/fx/scfx_rep.cpp
                      sysc/datatypes/fx/scfx_utils.cpp
+                     sysc/datatypes/int/sc_int64_io.cpp
+                     sysc/datatypes/int/sc_int64_mask.cpp
                      sysc/datatypes/int/sc_int_base.cpp
-                     sysc/datatypes/int/sc_int_mask.cpp
                      sysc/datatypes/int/sc_length_param.cpp
-                     sysc/datatypes/int/sc_nbexterns.cpp
                      sysc/datatypes/int/sc_nbutils.cpp
                      sysc/datatypes/int/sc_signed.cpp
                      sysc/datatypes/int/sc_uint_base.cpp
                      sysc/datatypes/int/sc_unsigned.cpp
-                     sysc/datatypes/misc/sc_concatref.cpp
                      sysc/datatypes/misc/sc_value_base.cpp
                      sysc/kernel/sc_attribute.cpp
                      sysc/kernel/sc_cor_fiber.cpp
@@ -120,11 +104,12 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_method_process.cpp
                      sysc/kernel/sc_module.cpp
                      sysc/kernel/sc_module_name.cpp
+                     sysc/kernel/sc_initializer_function.h
                      sysc/kernel/sc_module_registry.cpp
                      sysc/kernel/sc_name_gen.cpp
                      sysc/kernel/sc_object.cpp
                      sysc/kernel/sc_object_manager.cpp
-                     sysc/kernel/sc_phase_callback_registry.cpp
+                     sysc/kernel/sc_stage_callback_registry.cpp
                      sysc/kernel/sc_process.cpp
                      sysc/kernel/sc_reset.cpp
                      sysc/kernel/sc_sensitive.cpp
@@ -214,19 +199,29 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/datatypes/fx/scfx_rep.h
                      sysc/datatypes/fx/scfx_string.h
                      sysc/datatypes/fx/scfx_utils.h
-                     sysc/datatypes/int/sc_bigint.h
-                     sysc/datatypes/int/sc_biguint.h
-                     sysc/datatypes/int/sc_int.h
-                     sysc/datatypes/int/sc_int_base.h
-                     sysc/datatypes/int/sc_int_ids.h
-                     sysc/datatypes/int/sc_length_param.h
-                     sysc/datatypes/int/sc_nbdefs.h
-                     sysc/datatypes/int/sc_nbexterns.h
-                     sysc/datatypes/int/sc_nbutils.h
-                     sysc/datatypes/int/sc_signed.h
-                     sysc/datatypes/int/sc_uint.h
-                     sysc/datatypes/int/sc_uint_base.h
-                     sysc/datatypes/int/sc_unsigned.h
+                     sysc/datatypes/int/sc_bigint.h 
+                     sysc/datatypes/int/sc_bigint_inlines.h 
+                     sysc/datatypes/int/sc_big_ops.h 
+                     sysc/datatypes/int/sc_biguint.h 
+                     sysc/datatypes/int/sc_biguint_inlines.h 
+                     sysc/datatypes/int/sc_int.h 
+                     sysc/datatypes/int/sc_int_base.h 
+                     sysc/datatypes/int/sc_int_ids.h 
+                     sysc/datatypes/int/sc_int_inlines.h 
+                     sysc/datatypes/int/sc_length_param.h 
+                     sysc/datatypes/int/sc_nbdefs.h 
+                     sysc/datatypes/int/sc_nbutils.h 
+                     sysc/datatypes/int/sc_signed.h 
+                     sysc/datatypes/int/sc_signed_friends.h 
+                     sysc/datatypes/int/sc_signed_inlines.h 
+                     sysc/datatypes/int/sc_signed_ops.h 
+                     sysc/datatypes/int/sc_uint.h 
+                     sysc/datatypes/int/sc_uint_base.h 
+                     sysc/datatypes/int/sc_uint_inlines.h 
+                     sysc/datatypes/int/sc_unsigned.h 
+                     sysc/datatypes/int/sc_unsigned_friends.h 
+                     sysc/datatypes/int/sc_unsigned_inlines.h 
+                     sysc/datatypes/int/sc_vector_utils.h
                      sysc/datatypes/misc/sc_concatref.h
                      sysc/datatypes/misc/sc_value_base.h
                      sysc/kernel/sc_attribute.h
@@ -252,7 +247,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/kernel/sc_object.h
                      sysc/kernel/sc_object_int.h
                      sysc/kernel/sc_object_manager.h
-                     sysc/kernel/sc_phase_callback_registry.h
+                     sysc/kernel/sc_stage_callback_registry.h
                      sysc/kernel/sc_process.h
                      sysc/kernel/sc_process_handle.h
                      sysc/kernel/sc_reset.h
@@ -351,10 +346,13 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/tracing/sc_vcd_trace.h
                      sysc/tracing/sc_wif_trace.h
                      sysc/utils/sc_hash.h
+                     sysc/utils/sc_iostream.h
                      sysc/utils/sc_list.h
                      sysc/utils/sc_machine.h
                      sysc/utils/sc_mempool.h
+                     sysc/utils/sc_meta.h
                      sysc/utils/sc_pq.h
+                     sysc/utils/sc_ptr_flag.h
                      sysc/utils/sc_pvector.h
                      sysc/utils/sc_report.h
                      sysc/utils/sc_report_handler.h
@@ -428,12 +426,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                        $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
                        $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
                        $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
-                       $<$<STREQUAL:${QT_ARCH},powerpc_mach>:
-                         sysc/packages/qt/md/powerpc_mach.s
-                         sysc/packages/qt/md/powerpc.c>
-                       $<$<STREQUAL:${QT_ARCH},powerpc_sys5>:
-                         sysc/packages/qt/md/powerpc_sys5.s
-                         sysc/packages/qt/md/powerpc.c>
+                       $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
                        sysc/packages/qt/md/aarch64.h
                        sysc/packages/qt/md/axp.h
                        sysc/packages/qt/md/hppa.h
@@ -451,6 +444,7 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      >)
 
 add_library (SystemC::systemc ALIAS systemc)
+target_compile_features(systemc PUBLIC cxx_std_17)
 
 target_compile_definitions (
   systemc
@@ -459,6 +453,7 @@ target_compile_definitions (
   $<$<BOOL:${WIN32}>:WIN32>
   $<$<AND:$<BOOL:${BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
     SC_WIN_DLL>
+  $<$<BOOL:${ALLOW_DEPRECATED_IEEE_API}>:SC_ALLOW_DEPRECATED_IEEE_API>
   PRIVATE
   SC_BUILD
   SC_INCLUDE_FX
@@ -467,12 +462,8 @@ target_compile_definitions (
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
   $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
   $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
-  $<$<BOOL:${ENABLE_EARLY_MAXTIME_CREATION}>:SC_ENABLE_EARLY_MAXTIME_CREATION>
   $<$<BOOL:${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}>:
     SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS>
-  $<$<BOOL:${ENABLE_PHASE_CALLBACKS}>:SC_ENABLE_SIMULATION_PHASE_CALLBACKS>
-  $<$<BOOL:${ENABLE_PHASE_CALLBACKS_TRACING}>:
-    SC_ENABLE_SIMULATION_PHASE_CALLBACKS_TRACING>
   $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
   $<$<BOOL:${HAVE_POSIX_MEMALIGN}>:SC_HAVE_POSIX_MEMALIGN>
   $<$<BOOL:${ENABLE_LEGACY_MEM_MGMT}>:SC_LEGACY_MEM_MGMT>
@@ -485,8 +476,12 @@ target_compile_options(
   PUBLIC
   $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
   PRIVATE
-  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:
+  $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
     -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -xassembler-with-cpp>
+  $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+    -Qunused-arguments>
   $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
 
 target_include_directories(systemc

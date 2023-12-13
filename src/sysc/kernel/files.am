@@ -58,7 +58,9 @@ H_FILES += \
 	kernel/sc_macros.h \
 	kernel/sc_module.h \
 	kernel/sc_module_name.h \
+	kernel/sc_initializer_function.h \
 	kernel/sc_object.h \
+	kernel/sc_stage_callback_if.h \
 	kernel/sc_process.h \
 	kernel/sc_process_handle.h \
 	kernel/sc_runnable.h \
@@ -82,7 +84,7 @@ NO_H_FILES += \
 	kernel/sc_name_gen.h \
 	kernel/sc_object_int.h \
 	kernel/sc_object_manager.h \
-	kernel/sc_phase_callback_registry.h \
+	kernel/sc_stage_callback_registry.h \
 	kernel/sc_reset.h \
 	kernel/sc_runnable_int.h \
 	kernel/sc_simcontext_int.h \
@@ -104,7 +106,7 @@ CXX_FILES += \
 	kernel/sc_name_gen.cpp \
 	kernel/sc_object.cpp \
 	kernel/sc_object_manager.cpp \
-	kernel/sc_phase_callback_registry.cpp \
+	kernel/sc_stage_callback_registry.cpp \
 	kernel/sc_process.cpp \
 	kernel/sc_reset.cpp \
 	kernel/sc_sensitive.cpp \

@@ -259,38 +259,38 @@ sc_fxnum_fast_subref_r::dump( ::std::ostream& os ) const
 
 // explicit conversion to character string
 
-const std::string
+std::string
 sc_fxnum::to_string() const
 {
     return std::string( m_rep->to_string( SC_DEC, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_string( sc_numrep numrep ) const
 {
     return std::string( m_rep->to_string( numrep, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     return std::string( m_rep->to_string( numrep, (w_prefix ? 1 : 0),
 					SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_string( sc_fmt fmt ) const
 {
     return std::string( m_rep->to_string( SC_DEC, -1, fmt, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_string( sc_numrep numrep, sc_fmt fmt ) const
 {
     return std::string( m_rep->to_string( numrep, -1, fmt, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_string( sc_numrep numrep, bool w_prefix, sc_fmt fmt ) const
 {
     return std::string( m_rep->to_string( numrep, (w_prefix ? 1 : 0),
@@ -298,25 +298,25 @@ sc_fxnum::to_string( sc_numrep numrep, bool w_prefix, sc_fmt fmt ) const
 }
 
 
-const std::string
+std::string
 sc_fxnum::to_dec() const
 {
     return std::string( m_rep->to_string( SC_DEC, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_bin() const
 {
     return std::string( m_rep->to_string( SC_BIN, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_oct() const
 {
     return std::string( m_rep->to_string( SC_OCT, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum::to_hex() const
 {
     return std::string( m_rep->to_string( SC_HEX, -1, SC_F, &m_params ) );
@@ -669,38 +669,38 @@ to_string( const scfx_ieee_double&,
 
 // explicit conversion to character string
 
-const std::string
+std::string
 sc_fxnum_fast::to_string() const
 {
     return std::string( sc_dt::to_string( m_val, SC_DEC, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_string( sc_numrep numrep ) const
 {
     return std::string( sc_dt::to_string( m_val, numrep, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_string( sc_numrep numrep, bool w_prefix ) const
 {
     return std::string( sc_dt::to_string( m_val, numrep, (w_prefix ? 1 : 0),
 					SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_string( sc_fmt fmt ) const
 {
     return std::string( sc_dt::to_string( m_val, SC_DEC, -1, fmt, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_string( sc_numrep numrep, sc_fmt fmt ) const
 {
     return std::string( sc_dt::to_string( m_val, numrep, -1, fmt, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_string( sc_numrep numrep, bool w_prefix, sc_fmt fmt ) const
 {
     return std::string( sc_dt::to_string( m_val, numrep, (w_prefix ? 1 : 0),
@@ -708,25 +708,25 @@ sc_fxnum_fast::to_string( sc_numrep numrep, bool w_prefix, sc_fmt fmt ) const
 }
 
 
-const std::string
+std::string
 sc_fxnum_fast::to_dec() const
 {
     return std::string( sc_dt::to_string( m_val, SC_DEC, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_bin() const
 {
     return std::string( sc_dt::to_string( m_val, SC_BIN, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_oct() const
 {
     return std::string( sc_dt::to_string( m_val, SC_OCT, -1, SC_F, &m_params ) );
 }
 
-const std::string
+std::string
 sc_fxnum_fast::to_hex() const
 {
     return std::string( sc_dt::to_string( m_val, SC_HEX, -1, SC_F, &m_params ) );

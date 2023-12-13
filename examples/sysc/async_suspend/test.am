@@ -1,0 +1,92 @@
+## ****************************************************************************
+##
+##  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
+##  more contributor license agreements.  See the NOTICE file distributed
+##  with this work for additional information regarding copyright ownership.
+##  Accellera licenses this file to you under the Apache License, Version 2.0
+##  (the "License"); you may not use this file except in compliance with the
+##  License.  You may obtain a copy of the License at
+##
+##   http://www.apache.org/licenses/LICENSE-2.0
+##
+##  Unless required by applicable law or agreed to in writing, software
+##  distributed under the License is distributed on an "AS IS" BASIS,
+##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+##  implied.  See the License for the specific language governing
+##  permissions and limitations under the License.
+##
+## ****************************************************************************
+##
+##  test.am --
+##  Included from a Makefile.am to provide example-specific information
+##
+##  Original Author: Philipp A. Hartmann, OFFIS, 2013-05-20
+##
+## ****************************************************************************
+##
+##  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
+##  changes you are making here.
+##
+##      Name, Affiliation, Date:
+##  Description of Modification:
+##
+## ***************************************************************************
+
+## Generic example setup
+## (should be kept in sync among all test.am files)
+##
+## Note: Recent Automake versions (>1.13) support relative placeholders for
+##      included files (%D%,%C%).  To support older versions, use explicit
+##       names for now.
+##
+## Local values:
+##   %D%: async_suspend
+##   %C%: async_suspend
+
+examples_TESTS += async_suspend/test
+
+async_suspend_test_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+
+async_suspend_test_SOURCES = \
+	$(async_suspend_H_FILES) \
+	$(async_suspend_CXX_FILES)
+
+examples_BUILD += \
+	$(async_suspend_BUILD)
+
+examples_CLEAN += \
+	async_suspend/run.log \
+	async_suspend/expected_trimmed.log \
+	async_suspend/run_trimmed.log \
+	async_suspend/diff.log
+
+examples_FILES += \
+	$(async_suspend_H_FILES) \
+	$(async_suspend_CXX_FILES) \
+	$(async_suspend_BUILD) \
+	$(async_suspend_EXTRA)
+
+examples_DIRS += async_suspend
+
+## example-specific details
+
+async_suspend_H_FILES = \
+	async_suspend/async_event.h \
+	async_suspend/collector.h \
+	async_suspend/matplotlibcpp.h \
+	async_suspend/node.h
+
+async_suspend_CXX_FILES = \
+	async_suspend/async_suspend.cpp
+
+async_suspend_BUILD =
+
+async_suspend_EXTRA = \
+	async_suspend/CMakeLists.txt \
+	async_suspend/Makefile
+
+#async_suspend_FILTER =
+
+## Taf!
+## :vim:ft=automake:

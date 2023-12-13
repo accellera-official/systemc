@@ -42,17 +42,7 @@
 
 namespace sc_core {
 
-// ----------------------------------------------------------------------------
-//  File static variables.
-// ----------------------------------------------------------------------------
 
-// main coroutine
-
-static sc_cor_qt main_cor;
-
-// current coroutine
-
-static sc_cor_qt* curr_cor = 0;
 
 // ----------------------------------------------------------------------------
 
@@ -85,11 +75,7 @@ static std::size_t sc_pagesize()
     static std::size_t pagesize = 0;
 
     if( pagesize == 0 ) {
-#     if defined(__ppc__)
-        pagesize = getpagesize();
-#     else
         pagesize = sysconf( _SC_PAGESIZE );
-#     endif
     }
 
     sc_assert( pagesize != 0 );
@@ -169,12 +155,11 @@ sc_cor_qt::stack_protect( bool enable )
                  << ", address=0x" << std::hex << redzone
                  << ", enable=" << std::boolalpha << enable;
 
-            SC_REPORT_WARNING( SC_ID_STACK_SETUP_FAILED_
+            SC_REPORT_WARNING( SC_ID_COROUTINE_ERROR_
                              , sstr.str().c_str() );
         }
     }
 }
-
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_cor_pkg_qt
@@ -182,7 +167,6 @@ sc_cor_qt::stack_protect( bool enable )
 //  Coroutine package class implemented with QuickThreads.
 // ----------------------------------------------------------------------------
 
-int sc_cor_pkg_qt::instance_count = 0;
 
 // support functions
 
@@ -227,13 +211,23 @@ stack_alloc( void** buf, std::size_t* stack_size )
 // constructor
 
 sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
-: sc_cor_pkg( simc )
+  : sc_cor_pkg( simc )
+  , m_main_cor()
+  , m_curr_cor()
 {
-    if( ++ instance_count == 1 ) {
-	// initialize the current coroutine
-	sc_assert( curr_cor == 0 );
-	curr_cor = &main_cor;
-    }
+    m_main_cor.m_pkg = this;
+    m_curr_cor = &m_main_cor;
+}
+
+
+// set current coroutine
+
+sc_cor_qt*
+sc_cor_pkg_qt::set_current(sc_cor_qt* cor)
+{
+    sc_cor_qt* old_cor = m_curr_cor;
+    m_curr_cor = cor;
+    return old_cor;
 }
 
 
@@ -241,10 +235,6 @@ sc_cor_pkg_qt::sc_cor_pkg_qt( sc_simcontext* simc )
 
 sc_cor_pkg_qt::~sc_cor_pkg_qt()
 {
-    if( -- instance_count == 0 ) {
-	// cleanup the current coroutine
-	curr_cor = 0;
-    }
 }
 
 
@@ -254,7 +244,8 @@ extern "C"
 void
 sc_cor_qt_wrapper( void* arg, void* cor, qt_userf_t* fn )
 {
-    curr_cor = reinterpret_cast<sc_cor_qt*>( cor );
+    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( cor );
+    new_cor->m_pkg->set_current( new_cor );
     // invoke the user function
     (*(sc_cor_fn*) fn)( arg );
     // not reached
@@ -270,7 +261,7 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     void* aligned_sp = stack_alloc( &cor->m_stack, &cor->m_stack_size );
     if( aligned_sp == NULL )
     {
-        SC_REPORT_ERROR( SC_ID_STACK_SETUP_FAILED_
+        SC_REPORT_ERROR( SC_ID_COROUTINE_ERROR_
                        , "failed to allocate stack memory" );
         sc_abort();
     }
@@ -296,8 +287,7 @@ void
 sc_cor_pkg_qt::yield( sc_cor* next_cor )
 {
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = curr_cor;
-    curr_cor = new_cor;
+    sc_cor_qt* old_cor = set_current( new_cor );
     __sanitizer_start_switch_cor_qt( new_cor );
     QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
 }
@@ -316,8 +306,7 @@ void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
     sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = curr_cor;
-    curr_cor = new_cor;
+    sc_cor_qt* old_cor = set_current( new_cor );
     QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, 0, new_cor->m_sp );
 }
 
@@ -327,7 +316,7 @@ sc_cor_pkg_qt::abort( sc_cor* next_cor )
 sc_cor*
 sc_cor_pkg_qt::get_main()
 {
-    return &main_cor;
+    return &m_main_cor;
 }
 
 } // namespace sc_core

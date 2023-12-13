@@ -31,7 +31,7 @@
 
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
-#include "sysc/kernel/sc_phase_callback_registry.h"
+#include "sysc/kernel/sc_stage_callback_registry.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_simcontext_int.h"
@@ -44,16 +44,12 @@ namespace sc_core {
 
 using std::malloc;
 using std::strrchr;
-using std::strncmp;
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_event
 //
 //  The event class.
 // ----------------------------------------------------------------------------
-
-// kernel-internal event, that is never notified
-const sc_event sc_event::none( kernel_event, "none" );
 
 const char*
 sc_event::basename() const
@@ -111,19 +107,16 @@ sc_event::notify( const sc_time& t )
         return;
     }
     if( t == SC_ZERO_TIME ) {
-#       if SC_HAS_PHASE_CALLBACKS_
-            if( SC_UNLIKELY_( m_simc->get_status()
-                              & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
-            {
-                std::stringstream msg;
-                msg << m_simc->get_status()
-                    << ":\n\t delta notification of `"
-                    << name() << "' ignored";
-                SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
-                                 , msg.str().c_str() );
-                return;
-            }
-#       endif
+        if( SC_UNLIKELY_( m_simc->get_stage() ) )
+        {
+            std::stringstream msg;
+            msg << "sc_stage = " << m_simc->get_stage()
+                << ":\n\t delta notification of `"
+                << name() << "' ignored";
+            SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
+                             , msg.str().c_str() );
+            return;
+        }
         if( m_notify_type == TIMED ) {
             // remove this event from the timed events set
             sc_assert( m_timed != 0 );
@@ -135,19 +128,16 @@ sc_event::notify( const sc_time& t )
         m_notify_type = DELTA;
         return;
     }
-#   if SC_HAS_PHASE_CALLBACKS_
-        if( SC_UNLIKELY_( m_simc->get_status()
-                        & (SC_END_OF_UPDATE|SC_BEFORE_TIMESTEP) ) )
-        {
-            std::stringstream msg;
-            msg << m_simc->get_status()
-                << ":\n\t timed notification of `"
-                << name() << "' ignored";
-            SC_REPORT_WARNING( SC_ID_PHASE_CALLBACK_FORBIDDEN_
-                             , msg.str().c_str() );
-            return;
-        }
-#   endif
+    if( SC_UNLIKELY_( m_simc->get_stage() ) )
+    {
+        std::stringstream msg;
+        msg << "sc_stage = " << m_simc->get_stage()
+            << ":\n\t timed notification of `"
+            << name() << "' ignored";
+        SC_REPORT_WARNING( SC_ID_STAGE_CALLBACK_FORBIDDEN_
+                         , msg.str().c_str() );
+        return;
+    }
     if( m_notify_type == TIMED ) {
         sc_assert( m_timed != 0 );
         if( m_timed->m_notify_time <= m_simc->time_stamp() + t ) {
@@ -228,7 +218,7 @@ void
 sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false */ )
 {
     sc_object_manager* object_manager = m_simc->get_object_manager();
-    m_parent_p = m_simc->active_object();
+    m_parent_with_hierarchy_flag = m_simc->active_object();
 
     // No name provided, if we are not executing then create a name:
 
@@ -254,11 +244,12 @@ sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false
 
     if ( !is_kernel_event )
     {
-	object_manager->insert_event(m_name, this);
-	if ( m_parent_p )
-	    m_parent_p->add_child_event( this );
-	else
-	    m_simc->add_child_event( this );
+        m_parent_with_hierarchy_flag.set_flag( true );
+        object_manager->insert_event(m_name, this);
+        if ( m_parent_with_hierarchy_flag != NULL )
+            m_parent_with_hierarchy_flag->add_child_event( this );
+        else
+            m_simc->add_child_event( this );
     }
 }
 
@@ -284,18 +275,18 @@ sc_event::reset()
 // | Arguments:
 // |     name = name of the event.
 // +----------------------------------------------------------------------------
-sc_event::sc_event( const char* name ) :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event( const char* name )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( name );
 }
@@ -307,18 +298,18 @@ sc_event::sc_event( const char* name ) :
 // | If this is during elaboration create a name and add it to the object
 // | hierarchy.
 // +----------------------------------------------------------------------------
-sc_event::sc_event() :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event()
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( NULL );
 }
@@ -330,18 +321,18 @@ sc_event::sc_event() :
 // | If this is during elaboration create an implementation-defined name and
 // | do NOT add it to the object hierarchy.
 // +----------------------------------------------------------------------------
-sc_event::sc_event( kernel_tag, const char* name ) :
-    m_name(),
-    m_parent_p(NULL),
-    m_simc( sc_get_curr_simcontext() ),
-    m_trigger_stamp( ~sc_dt::UINT64_ZERO ),
-    m_notify_type( NONE ),
-    m_delta_event_index( -1 ),
-    m_timed( 0 ),
-    m_methods_static(),
-    m_methods_dynamic(),
-    m_threads_static(),
-    m_threads_dynamic()
+sc_event::sc_event( kernel_tag, const char* name )
+  : m_simc( sc_get_curr_simcontext() )
+  , m_trigger_stamp( ~sc_dt::UINT64_ZERO )
+  , m_notify_type( NONE )
+  , m_delta_event_index( -1 )
+  , m_timed( 0 )
+  , m_methods_static()
+  , m_methods_dynamic()
+  , m_threads_static()
+  , m_threads_dynamic()
+  , m_name()
+  , m_parent_with_hierarchy_flag(NULL)
 {
     register_event( name, /* is_kernel_event = */ true );
 }
@@ -356,10 +347,15 @@ sc_event::sc_event( kernel_tag, const char* name ) :
 sc_event::~sc_event()
 {
     cancel();
-    if ( m_name.length() != 0 )
+    if( in_hierarchy() )
     {
-	sc_object_manager* object_manager_p = m_simc->get_object_manager();
-	object_manager_p->remove_event( m_name );
+        sc_object_manager* object_manager_p = m_simc->get_object_manager();
+        object_manager_p->remove_event( m_name );
+
+        if ( m_parent_with_hierarchy_flag != NULL )
+            m_parent_with_hierarchy_flag->remove_child_event( this );
+        else
+            m_simc->remove_child_event( this );
     }
 
     for(size_t i = 0; i < m_threads_dynamic.size(); ++i ) {

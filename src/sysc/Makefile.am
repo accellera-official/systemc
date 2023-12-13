@@ -36,20 +36,12 @@ include $(top_srcdir)/config/Make-rules.sysc
 AM_CFLAGS   += @DEFS@
 AM_CXXFLAGS += @DEFS@
 
-if WANT_QT_THREADS
-QT_LIB    = packages/qt/libqt.la
-QT_SUBDIR = packages/qt
-endif
-
-# only build external packages separately
-SUBDIRS = \
-	packages/boost \
-	$(QT_SUBDIR)
-
+SUBDIRS =
 H_FILES =
 NO_H_FILES =
 CXX_FILES =
 INCDIRS =
+LIBADD =
 
 # include file lists for sub-directories
 include kernel/files.am
@@ -57,6 +49,12 @@ include communication/files.am
 include datatypes/files.am
 include tracing/files.am
 include utils/files.am
+
+# include individual third-party packages
+include packages/boost.am
+if WANT_QT_THREADS
+include packages/qt.am
+endif
 
 localincludedir = $(includedir)/sysc
 nobase_localinclude_HEADERS = $(H_FILES)
@@ -66,11 +64,7 @@ noinst_LTLIBRARIES = libsysc.la
 libsysc_la_SOURCES = $(NO_H_FILES) $(CXX_FILES)
 
 # add dependent (package) libraries
-libsysc_la_LIBADD = \
-       $(QT_LIB)
-
-INCDIRS += \
-	packages
+libsysc_la_LIBADD = $(LIBADD)
 
 uninstall-hook:
 	test ! -d "$(localincludedir)" || ( set -e ; cd "$(localincludedir)"; \

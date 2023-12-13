@@ -242,7 +242,7 @@ public:
 
     // MANDATORY
 
-    friend const sc_bit operator ~ ( const sc_bit& a );
+    friend sc_bit operator ~ ( const sc_bit& a );
 
     // RECOMMENDED
 
@@ -251,9 +251,9 @@ public:
 
     // binary bit-wise operations
 
-    friend const sc_bit operator | ( const sc_bit& a, const sc_bit& b );
-    friend const sc_bit operator & ( const sc_bit& a, const sc_bit& b );
-    friend const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b );
+    friend sc_bit operator | ( const sc_bit& a, const sc_bit& b );
+    friend sc_bit operator & ( const sc_bit& a, const sc_bit& b );
+    friend sc_bit operator ^ ( const sc_bit& a, const sc_bit& b );
 
     // other methods
 
@@ -309,13 +309,13 @@ DEFN_BIN_FUN(bool,not_equal)
 
     // MANDATORY
 
-    inline const sc_bit operator ~ ( const sc_bit& a )
+    inline sc_bit operator ~ ( const sc_bit& a )
        { return sc_bit( ! a.m_val ); }
 
 
     // OPTIONAL
 
-    inline const sc_bit b_not( const sc_bit& a )
+    inline sc_bit b_not( const sc_bit& a )
        { return ( ~ a ); }
 
 
@@ -328,33 +328,33 @@ DEFN_BIN_FUN(bool,not_equal)
 
     // MANDATORY
 
-    inline const sc_bit operator & ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit operator & ( const sc_bit& a, const sc_bit& b )
         { return sc_bit( a.m_val && b.m_val ); }
 
-    inline const sc_bit operator | ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit operator | ( const sc_bit& a, const sc_bit& b )
         { return sc_bit( a.m_val || b.m_val ); }
 
-    inline const sc_bit operator ^ ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit operator ^ ( const sc_bit& a, const sc_bit& b )
         { return sc_bit( a.m_val != b.m_val ); }
 
-    DEFN_BIN_FUN(const sc_bit,operator&)
-    DEFN_BIN_FUN(const sc_bit,operator|)
-    DEFN_BIN_FUN(const sc_bit,operator^)
+    DEFN_BIN_FUN(sc_bit,operator&)
+    DEFN_BIN_FUN(sc_bit,operator|)
+    DEFN_BIN_FUN(sc_bit,operator^)
 
     // OPTIONAL
 
-    inline const sc_bit b_and ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit b_and ( const sc_bit& a, const sc_bit& b )
         { return a & b; }
 
-    inline const sc_bit b_or ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit b_or ( const sc_bit& a, const sc_bit& b )
         { return a | b; }
 
-    inline const sc_bit b_xor ( const sc_bit& a, const sc_bit& b )
+    inline sc_bit b_xor ( const sc_bit& a, const sc_bit& b )
         { return a ^ b; }
 
-    DEFN_BIN_FUN(const sc_bit,b_and)
-    DEFN_BIN_FUN(const sc_bit,b_or)
-    DEFN_BIN_FUN(const sc_bit,b_xor)
+    DEFN_BIN_FUN(sc_bit,b_and)
+    DEFN_BIN_FUN(sc_bit,b_or)
+    DEFN_BIN_FUN(sc_bit,b_xor)
 
     // RECOMMENDED
 

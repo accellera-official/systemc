@@ -13,9 +13,10 @@
  *  Gene Bushuyev
  *  Mark Burton (@markfoodyburton)
  *  Jerome Cornet (@jeromecornetst)
+ *  Ali Dasdan
  *  Guillaume Delbergue (@guyguy333)
  *  Jack Donovan
- *  Ali Dasdan
+ *  Frederic Doucet (@frdoucet)
  *  Paul Ehrlich (@eactor)
  *  Karsten Einwich (@Einwich)
  *  Alan Fitch (@apfitch)
@@ -29,6 +30,7 @@
  *  Philipp A. Hartmann (@pah)
  *  Gino van Hauwermeiren
  *  Ulrich Holtmann
+ *  Peter de Jager (@peterdejager-github)
  *  Martin Janssen (@martin-janssen)
  *  Lukas Jünger (@aut0)
  *  Vijay Kumar
@@ -58,6 +60,7 @@
 
 # Companies
 
+ * Apple Inc.
  * ARM Ltd.
  * Bern University of Applied Sciences
  * Cadence Design Systems, Inc.
@@ -69,9 +72,11 @@
  * Fraunhofer-Gesellschaft
  * GreenSocs
  * Intel Corporation
+ * MachineWare GmbH
  * Mentor Graphics Corporation
  * NXP Semiconductors
  * OFFIS eV
+ * Qualcomm Technologies, Inc
  * Siemens
  * STMicroelectronics
  * Synopsys, Inc.

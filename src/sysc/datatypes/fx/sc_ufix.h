@@ -197,7 +197,7 @@ public:
 
     // unary bitwise operators
 
-    const sc_ufix operator ~ () const;
+    sc_ufix operator ~ () const;
 
 
     // unary bitwise functions
@@ -207,15 +207,15 @@ public:
 
     // binary bitwise operators
 
-    friend const sc_ufix operator & ( const sc_ufix&, const sc_ufix& );
-    friend const sc_ufix operator & ( const sc_ufix&, const sc_ufix_fast& );
-    friend const sc_ufix operator & ( const sc_ufix_fast&, const sc_ufix& );
-    friend const sc_ufix operator | ( const sc_ufix&, const sc_ufix& );
-    friend const sc_ufix operator | ( const sc_ufix&, const sc_ufix_fast& );
-    friend const sc_ufix operator | ( const sc_ufix_fast&, const sc_ufix& );
-    friend const sc_ufix operator ^ ( const sc_ufix&, const sc_ufix& );
-    friend const sc_ufix operator ^ ( const sc_ufix&, const sc_ufix_fast& );
-    friend const sc_ufix operator ^ ( const sc_ufix_fast&, const sc_ufix& );
+    friend sc_ufix operator & ( const sc_ufix&, const sc_ufix& );
+    friend sc_ufix operator & ( const sc_ufix&, const sc_ufix_fast& );
+    friend sc_ufix operator & ( const sc_ufix_fast&, const sc_ufix& );
+    friend sc_ufix operator | ( const sc_ufix&, const sc_ufix& );
+    friend sc_ufix operator | ( const sc_ufix&, const sc_ufix_fast& );
+    friend sc_ufix operator | ( const sc_ufix_fast&, const sc_ufix& );
+    friend sc_ufix operator ^ ( const sc_ufix&, const sc_ufix& );
+    friend sc_ufix operator ^ ( const sc_ufix&, const sc_ufix_fast& );
+    friend sc_ufix operator ^ ( const sc_ufix_fast&, const sc_ufix& );
 
 
     // binary bitwise functions
@@ -288,8 +288,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval operator ++ ( int );
-    const sc_fxval operator -- ( int );
+    sc_fxval operator ++ ( int );
+    sc_fxval operator -- ( int );
 
     sc_ufix& operator ++ ();
     sc_ufix& operator -- ();
@@ -432,7 +432,7 @@ public:
 
     // unary bitwise operators
 
-    const sc_ufix_fast operator ~ () const;
+    sc_ufix_fast operator ~ () const;
 
 
     // unary bitwise functions
@@ -442,12 +442,12 @@ public:
 
     // binary bitwise operators
 
-    friend const sc_ufix_fast operator & ( const sc_ufix_fast&,
-					   const sc_ufix_fast& );
-    friend const sc_ufix_fast operator ^ ( const sc_ufix_fast&,
-					   const sc_ufix_fast& );
-    friend const sc_ufix_fast operator | ( const sc_ufix_fast&,
-					   const sc_ufix_fast& );
+    friend sc_ufix_fast operator & ( const sc_ufix_fast&,
+				     const sc_ufix_fast& );
+    friend sc_ufix_fast operator ^ ( const sc_ufix_fast&,
+				     const sc_ufix_fast& );
+    friend sc_ufix_fast operator | ( const sc_ufix_fast&,
+				     const sc_ufix_fast& );
 
 
     // binary bitwise functions
@@ -517,8 +517,8 @@ public:
 
     // auto-increment and auto-decrement
 
-    const sc_fxval_fast operator ++ ( int );
-    const sc_fxval_fast operator -- ( int );
+    sc_fxval_fast operator ++ ( int );
+    sc_fxval_fast operator -- ( int );
 
     sc_ufix_fast& operator ++ ();
     sc_ufix_fast& operator -- ();
@@ -1025,7 +1025,7 @@ sc_ufix::sc_ufix( const sc_ufix& a )
 // unary bitwise operators
 
 inline
-const sc_ufix
+sc_ufix
 sc_ufix::operator ~ () const
 {
     SC_FXNUM_OBSERVER_READ_( *this )
@@ -1057,7 +1057,7 @@ b_not( sc_ufix& c, const sc_ufix& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-const sc_ufix                                                                 \
+sc_ufix                                                                       \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
@@ -1068,7 +1068,7 @@ operator op ( const tp1& a, const tp2& b )                                    \
     int fwl_c = sc_max( a.wl() - iwl_a, b.wl() - iwl_b );                     \
     sc_ufix c( iwl_c + fwl_c, iwl_c );                                        \
     for( int i = -fwl_c; i < iwl_c; ++ i )                                    \
-	c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
+        c.set_bit( i, a.get_bit( i ) op2 b.get_bit( i ) );                    \
     return sc_ufix( c, iwl_c + fwl_c, iwl_c );                                \
 }
 
@@ -1206,14 +1206,14 @@ DEFN_ASN_OP_T(^=,!=,sc_ufix_fast)
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval
+sc_fxval
 sc_ufix::operator ++ ( int )
 {
     return sc_fxval( sc_fxnum::operator ++ ( 0 ) );
 }
 
 inline
-const sc_fxval
+sc_fxval
 sc_ufix::operator -- ( int )
 {
     return sc_fxval( sc_fxnum::operator -- ( 0 ) );
@@ -1739,7 +1739,7 @@ sc_ufix_fast::sc_ufix_fast( const sc_ufix_fast& a )
 // unary bitwise operators
 
 inline
-const sc_ufix_fast
+sc_ufix_fast
 sc_ufix_fast::operator ~ () const
 {
     SC_FXNUM_FAST_OBSERVER_READ_( *this )
@@ -1771,7 +1771,7 @@ b_not( sc_ufix_fast& c, const sc_ufix_fast& a )
 
 #define DEFN_BIN_OP_T(op,op2,tp1,tp2)                                         \
 inline                                                                        \
-const sc_ufix_fast                                                            \
+sc_ufix_fast                                                                  \
 operator op ( const tp1& a, const tp2& b )                                    \
 {                                                                             \
     a.observer_read();                                                        \
@@ -1904,14 +1904,14 @@ DEFN_ASN_OP_T(^=,!=,sc_ufix_fast)
 // auto-increment and auto-decrement
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_ufix_fast::operator ++ ( int )
 {
     return sc_fxval_fast( sc_fxnum_fast::operator ++ ( 0 ) );
 }
 
 inline
-const sc_fxval_fast
+sc_fxval_fast
 sc_ufix_fast::operator -- ( int )
 {
     return sc_fxval_fast( sc_fxnum_fast::operator -- ( 0 ) );
