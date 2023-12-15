@@ -1,0 +1,20 @@
+SystemC Simulation
+Time  A B C D E
+      - - - - -
+0 s| 0 0 0 0 0 invoking method M 
+0 s| 0 0 0 0 0 setting A
+2 ns| 1 0 0 0 0 clearing A
+2 ns| 1 0 0 0 0 setting B
+2 ns| 0 1 0 0 0 invoking thread T 
+4 ns| 0 1 0 0 0 clearing B
+4 ns| 0 1 0 0 0 setting C
+4 ns| 0 0 1 0 0 invoking thread T 
+6 ns| 0 0 1 0 0 clearing C
+6 ns| 0 0 1 0 0 setting D
+6 ns| 0 0 0 1 0 invoking method M 
+6 ns| 0 0 0 1 0 invoking thread T 
+8 ns| 0 0 0 1 0 clearing D
+8 ns| 0 0 0 1 0 setting E
+8 ns| 0 0 0 0 1 invoking method M 
+10 ns| 0 0 0 0 1 clearing E
+program completed

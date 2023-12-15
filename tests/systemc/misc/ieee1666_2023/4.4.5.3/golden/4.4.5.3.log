@@ -1,0 +1,8 @@
+SystemC Simulation
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>
+
+Info: (I1) : sc_stop called to terminate a paused simulation
+
+Info: /OSCI/SystemC: Simulation stopped by user.

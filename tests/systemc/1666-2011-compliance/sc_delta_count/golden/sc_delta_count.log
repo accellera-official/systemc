@@ -1,0 +1,26 @@
+SystemC Simulation
+M() awoke at 0 s @ 0
+M() awoke at 0 s @ 1
+M() awoke at 0 s @ 3
+M() awoke at 1 ns @ 5
+M() awoke at 2 ns @ 6
+M() awoke at 5 ns @ 8
+M() awoke at 6 ns @ 9
+M() awoke at 7 ns @ 10
+M() awoke at 8 ns @ 12
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>
+
+Warning: (W571) no activity or clock movement for sc_start() invocation
+In file: <removed by verify.pl>
+M() awoke at 9 ns @ 13
+M() awoke at 10 ns @ 14
+M() awoke at 12 ns @ 15
+M() awoke at 12 ns @ 16
+M() awoke at 12 ns @ 17
+M() awoke at 13 ns @ 18
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+Success
