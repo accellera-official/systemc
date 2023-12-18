@@ -1,7 +1,7 @@
-                 SystemC 2.3.3 regression test suite
-                 ===================================
+                 SystemC regression test suite
+                 =============================
 
-This is the public review release of the SystemC 2.3.3 regression test suite.
+This is the SystemC regression test suite.
 
 Note: for Windows users, please also refer to README_windows.txt
 
@@ -19,16 +19,22 @@ CONTENTS
 ===============
 
   The regression test suite is organized as follows. At the top level,
-  we have a 'scripts' directory and a 'tests' directory.
+  we have a 'scripts' directory, an 'include' directory and several
+  tests directories (currently 'systemc' and 'tlm').
 
   The 'scripts' directory contains the regression test
   script(s). Right now, this directory contains a single script,
   'verify.pl'. This script is written in perl. It works with perl5,
   which must be located in /usr/bin, or in your path if running on Windows.
 
-  The 'tests' directory contains the regression tests. The directory
-  has a 'systemc' directory, and a 'tlm' directory. Each of these contains
-  other subdirectories. Actual tests are located in leaf directories.
+  The 'include' directory contains top-level include files share across
+  tests. The directory 'include/<toplevel>' is automatically added to a
+  tests include path for tests underneath the '<toplevel>' tests
+  directory.
+
+  The tests directories 'systemc' and 'tlm' contain the regression tests.
+  Each of these contains other subdirectories. Actual tests are located
+  in leaf directories.
 
   An actual test directory contains one or more source code files
   (ending in .cpp). If the directory contains one source code file,
@@ -82,7 +88,7 @@ CONTENTS
     o c++, g++ -> linux[64] (default)
 
   - Mac OS X (multiple architectures):
-    o c++, g++ -> macosx[ppc][64]
+    o c++, g++ -> macos[x64|arm64]
 
   - Solaris 2.7 and Solaris 2.8:
     o c++, g++ -> gccsparcOS5 (default)
@@ -127,13 +133,9 @@ CONTENTS
 
     > ../scripts/verify.pl systemc tlm
 
-  or simply
-
-    > ../scripts/verify.pl .
-
   runs everything.
 
-  The directories should be relative to '$SYSTEMC_TEST/tests'.
+  The directories should be relative to '$SYSTEMC_TEST'.
   By specifying subdirectories, it is possible to run only a subset
   of the tests in the regression test suite, e.g.
 
@@ -162,7 +164,7 @@ CONTENTS
   (and if possible removed), unless the '-no-cleanup' option is
   specified. If a test fails all intermediate results will be
   kept. The directory structure of the (temporary) results is the same
-  as the regression tests under '$SYSTEMC_TEST/tests'. Furthermore, in
+  as the regression tests under '$SYSTEMC_TEST'. Furthermore, in
   the current directory, a regression test log file called
   'verify.log' is created. This file contains the output of running
   each of the tests, and it contains a summary of which tests failed
@@ -171,11 +173,8 @@ CONTENTS
   Beware:
     Always create a _temporary_ directory to run the tests in. You
     should _never_ run the tests in the directory in which the test
-    sources are located (i.e. '$SYSTEMC_TEST/tests').
+    sources are located (i.e. '$SYSTEMC_TEST').
 
-  Note:
-    You may override the default TLM2 installation by setting the
-    environment variable TLM_HOME.
 
 2.1) Running tests in parallel
 ==============================

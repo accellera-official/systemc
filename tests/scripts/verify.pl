@@ -649,7 +649,7 @@ sub init_globals
     $rt_prodname = "systemc.exe";       # simulation executable name
     $rt_quick_tests = 0;
     $rt_makefile = 0;
-    $rt_tests_dir = "$rt_systemc_test/tests";
+    $rt_tests_dir = "$rt_systemc_test";
     $rt_common_include_dir = "include/common"; # relative to $rt_systemc_test
     $rt_time_tests = 0;
     $rt_verbose  = 0;
