@@ -46,6 +46,8 @@ DOC_FILES = \
 ##   find sysc -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 DOC_FILES += \
 	sysc/README 
+DOC_FILES += \
+	sysc/SIGN_EXTENSION.md 
 
 ##
 ## TLM-2.0 documentation

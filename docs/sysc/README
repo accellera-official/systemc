@@ -1,5 +1,5 @@
 ==========================================
-README for the SystemC 2.3.4 documentation
+README for the SystemC 3.0.0 documentation
 ==========================================
 
 This directory contains
@@ -9,5 +9,9 @@ doxygen/
   A folder containing a command file (template) for doxygen which may be
   used to generate browseable documentation of the SystemC class library.
   Please see www.doxygen.org for usage.
+
+SIGN_EXTENSION.md
+
+  A description of how SystemC datatypes are sign extended.
 
 README - this file.

@@ -42,6 +42,7 @@
 set (DOC_FILES
 	       DEVELOPMENT.md
 	       sysc/README
+	       sysc/SIGN_EXTENSION.md
 	       tlm/tlm_README.md)
 
 foreach (DOC_FILE ${DOC_FILES})
