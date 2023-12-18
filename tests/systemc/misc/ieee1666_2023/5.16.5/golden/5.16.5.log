@@ -1,0 +1,8 @@
+SystemC Simulation
+p.name() = top.mod.p
+p.basename() = p
+p.kind() = sc_port
+mod->name = top.mod
+sig.name = top.sig
+top.name() = top
+program completed

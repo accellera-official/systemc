@@ -1,0 +1,12 @@
+SystemC Simulation
+0 s: initializing
+3 ns: initializing
+4 ns: initializing
+7 ns: waited 3
+10 ns: waited 3
+11 ns: initializing
+12 ns: initializing
+13 ns: initializing
+14 ns: initializing
+15 ns: initializing
+18 ns: waited 3

@@ -1,0 +1,12 @@
+SystemC Simulation
+0 s CT2: reset true
+0 s CT2: looping
+0 s CT1: reset false
+0 s CT2: unwind 
+0 s CT2: reset true
+0 s CT2: looping
+1 ns CT2: unwind 
+1 ns CT2: reset true
+1 ns CT2: looping
+2 ns CT2: looping
+program completed

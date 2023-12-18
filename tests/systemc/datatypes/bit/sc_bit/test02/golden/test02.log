@@ -1,0 +1,177 @@
+SystemC Simulation
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        bv8 = 01000000
+        bv4 & bv8 = 00000000
+        bv8 & bv4 = 00000000
+        bv4 | bv8 = 01000011
+        bv8 | bv4 = 01000011
+        bv4 ^ bv8 = 01000011
+        bv8 ^ bv4 = 01000011
+
+BIT operations:
+    operands: 
+        lv5 = 1Z0X1
+        lv10 = 00101ZZZZZ
+        lv5 & lv10 = 00000XX0XX
+        lv10 & lv5 = 00000XX0XX
+        lv5 | lv10 = 001011XXX1
+        lv10 | lv5 = 001011XXX1
+        lv5 ^ lv10 = 00101XXXXX
+        lv10 ^ lv5 = 00101XXXXX
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        lv10 = 00101ZZZZZ
+        bv4 & lv10 = 00000000XX
+        lv10 & bv4 = 00000000XX
+        bv4 | lv10 = 00101XXX11
+        lv10 | bv4 = 00101XXX11
+        bv4 ^ lv10 = 00101XXXXX
+        lv10 ^ bv4 = 00101XXXXX
+
+BIT operations:
+    operands: 
+        lv5 = 1Z0X1
+        bv8 = 01000000
+        lv5 & bv8 = 00000000
+        bv8 & lv5 = 00000000
+        lv5 | bv8 = 0101X0X1
+        bv8 | lv5 = 0101X0X1
+        lv5 ^ bv8 = 0101X0X1
+        bv8 ^ lv5 = 0101X0X1
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        bv8 = 01000010
+        bv4 & bv8 = 00000010
+        bv8 & bv4 = 00000010
+        bv4 | bv8 = 01000011
+        bv8 | bv4 = 01000011
+        bv4 ^ bv8 = 01000001
+        bv8 ^ bv4 = 01000001
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        lv10 = 0000000000
+        lv5 & lv10 = 0000000000
+        lv10 & lv5 = 0000000000
+        lv5 | lv10 = 000001X1X1
+        lv10 | lv5 = 000001X1X1
+        lv5 ^ lv10 = 000001X1X1
+        lv10 ^ lv5 = 000001X1X1
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        lv10 = 0000000000
+        bv4 & lv10 = 0000000000
+        lv10 & bv4 = 0000000000
+        bv4 | lv10 = 0000000011
+        lv10 | bv4 = 0000000011
+        bv4 ^ lv10 = 0000000011
+        lv10 ^ bv4 = 0000000011
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        bv8 = 01000010
+        lv5 & bv8 = 000000X0
+        bv8 & lv5 = 000000X0
+        lv5 | bv8 = 0101X111
+        bv8 | lv5 = 0101X111
+        lv5 ^ bv8 = 0101X1X1
+        bv8 ^ lv5 = 0101X1X1
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        lv10 = XXXXXXXXXX
+        lv5 & lv10 = 00000XXXXX
+        lv10 & lv5 = 00000XXXXX
+        lv5 | lv10 = XXXXX1X1X1
+        lv10 | lv5 = XXXXX1X1X1
+        lv5 ^ lv10 = XXXXXXXXXX
+        lv10 ^ lv5 = XXXXXXXXXX
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        lv10 = XXXXXXXXXX
+        bv4 & lv10 = 00000000XX
+        lv10 & bv4 = 00000000XX
+        bv4 | lv10 = XXXXXXXX11
+        lv10 | bv4 = XXXXXXXX11
+        bv4 ^ lv10 = XXXXXXXXXX
+        lv10 ^ bv4 = XXXXXXXXXX
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        bv8 = 01000010
+        lv5 & bv8 = 000000X0
+        bv8 & lv5 = 000000X0
+        lv5 | bv8 = 0101X111
+        bv8 | lv5 = 0101X111
+        lv5 ^ bv8 = 0101X1X1
+        bv8 ^ lv5 = 0101X1X1
+
+BIT operations:
+    operands: 
+        lv10 = XXXXXXXXXX
+        lv10 = XXXXXXXXXX
+        lv10 & lv10 = XXXXXXXXXX
+        lv10 & lv10 = XXXXXXXXXX
+        lv10 | lv10 = XXXXXXXXXX
+        lv10 | lv10 = XXXXXXXXXX
+        lv10 ^ lv10 = XXXXXXXXXX
+        lv10 ^ lv10 = XXXXXXXXXX
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        lv10 = ZZZZZZZZZZ
+        lv5 & lv10 = 00000XXXXX
+        lv10 & lv5 = 00000XXXXX
+        lv5 | lv10 = XXXXX1X1X1
+        lv10 | lv5 = XXXXX1X1X1
+        lv5 ^ lv10 = XXXXXXXXXX
+        lv10 ^ lv5 = XXXXXXXXXX
+
+BIT operations:
+    operands: 
+        bv4 = 0011
+        lv10 = ZZZZZZZZZZ
+        bv4 & lv10 = 00000000XX
+        lv10 & bv4 = 00000000XX
+        bv4 | lv10 = XXXXXXXX11
+        lv10 | bv4 = XXXXXXXX11
+        bv4 ^ lv10 = XXXXXXXXXX
+        lv10 ^ bv4 = XXXXXXXXXX
+
+BIT operations:
+    operands: 
+        lv5 = 1X1X1
+        bv8 = 01000010
+        lv5 & bv8 = 000000X0
+        bv8 & lv5 = 000000X0
+        lv5 | bv8 = 0101X111
+        bv8 | lv5 = 0101X111
+        lv5 ^ bv8 = 0101X1X1
+        bv8 ^ lv5 = 0101X1X1
+
+BIT operations:
+    operands: 
+        lv10 = ZZZZZZZZZZ
+        lv10 = ZZZZZZZZZZ
+        lv10 & lv10 = XXXXXXXXXX
+        lv10 & lv10 = XXXXXXXXXX
+        lv10 | lv10 = XXXXXXXXXX
+        lv10 | lv10 = XXXXXXXXXX
+        lv10 ^ lv10 = XXXXXXXXXX
+        lv10 ^ lv10 = XXXXXXXXXX

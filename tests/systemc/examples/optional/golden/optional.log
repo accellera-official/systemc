@@ -1,0 +1,6 @@
+SystemC Simulation
+attach debug output..
+ name: demo.clk kind: sc_in
+ name: demo.clocked_method kind: sc_method_process
+ name: demo.debug_output kind: sc_out
+program complete

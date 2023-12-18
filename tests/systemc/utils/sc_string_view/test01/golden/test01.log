@@ -1,0 +1,14 @@
+SystemC Simulation
+sv = string literal
+cstr_sv_overload( const char* = "string literal")
+cstr_sv_overload( sc_string_view = "string literal")
+sv = string
+str_sv_overload( const std::string& = "string" )
+str_sv_overload( sc_string_view = "string")
+zsv = literal string
+cstr_zsv_overload( const char* = "literal string")
+cstr_zsv_overload( sc_zstring_view = "literal string")
+zsv = string
+str_zsv_overload( const std::string& = "string" )
+str_zsv_overload( sc_zstring_view = "string")
+Program completed

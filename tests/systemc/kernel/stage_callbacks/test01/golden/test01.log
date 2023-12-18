@@ -1,0 +1,56 @@
+SystemC Simulation
+tracer: before_end_of_elaboration: 0 callbacks called.
+tracer: stage callback SC_POST_BEFORE_END_OF_ELABORATION: 0 s -> pending activity: MAX
+tracer: end_of_elaboration: 1 callbacks called.
+tracer: stage callback SC_POST_END_OF_ELABORATION: 0 s -> pending activity: MAX
+tracer: start_of_simulation: 2 callbacks called.
+tracer: stage callback SC_POST_START_OF_SIMULATION: 0 s -> pending activity: MAX
+tracer.timed: 0 s: 0
+tracer.delta: 0 s: 0
+tracer: stage callback SC_POST_UPDATE: 0 s -> pending activity: 0 s
+tracer.delta: 0 s: 1
+tracer: stage callback SC_POST_UPDATE: 0 s -> pending activity: 100 ns
+
+Warning: (W553) forbidden action in stage callback: sc_stage = SC_POST_UPDATE:
+	 delta notification of `tracer.event_0' ignored
+In file: <removed by verify.pl>
+tracer: stage callback SC_PRE_TIMESTEP: 0 s -> pending activity: 100 ns
+
+Warning: (W553) forbidden action in stage callback: sc_stage = SC_PRE_TIMESTEP:
+	 delta notification of `tracer.event_0' ignored
+In file: <removed by verify.pl>
+tracer.timed: 100 ns: 1
+tracer: stage callback SC_POST_UPDATE: 100 ns -> pending activity: 0 s
+tracer.delta: 100 ns: 2
+tracer: stage callback SC_POST_UPDATE: 100 ns -> pending activity: 100 ns
+
+Warning: (W553) forbidden action in stage callback: sc_stage = SC_POST_UPDATE:
+	 timed notification of `tracer.event_0' ignored
+In file: <removed by verify.pl>
+tracer: stage callback SC_PRE_TIMESTEP: 100 ns -> pending activity: 100 ns
+
+Warning: (W553) forbidden action in stage callback: sc_stage = SC_PRE_TIMESTEP:
+	 timed notification of `tracer.event_0' ignored
+In file: <removed by verify.pl>
+tracer.timed: 200 ns: 2
+tracer: stage callback SC_POST_UPDATE: 200 ns -> pending activity: 0 s
+tracer: stage callback SC_PRE_TIMESTEP: 200 ns -> pending activity: 100 ns
+tracer.timed: 300 ns: 3
+tracer: stage callback SC_POST_UPDATE: 300 ns -> pending activity: 0 s
+tracer.delta: 300 ns: 3
+tracer: stage callback SC_POST_UPDATE: 300 ns -> pending activity: 100 ns
+tracer: stage callback SC_PRE_TIMESTEP: 300 ns -> pending activity: 100 ns
+tracer.timed: 400 ns: 4
+tracer: stage callback SC_POST_UPDATE: 400 ns -> pending activity: 0 s
+tracer: stage callback SC_PRE_PAUSE: 400 ns -> pending activity: 0 s
+tracer.delta: 400 ns: 4
+tracer: stage callback SC_POST_UPDATE: 400 ns -> pending activity: 100 ns
+tracer: stage callback SC_PRE_TIMESTEP: 400 ns -> pending activity: 100 ns
+tracer.timed: 500 ns: 5
+tracer: stage callback SC_POST_UPDATE: 500 ns -> pending activity: MAX
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+tracer: end_of_simulation: 19 callbacks called.
+tracer: stage callback SC_POST_END_OF_SIMULATION: 500 ns -> pending activity: MAX
+tracer: stage callback SC_PRE_STOP: 500 ns -> pending activity: MAX
+tracer: [destructor]: 21 callbacks called.
