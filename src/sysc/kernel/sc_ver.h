@@ -174,7 +174,7 @@ struct SC_API_VERSION_STRING
 
 #if !defined(SC_BUILD)
 // import explicitly instantiated template
-SC_TPLEXTERN_ template struct SC_API SC_API_VERSION_STRING
+extern template struct SC_API SC_API_VERSION_STRING
 <
   &SC_DISABLE_VIRTUAL_BIND_CHECK_
 >;
