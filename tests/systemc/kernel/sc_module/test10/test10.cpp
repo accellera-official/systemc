@@ -96,7 +96,7 @@ SC_MODULE(A)
 	void thread()
 	{
 	    int sum = 0;
-	    int x[0];
+	    int x[1];
 	    size_t stack_end = (size_t)x;
 	    size_t stack_start = (size_t)stack_end - 0x500000;
 	    for ( size_t stack_p = stack_start+0x1000; stack_p <  stack_end;  stack_p += 0x1000 ) {
