@@ -77,6 +77,8 @@
 #
 # - Linux (Clang): aarch64
 #
+# - macOS 10.5, 10.6 (GCC): ppc, ppc64
+#
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
 #
 # - Solaris (GCC and native compiler): sparc
@@ -334,6 +336,8 @@ if (APPLE)
     unset(HAS__aarch64__DEFINED CACHE)
     unset(HAS__i386_DEFINED CACHE)
     unset(HAS__x86_64__DEFINED CACHE)
+    unset(HAS__ppc__DEFINED CACHE)
+    unset(HAS__ppc64__DEFINED CACHE)
   endif()
 endif (APPLE)
 
@@ -346,6 +350,7 @@ check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
 check_symbol_exists (__i386 "" HAS__i386_DEFINED)
 check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
 check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
+check_symbol_exists (__ppc64__ "" HAS__ppc64__DEFINED)
 check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 
 
@@ -362,6 +367,12 @@ if (NOT SystemC_TARGET_ARCH)
       set (_TARGET_ARCH "macosarm64")
     elseif (HAS__x86_64__DEFINED)
       set (_TARGET_ARCH "macosx64")
+    elseif (HAS__ppc__DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "macosppc")
+    elseif (HAS__ppc64__DEFINED)
+      # Untested platform.
+      set (_TARGET_ARCH "macosppc64")
     else (N_OSX_ARCHITECTURES GREATER 1)
       set (_TARGET_ARCH "macosunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
