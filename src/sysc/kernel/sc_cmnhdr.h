@@ -141,7 +141,7 @@
 # define SC_TPLEXTERN_ extern
 
 // build SystemC DLL on Windows
-#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
+#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64)) && defined(_MSC_VER)
 
 # if defined(SC_BUILD) // building SystemC library
 #   define SC_API  __declspec(dllexport)
@@ -169,7 +169,7 @@
 // (deliberately outside of include guards to enable later effect)
 #if defined(SC_HAS_WINDOWS_H_) && defined(SC_INCLUDE_WINDOWS_H)
 #  undef SC_HAS_WINDOWS_H_
-#  include <Windows.h>
+#  include <windows.h>
 #endif
 
 // $Log: sc_cmnhdr.h,v $
