@@ -642,7 +642,7 @@ public:
 public:
     void adjust_hod()
     {
-        digit[HOD] &= ~(~0ULL << SC_BIT_INDEX(W));
+        digit[HOD] &= ~(~0U << SC_BIT_INDEX(W));
     }
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
