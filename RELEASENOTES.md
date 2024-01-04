@@ -45,7 +45,7 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
       - Xcode/AppleClang compiler version 12.0 until version 15.0
 
    * Microsoft Windows 10
-      - Microsoft Visual Studio 2019 (15.0) (Win32 and x64)
+      - Microsoft Visual Studio 2019 (16) (Win32 and x64)
 
    Warning: _The fixed-point data-types are not working as defined on
    MSVC 2017 and later in Release x64 mode._
@@ -151,11 +151,11 @@ RELEASENOTES.
 
 Following is the list of bug fixes and enhancements for the 3.0.0 release:
 
-  - Execution speed improvements for the SystemC datatypes
+  - Execution speed improvements for the SystemC data-types
 
   - Fixed MSVC warnings in examples
 
-  - Fixed automake flow for datatypes
+  - Fixed Automake flow for data-types
 
 
 ## 5. Deprecated features

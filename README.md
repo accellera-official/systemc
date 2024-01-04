@@ -43,7 +43,7 @@
 
 ### Installation
 
-  See the separate [INSTALL](INSTALL.md) file that provides system
+  See the separate [INSTALL.md](INSTALL.md) file that provides system
   information and installation instructions.
 
 ### Release Notes

@@ -402,7 +402,7 @@ SystemC example as a stand-alone application:
   - The CMake build scripts require more thorough testing of the various build
     configurations on as many platforms as possible.  For the moment, testing
     has been primarily done on macOS (x86_64 and i686), Linux (x86_64 and
-    i686) and Windows 10 using Visual Studio 2019 (16.0) (Win32 and x64).
+    i686) and Windows 10 using Visual Studio 2019 (16) (Win32 and x64).
 
   - The CMake build scripts do not configure and install `systemc.pc` and
     `tlm.pc` for `pkg-config`.

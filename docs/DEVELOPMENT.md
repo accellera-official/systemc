@@ -435,7 +435,7 @@ Issues are grouped (by using labels) in the following categories for
 different parts of the implementation:
 
  * `core`           - SystemC core language, i.e. everything in `sc_core`
- * `datatypes`      - SystemC datatypes, i.e. in `sc_dt`
+ * `datatypes`      - SystemC data-types, i.e. in `sc_dt`
  * `tlm`            - TLM-1.0, TLM-2.0
  * `infrastructure` - build system(s), scripts, etc.
 
