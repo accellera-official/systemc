@@ -767,7 +767,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 
     if( mant_is_neg )
     {
-	m_mant[m_msw] |=  ~0ULL << scfx_find_msb( m_mant[m_msw] );
+	m_mant[m_msw] |=  ~UINT64_ZERO << scfx_find_msb( m_mant[m_msw] );
 	for( int i = m_msw + 1; i < m_mant.size(); ++ i )
 	    m_mant[i] = static_cast<word>( -1 );
 	complement( m_mant, m_mant, m_mant.size() );
