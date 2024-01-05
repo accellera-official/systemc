@@ -35,7 +35,6 @@
 
  *****************************************************************************/
 
-
 #include "systemc.h"
 #define STACK_SIZE  0x600000 
 
@@ -47,9 +46,9 @@
 
 
 void my_dump( size_t value )
-{       
+{
     std::cout << "0x" << std::hex << value << " (" << std::dec << value << ") = ";
-}  
+}
 
 void* thread_stack_location()
 {
@@ -86,44 +85,45 @@ void qt_stack_info()
 
 SC_MODULE(A)
 {
-	SC_CTOR(A)
-	{
-		SC_THREAD(thread);
-		sensitive << m_clk;
-		set_stack_size(STACK_SIZE);
-	}
+  SC_CTOR(A)
+  {
+    SC_THREAD(thread);
+    sensitive << m_clk;
+    set_stack_size(STACK_SIZE);
+  }
 
-	void thread()
-	{
-	    int sum = 0;
-	    int x[1];
-	    size_t stack_end = (size_t)x;
-	    size_t stack_start = (size_t)stack_end - 0x500000;
-	    for ( size_t stack_p = stack_start+0x1000; stack_p <  stack_end;  stack_p += 0x1000 ) {
-#if 0
-	        std::cout << "access at 0x" << std::hex << stack_p
-		          << std::hex << " " << (stack_end - stack_p) << " " 
-			  << *(int*)stack_p << std::endl;
+  void thread()
+  { 
+    int sum = 0;
+    int x[1];
+    size_t stack_end = (size_t)x;
+    size_t stack_start = (size_t)stack_end - 0x500000;
+    
+    for ( size_t stack_p = stack_start + 0x1000; stack_p < stack_end; stack_p += 0x1000 ) {
+#if 1
+    std::cout << "access at 0x" << std::hex << stack_p
+              << std::hex << " " << (stack_end - stack_p) << " " 
+              << *(int*)stack_p << std::endl;
 #else
-                sum = sum + *(int*)stack_p;
+    sum = sum + *(int*)stack_p;
 #endif
-	    }
-	    std::cout << sum << std::endl;
-	} 
-	sc_in_clk m_clk;
+    }
+    std::cout << sum << std::endl;
+  }
+  sc_in_clk m_clk;
 };
 
 
 int sc_main(int argc, char* argv[])
 {
-	sc_clock clock;
-	A        a("a");
-	a.m_clk(clock);
+  sc_clock clock;
+  A        a("a");
+  a.m_clk(clock);
 
-	std::cout << "stack size = 0x" << std::hex << STACK_SIZE << " (" << std::dec 
-	          << STACK_SIZE << ")" << std::endl;
+  std::cout << "stack size = 0x" << std::hex << STACK_SIZE << " (" << std::dec 
+            << STACK_SIZE << ")" << std::endl;
 
-	sc_start(1, SC_NS );
-        std::cout << "Program complete" << std::endl;
-	return 0;
+  sc_start(1, SC_NS );
+  std::cout << "Program complete" << std::endl;
+  return 0;
 }

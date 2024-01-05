@@ -23,6 +23,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <cmath>
 using std::cout;
 using std::endl;
 using std::hex;
@@ -31,6 +32,7 @@ using std::dec;
 
 using namespace sc_dt;
 
+#define MAX_SIZE 50
 
 #if !defined(SC_VECTOR_UTILS_H)
 
@@ -146,7 +148,7 @@ old_vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
       nd = DIV_CEIL(nsr) - 1;
       nsr -= nd * BITS_PER_DIGIT;
     }
-    
+
     if (nd) {
 
       // Shift right for nd digits.
@@ -159,7 +161,6 @@ old_vec_shift_right(int ulen, sc_digit *u, int nsr, sc_digit fill)
       }
       else
         vector_zero( ulen - sc_min( nd, ulen ), ulen, u);
-     
     }
 
     if (nsr == 0)
@@ -188,57 +189,57 @@ using namespace sc_dt;
 
 void adjust_signed_hod( size_t width, sc_dt::sc_digit* digits )
 {
-    int hob = SC_BIT_INDEX(width-1);
-    int hod = SC_DIGIT_COUNT(width) - 1;
-    sc_digit high_digit = digits[hod];
-    if ( (1u << hob) & high_digit ) 
-        high_digit = high_digit | (~0u << hob) ;
-    else
-        high_digit = high_digit & ~(~0u << hob);
-    digits[hod] = high_digit;
+  int hob = SC_BIT_INDEX(width-1);
+  int hod = SC_DIGIT_COUNT(width) - 1;
+  sc_digit high_digit = digits[hod];
+  if ( (1u << hob) & high_digit ) 
+    high_digit = high_digit | (~0u << hob) ;
+  else
+    high_digit = high_digit & ~(~0u << hob);
+  digits[hod] = high_digit;
 }
 
 void adjust_unsigned_hod( size_t width, sc_dt::sc_digit* digits )
 {
-      sc_digit tmp = 0;
-      tmp = ~tmp;
-      int hod = SC_DIGIT_COUNT(width+1) - 1;
-      unsigned shift = (width & (std::numeric_limits<sc_digit>::digits-1));
-      digits[hod] &= ~(tmp << shift);
+  sc_digit tmp = 0;
+  tmp = ~tmp;
+  int hod = SC_DIGIT_COUNT(width+1) - 1;
+  unsigned shift = (width & (std::numeric_limits<sc_digit>::digits-1));
+  digits[hod] &= ~(tmp << shift);
 }
 
 void dump( size_t n, const sc_dt::sc_digit* digits )
 {
-    for ( int digit_i = n-1; digit_i >= 0; --digit_i )
-    {
-        cout << hex << std::setfill('0') << std::setw(8) << digits[digit_i] << " ";
-    }
-    cout << " digits_n " << n << endl;
+  for ( int digit_i = n-1; digit_i >= 0; --digit_i )
+  {
+    cout << hex << std::setfill('0') << std::setw(8) << digits[digit_i] << " ";
+  }
+  cout << " digits_n " << n << endl;
 }
 
 bool equal( size_t n, const sc_dt::sc_digit* left_p, const sc_dt::sc_digit* right_p )
 {
-    for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { 
-        if ( left_p[digit_i] != right_p[digit_i] ) return false;
-    }
-    return true;
+  for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { 
+    if ( left_p[digit_i] != right_p[digit_i] ) return false;
+  }
+  return true;
 }
 
 void fill( size_t n, sc_dt::sc_digit* to_p, unsigned int fill_value )
 {
-    for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { to_p[digit_i] = fill_value; }
+  for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { to_p[digit_i] = fill_value; }
 }
 
 template<typename T>
 void fill( size_t n, T& to, unsigned int fill_value )
 {
-    to = fill_value;
-    for ( size_t digit_i = 1; digit_i < n; ++digit_i ) { to = (to << 32) | fill_value; }
+  to = fill_value;
+  for ( size_t digit_i = 1; digit_i < n; ++digit_i ) { to = (to << 32) | fill_value; }
 }
 
 void load( size_t n, sc_dt::sc_digit* from, sc_dt::sc_digit* to )
 {
-    for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { to[digit_i] = from[digit_i]; }
+  for ( size_t digit_i = 0; digit_i < n; ++digit_i ) { to[digit_i] = from[digit_i]; }
 }
 
 template<int W, int D=1>
@@ -247,55 +248,65 @@ class ShiftLeftSigned : public ShiftLeftSigned<W-D,D>
   public:
     ShiftLeftSigned( unsigned int fill_value ) : ShiftLeftSigned<W-D,D>(fill_value)
     {
-        sc_bigint<W>    source;
-	size_t          source_digits_n = SC_DIGIT_COUNT(W);
+      sc_bigint<W>    source;
+      size_t          source_digits_n = SC_DIGIT_COUNT(W);
 
-	fill( source_digits_n, source, fill_value );
+      fill( source_digits_n, source, fill_value );
 
-	for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
-	    size_t        result_width = W + shift_i;
-	    size_t        result_digits_n = SC_DIGIT_COUNT(result_width);
-	    sc_signed     actual(result_width);
-#if defined(SC_VECTOR_UTILS_H)
-	    sc_digit      actual1[result_digits_n];
+      for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
+        size_t        result_width = W + shift_i;
+        size_t        result_digits_n = SC_DIGIT_COUNT(result_width);
+        sc_signed     actual(result_width);
+#if !defined(_MSC_VER)
+#  if defined(SC_VECTOR_UTILS_H)
+        sc_digit      actual1[result_digits_n];
+#  endif
+        sc_digit      expected[result_digits_n];
+#else
+#  if defined(SC_VECTOR_UTILS_H)
+        sc_digit* actual1= new sc_digit[result_digits_n];
+#  endif
+        sc_digit* expected = new sc_digit[result_digits_n];
 #endif
-	    sc_digit      expected[result_digits_n]; 
-	    
-	    load( source_digits_n, source.get_raw(), expected );
-	    old_vec_shift_left(result_digits_n, expected, shift_i);
-	    adjust_signed_hod( result_width, expected );
+        load( source_digits_n, source.get_raw(), expected );
+        old_vec_shift_left(result_digits_n, expected, shift_i);
+        adjust_signed_hod( result_width, expected );
 
-            // Test vector_shift_left( int target_n, sc_digit* target_p, int shift_n ) 
+        // Test vector_shift_left( int target_n, sc_digit* target_p, int shift_n ) 
 
-	    actual = source << shift_i;
-	    if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source   " << hex << source << dec << " width " << W << endl;
-		cout << "    shift    " << shift_i << endl;
-		cout << "    expected "; dump( result_digits_n, expected );
-		cout << "    actual   "; dump( result_digits_n, actual.get_raw() );
-	        assert(0);
-	    }
+        actual = source << shift_i;
+        if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
+          cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
+          << endl;
+          cout << "    source   " << hex << source << dec << " width " << W << endl;
+          cout << "    shift    " << shift_i << endl;
+          cout << "    expected "; dump( result_digits_n, expected );
+          cout << "    actual   "; dump( result_digits_n, actual.get_raw() );
+          assert(0);
+        }
 
-            // Test vector_shift_left( int source_n, const sc_digit* source_p, int target_n,
-	    //                         sc_digit* target_p, int shift_n )
+        // Test vector_shift_left( int source_n, const sc_digit* source_p, int target_n,
+        //                         sc_digit* target_p, int shift_n )
 
 #if defined(SC_VECTOR_UTILS_H)
-	    vector_shift_left( source_digits_n, source.get_raw(), result_digits_n, actual1, 
-                               shift_i );
-	    // @@@@@@@@ adjust_signed_hod( result_width, actual1 );
-	    if ( !equal( result_digits_n, actual1, expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source   " << hex << source << dec << " width " << W << endl;
-		cout << "    shift    " << shift_i << endl;
-		cout << "    expected "; dump( result_digits_n, expected );
-		cout << "    actual   "; dump( result_digits_n, actual1 );
-	        assert(0);
-	    }
+        vector_shift_left( source_digits_n, source.get_raw(), result_digits_n, actual1, 
+                           shift_i );
+        // @@@@@@@@ adjust_signed_hod( result_width, actual1 );
+        if ( !equal( result_digits_n, actual1, expected ) ) {
+          cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
+           << endl;
+          cout << "    source   " << hex << source << dec << " width " << W << endl;
+          cout << "    shift    " << shift_i << endl;
+          cout << "    expected "; dump( result_digits_n, expected );
+          cout << "    actual   "; dump( result_digits_n, actual1 );
+          assert(0);
+        }
 #endif
-	}
+#if defined(_MSC_VER)
+        delete actual1;
+        delete expected;
+#endif
+      }
     }
 };
 
@@ -312,56 +323,64 @@ class ShiftLeftUnsigned : public ShiftLeftUnsigned<W-D,D>
   public:
     ShiftLeftUnsigned( unsigned int fill_value ) : ShiftLeftUnsigned<W-D,D>(fill_value)
     {
-        sc_biguint<W>   source;
-	size_t          source_digits_n = SC_DIGIT_COUNT(W+1);
+      sc_biguint<W>   source;
+      size_t          source_digits_n = SC_DIGIT_COUNT(W+1);
 
-	fill( source_digits_n, source, fill_value );
+      fill( source_digits_n, source, fill_value );
 
-	for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
-	    size_t          result_width = (W+1) + shift_i;
-	    size_t          result_digits_n = SC_DIGIT_COUNT(result_width);
-	    sc_unsigned     actual(result_width);
-#if defined(SC_VECTOR_UTILS_H)
-	    sc_digit        actual1[result_digits_n];
+      for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
+        size_t          result_width = (W+1) + shift_i;
+        size_t          result_digits_n = SC_DIGIT_COUNT(result_width);
+        sc_unsigned     actual(result_width);
+#if !defined(_MSC_VER)
+#  if defined(SC_VECTOR_UTILS_H)
+        sc_digit        actual1[result_digits_n];
+#  endif
+        sc_digit        expected[result_digits_n];
+#else
+#  if defined(SC_VECTOR_UTILS_H)
+        sc_digit* actual1= new sc_digit[result_digits_n];
+#  endif
+        sc_digit* expected = new sc_digit[result_digits_n];
 #endif
-	    sc_digit        expected[result_digits_n];
-	    load( source_digits_n, source.get_raw(), expected );
-	    old_vec_shift_left(result_digits_n, expected, shift_i);
-	    adjust_signed_hod( result_width, expected );
+        load( source_digits_n, source.get_raw(), expected );
+        old_vec_shift_left(result_digits_n, expected, shift_i);
+        adjust_signed_hod( result_width, expected );
 
-            // Test vector_shift_left( int target_n, sc_digit* target_p, int shift_n ) 
+        // Test vector_shift_left( int target_n, sc_digit* target_p, int shift_n ) 
 
-	    actual = source << shift_i;
-	    if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source       " << hex << source << dec << " width " << W << endl;
-		cout << "    shift        " << shift_i << endl;
-		cout << "    result_width " << result_width << endl;
-		cout << "    result_n     " << result_digits_n << endl;
-		cout << "    expected     "; dump( result_digits_n, expected );
-		cout << "    actual       "; dump( result_digits_n, actual.get_raw() );
-	        assert(0);
-	    }
+        actual = source << shift_i;
+        if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
+          cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ << endl;
+          cout << "    source       " << hex << source << dec << " width " << W << endl;
+          cout << "    shift        " << shift_i << endl;
+          cout << "    result_width " << result_width << endl;
+          cout << "    result_n     " << result_digits_n << endl;
+          cout << "    expected     "; dump( result_digits_n, expected );
+          cout << "    actual       "; dump( result_digits_n, actual.get_raw() );
+          assert(0);
+        }
 
-            // Test vector_shift_left( int source_hod, const sc_digit* source_p, int target_hod,
-	    //                         sc_digit* target_p, int shift_n )
+        // Test vector_shift_left( int source_hod, const sc_digit* source_p, int target_hod,
+        //                         sc_digit* target_p, int shift_n )
 
 #if defined(SC_VECTOR_UTILS_H)
-	    vector_shift_left( source_digits_n, source.get_raw(), result_digits_n, actual1, 
-                               shift_i );
-            // adjust_unsigned_hod( W, actual1 );
-            if ( !equal( result_digits_n, actual1, expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source       " << hex << source << dec << " width " << W << endl;
-		cout << "    shift    " << shift_i << endl;
-                cout << "    expected "; dump( result_digits_n, expected );
-                cout << "    actual   "; dump( result_digits_n, actual1 );
-                assert(0);
-            }
+        vector_shift_left( source_digits_n, source.get_raw(), result_digits_n, actual1, shift_i );
+        // adjust_unsigned_hod( W, actual1 );
+        if ( !equal( result_digits_n, actual1, expected ) ) {
+          cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__  << endl;
+          cout << "    source       " << hex << source << dec << " width " << W << endl;
+          cout << "    shift    " << shift_i << endl;
+          cout << "    expected "; dump( result_digits_n, expected );
+          cout << "    actual   "; dump( result_digits_n, actual1 );
+          assert(0);
+        }
 #endif
-	}
+#if defined(_MSC_VER)
+        delete actual1;
+        delete expected;
+#endif
+      }
     }
 };
 
@@ -379,30 +398,38 @@ class ShiftRightSigned : public ShiftRightSigned<W-D,D>
   public:
     ShiftRightSigned( unsigned int fill_value ) : ShiftRightSigned<W-D,D>(fill_value)
     {
-        sc_bigint<W>    source;
-	size_t          digits_n = SC_DIGIT_COUNT(W);
-	sc_bigint<W>    actual;
-	sc_digit        actual_bits[digits_n];
-	sc_digit        expected[digits_n];
+      sc_bigint<W>    source;
+      size_t          digits_n = SC_DIGIT_COUNT(W);
+      sc_bigint<W>    actual;
+#if !defined(_MSC_VER)
+      sc_digit        actual_bits[digits_n];
+      sc_digit        expected[digits_n];
+#else
+      sc_digit* actual_bits = new sc_digit[digits_n];
+      sc_digit* expected = new sc_digit[digits_n];
+#endif
+      fill( digits_n, source, fill_value );
 
-	fill( digits_n, source, fill_value );
-
-	for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
-	    size_t result_width = W - shift_i;
-	    size_t result_digits_n = SC_DIGIT_COUNT(result_width);
-	    load( digits_n, source.get_raw(), expected );
-	    old_vec_shift_right(digits_n, expected, shift_i, source < 0 ? -1:0);
-	    actual = source >> shift_i;
-	    if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source       " << hex << source << dec << " width " << W << endl;
-		cout << "    shift    " << shift_i << endl;
-		cout << "    expected "; dump( result_digits_n, expected );
-		cout << "    actual   "; dump( result_digits_n, actual_bits );
-	        assert(0);
-	    }
-	}
+      for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
+        size_t result_width = W - shift_i;
+        size_t result_digits_n = SC_DIGIT_COUNT(result_width);
+        load( digits_n, source.get_raw(), expected );
+        old_vec_shift_right(digits_n, expected, shift_i, source < 0 ? -1:0);
+        actual = source >> shift_i;
+        if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
+          cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
+          << endl;
+          cout << "    source       " << hex << source << dec << " width " << W << endl;
+          cout << "    shift    " << shift_i << endl;
+          cout << "    expected "; dump( result_digits_n, expected );
+          cout << "    actual   "; dump( result_digits_n, actual_bits );
+          assert(0);
+        }
+      }
+#if defined(_MSC_VER)
+      delete actual_bits;
+      delete expected;
+#endif
     }
 };
 
@@ -419,29 +446,35 @@ class ShiftRightUnsigned : public ShiftRightUnsigned<W-D,D>
   public:
     ShiftRightUnsigned( unsigned int fill_value ) : ShiftRightUnsigned<W-D,D>(fill_value)
     {
-        sc_biguint<W>   source;
-	size_t          digits_n = SC_DIGIT_COUNT(W);
-	sc_biguint<W>   actual;
-	sc_digit        expected[digits_n];
+      sc_biguint<W>   source;
+      size_t          digits_n = SC_DIGIT_COUNT(W);
+      sc_biguint<W>   actual;
+#if !defined(_MSC_VER)
+      sc_digit        expected[digits_n]; // expected[digits_n];
+#else
+      sc_digit* expected = new sc_digit[digits_n];
+#endif
+      fill( digits_n, source, fill_value );
 
-	fill( digits_n, source, fill_value );
-
-	for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
-	    size_t result_width = W - shift_i;
-	    size_t result_digits_n = SC_DIGIT_COUNT(result_width);
-	    load( digits_n, source.get_raw(), expected );
-	    old_vec_shift_right(digits_n, expected, shift_i, 0);
-	    actual = source >> shift_i;
-	    if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
-		cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
-		     << endl;
-		cout << "    source       " << hex << source << dec << " width " << W << endl;
-		cout << "    shift    " << shift_i << endl;
-		cout << "    expected "; dump( result_digits_n, expected );
-		cout << "    actual   "; dump( result_digits_n, actual.get_raw() );
-	        assert(0);
-	    }
-	}
+      for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
+        size_t result_width = W - shift_i;
+        size_t result_digits_n = SC_DIGIT_COUNT(result_width);
+        load( digits_n, source.get_raw(), expected );
+        old_vec_shift_right(digits_n, expected, shift_i, 0);
+        actual = source >> shift_i;
+        if ( !equal( result_digits_n, actual.get_raw(), expected ) ) {
+           cout << "ERROR: actual != expected in " << __FILE__ << " at line " << __LINE__ 
+                << endl;
+           cout << "    source       " << hex << source << dec << " width " << W << endl;
+           cout << "    shift    " << shift_i << endl;
+           cout << "    expected "; dump( result_digits_n, expected );
+           cout << "    actual   "; dump( result_digits_n, actual.get_raw() );
+           assert(0);
+        }
+      }
+#if defined(_MSC_VER)
+      delete expected;
+#endif
     }
 };
 
@@ -454,44 +487,44 @@ class ShiftRightUnsigned<0,D>
 
 int sc_main( int argc, char* argv[] )
 {
-    {
-	std::cout << std::endl << "---------- shift right signed ----------" << std::endl;
-	ShiftRightSigned<128>      a(~0u);
-	ShiftRightSigned<128>      b(0x55555555u);
-	ShiftRightSigned<128>      c(0xaaaaaaaau);
-	ShiftRightSigned<128>      d(0x66666666u);
-	ShiftRightSigned<128>      e(0x99999999u);
-	ShiftRightSigned<1550,31>  f(~0u);
-    }
-    {
-	std::cout << std::endl << "---------- shift right unsigned ----------" << std::endl;
-	ShiftRightUnsigned<128>      a(~0u);
-	ShiftRightUnsigned<128>      b(0x55555555u);
-	ShiftRightUnsigned<128>      c(0xaaaaaaaau);
-	ShiftRightUnsigned<128>      d(0x66666666u);
-	ShiftRightUnsigned<128>      e(0x99999999u);
-	ShiftRightUnsigned<1550,31> f(~0u);
-    }
-    {
-	std::cout << std::endl << "---------- shift left signed ----------" << std::endl;
-	ShiftLeftSigned<128>      a(~0u);
-	ShiftLeftSigned<128>      b(0x55555555u);
-	ShiftLeftSigned<128>      c(0xaaaaaaaau);
-	ShiftLeftSigned<128>      d(0x66666666u);
-	ShiftLeftSigned<128>      e(0x99999999u);
-	ShiftLeftSigned<1550,31>  f(~0u);
-	ShiftLeftSigned<1550,31>  g(0x7fffffffu);
-    }
-    {
-	std::cout << std::endl << "---------- shift left unsigned ----------" << std::endl;
-	ShiftLeftUnsigned<128>      a(~0u);
-	ShiftLeftUnsigned<128>      b(0x55555555u);
-	ShiftLeftUnsigned<128>      c(0xaaaaaaaau);
-	ShiftLeftUnsigned<128>      d(0x66666666u);
-	ShiftLeftUnsigned<128>      e(0x99999999u);
-	ShiftLeftUnsigned<1550,31>  f(~0u);
-    }
-    cout << "Vector shift test completed" << endl;
-    return 0;
+  {
+    std::cout << std::endl << "---------- shift right signed ----------" << std::endl;
+    ShiftRightSigned<128>      a(~0u);
+    ShiftRightSigned<128>      b(0x55555555u);
+    ShiftRightSigned<128>      c(0xaaaaaaaau);
+    ShiftRightSigned<128>      d(0x66666666u);
+    ShiftRightSigned<128>      e(0x99999999u);
+    ShiftRightSigned<1550,31>  f(~0u);
+  }
+  {
+    std::cout << std::endl << "---------- shift right unsigned ----------" << std::endl;
+    ShiftRightUnsigned<128>     a(~0u);
+    ShiftRightUnsigned<128>     b(0x55555555u);
+    ShiftRightUnsigned<128>     c(0xaaaaaaaau);
+    ShiftRightUnsigned<128>     d(0x66666666u);
+    ShiftRightUnsigned<128>     e(0x99999999u);
+    ShiftRightUnsigned<1550,31> f(~0u);
+  }
+  {
+    std::cout << std::endl << "---------- shift left signed ----------" << std::endl;
+    ShiftLeftSigned<128>      a(~0u);
+    ShiftLeftSigned<128>      b(0x55555555u);
+    ShiftLeftSigned<128>      c(0xaaaaaaaau);
+    ShiftLeftSigned<128>      d(0x66666666u);
+    ShiftLeftSigned<128>      e(0x99999999u);
+    ShiftLeftSigned<1550,31>  f(~0u);
+    ShiftLeftSigned<1550,31>  g(0x7fffffffu);
+  }
+  {
+    std::cout << std::endl << "---------- shift left unsigned ----------" << std::endl;
+    ShiftLeftUnsigned<128>      a(~0u);
+    ShiftLeftUnsigned<128>      b(0x55555555u);
+    ShiftLeftUnsigned<128>      c(0xaaaaaaaau);
+    ShiftLeftUnsigned<128>      d(0x66666666u);
+    ShiftLeftUnsigned<128>      e(0x99999999u);
+    ShiftLeftUnsigned<1550,31>  f(~0u);
+  }
+  cout << "Vector shift test completed" << endl;
+  return 0;
 }
 #endif
