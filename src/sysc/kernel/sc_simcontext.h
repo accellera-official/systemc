@@ -330,11 +330,11 @@ public:
     void pre_suspend() const;
     void post_suspend() const;
 
-private:
     void hierarchy_push(sc_object_host*);
     sc_object_host* hierarchy_pop();
     sc_object_host* hierarchy_curr() const;
 
+private:
     void add_child_event( sc_event* );
     void add_child_object( sc_object* );
     void remove_child_event( sc_event* );
