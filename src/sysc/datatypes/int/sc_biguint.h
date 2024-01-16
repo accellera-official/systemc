@@ -446,7 +446,7 @@ to_uint64() const
     }
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0];
-	if ( W < 64 ) { result &= ~(~0ULL << W); }
+	if ( W < 64 ) { result &= ~(~UINT64_ZERO << W); }
     }
     return result;
 }
@@ -642,7 +642,7 @@ public:
 public:
     void adjust_hod()
     {
-        digit[HOD] &= ~(~0ULL << SC_BIT_INDEX(W));
+        digit[HOD] &= ~(~0U << SC_BIT_INDEX(W));
     }
 
 #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
