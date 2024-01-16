@@ -43,8 +43,6 @@ class SC_API tlm_phase
 {
 public:
   tlm_phase();
-  tlm_phase(unsigned int id); // TODO: should be dropped
-
   tlm_phase(tlm_phase_enum standard);
   tlm_phase& operator=(tlm_phase_enum standard);
 
