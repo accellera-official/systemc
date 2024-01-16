@@ -92,7 +92,7 @@ public:
 
     void assign( uint_type value )
     {
-        m_val = ( value & (1ull << (W-1)) ) ?  value | (~0ull << (W-1)) : 
+        m_val = ( value & (1ull << (W-1)) ) ?  value | (~UINT64_ZERO << (W-1)) : 
 	                                       value & ( ~UINT_ZERO >> (SC_INTWIDTH-W) );
     }
 
