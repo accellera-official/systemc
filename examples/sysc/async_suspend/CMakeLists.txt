@@ -49,3 +49,5 @@ if(ASYNC_SUSPEND_MATPLOT)
     target_include_directories(async_suspend PRIVATE ${Python3_INCLUDE_DIRS})
     add_definitions(-DWITHMATPLOT)
 endif()
+
+configure_and_add_test (async_suspend)
