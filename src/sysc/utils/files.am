@@ -73,7 +73,6 @@ CXX_FILES += \
 	utils/sc_report.cpp \
 	utils/sc_report_handler.cpp \
 	utils/sc_stop_here.cpp \
-	utils/sc_string.cpp \
 	utils/sc_utils_ids.cpp \
 	utils/sc_vector.cpp
 
