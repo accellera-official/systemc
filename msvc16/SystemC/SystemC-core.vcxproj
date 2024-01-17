@@ -376,7 +376,6 @@
     <ClCompile Include="..\..\src\sysc\kernel\sc_simcontext.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_spawn_options.cpp" />
     <ClCompile Include="..\..\src\sysc\utils\sc_stop_here.cpp" />
-    <ClCompile Include="..\..\src\sysc\utils\sc_string.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_thread_process.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_time.cpp" />
     <ClCompile Include="..\..\src\sysc\tracing\sc_trace.cpp" />
