@@ -745,26 +745,13 @@ settings to all build configurations.
    Note: _Only effective during library build._
 
 
- * `SC_USE_SC_STRING_OLD` / `SC_USE_STD_STRING`
-   Define `sc_string` symbol.
+ * `SC_USE_STD_STRING`
+   Define `sc_string` symbol as an alias to `std::string`
 
    Pre-IEEE-1666 versions of SystemC included an `sc_string` class for
    string objects.  This class has been superseeded by `std::string` these
    days.
-   If your application still relies on `sc_string` being available, set one
-   of the two supported preprocessor switches to provide it:
 
-   `SC_USE_SC_STRING_OLD`  
-     Uses old implementation `sc_string_old` to provide `sc_string`:
-    ```cpp
-    typedef sc_string_old sc_string;
-    ```
-
-   `SC_USE_STD_STRING`  
-     Provide `sc_string` as an alias to `std::string`:
-    ```cpp
-    typedef std::string sc_string;
-    ```
 
  * `SC_WIN_DLL`  
    Build (against) a DLL build of SystemC (Windows/MSVC only)
