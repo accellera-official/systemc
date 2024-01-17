@@ -45,9 +45,6 @@ typedef ::std::string sc_string;
 
 namespace sc_dt {
 
-// forward class declarations
-class sc_string_rep;
-
 // ----------------------------------------------------------------------------
 //  ENUM : sc_numrep
 //
