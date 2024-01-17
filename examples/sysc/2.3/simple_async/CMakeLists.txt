@@ -40,5 +40,5 @@
 
 
 add_executable (simple_async main.cpp async_event.h)
-target_link_libraries (simple_async SystemC::systemc)
+target_link_libraries (simple_async SystemC::systemc pthread)
 configure_and_add_test (simple_async)
