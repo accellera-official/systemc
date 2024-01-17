@@ -346,13 +346,7 @@ using namespace sc_core;
     using ::sc_core::wait;
 #endif // !defined( __HP_aCC )
 
-#ifdef SC_USE_SC_STRING_OLD
-	using   sc_dt::sc_string_old;
-	typedef sc_dt::sc_string_old sc_string;
-#endif
-#ifdef SC_USE_STD_STRING
-	typedef ::std::string sc_string;
-#endif
+typedef ::std::string sc_string;
 
 #undef SC_NO_STDGETS_
 
