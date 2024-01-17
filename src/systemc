@@ -131,16 +131,13 @@
 #include "sysc/utils/sc_pvector.h"
 #include "sysc/utils/sc_string_view.h"
 #include "sysc/utils/sc_vector.h"
+#include "sysc/utils/sc_string.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)
 
 #ifdef SC_INCLUDE_DYNAMIC_PROCESSES
 #    include "sysc/kernel/sc_dynamic_processes.h"
 #endif // SC_INCLUDE_DYNAMIC_PROCESSES
-
-#ifdef SC_USE_SC_STRING_OLD
-#    include "sysc/utils/sc_string.h"
-#endif // SC_USE_SC_STRING_OLD
 
 #ifdef SC_INCLUDE_EXTRA_STD_HEADERS
 #    include <cstring>
