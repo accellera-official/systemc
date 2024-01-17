@@ -329,7 +329,7 @@ class ShiftLeftUnsigned : public ShiftLeftUnsigned<W-D,D>
       fill( source_digits_n, source, fill_value );
 
       for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
-        size_t          result_width = (W+1) + shift_i;
+        const size_t          result_width = (W+1) + shift_i;
         const size_t          result_digits_n = SC_DIGIT_COUNT(result_width);
         sc_unsigned     actual(result_width);
 #if !defined(_MSC_VER)
