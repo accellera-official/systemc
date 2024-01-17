@@ -135,8 +135,8 @@ public:
 
     unsigned int negative() const;
     void negative( unsigned int );
-    unsigned int exponent() const;
-    void exponent(unsigned int );
+    int exponent() const;
+    void exponent( int );
     unsigned int mantissa0() const;
     void mantissa0( unsigned int );
     unsigned int mantissa1() const;
@@ -220,7 +220,7 @@ scfx_ieee_double::negative( unsigned int a )
 }
 
 inline
-unsigned int
+int
 scfx_ieee_double::exponent() const
 {
     return m_id.s.exponent - SCFX_IEEE_DOUBLE_BIAS;
@@ -228,7 +228,7 @@ scfx_ieee_double::exponent() const
 
 inline
 void
-scfx_ieee_double::exponent( unsigned int a )
+scfx_ieee_double::exponent( int a )
 {
     m_id.s.exponent = (SCFX_IEEE_DOUBLE_BIAS + a)
                       & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE);
