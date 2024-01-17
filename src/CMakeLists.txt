@@ -131,7 +131,6 @@ add_library (systemc sysc/communication/sc_clock.cpp
                      sysc/utils/sc_report.cpp
                      sysc/utils/sc_report_handler.cpp
                      sysc/utils/sc_stop_here.cpp
-                     sysc/utils/sc_string.cpp
                      sysc/utils/sc_utils_ids.cpp
                      sysc/utils/sc_vector.cpp
                      # TLM sources
