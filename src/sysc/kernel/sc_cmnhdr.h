@@ -135,11 +135,6 @@
 
 // ----------------------------------------------------------------------------
 
-// declare certain template instantiations as "extern" during library build
-// and adding an explicit instantiation into the (shared) SystemC library
-
-# define SC_TPLEXTERN_ extern
-
 // build SystemC DLL on Windows
 #if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64)) && defined(_MSC_VER)
 
@@ -159,7 +154,7 @@
 # define SC_API_TEMPLATE_DECL_ template class SC_API
 #else
 // keep extern when building an application (or on non-Windows)
-# define SC_API_TEMPLATE_DECL_ SC_TPLEXTERN_ template class SC_API
+# define SC_API_TEMPLATE_DECL_ extern template class SC_API
 #endif
 
 #endif // SC_CMNHDR_H

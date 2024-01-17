@@ -123,7 +123,7 @@
 #
 # ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
 #                               processes, which is no longer supported due to
-#                               changes in IEEE Std 1666-2011 (see
+#                               changes as of IEEE Std. 1666-2011 (see
 #                               sc_event::notify, 5.10.6).
 #
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
@@ -276,7 +276,7 @@ option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions 
 
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
-option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
+option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes as of IEEE Std. 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
@@ -290,7 +290,7 @@ option (ENABLE_LEGACY_MEM_MGMT
         "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
         OFF)
 
-option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std 1666" OFF)
+option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std. 1666" OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
@@ -684,7 +684,7 @@ add_subdirectory (examples)
 
 install (FILES AUTHORS.md
                INSTALL.md
-               cmake/INSTALL_USING_CMAKE
+               cmake/INSTALL_USING_CMAKE.md
                LICENSE
                NOTICE
                README.md
