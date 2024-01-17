@@ -91,13 +91,6 @@ private:
 
 } // anonymous namespace
 
-tlm_phase::tlm_phase( unsigned int id )
-  : m_id(id)
-{
-  // TODO: validate id?
-  // TODO: add deprecation warning?
-}
-
 tlm_phase::tlm_phase( const std::type_info& type, const char* name )
   : m_id( tlm_phase_registry::instance().register_phase(type, name) )
 {}
