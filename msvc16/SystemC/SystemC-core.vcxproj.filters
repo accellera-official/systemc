@@ -199,9 +199,6 @@
     <ClCompile Include="..\..\src\sysc\datatypes\int\sc_uint_base.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sysc\utils\sc_string.cpp">
-      <Filter>Source Files\sc_dt</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\sysc\datatypes\int\sc_unsigned.cpp">
       <Filter>Source Files\sc_dt</Filter>
     </ClCompile>
