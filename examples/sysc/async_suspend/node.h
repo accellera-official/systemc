@@ -34,6 +34,7 @@
 #include <vector>
 #include <unordered_map>
 #include <mutex>
+#include <thread>
 #include <condition_variable>
 
 #include "tlm.h"
@@ -45,30 +46,28 @@
 #include "async_event.h"
 #include "collector.h"
 
-extern "C" void *processQueueStart(void *c) ;
-
 const char *sycname="SystemC";
 
 #define SPEEDSYSTEMC 1000
 #define SPEEDNODE 100
 #define SPEEDBTRANS 10
 
-/* Each 'node' consists of a SystemC thread, and a p_thread component.
+/* Each 'node' consists of a SystemC thread, and a std::thread component.
  *
- * The p_thread gets transactions from a queue (or creates new ones), and 'sends'
+ * The std::thread gets transactions from a queue (or creates new ones), and 'sends'
  * them by posting them to a 'mailbox' (txn), and then signalling SystemC using
  * an async_events (sendIt). It then uses a 'semaphore' (txnSent) to wait till
  * the txn is sent, before sending another one.
- * The p_thread has it's own notion of 'time' (myTime)
+ * The std::thread has it's own notion of 'time' (myTime)
  *
  * Meanwhile, the SystemC thread receives the async event (sendIt), in a
  * SC_THREAD (sendTxns). This must be a thread, so that 'wait' can be called.
  * The txn's are sent to a 'random' other node, where they are processed by a
  * b_transport which calls wait().
- * Once done, sendTxns releases the semaphore allowing the p_thread to continue.
+ * Once done, sendTxns releases the semaphore allowing the std::thread to continue.
  *
  * In order to maintain synchronisation, the SystemC thread can do 2 things:
- *  1. If the 'nodes' local time (myTime) is ahead of SystemC, the p_thread
+ *  1. If the 'nodes' local time (myTime) is ahead of SystemC, the std::thread
  *  semaphore is released by notifying a method at the appropriate myTime.
  *  2. Else SystemC is requested to suspend (waiting for the node to catch up).
  *
@@ -94,9 +93,9 @@ public:
     int txnSent_c;
 
 
-    pthread_t scThread;            // the other thread
+    std::thread m_thread;
 
-    async_event sendIt;            // request from p_thread to SystemC to send
+    async_event sendIt;            // request from std::thread to SystemC to send
                                    // the txn in the mailbox. async_event is
                                    // like a normal event, but thread safe.
 
@@ -124,7 +123,6 @@ public:
         finished(false)
     {
         myTime = sc_core::SC_ZERO_TIME;
-        scThread = pthread_self();
 
         target_socket.register_b_transport( this, &asynctestnode::b_transport);
 
@@ -142,6 +140,7 @@ public:
         running = false;
         while (!finished)
             txnSentMethod();
+        if (m_thread.joinable()) m_thread.join();
     }
 
     // This will cause SystemC time to be driven forwards. But, if we're not
@@ -181,9 +180,7 @@ public:
         wait(SC_ZERO_TIME);
         col.add(sycname, sc_time_stamp());
         // Start the other thread once SystemC really has got going....
-        pthread_t id;
-        void *t = this;
-        pthread_create(&id, NULL, processQueueStart, t);
+        m_thread = std::thread([&]{processQueue();});
     }
 
     // We are NOT in SystemC - separate thread - DONT CALL WAIT!  
@@ -292,12 +289,5 @@ public:
     }
 
 };
-
-// Helper
-extern "C" void *processQueueStart(void *c)
-{
-    static_cast<asynctestnode *>(c)->processQueue();
-    return NULL;
-}
 
 #endif
