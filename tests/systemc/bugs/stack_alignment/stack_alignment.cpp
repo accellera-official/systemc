@@ -100,7 +100,7 @@ public:
         // manually enforce alignment (volatile to avoid optmizations)
         char * volatile myfpxregs = fpxregs64;
         while ((uintptr_t)myfpxregs & 0xF)
-            myfpxregs++;
+            myfpxregs = myfpxregs + 1;
 
         // the "real" requirement: enforced alignment works
         sc_assert( !((uintptr_t)fpxregs64 & 0xF) );
