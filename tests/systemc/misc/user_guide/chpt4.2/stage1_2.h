@@ -54,10 +54,11 @@ struct stage1_2 : public sc_module {
 	   const sc_signal<double>& IN2,
 	   sc_signal<double>& PROD,
 	   sc_signal<double>& QUOT)
-    : sc_module(NAME), 
-      S1("Stage1", TICK, IN1, IN2, sum, diff),
-      S2("Stage2", TICK, sum, diff, PROD, QUOT),
-      sum("SigSum")
+    : sc_module(NAME)
+    , sum("SigSum")
+    , diff("SigDiff")
+    , S1("Stage1", TICK, IN1, IN2, sum, diff)
+    , S2("Stage2", TICK, sum, diff, PROD, QUOT)
   {
   }
 };
