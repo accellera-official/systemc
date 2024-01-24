@@ -1466,7 +1466,7 @@ void EXC_CTRL::start_always() {
 			  case 0:
 			  // if(0 == _case_1934_) {
                             atemp = (sig_gen_buff_addr, sc_int<7>(24));
-			    dt = (256, MODE_S_P.read());
+			    dt = (sc_int<16>(256), MODE_S_P.read());
                             EXC_ADDR = atemp;
                             EXC_DATA = dt;
                             EXC_RW = 0;
