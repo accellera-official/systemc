@@ -35,8 +35,6 @@
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
 #include "tlm_utils/tlm_quantumkeeper.h"
-//#include <systemc>
-#include <cassert>
 //#include <iostream>
 
 class CoreDecouplingLTInitiator : public sc_core::sc_module

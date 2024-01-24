@@ -35,7 +35,6 @@
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
 #include <systemc>
-#include <cassert>
 #include <iostream>
 #include <iomanip>
 #include <map>

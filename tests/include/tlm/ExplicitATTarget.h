@@ -56,11 +56,11 @@ public:
   {
     if (phase == tlm::BEGIN_REQ) {
       sc_dt::uint64 address = trans.get_address();
-      assert(address < 400);
+      sc_assert(address < 400);
 
       // This target only supports one transaction at a time
       // This will only work with LT initiators
-      assert(mCurrentTransaction == 0);
+      sc_assert(mCurrentTransaction == 0);
 
       unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -101,7 +101,7 @@ public:
     }
 
     // Not possible
-    assert(0); exit(1);
+    sc_assert(0); exit(1);
 //    return tlm::TLM_COMPLETED;  //unreachable code
   }
 
@@ -111,17 +111,17 @@ public:
       // Wait for next synchronization request
       wait(mResponseEvent);
 
-      assert(mCurrentTransaction);
+      sc_assert(mCurrentTransaction);
       // start response phase
       phase_type phase = tlm::BEGIN_RESP;
       sc_core::sc_time t = sc_core::SC_ZERO_TIME;
 
       // Set response data
       mCurrentTransaction->set_response_status(tlm::TLM_OK_RESPONSE);
-      assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
+      sc_assert(mCurrentTransaction->get_command() == tlm::TLM_WRITE_COMMAND);
 
       sc_dt::uint64 address = mCurrentTransaction->get_address();
-      assert(address < 400);
+      sc_assert(address < 400);
       *reinterpret_cast<unsigned int*>(mCurrentTransaction->get_data_ptr()) =
         *reinterpret_cast<unsigned int*>(&mMem[address]);
 

@@ -34,8 +34,6 @@
 
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
-//#include <systemc>
-#include <cassert>
 //#include <iostream>
 
 class SimpleLTInitiator3 : public sc_core::sc_module
