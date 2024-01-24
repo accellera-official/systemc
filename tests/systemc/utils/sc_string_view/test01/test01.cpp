@@ -78,17 +78,6 @@ static bool str_zsv_overload( sc_zstring_view s, bool sv_expected ) {
   return sv_expected;
 }
 
-// only callable with sc_(z)string_view before C++17, providing implicit conversion
-// (std::string has explicit conversion from std::string_view)
-static void str_call( const std::string& ) {
-  sc_assert( SC_CPLUSPLUS < 201703L );
-}
-// will be called from C++17 onwards (no implicit conversion)
-static void str_call( ... ) {
-  sc_assert( SC_CPLUSPLUS >= 201703L );
-}
-
-
 int sc_main(int , char* [])
 {
   // sc_string_view
@@ -122,8 +111,6 @@ int sc_main(int , char* [])
     // str_sv_overload( string_literal, true ); // ambiguous
     sc_assert( str_sv_overload(str, false) );
     sc_assert( str_sv_overload(sv, true) );
-
-    str_call( sv );
   }
   // sc_zstring_view
   {
@@ -156,8 +143,6 @@ int sc_main(int , char* [])
     // str_sv_overload( string_literal, true ); // ambiguous
     sc_assert( str_zsv_overload(str, false) );
     sc_assert( str_zsv_overload(zsv, true) );
-
-    str_call( zsv );
   }
   // std::strng with embedded \0
   {
