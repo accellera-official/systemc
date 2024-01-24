@@ -46,7 +46,7 @@ void getres::entry()
     pop.write(true);
     wait();
     char buf[BUFSIZ];
-    sprintf( buf, "Result = %f", result.read() );
+    snprintf( buf, sizeof(buf), "Result = %f", result.read() );
     cout << buf << endl;
   }
 } // end of entry function

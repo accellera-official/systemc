@@ -154,8 +154,8 @@ struct Initiator: sc_module
     if ( trans.is_response_error() )
     {
       char txt[100];
-      sprintf(txt, "Transaction returned with error, response status = %s",
-                   trans.get_response_string().c_str());
+      snprintf(txt, sizeof(txt), "Transaction returned with error, response status = %s",
+                                 trans.get_response_string().c_str());
       SC_REPORT_ERROR("TLM-2", txt);
     }
 

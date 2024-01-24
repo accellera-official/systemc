@@ -2,7 +2,7 @@
 
 #define TEST_VAR(var, v) \
     var = v; \
-	sprintf(buffer, "%16llx", var.to_uint64()); \
+	snprintf(buffer, sizeof(buffer), "%16llx", var.to_uint64()); \
 	bv64 = var; \
 	cout << #var << " = " << v << " : " << bv64 << " : " << buffer << endl;
 

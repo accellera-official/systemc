@@ -153,7 +153,7 @@ void testbench::entry()
     sum = Ssum.read();
     d = Sdiff.read();
     // printf("A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
-    sprintf(buf, "A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
+    snprintf(buf, sizeof(buf), "A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
     cout << buf;
   }
   sc_stop();
