@@ -1,0 +1,41 @@
+name: Build SystemC on Ubuntu 22.04
+
+on:
+  workflow_dispatch:
+    inputs:
+      ubuntuVersion:
+        description: 'Ubuntu Version (20.04 or 22.04)'
+        required: true
+        default: '22.04'
+      tagVersion:
+        description: 'Tag Version'
+        required: true
+        default: 'latest'
+
+jobs:
+  build:
+    runs-on: ubuntu-${{ github.event.inputs.ubuntuVersion }}
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.tagVersion }}
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
+
+    - name: Build SystemC
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        make
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: systemc-artifacts
+        path: build/
