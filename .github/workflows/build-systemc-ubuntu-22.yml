@@ -33,6 +33,7 @@ jobs:
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=systemc-${{ github.event.inputs.tagVersion }}
         make
+        make install
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
