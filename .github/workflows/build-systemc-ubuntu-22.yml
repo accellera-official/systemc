@@ -10,7 +10,7 @@ on:
       tagVersion:
         description: 'Tag Version'
         required: true
-        default: 'latest'
+        default: '2.3.3'
 
 jobs:
   build:
