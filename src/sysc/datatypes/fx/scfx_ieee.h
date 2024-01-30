@@ -223,15 +223,15 @@ inline
 int
 scfx_ieee_double::exponent() const
 {
-    return m_id.s.exponent - SCFX_IEEE_DOUBLE_BIAS;
+    return static_cast<int>(m_id.s.exponent) - SCFX_IEEE_DOUBLE_BIAS;
 }
 
 inline
 void
 scfx_ieee_double::exponent( int a )
 {
-    m_id.s.exponent = (SCFX_IEEE_DOUBLE_BIAS + a)
-                      & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE);
+    m_id.s.exponent = static_cast<unsigned int>((SCFX_IEEE_DOUBLE_BIAS + a)
+                      & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE));
 }
 
 inline
