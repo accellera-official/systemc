@@ -40,13 +40,11 @@
 #include <iostream>
 
 // For legacy code using sc_string:
-
+#ifdef SC_USE_STD_STRING
 typedef ::std::string sc_string;
+#endif // SC_USE_STD_STRING
 
 namespace sc_dt {
-
-// forward class declarations
-class sc_string_rep;
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_numrep

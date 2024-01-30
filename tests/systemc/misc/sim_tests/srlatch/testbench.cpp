@@ -46,22 +46,22 @@ void testbench::entry()
   s.write(true);
   r.write(false);
   wait();
-  sprintf(buf, "SR=%x%x QQ'=%x%x", true, false, q.read(), qp.read());
+  snprintf(buf, sizeof(buf), "SR=%x%x QQ'=%x%x", true, false, q.read(), qp.read());
   cout << buf << endl;
   s.write(false);
   r.write(true);
   wait();
-  sprintf(buf, "SR=%x%x QQ'=%x%x", false, true, q.read(), qp.read());
+  snprintf(buf, sizeof(buf), "SR=%x%x QQ'=%x%x", false, true, q.read(), qp.read());
   cout << buf << endl;
   s.write(false);
   r.write(false);
   wait();
-  sprintf(buf, "SR=%x%x QQ'=%x%x", false, false, q.read(), qp.read());
+  snprintf(buf, sizeof(buf), "SR=%x%x QQ'=%x%x", false, false, q.read(), qp.read());
   cout << buf << endl;
   s.write(true);
   r.write(true);
   wait();
-  sprintf(buf, "SR=%x%x QQ'=%x%x", true, true, q.read(), qp.read());
+  snprintf(buf, sizeof(buf), "SR=%x%x QQ'=%x%x", true, true, q.read(), qp.read());
   cout << buf << endl;
   sc_stop();
 } // end of entry function

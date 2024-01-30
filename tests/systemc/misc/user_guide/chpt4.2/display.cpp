@@ -44,7 +44,7 @@ void display::entry()
 {
   while (true) {
     char buf[BUFSIZ];
-    sprintf( buf, "Result = %.16g", in.read() );
+    snprintf( buf, sizeof(buf), "Result = %.16g", in.read() );
     cout << buf << endl;
     wait();
   }

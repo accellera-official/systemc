@@ -70,7 +70,7 @@ void stimulus::entry() {
        out_value6.write(tmp6);
        out_value7.write(tmp7);
        cout << "Stimuli: " << tmp1 << " " << tmp2 << " " << tmp3 << " " << tmp4 << " "
-	    << tmp5 << " " << tmp6 << " " << tmp7 << endl;
+            << tmp5 << " " << +tmp6 << " " << +tmp7 << endl;
        tmp1 = tmp1 + 2;
        tmp2 = tmp2 + 1;
        tmp3 = tmp3 + 5;

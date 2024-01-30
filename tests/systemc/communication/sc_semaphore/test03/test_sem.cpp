@@ -53,13 +53,13 @@ void TestSem::body_1()
     
     while (loop_counter++<10 && !sem_1.wait())
     {
-        sprintf(buf, "time %f => thread1 : took semaphore %d times\n",
-                sc_time_stamp().to_double(), loop_counter);
+        snprintf(buf, sizeof(buf), "time %f => thread1 : took semaphore %d times\n",
+                 sc_time_stamp().to_double(), loop_counter);
         cout << buf << flush;
 }
 
-    sprintf(buf, "time %f => thread1 : value of semaphore = %d\n",
-            sc_time_stamp().to_double(), sem_1.get_value());
+    snprintf(buf, sizeof(buf), "time %f => thread1 : value of semaphore = %d\n",
+             sc_time_stamp().to_double(), sem_1.get_value());
     cout << buf << flush;
     
     sc_stop();
@@ -74,8 +74,8 @@ void TestSem::body_2()
     {
         wait(2);
         sem_1.post();
-        sprintf(buf, "time %f => thread2 : posted semaphore 1\n",
-                sc_time_stamp().to_double());
+        snprintf(buf, sizeof(buf), "time %f => thread2 : posted semaphore 1\n",
+                 sc_time_stamp().to_double());
         cout << buf << flush;
     }
     while (loop_counter++ < 5);

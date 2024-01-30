@@ -34,7 +34,6 @@
 
 #include "tlm.h"
 #include <systemc>
-#include <cassert>
 #include <iostream>
 #include <iomanip>
 
@@ -207,7 +206,7 @@ public:
   sync_enum_type nb_transport_bw(transaction_type& trans, phase_type& phase, sc_core::sc_time& t)
   {
       // We should never be called
-      assert(0);
+      sc_assert(0);
       return tlm::TLM_COMPLETED;
   }
 

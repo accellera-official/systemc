@@ -22,8 +22,6 @@
 
 #include "tlm.h"
 #include "tlm_utils/simple_target_socket.h"
-//#include <systemc>
-#include <cassert>
 #include <vector>
 #include <queue>
 //#include <iostream>
@@ -76,7 +74,7 @@ public:
       trans.acquire();
 
       sc_dt::uint64 address = trans.get_address();
-      assert(address < 400);
+      sc_assert(address < 400);
 
       unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
       if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -115,24 +113,22 @@ public:
     }
 
     // Not possible
-    assert(0); exit(1);
+    sc_assert(0); exit(1);
 //    return tlm::TLM_COMPLETED;  //unreachable code
   }
 
   void endRequest()
   {
-    assert(!mEndRequestQueue.empty());
+    sc_assert(!mEndRequestQueue.empty());
     // end request phase of oldest transaction
     phase_type phase = tlm::END_REQ;
     sc_core::sc_time t = sc_core::SC_ZERO_TIME;
     transaction_type* trans = mEndRequestQueue.front();
-    assert(trans);
+    sc_assert(trans);
     mEndRequestQueue.pop();
-    #if ( ! NDEBUG )
     sync_enum_type r = socket->nb_transport_bw(*trans, phase, t);
-    #endif /* ! NDEBUG */
-    assert(r == tlm::TLM_ACCEPTED); // FIXME: initiator should return TLM_ACCEPTED?
-    assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
+    sc_assert(r == tlm::TLM_ACCEPTED); // FIXME: initiator should return TLM_ACCEPTED?
+    sc_assert(t == sc_core::SC_ZERO_TIME); // t must be SC_ZERO_TIME
 
     // Notify end of request phase for next transaction after ACCEPT delay
     if (!mEndRequestQueue.empty()) {
@@ -149,18 +145,18 @@ public:
 
   void beginResponse()
   {
-    assert(!mResponseQueue.empty());
+    sc_assert(!mResponseQueue.empty());
     // start response phase of oldest transaction
     phase_type phase = tlm::BEGIN_RESP;
     sc_core::sc_time t = sc_core::SC_ZERO_TIME;
     transaction_type* trans = mResponseQueue.front();
-    assert(trans);
+    sc_assert(trans);
 
     // Set response data
     trans->set_response_status(tlm::TLM_OK_RESPONSE);
     if (trans->get_command() == tlm::TLM_READ_COMMAND) {
        sc_dt::uint64 address = trans->get_address();
-       assert(address < 400);
+       sc_assert(address < 400);
       *reinterpret_cast<unsigned int*>(trans->get_data_ptr()) =
         *reinterpret_cast<unsigned int*>(&mMem[address]);
     }
@@ -177,13 +173,13 @@ public:
      break;
 
     default:
-      assert(0); exit(1);
+      sc_assert(0); exit(1);
     };
   }
 
   void endResponse()
   {
-    assert(!mResponseQueue.empty());
+    sc_assert(!mResponseQueue.empty());
     mResponseQueue.front()->release();
     mResponseQueue.pop();
 

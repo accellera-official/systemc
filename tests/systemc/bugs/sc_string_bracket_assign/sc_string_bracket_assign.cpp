@@ -1,8 +1,4 @@
-
-#if !defined(SC_USE_SC_STRING_OLD) && !defined(SC_USE_STD_STRING)
-#   define SC_USE_SC_STRING_OLD
-//#   define SC_USE_STD_STRING
-#endif //SC_USE_STRING_*
+#define SC_USE_STD_STRING
 
 #include "systemc.h"
 

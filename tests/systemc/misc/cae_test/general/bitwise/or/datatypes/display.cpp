@@ -44,7 +44,7 @@ void display::entry() {
     while(counter++<100){
        do { wait(); } while ( in_valid == false);
        cout << "Display: " << in_value1.read() << " " << in_value2.read() << " " << in_value3.read(
-) << " " << in_value4.read() << " " << in_value5.read() << " " << in_value6.read() << endl;
+) << " " << in_value4.read() << " " << in_value5.read() << " " << +in_value6.read() << endl;
        do { wait(); } while ( in_valid == true);
     }
     sc_stop();

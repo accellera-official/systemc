@@ -103,13 +103,13 @@ public:
       transaction_type* trans;
       while ((trans = mRequestPEQ.get_next_transaction())!=0) {
         unsigned int portId = decode(trans->get_address());
-        assert(portId < NR_OF_TARGETS);
+        sc_assert(portId < NR_OF_TARGETS);
         initiator_socket_type* decodeSocket = &initiator_socket[portId];
         trans->set_address(trans->get_address() & getAddressMask(portId));
 
         // Fill in the destination port
         PendingTransactionsIterator it = mPendingTransactions.find(trans);
-        assert(it != mPendingTransactions.end());
+        sc_assert(it != mPendingTransactions.end());
         it->second.to = decodeSocket;
 
         phase_type phase = tlm::BEGIN_REQ;
@@ -135,7 +135,7 @@ public:
             continue;
 
           } else { // END_RESP
-            assert(0); exit(1);
+            sc_assert(0); exit(1);
           }
 
           // only send END_REQ to initiator if BEGIN_RESP was not already send
@@ -158,7 +158,7 @@ public:
           break;
 
         default:
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
         };
       }
     }
@@ -172,7 +172,7 @@ public:
       transaction_type* trans;
       while ((trans = mResponsePEQ.get_next_transaction())!=0) {
         PendingTransactionsIterator it = mPendingTransactions.find(trans);
-        assert(it != mPendingTransactions.end());
+        sc_assert(it != mPendingTransactions.end());
 
         phase_type phase = tlm::BEGIN_RESP;
         sc_core::sc_time t = sc_core::SC_ZERO_TIME;
@@ -194,17 +194,15 @@ public:
           break;
 
         default:
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
         };
 
         // forward END_RESP to target
         if (it->second.to) {
           phase = tlm::END_RESP;
           t = sc_core::SC_ZERO_TIME;
-          #if ( ! NDEBUG )
           sync_enum_type r = (*it->second.to)->nb_transport_fw(*trans, phase, t);
-          #endif /* ! NDEBUG */
-          assert(r == tlm::TLM_COMPLETED);
+          sc_assert(r == tlm::TLM_COMPLETED);
         }
 
         mPendingTransactions.erase(it);
@@ -235,7 +233,7 @@ public:
     } else {
       std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from initiator." << std::endl;
-      assert(false); exit(1);
+      sc_assert(false); exit(1);
     }
 
     return tlm::TLM_ACCEPTED;
@@ -249,7 +247,7 @@ public:
     if (phase != tlm::END_REQ && phase != tlm::BEGIN_RESP) {
       std::cout << "ERROR: '" << name()
                 << "': Illegal phase received from target." << std::endl;
-      assert(false); exit(1);
+      sc_assert(false); exit(1);
     }
 
     mEndRequestEvent.notify(t);
@@ -263,7 +261,7 @@ public:
   unsigned int transportDebug(int initiator_id, transaction_type& trans)
   {
     unsigned int portId = decode(trans.get_address());
-    assert(portId < NR_OF_TARGETS);
+    sc_assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     trans.set_address( trans.get_address() & getAddressMask(portId) );
     
@@ -298,7 +296,7 @@ public:
     sc_dt::uint64 address = trans.get_address();
 
     unsigned int portId = decode(address);
-    assert(portId < NR_OF_TARGETS);
+    sc_assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
 
@@ -310,8 +308,8 @@ public:
     if (result)
     {
       // Range must contain address
-      assert(dmi_data.get_start_address() <= maskedAddress);
-      assert(dmi_data.get_end_address() >= maskedAddress);
+      sc_assert(dmi_data.get_start_address() <= maskedAddress);
+      sc_assert(dmi_data.get_end_address() >= maskedAddress);
     }
     
     // Should always succeed
@@ -349,7 +347,7 @@ private:
                              int initiatorId)
   {
     const ConnectionInfo info = { &target_socket[initiatorId], to };
-    assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
+    sc_assert(mPendingTransactions.find(&trans) == mPendingTransactions.end());
     mPendingTransactions[&trans] = info;
   }
 

@@ -1,0 +1,45 @@
+name: cmake
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build_ubuntu:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        version: [20.04, 22.04]
+        platform: [linux/amd64, linux/arm64]
+    steps:
+    - name: Install qemu-user-static
+      run: |
+        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
+          sudo apt-get update && sudo apt-get install -y qemu-user-static
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
+        docker run systemc_test
+  build_almalinux:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        version: [8, 9]
+        platform: [linux/amd64, linux/arm64]
+    steps:
+    - name: Install qemu-user-static
+      run: |
+        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
+          sudo apt-get update && sudo apt-get install -y qemu-user-static
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
+        docker run systemc_test

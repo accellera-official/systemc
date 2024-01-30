@@ -3,7 +3,12 @@
 
 int main()
 {
-	char* argv[] = { "0", "1", "2", "3", "4" };
+	char arg0[] = "0";
+	char arg1[] = "1";
+	char arg2[] = "2";
+	char arg3[] = "3";
+	char arg4[] = "4";
+	char* argv[] = { arg0, arg1, arg2, arg3, arg4 };
 	return sc_elab_and_sim( sizeof(argv)/sizeof(char*), argv );
 }
 

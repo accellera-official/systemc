@@ -133,7 +133,7 @@ SC_MODULE( proc4 )
       else 
 	c = 0;
 	
-      d = clk & b; 
+      d = clk && b;
     }
 };
 

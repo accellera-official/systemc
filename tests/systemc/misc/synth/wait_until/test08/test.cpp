@@ -59,7 +59,7 @@ void test::entry()
                                 wait ();
                                 o5 = 2;
                         } else {
-                                do { wait(); } while  (cont2 != 8);
+                                do { wait(); } while  (cont2 != true);
                                 wait ();
                         }
                   }

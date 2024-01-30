@@ -51,7 +51,7 @@ void test::entry()
         while (1) {
                 wait ();
                 o1 = i2 + 1;
-                do { wait(); } while  (cont2 != 2);
+                do { wait(); } while  (cont2 != true);
         }
   } else {
         wait();

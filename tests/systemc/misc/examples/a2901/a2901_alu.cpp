@@ -72,7 +72,7 @@ a2901_alu::entry()
     }
 
     F.write(result);
-    OVR.write(!(R_ext_v[3] ^ S_ext_v[3]) & (R_ext_v[3] ^ result[3]));
+    OVR.write((!(R_ext_v[3] ^ S_ext_v[3])) & (R_ext_v[3] ^ result[3]));
     //C4.write(result[4]);
     C4.write((bool)result[4]);
     temp_p = R_ext_v | S_ext_v;

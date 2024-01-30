@@ -67,7 +67,7 @@ void testbench::entry()
     fprintf(data1, "%f\t%f\n", time, sample_val);
     fprintf(data2, "%f\t%f\n", time, result_val);
     char buf[BUFSIZ];
-    sprintf( buf, "Input = %f\tOutput = %f", sample_val, result_val );
+    snprintf( buf, sizeof(buf), "Input = %f\tOutput = %f", sample_val, result_val );
     cout << buf << endl;
     time += 1.0;
   }

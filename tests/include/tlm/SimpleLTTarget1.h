@@ -21,7 +21,6 @@
 #define __SIMPLE_LT_TARGET1_H__
 
 #include "tlm.h"
-#include <cassert>
 #include <vector>
 
 class SimpleLTTarget1 :
@@ -67,7 +66,7 @@ public:
   void b_transport(transaction_type& trans, sc_core::sc_time &t)
   {
     sc_dt::uint64 address = trans.get_address();
-    assert(address < 400);
+    sc_assert(address < 400);
 
     unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {

@@ -52,6 +52,7 @@ int test::incr (int x)
  
   a = x + 1;
   b = a + x;
+  c = 1 + b;
   o1 = x + i2.read() + b;
   return b + c;
 }
