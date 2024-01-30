@@ -538,8 +538,6 @@ void EXC_CTRL::start_always() {
             link_ptr = (link_ptr) + 1;
             if(((bool)link_ptr[6]) == 1) {
                 link_ptr = 0;
-            } else {
-                link_ptr = link_ptr;
             }
 	    dt = (((sc_int<1>(V_reg), sc_int<1>(0)), link_ptr.range(5,0)), sc_int<8>(0));
         } // GB_init_loop(end)
@@ -667,8 +665,6 @@ void EXC_CTRL::start_always() {
                     EXC_IDLE1 = 1;
                     break; //goto _signal_proc__END;
                 } else {
-                    err_no_reg = err_no_reg;
-                    rb_flag = rb_flag;
                     wait();
                 }
 
@@ -699,8 +695,6 @@ void EXC_CTRL::start_always() {
              // Combine with Fault Insertion bit
                 if((TM_EXC_FIR.read())[2]) {
                     dtemp = 254;
-                } else {
-                    dtemp = dtemp;
                 }
                 wait();
 
@@ -715,8 +709,6 @@ void EXC_CTRL::start_always() {
                     } else {
                         wait();
                         id_reg = 1;
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         //RHC_ADDR1 = (((sc_int<4>(0), sig_gen_buff_addr), RPBI_BPA.read()), sc_int<1>(MODE_S_P.read()));
                         RHC_ADDR1 = (((sc_int<4>(0), sig_gen_buff_addr), sc_int<4>(RPBI_BPA.read())), sc_int<1>(MODE_S_P.read()));
                         RHC_ADDR2 = ((sc_int<8>(10), TS0AR), sc_int<1>(RHC_REG_RST.read()));
@@ -793,7 +785,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
                         rb_flag = 1;
                         atemp = (sig_gen_buff_addr, sc_int<7>(10));
                         EXC_ADDR = atemp;
@@ -869,7 +860,6 @@ void EXC_CTRL::start_always() {
                         rb_flag = 1;
                         wait();
                     } else {
-                        err_no_reg = err_no_reg;
                         rb_flag = 1;
                         wait();
                     }
@@ -881,7 +871,6 @@ void EXC_CTRL::start_always() {
                         rb_flag = 1;
                         wait();
                     } else {
-                        err_no_reg = err_no_reg;
                         rb_flag = 1;
                         wait();
                     }
@@ -894,8 +883,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         if((DID_reg[0]) == 1) {
                             DID_reg = 10;
                             atemp_1 = 272;
@@ -982,8 +969,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         atemp = (sig_gen_buff_addr, sc_int<7>(10));
                         EXC_ADDR = atemp;
                         EXC_RPBH_ID = id_reg;
@@ -1281,8 +1266,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         atemp = (sig_gen_buff_addr, sc_int<7>(24));
                         EXC_ADDR = atemp;
                         EXC_RPBH_ID = id_reg;
@@ -1422,8 +1405,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         Data_Start_reg = -32;
                         MET_reg = 5;
                         total_data_len = 2;
@@ -1457,8 +1438,6 @@ void EXC_CTRL::start_always() {
                         }
                         if((TM_EXC_FIR.read())[3]) {
                             dtemp = 4096;
-                        } else {
-                            dtemp = dtemp;
                         }
                         wait();
                         _case_1934_ = dtemp;
@@ -1466,7 +1445,7 @@ void EXC_CTRL::start_always() {
 			  case 0:
 			  // if(0 == _case_1934_) {
                             atemp = (sig_gen_buff_addr, sc_int<7>(24));
-			    dt = (256, MODE_S_P.read());
+			    dt = (sc_int<16>(256), MODE_S_P.read());
                             EXC_ADDR = atemp;
                             EXC_DATA = dt;
                             EXC_RW = 0;
@@ -1788,12 +1767,8 @@ void EXC_CTRL::start_always() {
                                 if(GB_1_ind) {
                                     link_ptr = dtemp.range(13,7);
                                     V_reg = 1;
-                                    atemp = atemp;
-                                    dt = dt;
                                     wait();
                                 } else {
-                                    link_ptr = link_ptr;
-                                    V_reg = V_reg;
                                     atemp = (atemp_4.range(13,7), sc_int<7>(2));
                                     dt = (sc_int<3>(-4), dtemp.range(12,0));
                                     EXC_ADDR = atemp;
@@ -1930,7 +1905,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        err_no_reg = err_no_reg;
                         rb_flag = 1;
                         atemp = (sig_gen_buff_addr, sc_int<7>(1));
                         EXC_ADDR = atemp;
@@ -1965,8 +1939,6 @@ void EXC_CTRL::start_always() {
                         }
                         if((TM_EXC_FIR.read())[3]) {
                             dtemp = 4096;
-                        } else {
-                            dtemp = dtemp;
                         }
                         wait();
                         _case_2503_ = dtemp;
@@ -2318,7 +2290,6 @@ void EXC_CTRL::start_always() {
                         wait();
                     } else {
                         wait();
-                        rb_flag = rb_flag;
                         id_reg = 1;
                         if(!MODE_S_P.read()) {
                             total_data_len = 156;
@@ -2635,8 +2606,6 @@ void EXC_CTRL::start_always() {
                         rb_flag = 1;
                         wait();
                     } else {
-                        err_no_reg = err_no_reg;
-                        rb_flag = rb_flag;
                         wait();
                         RHC_ADDR1 = (sig_gen_buff_addr, sc_int<7>(24));
                         if(DID_reg[0]) {

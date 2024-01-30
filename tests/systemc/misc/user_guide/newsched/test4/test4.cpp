@@ -64,7 +64,7 @@ SC_MODULE( cgater )
 
   void entry()
   {
-    clock_out = clock_in & gate;
+    clock_out = clock_in && gate;
   }
 };
 

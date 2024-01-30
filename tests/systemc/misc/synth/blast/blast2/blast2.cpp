@@ -76,8 +76,8 @@ array::entry()
     mem[j.to_uint()] = b.read();
     mem[7] = i.to_uint();
     mem[8] = j.to_uint();
-    mem[mem[7]] = a + 1;
-    mem[mem[8]] = b - 2;
+    mem[+mem[7]] = a + 1;
+    mem[+mem[8]] = b - 2;
     c = mem[i.to_uint()] * mem[j.to_uint()];
     wait();
 }

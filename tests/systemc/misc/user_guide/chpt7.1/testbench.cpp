@@ -73,7 +73,7 @@ void testbench::entry()
     sum = adder_sub(a, b, c, &d);
     // printf("A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
     char buf[BUFSIZ];
-    sprintf(buf, "A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
+    snprintf(buf, sizeof(buf), "A = %d, B = %d, C = %d, D = %d, SUM = %d\n", a, b, c, d, sum);
     cout << buf;
   }
   sc_stop();

@@ -22,8 +22,6 @@
 
 #include "tlm.h"
 #include "tlm_utils/simple_target_socket.h"
-//#include <systemc>
-#include <cassert>
 #include <vector>
 #include <queue>
 //#include <iostream>
@@ -52,7 +50,7 @@ public:
   void myBTransport(transaction_type& trans, sc_core::sc_time& t)
   {
     sc_dt::uint64 address = trans.get_address();
-    assert(address < 400);
+    sc_assert(address < 400);
 
     unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {

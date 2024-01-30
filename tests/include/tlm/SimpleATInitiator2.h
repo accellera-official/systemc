@@ -35,7 +35,6 @@
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
 //#include <systemc>
-#include <cassert>
 #include <queue>
 //#include <iostream>
 
@@ -236,13 +235,13 @@ public:
         default:
           // A target should never return with these phases
           // If phase == END_RESP, nb_transport should have returned true
-          assert(0); exit(1);
+          sc_assert(0); exit(1);
           break;
         }
         break;
 
       default:
-        assert(0); exit(1);
+        sc_assert(0); exit(1);
       };
     }
     wait();
@@ -253,14 +252,14 @@ public:
   {
     switch (phase) {
     case tlm::END_REQ:
-      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
+      sc_assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
       // Request phase ended
       mEndRequestPhase.notify(sc_core::SC_ZERO_TIME);
       return tlm::TLM_ACCEPTED;
 
     case tlm::BEGIN_RESP:
     {
-      assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
+      sc_assert(t == sc_core::SC_ZERO_TIME); // FIXME: can t != 0?
 
       // Notify end of request phase if run thread is waiting for it
       // FIXME
@@ -268,9 +267,9 @@ public:
         mEndRequestPhase.notify(sc_core::SC_ZERO_TIME);
       }
 
-      assert(dynamic_cast<mytransaction_type*>(&trans));
+      sc_assert(dynamic_cast<mytransaction_type*>(&trans));
       mytransaction_type* myTrans = static_cast<mytransaction_type*>(&trans);
-      assert(myTrans);
+      sc_assert(myTrans);
 
       // Notify end of response phase after ACCEPT delay
       t += ACCEPT_DELAY;
@@ -285,7 +284,7 @@ public:
     case tlm::END_RESP:  // fall-through
     default:
       // A target should never call nb_transport with these phases
-      assert(0); exit(1);
+      sc_assert(0); exit(1);
 //      return tlm::TLM_COMPLETED;  //unreachable code
     };
   }

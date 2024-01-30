@@ -132,7 +132,7 @@ void testbench(const sc_signal<int>& data,
     sc_start( 10, SC_NS );
     clock.write(0);
     char buf[BUFSIZ];
-    sprintf( buf, "Data = %4d\tCode = %4d", data.read(), code.read() );
+    snprintf( buf, sizeof(buf), "Data = %4d\tCode = %4d", data.read(), code.read() );
     cout << buf << endl;
   }
 }

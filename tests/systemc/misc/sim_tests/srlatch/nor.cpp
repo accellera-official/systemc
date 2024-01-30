@@ -42,5 +42,5 @@
 
 void nor::entry()
 {
-  c.write(!(a.read() | b.read()));
+  c.write(!(a.read() || b.read()));
 } // end of entry function

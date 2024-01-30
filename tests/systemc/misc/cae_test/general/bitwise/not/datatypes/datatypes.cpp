@@ -112,7 +112,7 @@ void datatypes::entry()
     tmp5r = ~ tmp4;
     // char <- ~ char_array[0]
     // tmp6r = ~ tmp8[0];
-    tmp6r = ~ tmp8[0].to_bool();
+    tmp6r = ~ (char) tmp8[0].to_bool();
     // bool <- ! bool;
     tmp7r = !tmp7;
     // sc_bool_vector(4) <- ~ sc_logic_vector(4)

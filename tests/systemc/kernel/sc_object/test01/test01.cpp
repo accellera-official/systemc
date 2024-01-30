@@ -52,7 +52,6 @@ int
 sc_main( int, char*[] )
 {
    mod_a module("module");
-   mod_a module_1();
 
    sc_attr_base a1("a1");
    sc_attr_base a2("a2");
