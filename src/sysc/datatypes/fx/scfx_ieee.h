@@ -223,7 +223,7 @@ inline
 int
 scfx_ieee_double::exponent() const
 {
-    return static_cast<int>(m_id.s.exponent - SCFX_IEEE_DOUBLE_BIAS);
+    return static_cast<int>(m_id.s.exponent) - SCFX_IEEE_DOUBLE_BIAS;
 }
 
 inline
