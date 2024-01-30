@@ -72,6 +72,7 @@
  * Fraunhofer-Gesellschaft
  * GreenSocs
  * Intel Corporation
+ * MachineWare GmbH
  * Mentor Graphics Corporation
  * NXP Semiconductors
  * OFFIS eV
