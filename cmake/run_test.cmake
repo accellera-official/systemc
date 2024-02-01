@@ -101,7 +101,7 @@ else ("${TEST_FILTER}" STREQUAL "")
   file (STRINGS ${TEST_DIR}/run.log RUN_FILTERED_LOG REGEX "^.*${TEST_FILTER}.*$" )
   string(REPLACE ";" "\n"  RUN_LOG "${RUN_FILTERED_LOG}\n")
 endif ("${TEST_FILTER}" STREQUAL "")
-string(REGEX REPLACE "^.*stopped by user.*$" "" RUN_TRIMMED_LOG ${RUN_LOG})
+string(REGEX REPLACE "^.*stopped by user.*$" "" RUN_TRIMMED_LOG "${RUN_LOG}")
 file(WRITE ${TEST_DIR}/run_trimmed.log "${RUN_TRIMMED_LOG}")
 
 file(READ ${TEST_GOLDEN} EXPECTED_LOG)
