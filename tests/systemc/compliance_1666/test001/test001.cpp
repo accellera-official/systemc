@@ -153,7 +153,7 @@ struct Modtype: sc_module
     }
     ++ global_count;
   }
-  void dump() {
+  void check() {
     sc_assert(std::string(sc_get_current_process_handle().get_process_object()->basename()) == "thread");
     ++ global_count;
   }
@@ -222,7 +222,7 @@ void Modb::thread()
   p2->method();
   p3->method();
   wait(SC_ZERO_TIME);
-  (p4->read())->dump();
+  (p4->read())->check();
 }
 
 void Modb::funny()  { C1 c1; C2 c2; C3 c3; }

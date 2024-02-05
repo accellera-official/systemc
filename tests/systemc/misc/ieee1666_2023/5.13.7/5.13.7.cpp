@@ -25,8 +25,6 @@
 
  *****************************************************************************/
 
-// There is a warning about hiding sc_object::print() by Chan::print(), so we need to
-// determine if that is okay, or do we want to change the signature.
 
 #include <systemc>
 
@@ -37,6 +35,13 @@ struct i_f : virtual sc_core::sc_interface {
 struct Chan : sc_core::sc_channel, i_f {
     SC_CTOR(Chan) {}
     virtual void print() { std::cout << "I'm Chan.name=" << name() << std::endl; }
+
+#ifndef IEEE_1666_STRICT
+private:
+    // Suppress warning about hiding sc_object::print() by Chan::print(), so we need to
+    // determine if that is okay, or do we want to change the signature.
+    using sc_core::sc_object::print;
+#endif  // IEEE_1666_STRICT
 };
 
 struct Caller : sc_core::sc_module {
