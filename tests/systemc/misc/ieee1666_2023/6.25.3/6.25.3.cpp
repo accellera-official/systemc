@@ -29,10 +29,16 @@
 	
 class U {
   public:
+#ifndef IEEE_1666_STRICT
+    U(int val=0) : ptr(new int{val}) {}
+    U(const U& that) : U(*that.ptr) {}
+    ~U() { delete ptr; }
+#else
     U(int val=0) {
         ptr = new int;
 	*ptr = val;
     }
+#endif
 
     int get() const { return *ptr; }
     void set(int i) { *ptr = i; }
