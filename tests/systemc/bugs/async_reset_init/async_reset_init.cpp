@@ -61,14 +61,14 @@ SC_MODULE(module)
 
   void do_thread()
   {
-    print( "reset state" );
+    msg( "reset state" );
     wait();
-    print( "reset done" );
+    msg( "reset done" );
 
     while(1) // main loop
     {
       wait();
-      print( "continuing" );
+      msg( "continuing" );
     }
   }
 
@@ -78,13 +78,13 @@ SC_MODULE(module)
   void do_method()
   {
     if( rst_in.read() ) {
-      print("reset state");
+      msg("reset state");
     } else {
-      print("running");
+      msg("running");
     }
   }
 
-  void print(const char* msg)
+  void msg(const char* msg)
   {
     using namespace sc_core;
     using namespace std;
