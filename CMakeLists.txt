@@ -129,10 +129,6 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
-# ENABLE_LEGACY_MEM_MGMT        Use std::malloc or posix_memalign to allocate the
-#                               stack of the coroutines instead of mmap. ASAN will
-#                               not work with this.
-#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -285,10 +281,6 @@ option (ENABLE_PTHREADS
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
-        OFF)
-
-option (ENABLE_LEGACY_MEM_MGMT
-        "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
         OFF)
 
 option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std. 1666" OFF)
@@ -474,10 +466,6 @@ else (ENABLE_PTHREADS)
 endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
-  # QuickThreads stack protection can benefit from posix_memalign
-  include(CheckSymbolExists)
-  check_symbol_exists(posix_memalign "stdlib.h" HAVE_POSIX_MEMALIGN)
-
   # To build QuickThreads, enable the assembler support.
   enable_language (ASM)
 else (QT_ARCH)
@@ -625,7 +613,6 @@ if (ENABLE_PTHREADS)
 else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
-message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
