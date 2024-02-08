@@ -97,7 +97,7 @@ public:
   {
     initiator_socket_type* decodeSocket;
     unsigned int portId = decode(trans.get_address());
-    assert(portId < NR_OF_TARGETS);
+    sc_assert(portId < NR_OF_TARGETS);
     decodeSocket = &initiator_socket[portId];
     trans.set_address(trans.get_address() & getAddressMask(portId));
 
@@ -108,7 +108,7 @@ public:
                               transaction_type& trans)
   {
     unsigned int portId = decode(trans.get_address());
-    assert(portId < NR_OF_TARGETS);
+    sc_assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     trans.set_address( trans.get_address() & getAddressMask(portId) );
     
@@ -142,7 +142,7 @@ public:
     sc_dt::uint64 address = trans.get_address();
 
     unsigned int portId = decode(address);
-    assert(portId < NR_OF_TARGETS);
+    sc_assert(portId < NR_OF_TARGETS);
     initiator_socket_type* decodeSocket = &initiator_socket[portId];
     sc_dt::uint64 maskedAddress = address & getAddressMask(portId);
 
@@ -154,8 +154,8 @@ public:
     if (result)
     {
       // Range must contain address
-      assert(dmi_data.get_start_address() <= maskedAddress);
-      assert(dmi_data.get_end_address() >= maskedAddress);
+      sc_assert(dmi_data.get_start_address() <= maskedAddress);
+      sc_assert(dmi_data.get_end_address() >= maskedAddress);
     }
     
     // Should always succeed

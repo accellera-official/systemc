@@ -40,8 +40,10 @@
 
 option(ASYNC_SUSPEND_MATPLOT "Build async_suspend example with matplotlib for grahpical output" OFF)
 
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
 add_executable(async_suspend async_suspend.cpp)
-target_link_libraries(async_suspend SystemC::systemc pthread)
+target_link_libraries(async_suspend SystemC::systemc Threads::Threads)
 
 if(ASYNC_SUSPEND_MATPLOT)
     find_package(Python3 REQUIRED COMPONENTS Development)
@@ -49,3 +51,5 @@ if(ASYNC_SUSPEND_MATPLOT)
     target_include_directories(async_suspend PRIVATE ${Python3_INCLUDE_DIRS})
     add_definitions(-DWITHMATPLOT)
 endif()
+
+configure_and_add_test (async_suspend)

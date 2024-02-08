@@ -33,7 +33,6 @@
 #define __SIMPLE_LT_INITIATOR1_H__
 
 #include "tlm.h"     /// TLM definitions
-#include <cassert>   /// STD assert ()
 
 class SimpleLTInitiator1 :
   public sc_core::sc_module,
@@ -140,7 +139,7 @@ public:
 
   tlm::tlm_sync_enum nb_transport_bw(transaction_type &,phase_type &,sc_core::sc_time & )
   {
-    assert(0);  // should never happen
+    sc_assert(0);  // should never happen
     return tlm::TLM_COMPLETED;
   }
 

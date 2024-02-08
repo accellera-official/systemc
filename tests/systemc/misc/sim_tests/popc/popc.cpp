@@ -146,7 +146,7 @@ void proc1::entry()
         do { wait(); } while (data_ack == true);
 
         char buf[BUFSIZ];
-        sprintf( buf, "Input: %7d   Population Count: %3d", j, popc.read() );
+        snprintf( buf, sizeof(buf), "Input: %7d   Population Count: %3d", j, popc.read() );
         cout << buf << endl;
 
 	i++;

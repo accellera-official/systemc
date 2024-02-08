@@ -83,7 +83,7 @@ int sc_main(int ac, char *av[])
   sc_trace_file *tf;
   sc_signal<bool> clock;
 
-  char *enum_literals[4];
+  const char *enum_literals[4];
   enum_literals[0] = "OK";
   enum_literals[1] = "NOTOK";
   enum_literals[2] = "SOSO";
@@ -92,7 +92,7 @@ int sc_main(int ac, char *av[])
   proc1 P1("P1", clock);
 
   tf = sc_create_wif_trace_file("test10");
-  sc_trace(tf, P1.obj1, "Enum", (const char **) enum_literals);
+  sc_trace(tf, P1.obj1, "Enum", enum_literals);
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);

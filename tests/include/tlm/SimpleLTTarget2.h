@@ -22,7 +22,6 @@
 
 #include "tlm.h"
 #include "tlm_utils/passthrough_target_socket.h"
-#include <cassert>
 #include <vector>
 
 class SimpleLTTarget2 : public sc_core::sc_module
@@ -56,7 +55,7 @@ public:
                      sc_core::sc_time& t)
   {
     sc_dt::uint64 address = trans.get_address();
-    assert(address < 400);
+    sc_assert(address < 400);
 
     unsigned int& data = *reinterpret_cast<unsigned int*>(trans.get_data_ptr());
     if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
@@ -86,7 +85,7 @@ public:
                                phase_type& phase,
                                sc_core::sc_time& t)
   {
-    assert(phase == tlm::BEGIN_REQ);
+    sc_assert(phase == tlm::BEGIN_REQ);
 
     // Never blocks, so call b_transport implementation
     myBTransport(trans, t);

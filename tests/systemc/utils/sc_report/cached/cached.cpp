@@ -120,7 +120,7 @@ SC_MODULE( M )
     void thread1() {
 	while(1) {
 	    if (emit)
-		sc_report_handler::report(SC_INFO, id.read(), "aa"+ofs, "file_t1", 110+ofs);
+		sc_report_handler::report(SC_INFO, id.read(), &"aa"[ofs], "file_t1", 110+ofs);
 	    else 
 		dump_cached_report("t1");
 	    wait();
@@ -128,14 +128,14 @@ SC_MODULE( M )
     }
     void method1() {
 	if (emit)
-	    sc_report_handler::report(SC_WARNING, id.read(), "bb"+ofs, "file_m1", 210+ofs);
+	    sc_report_handler::report(SC_WARNING, id.read(), &"bb"[ofs], "file_m1", 210+ofs);
 	else 
 	    dump_cached_report("m1");
     }
     void thread2() {
 	while(1) {
 	    if (emit)
-		sc_report_handler::report(SC_WARNING, id.read(), "dd"+ofs, "file_t2", 120+ofs);
+		sc_report_handler::report(SC_WARNING, id.read(), &"dd"[ofs], "file_t2", 120+ofs);
 	    else 
 		dump_cached_report("t2");
 	    wait();
@@ -143,7 +143,7 @@ SC_MODULE( M )
     }
     void method2() {
 	if (emit)
-	    sc_report_handler::report(SC_INFO, id.read(), "ee"+ofs, "file_m2", 220+ofs);
+	    sc_report_handler::report(SC_INFO, id.read(), &"ee"[ofs], "file_m2", 220+ofs);
 	else 
 	    dump_cached_report("m2");
     }

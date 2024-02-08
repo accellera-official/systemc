@@ -62,7 +62,12 @@ SC_MODULE( mean )
        sc_signal<bool>& SEND_INPUT,
        sc_signal<bool>& DATA_READY,
        const sc_signal<bool>& RECEIVER_READY)
-    : in(IN_), out(OUT_), receiver_ready(RECEIVER_READY), send_input(SEND_INPUT), data_available(DATA_AVAILABLE), data_ready(DATA_READY)
+    : in(IN_)
+    , out(OUT_)
+    , data_available(DATA_AVAILABLE)
+    , send_input(SEND_INPUT)
+    , data_ready(DATA_READY)
+    , receiver_ready(RECEIVER_READY)
   {
     clk(CLK);
 	SC_CTHREAD( entry, clk.pos() );

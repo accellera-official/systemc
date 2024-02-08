@@ -190,7 +190,6 @@ struct sc_direct_access
   typedef sc_direct_access< const plain_type > const_policy;
 
   sc_direct_access(){}
-  sc_direct_access( const non_const_policy& ) {}
   // convert from any policy to (const) direct policy
   template<typename U>
   sc_direct_access( const U&

@@ -155,6 +155,12 @@ Andy Goodrich - Forte Design Systems, Inc.
 #    define SC_TEMPLATE template<> template<int W>
 #endif
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
 
 // FORWARD REFERENCES AND USINGS:
 
@@ -669,7 +675,7 @@ inline void sc_signal<sc_dt::sc_int<W> >::register_port(
 			m_output_p = &port_;
 		}
 #       else
-            if ( &port_ && if_typename_ ) {} // Silence unused args warning.
+		if ( port_.name() && if_typename_ ) {} // Silence unused args warning.
 #       endif
 }
 
@@ -1545,6 +1551,10 @@ inline void sc_int_sigref:: operator = ( const sc_dt::sc_unsigned& v )
 #undef SC_TEMPLATE
 #undef TTEST
 } // namespace sc_core
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 #endif // !defined(SC_SIGNAL_INT_H)
 
 namespace sc_core {
@@ -1584,9 +1594,9 @@ sc_dt::uint64 sc_int_part_if::read_part( int /*left*/, int /*right*/ ) const
 sc_int_sigref& sc_int_part_if::select_part( int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
-    return *(sc_int_sigref*)0;
+    sc_core::sc_abort(); // can't recover from here
 }
-void sc_int_part_if::write_part( sc_dt::uint64 v, int /*left*/, int /*right*/ )
+void sc_int_part_if::write_part( sc_dt::uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

@@ -100,7 +100,7 @@ SC_MODULE(A)
     size_t stack_start = (size_t)stack_end - 0x500000;
     
     for ( size_t stack_p = stack_start + 0x1000; stack_p < stack_end; stack_p += 0x1000 ) {
-#if 1
+#if 0
     std::cout << "access at 0x" << std::hex << stack_p
               << std::hex << " " << (stack_end - stack_p) << " " 
               << *(int*)stack_p << std::endl;

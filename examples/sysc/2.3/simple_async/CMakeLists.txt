@@ -39,6 +39,8 @@
 ###############################################################################
 
 
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
 add_executable (simple_async main.cpp async_event.h)
-target_link_libraries (simple_async SystemC::systemc)
+target_link_libraries (simple_async SystemC::systemc Threads::Threads)
 configure_and_add_test (simple_async)

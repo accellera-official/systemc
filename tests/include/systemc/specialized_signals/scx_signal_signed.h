@@ -202,6 +202,13 @@ Andy Goodrich - Forte Design Systems, Inc.
 #    define SC_TEMPLATE template<> template<int W>
 #endif
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
 // FORWARD REFERENCES AND USINGS:
 
 using sc_dt::int64;
@@ -821,7 +828,7 @@ inline void sc_signal<sc_dt::sc_bigint<W> >::register_port(
 			m_output_p = &port_;
 		}
 #       else
-            if ( &port_ && if_typename_ ) {} // Silence unused args warning.
+		if ( port_.name() && if_typename_ ) {} // Silence unused args warning.
 #       endif
 }
 
@@ -1734,6 +1741,10 @@ void sc_signed_sigref::operator = ( const sc_signed_sigref& v )
 
 #undef SC_TEMPLATE
 } // namespace sc_core
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 #endif // !defined(SC_SIGNAL_SIGNED_H)
 
 namespace sc_core {
@@ -1773,23 +1784,23 @@ sc_signed sc_signed_part_if::read_part( int /*left*/, int /*right*/ ) const
 sc_signed_sigref& sc_signed_part_if::select_part( int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
-    return *(sc_signed_sigref*)0;
+    sc_core::sc_abort(); // can't recover from here
 }
-void sc_signed_part_if::write_part( int64 v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( int64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
-void sc_signed_part_if::write_part( uint64 v, int /*left*/, int /*right*/ )
-{
-    SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
-}
-void sc_signed_part_if::write_part(
-    const sc_signed& v, int /*left*/, int /*right*/ )
+void sc_signed_part_if::write_part( uint64 /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }
 void sc_signed_part_if::write_part(
-    const sc_unsigned& v, int /*left*/, int /*right*/ )
+    const sc_signed& /*v*/, int /*left*/, int /*right*/ )
+{
+    SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
+}
+void sc_signed_part_if::write_part(
+    const sc_unsigned& /*v*/, int /*left*/, int /*right*/ )
 {
     SC_REPORT_ERROR( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_, "int" );
 }

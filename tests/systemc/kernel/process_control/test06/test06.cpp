@@ -61,7 +61,7 @@ public:
             << "(" << sc_time_stamp() << " @ " << sc_delta_count() << ")"
             << std::endl;
        }
-    } l; l=l;
+    } l;
 
     unsigned rounds = 5;
     while( rounds --> 0 )

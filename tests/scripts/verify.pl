@@ -501,7 +501,7 @@ sub get_systemc_arch
         } elsif( $uname_s =~ /^(CYGWIN|MINGW32|MINGW64)_NT/ ) {
 
                 # check windows compiler
-            if( $cxx_comp =~ /^cl(\.exe)?/i ) {
+            if( $cxx_comp =~ /^cl(\.exe)?$/i ) {
                 #find MSVC version
                 #reassign stderr and stdout
                 open SAVEOUT, ">&STDOUT";

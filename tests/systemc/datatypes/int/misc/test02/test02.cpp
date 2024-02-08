@@ -97,15 +97,15 @@ int sc_main(int, char**)
 		{
 			expected = j;
 			expected = expected << i;
-			sprintf(buffer, "0Xus%llx", expected);
+			snprintf(buffer, sizeof(buffer), "0Xus%llx", expected);
 			TEST(buffer, expected);
 			TESTs64(buffer, expected);
 			TESTu64(buffer, expected);
-			sprintf(buffer, "0ous%llo", expected);
+			snprintf(buffer, sizeof(buffer), "0ous%llo", expected);
 			TEST(buffer, expected);
 			TESTs64(buffer, expected);
 			TESTu64(buffer, expected);
-			sprintf(buffer, "%lld", expected);
+			snprintf(buffer, sizeof(buffer), "%lld", expected);
 			TEST(buffer, expected);
 			TESTs64(buffer, expected);
 			TESTu64(buffer, expected);

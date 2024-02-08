@@ -72,7 +72,7 @@ void conditions::entry(){
     tmp5 = in_value5.read();
 
     // complex condition on variables
-    if ((tmp1==4) && (tmp2<6) || (tmp5+tmp4.to_int()==6)) {
+    if (((tmp1==4) && (tmp2<6)) || (tmp5+tmp4.to_int()==6)) {
 	out_value1.write(4);
     } else {
 	out_value1.write(tmp1);
@@ -80,7 +80,7 @@ void conditions::entry(){
     wait();
 
     // complex conditions on signal reads
-    if ((in_value1.read().to_uint()==4) && (in_value2.read().to_int()<6) || 
+    if (((in_value1.read().to_uint()==4) && (in_value2.read().to_int()<6)) || 
 	(in_value4.read().to_int()+in_value5.read()==6)) {
 	out_value2.write(4);
     } else {
@@ -96,7 +96,7 @@ void conditions::entry(){
     tmp5 = in_value5.read();
 
     // complex conditions outside the if; does it matter for timing?
-    cond_tmp = (tmp1==4) && (tmp2<6) || (tmp5+tmp4.to_int()==6);
+    cond_tmp = ((tmp1==4) && (tmp2<6)) || (tmp5+tmp4.to_int()==6);
     if (cond_tmp) {
 	out_value3.write(4);
     } else {
@@ -107,15 +107,15 @@ void conditions::entry(){
     // arithmetic if can only be done when using the same datatypes
     // therefor the temporary assignment
     tmp2a = 0;
-    out_value4.write((tmp3.to_int()==4) && (tmp1<6) || 
+    out_value4.write(((tmp3.to_int()==4) && (tmp1<6)) ||
 		     (tmp5+tmp2.to_int()==6)?tmp2a:tmp1);
     wait();
 
     // arithmetic if can only be done when using the same datatypes
     // therefor the temporary assignment
     tmp5 = tmp2.to_int();
-    out_value5.write((in_value3.read().to_int()==4) &&
-		     (in_value1.read().to_int()<6) || 
+    out_value5.write(((in_value3.read().to_int()==4) &&
+		     (in_value1.read().to_int()<6)) ||
 		     (in_value5.read()+in_value2.read().to_int()==6)?
 		     0:tmp5); 
     out_valid.write(true);
