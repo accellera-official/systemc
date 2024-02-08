@@ -35,6 +35,10 @@
 #include <mutex>
 #include <condition_variable>
 
+#if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
+#pragma warning(disable: 4251) // DLL import for std::mutex
+#endif
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
