@@ -44,6 +44,7 @@
 #include <climits>
 #include <cmath> // math.h?
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -52,11 +53,6 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#if defined(__sun) || defined(__sun__)
-#   include <inttypes.h>
-#elif !defined(WIN32) && !defined(_WIN32)
-#   include <stdint.h>
-#endif
 #include <typeinfo>
 #include <utility>
 #include <vector>
@@ -292,10 +288,9 @@ using sc_dt::sc_logic_X;
 // USINGS FOR sc_core:
 //
 // The explicit using for ::sc_core::wait is to remove an ambiguity with
-// the constructor for the system's union wait on Unix and Linux. This
-// causes problems with aCC, so users of aCC should explicitly select
-// the SystemC wait functions using ::sc_core::wait(...). This is actually
-// a good idea for SystemC programmers in general.
+// the constructor for the system's union wait on Unix and Linux.
+// It is generally advisable to explicitly select the SystemC wait
+// functions using ::sc_core::wait(...).
 
 using namespace sc_core;
 using ::sc_core::wait;
