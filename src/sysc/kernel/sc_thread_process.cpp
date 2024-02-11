@@ -683,13 +683,11 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     //   (b) If this thread is already runnable can't trigger an event.
 
     // not possible for thread processes!
-#if 0 // ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if ( sc_get_current_process_b() == (sc_process_b*)this )
     {
         report_immediate_self_notification();
         return false;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     if( is_runnable() )
         return true;
