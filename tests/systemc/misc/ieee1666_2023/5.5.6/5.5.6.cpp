@@ -25,7 +25,6 @@
 
  *****************************************************************************/
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>
 
 int f() { std::cout << "f()" << std::endl; return 0; }

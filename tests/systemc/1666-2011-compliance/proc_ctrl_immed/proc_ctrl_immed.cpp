@@ -33,8 +33,6 @@
 
 // Process control methods executed immediately in same eval phase
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

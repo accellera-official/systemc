@@ -662,20 +662,6 @@ settings to all build configurations.
    Note: _Only effective during library build._
 
 
- * `SC_INCLUDE_DYNAMIC_PROCESSES`  
-   Enable dynamic process support (`sc_spawn`, `sc_bind`)
-
-   To improve compilation times, the functions for spawing dynamic
-   processes are not included by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use dynamically spawned processes.
-
-   Note 1: _Can be optionally set per translation unit in an application._
-
-   Note 2: _Some TLM convenience sockets require this feature and define
-           the symbol for you if needed._
-
-
  * `SC_INCLUDE_FX`  
    Enable SystemC fixed-point data-types
 

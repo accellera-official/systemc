@@ -1,4 +1,3 @@
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "CoreDecouplingLTInitiator.h"
 #include "SimpleATInitiator1.h"
 #include "SimpleATInitiator2.h"

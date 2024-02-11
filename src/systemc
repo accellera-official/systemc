@@ -69,12 +69,13 @@
 // include this file first
 #include "sysc/kernel/sc_cmnhdr.h"
 
-#include "sysc/kernel/sc_externs.h"
+#include "sysc/kernel/sc_dynamic_processes.h"
 #include "sysc/kernel/sc_except.h"
-#include "sysc/kernel/sc_module.h"
+#include "sysc/kernel/sc_externs.h"
 #include "sysc/kernel/sc_initializer_function.h"
-#include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_module.h"
 #include "sysc/kernel/sc_process_handle.h"
+#include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_ver.h"
 
 #include "sysc/communication/sc_buffer.h"
@@ -134,10 +135,6 @@
 #include "sysc/utils/sc_string.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)
-
-#ifdef SC_INCLUDE_DYNAMIC_PROCESSES
-#    include "sysc/kernel/sc_dynamic_processes.h"
-#endif // SC_INCLUDE_DYNAMIC_PROCESSES
 
 #ifdef SC_INCLUDE_EXTRA_STD_HEADERS
 #    include <cstring>

@@ -33,10 +33,6 @@
 #ifndef TLM_UTILS_SIMPLE_TARGET_SOCKET_H_INCLUDED_
 #define TLM_UTILS_SIMPLE_TARGET_SOCKET_H_INCLUDED_
 
-#ifndef SC_INCLUDE_DYNAMIC_PROCESSES // needed for sc_spawn
-#  define SC_INCLUDE_DYNAMIC_PROCESSES
-#endif
-
 #include <systemc>
 #include <tlm>
 #include "tlm_utils/convenience_socket_bases.h"

@@ -30,8 +30,6 @@
 
 // sc_process_handle::operator< and swap
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 #include <map>
 

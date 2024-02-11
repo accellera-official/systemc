@@ -30,8 +30,6 @@
 
 // sc_delta_count, including notifications across pauses
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using namespace sc_core;
 using std::cout;

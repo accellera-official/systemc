@@ -30,8 +30,6 @@
 
 // Calling process control methods during elaboration
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include "systemc.h"
 
 SC_MODULE(Top)

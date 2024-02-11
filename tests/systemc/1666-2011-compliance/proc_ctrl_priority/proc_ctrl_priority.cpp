@@ -33,8 +33,6 @@
 
 // Priority of process control methods suspend, disable, sync_reset_on, reset
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;
