@@ -478,9 +478,6 @@ dnl check for additional (header+lib) compiler flags
 dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
-AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],dnl
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
-   sysc_non_1666=yes])
 
 dnl
 dnl check for additional library compiler flags (documentation only)

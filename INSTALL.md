@@ -615,17 +615,6 @@ settings to all build configurations.
    See : Environment variable `SC_VCD_SCOPES`
 
 
- * `SC_DISABLE_VIRTUAL_BIND`  
-   Keep the "bind" function of sc_ports non-virtual
-
-   When this symbol is defined, the `bind()` function in sc_ports is
-   kept non-virtual (although it is required to be `virtual` as of
-   IEEE Std. 1666-2011).
-
-   Note: _This symbol needs to be consistently defined in the library
-     and any application linking against the built library._
-
-
  * `SC_DISABLE_COPYRIGHT_MESSAGE`  
    Do not print the copyright message when starting the application
 

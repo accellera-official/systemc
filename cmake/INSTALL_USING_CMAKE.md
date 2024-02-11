@@ -179,11 +179,6 @@ sources using CMake:
         Do not print the copyright message when starting the application.
         (default: `OFF`).
 
-     * `DISABLE_VIRTUAL_BIND`  
-       Disable the definition of `bind()` member functions of ports and exports
-       as `virtual`, which is incompatible with old TLM library implementations
-       (< 2.0.2).
-
      * `ENABLE_ASSERTIONS`  
        Always enable the `sc_assert` expressions (default: `ON`).
 
