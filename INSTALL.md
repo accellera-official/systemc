@@ -690,18 +690,6 @@ settings to all build configurations.
    Note: _Can be optionally set per translation unit in an application._
 
 
- * `SC_INCLUDE_STRSTREAM`  
-   Include (deprecated) `<strstream>` header from `<systemc.h>`
-
-   Pre-standard C++ compilers had support for an old stringstream
-   implementation called `strstream`.  In the unlikely case that your
-   application still relies on this deprecated class and that `<systemc.h>`
-   includes this header for you automatically, you now need to define this
-   symbol when building your application.
-
-   Note: _Only effective when building an application._
-
-
  * `SC_INCLUDE_WINDOWS_H`  
    Explicitly include `<windows.h>` header from `<systemc>` header
 

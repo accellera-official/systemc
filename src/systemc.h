@@ -203,17 +203,6 @@
     using std::strerror;
     using std::strlen;
 
-// deprecated strstream support
-#if defined( SC_INCLUDE_STRSTREAM )
-#include <strstream>
-
-    using std::strstream;
-    using std::strstreambuf;
-    using std::istrstream;
-    using std::ostrstream;
-
-#endif // SC_INCLUDE_STRSTREAM
-
 // INCLUDE SYSTEMC DEFINITIONS for sc_dt AND sc_core NAMESPACES:
 
 #include "systemc"
