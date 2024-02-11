@@ -289,28 +289,6 @@ using sc_dt::sc_logic_X;
     using sc_dt::SC_LATER;
 #endif // SC_INCLUDE_FX
 
-#if 0 // defined( _MSC_VER ) // supported versions of MSVC should support ADL
-
-    using sc_dt::equal;
-    using sc_dt::not_equal;
-    using sc_dt::b_not;
-    using sc_dt::b_and;
-    using sc_dt::b_or;
-    using sc_dt::b_xor;
-    using sc_dt::lrotate;
-    using sc_dt::rrotate;
-    using sc_dt::reverse;
-    using sc_dt::concat;
-    using sc_dt::and_reduce;
-    using sc_dt::or_reduce;
-    using sc_dt::xor_reduce;
-    using sc_dt::nand_reduce;
-    using sc_dt::nor_reduce;
-    using sc_dt::xnor_reduce;
-
-#endif // defined( _MSC_VER )
-
-
 // USINGS FOR sc_core:
 //
 // The explicit using for ::sc_core::wait is to remove an ambiguity with
@@ -320,10 +298,7 @@ using sc_dt::sc_logic_X;
 // a good idea for SystemC programmers in general.
 
 using namespace sc_core;
-
-#if !defined( __HP_aCC )
-    using ::sc_core::wait;
-#endif // !defined( __HP_aCC )
+using ::sc_core::wait;
 
 typedef ::std::string sc_string;
 
