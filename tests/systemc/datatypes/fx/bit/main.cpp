@@ -45,7 +45,6 @@
 // 
 
 
-#define SC_INCLUDE_FX
 #include "systemc.h"
 #include "test_all.hh"
 

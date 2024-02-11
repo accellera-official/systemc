@@ -37,7 +37,6 @@
 
 // test conversion of fixed point objects to uint64
 
-#define SC_INCLUDE_FX
 #include <systemc>
 
 using namespace std;

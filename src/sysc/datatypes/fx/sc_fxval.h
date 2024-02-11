@@ -55,12 +55,10 @@
 
 
 #include "sysc/datatypes/fx/scfx_rep.h"
-#ifndef SC_FX_EXCLUDE_OTHER
 #include "sysc/datatypes/int/sc_int_base.h"
 #include "sysc/datatypes/int/sc_uint_base.h"
 #include "sysc/datatypes/int/sc_signed.h"
 #include "sysc/datatypes/int/sc_unsigned.h"
-#endif
 #include "sysc/datatypes/fx/sc_fxval_observer.h"
 
 #ifdef SC_FXVAL_IMPLICIT_CONV
@@ -119,14 +117,12 @@ public:
                    sc_fxval( const sc_fxval_fast&, sc_fxval_observer* = 0 );
                    sc_fxval( const sc_fxnum&, sc_fxval_observer* = 0 );
                    sc_fxval( const sc_fxnum_fast&, sc_fxval_observer* = 0 );
-#ifndef SC_FX_EXCLUDE_OTHER
     SCFX_EXPLICIT_OTHER_ sc_fxval( int64, sc_fxval_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval( uint64, sc_fxval_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_int_base&, sc_fxval_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_uint_base&, sc_fxval_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_signed&, sc_fxval_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval( const sc_unsigned&, sc_fxval_observer* = 0 );
-#endif
 
     ~sc_fxval();
 
@@ -153,7 +149,6 @@ public:
     friend sc_fxval operator op ( const sc_fxval&, tp );                      \
     friend sc_fxval operator op ( tp, const sc_fxval& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_OP_OTHER(op)                                                 \
     DECL_BIN_OP_T(op,int64)                                                   \
     DECL_BIN_OP_T(op,uint64)                                                  \
@@ -161,9 +156,6 @@ public:
     DECL_BIN_OP_T(op,const sc_uint_base&)                                     \
     DECL_BIN_OP_T(op,const sc_signed&)                                        \
     DECL_BIN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_BIN_OP_OTHER(op)
-#endif
 
 #define DECL_BIN_OP(op,dummy)                                                 \
     friend sc_fxval operator op ( const sc_fxval&, const sc_fxval& );         \
@@ -195,14 +187,12 @@ public:
     DECL_BIN_OP_T(/,const sc_fxval_fast&)
     DECL_BIN_OP_T(/,const sc_fxnum_fast&)
 //    DECL_BIN_OP_OTHER(/)
-#ifndef SC_FX_EXCLUDE_OTHER
     DECL_BIN_OP_T(/,int64)                                                   \
     DECL_BIN_OP_T(/,uint64)                                                  \
     DECL_BIN_OP_T(/,const sc_int_base&)                                      \
     DECL_BIN_OP_T(/,const sc_uint_base&)                                     \
     DECL_BIN_OP_T(/,const sc_signed&)                                        \
     DECL_BIN_OP_T(/,const sc_unsigned&)
-#endif
 
 
 #undef DECL_BIN_OP_T
@@ -219,7 +209,6 @@ public:
     friend void fnc ( sc_fxval&, const sc_fxval&, tp );                       \
     friend void fnc ( sc_fxval&, tp, const sc_fxval& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_FNC_OTHER(fnc)                                               \
     DECL_BIN_FNC_T(fnc,int64)                                                 \
     DECL_BIN_FNC_T(fnc,uint64)                                                \
@@ -227,9 +216,6 @@ public:
     DECL_BIN_FNC_T(fnc,const sc_uint_base&)                                   \
     DECL_BIN_FNC_T(fnc,const sc_signed&)                                      \
     DECL_BIN_FNC_T(fnc,const sc_unsigned&)
-#else
-#define DECL_BIN_FNC_OTHER(fnc)
-#endif
 
 #define DECL_BIN_FNC(fnc)                                                     \
     friend void fnc ( sc_fxval&, const sc_fxval&, const sc_fxval& );          \
@@ -263,7 +249,6 @@ public:
     friend bool operator op ( const sc_fxval&, tp );                          \
     friend bool operator op ( tp, const sc_fxval& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_REL_OP_OTHER(op)                                                 \
     DECL_REL_OP_T(op,int64)                                                   \
     DECL_REL_OP_T(op,uint64)                                                  \
@@ -271,9 +256,6 @@ public:
     DECL_REL_OP_T(op,const sc_uint_base&)                                     \
     DECL_REL_OP_T(op,const sc_signed&)                                        \
     DECL_REL_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_REL_OP_OTHER(op)
-#endif
 
 #define DECL_REL_OP(op)                                                       \
     friend bool operator op ( const sc_fxval&, const sc_fxval& );             \
@@ -305,7 +287,6 @@ public:
 #define DECL_ASN_OP_T(op,tp)                                                  \
     sc_fxval& operator op( tp );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_ASN_OP_OTHER(op)                                                 \
     DECL_ASN_OP_T(op,int64)                                                   \
     DECL_ASN_OP_T(op,uint64)                                                  \
@@ -313,9 +294,6 @@ public:
     DECL_ASN_OP_T(op,const sc_uint_base&)                                     \
     DECL_ASN_OP_T(op,const sc_signed&)                                        \
     DECL_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_ASN_OP_OTHER(op)
-#endif
 
 #define DECL_ASN_OP(op)                                                       \
     DECL_ASN_OP_T(op,int)                                                     \
@@ -459,14 +437,12 @@ public:
     sc_fxval_fast( const sc_fxval_fast&, sc_fxval_fast_observer* = 0 );
     sc_fxval_fast( const sc_fxnum&, sc_fxval_fast_observer* = 0 );
     sc_fxval_fast( const sc_fxnum_fast&, sc_fxval_fast_observer* = 0 );
-#ifndef SC_FX_EXCLUDE_OTHER
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( int64, sc_fxval_fast_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( uint64, sc_fxval_fast_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_int_base&, sc_fxval_fast_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_uint_base&, sc_fxval_fast_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_signed&, sc_fxval_fast_observer* = 0 );
     SCFX_EXPLICIT_OTHER_ sc_fxval_fast( const sc_unsigned&, sc_fxval_fast_observer* = 0 );
-#endif
 
     ~sc_fxval_fast();
 
@@ -492,7 +468,6 @@ public:
     friend sc_fxval_fast operator op ( const sc_fxval_fast&, tp );            \
     friend sc_fxval_fast operator op ( tp, const sc_fxval_fast& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_OP_OTHER(op)                                                 \
     DECL_BIN_OP_T(op,int64)                                                   \
     DECL_BIN_OP_T(op,uint64)                                                  \
@@ -500,9 +475,6 @@ public:
     DECL_BIN_OP_T(op,const sc_uint_base&)                                     \
     DECL_BIN_OP_T(op,const sc_signed&)                                        \
     DECL_BIN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_BIN_OP_OTHER(op)
-#endif
 
 #define DECL_BIN_OP(op,dummy)                                                 \
     friend sc_fxval_fast operator op ( const sc_fxval_fast&,                  \
@@ -531,14 +503,12 @@ public:
     DECL_BIN_OP_T(/,double)
     DECL_BIN_OP_T(/,const char*)
 //    DECL_BIN_OP_OTHER(/)
-#ifndef SC_FX_EXCLUDE_OTHER
     DECL_BIN_OP_T(/,int64)                                                   \
     DECL_BIN_OP_T(/,uint64)                                                  \
     DECL_BIN_OP_T(/,const sc_int_base&)                                      \
     DECL_BIN_OP_T(/,const sc_uint_base&)                                     \
     DECL_BIN_OP_T(/,const sc_signed&)                                        \
     DECL_BIN_OP_T(/,const sc_unsigned&)
-#endif
 
 #undef DECL_BIN_OP_T
 #undef DECL_BIN_OP_OTHER
@@ -554,7 +524,6 @@ public:
     friend void fnc ( sc_fxval_fast&, const sc_fxval_fast&, tp );             \
     friend void fnc ( sc_fxval_fast&, tp, const sc_fxval_fast& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_BIN_FNC_OTHER(fnc)                                               \
     DECL_BIN_FNC_T(fnc,int64)                                                 \
     DECL_BIN_FNC_T(fnc,uint64)                                                \
@@ -562,9 +531,6 @@ public:
     DECL_BIN_FNC_T(fnc,const sc_uint_base&)                                   \
     DECL_BIN_FNC_T(fnc,const sc_signed&)                                      \
     DECL_BIN_FNC_T(fnc,const sc_unsigned&)
-#else
-#define DECL_BIN_FNC_OTHER(fnc)
-#endif
 
 #define DECL_BIN_FNC(fnc)                                                     \
     friend void fnc ( sc_fxval_fast&, const sc_fxval_fast&,                   \
@@ -599,7 +565,6 @@ public:
     friend bool operator op ( const sc_fxval_fast&, tp );                     \
     friend bool operator op ( tp, const sc_fxval_fast& );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_REL_OP_OTHER(op)                                                 \
     DECL_REL_OP_T(op,int64)                                                   \
     DECL_REL_OP_T(op,uint64)                                                  \
@@ -607,9 +572,6 @@ public:
     DECL_REL_OP_T(op,const sc_uint_base&)                                     \
     DECL_REL_OP_T(op,const sc_signed&)                                        \
     DECL_REL_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_REL_OP_OTHER(op)
-#endif
 
 #define DECL_REL_OP(op)                                                       \
     friend bool operator op ( const sc_fxval_fast&, const sc_fxval_fast& );   \
@@ -639,7 +601,6 @@ public:
 #define DECL_ASN_OP_T(op,tp)                                                  \
     sc_fxval_fast& operator op( tp );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_ASN_OP_OTHER(op)                                                 \
     DECL_ASN_OP_T(op,int64)                                                   \
     DECL_ASN_OP_T(op,uint64)                                                  \
@@ -647,9 +608,6 @@ public:
     DECL_ASN_OP_T(op,const sc_uint_base&)                                     \
     DECL_ASN_OP_T(op,const sc_signed&)                                        \
     DECL_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_ASN_OP_OTHER(op)
-#endif
 
 #define DECL_ASN_OP(op)                                                       \
     DECL_ASN_OP_T(op,int)                                                     \
@@ -834,14 +792,12 @@ DEFN_CTOR_T_A(float)
 DEFN_CTOR_T_A(double)
 DEFN_CTOR_T_A(const char*)
 DEFN_CTOR_T_B(const sc_fxval_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_CTOR_T_A(int64)
 DEFN_CTOR_T_A(uint64)
 DEFN_CTOR_T_C(const sc_int_base&)
 DEFN_CTOR_T_C(const sc_uint_base&)
 DEFN_CTOR_T_A(const sc_signed&)
 DEFN_CTOR_T_A(const sc_unsigned&)
-#endif
 
 #undef DEFN_CTOR_T
 #undef DEFN_CTOR_T_A
@@ -930,7 +886,6 @@ operator op ( tp a, const sc_fxval& b )                                       \
     return sc_fxval( sc_dt::fnc ## _scfx_rep( *tmp.m_rep, *b.m_rep ) );      \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_BIN_OP_OTHER(op,fnc)                                             \
 DEFN_BIN_OP_T(op,fnc,int64)                                                   \
 DEFN_BIN_OP_T(op,fnc,uint64)                                                  \
@@ -938,9 +893,6 @@ DEFN_BIN_OP_T(op,fnc,const sc_int_base&)                                      \
 DEFN_BIN_OP_T(op,fnc,const sc_uint_base&)                                     \
 DEFN_BIN_OP_T(op,fnc,const sc_signed&)                                        \
 DEFN_BIN_OP_T(op,fnc,const sc_unsigned&)
-#else
-#define DEFN_BIN_OP_OTHER(op,fnc)
-#endif
 
 #define DEFN_BIN_OP(op,fnc)                                                   \
 inline                                                                        \
@@ -985,14 +937,12 @@ DEFN_BIN_OP_T(/,div,double)
 DEFN_BIN_OP_T(/,div,const char*)
 DEFN_BIN_OP_T(/,div,const sc_fxval_fast&)
 //DEFN_BIN_OP_OTHER(/,div)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_BIN_OP_T(/,div,int64)                                                   \
 DEFN_BIN_OP_T(/,div,uint64)                                                  \
 DEFN_BIN_OP_T(/,div,const sc_int_base&)                                      \
 DEFN_BIN_OP_T(/,div,const sc_uint_base&)                                     \
 DEFN_BIN_OP_T(/,div,const sc_signed&)                                        \
 DEFN_BIN_OP_T(/,div,const sc_unsigned&)
-#endif
 
 #undef DEFN_BIN_OP_T
 #undef DEFN_BIN_OP_OTHER
@@ -1041,7 +991,6 @@ fnc ( sc_fxval& c, tp a, const sc_fxval& b )                                  \
     SC_FXVAL_OBSERVER_WRITE_( c )                                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_BIN_FNC_OTHER(fnc)                                               \
 DEFN_BIN_FNC_T(fnc,int64)                                                     \
 DEFN_BIN_FNC_T(fnc,uint64)                                                    \
@@ -1049,9 +998,6 @@ DEFN_BIN_FNC_T(fnc,const sc_int_base&)                                        \
 DEFN_BIN_FNC_T(fnc,const sc_uint_base&)                                       \
 DEFN_BIN_FNC_T(fnc,const sc_signed&)                                          \
 DEFN_BIN_FNC_T(fnc,const sc_unsigned&)
-#else
-#define DEFN_BIN_FNC_OTHER(fnc)
-#endif
 
 #define DEFN_BIN_FNC(fnc)                                                     \
 inline                                                                        \
@@ -1129,7 +1075,6 @@ operator op ( tp a, const sc_fxval& b )                                       \
     return ( ret );                                                           \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_REL_OP_OTHER(op,ret)                                             \
 DEFN_REL_OP_T(op,ret,int64)                                                   \
 DEFN_REL_OP_T(op,ret,uint64)                                                  \
@@ -1137,9 +1082,6 @@ DEFN_REL_OP_T(op,ret,const sc_int_base&)                                      \
 DEFN_REL_OP_T(op,ret,const sc_uint_base&)                                     \
 DEFN_REL_OP_T(op,ret,const sc_signed&)                                        \
 DEFN_REL_OP_T(op,ret,const sc_unsigned&)
-#else
-#define DEFN_REL_OP_OTHER(op,ret)
-#endif
 
 #define DEFN_REL_OP(op,ret)                                                   \
 inline                                                                        \
@@ -1208,14 +1150,12 @@ DEFN_ASN_OP_T(float)
 DEFN_ASN_OP_T(double)
 DEFN_ASN_OP_T(const char*)
 DEFN_ASN_OP_T(const sc_fxval_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_ASN_OP_T(int64)
 DEFN_ASN_OP_T(uint64)
 DEFN_ASN_OP_T(const sc_int_base&)
 DEFN_ASN_OP_T(const sc_uint_base&)
 DEFN_ASN_OP_T(const sc_signed&)
 DEFN_ASN_OP_T(const sc_unsigned&)
-#endif
 
 #undef DEFN_ASN_OP_T
 
@@ -1234,7 +1174,6 @@ sc_fxval::operator op ( tp b )                                                \
     return *this;                                                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_ASN_OP_OTHER(op,fnc)                                             \
 DEFN_ASN_OP_T(op,fnc,int64)                                                   \
 DEFN_ASN_OP_T(op,fnc,uint64)                                                  \
@@ -1242,9 +1181,6 @@ DEFN_ASN_OP_T(op,fnc,const sc_int_base&)                                      \
 DEFN_ASN_OP_T(op,fnc,const sc_uint_base&)                                     \
 DEFN_ASN_OP_T(op,fnc,const sc_signed&)                                        \
 DEFN_ASN_OP_T(op,fnc,const sc_unsigned&)
-#else
-#define DEFN_ASN_OP_OTHER(op,fnc)
-#endif
 
 #define DEFN_ASN_OP(op,fnc)                                                   \
 inline                                                                        \
@@ -1596,14 +1532,12 @@ DEFN_CTOR_T_A(float)
 DEFN_CTOR_T_A(double)
 DEFN_CTOR_T_B(const char*)
 DEFN_CTOR_T_C(const sc_fxval&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_CTOR_T_A(int64)
 DEFN_CTOR_T_A(uint64)
 DEFN_CTOR_T_C(const sc_int_base&)
 DEFN_CTOR_T_C(const sc_uint_base&)
 DEFN_CTOR_T_C(const sc_signed&)
 DEFN_CTOR_T_C(const sc_unsigned&)
-#endif
 
 #undef DEFN_CTOR_T
 #undef DEFN_CTOR_T_A
@@ -1691,7 +1625,6 @@ operator op ( tp a, const sc_fxval_fast& b )                                  \
     return sc_fxval_fast( tmp.m_val op b.m_val );                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_BIN_OP_OTHER(op)                                                 \
 DEFN_BIN_OP_T(op,int64)                                                       \
 DEFN_BIN_OP_T(op,uint64)                                                      \
@@ -1699,9 +1632,6 @@ DEFN_BIN_OP_T(op,const sc_int_base&)                                          \
 DEFN_BIN_OP_T(op,const sc_uint_base&)                                         \
 DEFN_BIN_OP_T(op,const sc_signed&)                                            \
 DEFN_BIN_OP_T(op,const sc_unsigned&)
-#else
-#define DEFN_BIN_OP_OTHER(op)
-#endif
 
 #define DEFN_BIN_OP(op,dummy)                                                 \
 inline                                                                        \
@@ -1743,14 +1673,12 @@ DEFN_BIN_OP_T(/,float)
 DEFN_BIN_OP_T(/,double)
 DEFN_BIN_OP_T(/,const char*)
 //DEFN_BIN_OP_OTHER(/)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_BIN_OP_T(/,int64)
 DEFN_BIN_OP_T(/,uint64)
 DEFN_BIN_OP_T(/,const sc_int_base&)
 DEFN_BIN_OP_T(/,const sc_uint_base&)
 DEFN_BIN_OP_T(/,const sc_signed&)
 DEFN_BIN_OP_T(/,const sc_unsigned&)
-#endif
 
 
 #undef DEFN_BIN_OP_T
@@ -1798,7 +1726,6 @@ fnc ( sc_fxval_fast& c, tp a, const sc_fxval_fast& b )                        \
     SC_FXVAL_FAST_OBSERVER_WRITE_( c )                                        \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_BIN_FNC_OTHER(fnc,op)                                            \
 DEFN_BIN_FNC_T(fnc,op,int64)                                                  \
 DEFN_BIN_FNC_T(fnc,op,uint64)                                                 \
@@ -1806,9 +1733,6 @@ DEFN_BIN_FNC_T(fnc,op,const sc_int_base&)                                     \
 DEFN_BIN_FNC_T(fnc,op,const sc_uint_base&)                                    \
 DEFN_BIN_FNC_T(fnc,op,const sc_signed&)                                       \
 DEFN_BIN_FNC_T(fnc,op,const sc_unsigned&)
-#else
-#define DEFN_BIN_FNC_OTHER(fnc,op)
-#endif
 
 #define DEFN_BIN_FNC(fnc,op)                                                  \
 inline                                                                        \
@@ -1880,7 +1804,6 @@ operator op ( tp a, const sc_fxval_fast& b )                                  \
     return ( tmp.m_val op b.m_val );                                          \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_REL_OP_OTHER(op)                                                 \
 DEFN_REL_OP_T(op,int64)                                                       \
 DEFN_REL_OP_T(op,uint64)                                                      \
@@ -1888,9 +1811,6 @@ DEFN_REL_OP_T(op,const sc_int_base&)                                          \
 DEFN_REL_OP_T(op,const sc_uint_base&)                                         \
 DEFN_REL_OP_T(op,const sc_signed&)                                            \
 DEFN_REL_OP_T(op,const sc_unsigned&)
-#else
-#define DEFN_REL_OP_OTHER(op)
-#endif
 
 #define DEFN_REL_OP(op)                                                       \
 inline                                                                        \
@@ -1957,14 +1877,12 @@ DEFN_ASN_OP_T(float)
 DEFN_ASN_OP_T(double)
 DEFN_ASN_OP_T(const char*)
 DEFN_ASN_OP_T(const sc_fxval&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_ASN_OP_T(int64)
 DEFN_ASN_OP_T(uint64)
 DEFN_ASN_OP_T(const sc_int_base&)
 DEFN_ASN_OP_T(const sc_uint_base&)
 DEFN_ASN_OP_T(const sc_signed&)
 DEFN_ASN_OP_T(const sc_unsigned&)
-#endif
 
 #undef DEFN_ASN_OP_T
 
@@ -1981,7 +1899,6 @@ sc_fxval_fast::operator op ( tp b )                                           \
     return *this;                                                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_ASN_OP_OTHER(op)                                                 \
 DEFN_ASN_OP_T(op,int64)                                                       \
 DEFN_ASN_OP_T(op,uint64)                                                      \
@@ -1989,9 +1906,6 @@ DEFN_ASN_OP_T(op,const sc_int_base&)                                          \
 DEFN_ASN_OP_T(op,const sc_uint_base&)                                         \
 DEFN_ASN_OP_T(op,const sc_signed&)                                            \
 DEFN_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DEFN_ASN_OP_OTHER(op)
-#endif
 
 #define DEFN_ASN_OP(op)                                                       \
 inline                                                                        \
