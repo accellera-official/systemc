@@ -550,6 +550,22 @@ mark_as_advanced(SystemCLanguage_INSTALL_CMAKEDIR SystemCTLM_INSTALL_CMAKEDIR)
 set(SystemCLanguage_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCLanguage_INSTALL_CMAKEDIR}")
 set(SystemCTLM_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCTLM_INSTALL_CMAKEDIR}")
 
+###############################################################################
+# Global compiler flags (including examples/tests)
+###############################################################################
+
+option(ENABLE_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+if(ENABLE_WARNINGS_AS_ERRORS)
+  add_compile_options(
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror>
+    $<$<CXX_COMPILER_ID:MSVC>:/WX>
+  )
+endif()
+
+# On Xcode, we need to disable the -Wconversion warning explicitly
+if(XCODE)
+  add_compile_options($<$<CXX_COMPILER_ID:AppleClang>:-Wno-conversion>)
+endif()
 
 ###############################################################################
 # Configure RPATH so that all targets find the libraries they link to
