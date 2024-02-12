@@ -144,11 +144,21 @@ sources using CMake:
      documentation string.  The most important variables are:
 
      * `BUILD_SHARED_LIBS`  
-       Build shared instead of static libraries (default: `ON` if not 
-       targetting Windows).
+       Build shared instead of static libraries
+       (default: `ON` if not targeting Windows).
 
      * `BUILD_SOURCE_DOCUMENTATION`  
        Build source code documentation using Doxygen (default: `OFF`).
+
+     * `ENABLE_EXAMPLES`  
+       Add build targets for all examples under the `examples/` folder,
+       add composite targets `all-examples` and `check-examples` to
+       build and run all of them (default: `ON`).
+
+     * `ENABLE_REGRESSION`  
+       Add build targets for all regression tests under the `tests/` folder,
+       add composite targets `all-tests` and `check-tests` to build and run
+       all of them (default: OFF).
 
      * `CMAKE_BUILD_TYPE`  
        Specifies the build type on single-configuration generators.

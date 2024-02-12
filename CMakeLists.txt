@@ -186,6 +186,17 @@ cmake_policy(SET CMP0001 NEW)
 
 project (SystemCLanguage CXX C)
 
+# check for multi-config generators (Ninja, Visual Studio, Xcode, ...)
+get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+# detect if we are building as package, or by add_subdirectory (pre-3.21 support)
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL)
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+  if(NOT PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL FALSE)
+  endif()
+endif()
+
 set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
 if(EXISTS ${SystemCLanguage_VERSION_FILE})
     file(READ ${SystemCLanguage_VERSION_FILE} SYSTEMC_VERSION_FILE_CONTENT)
@@ -300,6 +311,10 @@ set (OVERRIDE_DEFAULT_STACK_SIZE 0 CACHE STRING "Define the default stack size u
 if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
+
+# Testing
+option(ENABLE_EXAMPLES   "Build examples" ${PROJECT_IS_TOP_LEVEL})
+option(ENABLE_REGRESSION "Build regression tests" OFF)
 
 mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  DISABLE_VIRTUAL_BIND
@@ -600,7 +615,11 @@ message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemC
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
-message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message (STATUS "ENABLE_EXAMPLES = ${ENABLE_EXAMPLES}")
+message (STATUS "ENABLE_REGRESSION = ${ENABLE_REGRESSION}")
+if (NOT GENERATOR_IS_MULTI_CONFIG)
+  message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
@@ -655,10 +674,11 @@ message (STATUS "===============================================================
 # Subdirectories
 ###############################################################################
 
-add_subdirectory (docs)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 add_subdirectory (src)
+add_subdirectory (docs)
 add_subdirectory (examples)
-
+add_subdirectory (tests)
 
 ###############################################################################
 # Install README files
