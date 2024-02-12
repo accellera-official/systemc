@@ -14,7 +14,7 @@
 //
 //  ref.hpp - ref/cref, useful helper functions
 //
-//  Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+//  Copyright (C) 1999, 2000 Jaakko JÃ¤rvi (jaakko.jarvi@cs.utu.fi)
 //  Copyright (C) 2001, 2002 Peter Dimov
 //  Copyright (C) 2002 David Abrahams
 //
@@ -29,7 +29,7 @@ namespace sc_boost
 {
 
 template<class T> class reference_wrapper
-{ 
+{
 public:
     typedef T type;
 
@@ -61,7 +61,7 @@ private:
 # endif
 
 template<class T> inline reference_wrapper<T> SC_BOOST_REF_CONST ref(T & t)
-{ 
+{
     return reference_wrapper<T>(t);
 }
 
@@ -124,7 +124,7 @@ namespace detail
 {
   typedef char (&yes_reference_wrapper_t)[1];
   typedef char (&no_reference_wrapper_t)[2];
-      
+
   no_reference_wrapper_t is_reference_wrapper_test(...);
 
   template<typename T>
@@ -159,7 +159,7 @@ class is_reference_wrapper
         bool, value = (
              sizeof(detail::is_reference_wrapper_test(type<T>()))
             == sizeof(detail::yes_reference_wrapper_t)));
-    
+
     typedef ::sc_boost::mpl::bool_<value> type;
 };
 
