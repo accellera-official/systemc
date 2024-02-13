@@ -38,6 +38,7 @@
 #
 ###############################################################################
 
+cmake_minimum_required(VERSION 3.8) # cxx_std_17
 
 ###############################################################################
 # Configure QuickThreads
@@ -492,7 +493,7 @@ if (APPLE)
     -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
 endif(APPLE)
 
-target_link_libraries (systemc PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
+target_link_libraries(systemc PRIVATE Threads::Threads)
 
 set_target_properties (systemc
                        PROPERTIES

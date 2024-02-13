@@ -23,7 +23,7 @@ Torsten Maehne, Bern University of Applied Sciences, Switzerland, 2017-02-22
 
 5. Known Problems
 
-6. Ressources
+6. Resources
 
 
 ## 1. Introduction
@@ -144,11 +144,21 @@ sources using CMake:
      documentation string.  The most important variables are:
 
      * `BUILD_SHARED_LIBS`  
-       Build shared instead of static libraries (default: `ON` if not 
-       targetting Windows).
+       Build shared instead of static libraries
+       (default: `ON` if not targeting Windows).
 
      * `BUILD_SOURCE_DOCUMENTATION`  
        Build source code documentation using Doxygen (default: `OFF`).
+
+     * `ENABLE_EXAMPLES`  
+       Add build targets for all examples under the `examples/` folder,
+       add composite targets `all-examples` and `check-examples` to
+       build and run all of them (default: `ON`).
+
+     * `ENABLE_REGRESSION`  
+       Add build targets for all regression tests under the `tests/` folder,
+       add composite targets `all-tests` and `check-tests` to build and run
+       all of them (default: OFF).
 
      * `CMAKE_BUILD_TYPE`  
        Specifies the build type on single-configuration generators.
@@ -174,6 +184,9 @@ sources using CMake:
 
      * `CMAKE_VERBOSE_MAKEFILE`  
        Generate a verbose Makefile (default: `OFF`).
+
+     * `ENABLE_WARNINGS_AS_ERRORS`  
+       Treat compiler warnings as errors on supported compilers (default: `OFF`).
 
      * `DISABLE_COPYRIGHT_MESSAGE`  
         Do not print the copyright message when starting the application.
@@ -305,7 +318,7 @@ it, but depending on the chosen compiler options, it may need adjustment.
 
 On macOS, a similar approach as in section 3.1 can be adopted.  However,
 it has to be noted that Apple's versions of GCC and Clang don't support
-`-m32` and `-m64`, but the more flexible `-arch <i386|x86_64|ppc|ppc64>` 
+`-m32` and `-m64`, but the more flexible `-arch <arm64|x86_64>` 
 parameter.  The latter can be even repeated several times on the command
 line to create universal binaries able to run on several processor 
 architectures.  CMake has native support for this command line option, 
@@ -315,7 +328,7 @@ It is sufficient to set the variable `CMAKE_OSX_ARCHITECTURES` to the
 desired target architecture(s).  Multiple architectures are separated
 with a `;`. You can do so already on the command line
 
-      $ cmake .. -DCMAKE_OSX_ARCHITECTURES=x86_64;i386;ppc
+      $ cmake .. -DCMAKE_OSX_ARCHITECTURES='x86_64;arm64'
 
 or in variable editors of `ccmake` and `cmake-gui`.
 

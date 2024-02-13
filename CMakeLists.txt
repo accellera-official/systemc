@@ -181,11 +181,21 @@
 #
 ###############################################################################
 
-
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.5)
 cmake_policy(SET CMP0001 NEW)
 
 project (SystemCLanguage CXX C)
+
+# check for multi-config generators (Ninja, Visual Studio, Xcode, ...)
+get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+# detect if we are building as package, or by add_subdirectory (pre-3.21 support)
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL)
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+  if(NOT PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL FALSE)
+  endif()
+endif()
 
 set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
 if(EXISTS ${SystemCLanguage_VERSION_FILE})
@@ -302,6 +312,10 @@ if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
 
+# Testing
+option(ENABLE_EXAMPLES   "Build examples" ${PROJECT_IS_TOP_LEVEL})
+option(ENABLE_REGRESSION "Build regression tests" OFF)
+
 mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  DISABLE_VIRTUAL_BIND
                  ENABLE_ASSERTIONS
@@ -319,8 +333,7 @@ message (STATUS "Checking OS and processor type.")
 
 if (APPLE)
   list (LENGTH CMAKE_OSX_ARCHITECTURES N_OSX_ARCHITECTURES)
-  set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "")
-  if ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "${CMAKE_OSX_ARCHITECTURES_CACHED}")
+  if (NOT DEFINED CMAKE_OSX_ARCHITECTURES_CACHED OR NOT ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "${CMAKE_OSX_ARCHITECTURES_CACHED}"))
     set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "" FORCE)
     unset(SystemC_TARGET_ARCH CACHE)
     unset(HAS__aarch64__DEFINED CACHE)
@@ -344,7 +357,7 @@ check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 # Set SystemC_TARGET_ARCH according to the detected
 # OS/processor/compiler platform
 if (NOT SystemC_TARGET_ARCH)
-  if ($ENV{SYSTEMC_TARGET_ARCH})
+  if (DEFINED ENV{SYSTEMC_TARGET_ARCH})
     message (STATUS "Using SYSTEMC_TARGET_ARCH from the environment.")
     set (_TARGET_ARCH $ENV{SYSTEMC_TARGET_ARCH})
   elseif (APPLE)
@@ -426,11 +439,10 @@ if (NOT SystemC_TARGET_ARCH)
   else ($ENV{SYSTEMC_TARGET_ARCH})
     # Unknown platform, so guess a SystemC target architecture value.
     string (TOLOWER "${CMAKE_SYSTEM_NAME}${CMAKE_PROCESSOR_NAME}" _TARGET_ARCH)
-  endif ($ENV{SYSTEMC_TARGET_ARCH})
+  endif (DEFINED ENV{SYSTEMC_TARGET_ARCH})
   set (SystemC_TARGET_ARCH ${_TARGET_ARCH} CACHE STRING "SystemC Target Architecture")
   unset (_TARGET_ARCH)
 endif (NOT SystemC_TARGET_ARCH)
-
 
 ###############################################################################
 # Configure QuickThreads
@@ -481,18 +493,13 @@ endif (QT_ARCH)
 ###############################################################################
 # Configure Pthreads or Fiber if necessary.
 ###############################################################################
+
+set (THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 if (WIN32 AND ENABLE_PTHREADS)
   message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
 endif (WIN32 AND ENABLE_PTHREADS)
-
-if (ENABLE_PTHREADS OR NOT QT_ARCH)
-  set (THREADS_PREFER_PTHREAD_FLAG ON)
-  find_package (Threads REQUIRED)
-  if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
-  endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-endif (ENABLE_PTHREADS OR NOT QT_ARCH)
-
 
 ###############################################################################
 # Set the installation paths
@@ -558,6 +565,22 @@ mark_as_advanced(SystemCLanguage_INSTALL_CMAKEDIR SystemCTLM_INSTALL_CMAKEDIR)
 set(SystemCLanguage_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCLanguage_INSTALL_CMAKEDIR}")
 set(SystemCTLM_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCTLM_INSTALL_CMAKEDIR}")
 
+###############################################################################
+# Global compiler flags (including examples/tests)
+###############################################################################
+
+option(ENABLE_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+if(ENABLE_WARNINGS_AS_ERRORS)
+  add_compile_options(
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror>
+    $<$<CXX_COMPILER_ID:MSVC>:/WX>
+  )
+endif()
+
+# On Xcode, we need to disable the -Wconversion warning explicitly
+if(XCODE)
+  add_compile_options($<$<CXX_COMPILER_ID:AppleClang>:-Wno-conversion>)
+endif()
 
 ###############################################################################
 # Configure RPATH so that all targets find the libraries they link to
@@ -568,8 +591,7 @@ set (CMAKE_MACOSX_RPATH TRUE)
 
 # Use, i.e., don't skip, the full RPATH for the build tree.
 set (CMAKE_SKIP_BUILD_RPATH  FALSE)
-# For build, don't use the install RPATH already (but later on when
-# installing).
+# For build, don't use the install RPATH already (but later on when installing).
 set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 # Set the RPATH to be used when installing.
 set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
@@ -593,7 +615,11 @@ message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemC
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
-message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message (STATUS "ENABLE_EXAMPLES = ${ENABLE_EXAMPLES}")
+message (STATUS "ENABLE_REGRESSION = ${ENABLE_REGRESSION}")
+if (NOT GENERATOR_IS_MULTI_CONFIG)
+  message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 if (DISABLE_VIRTUAL_BIND)
@@ -614,7 +640,7 @@ else (ENABLE_PTHREADS)
   message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 endif (ENABLE_PTHREADS)
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-  message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
+  message (STATUS "OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
 message (STATUS "SystemCLanguage_VERSION = ${SystemCLanguage_VERSION}")
@@ -635,18 +661,6 @@ endif (DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
 if (DEFINED CMAKE_OSX_SYSROOT)
   message (STATUS "CMAKE_OSX_SYSROOT = ${CMAKE_OSX_SYSROOT}")
 endif(DEFINED CMAKE_OSX_SYSROOT)
-if (DEFINED Threads_FOUND)
-  message (STATUS "Threads_FOUND = ${Threads_FOUND}")
-endif (DEFINED Threads_FOUND)
-if (DEFINED CMAKE_USE_PTHREADS_INIT)
-  message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
-endif (DEFINED CMAKE_USE_PTHREADS_INIT)
-if (DEFINED CMAKE_USE_WIN32_THREADS_INIT)
-  message (STATUS "CMAKE_USE_WIN32_THREADS_INIT = ${CMAKE_USE_WIN32_THREADS_INIT}")
-endif (DEFINED CMAKE_USE_WIN32_THREADS_INIT)
-if (DEFINED CMAKE_THREAD_LIBS_INIT)
-  message (STATUS "CMAKE_THREAD_LIBS_INIT = ${CMAKE_THREAD_LIBS_INIT}")
-endif (DEFINED CMAKE_THREAD_LIBS_INIT)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
@@ -656,15 +670,15 @@ message (STATUS "CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
 message (STATUS "INSTALL_CMAKEDIR = ${INSTALL_CMAKEDIR}")
 message (STATUS "========================================================================")
 
-
 ###############################################################################
 # Subdirectories
 ###############################################################################
 
-add_subdirectory (docs)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 add_subdirectory (src)
+add_subdirectory (docs)
 add_subdirectory (examples)
-
+add_subdirectory (tests)
 
 ###############################################################################
 # Install README files
