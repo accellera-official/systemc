@@ -1,10 +1,10 @@
-//  (C) Copyright John Maddock 2001. 
-//  (C) Copyright Jens Maurer 2001 - 2003. 
-//  (C) Copyright Peter Dimov 2002. 
-//  (C) Copyright Aleksey Gurtovoy 2002 - 2003. 
-//  (C) Copyright David Abrahams 2002. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001.
+//  (C) Copyright Jens Maurer 2001 - 2003.
+//  (C) Copyright Peter Dimov 2002.
+//  (C) Copyright Aleksey Gurtovoy 2002 - 2003.
+//  (C) Copyright David Abrahams 2002.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -34,13 +34,13 @@
 #      define SC_BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #    endif
 
-#    if (__SUNPRO_CC <= 0x530) 
+#    if (__SUNPRO_CC <= 0x530)
        // Requesting debug info (-g) with Boost.Python results
        // in an internal compiler error for "static const"
        // initialized in-class.
        //    >> Assertion:   (../links/dbg_cstabs.cc, line 611)
        //         while processing ../test.cpp at line 0.
-       // (Jens Maurer according to Gottfried Ganﬂauge 04 Mar 2002)
+       // (Jens Maurer according to Gottfried Gan√üauge 04 Mar 2002)
 #      define SC_BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 
        // SunPro 5.3 has better support for partial specialization,
@@ -57,7 +57,7 @@
 #      define SC_BOOST_NO_INTEGRAL_INT64_T
 #    endif
 
-#    if (__SUNPRO_CC < 0x570) 
+#    if (__SUNPRO_CC < 0x570)
 #      define SC_BOOST_NO_TEMPLATE_TEMPLATES
        // see http://lists.boost.org/MailArchives/boost/msg47184.php
        // and http://lists.boost.org/MailArchives/boost/msg47220.php

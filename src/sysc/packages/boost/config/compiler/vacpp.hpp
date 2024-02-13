@@ -1,10 +1,10 @@
-//  (C) Copyright John Maddock 2001 - 2003. 
-//  (C) Copyright Toon Knapen 2001 - 2003. 
-//  (C) Copyright Lie-Quan Lee 2001. 
-//  (C) Copyright Markus Schöpflin 2002 - 2003. 
-//  (C) Copyright Beman Dawes 2002 - 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001 - 2003.
+//  (C) Copyright Toon Knapen 2001 - 2003.
+//  (C) Copyright Lie-Quan Lee 2001.
+//  (C) Copyright Markus SchÃ¶pflin 2002 - 2003.
+//  (C) Copyright Beman Dawes 2002 - 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -16,7 +16,7 @@
 #  define SC_BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
 
-#if (__IBMCPP__ <= 502) 
+#if (__IBMCPP__ <= 502)
 // Actually the compiler supports inclass member initialization but it
 // requires a definition for the class member and it doesn't recognize
 // it as an integral constant expression when used as a template argument.
