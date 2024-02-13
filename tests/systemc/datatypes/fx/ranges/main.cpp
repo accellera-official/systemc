@@ -46,7 +46,6 @@
 
 
 #include <limits.h>
-#define SC_INCLUDE_FX
 #include "systemc.h"
 
 extern void range_fx(ostream&);

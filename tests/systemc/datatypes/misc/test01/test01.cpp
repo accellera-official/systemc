@@ -37,7 +37,6 @@
 
 // test of i/o streaming of the datatypes
 
-#define SC_INCLUDE_FX
 #include "systemc.h"
 #include <sstream>
 

@@ -37,7 +37,6 @@
 
 // test of sc_[u]fix constructors with fixed-point type argument
 
-#define SC_INCLUDE_FX
 #include "systemc.h"
 
 #define WRITE(a) \

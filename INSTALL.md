@@ -146,11 +146,6 @@ To install SystemC on a UNIX system, do the following steps:
      ../configure 'CXXFLAGS=-std=c++17'
      ```
 
-     SystemC 3.0.0 includes a fixed-point package that is always built.
-     When compiling your applications with fixed-point types, you still have
-     to use compiler flag `-DSC_INCLUDE_FX`.  Note that compile times might
-     increase when using this compiler flag.
-
      In case you want to install the package in another place than the
      top level directory, configure the package e.g. as follows:
 
@@ -634,20 +629,6 @@ settings to all build configurations.
    preprocessor symbol (when building the library and/or an application),
    the `sc_assert()` checks are always enabled, irrespectively of the
    definition of `NDEBUG`.
-
-
- * `SC_INCLUDE_FX`  
-   Enable SystemC fixed-point data-types
-
-   To improve compilation times, the fixed-point data-types are not enabled
-   by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use the SystemC fixed-point types.
-
-   Note: _Is by default always defined during the library build to enable
-         later use of the fixed-point data-types in an application._
-
-   Note: _Can be optionally set per translation unit in an application._
 
 
  * `SC_INCLUDE_WINDOWS_H`  

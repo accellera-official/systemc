@@ -18,7 +18,6 @@
  *****************************************************************************/
 
 #define SC_ENABLE_OBSERVERS
-#define SC_INCLUDE_FX
 #include "systemc.h"
 
 #if SC_CPLUSPLUS < 201103L
