@@ -27,7 +27,6 @@
 
 // see https://github.com/OSCI-WG/systemc/issues/222
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>
 #include <iomanip>
 #include <sstream>

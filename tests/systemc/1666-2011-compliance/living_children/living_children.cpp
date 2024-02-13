@@ -30,8 +30,6 @@
 
 // Not invaliding handles to processes with living children
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

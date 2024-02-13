@@ -38,12 +38,6 @@
 #include "sysc/kernel/sc_object.h"
 #include "sysc/kernel/sc_process.h"
 
-#if ! defined( SC_DISABLE_VIRTUAL_BIND )
-#  define SC_VIRTUAL_ virtual
-#else
-#  define SC_VIRTUAL_ /* non-virtual */
-#endif
-
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::vector
@@ -283,7 +277,7 @@ public:
 
     // bind an interface of type IF to this port
 
-    SC_VIRTUAL_ void bind( IF& interface_ )
+    virtual void bind( IF& interface_ )
 	{ base_type::bind( interface_ ); }
 
     void operator () ( IF& interface_ )
@@ -292,7 +286,7 @@ public:
 
     // bind a parent port with type IF to this port
 
-    SC_VIRTUAL_ void bind( port_type& parent_ )
+    virtual void bind( port_type& parent_ )
 	{ base_type::bind( parent_ ); }
 
     void operator () ( port_type& parent_ )
@@ -639,8 +633,6 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 // ----------------------------------------------------------------------------
 
 } // namespace sc_core
-
-#undef SC_VIRTUAL_
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(pop)

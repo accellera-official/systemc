@@ -30,8 +30,6 @@
 
 // async_reset_signal_is
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using namespace sc_core;
 using std::cout;

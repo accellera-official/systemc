@@ -39,7 +39,6 @@
 //  Andy Goodrich: update of copyright notice, added visible CVS logging.
 //
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "systemc.h"
 SC_MODULE(mod)
 {

@@ -38,6 +38,7 @@
 #
 ###############################################################################
 
+cmake_minimum_required(VERSION 3.8) # cxx_std_17
 
 ###############################################################################
 # Configure QuickThreads
@@ -447,7 +448,6 @@ target_compile_features(systemc PUBLIC cxx_std_17)
 target_compile_definitions (
   systemc
   PUBLIC
-  $<$<BOOL:${DISABLE_VIRTUAL_BIND}>:SC_DISABLE_VIRTUAL_BIND>
   $<$<BOOL:${WIN32}>:WIN32>
   $<$<AND:$<BOOL:${BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
     SC_WIN_DLL>
@@ -459,8 +459,6 @@ target_compile_definitions (
   $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
   $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
   $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
-  $<$<BOOL:${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}>:
-    SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS>
   $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
   $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
     SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
@@ -491,7 +489,7 @@ if (APPLE)
     -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
 endif(APPLE)
 
-target_link_libraries (systemc PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
+target_link_libraries(systemc PRIVATE Threads::Threads)
 
 set_target_properties (systemc
                        PROPERTIES

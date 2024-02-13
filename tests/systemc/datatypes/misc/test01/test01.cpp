@@ -38,11 +38,7 @@
 // test of i/o streaming of the datatypes
 
 #include "systemc.h"
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
-#   include "sstream"
-#else
-#   include "strstream.h"
-#endif
+#include <sstream>
 
 // THE FOLLOWING SPECIALIZATIONS FOR sc_bitref<X> AND sc_subref<X> GO AWAY
 // WHEN sc_bv and sc_lv ARE INTEGRATED INTO THE NORMAL CONCATENATION SCHEME:
@@ -51,11 +47,7 @@ template <class X>
 void
 test( sc_dt::sc_bitref<X> a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -67,11 +59,7 @@ template <class X>
 void
 test( sc_dt::sc_subref<X> a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -83,11 +71,7 @@ test( sc_dt::sc_subref<X> a )
 void
 test( sc_dt::sc_fxnum_bitref a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -98,11 +82,7 @@ test( sc_dt::sc_fxnum_bitref a )
 void
 test( sc_dt::sc_fxnum_fast_bitref a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -114,11 +94,7 @@ test( sc_dt::sc_fxnum_fast_bitref a )
 void
 test( sc_dt::sc_fxnum_subref a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -129,11 +105,7 @@ test( sc_dt::sc_fxnum_subref a )
 void
 test( sc_dt::sc_fxnum_fast_subref a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;
@@ -145,11 +117,7 @@ template <class T>
 void
 test( T& a )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
     std::stringstream ss;
-# else
-	strstream ss;
-# endif
 
     cout << a << endl;
     ss << a;

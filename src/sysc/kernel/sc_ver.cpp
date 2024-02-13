@@ -152,14 +152,12 @@ pln()
 // passing the value to the constructor of the api_version_check object.
 
 // const int DEBUG_SYSTEMC_CHECK_           = 1;
-const int SC_DISABLE_VIRTUAL_BIND_CHECK_ = 1;
 
-template<>
+//template<>
 SC_API SC_API_VERSION_STRING
-<
+//<
 //   & DEBUG_SYSTEMC_CHECK_,
-  & SC_DISABLE_VIRTUAL_BIND_CHECK_
->
+//>
 ::SC_API_VERSION_STRING
 (
   sc_writer_policy default_writer_policy

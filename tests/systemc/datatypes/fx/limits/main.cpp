@@ -47,11 +47,7 @@
 #include <limits.h>
 #include "systemc.h"
 
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
-#   include "sstream"
-#else
-#   include "strstream.h"
-#endif
+#include <sstream>
 
 extern void test_fx_float_limits(ostream&);
 extern void test_fx_ufix_limits(ostream&);
@@ -61,12 +57,7 @@ extern void test_fx_ufixed_limits(ostream&);
 
 int sc_main( int, char** )
 {
-# if (defined(__GNUC__) && (__GNUC__ >= 3))|| (defined(_MSC_VER) && (_MSC_VER >= 1300))
-    std::stringstream out;
-# else
-    strstream out;
-# endif
-
+  std::stringstream out;
   out.precision(15);
 
   test_fx_float_limits(out);
