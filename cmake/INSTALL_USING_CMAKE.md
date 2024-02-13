@@ -195,11 +195,6 @@ sources using CMake:
      * `ENABLE_ASSERTIONS`  
        Always enable the `sc_assert` expressions (default: `ON`).
 
-     * `ENABLE_IMMEDIATE_SELF_NOTIFICATIONS`  
-       Enable immediate self-notification of processes, which is no longer
-       supported due to changes as of IEEE Std. 1666-2011 (see
-       `sc_event::notify`, 5.10.6).
-
      * `ENABLE_PTHREADS`  
        Use POSIX threads for SystemC processes instead of QuickThreads on Unix
        or Fiber on Windows.

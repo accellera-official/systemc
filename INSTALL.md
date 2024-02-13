@@ -636,21 +636,6 @@ settings to all build configurations.
    definition of `NDEBUG`.
 
 
- * `SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS`
-   Allow a process to trigger itself immediately
-
-   Allow a method process to trigger itself immediately by using
-   ```cpp
-   next_trigger( ev ); // or a static sensitivity
-   ev.notify();
-   ```
-
-   This behavior has been disabled by default as of IEEE Std. 1666-2011 and
-   can be reenabled by this option.
-
-   Note: _Only effective during library build._
-
-
  * `SC_INCLUDE_DYNAMIC_PROCESSES`  
    Enable dynamic process support (`sc_spawn`, `sc_bind`)
 

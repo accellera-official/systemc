@@ -116,11 +116,6 @@
 # ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
 #                               (default: ON)
 #
-# ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
-#                               processes, which is no longer supported due to
-#                               changes as of IEEE Std. 1666-2011 (see
-#                               sc_event::notify, 5.10.6).
-#
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
@@ -276,8 +271,6 @@ option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatib
 
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
-option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes as of IEEE Std. 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
-
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
@@ -311,8 +304,6 @@ option(ENABLE_REGRESSION "Build regression tests" OFF)
 
 mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
                  ENABLE_ASSERTIONS
-                 ENABLE_EARLY_MAXTIME_CREATION
-                 ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -615,12 +606,6 @@ endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
-message (STATUS "ENABLE_EARLY_MAXTIME_CREATION = ${ENABLE_EARLY_MAXTIME_CREATION}")
-if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  message ("ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
-else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
-endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
 if (ENABLE_PTHREADS)
   message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
 else (ENABLE_PTHREADS)
