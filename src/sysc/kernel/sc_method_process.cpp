@@ -604,8 +604,7 @@ void sc_method_process::throw_user( const sc_throw_it_helper& helper,
 // false if not.
 //
 // If the triggering process is the same process, the trigger is
-// ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-// is defined.
+// ignored as well.
 //
 // Notes:
 //   (1) See note 1 in the header for sc_simcontext::prepare_to_simulate (in 
@@ -623,13 +622,11 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
     //       execution, but leave the sensitivity in place.
     //   (b) If this method is already runnable can't trigger an event.
 
-#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
     {
         report_immediate_self_notification();
         return false;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     if( is_runnable() )
         return true;

@@ -615,17 +615,6 @@ settings to all build configurations.
    See : Environment variable `SC_VCD_SCOPES`
 
 
- * `SC_DISABLE_VIRTUAL_BIND`  
-   Keep the "bind" function of sc_ports non-virtual
-
-   When this symbol is defined, the `bind()` function in sc_ports is
-   kept non-virtual (although it is required to be `virtual` as of
-   IEEE Std. 1666-2011).
-
-   Note: _This symbol needs to be consistently defined in the library
-     and any application linking against the built library._
-
-
  * `SC_DISABLE_COPYRIGHT_MESSAGE`  
    Do not print the copyright message when starting the application
 
@@ -647,21 +636,6 @@ settings to all build configurations.
    definition of `NDEBUG`.
 
 
- * `SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS`
-   Allow a process to trigger itself immediately
-
-   Allow a method process to trigger itself immediately by using
-   ```cpp
-   next_trigger( ev ); // or a static sensitivity
-   ev.notify();
-   ```
-
-   This behavior has been disabled by default as of IEEE Std. 1666-2011 and
-   can be reenabled by this option.
-
-   Note: _Only effective during library build._
-
-
  * `SC_INCLUDE_FX`  
    Enable SystemC fixed-point data-types
 
@@ -674,18 +648,6 @@ settings to all build configurations.
          later use of the fixed-point data-types in an application._
 
    Note: _Can be optionally set per translation unit in an application._
-
-
- * `SC_INCLUDE_STRSTREAM`  
-   Include (deprecated) `<strstream>` header from `<systemc.h>`
-
-   Pre-standard C++ compilers had support for an old stringstream
-   implementation called `strstream`.  In the unlikely case that your
-   application still relies on this deprecated class and that `<systemc.h>`
-   includes this header for you automatically, you now need to define this
-   symbol when building your application.
-
-   Note: _Only effective when building an application._
 
 
  * `SC_INCLUDE_WINDOWS_H`  

@@ -460,7 +460,6 @@ AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 dnl
 dnl pkg-config setup
 dnl
-LIBCONFIG_DEFINES=
 PKGCONFIG_DEFINES=
 PKGCONFIG_CFLAGS=
 PKGCONFIG_LDPRIV=
@@ -478,21 +477,10 @@ dnl check for additional (header+lib) compiler flags
 dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
-AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],dnl
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
-   sysc_non_1666=yes])
-
-dnl
-dnl check for additional library compiler flags (documentation only)
-dnl
-AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],dnl
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
-   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
 dnl
-AC_SUBST(LIBCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_CFLAGS)
 AC_SUBST(PKGCONFIG_LDPRIV)
@@ -562,14 +550,11 @@ AS_IF([test -n "${sysc_flags}"],dnl
 [sysc_flags="${as_nl} User-provided command-line flags :${as_nl}${sysc_flags}"])
 
 dnl prepare printing of additional settings
-AS_IF([test -n "${PKGCONFIG_DEFINES}" -o -n "${LIBCONFIG_DEFINES}"],[dnl
+AS_IF([test -n "${PKGCONFIG_DEFINES}"],[dnl
 sysc_additional="${as_nl} Detected additional settings:"
 AS_IF([test -n "${PKGCONFIG_DEFINES}"],dnl
   [AS_VAR_APPEND([sysc_additional],dnl
                  ["${as_nl}    ${PKGCONFIG_DEFINES}"])])
-AS_IF([test -n "${LIBCONFIG_DEFINES}"],dnl
-  [AS_VAR_APPEND([sysc_additional],dnl
-                 ["${as_nl}    ${LIBCONFIG_DEFINES}"])])
 AS_VAR_APPEND([sysc_additional],["${as_nl}"])dnl
 ]) dnl additional settings
 
