@@ -30,8 +30,6 @@
 
 // Basic functionality of process control methods
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using sc_core::sc_process_handle;
 using sc_core::sc_event;

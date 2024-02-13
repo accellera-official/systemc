@@ -30,8 +30,6 @@
 
 // Method processes with sync and async resets, reset_event, sc_event_or_list
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

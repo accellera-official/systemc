@@ -35,12 +35,6 @@
 
  *****************************************************************************/
 
-//#define USE_BOOST
-
-#ifndef USE_BOOST
-#  define SC_INCLUDE_DYNAMIC_PROCESSES
-#endif
-
 #include "systemc.h"
 
 #include "sysc/utils/sc_vector.h"
@@ -102,13 +96,7 @@ DUT::DUT( sc_module_name )
 {
   arr.init( 3, fill_array );
 
-  sigs.init( inps.size()
-#if defined( SC_INCLUDE_DYNAMIC_PROCESSES )
-	, sc_bind( &DUT::init_sig_bind, this, sc_unnamed::_1, sc_unnamed::_2 )
-#elif defined( USE_BOOST )
-	, boost::bind( &DUT::init_sig_bind, this, _1, _2 )
-#endif
-  );
+  sigs.init( inps.size(), sc_bind( &DUT::init_sig_bind, this, sc_unnamed::_1, sc_unnamed::_2 ) );
 }
 
 int sc_main(int , char* [])

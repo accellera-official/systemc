@@ -25,7 +25,6 @@
 
  *****************************************************************************/
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
 
 struct my_module : public sc_core::sc_module {

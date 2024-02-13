@@ -2,8 +2,6 @@
 // General tests combining features of SystemC 2.1 and 1666
 
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using sc_core::sc_interface;
 using sc_core::sc_object;

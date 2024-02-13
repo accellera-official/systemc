@@ -31,8 +31,6 @@
 // sc_start with event starvation policy
 // sc_pending_activity and friends
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using namespace sc_core;
 using std::cout;

@@ -30,8 +30,6 @@
 
 // sc_pause, sc_get_status, sc_is_running
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 using namespace sc_core;
 using std::cout;

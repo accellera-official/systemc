@@ -30,8 +30,6 @@
 
 // sync_reset_on/off
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

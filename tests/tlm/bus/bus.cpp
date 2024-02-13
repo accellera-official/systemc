@@ -16,7 +16,6 @@
   permissions and limitations under the License.
 
  *****************************************************************************/
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>
 #include "tlm.h"
 
