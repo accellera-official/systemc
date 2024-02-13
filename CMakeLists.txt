@@ -113,11 +113,6 @@
 # DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
 #                               the application. (default: OFF)
 #
-# DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
-#                               functions of ports and exports as "virtual",
-#                               which is incompatible with old TLM library
-#                               implementations (< 2.0.2).
-#
 # ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
 #                               (default: ON)
 #
@@ -279,8 +274,6 @@ option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when start
 
 option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
 
-option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
-
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
 option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes as of IEEE Std. 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
@@ -317,7 +310,6 @@ option(ENABLE_EXAMPLES   "Build examples" ${PROJECT_IS_TOP_LEVEL})
 option(ENABLE_REGRESSION "Build regression tests" OFF)
 
 mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
-                 DISABLE_VIRTUAL_BIND
                  ENABLE_ASSERTIONS
                  ENABLE_EARLY_MAXTIME_CREATION
                  ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
@@ -622,11 +614,6 @@ if (NOT GENERATOR_IS_MULTI_CONFIG)
 endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
-if (DISABLE_VIRTUAL_BIND)
-  message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
-else (DISABLE_VIRTUAL_BIND)
-  message (STATUS "DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
-endif (DISABLE_VIRTUAL_BIND)
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
 message (STATUS "ENABLE_EARLY_MAXTIME_CREATION = ${ENABLE_EARLY_MAXTIME_CREATION}")
 if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)

@@ -448,7 +448,6 @@ target_compile_features(systemc PUBLIC cxx_std_17)
 target_compile_definitions (
   systemc
   PUBLIC
-  $<$<BOOL:${DISABLE_VIRTUAL_BIND}>:SC_DISABLE_VIRTUAL_BIND>
   $<$<BOOL:${WIN32}>:WIN32>
   $<$<AND:$<BOOL:${BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
     SC_WIN_DLL>
