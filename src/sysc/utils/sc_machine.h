@@ -31,15 +31,19 @@
 #define SC_MACHINE_H
 
 #include <climits>
-#include "sysc/packages/boost/detail/endian.hpp"
 
 // ----------------------------------------------------------------------------
 //  Little or big endian machine?
 // ----------------------------------------------------------------------------
 
-#if defined( SC_BOOST_LITTLE_ENDIAN )
+#if defined(_MSC_VER) && !defined(__BYTE_ORDER__)
+// Quoting from https://learn.microsoft.com/en-us/cpp/standard-library/bit-enum?view=msvc-170#remarks
+//    All native scalar types are little-endian for the platforms that
+//    Microsoft Visual C++ targets (x86, x64, ARM, ARM64).
 #   define SC_LITTLE_ENDIAN
-#elif defined( SC_BOOST_BIG_ENDIAN )
+#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#   define SC_LITTLE_ENDIAN
+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #   define SC_BIG_ENDIAN
 #else
 #   error "Could not detect the endianness of the CPU."
