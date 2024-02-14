@@ -29,27 +29,19 @@
 #ifndef SC_VECTOR_H_INCLUDED_
 #define SC_VECTOR_H_INCLUDED_
 
-#include <vector>
+#include <algorithm> // std::swap
 #include <iterator>
 #include <string>
-#include <algorithm> // std::swap
+#include <type_traits>
+#include <vector>
 
 #include "sysc/kernel/sc_object.h"
-#include "sysc/utils/sc_meta.h"
 #include "sysc/kernel/sc_stage_callback_if.h"
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::vector
 #endif
-
-#define SC_RPTYPE_(Type)                                   \
-  ::sc_core::sc_meta::remove_special_fptr         \
-    < ::sc_core::sc_meta::special_result& (*) Type >::type::value
-
-#define SC_ENABLE_IF_( Cond )                              \
-  typename ::sc_core::sc_meta::enable_if                   \
-    < SC_RPTYPE_(Cond) >::type * = NULL
 
 namespace sc_core {
 // forward declarations
@@ -177,13 +169,19 @@ private:
 
 }; // sc_vector_base
 
+// helper check for constness
+template< typename CT, typename T >
+inline constexpr bool sc_is_more_const_v =
+     std::is_same_v<std::remove_const_t<CT>, std::remove_const_t<T>> &&
+     std::is_const_v<CT> >= std::is_const_v<T>;
+
 // iterator access adapters
 template< typename ElementType >
 struct sc_direct_access
 {
-  typedef ElementType  element_type;
-  typedef element_type type;
-  typedef typename sc_meta::remove_const<type>::type plain_type;
+  typedef ElementType               element_type;
+  typedef element_type              type;
+  typedef std::remove_const_t<type> plain_type;
 
   typedef sc_direct_access< type >             policy;
   typedef sc_direct_access< plain_type >       non_const_policy;
@@ -191,12 +189,9 @@ struct sc_direct_access
 
   sc_direct_access(){}
   // convert from any policy to (const) direct policy
-  template<typename U>
-  sc_direct_access( const U&
-    , SC_ENABLE_IF_((
-        sc_meta::is_more_const<type,typename U::policy::element_type>
-    )) )
-  {}
+  template< typename U
+          , typename = std::enable_if_t<sc_is_more_const_v<type, typename U::policy::element_type>>>
+  sc_direct_access( const U& ) {}
 
   type* get( type* this_ ) const
     { return this_; }
@@ -214,8 +209,8 @@ class sc_member_access
     typedef AccessType  access_type;
     typedef access_type (ElementType::*member_type);
     typedef access_type type;
-    typedef typename sc_meta::remove_const<type>::type plain_type;
-    typedef typename sc_meta::remove_const<ElementType>::type plain_elem_type;
+    typedef std::remove_const_t<type> plain_type;
+    typedef std::remove_const_t<ElementType> plain_elem_type;
 
     typedef sc_member_access< element_type, access_type > policy;
     typedef sc_member_access< plain_elem_type, plain_type >
@@ -248,8 +243,8 @@ class sc_vector_iter
   typedef typename AccessPolicy::non_const_policy  non_const_policy;
   typedef typename AccessPolicy::const_policy      const_policy;
 
-  typedef typename sc_meta::remove_const<ElementType>::type plain_type;
-  typedef const plain_type                                  const_plain_type;
+  typedef std::remove_const_t<ElementType> plain_type;
+  typedef const plain_type                 const_plain_type;
   typedef typename sc_direct_access<plain_type>::const_policy
     const_direct_policy;
 
@@ -302,12 +297,9 @@ public:
   //       tailored towards sc_vector(_iter), should the need arise.
   //
   // See also: sc_direct_access conversion constructor
-  template< typename It >
-  sc_vector_iter( const It& it
-    , SC_ENABLE_IF_((
-        sc_meta::is_more_const< element_type
-                              , typename It::policy::element_type >
-      )) )
+  template< typename It
+          , typename = std::enable_if_t<sc_is_more_const_v<element_type, typename It::policy::element_type>>>
+  sc_vector_iter( const It& it )
     : access_policy( it.get_policy() ), it_( it.it_ )
   {}
 
