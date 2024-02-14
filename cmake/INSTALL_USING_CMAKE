@@ -144,74 +144,7 @@ OS/processor/compiler tuple.
 The build process can be configured through the configuration
 variables offered to the user in the CMake console and GUI (ccmake and
 cmake-gui, respectively). Each variable is annotated with a brief
-documentation string. The most important variables are:
-
-BUILD_SHARED_LIBS             Build shared instead of static libraries
-                              (default: ON if not targetting Windows).
-
-BUILD_SOURCE_DOCUMENTATION    Build source code documentation using Doxygen
-                              (default: OFF).
-
-CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
-                              generators. (default: Release).
-
-CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-                              values are 98, 11, 14, and 17. (default: 98)
-
-CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
-                              is a requirement. (default: ON)
-
-CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
-                              installation (defaults to $ENV{SYSTEMC_HOME}
-                              if set to an absolute path and otherwise to either
-                              /opt/systemc/ (Unix-like platforms including
-                              CYGWIN), $ENV{ProgramFiles}/SystemC/ (on Windows
-                              systems), or ${CMAKE_INSTALL_PREFIX}/systemc.
-
-CMAKE_OSX_ARCHITECTURES       Architectures for cross-compilation on Mac OS X
-                              (default: empty, i.e., only for the system
-                              processor).
-
-CMAKE_VERBOSE_MAKEFILE        Generate a verbose Makefile (default: OFF).
-
-DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
-                              the application. (default: OFF)
-
-DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
-                              functions of ports and exports as "virtual",
-                              which is incompatible with old TLM library
-                              implementations (< 2.0.2).
-
-ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
-                              (default: ON)
-
-ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
-                              processes, which is no longer supported due to
-                              changes in IEEE Std 1666-2011 (see
-                              sc_event::notify, 5.10.6).
-
-ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
-                              of QuickThreads on Unix or Fiber on Windows.
-
-SystemC_TARGET_ARCH           Target architecture according to the
-                              Accellera SystemC conventions set either from
-                              $ENV{SYSTEMC_TARGET_ARCH}, $ENV{SYSTEMC_ARCH},
-                              or detected by CMake.
-
-INSTALL_TO_LIB_BUILD_TYPE_DIR Install the libraries to lib-${CMAKE_BUILD_TYPE}
-                              to enable parallel installation of the different
-                              build variants. (default: OFF)
-
-INSTALL_TO_LIB_TARGET_ARCH_DIR  Install the libraries to lib-<target-arch>
-                              to facilitate linking applications, which
-                              build systems assume to find SystemC in
-                              lib-<target-arch>. (default: OFF)
-
-INSTALL_LIB_TARGET_ARCH_SYMLINK  On Unix, install a symlink lib-<target-arch>
-                              to lib-${CMAKE_BUILD_TYPE} facilitating the
-                              linking of user code, which build system assumes
-                              to find the SystemC libraries under
-                              lib-<target-arch>. (default: OFF)
+documentation string in the CMakeLists.txt at the top level.
 
 Other configuration variables will be proposed by CMake depending on the OS
 and detected processor, compiler, and libraries. For more information, please

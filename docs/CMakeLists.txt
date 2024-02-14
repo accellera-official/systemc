@@ -52,7 +52,7 @@ foreach (DOC_FILE ${DOC_FILES})
            OPTIONAL)
 endforeach (DOC_FILE ${DOC_FILES})
 
-if (BUILD_SOURCE_DOCUMENTATION)
+if (SC_BUILD_SOURCE_DOCUMENTATION)
   find_package (Doxygen REQUIRED)
   add_custom_target (doxygen ALL
                      DEPENDS doxygen-sysc doxygen-tlm)
@@ -108,4 +108,4 @@ if (BUILD_SOURCE_DOCUMENTATION)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/tlm/doxygen/tlm.tag
            DESTINATION ${CMAKE_INSTALL_DOCDIR}/tlm/doxygen
            COMPONENT doc)
-endif (BUILD_SOURCE_DOCUMENTATION)
+endif (SC_BUILD_SOURCE_DOCUMENTATION)

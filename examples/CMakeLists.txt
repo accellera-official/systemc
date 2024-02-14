@@ -38,7 +38,7 @@
 #
 ###############################################################################
 
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.5)
 
 # Only built under "check" target
 #  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
@@ -53,12 +53,12 @@ set_target_properties(check PROPERTIES FOLDER "examples")
 # Common definitions for all examples.
 ########################################################################
 
-if (DEBUG_SYSTEMC)
+if (SC_DEBUG_SYSTEMC)
   add_definitions (-DDEBUG_SYSTEMC)
-endif (DEBUG_SYSTEMC)
-if (ENABLE_ASSERTIONS)
+endif (SC_DEBUG_SYSTEMC)
+if (SC_ENABLE_ASSERTIONS)
   add_definitions (-DSC_ENABLE_ASSERTIONS)
-endif (ENABLE_ASSERTIONS)
+endif (SC_ENABLE_ASSERTIONS)
 
 if (WIN32)
   # Not sure, if these preprocessor definitions are strictly required to build
