@@ -524,14 +524,6 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_ver.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_wait.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_wait_cthread.h" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\bind.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\config.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\detail\endian.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\mem_fn.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\ref.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\enable_if.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view_fwd.hpp" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace_file_base.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_tracing_ids.h" />
