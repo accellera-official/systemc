@@ -54,7 +54,7 @@ endif (QT_ARCH STREQUAL "sparc")
 # Build rules for SystemC library
 ###############################################################################
 
-add_library (systemc sysc/communication/sc_clock.cpp
+add_library (systemc ${SC_LIB_TYPE} sysc/communication/sc_clock.cpp
                      sysc/communication/sc_event_finder.cpp
                      sysc/communication/sc_event_queue.cpp
                      sysc/communication/sc_export.cpp
@@ -451,7 +451,7 @@ target_compile_definitions (
   PUBLIC
   $<$<BOOL:${SC_DISABLE_VIRTUAL_BIND}>:SC_DISABLE_VIRTUAL_BIND>
   $<$<BOOL:${WIN32}>:WIN32>
-  $<$<AND:$<BOOL:${SC_BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
+  $<$<AND:$<STREQUAL:${SC_LIB_TYPE},SHARED>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
     SC_WIN_DLL>
   $<$<BOOL:${SC_ALLOW_DEPRECATED_IEEE_API}>:SC_ALLOW_DEPRECATED_IEEE_API>
   PRIVATE
