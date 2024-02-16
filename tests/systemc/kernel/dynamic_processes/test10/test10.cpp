@@ -42,7 +42,6 @@
 //  Andy Goodrich: first check-in.
 //
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "systemc.h"
 
 SC_MODULE(DUT)

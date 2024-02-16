@@ -16,7 +16,6 @@
   permissions and limitations under the License.
 
  *****************************************************************************/
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include "systemc"
 #include "tlm"
 #include "tlm_utils/simple_initiator_socket.h"

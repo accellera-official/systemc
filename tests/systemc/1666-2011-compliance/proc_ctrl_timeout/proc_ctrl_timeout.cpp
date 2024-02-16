@@ -30,8 +30,6 @@
 
 // Process control methods interacting with time-out and event lists
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

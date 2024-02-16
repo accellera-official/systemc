@@ -467,8 +467,7 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //       file sc_simcontext.cpp) for a diagram showing the state transitions 
 //       for processes.
 //   (2) If the triggering process is the same process, the trigger is
-//       ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-//       is defined.
+//       ignored as well.
 //------------------------------------------------------------------------------
 inline
 void
@@ -484,13 +483,11 @@ sc_thread_process::trigger_static()
           m_trigger_type != STATIC )
         return;
 
-#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
     {
         report_immediate_self_notification();
         return;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     if ( m_wait_cycle_n > 0 && THROW_NONE == m_throw_status )
     {

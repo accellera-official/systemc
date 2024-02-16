@@ -44,6 +44,7 @@
 #include <climits>
 #include <cmath> // math.h?
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -52,21 +53,9 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#if defined(__sun) || defined(__sun__)
-#   include <inttypes.h>
-#elif !defined(WIN32) && !defined(_WIN32)
-#   include <stdint.h>
-#endif
 #include <typeinfo>
 #include <utility>
 #include <vector>
-
-// C++11 deprecates std::gets, as it can't be used safely.
-// Compilers are starting to remove it from their headers.
-#if defined(__cplusplus) && (__cplusplus >= 201103L) || \
-    defined(_MSC_VER) && (_MSC_VER >= 1900)
-#define SC_NO_STDGETS_
-#endif
 
 // USINGS FOR I/O STREAM SUPPORT:
 
@@ -124,9 +113,6 @@
     using std::fputs;
     using std::getc;
     using std::getchar;
-#ifndef SC_NO_STDGETS_
-    using std::gets;
-#endif
     using std::putc;
     using std::putchar;
     using std::puts;
@@ -203,17 +189,6 @@
     using std::strerror;
     using std::strlen;
 
-// deprecated strstream support
-#if defined( SC_INCLUDE_STRSTREAM )
-#include <strstream>
-
-    using std::strstream;
-    using std::strstreambuf;
-    using std::istrstream;
-    using std::ostrstream;
-
-#endif // SC_INCLUDE_STRSTREAM
-
 // INCLUDE SYSTEMC DEFINITIONS for sc_dt AND sc_core NAMESPACES:
 
 #include "systemc"
@@ -267,87 +242,59 @@ using sc_dt::sc_logic_Z;
 using sc_dt::sc_logic_X;
 // #endif
 
-#ifdef SC_INCLUDE_FX
-    using sc_dt::sc_fxnum;
-    using sc_dt::sc_fxnum_bitref;
-    using sc_dt::sc_fxnum_fast;
-    using sc_dt::sc_fix;
-    using sc_dt::sc_fix_fast;
-    using sc_dt::sc_ufix;
-    using sc_dt::sc_ufix_fast;
-    using sc_dt::sc_fixed;
-    using sc_dt::sc_fixed_fast;
-    using sc_dt::sc_ufixed;
-    using sc_dt::sc_ufixed_fast;
-    using sc_dt::sc_fxval;
-    using sc_dt::sc_fxval_fast;
-    using sc_dt::sc_fxcast_switch;
-    using sc_dt::sc_fxcast_context;
-    using sc_dt::sc_fxtype_params;
-    using sc_dt::sc_fxtype_context;
-    using sc_dt::sc_q_mode;
-    using sc_dt::SC_RND;
-    using sc_dt::SC_RND_ZERO;
-    using sc_dt::SC_RND_MIN_INF;
-    using sc_dt::SC_RND_INF;
-    using sc_dt::SC_RND_CONV;
-    using sc_dt::SC_TRN;
-    using sc_dt::SC_TRN_ZERO;
-    using sc_dt::sc_o_mode;
-    using sc_dt::SC_SAT;
-    using sc_dt::SC_SAT_ZERO;
-    using sc_dt::SC_SAT_SYM;
-    using sc_dt::SC_WRAP;
-    using sc_dt::SC_WRAP_SM;
-    using sc_dt::sc_switch;
-    using sc_dt::SC_OFF;
-    using sc_dt::SC_ON;
-    using sc_dt::sc_fmt;
-    using sc_dt::SC_F;
-    using sc_dt::SC_E;
-    using sc_dt::sc_context_begin;
-    using sc_dt::SC_NOW;
-    using sc_dt::SC_LATER;
-#endif // SC_INCLUDE_FX
 
-#if 0 // defined( _MSC_VER ) // supported versions of MSVC should support ADL
-
-    using sc_dt::equal;
-    using sc_dt::not_equal;
-    using sc_dt::b_not;
-    using sc_dt::b_and;
-    using sc_dt::b_or;
-    using sc_dt::b_xor;
-    using sc_dt::lrotate;
-    using sc_dt::rrotate;
-    using sc_dt::reverse;
-    using sc_dt::concat;
-    using sc_dt::and_reduce;
-    using sc_dt::or_reduce;
-    using sc_dt::xor_reduce;
-    using sc_dt::nand_reduce;
-    using sc_dt::nor_reduce;
-    using sc_dt::xnor_reduce;
-
-#endif // defined( _MSC_VER )
+using sc_dt::sc_fxnum;
+using sc_dt::sc_fxnum_bitref;
+using sc_dt::sc_fxnum_fast;
+using sc_dt::sc_fix;
+using sc_dt::sc_fix_fast;
+using sc_dt::sc_ufix;
+using sc_dt::sc_ufix_fast;
+using sc_dt::sc_fixed;
+using sc_dt::sc_fixed_fast;
+using sc_dt::sc_ufixed;
+using sc_dt::sc_ufixed_fast;
+using sc_dt::sc_fxval;
+using sc_dt::sc_fxval_fast;
+using sc_dt::sc_fxcast_switch;
+using sc_dt::sc_fxcast_context;
+using sc_dt::sc_fxtype_params;
+using sc_dt::sc_fxtype_context;
+using sc_dt::sc_q_mode;
+using sc_dt::SC_RND;
+using sc_dt::SC_RND_ZERO;
+using sc_dt::SC_RND_MIN_INF;
+using sc_dt::SC_RND_INF;
+using sc_dt::SC_RND_CONV;
+using sc_dt::SC_TRN;
+using sc_dt::SC_TRN_ZERO;
+using sc_dt::sc_o_mode;
+using sc_dt::SC_SAT;
+using sc_dt::SC_SAT_ZERO;
+using sc_dt::SC_SAT_SYM;
+using sc_dt::SC_WRAP;
+using sc_dt::SC_WRAP_SM;
+using sc_dt::sc_switch;
+using sc_dt::SC_OFF;
+using sc_dt::SC_ON;
+using sc_dt::sc_fmt;
+using sc_dt::SC_F;
+using sc_dt::SC_E;
+using sc_dt::sc_context_begin;
+using sc_dt::SC_NOW;
+using sc_dt::SC_LATER;
 
 
 // USINGS FOR sc_core:
 //
 // The explicit using for ::sc_core::wait is to remove an ambiguity with
-// the constructor for the system's union wait on Unix and Linux. This
-// causes problems with aCC, so users of aCC should explicitly select
-// the SystemC wait functions using ::sc_core::wait(...). This is actually
-// a good idea for SystemC programmers in general.
+// the constructor for the system's union wait on Unix and Linux.
+// It is generally advisable to explicitly select the SystemC wait
+// functions using ::sc_core::wait(...).
 
 using namespace sc_core;
-
-#if !defined( __HP_aCC )
-    using ::sc_core::wait;
-#endif // !defined( __HP_aCC )
+using ::sc_core::wait;
 
 typedef ::std::string sc_string;
-
-#undef SC_NO_STDGETS_
 
 #endif // SYSTEMC_H

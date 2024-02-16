@@ -38,51 +38,14 @@
 #
 ###############################################################################
 
-cmake_minimum_required (VERSION 3.0)
+if (NOT ENABLE_EXAMPLES)
+  return()
+endif()
 
-# Only built under "check" target
-#  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -C "${CMAKE_BUILD_TYPE}")
-enable_testing()
+set(TEST_CATEGORY examples)
+include(SystemCTesting)
 
-set_property(GLOBAL PROPERTY USE_FOLDERS TRUE)
-set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL TRUE)
-set_target_properties(check PROPERTIES FOLDER "examples")
-
-########################################################################
-# Common definitions for all examples.
-########################################################################
-
-if (DEBUG_SYSTEMC)
-  add_definitions (-DDEBUG_SYSTEMC)
-endif (DEBUG_SYSTEMC)
-if (ENABLE_ASSERTIONS)
-  add_definitions (-DSC_ENABLE_ASSERTIONS)
-endif (ENABLE_ASSERTIONS)
-
-if (WIN32)
-  # Not sure, if these preprocessor definitions are strictly required to build
-  # console applications with Visual Studio. Instead of _CONSOLE, _LIB may be
-  # more appropriate. Maybe also WIN32, _WIN32, _WIN64 needs to be #defined to
-  # generate correct VS projects.
-  #
-  # Resources:
-  # <http://social.msdn.microsoft.com/Forums/en-US/vclanguage/thread/9e45a760-f2b8-47b2-8b8c-dfeeb1b24c92/>.
-  # <http://www.itk.org/Bug/view.php?id=13292>
-  # <http://www.sunlightd.com/Archive/Windows/FAQ.aspx>
-  # <http://msdn.microsoft.com/en-us/library/9yb4317s(v=vs.80).aspx>
-  # <http://www.windows-api.com/microsoft/VC-MFC/32308312/preprocessor-definitions-for-x64-projects.aspx>
-  add_definitions (-D_CONSOLE -DNOGDI)
-endif (WIN32)
-
-# TODO: Set MSVC warning level to 3 and 4 for the individual examples
-# and disable selected warnings (e.g., 4996). See the individual
-# *.vcxproj files for details.
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-  add_compile_options(-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable)
-elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  add_compile_options(/W3 /wd4244 /wd4267 /wd4996)
-endif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+###############################################################################
 
 # If possible, find a more powerful platform-specific diff tool than "cmake -E compare_files"
 find_program (DIFF_COMMAND
@@ -134,6 +97,7 @@ function (configure_and_add_test TEST_PROG)
     endif (NOT EXISTS ${TEST_GOLDEN})
   endif ("${TEST_GOLDEN}" STREQUAL "")
 
+  set(TEST_NAME ${TEST_NAME}${TEST_SUFFIX})
   add_test (NAME ${TEST_NAME}
             COMMAND ${CMAKE_COMMAND} "-DTEST_EXE=$<TARGET_FILE:${TEST_PROG}>"
                                      "-DTEST_DIR=${CMAKE_CURRENT_BINARY_DIR}"
@@ -142,8 +106,8 @@ function (configure_and_add_test TEST_PROG)
                                      "-DTEST_FILTER=${TEST_FILTER}"
                                      "-DDIFF_COMMAND=${DIFF_COMMAND}"
                                      "-DDIFF_OPTIONS=${DIFF_OPTIONS}"
-                                     -P ${PROJECT_SOURCE_DIR}/cmake/run_test.cmake)
-  add_dependencies(check ${TEST_PROG})
+                                     -P ${PROJECT_SOURCE_DIR}/cmake/run-example.cmake)
+  add_dependencies(all-examples ${TEST_PROG})
   set_tests_properties (${TEST_NAME}
                         PROPERTIES FAIL_REGULAR_EXPRESSION "^[*][*][*]ERROR")
   set_target_properties(${TEST_PROG} PROPERTIES FOLDER "${TEST_FOLDER}")

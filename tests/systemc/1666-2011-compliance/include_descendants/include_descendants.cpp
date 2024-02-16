@@ -30,8 +30,6 @@
 
 // Process control methods include_descendants argument
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

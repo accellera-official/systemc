@@ -146,11 +146,6 @@ To install SystemC on a UNIX system, do the following steps:
      ../configure 'CXXFLAGS=-std=c++17'
      ```
 
-     SystemC 3.0.0 includes a fixed-point package that is always built.
-     When compiling your applications with fixed-point types, you still have
-     to use compiler flag `-DSC_INCLUDE_FX`.  Note that compile times might
-     increase when using this compiler flag.
-
      In case you want to install the package in another place than the
      top level directory, configure the package e.g. as follows:
 
@@ -615,17 +610,6 @@ settings to all build configurations.
    See : Environment variable `SC_VCD_SCOPES`
 
 
- * `SC_DISABLE_VIRTUAL_BIND`  
-   Keep the "bind" function of sc_ports non-virtual
-
-   When this symbol is defined, the `bind()` function in sc_ports is
-   kept non-virtual (although it is required to be `virtual` as of
-   IEEE Std. 1666-2011).
-
-   Note: _This symbol needs to be consistently defined in the library
-     and any application linking against the built library._
-
-
  * `SC_DISABLE_COPYRIGHT_MESSAGE`  
    Do not print the copyright message when starting the application
 
@@ -645,61 +629,6 @@ settings to all build configurations.
    preprocessor symbol (when building the library and/or an application),
    the `sc_assert()` checks are always enabled, irrespectively of the
    definition of `NDEBUG`.
-
-
- * `SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS`
-   Allow a process to trigger itself immediately
-
-   Allow a method process to trigger itself immediately by using
-   ```cpp
-   next_trigger( ev ); // or a static sensitivity
-   ev.notify();
-   ```
-
-   This behavior has been disabled by default as of IEEE Std. 1666-2011 and
-   can be reenabled by this option.
-
-   Note: _Only effective during library build._
-
-
- * `SC_INCLUDE_DYNAMIC_PROCESSES`  
-   Enable dynamic process support (`sc_spawn`, `sc_bind`)
-
-   To improve compilation times, the functions for spawing dynamic
-   processes are not included by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use dynamically spawned processes.
-
-   Note 1: _Can be optionally set per translation unit in an application._
-
-   Note 2: _Some TLM convenience sockets require this feature and define
-           the symbol for you if needed._
-
-
- * `SC_INCLUDE_FX`  
-   Enable SystemC fixed-point data-types
-
-   To improve compilation times, the fixed-point data-types are not enabled
-   by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use the SystemC fixed-point types.
-
-   Note: _Is by default always defined during the library build to enable
-         later use of the fixed-point data-types in an application._
-
-   Note: _Can be optionally set per translation unit in an application._
-
-
- * `SC_INCLUDE_STRSTREAM`  
-   Include (deprecated) `<strstream>` header from `<systemc.h>`
-
-   Pre-standard C++ compilers had support for an old stringstream
-   implementation called `strstream`.  In the unlikely case that your
-   application still relies on this deprecated class and that `<systemc.h>`
-   includes this header for you automatically, you now need to define this
-   symbol when building your application.
-
-   Note: _Only effective when building an application._
 
 
  * `SC_INCLUDE_WINDOWS_H`  

@@ -56,10 +56,7 @@
 #include "sysc/tracing/sc_trace.h"
 
 
-namespace sc_dt
-{
-
-#ifdef SC_INCLUDE_FX
+namespace sc_dt {
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signed
@@ -352,13 +349,7 @@ sc_uint_base::operator = ( const sc_fxnum_fast& v )
     return *this;
 }
 
-
-#endif
-
-
 } // namespace sc_dt
-
-
 #endif
 
 // Taf!

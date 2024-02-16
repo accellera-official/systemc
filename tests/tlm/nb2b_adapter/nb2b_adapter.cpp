@@ -4,8 +4,6 @@
 
 #include <iomanip>
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include "systemc"
 using namespace sc_core;
 using namespace sc_dt;

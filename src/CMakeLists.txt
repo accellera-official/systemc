@@ -38,6 +38,7 @@
 #
 ###############################################################################
 
+cmake_minimum_required(VERSION 3.8) # cxx_std_17
 
 ###############################################################################
 # Configure QuickThreads
@@ -57,47 +58,49 @@ endif (QT_ARCH STREQUAL "sparc")
 function(add_systemc_library libName scBuildDefine)
 
     add_library(${libName} ${ARGN})
-    target_compile_features(${libName} PUBLIC cxx_std_17)
 
-    target_compile_definitions(
-            ${libName}
-            PUBLIC
-            $<$<BOOL:${DISABLE_VIRTUAL_BIND}>:SC_DISABLE_VIRTUAL_BIND>
-            $<$<BOOL:${WIN32}>: WIN32>
-            $<$<AND:$<BOOL:${BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>: SC_WIN_DLL>
-            PRIVATE
-            ${scBuildDefine}
-            SC_INCLUDE_FX
-            $<$<BOOL:${DEBUG_SYSTEMC}>: DEBUG_SYSTEMC>
-            $<$<BOOL:${DISABLE_ASYNC_UPDATES}>: SC_DISABLE_ASYNC_UPDATES>
-            $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>: SC_DISABLE_COPYRIGHT_MESSAGE>
-            $<$<BOOL:${DISABLE_VCD_SCOPES}>: SC_DISABLE_VCD_SCOPES>
-            $<$<BOOL:${ENABLE_ASSERTIONS}>: SC_ENABLE_ASSERTIONS>
-            $<$<BOOL:${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}>: SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS>
-            $<$<BOOL:${ENABLE_PTHREADS}>: SC_USE_PTHREADS>
-            $<$<BOOL:${HAVE_POSIX_MEMALIGN}>:SC_HAVE_POSIX_MEMALIGN>
-            $<$<BOOL:${ENABLE_LEGACY_MEM_MGMT}>:SC_LEGACY_MEM_MGMT>
-            $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>: SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
-            $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
+    target_compile_features(
+        ${libName}
+        PUBLIC
+        cxx_std_17)
+
+    target_compile_definitions (
+        ${libName}
+        PUBLIC
+        $<$<BOOL:${WIN32}>:WIN32>
+        $<$<AND:$<BOOL:${BUILD_SHARED_LIBS}>,$<OR:$<BOOL:${WIN32}>,$<BOOL:${CYGWIN}>>>:
+        SC_WIN_DLL>
+        $<$<BOOL:${ALLOW_DEPRECATED_IEEE_API}>:SC_ALLOW_DEPRECATED_IEEE_API>
+        PRIVATE
+        ${scBuildDefine}
+        $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
+        $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
+        $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
+        $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
+        $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
+        $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
+        $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
+        SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
+        $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
 
     target_compile_options(
-            ${libName}
-            PUBLIC
-            $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
-            PRIVATE
-            $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-              -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
-            $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
-              -xassembler-with-cpp>
-            $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
-              -Qunused-arguments>
-            $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
-  
+        ${libName}
+        PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
+        PRIVATE
+        $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
+          -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
+        $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+          -xassembler-with-cpp>
+        $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
+          -Qunused-arguments>
+        $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4244 /wd4267 /wd4996>)
+
     target_include_directories(
-            ${libName}
-            PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+        ${libName}
+        PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
     if (APPLE)
         # It's OK that _sc_main, __sanitizer_start_switch_fiber, and
@@ -106,18 +109,20 @@ function(add_systemc_library libName scBuildDefine)
         -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
     endif(APPLE)
 
-    target_link_libraries(${libName} PUBLIC $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
+    target_link_libraries(
+        ${libName}
+        PUBLIC
+        $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:Threads::Threads>)
 
     set_target_properties(
-            ${libName}
-            PROPERTIES
-            LINKER_LANGUAGE CXX
-            VERSION ${SystemCLanguage_VERSION}
-            SOVERSION ${SystemCLanguage_SOVERSION}
-            INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+        ${libName}
+        PROPERTIES
+        LINKER_LANGUAGE CXX
+        VERSION ${SystemCLanguage_VERSION}
+        SOVERSION ${SystemCLanguage_SOVERSION}
+        INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
 
 endfunction(add_systemc_library)
-
 
 set(SYSTEMC_CORE_SRC
         systemc sysc/communication/sc_clock.cpp
@@ -262,28 +267,28 @@ set(SYSTEMC_CORE_SRC
         sysc/datatypes/fx/scfx_rep.h
         sysc/datatypes/fx/scfx_string.h
         sysc/datatypes/fx/scfx_utils.h
-        sysc/datatypes/int/sc_bigint.h 
-        sysc/datatypes/int/sc_bigint_inlines.h 
-        sysc/datatypes/int/sc_big_ops.h 
-        sysc/datatypes/int/sc_biguint.h 
-        sysc/datatypes/int/sc_biguint_inlines.h 
-        sysc/datatypes/int/sc_int.h 
-        sysc/datatypes/int/sc_int_base.h 
-        sysc/datatypes/int/sc_int_ids.h 
-        sysc/datatypes/int/sc_int_inlines.h 
-        sysc/datatypes/int/sc_length_param.h 
-        sysc/datatypes/int/sc_nbdefs.h 
-        sysc/datatypes/int/sc_nbutils.h 
-        sysc/datatypes/int/sc_signed.h 
-        sysc/datatypes/int/sc_signed_friends.h 
-        sysc/datatypes/int/sc_signed_inlines.h 
-        sysc/datatypes/int/sc_signed_ops.h 
-        sysc/datatypes/int/sc_uint.h 
-        sysc/datatypes/int/sc_uint_base.h 
-        sysc/datatypes/int/sc_uint_inlines.h 
-        sysc/datatypes/int/sc_unsigned.h 
-        sysc/datatypes/int/sc_unsigned_friends.h 
-        sysc/datatypes/int/sc_unsigned_inlines.h 
+        sysc/datatypes/int/sc_bigint.h
+        sysc/datatypes/int/sc_bigint_inlines.h
+        sysc/datatypes/int/sc_big_ops.h
+        sysc/datatypes/int/sc_biguint.h
+        sysc/datatypes/int/sc_biguint_inlines.h
+        sysc/datatypes/int/sc_int.h
+        sysc/datatypes/int/sc_int_base.h
+        sysc/datatypes/int/sc_int_ids.h
+        sysc/datatypes/int/sc_int_inlines.h
+        sysc/datatypes/int/sc_length_param.h
+        sysc/datatypes/int/sc_nbdefs.h
+        sysc/datatypes/int/sc_nbutils.h
+        sysc/datatypes/int/sc_signed.h
+        sysc/datatypes/int/sc_signed_friends.h
+        sysc/datatypes/int/sc_signed_inlines.h
+        sysc/datatypes/int/sc_signed_ops.h
+        sysc/datatypes/int/sc_uint.h
+        sysc/datatypes/int/sc_uint_base.h
+        sysc/datatypes/int/sc_uint_inlines.h
+        sysc/datatypes/int/sc_unsigned.h
+        sysc/datatypes/int/sc_unsigned_friends.h
+        sysc/datatypes/int/sc_unsigned_inlines.h
         sysc/datatypes/int/sc_vector_utils.h
         sysc/datatypes/misc/sc_concatref.h
         sysc/datatypes/misc/sc_value_base.h
@@ -506,7 +511,6 @@ set(SYSTEMC_CORE_SRC
         >
         )
 
-
 set(SYSTEMC_SC_MAIN_SRC
         systemc.h
         tlm.h
@@ -517,10 +521,11 @@ set(SYSTEMC_SC_MAIN_SRC
 
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-#   Windows DLLs can't contain unresolved symbols, so we need to spilt library into two:
-#         - ${SYSTEMC_DLL_TARGET}.dll is a shared library without unresolved symbols
-#         - systemc.lib contains main() and unresolved sc_main()
-#   Then we merge interface library ${SYSTEMC_DLL_TARGET}.lib into systemc.lib
+# Windows DLLs can't contain unresolved symbols, so we need to spilt library
+# into two:
+#  - ${SYSTEMC_DLL_TARGET}.dll is a shared library without unresolved symbols
+#  - systemc.lib contains main() and unresolved sc_main()
+# Then we merge interface library ${SYSTEMC_DLL_TARGET}.lib into systemc.lib
 
     set(SYSTEMC_DLL_TARGET systemc-${SystemCLanguage_VERSION})
 
@@ -574,7 +579,6 @@ install(TARGETS ${SYSTEMC_TARGETS} EXPORT SystemCLanguageTargets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT lib)
 
-
 ###############################################################################
 # Install rules for SystemC library
 ###############################################################################
@@ -583,7 +587,6 @@ install(TARGETS ${SYSTEMC_TARGETS} EXPORT SystemCLanguageTargets
 export (TARGETS ${SYSTEMC_TARGETS}
         NAMESPACE SystemC::
         FILE ${CMAKE_BINARY_DIR}/SystemCLanguageTargets.cmake)
-
 
 # Install the SystemC and TLM headers
 install (FILES systemc tlm

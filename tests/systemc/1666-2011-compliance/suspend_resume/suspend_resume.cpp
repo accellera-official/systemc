@@ -28,8 +28,6 @@
 //  Andy Goodrich: remove extraneous + prefixes from git diff.
 //
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

@@ -30,8 +30,6 @@
 
 // Method process uses suspends, resumes, disables, and enables itself
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
-
 #include <systemc>
 
 using namespace sc_core;

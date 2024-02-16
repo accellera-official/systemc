@@ -37,7 +37,6 @@
 
 // test of explicit conversions of the datatypes
 
-#define SC_INCLUDE_FX
 #include "systemc.h"
 
 

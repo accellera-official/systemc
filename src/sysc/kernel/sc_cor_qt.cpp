@@ -90,13 +90,9 @@ static std::size_t sc_pagesize()
 
 sc_cor_qt::~sc_cor_qt()
 {
-#ifdef SC_LEGACY_MEM_MGMT
-    std::free( m_stack );
-#else
     if ( m_stack ) {
         ::munmap( m_stack, m_stack_size );
     }
-#endif
 }
 
 // switch stack protection on/off
@@ -111,12 +107,6 @@ sc_cor_qt::stack_protect( bool enable )
     sc_assert( m_stack_size > ( 2 * pagesize ) );
 
     std::size_t sp_addr = reinterpret_cast<std::size_t>(m_stack);
-#ifndef SC_HAVE_POSIX_MEMALIGN
-    const std::size_t round_up_mask = pagesize - 1;
-    if( sp_addr & round_up_mask ) { // misaligned allocation
-        sp_addr = (sp_addr + round_up_mask) & ~round_up_mask;
-    }
-#endif // SC_HAVE_POSIX_MEMALIGN
 
 #ifdef QUICKTHREADS_GROW_DOWN
     // Stacks grow from high address down to low address
@@ -181,31 +171,14 @@ stack_alloc( void** buf, std::size_t* stack_size )
 
     // round up to multiple of alignment
     *stack_size = (*stack_size + round_up_mask) & ~round_up_mask;
+    sc_assert( *stack_size > (alignment * 2) );
 
-#ifdef SC_LEGACY_MEM_MGMT
-    #ifdef SC_HAVE_POSIX_MEMALIGN
-        if( 0 != posix_memalign( buf, alignment, *stack_size ) ) {
-            *buf = NULL; // allocation failed
-        }
-        return *buf;
-    #endif
-    *buf = std::malloc( *stack_size );
-    std::size_t sp_addr = reinterpret_cast<std::size_t>( *buf );
-    if( sp_addr & round_up_mask ) // misaligned allocation
-    {
-        sc_assert( *stack_size > (alignment * 2) );
-        sp_addr = (sp_addr + round_up_mask) & ~round_up_mask;
-        *stack_size -= alignment;
-    }
-    return reinterpret_cast<void*>( sp_addr );
-#else
     *buf = ::mmap( NULL, *stack_size, PROT_READ | PROT_WRITE,
                    MAP_PRIVATE | MAP_ANON, -1, 0 );
     if ( *buf == MAP_FAILED ) {
         *buf = NULL;
     }
     return *buf;
-#endif
 }
 
 // constructor

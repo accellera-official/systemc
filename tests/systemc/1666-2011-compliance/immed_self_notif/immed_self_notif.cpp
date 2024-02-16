@@ -30,7 +30,6 @@
 
 // Change to the semantics of immediate self-notification to match Verilog semantics
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc>
 
 using namespace sc_core;

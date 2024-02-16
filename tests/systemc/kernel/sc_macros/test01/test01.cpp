@@ -37,7 +37,6 @@
 
 // test of sc_abs<T> for all SystemC arithmetic datatypes
 
-#define SC_INCLUDE_FX
 #include "systemc.h"
 
 int
