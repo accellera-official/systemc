@@ -6,29 +6,20 @@ at http://accellera.org/about/policies-and-procedures.
 
 ## Repository setup
 
-The central source code repository of the Accellera SystemC implementation is
-hosted in two [Git][1] repositories at [GitHub][2].  The main
-repositories are **private** to the [`OSCI-WG` organization][3] and can be
-found at:
+The central source code repository of the Accellera SystemC reference
+implementation is hosted in two [Git][1] repositories at [GitHub][2].
 
- * https://github.com/OSCI-WG/systemc             (core SystemC library)
- * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
+The **public** repository can be found at:
 
-A read-only, **public** copy of these repositories can be found at
+ * https://github.com/accellera-official/systemc
 
- * https://github.com/accellera-official/systemc             (core SystemC library)
- * https://github.com/accellera-official/systemc-regressions (regression test suite)
+A **private** repository for Accellera memberscan be found at:
 
-Members of the GitHub [`OSCI-WG` organization][3] with the necessary access
-rights can clone the repositories via SSH from the locations
+ * https://github.com/OSCI-WG/systemc
 
-     git clone -o osci-wg git@github.com:OSCI-WG/systemc.git
-     git clone -o osci-wg git@github.com:OSCI-WG/systemc-regressions.git
-
-respectively.
-
-To obtain access to the repositories and the GitHub organization in general,
-LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>
+To obtain access to the private repository and the [`OSCI-WG` organization][3]
+in general, members of the Accellera SystemC Language Working Group (LWG) can
+contact the LWG chair at <mailto:lwg-chair@lists.accellera.org>
 including their GitHub account name.
 
 >  *Note:*
@@ -43,29 +34,30 @@ development process needed for collaboratively evolving the reference
 implementation of SystemC.
 
 
-### Relationship between private and public repositories
+### Relationship between public and private repositories
 
-New features and enhancements are developed by the LWG in the **private**
-repositories, see below.  Please check the [CONTRIBUTING.md][5] guidelines
-how to join Accellera and its working groups to contribute to the
-development of SystemC.
+The **public** repository contains the latest development version of the
+Accellera SystemC reference implementation, including bug fixes and other
+capabilities approved and released by the SystemC Language Working Group.
 
-The **public** repositories are typically updated only together with
-public releases of the Accellera SystemC reference implementation.
+>  *Note:*
+>  The development version in the main branch might differ from the latest
+>  [released](https://github.com/accellera-official/systemc/releases) or
+>  [tagged](https://github.com/accellera-official/systemc/tags)
+>  versions.  For the latest stable version, please use a release or tag.
 
-In-between public releases, bug fixes may be published via the public
-repositories as well.  In this case, the updated `public` branch
-including the new bug fixes, is then merged back into the `master`
-branch to make sure the fix is part of the next release.
+The **private** repository contains features or enhancements under development
+by the SystemC Language Working Group.
 
+Please check the [CONTRIBUTING.md][5] guidelines how to join Accellera and its
+working groups to contribute to the development of SystemC.
 
 ### Creating a personal fork
 
 In order to contribute changes to the different repositories, it is
 recommended to create personal (or company-based) [forks][6] of the
 repositories on GitHub and push the proposed changes (bugfixes,
-features, ...) there.  These forks are also only accessible to members
-of the [`OSCI-WG` GitHub organization][3].  Details of the intended
+features, ...) there.  Details of the intended
 work-flow are described in the next [section](#basic-branch-setup).
 It is convenient to add this GitHub fork as a remote to your local
 clone of the repository:
@@ -91,6 +83,9 @@ Git commands and workflow can be found [online][7].
 
 
 ## Development flow
+
+This section explains the development flow for the **private**
+repository.
 
 ### Basic branch setup
 
@@ -178,7 +173,7 @@ forked and checked out from the Accellera `master` branch:
 Then code up the new contribution.  Please try to facilitate code
 review by other Accellera members by logically grouping your changes into
 one commit per addressed issue. For the commit messages, please
-consider to follow these suggestions: 
+consider to follow these suggestions:
 
 >  *Note:* **Commit messages**
 >
@@ -226,7 +221,7 @@ clone of the repository
 
 After the contribution is accepted, it will be merged into the working group's
 `master` branch by the responsible source code maintainer.  This should
-be done with an explicit *merge commit*, to keep the individual 
+be done with an explicit *merge commit*, to keep the individual
 contributions separated:
 
       git merge --no-ff --log \
@@ -346,10 +341,10 @@ performed by the maintainer
         git merge --no-commit master
         git rm <new-internal-file...> # drop new or changed "private" files
         git commit -m "merge master branch for x.x.x release"
-        
-        *NOTE:* `.gitignore` has to be removed in this branch otherwise 
-                `Makefile.in`` files are missing in the commit as well 
-                as in the subsequent git archive step. 
+
+        *NOTE:* `.gitignore` has to be removed in this branch otherwise
+                `Makefile.in`` files are missing in the commit as well
+                as in the subsequent git archive step.
 
 3. **Update the Autoconf (and other auto-generated) files**
 
@@ -416,13 +411,11 @@ performed by the maintainer
 Open issues (bugs, cleanups, features) related to the reference
 implementation of SystemC/TLM are tracked via GitHub:
 
- * <https://github.com/OSCI-WG/systemc/issues>             (core library)
- * <https://github.com/OSCI-WG/systemc-regressions/issues> (regression tests)
+ * <https://github.com/OSCI-WG/systemc/issues>
 
 Some issues might be reported against the public repositories as well:
 
- * <https://github.com/accellera-official/systemc/issues>             (core library)
- * <https://github.com/accellera-official/systemc-regressions/issues> (regression tests)
+ * <https://github.com/accellera-official/systemc/issues>
 
 > *NOTE:* For issues discussed in the LWG, the internal issue tracker is preferred.
           An internal issue clone will be added for publicly reported issues.
@@ -442,36 +435,36 @@ different parts of the implementation:
 Additional labels are used to classify issues according to their
 severity (10 highest), according to the following guidelines:
 
- * `10-critical`  
+ * `10-critical`
    Show-stoppers that must be fixed, affects all (or at least most)
    platforms and violates fundamental specifications for most applications.
 
- * `09-serious`  
+ * `09-serious`
    At least one of the explicitly supported platforms is affected and
    causes significant problems for many applications.
- 
- * `06-medium`  
+
+ * `06-medium`
    Covers an area, where the standard may not be clearly specified.
    May require changes to external/standard API.
- 
- * `05-feature`  
-   New feature proposal, beyond the current standard.  Includes internal 
-   (and external, providing adoption by the IEEE P1666 working group) 
+
+ * `05-feature`
+   New feature proposal, beyond the current standard.  Includes internal
+   (and external, providing adoption by the IEEE P1666 working group)
    API changes.
- 
- * `04-errata`  
+
+ * `04-errata`
    Inconvenience (errata) for users of many platforms, workaround available.
    Solution may require internal API changes.
 
- * `02-documentation`  
+ * `02-documentation`
    Documentation inconsistency or insufficiency (e.g., whitepaper unclear
    or misleading), no code changes.
 
- * `01-inconvenience`  
+ * `01-inconvenience`
    Inconvenience (workaround available), for some platforms
    (e.g. users of Visual Studio 2003)
- 
- * `00-cosmetic`  
+
+ * `00-cosmetic`
    Changes addressing performance or clarity of implementation,
    no API changes.
 
@@ -483,6 +476,10 @@ assigned.
 
 
 ## Changelog
+
+* v3.0 (2024-02-16)
+  * Update explanation and use model of public and private repositories
+  * Remove separate repositories for regression tests
 
 * v2.2 (2019-11-10)
   * Fix link to policies and procedures
