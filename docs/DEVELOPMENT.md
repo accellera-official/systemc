@@ -2,7 +2,7 @@
 
 This document focuses on the technical aspects related to the development
 of the SystemC implementation.  Legal and formal procedures are documented
-at http://accellera.org/about/policies-and-procedures.
+at https://accellera.org/about/policies-and-procedures.
 
 ## Repository setup
 
@@ -13,7 +13,7 @@ The **public** repository can be found at:
 
  * https://github.com/accellera-official/systemc
 
-A **private** repository for Accellera memberscan be found at:
+A **private** repository for Accellera members can be found at:
 
  * https://github.com/OSCI-WG/systemc
 
@@ -33,7 +33,6 @@ Since Git is 'distributed', it is a very natural choice for the distributed
 development process needed for collaboratively evolving the reference
 implementation of SystemC.
 
-
 ### Relationship between public and private repositories
 
 The **public** repository contains the latest development version of the
@@ -42,14 +41,13 @@ capabilities approved and released by the SystemC Language Working Group.
 
 >  *Note:*
 >  The development version in the main branch might differ from the latest
->  [released](https://github.com/accellera-official/systemc/releases) or
->  [tagged](https://github.com/accellera-official/systemc/tags)
->  versions.  For the latest stable version, please use a release or tag.
+>  [released][9] or [tagged][10] versions.  For the latest stable version,
+>  please use a release or tag.
 
 The **private** repository contains features or enhancements under development
 by the SystemC Language Working Group.
 
-Please check the [CONTRIBUTING.md][5] guidelines how to join Accellera and its
+Please check the [CONTRIBUTING][5] guidelines how to join Accellera and its
 working groups to contribute to the development of SystemC.
 
 ### Creating a personal fork
@@ -57,8 +55,8 @@ working groups to contribute to the development of SystemC.
 In order to contribute changes to the different repositories, it is
 recommended to create personal (or company-based) [forks][6] of the
 repositories on GitHub and push the proposed changes (bugfixes,
-features, ...) there.  Details of the intended
-work-flow are described in the next [section](#basic-branch-setup).
+features, ...) there.  Details of the intended workflow are described
+in the next [section](#basic-branch-setup).
 It is convenient to add this GitHub fork as a remote to your local
 clone of the repository:
 
@@ -80,7 +78,6 @@ Any changes can then be pushed to GitHub using:
 
 A basic cheat sheet containing the an overview of the general
 Git commands and workflow can be found [online][7].
-
 
 ## Development flow
 
@@ -159,8 +156,6 @@ can be deployed.  Not all aspects of this model are expected to
 be needed for the SystemC implementation, as we usually
 maintain only a single (i.e., the latest) public release of the
 kernel.
-
-[12]: http://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
 
 ### Adding a feature (set)
 
@@ -281,7 +276,6 @@ Once, the bug fix branch is ready, it should be pushed into the
 vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
-
 ## Versioning scheme
 
 In general, the versioning pattern for the SystemC/TLM reference
@@ -314,7 +308,6 @@ header files should be  be handled according to the following criteria:
 
 The overall release date (see [next section](#release-management)) of the
 PoC release tarball should reflect the date of the archive creation.
-
 
 ## Release management
 
@@ -405,7 +398,6 @@ performed by the maintainer
         git push osci-wg master:public
         git push accellera-official master release <version>
 
-
 ## Issue tracking
 
 Open issues (bugs, cleanups, features) related to the reference
@@ -474,8 +466,12 @@ the issue is added to the issue tracking system, a classification is done
 (including a target milestone), and preferably a responsible person is
 assigned.
 
-
 ## Changelog
+
+* 2024-02-19
+  * fix typos
+  * update names of references
+  * links replaced by https where possible
 
 * v3.0 (2024-02-16)
   * Update explanation and use model of public and private repositories
@@ -483,14 +479,14 @@ assigned.
 
 * v2.2 (2019-11-10)
   * Fix link to policies and procedures
-  * Add reference to sign-off process described in `CONTRIBUTING.md`
+  * Add reference to sign-off process described in `CONTRIBUTING`
 
 * v2.1 (2019-04-23)
   * Update information about public repositories and their relation
     to the WG-internal repositories.
 
 * v2.0 (2018-10-01)
-  * Reorganize contents between `CONTRIBUTING.md` and `DEVELOPMENT.md`
+  * Reorganize contents between `CONTRIBUTING` and `DEVELOPMENT`
   * Add information about public repositories
   * Formatting fixes and cleanups
 
@@ -506,17 +502,18 @@ assigned.
 * v0.9 - Initial proposal to the Accellera SystemC LWG (2012-09-25)
   * To be discussed during the October LWG phone conference
 
-
 ## Authors of this document
 
 Lynn Bannister, Martin Barnasconi, Mark Burton, Philipp A. Hartmann, Torsten Maehne
 
-
- [1]: http://git-scm.com "Git version control system"
- [2]: http://github.com
+ [1]: https://git-scm.com "Git version control system"
+ [2]: https://github.com
  [3]: https://github.com/osci-wg "Accellera WG GitHub organization"
- [4]: http://git-scm.com/book "Pro Git Book"
+ [4]: https://git-scm.com/book "Pro Git Book"
  [5]: ../CONTRIBUTING.md "Contriubting to SystemC"
  [6]: https://help.github.com/articles/fork-a-repo
  [7]: http://zrusin.blogspot.de/2007/09/git-cheat-sheet.html "Git Cheat Sheet"
  [8]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
+ [9]: https://github.com/accellera-official/systemc/releases
+ [10]: https://github.com/accellera-official/systemc/tags
+ [12]: https://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
