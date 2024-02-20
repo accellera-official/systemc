@@ -95,20 +95,20 @@ class SC_API sc_time
     friend class sc_event;
     friend class sc_clock;
 
-    friend void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
 
 public:
 

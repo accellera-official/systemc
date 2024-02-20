@@ -227,10 +227,10 @@ class SC_API sc_process_b : public sc_object_host {
     friend void sc_thread_cor_fn( void* arg );
     friend SC_API bool timed_out( sc_simcontext* );
 
-    friend void sc_suspend_all();
-    friend void sc_unsuspend_all();
-    friend void sc_suspendable();
-    friend void sc_unsuspendable();
+    friend SC_API void sc_suspend_all();
+    friend SC_API void sc_unsuspend_all();
+    friend SC_API void sc_suspendable();
+    friend SC_API void sc_unsuspendable();
 
   public:
     enum process_throw_type {
