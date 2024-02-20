@@ -786,30 +786,6 @@
     <ClInclude Include="..\..\src\sysc\datatypes\fx\fx.h">
       <Filter>Header Files\sc_dt</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\ref.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\bind.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\config.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\mem_fn.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\enable_if.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view_fwd.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\sysc\packages\boost\detail\endian.hpp">
-      <Filter>Header Files\sc_boost</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int_inlines.h">
       <Filter>Header Files\sc_dt</Filter>
     </ClInclude>
@@ -888,9 +864,6 @@
     </Filter>
     <Filter Include="Source Files\tlm_utils">
       <UniqueIdentifier>{1050930d-f9f9-45f1-a16d-076f334b0aeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\sc_boost">
-      <UniqueIdentifier>{d873e7b3-e806-4138-8218-e54338e43868}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
