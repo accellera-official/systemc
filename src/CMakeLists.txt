@@ -418,7 +418,6 @@ set(SYSTEMC_CORE_SRC
         sysc/utils/sc_list.h
         sysc/utils/sc_machine.h
         sysc/utils/sc_mempool.h
-        sysc/utils/sc_meta.h
         sysc/utils/sc_pq.h
         sysc/utils/sc_ptr_flag.h
         sysc/utils/sc_pvector.h
