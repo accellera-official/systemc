@@ -326,20 +326,6 @@ public:
   this_type& operator+=( difference_type n ) { it_+=n; return *this; }
   this_type& operator-=( difference_type n ) { it_-=n; return *this; }
 
-  // relations
-  bool operator==( const const_direct_iterator& that ) const
-    { return it_ == that.it_; }
-  bool operator!=( const const_direct_iterator& that ) const
-    { return it_ != that.it_; }
-  bool operator<=( const const_direct_iterator& that ) const
-    { return it_ <= that.it_; }
-  bool operator>=( const const_direct_iterator& that ) const
-    { return it_ >= that.it_; }
-  bool operator< ( const const_direct_iterator& that ) const
-    { return it_ < that.it_; }
-  bool operator> ( const const_direct_iterator& that ) const
-    { return it_ > that.it_; }
-
   // dereference
   reference operator*() const
     { return *access_policy::get( static_cast<element_type*>((void*)*it_) ); }
@@ -352,7 +338,44 @@ public:
   difference_type operator-( const_direct_iterator const& that ) const
     { return it_-that.it_; }
 
+  raw_iterator raw() const { return it_; }
+
 }; // sc_vector_iter
+
+
+// sc_vector_iter relations
+template< typename T1, typename Pol1, typename T2, typename Pol2
+        , typename = std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>>>
+inline bool
+operator==( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b )
+  { return a.raw() == b.raw(); }
+
+template< typename T1, typename Pol1, typename T2, typename Pol2 >
+inline auto
+operator!=( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b ) -> decltype( !(a == b) )
+  { return !(a == b); }
+
+template< typename T1, typename Pol1, typename T2, typename Pol2
+        , typename = std::enable_if_t<std::is_same_v<std::remove_const_t<T1>, std::remove_const_t<T2>>>>
+inline bool
+operator<( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b )
+  { return a.raw() < b.raw(); }
+
+template< typename T1, typename Pol1, typename T2, typename Pol2 >
+inline auto
+operator>=( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b ) -> decltype( !(a < b) )
+  { return !(a < b); }
+
+template< typename T1, typename Pol1, typename T2, typename Pol2 >
+inline auto
+operator>( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b ) -> decltype( (b < a) )
+  { return b < a; }
+
+template< typename T1, typename Pol1, typename T2, typename Pol2 >
+inline auto
+operator<=( const sc_vector_iter<T1,Pol1>& a, const sc_vector_iter<T2,Pol2> & b ) -> decltype( !(b < a) )
+  { return !(b < a); }
+
 
 template< typename T >
 class sc_vector
