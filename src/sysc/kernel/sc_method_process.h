@@ -112,20 +112,20 @@ class sc_method_process : public sc_process_b {
     friend class sc_simcontext;
     friend class sc_runnable;
 
-    friend void next_trigger( sc_simcontext* );
-    friend void next_trigger( const sc_event&,
+    friend SC_API void next_trigger( sc_simcontext* );
+    friend SC_API void next_trigger( const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_event_or_list&,
+    friend SC_API void next_trigger( const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_event_and_list&,
+    friend SC_API void next_trigger( const sc_event_and_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&,
+    friend SC_API void next_trigger( const sc_time&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_or_list&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_and_list&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event_and_list&,
                   sc_simcontext* );
 
   public:

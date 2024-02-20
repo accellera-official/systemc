@@ -259,9 +259,8 @@ else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
-  set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
-endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
@@ -671,12 +670,7 @@ install (FILES AUTHORS.md
 # Provide package of the SystemC library to other programs using CMake
 ###############################################################################
 
-# Export the systemc library target for usage by other programs
-# ... to local build tree
-export (TARGETS systemc
-        NAMESPACE SystemC::
-        FILE SystemCLanguageTargets.cmake)
-# ... to installation tree
+# Export the systemc library target for usage by other programs to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
