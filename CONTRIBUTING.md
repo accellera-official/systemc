@@ -14,8 +14,8 @@
  join Accellera and its working groups.
  Find out more information at http://www.accellera.org/about/join.
  If your company, organization or university is already an Accellera member,
- you can create an account [here][6] and once logged in, request to 
- [join the SystemC Language Working Group][4] by clicking on the "Join" 
+ you can create an account [here][6] and once logged in, request to
+ [join the SystemC Language Working Group][4] by clicking on the "Join"
  button of the SystemC Language Working Group (LWG) section.
 
 ### Join the SystemC community
@@ -23,7 +23,6 @@
  If you are not an Accellera member, please join the **[SystemC community
  forum][5]** to provide feedback, report bugs and join the general
  discussion around the evolution of SystemC.
-
 
 ## Issue reporting
 
@@ -38,18 +37,17 @@ the following information (if applicable):
   5. compile/runtime warnings and errors
   6. code sample, not more than 100 lines to demonstrate the problem
 
-> **Note**  
+> **Note**
 >  All bugs will only be tested against the latest publicly available
 >  version of the product.
 
-> **Note**  
+> **Note**
 >  All C++ compilers that SystemC supports have bugs of different
 >  degree of severity. We cannot fix those bugs.
 >  Please report them to the compiler vendor.
 
 Accellera working group members have access to the internal issue tracking
 at GitHub, as described [here][7].
-
 
 ## Patch submission
 
@@ -61,7 +59,6 @@ implementation are properly licensed under the
 The sign-off is a simple line at the end of the explanation for the
 patch (or commit message), which certifies that you wrote it yourself
 or otherwise have the right to pass it on as an open-source patch:
-
 
 ### Accellera Developer's Certificate of Origin
 
@@ -89,7 +86,7 @@ please use `git commit --signoff` to add a line of the form:
 ```
 using your real name (no pseudonyms or anonymous contributions).
 
-> **Note**  
+> **Note**
 > For Accellera members, contributions are already bound by the
 > [Accellera policies and procedures][3] and the sign-off is optional,
 > but recommended.  For **non-Accellera** members, the sign-off is
@@ -102,24 +99,22 @@ own `Signed-off-by` line appended.  It stays under the sole governance
 of the corresponding WGs to decide whether the proposal will be included
 in the reference implementation (or future Accellera standards).
 
-
 ## Repository organization
 
-The central source code repository of the Accellera SystemC implementation
-is hosted in two repositories at [GitHub](http://github.com).  The main
-repositories are **private** to the [`OSCI-WG` GitHub organization][8] and
-can be found at:
+The central source code repository of the Accellera SystemC reference
+implementation is hosted in two repositories at [GitHub][9].
 
- * https://github.com/OSCI-WG/systemc             (core SystemC library)
- * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
+The **public** repository can be found at:
 
-A read-only, **public** copy of the core SystemC library repository can be found 
-at https://github.com/accellera-official/systemc
+ * https://github.com/accellera-official/systemc
+
+A **private** repository for Accellera members can be found at:
+
+ * https://github.com/OSCI-WG/systemc
 
 To obtain access to the repositories and the GitHub organization in general,
 LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>
 including their GitHub account name.
-
 
 [1]: https://www.accellera.org
 [2]: https://accellera.org/activities/working-groups/systemc-language
@@ -129,3 +124,4 @@ including their GitHub account name.
 [6]: https://workspace.accellera.org/site/login
 [7]: docs/DEVELOPMENT.md#issue-tracking
 [8]: https://github.com/osci-wg
+[9]: https://github.com
