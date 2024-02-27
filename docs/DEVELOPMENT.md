@@ -62,7 +62,7 @@ clone of the repository:
 
       cd <repo>/
       git remote add origin git@github.com:<your-account>/<repo>.git
-      git branch --set-upstream master origin/master
+      git branch --set-upstream main origin/main
 
 Any changes can then be pushed to GitHub using:
 
@@ -81,74 +81,62 @@ Git commands and workflow can be found [online][7].
 
 ## Development flow
 
-This section explains the development flow for the **private**
-repository.
+This section explains the development flow for both **public** and
+**private** repository.
 
 ### Basic branch setup
 
-The main idea is to have two main branches, one for the development,
-one for the releases.
+The following branches exist in a SystemC repository:
 
-* **master**
+* **main**
 
-  The latest and greatest `HEAD` of the LWG development.
-  This is where all the new features and fixes go.
+  The latest and greatest `HEAD` of the SystemC development.
+  This is where all finalized and approved features and fixes go.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository.
 
-* **public**
+* **develop**
 
-  The latest revision pushed to the public repository of SystemC.
-  This may also include changes, that are not yet part of an
-  official release package.
+  This branch is used for development and testing of enhancements,
+  new features and fixes which are not yet finalized and approved.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository, however, the branch in the **private** repository
+  might be ahead of the **pubic** branch because of some LWG specific
+  developments.
 
 * **release**
 
   This branch is used to create the release tarballs, both internal
-  and public snapshots, typically based on the `public` branch.
+  and public snapshots, typically based on the `main` branch.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository.
+
+In addition, these repositories may contain additional branches for dedicated
+feature developments, but it is expected that these branches are merged into
+the `main` or `develop` branch.
 
 For the **regressions**, the `release` branch is more or less just a pointer
 to the latest revision of a snapshot (or release).  It is still useful
 to keep a named branching point, in case of required hotfixes.
 
 For the **core library**, the `release` branch is to be different from the
-`master` branch.  The idea is to fully track the contents of the released
-tarball.  This requires the following changes compared to the `master`
+`main` branch.  The idea is to fully track the contents of the released
+tarball.  This requires the following changes compared to the `main`
 branch:
 
   - The Automake generated files are added to this tree.
   - Accellera internal files are stripped
     (`.gitignore`, internal documentation, ...).
 
-To prepare a release, the `master` branch would then be merged into the
-`release` branch, the automake files would be updated (if necessary) and
+To prepare a release, the `main` branch would then be merged into the
+`release` branch, the Automake files would be updated (if necessary) and
 the clean working tree could be used as baseline for the tarball (e.g.,
 via `git-archive(1)`).  Details are described in the next section
 [release management](#release-management).  The history of the (core library)
 repostitory could then look like shown in the following graph
 (time progresses upwards):
 
-       time  feature   master hotfix release
-             branches    |         | |
-        ^      |  |
-        |                [master]
-        |                |           [release]
-        ^          ----- o           |
-        |         /      |           o - [systemc-2.3.0.1]
-        |        /    -- o          /|
-        |       /    /   |         o |
-        ^      |  o--   ...         \|
-        |      o ...     |  -------- o - [systemc-2.3.0]
-        |      |  o     .../         |
-        |      o   \---- o -[public] ..
-        ^       \       \|           |
-        |        ------- o           o   (internal snapshot)
-        |               ...          |
-        ^                            o - [systemc-2.2.0]
-
-It should usually be sufficient to keep the two branches `master`
-and `release`, and cherry-pick hotfixes for emergency releases
-directly on top of the `release` branch.  For convenience, an
-additional `public` branch could be used to mark the branching
-point for the last `release`.
+![Git branches](./git_branches.svg)
 
 If more sophisticated version branches are needed, a development
 model similar to the well-known ["successful branching model"][12]
@@ -161,9 +149,9 @@ kernel.
 
 The development of a new contribution in form of a feature or a
 complex bug fix is best done in a new feature branch, which is
-forked and checked out from the Accellera `master` branch:
+forked and checked out from the Accellera `develop` branch:
 
-      git checkout -b <company>-<feature-xyz> master
+      git checkout -b <company>-<feature-xyz> develop
 
 Then code up the new contribution.  Please try to facilitate code
 review by other Accellera members by logically grouping your changes into
@@ -184,9 +172,9 @@ consider to follow these suggestions:
 > Apache-2.0 license (see `LICENSE`), a sign-off procedure is
 > defined in the [contributing guidelines][5].
 
-During the development of the contribution, the `master` branch may
+During the development of the contribution, the `develop` branch may
 receive other commits.  In that case, consider rebasing the commits in
-your feature branch onto the `HEAD` of the `master` branch to keep the
+your feature branch onto the `HEAD` of the `develop` branch to keep the
 history clean.  Once the contribution is ready for review by the
 working group, push the feature branch in your fork of the respective
 repository on GitHub:
@@ -197,7 +185,7 @@ Then, send a [pull request][8] either manually or via [GitHub][8] to
 initiate the code review by the working group members.  The summary
 can be manually generated by
 
-      git request-pull master git@github.com/<account>/<repo>.git \
+      git request-pull develop git@github.com/<account>/<repo>.git \
               <company-feature-xyz>
 
 to be sent to the LWG reflector.
@@ -211,11 +199,11 @@ clone of the repository
       git fetch  <remote-name>
 
       # examine differences
-      git diff master..<remote-name>/<company-feature-xyz>
+      git diff develop..<remote-name>/<company-feature-xyz>
       git log <remote-name>/<company-feature-xyz>
 
 After the contribution is accepted, it will be merged into the working group's
-`master` branch by the responsible source code maintainer.  This should
+`develop` branch by the responsible source code maintainer.  This should
 be done with an explicit *merge commit*, to keep the individual
 contributions separated:
 
@@ -224,12 +212,12 @@ contributions separated:
 
 Instead of fully merging the contribution, the maintainer may choose
 to cherry-pick individual commits or to rebase the feature branch on
-an intermittently updated `master`.  He may also request additional
+an intermittently updated `develop`.  He may also request additional
 changes to be done by the submitter.  In that case, the submitter may
-need to merge recent changes to the `master` branch into his feature
+need to merge recent changes to the `develop` branch into his feature
 branch before carrying out the requested changes.
 
-After the contribution has been fully merged into `master`, the
+After the contribution has been fully merged into `develop`, the
 feature branch in the local and Github fork may be deleted.
 
       git branch -d <company-feature-xyz>      # delete local branch
@@ -246,17 +234,17 @@ implementation.
 For this purpose members may employ the already mentioned ["successful
 branching model"][12] by Vincent Driessen.  The vendor can branch its
 own development branch, e.g., `develop-<vendor>` from the already
-tracked working group development branch `master` in his clone of the WG
-repository.  The vendor is then able to integrate commits on the WG
+tracked working group development branch `develop` in his clone of the LWG
+repository.  The vendor is then able to integrate commits on the LWG
 development branch by merging it into his his vendor development
 branch.
 
-Bug fixes to be contributed back to the WG consist usually of one or
+Bug fixes to be contributed back to the LWG consist usually of one or
 several isolated commits.  They need to be cherry-picked from the
-vendor's development branch into a new branch created from the WG
+vendor's development branch into a new branch created from the LWG
 development branch:
 
-      git checkout -b <vendor>-fix-<bug> origin/master
+      git checkout -b <vendor>-fix-<bug> origin/develop
       git cherry-pick <commit>...
 
 Once, the bug fix branch is ready, it should be pushed into the
@@ -264,13 +252,13 @@ vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
 A new feature consists usually of a series of commits developed in a
-dedicated feature branched of the vendor's or WG's development
+dedicated feature branched of the vendor's or LWG's development
 branch.  Only in the first case, a rebase on the top of the WG's
 development branch is necessary.  To this end, branch first from the
 feature branch:
 
       git checkout -b <vendor>-<new-feature> <private-feature-branch>
-      git rebase [-i|--interactive] --onto origin/master develop-<vendor>
+      git rebase [-i|--interactive] --onto origin/develop develop-<vendor>
 
 Once, the bug fix branch is ready, it should be pushed into the
 vendor's github account and a pull request created, as described in
@@ -311,35 +299,44 @@ PoC release tarball should reflect the date of the archive creation.
 
 ## Release management
 
-To prepare a new release tarball, the following set steps are to be
-performed by the maintainer
+To prepare a new release tarball, along with a tagged release at GitHub,
+the following set steps are to be performed by the maintainer
 
-1. **Prepare the release in the `master` branch**
+1. **Merge enhancements, new features and fixes to be released**
+
+   The latest enhancements, features and fixes are available in the
+   `develop` branch. The LWG should decide which features are merged
+   into the `main` branch, to make them part of a release.
+
+   The maintainer will merge one or more commits from the `develop` branch
+   into the `main` branch.
+
+2. **Prepare the release in the `main` branch**
 
    Before creating a release snapshot, the documentation and version
-   information in the package should be updated within the `master`
+   information in the package should be updated within the `main`
    branch.  This includes files like
-   - `ChangeLog`, `RELEASENOTES`, `README`, `INSTALL`
+   - `RELEASENOTES.md`, `README.md`, `INSTALL.md`
    - [Version headers](#versioning-scheme)
 
    During the release preparation phase, other functional changes
-   should not be added/merged to the `master` branch.
+   should not be added/merged to the `main` branch.
 
-2. **Update the `release` branch**
+3. **Update the `release` branch**
 
         # switch to release branch
         git checkout release
 
-        # merge master branch
-        git merge --no-commit master
+        # merge main branch
+        git merge --no-commit main
         git rm <new-internal-file...> # drop new or changed "private" files
-        git commit -m "merge master branch for x.x.x release"
+        git commit -m "merge main branch for x.x.x release"
 
         *NOTE:* `.gitignore` has to be removed in this branch otherwise
                 `Makefile.in`` files are missing in the commit as well
                 as in the subsequent git archive step.
 
-3. **Update the Autoconf (and other auto-generated) files**
+4. **Update the Autoconf (and other auto-generated) files**
 
         autoreconf -if # or config/bootstrap
         git add -u     # add changed files
@@ -347,14 +344,14 @@ performed by the maintainer
         git add <new files to distribute>
         git commit -m "update autogenerated files for x.x.x release"
 
-4. **Tag the release revision**
+5. **Tag the release revision**
 
    In order to keep track of the release snapshots, the revisions used
    for creating the release tarballs should be marked with an *annotated*
    and optionally signed Git tag.
 
         # git tag -a -m "<package> <version>" <version> <refspec>
-        git tag -a -m "SystemC 2.3.0" 2.3.0 release
+        git tag -a -m "SystemC 3.0.0" 3.0.0 release
 
    The tagname should contain the `<version>`, following the versioning rules
    in IEEE Std. 1666-2023.  There are three standard formats:
@@ -365,7 +362,7 @@ performed by the maintainer
    > *NOTE:* The tag should be on the `release` branch, to enable the
    > automated tarball creation in the next step.
 
-5. **Create the release tarball**
+6. **Create the release tarball**
 
    `git archive` can then be used to create the release tarball.
    `git describe` can be used to obtain the correct tarball name
@@ -379,24 +376,21 @@ performed by the maintainer
    > *NOTE:* Even without a tag, a quick-shot release of the
    >         release branch can be generated this way.
 
-6. **Publish the release**
+7. **Publish the release**
 
    Upload the archive to the LWG area for internal review
-   and push the changes to GitHub.
+   and push the changes to the GitHub **public** and/or **private**
+   repositories.
 
-        git push osci-wg master release <version>
+        git push osci-wg main release <version>
+        git push accellera-official main release <version>
 
    > *NOTE:* The tag needs to be pushed explicitly.
 
    > *NOTE:* For each tag pushed to the GitHub repository, the corresponding
              release archive can be downloaded from GitHub directly via
-             `https://github.com/osci-wg/systemc/releases/tag/<version>`.
-
-   For **public** releases, update the `public` branch and repeat the same
-   steps for the public repositories:
-
-        git push osci-wg master:public
-        git push accellera-official master release <version>
+             `https://github.com/osci-wg/systemc/releases/tag/<version>` or
+             `https://github.com/accellera-official/systemc/releases/tag/<version>`
 
 ## Issue tracking
 
@@ -467,6 +461,12 @@ the issue is added to the issue tracking system, a classification is done
 assigned.
 
 ## Changelog
+
+* 2024-02-27
+  * rename master into main
+  * introduce branch develop. Remove branch public
+  * update git branches picture
+  * update development flow description
 
 * 2024-02-19
   * fix typos
