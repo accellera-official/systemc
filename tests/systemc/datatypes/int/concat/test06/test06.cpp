@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test06.cpp -- 
+  test06.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -37,10 +37,10 @@
 
 // test of sc_[u]int concatenation with type bool, concat()
 
-#include "systemc.h"
+#include <systemc>
 
-#define WRITE(a) \
-    cout << a << endl
+using std::cout;
+using std::endl;
 
 int
 sc_main( int, char*[] )
@@ -49,23 +49,23 @@ sc_main( int, char*[] )
 
     // )))  sc_uint  (((
 
-    sc_uint<3> ui3 = 3;
-    sc_uint<4> ui4;
-    sc_uint<2> ui2;
+    sc_dt::sc_uint<3> ui3 = 3;
+    sc_dt::sc_uint<4> ui4;
+    sc_dt::sc_uint<2> ui2;
 
     // sc_uint_base
 
     b = false;
     ui4 = concat( ui3, b );
-    WRITE( ui4 );
+    cout << ui4 << endl;
     ui4 = concat( b, ui3 );
-    WRITE( ui4 );
+    cout << ui4 << endl;
 
     b = true;
     ui4 = concat( ui3, b );
-    WRITE( ui4 );
+    cout << ui4 << endl;
     ui4 = concat( b, ui3 );
-    WRITE( ui4 );
+    cout << ui4 << endl;
 
     // sc_uint_bitref
 
@@ -73,15 +73,15 @@ sc_main( int, char*[] )
 
     b = false;
     ui2 = concat( ui3[0], b );
-    WRITE( ui2 );
+    cout << ui2 << endl;
     ui2 = concat( b, ui3[0] );
-    WRITE( ui2 );
+    cout << ui2 << endl;
 
     b = true;
     ui2 = concat( ui3[0], b );
-    WRITE( ui2 );
+    cout << ui2 << endl;
     ui2 = concat( b, ui3[0] );
-    WRITE( ui2 );
+    cout << ui2 << endl;
 
     // sc_uint_subref
 
@@ -89,15 +89,15 @@ sc_main( int, char*[] )
 
     b = false;
     ui2 = concat( ui3.range( 0, 0 ), b );
-    WRITE( ui2 );
+    cout << ui2 << endl;
     ui2 = concat( b, ui3.range( 0, 0 ) );
-    WRITE( ui2 );
+    cout << ui2 << endl;
 
     b = true;
     ui2 = concat( ui3.range( 0, 0 ), b );
-    WRITE( ui2 );
+    cout << ui2 << endl;
     ui2 = concat( b, ui3.range( 0, 0 ) );
-    WRITE( ui2 );
+    cout << ui2 << endl;
 
     // sc_uint_concat
 
@@ -105,22 +105,21 @@ sc_main( int, char*[] )
 
     b = false;
     ui4 = concat( concat( ui3.range( 2, 1 ), ui3[0] ), b );
-    WRITE( ui4 );
+    cout << ui4 << endl;
     ui4 = concat( b, concat( ui3.range( 2, 1 ), ui3[0] ) );
-    WRITE( ui4 );
+    cout << ui4 << endl;
 
     b = true;
     ui4 = concat( concat( ui3.range( 2, 1 ), ui3[0] ), b );
-    WRITE( ui4 );
+    cout << ui4 << endl;
     ui4 = concat( b, concat( ui3.range( 2, 1 ), ui3[0] ) );
-    WRITE( ui4 );
-
+    cout << ui4 << endl;
 
     // )))  sc_int  (((
 
-    sc_int<3> i3 = 3;
-    sc_int<4> i4;
-    sc_int<2> i2;
+    sc_dt::sc_int<3> i3 = 3;
+    sc_dt::sc_int<4> i4;
+    sc_dt::sc_int<2> i2;
 
     // sc_int_base
 
@@ -128,15 +127,15 @@ sc_main( int, char*[] )
 
     b = false;
     i4 = concat( i3, b );
-    WRITE( i4 );
+    cout << i4 << endl;
     i4 = concat( b, i3 );
-    WRITE( i4 );
+    cout << i4 << endl;
 
     b = true;
     i4 = concat( i3, b );
-    WRITE( i4 );
+    cout << i4 << endl;
     i4 = concat( b, i3 );
-    WRITE( i4 );
+    cout << i4 << endl;
 
     // sc_int_bitref
 
@@ -144,15 +143,15 @@ sc_main( int, char*[] )
 
     b = false;
     i2 = concat( i3[0], b );
-    WRITE( i2 );
+    cout << i2 << endl;
     i2 = concat( b, i3[0] );
-    WRITE( i2 );
+    cout << i2 << endl;
 
     b = true;
     i2 = concat( i3[0], b );
-    WRITE( i2 );
+    cout << i2 << endl;
     i2 = concat( b, i3[0] );
-    WRITE( i2 );
+    cout << i2 << endl;
 
     // sc_int_subref
 
@@ -160,15 +159,15 @@ sc_main( int, char*[] )
 
     b = false;
     i2 = concat( i3.range( 0, 0 ), b );
-    WRITE( i2 );
+    cout << i2 << endl;
     i2 = concat( b, i3.range( 0, 0 ) );
-    WRITE( i2 );
+    cout << i2 << endl;
 
     b = true;
     i2 = concat( i3.range( 0, 0 ), b );
-    WRITE( i2 );
+    cout << i2 << endl;
     i2 = concat( b, i3.range( 0, 0 ) );
-    WRITE( i2 );
+    cout << i2 << endl;
 
     // sc_int_concat
 
@@ -176,15 +175,15 @@ sc_main( int, char*[] )
 
     b = false;
     i4 = concat( concat( i3.range( 2, 1 ), i3[0] ), b );
-    WRITE( i4 );
+    cout << i4 << endl;
     i4 = concat( b, concat( i3.range( 2, 1 ), i3[0] ) );
-    WRITE( i4 );
+    cout << i4 << endl;
 
     b = true;
     i4 = concat( concat( i3.range( 2, 1 ), i3[0] ), b );
-    WRITE( i4 );
+    cout << i4 << endl;
     i4 = concat( b, concat( i3.range( 2, 1 ), i3[0] ) );
-    WRITE( i4 );
+    cout << i4 << endl;
 
     return 0;
 }
