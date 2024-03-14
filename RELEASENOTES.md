@@ -267,11 +267,3 @@ you include `systemc.h`, e.g.:
   #define SC_INCLUDE_FX
   #include "systemc.h"
 ```
-
-Due to the large size of the fixed-point data-types header files,
-compilation can take considerably more time.
-
-If you want to use the fixed-point data types only (i.e., not data-types
-`sc_int`, `sc_uint`, `sc_bigint`, `sc_biguint`), compilation time can be
-reduced by defining compile-time macro `SC_FX_EXCLUDE_OTHER` (in addition
-to `SC_INCLUDE_FX`).

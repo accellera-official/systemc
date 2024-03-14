@@ -177,14 +177,12 @@ public:
     DECL_CTORS_T_A(const sc_fxval_fast&)
     DECL_CTORS_T_A(const sc_fxnum&)
     DECL_CTORS_T_A(const sc_fxnum_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
     DECL_CTORS_T_B(int64)
     DECL_CTORS_T_B(uint64)
     DECL_CTORS_T_B(const sc_int_base&)
     DECL_CTORS_T_B(const sc_uint_base&)
     DECL_CTORS_T_B(const sc_signed&)
     DECL_CTORS_T_B(const sc_unsigned&)
-#endif
 
 #undef DECL_CTORS_T
 #undef DECL_CTORS_T_A
@@ -238,7 +236,6 @@ public:
 #define DECL_ASN_OP_T(op,tp)                                                  \
     sc_ufix& operator op ( tp );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_ASN_OP_OTHER(op)                                                 \
     DECL_ASN_OP_T(op,int64)                                                   \
     DECL_ASN_OP_T(op,uint64)                                                  \
@@ -246,9 +243,6 @@ public:
     DECL_ASN_OP_T(op,const sc_uint_base&)                                     \
     DECL_ASN_OP_T(op,const sc_signed&)                                        \
     DECL_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_ASN_OP_OTHER(op)
-#endif
 
 #define DECL_ASN_OP(op)                                                       \
     DECL_ASN_OP_T(op,int)                                                     \
@@ -412,14 +406,12 @@ public:
     DECL_CTORS_T_A(const sc_fxval_fast&)
     DECL_CTORS_T_A(const sc_fxnum&)
     DECL_CTORS_T_A(const sc_fxnum_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
     DECL_CTORS_T_B(int64)
     DECL_CTORS_T_B(uint64)
     DECL_CTORS_T_B(const sc_int_base&)
     DECL_CTORS_T_B(const sc_uint_base&)
     DECL_CTORS_T_B(const sc_signed&)
     DECL_CTORS_T_B(const sc_unsigned&)
-#endif
 
 #undef DECL_CTORS_T
 #undef DECL_CTORS_T_A
@@ -467,7 +459,6 @@ public:
 #define DECL_ASN_OP_T(op,tp)                                                  \
     sc_ufix_fast& operator op ( tp );
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DECL_ASN_OP_OTHER(op)                                                 \
     DECL_ASN_OP_T(op,int64)                                                   \
     DECL_ASN_OP_T(op,uint64)                                                  \
@@ -475,9 +466,6 @@ public:
     DECL_ASN_OP_T(op,const sc_uint_base&)                                     \
     DECL_ASN_OP_T(op,const sc_signed&)                                        \
     DECL_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DECL_ASN_OP_OTHER(op)
-#endif
 
 #define DECL_ASN_OP(op)                                                       \
     DECL_ASN_OP_T(op,int)                                                     \
@@ -998,14 +986,12 @@ DEFN_CTORS_T_A(const sc_fxval&)
 DEFN_CTORS_T_A(const sc_fxval_fast&)
 DEFN_CTORS_T_B(const sc_fxnum&)
 DEFN_CTORS_T_B(const sc_fxnum_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_CTORS_T_A(int64)
 DEFN_CTORS_T_A(uint64)
 DEFN_CTORS_T_A(const sc_int_base&)
 DEFN_CTORS_T_A(const sc_uint_base&)
 DEFN_CTORS_T_A(const sc_signed&)
 DEFN_CTORS_T_A(const sc_unsigned&)
-#endif
 
 #undef DEFN_CTORS_T_A
 #undef DEFN_CTORS_T_B
@@ -1137,7 +1123,6 @@ sc_ufix::operator op ( tp a )                                                 \
     return *this;                                                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_ASN_OP_OTHER(op)                                                 \
 DEFN_ASN_OP_T(op,int64)                                                       \
 DEFN_ASN_OP_T(op,uint64)                                                      \
@@ -1145,9 +1130,6 @@ DEFN_ASN_OP_T(op,const sc_int_base&)                                          \
 DEFN_ASN_OP_T(op,const sc_uint_base&)                                         \
 DEFN_ASN_OP_T(op,const sc_signed&)                                            \
 DEFN_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DEFN_ASN_OP_OTHER(op)
-#endif
 
 #define DEFN_ASN_OP(op)                                                       \
 DEFN_ASN_OP_T(op,int)                                                         \
@@ -1712,14 +1694,12 @@ DEFN_CTORS_T_A(const sc_fxval&)
 DEFN_CTORS_T_A(const sc_fxval_fast&)
 DEFN_CTORS_T_B(const sc_fxnum&)
 DEFN_CTORS_T_B(const sc_fxnum_fast&)
-#ifndef SC_FX_EXCLUDE_OTHER
 DEFN_CTORS_T_A(int64)
 DEFN_CTORS_T_A(uint64)
 DEFN_CTORS_T_A(const sc_int_base&)
 DEFN_CTORS_T_A(const sc_uint_base&)
 DEFN_CTORS_T_A(const sc_signed&)
 DEFN_CTORS_T_A(const sc_unsigned&)
-#endif
 
 #undef DEFN_CTORS_T_A
 #undef DEFN_CTORS_T_B
@@ -1835,7 +1815,6 @@ sc_ufix_fast::operator op ( tp a )                                            \
     return *this;                                                             \
 }
 
-#ifndef SC_FX_EXCLUDE_OTHER
 #define DEFN_ASN_OP_OTHER(op)                                                 \
 DEFN_ASN_OP_T(op,int64)                                                       \
 DEFN_ASN_OP_T(op,uint64)                                                      \
@@ -1843,9 +1822,6 @@ DEFN_ASN_OP_T(op,const sc_int_base&)                                          \
 DEFN_ASN_OP_T(op,const sc_uint_base&)                                         \
 DEFN_ASN_OP_T(op,const sc_signed&)                                            \
 DEFN_ASN_OP_T(op,const sc_unsigned&)
-#else
-#define DEFN_ASN_OP_OTHER(op)
-#endif
 
 #define DEFN_ASN_OP(op)                                                       \
 DEFN_ASN_OP_T(op,int)                                                         \
