@@ -22,6 +22,8 @@ Andrew C. Goodrich
 
   8. Known problems
 
+  9. Fixed-point library
+
 
 ## 1. IMPORTANT
 
@@ -250,3 +252,26 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
     limit of tar archives, and several Windows archivers (e.g. WinZip)
     have been reported to trip over this.  The open source archiver 7-zip
     (http://7-zip.org) is known to work.
+
+
+## 9. Fixed-point library
+
+SystemC contains a fixed-point data-types package.
+
+Compile-time macro `SC_INCLUDE_FX` must be defined in order to build
+applications that use fixed point types. You can specify a compiler
+flag, e.g., `g++ -DSC_INCLUDE_FX` or use a define statement before
+you include `systemc.h`, e.g.:
+
+```
+  #define SC_INCLUDE_FX
+  #include "systemc.h"
+```
+
+Due to the large size of the fixed-point data-types header files,
+compilation can take considerably more time.
+
+If you want to use the fixed-point data types only (i.e., not data-types
+`sc_int`, `sc_uint`, `sc_bigint`, `sc_biguint`), compilation time can be
+reduced by defining compile-time macro `SC_FX_EXCLUDE_OTHER` (in addition
+to `SC_INCLUDE_FX`).

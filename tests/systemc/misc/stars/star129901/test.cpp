@@ -46,6 +46,7 @@ g++ -g -I /u/scp/src/systemc-2.0/include bug.cpp /u/scp/src/systemc-2.0/lib-gccs
 -------------------------------------------------------------------------------
 */
 
+#define SC_INCLUDE_FX 1
 #include "systemc.h"
 
 double bug()

@@ -37,6 +37,7 @@
 
 // memory leak test; sc_fxnum[_fast]_subref didn't have a destructor
 
+#define SC_INCLUDE_FX
 #include "systemc.h"
 
 int

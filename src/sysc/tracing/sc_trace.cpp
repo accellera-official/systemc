@@ -226,10 +226,14 @@ DEFN_TRACE_FUNC_A( sc_dt::sc_unsigned )
 DEFN_TRACE_FUNC_A( sc_dt::sc_bv_base )
 DEFN_TRACE_FUNC_A( sc_dt::sc_lv_base )
 
+#ifdef SC_INCLUDE_FX
+
 DEFN_TRACE_FUNC_A( sc_dt::sc_fxval )
 DEFN_TRACE_FUNC_A( sc_dt::sc_fxval_fast )
 DEFN_TRACE_FUNC_A( sc_dt::sc_fxnum )
 DEFN_TRACE_FUNC_A( sc_dt::sc_fxnum_fast )
+
+#endif // SC_INCLUDE_FX
 
 #undef DEFN_TRACE_FUNC_REF_A
 #undef DEFN_TRACE_FUNC_PTR_A

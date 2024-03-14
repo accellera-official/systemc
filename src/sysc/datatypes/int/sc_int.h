@@ -141,6 +141,7 @@ public:
         : sc_int_base( W )
         { assign( a.to_uint64() ); }
 
+#ifdef SC_INCLUDE_FX
 
     explicit sc_int( const sc_fxval& a )
 	: sc_int_base( W )
@@ -158,6 +159,7 @@ public:
 	: sc_int_base( W )
 	{ sc_int_base::operator = ( a ); }
 
+#endif
 
     sc_int( const sc_bv_base& a )
 	: sc_int_base( W )
@@ -232,6 +234,8 @@ public:
     sc_int<W>& operator = ( const sc_unsigned_subref_r& a )
 	{ sc_int_base::operator = ( a ); return *this; }
 
+#ifdef SC_INCLUDE_FX
+
     sc_int<W>& operator = ( const sc_fxval& a )
 	{ sc_int_base::operator = ( a ); return *this; }
 
@@ -243,6 +247,8 @@ public:
 
     sc_int<W>& operator = ( const sc_fxnum_fast& a )
 	{ sc_int_base::operator = ( a ); return *this; }
+
+#endif
 
     sc_int<W>& operator = ( const sc_bv_base& a )
 	{ sc_int_base::operator = ( a ); return *this; }

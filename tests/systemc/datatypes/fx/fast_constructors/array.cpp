@@ -43,6 +43,7 @@
 // 
 
 #include <limits.h>
+#define SC_INCLUDE_FX
 #include "systemc.h"
 #include "fx_precision_double.h"
 
