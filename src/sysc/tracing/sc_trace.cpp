@@ -71,7 +71,7 @@ void SC_API tprintf(sc_trace_file* tf,  const char* format, ...)
     static char buffer[4096];
     va_list ap;
     va_start(ap, format);
-    (void) vsnprintf(buffer, 4096, format, ap);
+    (void) vsnprintf(buffer, sizeof(buffer), format, ap);
     va_end(ap);
     if (tf) tf->write_comment(buffer);
 }
