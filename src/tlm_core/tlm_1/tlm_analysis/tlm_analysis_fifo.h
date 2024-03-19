@@ -40,11 +40,11 @@ class tlm_analysis_fifo :
   tlm_analysis_fifo() : tlm_fifo<T>( -16 ) {}
 
   void write( const tlm_analysis_triple<T> &t ) {
-    nb_put( t );
+    this->nb_put( t );
   }
 
   void write( const T &t ) {
-    nb_put( t );
+    this->nb_put( t );
   }
 
 };
