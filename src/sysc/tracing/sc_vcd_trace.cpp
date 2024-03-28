@@ -2125,7 +2125,7 @@ vcd_trace_file::obtain_name()
     char char2 = static_cast<char>(result % used_types_count);
 
     char buf[20];
-    std::snprintf(buf, 20, "%c%c%c%c%c",
+    std::snprintf(buf, sizeof(buf), "%c%c%c%c%c",
             char2 + first_type_used,
             char3 + first_type_used,
             char4 + first_type_used,

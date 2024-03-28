@@ -2812,7 +2812,7 @@ scfx_rep::dump( ::std::ostream& os ) const
     for( int i = size() - 1; i >= 0; i -- )
     {
 	char buf[BUFSIZ];
-	std::snprintf( buf, BUFSIZ, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
+	std::snprintf( buf, sizeof(buf), " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
 	os << buf << ::std::endl;
     }
 

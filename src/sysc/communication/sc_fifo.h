@@ -299,7 +299,7 @@ sc_fifo<T>::trace( sc_trace_file* tf ) const
     char buf[32];
     std::string nm = name();
     for( int i = 0; i < m_size; ++ i ) {
-	std::snprintf( buf, 32, "_%d", i );
+	std::snprintf( buf, sizeof(buf), "_%d", i );
 	sc_trace( tf, m_buf[i], nm + buf );
     }
 #endif
