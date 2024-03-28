@@ -227,7 +227,7 @@ sc_unsigned::sc_unsigned(const sc_bv_base& v) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf( msg, BUFSIZ, "%s::%s( sc_bv_base ) : nb = %d is not valid",
+        std::snprintf( msg, sizeof(msg), "%s::%s( sc_bv_base ) : nb = %d is not valid",
                  "sc_unsigned", "sc_unsigned", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -251,7 +251,7 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf( msg, BUFSIZ, "%s::%s( sc_lv_base ) : nb = %d is not valid",
+        std::snprintf( msg, sizeof(msg), "%s::%s( sc_lv_base ) : nb = %d is not valid",
                  "sc_unsigned", "sc_unsigned", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
