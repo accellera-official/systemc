@@ -160,7 +160,15 @@ vcd_trace::compose_data_line(char* rawdata, char* compdata, size_t compdata_n)
         else
         {
             const char* effective_begin = strip_leading_bits(rawdata);
+// FIXME: see
+// https://github.com/OSCI-WG/systemc/pull/642 
+// https://github.com/OSCI-WG/systemc/issues/600
+// https://github.com/OSCI-WG/systemc/pull/645
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
             std::snprintf(compdata, compdata_n, "b%s %s", effective_begin, vcd_name.c_str());
+#pragma GCC diagnostic pop
+
         }
     }
 }

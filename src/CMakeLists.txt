@@ -89,7 +89,7 @@ function(add_systemc_library libName scBuildDefine)
         $<$<CXX_COMPILER_ID:MSVC>:/vmg /MP>
         PRIVATE
         $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
-          -Wall -Wextra -Wno-format-truncation -Wno-unused-parameter -Wno-unused-variable>
+          -Wall -Wextra -Wno-unused-parameter -Wno-unused-variable>
         $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
           -xassembler-with-cpp>
         $<$<AND:$<COMPILE_LANGUAGE:ASM>,$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>>:
