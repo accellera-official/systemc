@@ -33,32 +33,40 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
 1. This release is supported on the following platform combinations 
    for which it has been tested:
 
-|      OS        |    Target     |    Compiler
-| -------------- | ------------- |  --------------
-| Ubuntu 20.04   |     amd64     |  gcc  9.4.0
-| Ubuntu 20.04   |     arm64     |  gcc  9.4.0
-| Ubuntu 22.04   |     amd64     |  gcc 11.4.0
-| Ubuntu 22.04   |     arm64     |  gcc 11.4.0
-| AlmaLinux 8    |     amd64     |  gcc  8.5.0
-| AlmaLinux 8    |     arm64     |  gcc  8.5.0
-| AlmaLinux 9    |     amd64     |  gcc 11.4.1
-| AlmaLinux 9    |     arm64     |  gcc 11.4.1
-| Debian 12.5    |     amd64     |  gcc 12.3.0 
-| Debian 12.5    |     amd64     |  gcc 13.2.0 
-| Debian 12.5    |     amd64     |  gcc 13.2.0 with --std=c++20
-| Rhel 7.9       |     x86_64    |  gcc 9.3.0
-| Rhel 8.8       |     amd64     |  gcc 9.4.0
-| Rhel 8.8       |     amd64     |  gcc 13.1.0
-| Rhel 8.8       |     amd64     |  clang 17.0.6
-| Rhel 8.9       |     amd64     |  gcc 8.5.0
-| Rhel 8.9       |     amd64     |  gcc 11.2.1
-| Rhel 8.9       |     amd64     |  gcc 12.2.1
-| Rhel 8.9       |     amd64     |  coside clang 16.0.6
-| Rhel 8.9       |     amd64     |  coside gcc 13.1.0
-| Windows 10     |               |  msvc16 (2019)
-| Windows 11     |               |  msvc16 (2019)
-| Windows 11     |               |  msvc17 (2022)
-| macOS 14.4     |               |  Apple clang 15
+|      OS             |    Target     |    Compiler
+| ------------------- | ------------- |  --------------
+| Ubuntu 20.04        |     amd64     |  gcc  9.4.0
+| Ubuntu 20.04        |     arm64     |  gcc  9.4.0
+| Ubuntu 22.04        |     amd64     |  gcc 11.4.0
+| Ubuntu 22.04        |     arm64     |  gcc 11.4.0
+| AlmaLinux 8         |     amd64     |  gcc  8.5.0
+| AlmaLinux 8         |     arm64     |  gcc  8.5.0
+| AlmaLinux 9         |     amd64     |  gcc 11.4.1
+| AlmaLinux 9         |     arm64     |  gcc 11.4.1
+| Debian 12.5         |     amd64     |  gcc 12.3.0 
+| Debian 12.5         |     amd64     |  gcc 13.2.0 
+| Debian 12.5         |     amd64     |  gcc 13.2.0 with --std=c++20
+| Rhel 7.9            |     x86_64    |  gcc 9.3.0
+| Rhel 8.8            |     amd64     |  gcc 9.4.0
+| Rhel 8.8            |     amd64     |  gcc 13.1.0
+| Rhel 8.8            |     amd64     |  clang 17.0.6
+| Rhel 8.9            |     amd64     |  gcc 8.5.0
+| Rhel 8.9            |     amd64     |  gcc 11.2.1
+| Rhel 8.9            |     amd64     |  gcc 12.2.1
+| Rhel 8.9            |     amd64     |  coside clang 16.0.6
+| Rhel 8.9            |     amd64     |  coside gcc 13.1.0
+| Windows 10          |               |  msvc16 (2019)
+| Windows 11          |               |  msvc16 (2019)
+| Windows 11          |               |  msvc17 (2022)
+| macOS 12 (Monterey) | x86_64        | AppleClang 13 
+| macOS 12 (Monterey) | arm64         | AppleClang 13
+| macOS 13 (Ventura)  | x86_64        | AppleClang 14 
+| macOS 13 (Ventura)  | arm64         | AppleClang 14
+| macOS 14 (Sonoma)   | x86_64        | AppleClang 14
+| macOS 14 (Sonoma)   | arm64         | AppleClang 14 
+| macOS 14 (Sonoma)   | x86_64        | AppleClang 15
+| macOS 14 (Sonoma)   | arm64         | AppleClang 15
+
 
 Warning: _The fixed-point data-types are not working as defined on
 MSVC 2017 and later in Release x64 mode._
