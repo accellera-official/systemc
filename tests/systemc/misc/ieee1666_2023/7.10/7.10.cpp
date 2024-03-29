@@ -40,6 +40,7 @@
 //
 // @@@@ ISSUES @@@@
 
+#define SC_INCLUDE_FX
 #include <systemc.h>
 
 #define SHOW(X) \

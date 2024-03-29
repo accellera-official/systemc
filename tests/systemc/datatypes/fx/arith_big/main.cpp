@@ -45,6 +45,7 @@
 // 
 
 
+#define SC_INCLUDE_FX
 #include "systemc.h"
 
 

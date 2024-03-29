@@ -266,6 +266,7 @@ public:
     #endif
 	{ *this = v; }
 
+#ifdef SC_INCLUDE_FX
 
     explicit sc_biguint( const sc_fxval& v )
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
@@ -298,6 +299,8 @@ public:
         : sc_unsigned( W, false )
     #endif
 	{ *this = v; }
+
+#endif
 
 
     // destructor
@@ -362,6 +365,8 @@ public:
 
     const sc_biguint<W>& operator = ( const sc_uint_base& v ) ;
 
+#ifdef SC_INCLUDE_FX
+
     const sc_biguint<W>& operator = ( const sc_fxval& v )
 	{ sc_unsigned_proxy() = ( v ); return *this; }
 
@@ -374,6 +379,7 @@ public:
     const sc_biguint<W>& operator = ( const sc_fxnum_fast& v )
 	{ sc_unsigned_proxy() = ( v ); return *this; }
 
+#endif
 
 // +----------------------------------------------------------------------------
 // |"sc_bigint<W>::to_XXXX"

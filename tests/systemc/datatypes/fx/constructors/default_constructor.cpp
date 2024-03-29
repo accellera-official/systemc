@@ -46,6 +46,7 @@
 
 #include <limits.h>
 #include <float.h>
+#define SC_INCLUDE_FX
 #include "systemc.h"
  
 typedef unsigned int   uint;

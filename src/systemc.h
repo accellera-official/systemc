@@ -242,48 +242,48 @@ using sc_dt::sc_logic_Z;
 using sc_dt::sc_logic_X;
 // #endif
 
-
-using sc_dt::sc_fxnum;
-using sc_dt::sc_fxnum_bitref;
-using sc_dt::sc_fxnum_fast;
-using sc_dt::sc_fix;
-using sc_dt::sc_fix_fast;
-using sc_dt::sc_ufix;
-using sc_dt::sc_ufix_fast;
-using sc_dt::sc_fixed;
-using sc_dt::sc_fixed_fast;
-using sc_dt::sc_ufixed;
-using sc_dt::sc_ufixed_fast;
-using sc_dt::sc_fxval;
-using sc_dt::sc_fxval_fast;
-using sc_dt::sc_fxcast_switch;
-using sc_dt::sc_fxcast_context;
-using sc_dt::sc_fxtype_params;
-using sc_dt::sc_fxtype_context;
-using sc_dt::sc_q_mode;
-using sc_dt::SC_RND;
-using sc_dt::SC_RND_ZERO;
-using sc_dt::SC_RND_MIN_INF;
-using sc_dt::SC_RND_INF;
-using sc_dt::SC_RND_CONV;
-using sc_dt::SC_TRN;
-using sc_dt::SC_TRN_ZERO;
-using sc_dt::sc_o_mode;
-using sc_dt::SC_SAT;
-using sc_dt::SC_SAT_ZERO;
-using sc_dt::SC_SAT_SYM;
-using sc_dt::SC_WRAP;
-using sc_dt::SC_WRAP_SM;
-using sc_dt::sc_switch;
-using sc_dt::SC_OFF;
-using sc_dt::SC_ON;
-using sc_dt::sc_fmt;
-using sc_dt::SC_F;
-using sc_dt::SC_E;
-using sc_dt::sc_context_begin;
-using sc_dt::SC_NOW;
-using sc_dt::SC_LATER;
-
+#ifdef SC_INCLUDE_FX
+    using sc_dt::sc_fxnum;
+    using sc_dt::sc_fxnum_bitref;
+    using sc_dt::sc_fxnum_fast;
+    using sc_dt::sc_fix;
+    using sc_dt::sc_fix_fast;
+    using sc_dt::sc_ufix;
+    using sc_dt::sc_ufix_fast;
+    using sc_dt::sc_fixed;
+    using sc_dt::sc_fixed_fast;
+    using sc_dt::sc_ufixed;
+    using sc_dt::sc_ufixed_fast;
+    using sc_dt::sc_fxval;
+    using sc_dt::sc_fxval_fast;
+    using sc_dt::sc_fxcast_switch;
+    using sc_dt::sc_fxcast_context;
+    using sc_dt::sc_fxtype_params;
+    using sc_dt::sc_fxtype_context;
+    using sc_dt::sc_q_mode;
+    using sc_dt::SC_RND;
+    using sc_dt::SC_RND_ZERO;
+    using sc_dt::SC_RND_MIN_INF;
+    using sc_dt::SC_RND_INF;
+    using sc_dt::SC_RND_CONV;
+    using sc_dt::SC_TRN;
+    using sc_dt::SC_TRN_ZERO;
+    using sc_dt::sc_o_mode;
+    using sc_dt::SC_SAT;
+    using sc_dt::SC_SAT_ZERO;
+    using sc_dt::SC_SAT_SYM;
+    using sc_dt::SC_WRAP;
+    using sc_dt::SC_WRAP_SM;
+    using sc_dt::sc_switch;
+    using sc_dt::SC_OFF;
+    using sc_dt::SC_ON;
+    using sc_dt::sc_fmt;
+    using sc_dt::SC_F;
+    using sc_dt::SC_E;
+    using sc_dt::sc_context_begin;
+    using sc_dt::SC_NOW;
+    using sc_dt::SC_LATER;
+#endif // SC_INCLUDE_FX
 
 // USINGS FOR sc_core:
 //
