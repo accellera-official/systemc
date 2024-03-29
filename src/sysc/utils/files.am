@@ -49,7 +49,6 @@ H_FILES += \
 	utils/sc_list.h \
 	utils/sc_machine.h \
 	utils/sc_mempool.h \
-	utils/sc_meta.h \
 	utils/sc_pq.h \
 	utils/sc_ptr_flag.h \
 	utils/sc_pvector.h \
@@ -59,7 +58,6 @@ H_FILES += \
 	utils/sc_string.h \
 	utils/sc_string_view.h \
 	utils/sc_temporary.h \
-	utils/sc_typeindex.h \
 	utils/sc_utils_ids.h \
 	utils/sc_vector.h
 
@@ -74,7 +72,6 @@ CXX_FILES += \
 	utils/sc_report.cpp \
 	utils/sc_report_handler.cpp \
 	utils/sc_stop_here.cpp \
-	utils/sc_string.cpp \
 	utils/sc_utils_ids.cpp \
 	utils/sc_vector.cpp
 

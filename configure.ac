@@ -256,11 +256,6 @@ dnl
 AX_PTHREAD
 
 dnl
-dnl check for presence of posix_memalign function
-dnl
-AC_CHECK_FUNC([posix_memalign],[AC_DEFINE([SC_HAVE_POSIX_MEMALIGN],[1])])
-
-dnl
 dnl Libtool setup
 dnl
 dnl - libtools should be put *after* all CC options have been set
@@ -453,23 +448,6 @@ AM_CONDITIONAL([DISABLE_VCD_SCOPES],dnl
 AC_MSG_RESULT($enable_vcd_scopes)
 
 dnl
-dnl enable legacy memory management for allocating coroutine stack
-dnl
-AC_MSG_CHECKING([whether to enable legacy memory managment for allocating coroutine stack])
-AC_ARG_ENABLE([legacy_mem_mgmt],
-  [AS_HELP_STRING([--enable-legacy-mem-mgmt],
-                  [enable legacy memory management for coroutine stack
-                   @<:@yes|no(=default)@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_legacy_mem_mgmt=yes],
-    [no|default],[enable_legacy_mem_mgmt=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-legacy-mem-mgmt])])],
-  [enable_legacy_mem_mgmt=no])
-AM_CONDITIONAL([ENABLE_LEGACY_MEM_MGMT],dnl
-               [test x"$enable_legacy_mem_mgmt" = xyes])
-AC_MSG_RESULT($enable_legacy_mem_mgmt)
-
-dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
@@ -482,7 +460,6 @@ AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 dnl
 dnl pkg-config setup
 dnl
-LIBCONFIG_DEFINES=
 PKGCONFIG_DEFINES=
 PKGCONFIG_CFLAGS=
 PKGCONFIG_LDPRIV=
@@ -500,21 +477,10 @@ dnl check for additional (header+lib) compiler flags
 dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
-AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],dnl
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
-   sysc_non_1666=yes])
-
-dnl
-dnl check for additional library compiler flags (documentation only)
-dnl
-AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],dnl
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
-   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
 dnl
-AC_SUBST(LIBCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_CFLAGS)
 AC_SUBST(PKGCONFIG_LDPRIV)
@@ -584,14 +550,11 @@ AS_IF([test -n "${sysc_flags}"],dnl
 [sysc_flags="${as_nl} User-provided command-line flags :${as_nl}${sysc_flags}"])
 
 dnl prepare printing of additional settings
-AS_IF([test -n "${PKGCONFIG_DEFINES}" -o -n "${LIBCONFIG_DEFINES}"],[dnl
+AS_IF([test -n "${PKGCONFIG_DEFINES}"],[dnl
 sysc_additional="${as_nl} Detected additional settings:"
 AS_IF([test -n "${PKGCONFIG_DEFINES}"],dnl
   [AS_VAR_APPEND([sysc_additional],dnl
                  ["${as_nl}    ${PKGCONFIG_DEFINES}"])])
-AS_IF([test -n "${LIBCONFIG_DEFINES}"],dnl
-  [AS_VAR_APPEND([sysc_additional],dnl
-                 ["${as_nl}    ${LIBCONFIG_DEFINES}"])])
 AS_VAR_APPEND([sysc_additional],["${as_nl}"])dnl
 ]) dnl additional settings
 

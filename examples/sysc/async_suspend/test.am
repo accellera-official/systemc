@@ -48,6 +48,9 @@ examples_TESTS += async_suspend/test
 async_suspend_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
+async_suspend_test_LDFLAGS = \
+	-pthread
+
 async_suspend_test_SOURCES = \
 	$(async_suspend_H_FILES) \
 	$(async_suspend_CXX_FILES)

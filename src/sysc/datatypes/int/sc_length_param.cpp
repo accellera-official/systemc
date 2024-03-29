@@ -76,7 +76,7 @@ sc_length_param::to_string() const
     char buf[BUFSIZ];
 
     s += "(";
-    std::snprintf(buf, BUFSIZ, "%d", m_len );
+    std::snprintf(buf, sizeof(buf), "%d", m_len );
     s += buf;
     s += ")";
 

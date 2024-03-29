@@ -102,41 +102,22 @@ randomize( int seed  )
 
   in_seed = ( seed <= 0 ? static_cast<long>(time( 0 )) : seed );
 
-#if (!defined(WIN32) && !defined(_WIN32))
-  srand48( in_seed );
-#else
   srand( ( unsigned ) in_seed );
-#endif
 
   return in_seed;
 }
 
 // Flip a coin with probability p.
 
-#if (!defined(WIN32) && !defined(_WIN32))
-
 inline
 bool
 flip( double p )
 {
-  return ( drand48() < p );
+  // rand() produces an integer between 0 and RAND_MAX so 
+  // rand() / RAND_MAX is a number between 0 and 1, 
+  // which is required to compare with p.
+  return ( rand() < ( int ) ( p * RAND_MAX ) );
 }
-
-#else
-
-inline
-bool
-flip( double p )
-{
-  const int MAX_VAL = ( 1 << 15 );
-
-  // rand() produces an integer between 0 and 2^15-1, so rand() /
-  // MAX_VAL is a number between 0 and 1, which is required to compare
-  // with p.
-  return ( rand() < ( int ) ( p * MAX_VAL ) );
-}
-
-#endif
 
 // Randomly generate a bit string with nbits bits.  str has a length
 // of nbits + 1. This function is used to generate random messages to

@@ -1,0 +1,5 @@
+SystemC Simulation
+object top
+object top.a
+object top.c
+program completed

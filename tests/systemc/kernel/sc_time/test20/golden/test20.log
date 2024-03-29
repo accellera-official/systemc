@@ -1,0 +1,32 @@
+SystemC Simulation
+constructor SC_ZERO_TIME: valid construct.
+constructor 1e-3: valid construct.
+constructor 1ms: valid construct.
+constructor 1 ms: valid construct.
+constructor 1.0 ms: valid construct.
+constructor 1.00000 ms: valid construct.
+constructor 1e-3 s: valid construct.
+constructor 1E-3 s: valid construct.
+constructor 1e-03 s: valid construct.
+constructor 1e-003 s: valid construct.
+constructor 1.0e-3 s: valid construct.
+constructor 1.0e+3 us: valid construct.
+constructor 1ms as stringview: valid construct.
+constructor 1ms as string: valid construct.
+constructor 1ms as const char*: valid construct.
+constructor uses sc_time output string from stream: valid construct.
+constructor uses sc_time output string using to_string: valid construct.
+member function from_string 1ms: valid construct.
+constructor with imcomplete exponent: expected error occurred
+constructor with missing value: expected error occurred
+constructor with invald character '!': expected error occurred
+constructor with invald character '+': expected error occurred
+constructor with invald character '_': expected error occurred
+constructor with invalid SI unit notation (sec): expected error occurred
+constructor with invalid character '2' at end of string: expected error occurred
+constructor with invalid space at start of string: expected error occurred
+constructor with invalid space at end of string: expected error occurred
+constructor with invalid space in middle of string: expected error occurred
+constructor with invalid spaces at multiple places in string: expected error occurred
+constructor with invalid upper case character in string: expected error occurred
+constructor with invalid SI unit in upper case: expected error occurred

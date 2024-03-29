@@ -138,12 +138,13 @@ class sc_fxnum_fast;
 
   // Unary arithmetic operators
 
-  sc_signed operator + (const sc_signed&   u);
-  sc_signed operator - (const sc_signed&   u);
+  SC_API sc_signed operator + (const sc_signed&   u);
+  SC_API sc_signed operator - (const sc_signed&   u);
+  SC_API sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
 
-  sc_signed operator ~ (const sc_signed& u);
+  SC_API sc_signed operator ~ (const sc_signed& u);
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signed_bitref_r
@@ -151,7 +152,7 @@ class sc_fxnum_fast;
 //  Proxy class for sc_signed bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_signed_bitref_r : public sc_value_base
+class SC_API sc_signed_bitref_r : public sc_value_base
 {
     friend class sc_signed;
 
@@ -261,7 +262,7 @@ operator<<( ::std::ostream&, const sc_signed_bitref_r& );
 //  Proxy class for sc_signed bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_signed_bitref
+class SC_API sc_signed_bitref
     : public sc_signed_bitref_r
 {
     friend class sc_signed;
@@ -317,7 +318,7 @@ operator>>( ::std::istream&, sc_signed_bitref& );
 //  Proxy class for sc_signed part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_signed_subref_r : public sc_value_base
+class SC_API sc_signed_subref_r : public sc_value_base
 {
     friend class sc_signed;
     friend class sc_signed_signal;
@@ -466,7 +467,7 @@ operator<<( ::std::ostream&, const sc_signed_subref_r& );
 //  Proxy class for sc_signed part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_signed_subref
+class SC_API sc_signed_subref
     : public sc_signed_subref_r
 {
     friend class sc_signed;
@@ -547,7 +548,7 @@ operator>>( ::std::istream&, sc_signed_subref& );
 //  Arbitrary precision signed number.
 // ----------------------------------------------------------------------------
 
-class sc_signed : public sc_value_base
+class SC_API sc_signed : public sc_value_base
 {
     friend class sc_concatref;
     friend class sc_signed_bitref_r;
@@ -1136,13 +1137,13 @@ public:
 
   // Unary arithmetic operators
 
-  friend sc_signed operator + (const sc_signed&   u);
-  friend sc_signed operator - (const sc_signed&   u);
-  friend sc_signed operator - (const sc_unsigned& u);
+  friend SC_API sc_signed operator + (const sc_signed&   u);
+  friend SC_API sc_signed operator - (const sc_signed&   u);
+  friend SC_API sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
 
-  friend sc_signed operator ~ (const sc_signed& u);
+  friend SC_API sc_signed operator ~ (const sc_signed& u);
 
 protected:
 
@@ -1367,7 +1368,7 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf(msg, BUFSIZ,
+        std::snprintf(msg, sizeof(msg),
 		    "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -1629,7 +1630,7 @@ sc_signed::sc_signed( int nb ) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf(msg, BUFSIZ, "%s::%s( int nb ) : nb = %d is not valid",
+        std::snprintf(msg, sizeof(msg), "%s::%s( int nb ) : nb = %d is not valid",
                  "sc_signed", "sc_signed", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }

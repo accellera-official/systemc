@@ -36,9 +36,7 @@
 
 #include <iostream>
 
-#if SC_CPLUSPLUS >= 201703L
 #include <string_view>
-#endif
 
 namespace sc_core {
 
@@ -97,20 +95,20 @@ class SC_API sc_time
     friend class sc_event;
     friend class sc_clock;
 
-    friend void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
 
 public:
 
@@ -125,13 +123,8 @@ public:
     // convert time object from string
     // For C++ versions prior to C++17, offer some (non-standard) backwards compatibility
     // using std::string instead of std::string_view
-#if SC_CPLUSPLUS >= 201703L
     explicit sc_time( std::string_view strv );
     static sc_time from_string( std::string_view strv );
-#else
-    explicit sc_time( const std::string& str );
-    static sc_time from_string( const std::string& str );
-#endif
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );

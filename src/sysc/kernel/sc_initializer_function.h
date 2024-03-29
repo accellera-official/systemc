@@ -31,8 +31,6 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 
-#if SC_CPLUSPLUS >= 201103L
-
 #include "sysc/kernel/sc_macros.h"
 #include "sysc/kernel/sc_module.h"
 #include <functional>
@@ -105,7 +103,5 @@ inline const char * sc_initializer_function_name_fwd (const char *name, F&& fn)
 
 
 }
-
-#endif // SC_CPLUSPLUS >= 201103L
 
 #endif // SC_CORE_SC_INITIALIZER_FUNCTION_H_INCLUDED_

@@ -142,7 +142,7 @@ sc_report::swap( sc_report & that )
     swap( m_what,            that.m_what );
 } 
 
-sc_report::~sc_report() SC_NOEXCEPT_
+sc_report::~sc_report() noexcept
 {
     if ( file != empty_str )
 	delete[] file;

@@ -39,13 +39,16 @@ DOXYGEN=doxygen
 ## Core documentation (see also root directory)
 
 DOC_FILES = \
-	DEVELOPMENT.md
+	DEVELOPMENT.md \
+	git_branches.svg
 
 ##
 ## SystemC documentation
 ##   find sysc -type f -a -not -name "*.in" -printf "\t%p \\\\\n"
 DOC_FILES += \
-	sysc/README 
+	sysc/README
+DOC_FILES += \
+	sysc/SIGN_EXTENSION.md
 
 ##
 ## TLM-2.0 documentation

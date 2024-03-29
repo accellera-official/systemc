@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Error: (E513) an sc_module_name parameter for your constructor is required
+In file: <removed by verify.pl>

@@ -106,15 +106,15 @@ class sc_thread_process : public sc_process_b {
     friend class sc_runnable;
     friend sc_cor* get_cor_pointer( sc_process_b* process_p );
 
-    friend void wait( int, sc_simcontext* );
-    friend void wait( sc_simcontext* );
-    friend void wait( const sc_event&, sc_simcontext* );
-    friend void wait( const sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_event_and_list&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext*);
+    friend SC_API void wait( int, sc_simcontext* );
+    friend SC_API void wait( sc_simcontext* );
+    friend SC_API void wait( const sc_event&, sc_simcontext* );
+    friend SC_API void wait( const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext*);
 
   public:
     sc_thread_process( const char* name_p, bool free_host,
@@ -467,8 +467,7 @@ inline sc_cor* get_cor_pointer( sc_process_b* process_p )
 //       file sc_simcontext.cpp) for a diagram showing the state transitions 
 //       for processes.
 //   (2) If the triggering process is the same process, the trigger is
-//       ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-//       is defined.
+//       ignored as well.
 //------------------------------------------------------------------------------
 inline
 void
@@ -484,13 +483,11 @@ sc_thread_process::trigger_static()
           m_trigger_type != STATIC )
         return;
 
-#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
     {
         report_immediate_self_notification();
         return;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     if ( m_wait_cycle_n > 0 && THROW_NONE == m_throw_status )
     {

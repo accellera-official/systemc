@@ -267,7 +267,6 @@ sc_time::sc_time( value_type v, bool scale )
     }
 }
 
-#if SC_CPLUSPLUS >= 201703L
 sc_time::sc_time( std::string_view strv )
   : m_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) )
 {}
@@ -277,18 +276,6 @@ sc_time::from_string( std::string_view strv )
 {
     return from_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) );
 }
-#else
-sc_time::sc_time( const std::string& str )
-  : m_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) )
-{}
-
-sc_time
-sc_time::from_string( const std::string& str ) 
-{
-    return from_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) );
-}
-#endif
-
 
 sc_time
 sc_time::from_value( value_type v )
@@ -495,7 +482,7 @@ sc_get_default_time_unit()
 
 // ----------------------------------------------------------------------------
 
-SC_API const sc_time SC_ZERO_TIME;
+const sc_time SC_ZERO_TIME;
 
 } // namespace sc_core
 

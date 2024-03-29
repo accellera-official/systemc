@@ -36,12 +36,6 @@
 #include "sysc/datatypes/bit/sc_logic.h"
 #include "sysc/tracing/sc_trace.h"
 
-#if ! defined( SC_DISABLE_VIRTUAL_BIND )
-#  define SC_VIRTUAL_ virtual
-#else
-#  define SC_VIRTUAL_ /* non-virtual */
-#endif
-
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
 #pragma warning(disable: 4251) // DLL import for std::string
@@ -164,10 +158,10 @@ public:
 
     // bind to in interface
 
-    SC_VIRTUAL_ void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
-    SC_VIRTUAL_ void bind( in_if_type& interface_ )
+    virtual void bind( in_if_type& interface_ )
 	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
@@ -176,7 +170,7 @@ public:
 
     // bind to parent in port
 
-    SC_VIRTUAL_ void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
@@ -185,7 +179,7 @@ public:
 
     // bind to parent inout port
 
-    SC_VIRTUAL_ void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
@@ -262,7 +256,7 @@ protected:
     //  - should only be called, when using sc_port_b explicitly
     //  - errors are detected during elaboration
 
-    SC_VIRTUAL_ void bind( base_port_type& parent_ )
+    virtual void bind( base_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
 
@@ -485,10 +479,10 @@ public:
 
     // bind to in interface
 
-    SC_VIRTUAL_ void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
-    SC_VIRTUAL_ void bind( in_if_type& interface_ )
+    virtual void bind( in_if_type& interface_ )
 	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
@@ -497,7 +491,7 @@ public:
 
     // bind to parent in port
 
-    SC_VIRTUAL_ void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
@@ -506,7 +500,7 @@ public:
 
     // bind to parent inout port
 
-    SC_VIRTUAL_ void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
@@ -619,7 +613,7 @@ protected:
     //  - should only be called, when using sc_port_b explicitly
     //  - errors are detected during elaboration
 
-    SC_VIRTUAL_ void bind( base_port_type& parent_ )
+    virtual void bind( base_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
 private:
@@ -742,10 +736,10 @@ public:
 
     // bind to in interface
 
-    SC_VIRTUAL_ void bind( const in_if_type& interface_ )
+    virtual void bind( const in_if_type& interface_ )
 	{ sc_port_base::bind( const_cast<in_if_type&>( interface_ ) ); }
 
-    SC_VIRTUAL_ void bind( in_if_type& interface_ )
+    virtual void bind( in_if_type& interface_ )
 	{ this->bind( const_cast<const in_if_type&>( interface_ ) ); }
 
     void operator () ( const in_if_type& interface_ )
@@ -754,7 +748,7 @@ public:
 
     // bind to parent in port
 
-    SC_VIRTUAL_ void bind( in_port_type& parent_ )
+    virtual void bind( in_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
     void operator () ( in_port_type& parent_ )
@@ -763,7 +757,7 @@ public:
 
     // bind to parent inout port
 
-    SC_VIRTUAL_ void bind( inout_port_type& parent_ )
+    virtual void bind( inout_port_type& parent_ )
 	{ sc_port_base::bind( parent_ ); }
 
     void operator () ( inout_port_type& parent_ )
@@ -876,7 +870,7 @@ protected:
     //  - should only be called, when using sc_port_b explicitly
     //  - errors are detected during elaboration
 
-    SC_VIRTUAL_ void bind( base_port_type& parent_ )
+    virtual void bind( base_port_type& parent_ )
         { sc_port_base::bind( parent_ ); }
 
 private:
@@ -1769,8 +1763,6 @@ sc_trace( sc_trace_file* tf, const sc_inout<T>& port,
 }
 
 } // namespace sc_core
-
-#undef SC_VIRTUAL_
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(pop)

@@ -68,32 +68,18 @@ class SC_API sc_hierarchy_scope
     struct root_tag {};
     struct kernel_tag {};
 
-#if SC_CPLUSPLUS < 201103L
-    struct move_tag // manual "move" support
-    {
-        move_tag( sc_hierarchy_scope& );
-        sc_simcontext*  simc;
-        sc_object_host* scope;
-    };
-    SC_NODISCARD_ move_tag move();
-#else
-    SC_NODISCARD_ sc_hierarchy_scope move()
+    [[nodiscard]] sc_hierarchy_scope move()
       { return std::move(*this); }
-#endif // C++03
 
     sc_hierarchy_scope(kernel_tag, sc_object*);
     sc_hierarchy_scope(kernel_tag, sc_object_host*);
 public:
-    ~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false);
+    ~sc_hierarchy_scope() noexcept(false);
 
     // get root scope
     static sc_hierarchy_scope get_root() { return sc_hierarchy_scope(sc_core::sc_hierarchy_scope::root); }
 
-#if SC_CPLUSPLUS >= 201103L
     sc_hierarchy_scope(sc_hierarchy_scope&&);
-#else
-    sc_hierarchy_scope(move_tag);
-#endif // SC_CPLUSPLUS >= 201103L
 
 private:
     // disabled copying and assignment
@@ -130,11 +116,7 @@ class SC_API sc_object
     friend class sc_simcontext;
     friend class sc_trace_file_base;
 
-#if SC_CPLUSPLUS >= 201103L
     typedef sc_hierarchy_scope hierarchy_scope;
-#else
-    typedef sc_hierarchy_scope::move_tag hierarchy_scope;
-#endif // SC_CPLUSPLUS >= 201103L
 
 public:
     const char* name() const
@@ -190,7 +172,7 @@ protected:
     sc_object& operator=( const sc_object& );
 
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
+    [[nodiscard]] virtual hierarchy_scope get_hierarchy_scope();
 
 private:
     void detach();
@@ -240,7 +222,7 @@ public:
 
 protected:
     // restore SystemC hierarchy to current object's hierarchical scope
-    SC_NODISCARD_ virtual hierarchy_scope get_hierarchy_scope();
+    [[nodiscard]] virtual hierarchy_scope get_hierarchy_scope();
 
 private:
     virtual void add_child_event( sc_event* event_p );

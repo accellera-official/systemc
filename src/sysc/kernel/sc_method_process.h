@@ -112,20 +112,20 @@ class sc_method_process : public sc_process_b {
     friend class sc_simcontext;
     friend class sc_runnable;
 
-    friend void next_trigger( sc_simcontext* );
-    friend void next_trigger( const sc_event&,
+    friend SC_API void next_trigger( sc_simcontext* );
+    friend SC_API void next_trigger( const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_event_or_list&,
+    friend SC_API void next_trigger( const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_event_and_list&,
+    friend SC_API void next_trigger( const sc_event_and_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&,
+    friend SC_API void next_trigger( const sc_time&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_or_list&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event_or_list&,
                   sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_and_list&,
+    friend SC_API void next_trigger( const sc_time&, const sc_event_and_list&,
                   sc_simcontext* );
 
   public:
@@ -336,8 +336,7 @@ inline bool sc_method_process::run_process()
 //       file sc_simcontext.cpp) for a diagram showing the state transitions 
 //       for processes.
 //   (2) If the triggering process is the same process, the trigger is
-//       ignored as well, unless SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
-//       is defined.
+//       ignored as well.
 //------------------------------------------------------------------------------
 inline
 void
@@ -347,13 +346,11 @@ sc_method_process::trigger_static()
           m_trigger_type != STATIC )
         return;
 
-#if ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if( SC_UNLIKELY_( sc_get_current_process_b() == this ) )
     {
         report_immediate_self_notification();
         return;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     // If we get here then the method is has satisfied its wait, if its 
     // suspended mark its state as ready to run. If its not suspended then 

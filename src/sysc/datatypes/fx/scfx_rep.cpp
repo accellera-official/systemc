@@ -767,7 +767,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 
     if( mant_is_neg )
     {
-	m_mant[m_msw] |=  ~0U << scfx_find_msb( m_mant[m_msw] );
+	m_mant[m_msw] |=  ~UINT64_ZERO << scfx_find_msb( m_mant[m_msw] );
 	for( int i = m_msw + 1; i < m_mant.size(); ++ i )
 	    m_mant[i] = static_cast<word>( -1 );
 	complement( m_mant, m_mant, m_mant.size() );
@@ -2812,7 +2812,7 @@ scfx_rep::dump( ::std::ostream& os ) const
     for( int i = size() - 1; i >= 0; i -- )
     {
 	char buf[BUFSIZ];
-	std::snprintf( buf, BUFSIZ, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
+	std::snprintf( buf, sizeof(buf), " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
 	os << buf << ::std::endl;
     }
 

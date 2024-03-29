@@ -376,7 +376,6 @@
     <ClCompile Include="..\..\src\sysc\kernel\sc_simcontext.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_spawn_options.cpp" />
     <ClCompile Include="..\..\src\sysc\utils\sc_stop_here.cpp" />
-    <ClCompile Include="..\..\src\sysc\utils\sc_string.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_thread_process.cpp" />
     <ClCompile Include="..\..\src\sysc\kernel\sc_time.cpp" />
     <ClCompile Include="..\..\src\sysc\tracing\sc_trace.cpp" />
@@ -525,14 +524,6 @@
     <ClInclude Include="..\..\src\sysc\kernel\sc_ver.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_wait.h" />
     <ClInclude Include="..\..\src\sysc\kernel\sc_wait_cthread.h" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\bind.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\config.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\detail\endian.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\mem_fn.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\ref.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\enable_if.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view.hpp" />
-    <ClInclude Include="..\..\src\sysc\packages\boost\utility\string_view_fwd.hpp" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_trace_file_base.h" />
     <ClInclude Include="..\..\src\sysc\tracing\sc_tracing_ids.h" />
@@ -543,7 +534,6 @@
     <ClInclude Include="..\..\src\sysc\utils\sc_list.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_machine.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h" />
-    <ClInclude Include="..\..\src\sysc\utils\sc_meta.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pq.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_ptr_flag.h" />
     <ClInclude Include="..\..\src\sysc\utils\sc_pvector.h" />

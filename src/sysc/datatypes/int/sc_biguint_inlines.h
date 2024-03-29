@@ -44,6 +44,14 @@ namespace sc_dt {
 // |     Constant reference to this object instance.
 // +----------------------------------------------------------------------------
 template<int W>
+inline const sc_biguint<W>&
+sc_biguint<W>::operator = (const sc_biguint<W>& from)
+{
+    vector_copy( DIGITS_N, from.get_digits(), get_digits() );
+    return *this;
+}
+
+template<int W>
 template<int WO>
 inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_biguint<WO>& from)

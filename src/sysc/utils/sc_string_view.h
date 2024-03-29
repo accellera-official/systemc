@@ -34,38 +34,17 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 #include <string>
-#if SC_CPLUSPLUS >= 201103L
 #include <type_traits> // std::enable_if, std::is_convertible
-#endif
-
-#if SC_CPLUSPLUS >= 201402L && defined(__has_include)
-#  if SC_CPLUSPLUS > 201402L && __has_include(<string_view>) /* since C++17 */
-#    include <string_view>
-#    define SC_STRING_VIEW_NS_ std
-   /*  available in Library Fundamentals, ISO/IEC TS 19568:2015 */
-#  elif __has_include(<experimental/string_view>)
-#    include <experimental/string_view>
-#    define SC_STRING_VIEW_NS_ std::experimental
-#  endif
-#else
-// TODO: other ways to detect availability of std::(experimental::)string_view?
-#endif
-
-#ifndef SC_STRING_VIEW_NS_
-// fallback to (mostly compatible) implementation from Boost
-#  include <sysc/packages/boost/utility/string_view.hpp>
-#  define SC_STRING_VIEW_NS_ sc_boost
-#endif // Boost fallback
+#include <string_view>
 
 namespace sc_core {
 
 /// non-owning, constant reference to a string
 // TODO: add ABI guard against inconsistent configurations
 class SC_API sc_string_view
-  : public SC_STRING_VIEW_NS_::string_view
+  : public std::string_view
 {
-  typedef SC_STRING_VIEW_NS_::string_view base_type;
-#if SC_CPLUSPLUS >= 201103L
+  typedef std::string_view base_type;
   template<typename T> struct enable_if_convertible
     : std::enable_if<std::is_convertible<T,base_type>::value > {};
 public:
@@ -73,36 +52,14 @@ public:
     using base_type::base_type;
 
     // allow same conversions as base class, needed for C++17
-# if !defined(_MSC_VER) || _MSC_VER >= 1910 // internal compiler error on MSVC 2015
     template<typename T>
     /* constexpr */ sc_string_view( const T& s
                                   , typename enable_if_convertible<T>::type* = 0)
       : base_type(s) {}
-# endif // MSVC 2015 or earlier
-#else
-public:
-  /* constexpr */ sc_string_view() /* noexcept */
-    : base_type() {}
-  /* constexpr */ sc_string_view(const base_type& sv) /* noexcept */
-    : base_type(sv) {}
-  /* constexpr */ sc_string_view(const char* s) /* noexcept */
-    : base_type(s) {}
-  /* constexpr */ sc_string_view(const char* s, size_type sz) /* noexcept */
-    : base_type(s, sz) {}
-  /* constexpr */ sc_string_view(const std::string& s) /* noexcept */
-    : base_type(s.data(), s.size()) {}
-#endif // C++11
 
   // helper function to create an explicit string copy
   inline std::string str() const
     { return std::string( data(), size() ); }
-
-#if SC_CPLUSPLUS < 201703L
-  // pre-C++17 does not support creation of/assignment to std::string from string_view,
-  // add implicit conversion for convenience
-  inline operator std::string() const
-    { return str(); }
-#endif // before C++17
 
 #if SC_CPLUSPLUS <= 201703L // before C++20
   /* constexpr */ bool starts_with(base_type sv) const /* noexcept */
@@ -149,6 +106,5 @@ private:
 
 } // namespace sc_core
 
-#undef SC_STRING_VIEW_NS_
 #endif // SYSC_UTILS_STRING_VIEW_H_INCLUDED_
 // Taf!

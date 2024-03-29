@@ -1,0 +1,11 @@
+SystemC Simulation
+ tb   0   0 s
+ tb   1   1 ns
+ tb   2   2 ns
+ tb   3   3 ns
+ tb   4   4 ns
+ tb   5   5 ns
+ tb   6   6 ns
+ tb   7   7 ns
+ tb   8   8 ns
+ tb   9   9 ns

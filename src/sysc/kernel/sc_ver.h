@@ -55,18 +55,18 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_3_0_0
 
-#define SYSTEMC_VERSION       20231124
+#define SYSTEMC_VERSION       20240329
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      3
 #define SC_VERSION_MINOR      0
 #define SC_VERSION_PATCH      0
-#define SC_IS_PRERELEASE      1
+#define SC_IS_PRERELEASE      0
 
 /// compliancy with IEEE 1666-2023 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     202301L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2023 by all Contributors,\n" \
+  "Copyright (c) 1996-2024 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
@@ -129,16 +129,6 @@ extern SC_API const std::string  sc_copyright_string;
 extern const int DEBUG_SYSTEMC_CHECK_;
 #endif
 
-// SC_DISABLE_VIRTUAL_BIND
-#if defined( SC_DISABLE_VIRTUAL_BIND )
-# define SC_DISABLE_VIRTUAL_BIND_CHECK_ \
-    SC_API_DEFINED_(SC_DISABLE_VIRTUAL_BIND)
-#else
-# define SC_DISABLE_VIRTUAL_BIND_CHECK_ \
-    SC_API_UNDEFINED_(SC_DISABLE_VIRTUAL_BIND)
-#endif
-extern const int SC_DISABLE_VIRTUAL_BIND_CHECK_;
-
 // Some preprocessor switches need to be consistent between different
 // translation units of an application.  Those can't be easily checked
 // during link-time.  Instead, perform a check during run-time by
@@ -147,12 +137,11 @@ extern const int SC_DISABLE_VIRTUAL_BIND_CHECK_;
 // Note: Template and constructor parameters are not passed as default
 //       values to avoid ODR violations in the check itself.
 
-template // use pointers for more verbose error messages
-<
+//template // use pointers for more verbose error messages
+//<
 //  const int * DebugSystemC,
-  const int * DisableVirtualBind
->
-struct SC_API_VERSION_STRING
+//>
+struct SC_API SC_API_VERSION_STRING
 {
   SC_API_VERSION_STRING
     (
@@ -174,18 +163,16 @@ struct SC_API_VERSION_STRING
 
 #if !defined(SC_BUILD)
 // import explicitly instantiated template
-SC_TPLEXTERN_ template struct SC_API SC_API_VERSION_STRING
-<
-  &SC_DISABLE_VIRTUAL_BIND_CHECK_
->;
+//extern template struct SC_API SC_API_VERSION_STRING
+//<
+//>;
 
 #if !defined(SC_DISABLE_API_VERSION_CHECK)
 static
 SC_API_VERSION_STRING
-<
+//<
 //  & DEBUG_SYSTEMC_CHECK_,
-  & SC_DISABLE_VIRTUAL_BIND_CHECK_
->
+//>
 api_version_check
 (
   SC_DEFAULT_WRITER_POLICY

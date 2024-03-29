@@ -127,39 +127,6 @@
 #endif // IEEE_1666_CPLUSPLUS
 
 // ----------------------------------------------------------------------------
-// (no) exception specifiers
-
-# define SC_NOEXCEPT_            noexcept
-# define SC_NOEXCEPT_EXPR_(expr) noexcept(expr)
-
-// ----------------------------------------------------------------------------
-// indicate, that a function result shall not be discarded
-
-#ifndef SC_NODISCARD_
-
-#if defined(__has_cpp_attribute)
-# if __has_cpp_attribute(nodiscard)
-#   define SC_NODISCARD_ [[nodiscard]]
-# endif
-#endif // __has_cpp_attribute(nodiscard)
-
-#if !defined(SC_NODISCARD_) && defined(__has_attribute)
-# if __has_attribute(warn_unused_result)
-#   define SC_NODISCARD_ __attribute__((warn_unused_result))
-# endif
-#endif // __has_attribute(warn_unused_result)
-
-#if !defined(SC_NODISCARD_) && defined(_Check_return_)
-# define SC_NODISCARD_ _Check_return_
-#endif // _Check_result_
-
-#ifndef SC_NODISCARD_
-# define SC_NODISCARD_ /* nothing */
-#endif
-
-#endif // SC_NODISCARD_
-
-// ----------------------------------------------------------------------------
 
 #include <cassert>
 #include <cstdio>
@@ -168,13 +135,8 @@
 
 // ----------------------------------------------------------------------------
 
-// declare certain template instantiations as "extern" during library build
-// and adding an explicit instantiation into the (shared) SystemC library
-
-# define SC_TPLEXTERN_ extern
-
 // build SystemC DLL on Windows
-#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64))
+#if defined(SC_WIN_DLL) && (defined(_WIN32) || defined(_WIN64)) && defined(_MSC_VER)
 
 # if defined(SC_BUILD) // building SystemC library
 #   define SC_API  __declspec(dllexport)
@@ -192,7 +154,7 @@
 # define SC_API_TEMPLATE_DECL_ template class SC_API
 #else
 // keep extern when building an application (or on non-Windows)
-# define SC_API_TEMPLATE_DECL_ SC_TPLEXTERN_ template class SC_API
+# define SC_API_TEMPLATE_DECL_ extern template class SC_API
 #endif
 
 #endif // SC_CMNHDR_H
@@ -202,7 +164,7 @@
 // (deliberately outside of include guards to enable later effect)
 #if defined(SC_HAS_WINDOWS_H_) && defined(SC_INCLUDE_WINDOWS_H)
 #  undef SC_HAS_WINDOWS_H_
-#  include <Windows.h>
+#  include <windows.h>
 #endif
 
 // $Log: sc_cmnhdr.h,v $

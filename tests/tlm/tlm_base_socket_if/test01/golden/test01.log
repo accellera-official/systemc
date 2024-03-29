@@ -1,0 +1,17 @@
+SystemC Simulation
+port_base: m1.tlm_base_initiator_socket_0
+const port_base: m1.tlm_base_initiator_socket_0
+base_export: m1.tlm_base_initiator_socket_export_0
+const base_export: m1.tlm_base_initiator_socket_export_0
+bus width: 32
+protocol_types: tlm_base_protocol_types
+tlm_socket_category: TLM_INITIATOR_SOCKET
+is_multi_socket: 0
+port_base: m2.tlm_base_target_socket_port_0
+const port_base: m2.tlm_base_target_socket_port_0
+base_export: m2.tlm_base_target_socket_0
+const base_export: m2.tlm_base_target_socket_0
+bus width: 16
+protocol_types: tlm_base_protocol_types
+tlm_socket_category: TLM_TARGET_SOCKET
+is_multi_socket: 0

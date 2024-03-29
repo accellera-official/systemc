@@ -194,7 +194,7 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     if ( dst_i == end_i )
     {
-	mask = ~(~0U << left_shift);
+	mask = ~(~UINT64_ZERO << left_shift);
 	dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
 	    (digit[0] << left_shift) ) & DIGIT_MASK;
     }
@@ -220,7 +220,7 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
     {
 	high_i = SC_BIT_INDEX(high_i);
 	right_shift = BITS_PER_DIGIT - left_shift;
-	mask = ~(~0U << left_shift);
+	mask = ~(~UINT64_ZERO << left_shift);
 	right_word = digit[0];
 	dst_p[dst_i] = (dst_p[dst_i] & mask) |
 	    ((right_word << left_shift) & DIGIT_MASK);
@@ -590,7 +590,7 @@ sc_unsigned::check_if_outside(int bit_num) const
 #ifdef DEBUG_SYSTEMC
       if( bit_num < 0 || bit_num >= nbits ) {
 	  char msg[BUFSIZ];
-	  std::snprintf(msg, BUFSIZ, "%s::check_if_outside( int bit_num ) : "
+	  std::snprintf(msg, sizeof(msg), "%s::check_if_outside( int bit_num ) : "
 		   "bit_num = %d is out of bounds",
 		   "sc_unsigned", bit_num );
 	  SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );
