@@ -10,7 +10,7 @@ Andrew C. Goodrich
   
   2. What's new in this release?
 
-  3. New features 
+  3. New features
 
   4. Bug fixes and enhancements
 
@@ -22,7 +22,6 @@ Andrew C. Goodrich
 
   8. Known problems
 
-
 ## 1. IMPORTANT
 
 This is the release of the SystemC 3.0.0 Class Library.
@@ -31,58 +30,69 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
 1. This release is supported on the following platform combinations 
    for which it has been tested:
 
-   * 64-bit Linux (x86_64), RedHat Enterprise 7 & 8
-      - GNU C++ compiler versions gcc-9.3.0 through gcc-11.1.0
-      - Clang C++ compiler versions clang-11.1 through clang-13.0.0
+|      OS        |    Target     |    Compiler
+| -------------- | ------------- |  --------------
+| Ubuntu 20.04   |     amd64     |  gcc  9.4.0
+| Ubuntu 20.04   |     arm64     |  gcc  9.4.0
+| Ubuntu 22.04   |     amd64     |  gcc 11.4.0
+| Ubuntu 22.04   |     arm64     |  gcc 11.4.0
+| AlmaLinux 8    |     amd64     |  gcc  8.5.0
+| AlmaLinux 8    |     arm64     |  gcc  8.5.0
+| AlmaLinux 9    |     amd64     |  gcc 11.4.1
+| AlmaLinux 9    |     arm64     |  gcc 11.4.1
+| Debian 12.5    |     amd64     |  gcc 12.3.0 
+| Debian 12.5    |     amd64     |  gcc 13.2.0 
+| Debian 12.5    |     amd64     |  gcc 13.2.0 with --std=c++20
+| Rhel 7.9       |     x86_64    |  gcc 9.3.0
+| Rhel 8.8       |     amd64     |  gcc 9.4.0
+| Rhel 8.8       |     amd64     |  gcc 13.1.0
+| Rhel 8.8       |     amd64     |  clang 17.0.6
+| Rhel 8.9       |     amd64     |  gcc 8.5.0
+| Rhel 8.9       |     amd64     |  gcc 11.2.1
+| Rhel 8.9       |     amd64     |  gcc 12.2.1
+| Rhel 8.9       |     amd64     |  coside clang 16.0.6
+| Rhel 8.9       |     amd64     |  coside gcc 13.1.0
+| Windows 10     |               |  msvc16 (2019)
+| Windows 11     |               |  msvc16 (2019)
+| Windows 11     |               |  msvc17 (2022)
+| macOS 14.4     |               |  Apple clang 15
 
-   * 64-bit Linux (aarch64), Ubuntu 18 & 20
-      - GNU C++ compiler version gcc-9.3
+Warning: _The fixed-point data-types are not working as defined on
+MSVC 2017 and later in Release x64 mode._
 
-   * 64-bit macOS (macosarm64, macosx64, macosuniversal, macosunknown),
-     macOS 11.6 (Big Sur) until 14.1 (Sonoma)
-      - Xcode/AppleClang compiler version 12.0 until version 15.0
+This release has not been tested or is known not to work as expected
+on the following formerly supported platforms:
 
-   * Microsoft Windows 10
-      - Microsoft Visual Studio 2019 (16) (Win32 and x64)
-
-   Warning: _The fixed-point data-types are not working as defined on
-   MSVC 2017 and later in Release x64 mode._
-
-   This release has not been tested or is known not to work as expected
-   on the following formerly supported platforms:
-
-   * GNU C++ compiler versions prior to 9.3.0 (all platforms)
-   * FreeBSD 9.0 or later (x86, x86_64) with GNU C++ compiler
-   * HP-UX 11.00 or later with GNU C++ or HP C++ compiler
-   * Sun/Oracle Solaris, with GNU C++ or Sun/Solaris Studio compiler
-   * macOS prior to 11.6 (Big Sur) and/or on the x86, PowerPC architectures
-   * Microsoft Visual C++ versions prior to 2017 (15.0)
-   * Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
-   * Msys/MinGW32 GNU C++ compiler
+* GNU C++ compiler versions prior to 9.3.0 (all platforms)
+* FreeBSD 9.0 or later (x86, x86_64) with GNU C++ compiler
+* HP-UX 11.00 or later with GNU C++ or HP C++ compiler
+* Sun/Oracle Solaris, with GNU C++ or Sun/Solaris Studio compiler
+* macOS prior to 11.6 (Big Sur) and/or on the x86, PowerPC architectures
+* Microsoft Visual C++ versions prior to 2017 (15.0)
+* Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
+* Msys/MinGW32 GNU C++ compiler
 
 2. (In)compatibility note
 
-   While it is possible to build SystemC as a shared library (both on
-   ELF-based systems and well as a DLL on Windows), there is no explicitly
-   defined binary interface across different
+While it is possible to build SystemC as a shared library (both on
+ELF-based systems and well as a DLL on Windows), there is no explicitly
+defined binary interface across different
+  - SystemC implementations (e.g. from multiple vendors)
+  - SystemC library versions
+  - Compilers or compiler versions
+  - Operating systems or OS versions
 
-    - SystemC implementations (e.g. from multiple vendors)
-    - SystemC library versions
-    - Compilers or compiler versions
-    - Operating systems or OS versions
-
-   Some differences might be caught at link time, while other incompatibilities
-   could just silently lead to undefined behavior during simulation.  Please
-   carefully ensure a consistent build configuration, when integrating binary
-   SystemC models built from separate sources.
+   Some differences might be caught at link time, while other incompatibilities 
+   could just silently lead to undefined behavior during simulation. Please carefully 
+   ensure a consistent build configuration, when integrating binary SystemC models built 
+   from separate sources.
 
 
 ## 2. What's new in this release?
 
-This version of SystemC contains the "Proof of Concept" simulator
-for the IEEE Std. 1666-2023 SystemC standard.  Please consult the IEEE Std.
-1666-2023 SystemC Language Reference Manual for details about the
-current SystemC standard.
+This version of SystemC contains the Reference Implementation simulator
+for the IEEE Std. 1666-2023 SystemC standard.  Please consult the IEEE Std. 1666-2023 S
+ystemC Language Reference Manual for details about the current SystemC standard.
 
 Compared to the 2.3.4 release, this release has the following new items:
 
@@ -144,9 +154,6 @@ Here is an overview of the new features available in 3.0.0.
 
 ## 4. Bug fixes and enhancements
 
-For bug fixes added in 2.3.4 (or before) already, please refer to the previous
-RELEASENOTES.
-
 Following is the list of bug fixes and enhancements for the 3.0.0 release:
 
   - Execution speed improvements for the SystemC data-types
@@ -193,7 +200,7 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
     lead to a value modulo the maximum time.  In both cases, no warning is 
     generated, even though such a warning is mandated by IEEE Std. 1666-2023.
 
-  - Some typos have not been fixed in the version of the IEEE Std. 1666-2023 
+  - Some typos have not been fixed yet in the version of the IEEE Std. 1666-2023 
     document available online, but have been implemented in this release:
 
     - the following stage callbacks are implemented
