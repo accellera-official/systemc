@@ -164,11 +164,14 @@ vcd_trace::compose_data_line(char* rawdata, char* compdata, size_t compdata_n)
 // https://github.com/OSCI-WG/systemc/pull/642 
 // https://github.com/OSCI-WG/systemc/issues/600
 // https://github.com/OSCI-WG/systemc/pull/645
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wformat-truncation"
+#if defined(__GNUC__) && !defined(__clang__)
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
             std::snprintf(compdata, compdata_n, "b%s %s", effective_begin, vcd_name.c_str());
-#pragma GCC diagnostic pop
-
+#if defined(__GNUC__) && !defined(__clang__)
+#  pragma GCC diagnostic pop
+#endif
         }
     }
 }
