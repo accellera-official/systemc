@@ -55,18 +55,18 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_3_0_0
 
-#define SYSTEMC_VERSION       20231124
+#define SYSTEMC_VERSION       20240329
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      3
 #define SC_VERSION_MINOR      0
 #define SC_VERSION_PATCH      0
-#define SC_IS_PRERELEASE      1
+#define SC_IS_PRERELEASE      0
 
 /// compliancy with IEEE 1666-2023 (see 8.6.5)
 #define IEEE_1666_SYSTEMC     202301L
 
 #define SC_COPYRIGHT                               \
-  "Copyright (c) 1996-2023 by all Contributors,\n" \
+  "Copyright (c) 1996-2024 by all Contributors,\n" \
   "ALL RIGHTS RESERVED\n"
 
 
