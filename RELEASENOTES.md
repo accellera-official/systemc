@@ -94,8 +94,8 @@ defined binary interface across different
 ## 2. What's new in this release?
 
 This version of SystemC contains the Reference Implementation simulator
-for the IEEE Std. 1666-2023 SystemC standard.  Please consult the IEEE Std. 1666-2023 S
-ystemC Language Reference Manual for details about the current SystemC standard.
+for the IEEE Std. 1666-2023 SystemC standard.  Please consult the IEEE Std. 1666-2023
+SystemC Language Reference Manual for details about the current SystemC standard.
 
 Compared to the 2.3.4 release, this release has the following new items:
 
@@ -110,8 +110,6 @@ Compared to the 2.3.4 release, this release has the following new items:
     Testing and feedback welcome via the Accellera SystemC forums
     at http://forums.accellera.org/forum/9-systemc/.
     
-  - Updated platform support, see the [README.md](README.md).
-
 
 ## 3. New features
 
@@ -154,6 +152,8 @@ Here is an overview of the new features available in 3.0.0.
     `sc_core::sc_vector::emplace_back_with_name` support making incremental 
     additions to `sc_core::sc_vector`.
 
+  - Added support for C++20, lambda functions for sc_spawn and sc_bind
+
 
 ## 4. Bug fixes and enhancements
 
@@ -163,7 +163,31 @@ Following is the list of bug fixes and enhancements for the 3.0.0 release:
 
   - Fixed MSVC warnings in examples
 
+  - Fixed set_stack_size issue on Windows
+
+  - Fixed sc_vector iterator comparisons in C++20
+
   - Fixed Automake flow for data-types
+
+  - Fixed various warnings and cleanup in tests
+
+  - Improved windows support (recent Visual Studio files, tests cleanup)
+
+  - Removed obsolete macros
+
+  - Droped unused Boost package
+
+  - Droped legacy coroutine stack allocation for QuickThreads 
+
+  - Various clean-up thanks to the support of c++17 as new baseline for SystemC
+
+  - Fixed various invalid UTF-8 charcters in comments
+
+  - Fixed big integers issue in constructor
+
+  - Improved CMake support
+
+  - Merged SystemC regression tests in distribution
 
 
 ## 5. Deprecated features
