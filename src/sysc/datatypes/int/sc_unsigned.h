@@ -614,10 +614,12 @@ public:
     const sc_unsigned& operator = ( const sc_bv_base& );
     const sc_unsigned& operator = ( const sc_lv_base& );
 
+#ifdef SC_INCLUDE_FX
     const sc_unsigned& operator = ( const sc_fxval& );
     const sc_unsigned& operator = ( const sc_fxval_fast& );
     const sc_unsigned& operator = ( const sc_fxnum& );
     const sc_unsigned& operator = ( const sc_fxnum_fast& );
+#endif
 
 
     // destructor:

@@ -47,6 +47,7 @@
 
 #include <limits.h>
 #include <math.h>
+#define SC_INCLUDE_FX
 #include "systemc.h"
 
 #define SHOW(a) os << #a << " : " << a.to_string(SC_HEX) << "\n"

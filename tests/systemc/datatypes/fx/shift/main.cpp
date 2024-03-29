@@ -45,6 +45,7 @@
 // 
 
 #include <limits.h>
+#define SC_INCLUDE_FX
 #include "systemc.h"
 
 extern void operator_shift_right(ostream& out);

@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test05.cpp -- 
+  test05.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -37,14 +37,17 @@
 
 // test of sc_uint's concat operators -- basic functionality, concat()
 
-#include "systemc.h"
+#include <systemc>
+
+using std::cout;
+using std::endl;
 
 void
-test_concat( const sc_uint<8>& a )
+test_concat( const sc_dt::sc_uint<8>& a )
 {
-    sc_uint<8> b;
-    sc_uint<4> c;
-    sc_uint<4> d;
+    sc_dt::sc_uint<8> b;
+    sc_dt::sc_uint<4> c;
+    sc_dt::sc_uint<4> d;
 
     cout << a << endl;
 
@@ -193,7 +196,7 @@ test_concat( const sc_uint<8>& a )
 int
 sc_main( int, char*[] )
 {
-    sc_uint<8> a( 33 );
+    sc_dt::sc_uint<8> a( 33 );
 
     test_concat( a );
 

@@ -1,3 +1,5 @@
+#define SC_INCLUDE_FX
+
 #include <systemc.h>
 
 // 28) sc_core and sc_dt - check names still visible in <systemc.h>

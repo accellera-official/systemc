@@ -27,7 +27,8 @@ if USES_PTHREADS_LIB
    AM_LDFLAGS+=$(PTHREAD_LIBS)
 endif
 
-EXTRA_DEFINES=
+# always add fix-point support
+EXTRA_DEFINES=-DSC_INCLUDE_FX
 
 # initialize some useful variables (filled later)
 

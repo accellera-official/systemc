@@ -73,6 +73,7 @@ function(add_systemc_library libName scBuildDefine)
         $<$<BOOL:${ALLOW_DEPRECATED_IEEE_API}>:SC_ALLOW_DEPRECATED_IEEE_API>
         PRIVATE
         ${scBuildDefine}
+        SC_INCLUDE_FX
         $<$<BOOL:${DEBUG_SYSTEMC}>:DEBUG_SYSTEMC>
         $<$<BOOL:${DISABLE_ASYNC_UPDATES}>:SC_DISABLE_ASYNC_UPDATES>
         $<$<BOOL:${DISABLE_COPYRIGHT_MESSAGE}>:SC_DISABLE_COPYRIGHT_MESSAGE>
