@@ -127,6 +127,14 @@ public:
     #endif
 	{ *this = (int)flag; }
 
+    sc_biguint( const sc_biguint<W>& v )
+    #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, compile_time_digits )
+    #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_unsigned( W, false )
+    #endif
+	{ *this = v; }
+
     template<int WO>
     sc_biguint( const sc_biguint<WO>& v )
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
@@ -315,6 +323,8 @@ public:
 
 
     // assignment operators
+
+    const sc_biguint<W>& operator = ( const sc_biguint<W>& v );
 
     template<int WO>
     const sc_biguint<W>& operator = ( const sc_biguint<WO>& v );

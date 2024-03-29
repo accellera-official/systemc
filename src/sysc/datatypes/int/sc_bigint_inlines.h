@@ -44,17 +44,20 @@ namespace sc_dt {
 // |     Constant reference to this object instance.
 // +----------------------------------------------------------------------------
 template<int W>
+inline const sc_bigint<W>&
+sc_bigint<W>::operator = (const sc_bigint<W>& from)
+{
+    vector_copy( DIGITS_N, from.get_digits(), get_digits() );
+    return *this;
+}
+
+template<int W>
 template<int WO>
 inline const sc_bigint<W>&
 sc_bigint<W>::operator = (const sc_bigint<WO>& from)
 {
-    if ( W == WO ) {
-        vector_copy( DIGITS_N, from.get_digits(), get_digits() );
-    }
-    else {
-	vector_copy( sc_bigint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, get_digits() );
-	adjust_hod();
-    }
+    vector_copy( sc_bigint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, get_digits() );
+    adjust_hod();
     return *this;
 }
 
