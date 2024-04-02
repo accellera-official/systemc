@@ -296,6 +296,10 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
   - Some warnings related to overloaded virtual functions are reported when using 
     gcc 13 or clang17. They will be fixed in an upcoming version of the library. 
 
+  - in SystemC 3.0.0 release,  the build fails on (Apple)Clang compilers due to a
+    warning eventually treated as error in sc_vcd_trace.cpp. The workaround is 
+    available on the main branch of accellera-official repository.
+
 ## 9. Fixed-point library
 
 SystemC contains a fixed-point data-types package.
