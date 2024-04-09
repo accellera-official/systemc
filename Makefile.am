@@ -79,8 +79,8 @@ rootdoc_DATA = \
 	$(DOC_FILES)
 
 uninstall-hook:
-	test ! -d "$(docdir)" || rmdir --ignore-fail-on-non-empty "$(docdir)"
-	test ! -d "$(prefix)" || rmdir --ignore-fail-on-non-empty "$(prefix)"
+	test ! -d "$(docdir)" || rmdir "$(docdir)" || true
+	test ! -d "$(prefix)" || rmdir "$(prefix)" || true
 
 endif # SEPARATE_INSTALL_TREE
 

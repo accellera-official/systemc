@@ -67,7 +67,7 @@ examples_DIRS = \
 uninstall-hook:
 	test ! -d "$(buildexamplesdir)" || ( set -e ;  cd "$(buildexamplesdir)" ; \
 	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-	  cd - ; rmdir --ignore-fail-on-non-empty "$(buildexamplesdir)" )
+	  cd - ; rmdir "$(buildexamplesdir)" || true)
 
 endif # SEPARATE_INSTALL_TREE
 
