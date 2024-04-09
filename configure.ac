@@ -596,7 +596,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF
