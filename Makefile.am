@@ -37,6 +37,7 @@ ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
 	src \
+	docs \
 	examples
 
 DOC_FILES = \
@@ -58,7 +59,9 @@ EXTRA_DIST = \
 	CMakeLists.txt \
 	cmake/SystemCLanguageConfig.cmake.in \
 	cmake/SystemCTLMConfig.cmake.in \
-	cmake/run_test.cmake \
+	cmake/SystemCTesting.cmake \
+	cmake/run-example.cmake \
+	cmake/run-test.py \
 	\
 	msvc16/SystemC/SystemC.sln \
 	msvc16/SystemC/SystemC.props \
