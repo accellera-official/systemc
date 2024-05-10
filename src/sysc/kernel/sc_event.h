@@ -601,6 +601,13 @@ sc_event_list::temporary() const
     return m_auto_delete && ! m_busy;
 }
 
+#if defined(__GNUC__) && (__GNUC__ >= 11)
+// Ignore overly strict -Wfree-nonheap-object warning on GCC 11.0 and later
+// -- https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54202
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfree-nonheap-object"
+#endif
+
 inline
 void
 sc_event_list::auto_delete() const
@@ -613,6 +620,9 @@ sc_event_list::auto_delete() const
     }
 }
 
+#if defined(__GNUC__) && (__GNUC__ >= 11)
+#pragma GCC diagnostic pop
+#endif
 
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
