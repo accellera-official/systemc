@@ -17,7 +17,7 @@
 
  *****************************************************************************/
 
-// proc_ctrl_elab.cpp -- test for 
+// proc_ctrl_elab.cpp -- test for
 //
 //  Original Author: John Aynsley, Doulos, Inc.
 //
@@ -38,7 +38,7 @@ SC_MODULE(Top)
   : caught_throw_it(0)
   , caught_reset(0)
   , caught_kill(0)
-  
+
   , target_suspend_1_called(false)
   , target_suspend_2_called(false)
   , target_suspend_3_called(false)
@@ -83,14 +83,14 @@ SC_MODULE(Top)
       sensitive << ev;
       ts4 = sc_get_current_process_handle();
       ts4.suspend();
-      
+
     SC_THREAD(target_suspend_5);
       dont_initialize();
       sensitive << ev;
       ts5 = sc_get_current_process_handle();
       ts5.suspend();
       ts5.resume();
-      
+
     SC_THREAD(target_disable_1);
       sensitive << dummy_ev;
       td1 = sc_get_current_process_handle();
@@ -101,7 +101,7 @@ SC_MODULE(Top)
 
     SC_THREAD(target_disable_3);
       td3 = sc_get_current_process_handle();
-      
+
     SC_THREAD(target_disable_4);
       dont_initialize();
       sensitive << ev;
@@ -135,7 +135,7 @@ SC_MODULE(Top)
       sensitive << ev;
       tr4 = sc_get_current_process_handle();
       tr4.sync_reset_on();
-      
+
     try {
       ts2.throw_it(ex);
       sc_assert( false );
@@ -143,7 +143,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_throw_it;
     }
-      
+
     try {
       ts2.reset();
       sc_assert( false );
@@ -151,7 +151,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_reset;
     }
-      
+
     try {
       ts2.kill();
       sc_assert( false );
@@ -160,7 +160,7 @@ SC_MODULE(Top)
       ++caught_kill;
     }
   }
-  
+
   void before_end_of_elaboration()
   {
     ts1.suspend();
@@ -170,11 +170,11 @@ SC_MODULE(Top)
     td1.disable();
     td2.disable();
     td3.disable();
-    
+
     tr1.sync_reset_on();
     tr2.sync_reset_on();
     tr3.sync_reset_on();
-      
+
     try {
       ts2.throw_it(ex);
       sc_assert( false );
@@ -182,7 +182,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_throw_it;
     }
-      
+
     try {
       ts2.reset();
       sc_assert( false );
@@ -190,7 +190,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_reset;
     }
-      
+
     try {
       ts2.kill();
       sc_assert( false );
@@ -204,7 +204,7 @@ SC_MODULE(Top)
   {
     td3.enable();
     tr3.sync_reset_off();
-      
+
     try {
       ts2.throw_it(ex);
       sc_assert( false );
@@ -212,7 +212,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_throw_it;
     }
-      
+
     try {
       ts2.reset();
       sc_assert( false );
@@ -220,7 +220,7 @@ SC_MODULE(Top)
     catch (std::exception e) {
       ++caught_reset;
     }
-      
+
     try {
       ts2.kill();
       sc_assert( false );
@@ -229,13 +229,13 @@ SC_MODULE(Top)
       ++caught_kill;
     }
   }
-  
+
   sc_event ev, dummy_ev;
-  
-  std::exception ex;  
+
+  std::exception ex;
 
   sc_process_handle ts1;
-  sc_process_handle ts2;  
+  sc_process_handle ts2;
   sc_process_handle ts3;
   sc_process_handle ts4;
   sc_process_handle ts5;
@@ -272,78 +272,78 @@ SC_MODULE(Top)
   bool target_sync_reset_2_called;
   bool target_sync_reset_3_called;
   bool target_sync_reset_4_called;
-  
+
   int reset_1_count;
   int reset_2_count;
   int reset_3_count;
   int reset_4_count;
-  
+
   void ctrl()
   {
     ts3.resume();
-    
+
     wait(10, SC_NS);
     ts1.resume();
     ev.notify();
-    
+
     wait(10, SC_NS);
     ts2.resume();
     tr2.sync_reset_off();
     tr4.sync_reset_off();
-    
+
     wait(10, SC_NS);
     td2.enable();
-    
+
     wait(10, SC_NS);
     ev.notify();
-    
+
     wait(10, SC_NS);
     ev.notify();
     td2.disable();
-    
+
     wait(10, SC_NS);
     td4.enable();
     ts4.resume();
     ev.notify();
   }
-   
+
   void target_suspend_1()
   {
     sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
     target_suspend_1_called = true;
   }
-   
+
   void target_suspend_2()
   {
     sc_assert( sc_time_stamp() == sc_time(20, SC_NS) );
     target_suspend_2_called = true;
   }
-   
+
   void target_suspend_3()
   {
     sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
     target_suspend_3_called = true;
   }
-   
+
   void target_suspend_4()
   {
     sc_assert( sc_time_stamp() == sc_time(60, SC_NS) );
     target_suspend_4_called = true;
   }
-   
+
   void target_suspend_5()
   {
     sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
     target_suspend_5_called = true;
     ts5.suspend();
   }
-   
+
   void target_disable_1()
   {
     sc_assert( false );
     target_disable_1_called = true;
   }
-   
+
   void target_disable_2()
   {
     sc_assert( sc_time_stamp() == sc_time(40, SC_NS) );
@@ -353,27 +353,27 @@ SC_MODULE(Top)
     sc_assert( sc_time_stamp() == sc_time(50, SC_NS) );
     target_disable_2_called_again = true;
   }
-   
+
   void target_disable_3()
   {
     sc_assert( sc_time_stamp() == sc_time(0, SC_NS) );
     sc_assert( sc_delta_count() == 0 );
     target_disable_3_called = true;
   }
-   
+
   void target_disable_4()
   {
     sc_assert( sc_time_stamp() == sc_time(60, SC_NS) );
     target_disable_4_called = true;
   }
-   
+
   void target_disable_5()
   {
     sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
     target_disable_5_called = true;
     td5.disable();
   }
-   
+
   void target_sync_reset_1()
   {
     switch (reset_1_count)
@@ -381,23 +381,23 @@ SC_MODULE(Top)
       case 0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) );
               sc_assert( sc_delta_count() == 0 );
               break;
-      case 1: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) ); 
+      case 1: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
               break;
-      case 2: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) ); 
+      case 2: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) );
               break;
-      case 3: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) ); 
+      case 3: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) );
               target_sync_reset_1_called = true;
               break;
     }
     ++reset_1_count;
-    
+
     while (true)
     {
       wait();
       sc_assert( false );
     }
   }
-   
+
   void target_sync_reset_2()
   {
     switch (reset_2_count)
@@ -405,68 +405,68 @@ SC_MODULE(Top)
       case 0: sc_assert( sc_time_stamp() == sc_time(0, SC_NS) );
               sc_assert( sc_delta_count() == 0 );
               break;
-      case 1: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) ); 
+      case 1: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
               break;
-      case 2: sc_assert( false ); 
+      case 2: sc_assert( false );
               break;
-      case 3: sc_assert( false ); 
+      case 3: sc_assert( false );
               break;
     }
     ++reset_2_count;
-    
+
     while (true)
     {
       wait();
-      
+
     switch (reset_2_count)
     {
       case 0: sc_assert( false );
               break;
       case 1: sc_assert( false );
               break;
-      case 2: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) ); 
+      case 2: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) );
               break;
-      case 3: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) ); 
+      case 3: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) );
               target_sync_reset_2_called = true;
               break;
     }
     ++reset_2_count;
-    
+
     }
   }
-   
+
   void target_sync_reset_3()
   {
     switch (reset_3_count)
     {
       case 0: sc_assert( sc_time_stamp() == sc_time(10, SC_NS) );
               break;
-      case 1: sc_assert( false ); 
+      case 1: sc_assert( false );
               break;
-      case 2: sc_assert( false ); 
+      case 2: sc_assert( false );
               break;
     }
     ++reset_3_count;
-    
+
     while (true)
     {
       wait();
-      
+
     switch (reset_3_count)
     {
       case 0: sc_assert( false );
               break;
-      case 1: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) ); 
+      case 1: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) );
               break;
-      case 2: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) ); 
+      case 2: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) );
               target_sync_reset_3_called = true;
               break;
     }
     ++reset_3_count;
-    
+
     }
   }
-   
+
   void target_sync_reset_4()
   {
     switch (reset_4_count)
@@ -475,27 +475,27 @@ SC_MODULE(Top)
               break;
       case 1: sc_assert( false );
               break;
-      case 2: sc_assert( false ); 
+      case 2: sc_assert( false );
               break;
     }
     ++reset_4_count;
-    
+
     while (true)
     {
       wait();
-      
+
     switch (reset_4_count)
     {
       case 0: sc_assert( false );
               break;
-      case 1: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) ); 
+      case 1: sc_assert( sc_time_stamp() == sc_time(40, SC_NS) );
               break;
-      case 2: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) ); 
+      case 2: sc_assert( sc_time_stamp() == sc_time(50, SC_NS) );
               target_sync_reset_4_called = true;
               break;
     }
     ++reset_4_count;
-    
+
     }
   }
 };
@@ -508,7 +508,7 @@ int sc_main(int argc, char* argv[])
   sc_assert( top.caught_throw_it == 3 );
   sc_assert( top.caught_reset == 3 );
   sc_assert( top.caught_kill == 3 );
-  
+
   sc_assert( top.target_suspend_1_called );
   sc_assert( top.target_suspend_2_called );
   sc_assert( top.target_suspend_3_called );
@@ -526,7 +526,7 @@ int sc_main(int argc, char* argv[])
   sc_assert( top.target_sync_reset_2_called );
   sc_assert( top.target_sync_reset_3_called );
   sc_assert( top.target_sync_reset_4_called );
-  
+
   cout << endl << "Success" << endl;
   return 0;
 }
