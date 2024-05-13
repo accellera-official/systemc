@@ -47,21 +47,21 @@ sc_main( int, char*[] )
     try {
         sc_int<-3> a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<-3>\n";
     }
 
     try {
         sc_int<0>  a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<0>\n";
     }
 
     try {
         sc_int<100> a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<100>\n";
     }
 
@@ -72,7 +72,7 @@ sc_main( int, char*[] )
         sc_int<8> a = 42;
         cout << a[-1] << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<8>[-1]\n";
     }
 
@@ -80,7 +80,7 @@ sc_main( int, char*[] )
         sc_int<8> a = 42;
         cout << a[8] << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<8>[8]\n";
     }
 
@@ -91,7 +91,7 @@ sc_main( int, char*[] )
         sc_int<8> a = 42;
         cout << a( 3, -1 ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<8>( 3, -1 )\n";
     }
 
@@ -99,7 +99,7 @@ sc_main( int, char*[] )
         sc_int<8> a = 42;
         cout << a( 8, 4 ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<8>( 8, 4 )\n";
     }
 
@@ -107,7 +107,7 @@ sc_main( int, char*[] )
         sc_int<8> a = 42;
         cout << a( 0, 3 ) << endl;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_int<8>( 0, 3 )\n";
     }
 
@@ -118,7 +118,7 @@ sc_main( int, char*[] )
         sc_int<42> a;
         cout << ( a, a ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for ( sc_int<42>, sc_int<42> )\n";
     }
 
@@ -128,21 +128,21 @@ sc_main( int, char*[] )
     try {
         sc_uint<-3> a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<-3>\n";
     }
 
     try {
         sc_uint<0>  a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<0>\n";
     }
 
     try {
         sc_uint<100> a;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<100>\n";
     }
 
@@ -153,7 +153,7 @@ sc_main( int, char*[] )
         sc_uint<8> a = 42;
         cout << a[-1] << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<8>[-1]\n";
     }
 
@@ -161,7 +161,7 @@ sc_main( int, char*[] )
         sc_uint<8> a = 42;
         cout << a[8] << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<8>[8]\n";
     }
 
@@ -172,7 +172,7 @@ sc_main( int, char*[] )
         sc_uint<8> a = 42;
         cout << a( 3, -1 ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<8>( 3, -1 )\n";
     }
 
@@ -180,7 +180,7 @@ sc_main( int, char*[] )
         sc_uint<8> a = 42;
         cout << a( 8, 4 ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<8>( 8, 4 )\n";
     }
 
@@ -188,7 +188,7 @@ sc_main( int, char*[] )
         sc_uint<8> a = 42;
         cout << a( 0, 3 ) << endl;
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for sc_uint<8>( 0, 3 )\n";
     }
 
@@ -199,7 +199,7 @@ sc_main( int, char*[] )
         sc_uint<42> a;
         cout << ( a, a ) << "\n";
     }
-    catch( sc_report ) {
+    catch( const sc_report & ) {
         cout << "caught exception for ( sc_uint<42>, sc_uint<42> )\n";
     }
 

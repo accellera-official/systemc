@@ -208,7 +208,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
     wait(ch8.terminated_event() & ch9.terminated_event());
@@ -223,7 +223,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f13 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
@@ -237,7 +237,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f14 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
@@ -249,7 +249,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f15 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
@@ -261,7 +261,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f16 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
@@ -273,7 +273,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f17 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }
@@ -285,7 +285,7 @@ struct Top: sc_module
     try {
       wait(20, SC_NS);
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       f18 = 1;
       sc_assert( sc_time_stamp() == sc_time(210, SC_NS) );
     }

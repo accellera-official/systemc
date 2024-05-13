@@ -36,7 +36,11 @@ SC_MODULE(M)
         try {
 	    // . . .
 	    SC_REPORT_ERROR("msg_type", "msg");
+#ifndef IEEE_1666_STRICT
+	} catch(const sc_core::sc_report & c) {
+#else
 	} catch(sc_core::sc_report c) {
+#endif // IEEE_1666_STRICT
 	    std::cout << "Caught " << c.what() << std::endl;
 	}
     }

@@ -140,7 +140,7 @@ SC_MODULE(Top)
       ts2.throw_it(ex);
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_throw_it;
     }
 
@@ -148,7 +148,7 @@ SC_MODULE(Top)
       ts2.reset();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_reset;
     }
 
@@ -156,7 +156,7 @@ SC_MODULE(Top)
       ts2.kill();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_kill;
     }
   }
@@ -179,7 +179,7 @@ SC_MODULE(Top)
       ts2.throw_it(ex);
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_throw_it;
     }
 
@@ -187,7 +187,7 @@ SC_MODULE(Top)
       ts2.reset();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_reset;
     }
 
@@ -195,7 +195,7 @@ SC_MODULE(Top)
       ts2.kill();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_kill;
     }
   }
@@ -209,7 +209,7 @@ SC_MODULE(Top)
       ts2.throw_it(ex);
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_throw_it;
     }
 
@@ -217,7 +217,7 @@ SC_MODULE(Top)
       ts2.reset();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_reset;
     }
 
@@ -225,7 +225,7 @@ SC_MODULE(Top)
       ts2.kill();
       sc_assert( false );
     }
-    catch (std::exception e) {
+    catch (const std::exception & e) {
       ++caught_kill;
     }
   }
