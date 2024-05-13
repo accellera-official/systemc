@@ -773,6 +773,7 @@ void cycle_model::decode(int opcode, instr* i) {
     i->src1.type = o_acc;
     i->dst.type = o_dir;
     i->cycle = 2;
+    break;
   }
   case 0x88:
   case 0x89:

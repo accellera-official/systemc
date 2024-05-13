@@ -1258,6 +1258,7 @@ void EXC_CTRL::start_always() {
                             wait();
                     } // end _case_1396_
                     
+			    break;
 		  // } else if(208 == _case_1021_) {
 		   case 208:
                     if(((MET_reg) != 3) || ((DID_reg) == 0)) {
