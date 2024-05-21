@@ -81,15 +81,18 @@ void balancing::entry(){
       wait();
       out_value1.write(3);
       wait();
+      // fallthrough
     case 3 : 
       out_value1.write(2);
       wait();
       wait();
       wait();
+      // fallthrough
     case 2 :
       out_value1.write(1);
       wait();
       wait();
+      // fallthrough
     default : 
       out_value1.write(tmp1);
       wait();
@@ -111,6 +114,7 @@ void balancing::entry(){
       //long operation should extent latency
       out_tmp2 = tmp2*tmp2*tmp2;
       wait();
+      // fallthrough
     case 4 : 
     case 5 : 
     case 6 : 
@@ -118,6 +122,7 @@ void balancing::entry(){
       //short operation should not extent latency
       out_tmp2 = 4;
       wait();
+      // fallthrough
     case 8 | 9 | 10 | 11: 
       //wait statements should extent latency
       out_tmp2 = 1;
@@ -144,12 +149,14 @@ void balancing::entry(){
       //long operation should extent latency
       out_tmp2 = tmp2*tmp2*tmp2;
       wait();
+      // fallthrough
     case 4 : 
     case 5 : 
     case 6 : 
     case 7 : 
       //short operation should not extent latency
       out_tmp2 = 4;
+      // fallthrough
     case 8 : 
     case 9 : 
     case 10 : 

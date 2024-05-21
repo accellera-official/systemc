@@ -95,7 +95,7 @@ lc::thread()
 sc_uint<20>
 lc::extract(sc_uint<32> x, sc_uint<7> p, sc_uint<5> w)
 {
-	return( (x>>(p-w+1)) & ~(~0<<w) );
+	return( (x>>(p-w+1)) & ~(~sc_dt::UINT_ZERO<<w) );
 }
 
 #define BRANCH(T)	T.range(31,27)
@@ -135,7 +135,7 @@ lc::lookup(sc_uint<32> ip)
 
 		ip_prefix = M[addr];
 		t = M[addr|1];
-		mask = ~0 << (32-LEN(t));
+		mask = ~sc_dt::UINT_ZERO << (32-LEN(t));
 		if( (ip_prefix&mask) == (ip&mask)){
 			next_hop = NEXT_HOP(t);
 			break;

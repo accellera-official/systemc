@@ -217,7 +217,7 @@ test_bitwise_left_shift()
 	    a <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -239,7 +239,7 @@ test_bitwise_left_shift()
 	    b = a << -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -260,7 +260,7 @@ test_bitwise_left_shift()
 	    a <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -282,7 +282,7 @@ test_bitwise_left_shift()
 	    b = a << -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -303,7 +303,7 @@ test_bitwise_left_shift()
 	    (a( 69, 20 ), a( 19, 0 )) <<= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -326,7 +326,7 @@ test_bitwise_left_shift()
 	    b = (a( 69, 20 ), a( 19, 0 )) << -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -353,7 +353,7 @@ test_bitwise_right_shift()
 	    a >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -375,7 +375,7 @@ test_bitwise_right_shift()
 	    b = a >> -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -396,7 +396,7 @@ test_bitwise_right_shift()
 	    a >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -418,7 +418,7 @@ test_bitwise_right_shift()
 	    b = a >> -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -439,7 +439,7 @@ test_bitwise_right_shift()
 	    (a( 69, 20 ), a( 19, 0 )) >>= -1;
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -461,7 +461,7 @@ test_bitwise_right_shift()
 	    b = (a( 69, 20 ), a( 19, 0 )) >> -1;
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -488,7 +488,7 @@ test_bitwise_left_rotate()
 	    a.lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -510,7 +510,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -531,7 +531,7 @@ test_bitwise_left_rotate()
 	    a.lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -553,7 +553,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -574,7 +574,7 @@ test_bitwise_left_rotate()
 	    (a( 69, 20 ), a( 19, 0 )).lrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -596,7 +596,7 @@ test_bitwise_left_rotate()
 	    b = lrotate( (a( 69, 20 ), a( 19, 0 )), -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -623,7 +623,7 @@ test_bitwise_right_rotate()
 	    a.rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -645,7 +645,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -666,7 +666,7 @@ test_bitwise_right_rotate()
 	    a.rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -688,7 +688,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( a, -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -709,7 +709,7 @@ test_bitwise_right_rotate()
 	    (a( 69, 20 ), a( 19, 0 )).rrotate( -1 );
 	    WRITE( a );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}
@@ -732,7 +732,7 @@ test_bitwise_right_rotate()
 	    b = rrotate( (a( 69, 20 ), a( 19, 0 )), -1 );
 	    WRITE( b );
 	}
-	catch( sc_report x ) {
+	catch( const sc_report & x ) {
 	    cout << "\ncaught exception" << endl;
 	    cout << x.what() << endl;
 	}

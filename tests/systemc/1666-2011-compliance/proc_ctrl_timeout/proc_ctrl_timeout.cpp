@@ -83,7 +83,7 @@ struct Top: sc_module
       t1.disable();
       f7 = 1;
     }
-    catch (sc_exception ex) {
+    catch (const sc_exception & ex) {
       cout << "Exception caught at " << sc_time_stamp() << endl;
     }
 
@@ -91,7 +91,7 @@ struct Top: sc_module
       t2.disable();
       f8 = 1;
     }
-    catch (sc_exception ex) {
+    catch (const sc_exception & ex) {
       cout << "Exception caught at " << sc_time_stamp() << endl;
     }
     
@@ -190,7 +190,7 @@ struct Top: sc_module
       t5.disable();  // Disabling a process waiting on a time-out
       f21 = 1;
     }
-    catch (sc_exception ex) {
+    catch (const sc_exception & ex) {
       cout << "Exception caught at " << sc_time_stamp() << endl;
     }
     wait(sc_time(500, SC_NS) - sc_time_stamp());

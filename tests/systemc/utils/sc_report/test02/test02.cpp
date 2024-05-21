@@ -47,7 +47,7 @@ sc_main( int, char*[] )
     try {
         sc_report::register_id( -1, "first try" );
     }
-    catch( sc_report x ) {
+    catch( const sc_report & x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }
@@ -55,7 +55,7 @@ sc_main( int, char*[] )
     try {
         sc_report::register_id( MY_ID, 0 );
     }
-    catch( sc_report x ) {
+    catch( const sc_report & x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }
@@ -64,7 +64,7 @@ sc_main( int, char*[] )
         sc_report::register_id( MY_ID, "bogus message" );
         sc_report::register_id( MY_ID, "another bogus message" );
     }
-    catch( sc_report x ) {
+    catch( const sc_report & x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }

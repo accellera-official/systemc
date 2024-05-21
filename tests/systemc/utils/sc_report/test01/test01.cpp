@@ -76,7 +76,7 @@ sc_main( int, char*[] )
     try {
         SC_REPORT_WARNING( MY_ID, "do make warnings errors" );
     }
-    catch( sc_report x ) {
+    catch( const sc_report& x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }
@@ -84,7 +84,7 @@ sc_main( int, char*[] )
     try {
         SC_REPORT_WARNING( MY_ID, "do not make warnings errors" );
     }
-    catch( sc_report x ) {
+    catch( const sc_report& x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }
@@ -92,7 +92,7 @@ sc_main( int, char*[] )
     try {
         SC_REPORT_ERROR( MY_ID, "errors ..." );
     }
-    catch( sc_report x ) {
+    catch( const sc_report& x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }
@@ -100,7 +100,7 @@ sc_main( int, char*[] )
     try {
         SC_REPORT_ERROR( MY_ID, "cannot be suppressed" );
     }
-    catch( sc_report x ) {
+    catch( const sc_report& x ) {
         cout << "\ncaught exception" << endl;
         cout << x.what() << endl;
     }

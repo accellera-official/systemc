@@ -81,7 +81,7 @@ struct Top: sc_module
     try {
       t1.throw_it(ex);
     }
-    catch (std::exception ex) {
+    catch (const std::exception & e) {
       f1 = 1;
       sc_assert( t1.valid() );
       sc_assert( !t1.terminated() );
@@ -265,7 +265,7 @@ struct Top: sc_module
       t2.throw_it(ex);  // Process throws an exception to itself
       sc_assert( false );
     }
-    catch (std::exception ex) {
+    catch (const std::exception & e) {
       sc_assert( t2.valid() );
       sc_assert( !t2.terminated() );
       f5 = 1;
@@ -278,7 +278,7 @@ struct Top: sc_module
     try {
       wait(1, SC_US);
     }
-    catch (std::exception ex) {
+    catch (const std::exception & e) {
       sc_assert( t3.valid() );
       sc_assert( !t3.terminated() );
       f6 = 1;
