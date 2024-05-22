@@ -3,29 +3,17 @@ ARG IMAGE=almalinux:$ALMA_VERSION
 
 FROM $IMAGE
 
-ARG BUILD_REGRESSION=OFF
-
 WORKDIR /app
 
 RUN dnf install -y \
     cmake \
     gcc \
     gcc-c++ \
+    clang \
     && dnf clean all
 
 # Copy the current directory contents into the container at /app
 COPY . /app
-
-# GCC builds
-RUN cmake -B BUILD/RELEASE/BUILD -DCMAKE_INSTALL_PREFIX=$PWD/BUILD/RELEASE -DCMAKE_CXX_FLAGS="-Werror" -DENABLE_REGRESSION=$BUILD_REGRESSION .
-RUN cmake --build BUILD/RELEASE/BUILD/ --parallel
-RUN cmake -B BUILD/RELEASE_STATIC/BUILD -DCMAKE_INSTALL_PREFIX=$PWD/BUILD/RELEASE -DCMAKE_CXX_FLAGS="-Werror" -DBUILD_SHARED_LIBS=OFF -DENABLE_REGRESSION=$BUILD_REGRESSION .
-RUN cmake --build BUILD/RELEASE_STATIC/BUILD/ --parallel
-
-# Clang builds
-RUN CC=clang CXX=clang++ cmake -B BUILD/RELEASE_CLANG/BUILD -DCMAKE_INSTALL_PREFIX=$PWD/BUILD/RELEASE_CLANG -DCMAKE_CXX_FLAGS="-Werror" -DENABLE_REGRESSION=$BUILD_REGRESSION .
-RUN CC=clang CXX=clang++ cmake --build BUILD/RELEASE_CLANG/BUILD/ --parallel
-RUN CC=clang CXX=clang++ cmake -B BUILD/RELEASE_CLANG_STATIC/BUILD -DCMAKE_INSTALL_PREFIX=$PWD/BUILD/RELEASE_CLANG_STATIC -DCMAKE_CXX_FLAGS="-Werror" -DBUILD_SHARED_LIBS=OFF -DENABLE_REGRESSION=$BUILD_REGRESSION .
-RUN CC=clang CXX=clang++ cmake --build BUILD/RELEASE_CLANG_STATIC/BUILD/ --parallel
-
-CMD ["/bin/bash", "-c", "make -j `nproc` -C BUILD/RELEASE/BUILD/ check && make -j `nproc` -C BUILD/RELEASE_STATIC/BUILD/ check && make -j `nproc` -C BUILD/RELEASE_CLANG/BUILD/ check && make -j `nproc` -C BUILD/RELEASE_CLANG_STATIC/BUILD/ check"]
+# Setup entrypoint CI script
+COPY ./docker/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
