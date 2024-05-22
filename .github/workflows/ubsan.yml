@@ -1,4 +1,4 @@
-name: cmake
+name: ubsan
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
       matrix:
         version: [20.04, 22.04]
         platform: [linux/amd64, linux/arm64]
-        target: [gcc-shared, gcc-static, clang-shared, clang-static]
+        target: [clang-shared-regression-ubsan]
     steps:
     - name: Install qemu-user-static
       run: |
@@ -32,7 +32,7 @@ jobs:
       matrix:
         version: [8, 9]
         platform: [linux/amd64, linux/arm64]
-        target: [gcc-shared, gcc-static, clang-shared, clang-static]
+        target: [clang-shared-regression-ubsan]
     steps:
     - name: Install qemu-user-static
       run: |

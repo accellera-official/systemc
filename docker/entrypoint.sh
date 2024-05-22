@@ -52,7 +52,6 @@ case "$SYSTEMC_CI_TARGET" in
     BUILD_SHARED_LIBRARY=true
     BUILD_REGRESSIONS=true
     CXX_FLAGS="$CXX_FLAGS -fsanitize=address"
-    UBSAN=false
     ;;
   clang-shared-regression-ubsan)
     CC=clang
@@ -70,7 +69,7 @@ esac
 cd /app
 cmake -B BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD \
       -DCMAKE_INSTALL_PREFIX=/app/BUILD/${SYSTEMC_CI_TARGET} \
-      -DCMAKE_CXX_FLAGS=$CXX_FLAGS \
+      -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
       -DCMAKE_C_COMPILER=$CC \
       -DCMAKE_CXX_COMPILER=$CXX \
       -DENABLE_REGRESSION=$BUILD_REGRESSIONS \

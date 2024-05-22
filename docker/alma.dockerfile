@@ -10,6 +10,8 @@ RUN dnf install -y \
     gcc \
     gcc-c++ \
     clang \
+    libasan \
+    libubsan \
     && dnf clean all
 
 # Copy the current directory contents into the container at /app
