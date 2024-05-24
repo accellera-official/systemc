@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  build_ubuntu:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,3 +45,15 @@ jobs:
       run: |
         docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
         docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  build_macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [clang-shared-regression-asan]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        SYSTEMC_CI_TARGET=${{ matrix.target }} SYSTEMC_SRC_PATH=$PWD docker/entrypoint.sh
