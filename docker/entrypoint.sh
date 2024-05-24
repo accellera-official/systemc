@@ -6,6 +6,8 @@ if [[ -z "${SYSTEMC_CI_TARGET}" ]]; then
   exit 1
 fi
 
+: ${SYSTEMC_SRC_PATH:="/app"}
+
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
 
@@ -66,7 +68,7 @@ case "$SYSTEMC_CI_TARGET" in
     ;;
 esac
 
-cd /app
+cd $SYSTEMC_SRC_PATH
 cmake -B BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD \
       -DCMAKE_INSTALL_PREFIX=/app/BUILD/${SYSTEMC_CI_TARGET} \
       -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
