@@ -57,3 +57,12 @@ jobs:
     - name: Build
       run: |
         SYSTEMC_CI_TARGET=${{ matrix.target }} SYSTEMC_SRC_PATH=$PWD docker/entrypoint.sh
+  build_windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        cmake -B BUILD/RELEASE/BUILD .
+        cmake --build BUILD/RELEASE/BUILD --config RELEASE --parallel
