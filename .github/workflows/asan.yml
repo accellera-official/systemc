@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  build_ubuntu:
+  ubuntu:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -25,7 +25,7 @@ jobs:
       run: |
         docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
         docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
-  build_almalinux:
+  almalinux:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,7 +45,7 @@ jobs:
       run: |
         docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
         docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
-  build_macos:
+  macos:
     runs-on: macos-latest
     strategy:
       fail-fast: false
