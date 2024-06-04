@@ -1,4 +1,4 @@
-name: cmake
+name: regressions
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
       matrix:
         version: [20.04, 22.04]
         platform: [linux/amd64, linux/arm64]
-        target: [gcc-shared, gcc-static, clang-shared, clang-static]
+        target: [gcc-shared-regression, clang-shared-regression]
     steps:
     - name: Install qemu-user-static
       run: |
@@ -32,7 +32,7 @@ jobs:
       matrix:
         version: [8, 9]
         platform: [linux/amd64, linux/arm64]
-        target: [gcc-shared, gcc-static, clang-shared, clang-static]
+        target: [gcc-shared-regression, clang-shared-regression]
     steps:
     - name: Install qemu-user-static
       run: |
@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [clang-shared, clang-static]
+        target: [clang-shared-regression]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -64,6 +64,6 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       run: |
-        cmake -B BUILD/RELEASE/BUILD .
+        cmake -B BUILD/RELEASE/BUILD -DENABLE_REGRESSION=true .
         cmake --build BUILD/RELEASE/BUILD --config RELEASE --parallel
         cmake --install BUILD/RELEASE/BUILD --config RELEASE
