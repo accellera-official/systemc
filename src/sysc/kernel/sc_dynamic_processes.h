@@ -54,22 +54,24 @@ auto sc_bind( F&& f, Args&&... args )
  { return std::bind<R>( std::forward<F>(f), std::forward<Args>(args)... ); }
 
 template<typename T>
-auto sc_ref( T&& v )
+auto sc_ref( T&& v ) noexcept
  { return std::ref( std::forward<T>(v) ); }
 
 template<typename T>
-auto sc_cref( T&& v )
+void sc_ref( const T&& ) = delete;
+
+template<typename T>
+auto sc_cref( T&& v ) noexcept
  { return std::cref( std::forward<T>(v) ); }
+
+template<typename T>
+void sc_cref( const T&& ) = delete;
 
 } // namespace sc_core
 
-// bring sc_bind, sc_ref, sc_cref into global namespace - unless asked not to
-// TODO: invert default for IEEE 1666-202x
-#if ! (defined(SC_BIND_IN_GLOBAL_NAMESPACE) && SC_BIND_IN_GLOBAL_NAMESPACE == 0)
 using sc_core::sc_bind;
 using sc_core::sc_ref;
 using sc_core::sc_cref;
-#endif // SC_BIND_IN_GLOBAL_NAMESPACE
 
 // $Log: sc_dynamic_processes.h,v $
 // Revision 1.5  2011/08/26 20:46:09  acg
