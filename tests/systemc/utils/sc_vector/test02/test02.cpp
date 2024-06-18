@@ -40,11 +40,6 @@
 #include "sysc/utils/sc_vector.h"
 using sc_core::sc_vector;
 
-#ifdef USE_BOOST
-#include <boost/bind.hpp>
-#include <boost/bind/placeholders.hpp>
-#endif
-
 // ---- some classes
 //
 struct base : sc_object
