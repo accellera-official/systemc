@@ -121,7 +121,7 @@ function(add_systemc_library libName scBuildDefine)
         LINKER_LANGUAGE CXX
         VERSION ${SystemCLanguage_VERSION}
         SOVERSION ${SystemCLanguage_SOVERSION}
-        INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+        )
 
 endfunction(add_systemc_library)
 
