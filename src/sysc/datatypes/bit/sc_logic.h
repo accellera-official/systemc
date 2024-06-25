@@ -107,36 +107,45 @@ private:
     static void invalid_value( char );
     static void invalid_value( int );
 
-    static sc_logic_value_t to_value( sc_logic_value_t v )
+public:
+
+    // conversion methods
+
+    static inline sc_logic_value_t to_value( sc_logic_value_t v )
 	{
 	    if( v < Log_0 || v > Log_X ) {
 		invalid_value( v );
-		// may continue, if suppressed
+		// will return Log_X, if suppressed
 		v = Log_X;
 	    }
 	    return v;
 	}
 
-    static sc_logic_value_t to_value( bool b )
+    static inline sc_logic_value_t to_value( bool b )
 	{ return ( b ? Log_1 : Log_0 ); }
 
-    static sc_logic_value_t to_value( char c )
+    static inline sc_logic_value_t to_value( char c )
 	{
-	    unsigned int index = (int)c;
-	    if ( index > 127 )
+	    switch( c ) 
 	    {
+	      case '0' : return Log_0;
+	      case '1' : return Log_1;
+	      case 'x' : return Log_X;
+	      case 'X' : return Log_X;
+	      case 'z' : return Log_Z;
+	      case 'Z' : return Log_Z;
+	      default:
 		invalid_value( c );
-		// may continue, if suppressed
-		index = 127; // aka Log_X
+		// will return Log_X, if suppressed
+		return Log_X;
 	    }
-	    return char_to_logic[index];
 	}
 
     static sc_logic_value_t to_value( int i )
 	{
 	    if( i < Log_0 || i > Log_X ) {
 		invalid_value( i );
-		// may continue, if suppressed
+		// will return Log_X, if suppressed
 		i = Log_X;
 	    }
 	    return sc_logic_value_t( i );
@@ -149,7 +158,6 @@ public:
 
     // conversion tables
 
-    static const sc_logic_value_t char_to_logic[128];
     static const char logic_to_char[4];
     static const sc_logic_value_t and_table[4][4];
     static const sc_logic_value_t or_table[4][4];

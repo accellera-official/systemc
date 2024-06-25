@@ -166,16 +166,26 @@ sc_bv_base::operator = ( const char* a )
 }
 
 
-// ----------------------------------------------------------------------------
-
-// convert formatted string to binary string
-
+// +------------------------------------------------------------------------------------------------
+// |"convert_to_bin"
+// | 
+// | This function converts a formatted char string into std::string representation of logic 
+// | values.
+// |
+// | Notes:
+// |   (1) Non-prefixed logic character strings cannot start with '0x' or '0X', because this will 
+// |       be interpretted as the prefix for a hexadecimal value, e.g., 0x10 is a value of 
+// |       hexadecimal 10, not binary 10.
+// |   (2) For sc_bv values an attempt to initialize with X or Z digits will be caught by
+// |       sc_bv_base::assign_from_string().
+// | Arguments:
+// |     s = formatted charstring to be converted
+// | Result:
+// |     = s std::string consisting of '0', '1', 'X', and 'Z' characters.
+// +------------------------------------------------------------------------------------------------
 SC_API std::string
 convert_to_bin( const char* s )
 {
-    // Beware: logic character strings cannot start with '0x' or '0X',
-    //         because this is seen as a hexadecimal encoding prefix!
-
     if( s == 0 ) {
         SC_REPORT_ERROR(sc_core::SC_ID_CANNOT_CONVERT_,
             "character string is zero" );
@@ -192,17 +202,27 @@ convert_to_bin( const char* s )
     if( s[0] == '-' || s[0] == '+' ) {
         ++ i;
     }
+
+    // If there is a 0 to start the value, attempt to process is as a type prefix:
+
     if( n > (i + 2) && s[i] == '0' )
     {
+	// Look for 0b or 0B prefix followed by a 4-state digit:
+
         if (s[i+1] == 'b' || s[i+1] == 'B' )
         {
-            if ( s[i+2] == '0' || s[i+2] == '1' )
+            if ( s[i+2] == '0' || s[i+2] == '1' || 
+	         s[i+2] == 'x' || s[i+2] == 'X' ||
+	         s[i+2] == 'z' || s[i+2] == 'Z' )
             {
                 std::string str( &s[2] );
                 str += "F";
                 return str;
             }
         }
+
+	// Look for the other potential prefix cases:
+
         if ( s[i+1] == 'b' || s[i+1] == 'B' ||
              s[i+1] == 'c' || s[i+1] == 'C' ||
              s[i+1] == 'd' || s[i+1] == 'D' ||
@@ -230,21 +250,32 @@ convert_to_bin( const char* s )
 
     }
 
-    // bin by default
+    // If we fall through to here there is no prefix, so treat as four state digits by default:
 
     std::string str( s );
     str += "U"; // mark the string as unformatted
     return str;
 }
 
-// convert binary string to formatted string
-
+// +------------------------------------------------------------------------------------------------
+// |"convert_to_fmt"
+// | 
+// | This function converts the supplied binary string of binary digits (1s and 0s) to a
+// | formatted string with the supplied numerical represenation.
+// |
+// | Arguments:
+// |     s        = string of binary digits.
+// |     numrep   = desired numerical representation.
+// |     w_prefix = true if the resulting value should be prefixed, false if not.
+// |
+// | Result:
+// |     formatted string with the desired numerical representation.
+// +------------------------------------------------------------------------------------------------
 SC_API std::string
 convert_to_fmt( const std::string& s, sc_numrep numrep, bool w_prefix )
 {
     int n = s.length();
     std::string str("0bus");
-    // str += "0bus";
     str += s;
     sc_ufix a( str.c_str(), n, n, SC_TRN, SC_WRAP, 0, SC_ON );
     return a.to_string( numrep, w_prefix );

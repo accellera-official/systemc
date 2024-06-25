@@ -98,26 +98,6 @@ sc_logic::invalid_01() const
 
 // conversion tables
 
-const sc_logic_value_t sc_logic::char_to_logic[128] =
-{
-    Log_0, Log_1, Log_Z, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_0, Log_1, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_Z, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X, Log_X,
-    Log_X, Log_X, Log_Z, Log_X, Log_X, Log_X, Log_X, Log_X
-};
-
 const char sc_logic::logic_to_char[4] = { '0', '1', 'Z', 'X' };
 
 const sc_logic_value_t sc_logic::and_table[4][4] =
