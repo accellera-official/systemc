@@ -91,7 +91,7 @@ sc_bv_base::init( int length_, bool init_value )
     // initialize the bits to 'init_value'
     sc_digit dw = init_value ? ~SC_DIGIT_ZERO : SC_DIGIT_ZERO;
     int sz = m_size;
-    for( int i = 0; i < sz; ++ i ) {
+    for( int i = 0; i < sz; ++i ) {
         m_data[i] = dw;
     }
     clean_tail();
@@ -106,7 +106,7 @@ sc_bv_base::assign_from_string( const std::string& s )
     int s_len = s.length() - 1;
     int min_len = sc_min( len, s_len );
     int i = 0;
-    for( ; i < min_len; ++ i ) {
+    for( ; i < min_len; ++i ) {
         char c = s[s_len - i - 1];
         if( c != '0' && c != '1' ) {
             SC_REPORT_ERROR( sc_core::SC_ID_CANNOT_CONVERT_,
@@ -119,7 +119,7 @@ sc_bv_base::assign_from_string( const std::string& s )
     // if formatted, fill the rest with sign(s), otherwise fill with zeros
     sc_logic_value_t fill = (s[s_len] == 'F' ? sc_logic_value_t( s[0] - '0' )
                                              : sc_logic_value_t( 0 ));
-    for( ; i < len; ++ i ) {
+    for( ; i < len; ++i ) {
         set_bit( i, fill );
     }
 }
@@ -150,7 +150,7 @@ sc_bv_base::sc_bv_base( const sc_bv_base& a )
 {
     // copy the bits
     int sz = m_size;
-    for( int i = 0; i < sz; ++ i ) {
+    for( int i = 0; i < sz; ++i ) {
         m_data[i] = a.m_data[i];
     }
 }
@@ -174,12 +174,12 @@ sc_bv_base::operator = ( const char* a )
 // |
 // | Notes:
 // |   (1) Non-prefixed logic character strings cannot start with '0x' or '0X', because this will 
-// |       be interpretted as the prefix for a hexadecimal value, e.g., 0x10 is a value of 
+// |       be interpreted as the prefix for a hexadecimal value, e.g., 0x10 is a value of 
 // |       hexadecimal 10, not binary 10.
 // |   (2) For sc_bv values an attempt to initialize with X or Z digits will be caught by
 // |       sc_bv_base::assign_from_string().
 // | Arguments:
-// |     s = formatted charstring to be converted
+// |     s = formatted char string to be converted
 // | Result:
 // |     = s std::string consisting of '0', '1', 'X', and 'Z' characters.
 // +------------------------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ convert_to_bin( const char* s )
     int n = strlen( s );
     int i = 0;
     if( s[0] == '-' || s[0] == '+' ) {
-        ++ i;
+        ++i;
     }
 
     // If there is a 0 to start the value, attempt to process is as a type prefix:
