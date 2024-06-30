@@ -46,12 +46,12 @@ int sc_main(int ac, char *av[])
   int			a[4] = { 0, 23, -534, 23423 };  
   long			b[4] = { 0, 23, -534, 23423 };  
   short			c[4] = { 0, 23, -534, 23423 };  
-  char			d[9] = { 'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', '-' };
+  char			d[4] = { 'X', '0', '1', 'Z' };
 
   unsigned int		e[4] = { 0, 23, 534, 23423 };  
   unsigned long		f[4] = { 0, 23, 534, 23423 };  
   unsigned short	g[4] = { 0, 23, 534, 23423 };  
-  unsigned char		h[9] = { 'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', '-' };
+  unsigned char		h[4] = { 'X', '0', '1', 'Z' };
 
   float			i[4] = { 0, 4.89, -345.6778, 543222.898394322 };  
   double		j[4] = { 0, 4.89, -345.6778, 543222.898394322 };  
@@ -60,8 +60,7 @@ int sc_main(int ac, char *av[])
 
   bool			l[4] = { 0, 1, true, false };  
 
-  sc_logic m[9] = { sc_logic('U'), sc_logic('X'), sc_logic('0'), sc_logic('1'),
-    sc_logic('Z'), sc_logic('W'), sc_logic('L'), sc_logic('H'), sc_logic('-') };
+  sc_logic m[4] = { sc_logic('X'), sc_logic('0'), sc_logic('1'), sc_logic('Z') };
 
 
 // 2. TYPE CONVERSION
@@ -80,8 +79,7 @@ int sc_main(int ac, char *av[])
 		<< c[0] << "\t" << c[1] << "\t" << c[2] << "\t" << c[3] 
       	<< "\nCHAR \t\t" 
 		<< d[0] << "\t" << d[1] << "\t" << d[2] << "\t" 
-		<< d[3] << "\t" << d[4] << "\t" << d[5] << "\t" 
-		<< d[6] << "\t" << d[7] << "\t" << d[8]
+		<< d[3] 
       	<< "\n\nUNSIGNED INT \t"	 
 		<< e[0] << "\t" << e[1] << "\t" << e[2] << "\t" << e[3] 
       	<< "\nUNSIGNED LONG \t" 
@@ -90,8 +88,7 @@ int sc_main(int ac, char *av[])
 		<< g[0] << "\t" << g[1] << "\t" << g[2] << "\t" << g[3] 
       	<< "\nUNSIGNED CHAR \t" 
 		<< h[0] << "\t" << h[1] << "\t" << h[2] << "\t" 
-		<< h[3] << "\t" << h[4] << "\t" << h[5] << "\t" 
-		<< h[6] << "\t" << h[7] << "\t" << h[8]
+		<< h[3] 
       	<< "\n\nFLOAT \t\t" 
 		<< i[0] << "\t" << i[1] << "\t" << i[2] << "\t" << i[3] 
       	<< "\nDOUBLE \t\t" 
@@ -103,8 +100,7 @@ int sc_main(int ac, char *av[])
 		<< l[0] << "\t" << l[1] << "\t" << l[2] << "\t" << l[3] 
       	<< "\nSTD_ULOGIC \t" 
 		<< m[0] << "\t" << m[1] << "\t" << m[2] << "\t" 
-		<< m[3] << "\t" << m[4] << "\t" << m[5] << "\t" 
-		<< m[6] << "\t" << m[7] << "\t" << m[8]
+		<< m[3] 
       	<< endl;
    return 0;
 }
