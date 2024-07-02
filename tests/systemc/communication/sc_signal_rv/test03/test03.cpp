@@ -19,9 +19,9 @@
 
 /*****************************************************************************
 
-  test03.cpp -- 
+  test03.cpp -- Test binding error processing for signal_rv ports.
 
-  Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
+  Original Author: Andy Goodrich, Accellera, 2024-07-01
 
  *****************************************************************************/
 
@@ -43,70 +43,23 @@ SC_MODULE( mod_a )
 {
     // ports
     sc_out_rv<1> out1;
-    sc_out_rv<1> out2;
-    // sc_in_rv<1>  in;
-    sc_in<sc_lv<1> > in;
-
-    // variables
-    sc_logic l1;
-    sc_logic l2;
-
-    // events
-    sc_event ready1;
-    sc_event ready2;
-
-    void out_action1()
-    {
-        for( int i = 0; i < 4; ++ i ) {
-            l1 = sc_dt::sc_logic_value_t( i );
-            for( int j = 0; j < 4; ++j ) {
-                out1.write( sc_lv<1>( l1 ) );
-                wait( 1, SC_NS );
-                ready1.notify();
-                wait( SC_ZERO_TIME );
-            }
-        }
-    }
-
-    void out_action2()
-    {
-        for( int i = 0; i < 4; ++ i ) {
-            for( int j = 0; j < 4; ++ j ) {
-                l2 = sc_dt::sc_logic_value_t( j );
-                out2.write( sc_lv<1>( l2 ) );
-                wait( 1, SC_NS );
-                ready2.notify();
-                wait( SC_ZERO_TIME );
-            }
-        }
-    }
-
-    void in_action()
-    {
-        for( int i = 0; i < 16; ++ i ) {
-            wait( ready1 & ready2 );
-            cout << l1 << " " << l2 << " -> " << in.read() << endl;
-        }
-    }
+    sc_in_rv<1>  in;
 
     SC_CTOR( mod_a )
     {
-        SC_THREAD( out_action1 );
-        SC_THREAD( out_action2 );
-        SC_THREAD( in_action );
     }
 };
 
 int
 sc_main( int, char*[] )
 {
-    sc_signal_rv<1> sig_rv;
     sc_signal<sc_lv<1> > sig_lv;
+
+    sc_report_handler::set_actions( SC_ERROR, SC_DISPLAY );
 
     mod_a a( "a" );
 
-    a.out1( sig_rv );
-    a.out2( sig_lv );
+    a.out1( sig_lv );
     a.in( sig_lv );
 
     sc_start();

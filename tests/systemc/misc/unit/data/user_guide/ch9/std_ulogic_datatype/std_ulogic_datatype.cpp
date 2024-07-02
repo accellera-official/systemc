@@ -52,29 +52,19 @@ int sc_main(int ac, char *av[])
 // 2. TYPE CONVERSION
 
   // std_ulogic <- std_ulogic
-  s1  = 'U';
-  s2  = 'X';
-  s3  = '0';
-  s4  = '1';
-  s5  = 'Z';
-  s6  = 'W';
-  s7  = 'L';
-  s8  = 'H';
-  s9  = '-';
+  s1  = 'X';
+  s2  = '0';
+  s3  = '1';
+  s4  = 'Z';
   s10 = true;
   s11 = false;
 
   cout 	<< "\nstd_ulogic \t<=\t\t std_ulogic"
 	<< "\n-------------------------------------------"
-       	<< "\nUNINITIALIZED \t= " << s1  << "\t\t 'U'"
-	<< "\nUNKNOWN \t= "       << s2  << "\t\t 'X'"
-       	<< "\nZERO \t\t= "        << s3  << "\t\t '0'"
-	<< "\nONE \t\t= "         << s4  << "\t\t '1'"
-	<< "\nTRISTATE \t= "      << s5  << "\t\t 'Z'"
-       	<< "\nWEAK-UNKNOWN \t= "  << s6  << "\t\t 'W'"
-	<< "\nWEAK-ZERO \t= "     << s7  << "\t\t 'L'"
-	<< "\nWEAK-ONE \t= "      << s8  << "\t\t 'H'"
-	<< "\nDONT-CARE \t= "     << s9  << "\t\t '-'"
+	<< "\nUNKNOWN \t= "       << s1  << "\t\t 'X'"
+       	<< "\nZERO \t\t= "        << s2  << "\t\t '0'"
+	<< "\nONE \t\t= "         << s3  << "\t\t '1'"
+	<< "\nTRISTATE \t= "      << s4  << "\t\t 'Z'"
 	<< "\nTRUE \t\t= "        << s10 << "\t\t true"
 	<< "\nFALSE \t\t= "       << s11 << "\t\t false" 
        	<< "\n" << endl;
@@ -123,67 +113,28 @@ int sc_main(int ac, char *av[])
   char		c1, c2, c3, c4, c5, c6, c7, c8, c9;
   char		c10, c11, c12, c13, c14, c15, c16, c17, c18, c19;
 
-  c1  = 'U';
-  c2  = 'u';
   c3  = 'X';
   c4  = 'x'; 
   c5  = '0';
   c6  = '1';
   c7  = 'Z';
   c8  = 'z';
-  c9  = 'W';
-  c10 = 'w';
-  c11 = 'L';
-  c12 = 'l';
-  c13 = 'H';
-  c14 = 'h';
-  c15 = '-';
-  c16 = 'D';
-  c17 = 'd';
-  c18 = 'B';
-  c19 = 'F';
 
-  sc1  = c1; 
-  sc2  = c2; 
   sc3  = c3; 
   sc4  = c4; 
   sc5  = c5; 
   sc6  = c6; 
   sc7  = c7; 
   sc8  = c8; 
-  sc9  = c9; 
-  sc10 = c10; 
-  sc11 = c11; 
-  sc12 = c12; 
-  sc13 = c13; 
-  sc14 = c14; 
-  sc15 = c15; 
-  sc16 = c16; 
-  sc17 = c17; 
-  sc18 = c18; 
-  sc19 = c19; 
 
   cout  << "std_ulogic  <=\t char"
         << "\n---------------------"
-        << "\nSC1 \t= "  << sc1  << "\t '" << c1  << "'"
-        << "\nSC2 \t= "  << sc2  << "\t '" << c2  << "'"
         << "\nSC3 \t= "  << sc3  << "\t '" << c3  << "'"
         << "\nSC4 \t= "  << sc4  << "\t '" << c4  << "'"
         << "\nSC5 \t= "  << sc5  << "\t '" << c5  << "'"
         << "\nSC6 \t= "  << sc6  << "\t '" << c6  << "'"
         << "\nSC7 \t= "  << sc7  << "\t '" << c7  << "'"
         << "\nSC8 \t= "  << sc8  << "\t '" << c8  << "'"
-        << "\nSC9 \t= "  << sc9  << "\t '" << c9  << "'"
-        << "\nSC10 \t= " << sc10 << "\t '" << c10 << "'"
-        << "\nSC11 \t= " << sc11 << "\t '" << c11 << "'"
-        << "\nSC12 \t= " << sc12 << "\t '" << c12 << "'"
-        << "\nSC13 \t= " << sc13 << "\t '" << c13 << "'"
-        << "\nSC14 \t= " << sc14 << "\t '" << c14 << "'"
-        << "\nSC15 \t= " << sc15 << "\t '" << c15 << "'"
-        << "\nSC16 \t= " << sc16 << "\t '" << c16 << "'"
-        << "\nSC17 \t= " << sc17 << "\t '" << c17 << "'"
-        << "\nSC18 \t= " << sc18 << "\t '" << c18 << "'"
-        << "\nSC19 \t= " << sc19 << "\t '" << c19 << "'"
         << "\n" << endl;
 
 
@@ -350,51 +301,22 @@ int sc_main(int ac, char *av[])
   std_ulogic	hu, hx, h0, h1, hz, hw, hl, hh, hd;
   std_ulogic	du, dx, d0, d1, dz, dw, dl, dh, dd;
 
-  v1  = 'U';
   v2  = 'X';
   v3  = '0';
   v4  = '1';
   v5  = 'Z';
-  v6  = 'W';
-  v7  = 'L';
-  v8  = 'H';
-  v9  = '-';
 
-  uu = v1 & v1;	   ux = v1 & v2;    u0 = v1 & v3;
-  u1 = v1 & v4;	   uz = v1 & v5;    uw = v1 & v6;
-  ul = v1 & v7;	   uh = v1 & v8;    ud = v1 & v9; 
+  xx = v2 & v2;    x0 = v2 & v3;
+  x1 = v2 & v4;	   xz = v2 & v5;    
    
-  xu = v2 & v1;	   xx = v2 & v2;    x0 = v2 & v3;
-  x1 = v2 & v4;	   xz = v2 & v5;    xw = v2 & v6;
-  xl = v2 & v7;	   xh = v2 & v8;    xd = v2 & v9; 
+  _0x = v3 & v2;    _00 = v3 & v3;
+  _01 = v3 & v4;   _0z = v3 & v5;    
    
-  _0u = v3 & v1;   _0x = v3 & v2;    _00 = v3 & v3;
-  _01 = v3 & v4;   _0z = v3 & v5;    _0w = v3 & v6;
-  _0l = v3 & v7;   _0h = v3 & v8;    _0d = v3 & v9; 
+  _1x = v4 & v2;    _10 = v4 & v3;
+  _11 = v4 & v4;   _1z = v4 & v5;    
    
-  _1u = v4 & v1;   _1x = v4 & v2;    _10 = v4 & v3;
-  _11 = v4 & v4;   _1z = v4 & v5;    _1w = v4 & v6;
-  _1l = v4 & v7;   _1h = v4 & v8;    _1d = v4 & v9; 
-   
-  zu = v5 & v1;	   zx = v5 & v2;    z0 = v5 & v3;
-  z1 = v5 & v4;	   zz = v5 & v5;    zw = v5 & v6;
-  zl = v5 & v7;	   zh = v5 & v8;    zd = v5 & v9; 
-   
-  wu = v6 & v1;	   wx = v6 & v2;    w0 = v6 & v3;
-  w1 = v6 & v4;	   wz = v6 & v5;    ww = v6 & v6;
-  wl = v6 & v7;	   wh = v6 & v8;    wd = v6 & v9; 
-   
-  lu = v7 & v1;	   lx = v7 & v2;    l0 = v7 & v3;
-  l1 = v7 & v4;	   lz = v7 & v5;    lw = v7 & v6;
-  ll = v7 & v7;	   lh = v7 & v8;    ld = v7 & v9; 
-   
-  hu = v8 & v1;	   hx = v8 & v2;    h0 = v8 & v3;
-  h1 = v8 & v4;	   hz = v8 & v5;    hw = v8 & v6;
-  hl = v8 & v7;	   hh = v8 & v8;    hd = v8 & v9; 
-   
-  du = v9 & v1;	   dx = v9 & v2;    d0 = v9 & v3;
-  d1 = v9 & v4;	   dz = v9 & v5;    dw = v9 & v6;
-  dl = v9 & v7;	   dh = v9 & v8;    dd = v9 & v9; 
+  zx = v5 & v2;    z0 = v5 & v3;
+  z1 = v5 & v4;	   zz = v5 & v5;    
    
   cout	<< "\n+-------------------------+"
        	<< "\n| AND (&) | X | 0 | 1 | Z |" 
@@ -413,41 +335,17 @@ int sc_main(int ac, char *av[])
 	<< "\n+-------------------------+"
 	<< endl;
 
-  uu = v1 | v1;	   ux = v1 | v2;    u0 = v1 | v3;
-  u1 = v1 | v4;	   uz = v1 | v5;    uw = v1 | v6;
-  ul = v1 | v7;	   uh = v1 | v8;    ud = v1 | v9; 
+  xx = v2 | v2;    x0 = v2 | v3;
+  x1 = v2 | v4;	   xz = v2 | v5;    
    
-  xu = v2 | v1;	   xx = v2 | v2;    x0 = v2 | v3;
-  x1 = v2 | v4;	   xz = v2 | v5;    xw = v2 | v6;
-  xl = v2 | v7;	   xh = v2 | v8;    xd = v2 | v9; 
+  _0x = v3 | v2;   _00 = v3 | v3;
+  _01 = v3 | v4;   _0z = v3 | v5;    
    
-  _0u = v3 | v1;   _0x = v3 | v2;    _00 = v3 | v3;
-  _01 = v3 | v4;   _0z = v3 | v5;    _0w = v3 | v6;
-  _0l = v3 | v7;   _0h = v3 | v8;    _0d = v3 | v9; 
+  _1x = v4 | v2;   _10 = v4 | v3;
+  _11 = v4 | v4;   _1z = v4 | v5;    
    
-  _1u = v4 | v1;   _1x = v4 | v2;    _10 = v4 | v3;
-  _11 = v4 | v4;   _1z = v4 | v5;    _1w = v4 | v6;
-  _1l = v4 | v7;   _1h = v4 | v8;    _1d = v4 | v9; 
-   
-  zu = v5 | v1;	   zx = v5 | v2;    z0 = v5 | v3;
-  z1 = v5 | v4;	   zz = v5 | v5;    zw = v5 | v6;
-  zl = v5 | v7;	   zh = v5 | v8;    zd = v5 | v9; 
-   
-  wu = v6 | v1;	   wx = v6 | v2;    w0 = v6 | v3;
-  w1 = v6 | v4;	   wz = v6 | v5;    ww = v6 | v6;
-  wl = v6 | v7;	   wh = v6 | v8;    wd = v6 | v9; 
-   
-  lu = v7 | v1;	   lx = v7 | v2;    l0 = v7 | v3;
-  l1 = v7 | v4;	   lz = v7 | v5;    lw = v7 | v6;
-  ll = v7 | v7;	   lh = v7 | v8;    ld = v7 | v9; 
-   
-  hu = v8 | v1;	   hx = v8 | v2;    h0 = v8 | v3;
-  h1 = v8 | v4;	   hz = v8 | v5;    hw = v8 | v6;
-  hl = v8 | v7;	   hh = v8 | v8;    hd = v8 | v9; 
-   
-  du = v9 | v1;	   dx = v9 | v2;    d0 = v9 | v3;
-  d1 = v9 | v4;	   dz = v9 | v5;    dw = v9 | v6;
-  dl = v9 | v7;	   dh = v9 | v8;    dd = v9 | v9; 
+  zx = v5 | v2;    z0 = v5 | v3;
+  z1 = v5 | v4;	   zz = v5 | v5;    
    
   cout	<< "\n+-------------------------+"
        	<< "\n| OR  (|) | X | 0 | 1 | Z |" 
@@ -466,41 +364,17 @@ int sc_main(int ac, char *av[])
 	<< "\n+-------------------------+"
 	<< endl;
 
-  uu = v1 ^ v1;	   ux = v1 ^ v2;    u0 = v1 ^ v3;
-  u1 = v1 ^ v4;	   uz = v1 ^ v5;    uw = v1 ^ v6;
-  ul = v1 ^ v7;	   uh = v1 ^ v8;    ud = v1 ^ v9; 
+  xx = v2 ^ v2;    x0 = v2 ^ v3;
+  x1 = v2 ^ v4;	   xz = v2 ^ v5;    
    
-  xu = v2 ^ v1;	   xx = v2 ^ v2;    x0 = v2 ^ v3;
-  x1 = v2 ^ v4;	   xz = v2 ^ v5;    xw = v2 ^ v6;
-  xl = v2 ^ v7;	   xh = v2 ^ v8;    xd = v2 ^ v9; 
+  _0x = v3 ^ v2;   _00 = v3 ^ v3;
+  _01 = v3 ^ v4;   _0z = v3 ^ v5;    
    
-  _0u = v3 ^ v1;   _0x = v3 ^ v2;    _00 = v3 ^ v3;
-  _01 = v3 ^ v4;   _0z = v3 ^ v5;    _0w = v3 ^ v6;
-  _0l = v3 ^ v7;   _0h = v3 ^ v8;    _0d = v3 ^ v9; 
+  _1x = v4 ^ v2;   _10 = v4 ^ v3;
+  _11 = v4 ^ v4;   _1z = v4 ^ v5;    
    
-  _1u = v4 ^ v1;   _1x = v4 ^ v2;    _10 = v4 ^ v3;
-  _11 = v4 ^ v4;   _1z = v4 ^ v5;    _1w = v4 ^ v6;
-  _1l = v4 ^ v7;   _1h = v4 ^ v8;    _1d = v4 ^ v9; 
-   
-  zu = v5 ^ v1;	   zx = v5 ^ v2;    z0 = v5 ^ v3;
-  z1 = v5 ^ v4;	   zz = v5 ^ v5;    zw = v5 ^ v6;
-  zl = v5 ^ v7;	   zh = v5 ^ v8;    zd = v5 ^ v9; 
-   
-  wu = v6 ^ v1;	   wx = v6 ^ v2;    w0 = v6 ^ v3;
-  w1 = v6 ^ v4;	   wz = v6 ^ v5;    ww = v6 ^ v6;
-  wl = v6 ^ v7;	   wh = v6 ^ v8;    wd = v6 ^ v9; 
-   
-  lu = v7 ^ v1;	   lx = v7 ^ v2;    l0 = v7 ^ v3;
-  l1 = v7 ^ v4;	   lz = v7 ^ v5;    lw = v7 ^ v6;
-  ll = v7 ^ v7;	   lh = v7 ^ v8;    ld = v7 ^ v9; 
-   
-  hu = v8 ^ v1;	   hx = v8 ^ v2;    h0 = v8 ^ v3;
-  h1 = v8 ^ v4;	   hz = v8 ^ v5;    hw = v8 ^ v6;
-  hl = v8 ^ v7;	   hh = v8 ^ v8;    hd = v8 ^ v9; 
-   
-  du = v9 ^ v1;	   dx = v9 ^ v2;    d0 = v9 ^ v3;
-  d1 = v9 ^ v4;	   dz = v9 ^ v5;    dw = v9 ^ v6;
-  dl = v9 ^ v7;	   dh = v9 ^ v8;    dd = v9 ^ v9; 
+  zx = v5 ^ v2;    z0 = v5 ^ v3;
+  z1 = v5 ^ v4;	   zz = v5 ^ v5;    
    
   cout	<< "\n+-------------------------+"
        	<< "\n| XOR (^) | X | 0 | 1 | Z |" 

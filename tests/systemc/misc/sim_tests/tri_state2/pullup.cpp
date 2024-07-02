@@ -43,7 +43,7 @@
 void pullup::entry()
 {
   while (true) {
-    pup.write(sc_logic('H'));
+    pup.write(sc_logic('1'));
     wait();
   }
 } // end of entry function
