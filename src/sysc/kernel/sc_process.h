@@ -130,8 +130,24 @@ inline void sc_process_monitor::signal(sc_thread_handle , int ) {}
 //-----------------------------------------------------------------------------
 
 typedef void (sc_process_host::*sc_entry_func)();
+
+template<typename T>
+static constexpr inline auto sc_make_func_ptr( void (T::*method_p)() ) noexcept
+{
+// Suppress false positive warning by GCC on ARM64 about
+// static_cast of pointer to member function of base class
+#if defined(__aarch64__) && defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshift-negative-value"
+#endif
+    return static_cast<sc_entry_func>(method_p);
+#if defined(__aarch64__) && defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
+}
+
 #define SC_MAKE_FUNC_PTR(callback_tag, func) \
-    static_cast<sc_core::sc_entry_func>(&callback_tag::func)
+    sc_core::sc_make_func_ptr(&callback_tag::func)
 
 extern SC_API void sc_set_stack_size( sc_thread_handle, std::size_t );
 
