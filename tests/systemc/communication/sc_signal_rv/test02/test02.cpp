@@ -43,7 +43,7 @@ SC_MODULE( mod_a )
 {
     // ports
     sc_in<sc_lv<1> >  in;
-    sc_out_rv<1>      out1;
+    sc_out<sc_lv<1> > out1;
     sc_out_rv<1>      out2;
 
     // variables
