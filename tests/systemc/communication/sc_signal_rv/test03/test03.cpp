@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test03.cpp -- 
+  test02.cpp -- 
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -42,11 +42,9 @@
 SC_MODULE( mod_a )
 {
     // ports
-    sc_out_rv<1> out1;
-    // sc_out_rv<1> out2;
+    sc_in<sc_lv<1> >  in;
+    sc_out<sc_lv<1> > out1;
     sc_out<sc_lv<1> > out2;
-    // sc_in_rv<1>  in;
-    sc_in<sc_lv<1> > in;
 
     // variables
     sc_logic l1;
@@ -102,13 +100,12 @@ int
 sc_main( int, char*[] )
 {
     sc_signal_rv<1> sig_rv;
-    sc_signal<sc_lv<1> > sig_lv;
 
     mod_a a( "a" );
 
     a.out1( sig_rv );
-    a.out2( sig_lv );
-    a.in( sig_lv );
+    a.out2( sig_rv );
+    a.in( sig_rv );
 
     sc_start();
 

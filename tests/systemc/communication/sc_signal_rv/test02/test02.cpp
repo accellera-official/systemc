@@ -42,9 +42,9 @@
 SC_MODULE( mod_a )
 {
     // ports
-    sc_out_rv<1> out1;
-    sc_out_rv<1> out2;
-    sc_in_rv<1>  in;
+    sc_in<sc_lv<1> >  in;
+    sc_out_rv<1>      out1;
+    sc_out_rv<1>      out2;
 
     // variables
     sc_logic l1;
@@ -100,12 +100,11 @@ int
 sc_main( int, char*[] )
 {
     sc_signal_rv<1> sig_rv;
-    sc_signal_rv<1> sig_rv2;
 
     mod_a a( "a" );
 
     a.out1( sig_rv );
-    a.out2( sig_rv2 );
+    a.out2( sig_rv );
     a.in( sig_rv );
 
     sc_start();
