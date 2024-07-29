@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test02.cpp -- 
+  test03.cpp -- 
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
