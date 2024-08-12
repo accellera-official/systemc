@@ -48,7 +48,7 @@ SC_MODULE( display )
     const sc_signal<long>&             in_value3;                        // Output  port
     const sc_signal<int>&              in_value4;                        // Output  port
     const sc_signal<short>&            in_value5;                        // Output  port
-    const sc_signal<char>&             in_value6;                        // Output  port
+    const sc_signal<signed char>&      in_value6;                        // Output  port
     const sc_signal<bool>&             in_valid;                         // Output  port
 
    // 
@@ -63,7 +63,7 @@ SC_MODULE( display )
                const sc_signal<long>&            IN_VALUE3,
                const sc_signal<int>&             IN_VALUE4,
                const sc_signal<short>&           IN_VALUE5,
-               const sc_signal<char>&            IN_VALUE6,
+               const sc_signal<signed char>&     IN_VALUE6,
                const sc_signal<bool>&            IN_VALID
            ) 
            : 

@@ -49,7 +49,7 @@ void stimulus::entry() {
     long           tmp3;
     int            tmp4;
     short          tmp5;
-    char           tmp6;
+    signed char    tmp6;
 
     int counter = 0;
 
@@ -61,7 +61,7 @@ void stimulus::entry() {
     tmp6 = 'R';
 
     while(counter<100){
-       out_valid.write(true);    
+       out_valid.write(true);
        out_value1.write(tmp1);
        out_value2.write(tmp2);
        out_value3.write(tmp3);

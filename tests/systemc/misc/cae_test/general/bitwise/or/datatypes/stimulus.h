@@ -49,8 +49,8 @@ SC_MODULE( stimulus )
     sc_signal<long>&             out_value3;                        // Output  port
     sc_signal<int>&              out_value4;                        // Output  port
     sc_signal<short>&            out_value5;                        // Output  port
-    sc_signal<char>&             out_value6;                        // Output  port
-    sc_signal<char>&             out_value7;                        // Output  port
+    sc_signal<signed char>&      out_value6;                        // Output  port
+    sc_signal<signed char>&      out_value7;                        // Output  port
     sc_signal<bool>&             out_valid;                         // Output  port
     const sc_signal<bool>&       in_ack;
 
@@ -67,8 +67,8 @@ SC_MODULE( stimulus )
         sc_signal<long>&                   OUT_VALUE3,
         sc_signal<int>&                    OUT_VALUE4,
         sc_signal<short>&                  OUT_VALUE5,
-        sc_signal<char>&                   OUT_VALUE6,
-        sc_signal<char>&                   OUT_VALUE7,
+        sc_signal<signed char>&            OUT_VALUE6,
+        sc_signal<signed char>&            OUT_VALUE7,
         sc_signal<bool>&                   OUT_VALID,
         const sc_signal<bool>&             IN_ACK
         )

@@ -54,8 +54,8 @@ void sharing::entry()
   int             tmp4r;
   short           tmp5;
   short           tmp5r;
-  char            tmp6;
-  char            tmp6r;
+  signed char     tmp6;
+  signed char     tmp6r;
 
 // define 1 dimensional array
    unsigned int  tmp7[2];
@@ -129,8 +129,8 @@ void sharing::entry()
     tmp3r = tmp3 << (tmp5 % 32);
     tmp4r = tmp4 << 2;
     tmp5r = tmp3 << ((unsigned int)(tmp5) % 32);
-    tmp6r = tmp6 << (tmp2.to_uint() % 8);
- 
+    tmp6r = static_cast<unsigned char>(tmp6) << (tmp2.to_uint() % 8);
+
     //write outputs
     out_value1.write(tmp1r);
     out_value2.write(tmp2r);

@@ -55,8 +55,8 @@ SC_MODULE( datatypes )
     const sc_signal<long>&             in_value3;                        // Input  port
     const sc_signal<int>&              in_value4;                        // Input  port
     const sc_signal<short>&            in_value5;                        // Input  port
-    const sc_signal<char>&             in_value6;                        // Input  port
-    const sc_signal<char>&             in_value7;                        // Input  port
+    const sc_signal<signed char>&      in_value6;                        // Input  port
+    const sc_signal<signed char>&      in_value7;                        // Input  port
     const sc_signal<bool>&             in_valid;                         // Input  port
     sc_signal<bool>&                   out_ack;                          // Output port
     sc_signal_bool_vector&             out_value1;    // Output port
@@ -64,7 +64,7 @@ SC_MODULE( datatypes )
     sc_signal<long>&                   out_value3;                       // Output port
     sc_signal<int>&                    out_value4;                       // Output port
     sc_signal<short>&                  out_value5;                       // Output port
-    sc_signal<char>&                   out_value6;                       // Output port
+    sc_signal<signed char>&            out_value6;                       // Output port
     sc_signal<bool>&                   out_valid;                        // Output port
 
     //
@@ -80,8 +80,8 @@ SC_MODULE( datatypes )
         const sc_signal<long>&                    IN_VALUE3,
         const sc_signal<int>&                     IN_VALUE4,
         const sc_signal<short>&                   IN_VALUE5,
-        const sc_signal<char>&                    IN_VALUE6,
-        const sc_signal<char>&                    IN_VALUE7,
+        const sc_signal<signed char>&             IN_VALUE6,
+        const sc_signal<signed char>&             IN_VALUE7,
         const   sc_signal<bool>&                  IN_VALID,
 
                 sc_signal<bool>&                   OUT_ACK,
@@ -90,7 +90,7 @@ SC_MODULE( datatypes )
                 sc_signal<long>&                   OUT_VALUE3,
                 sc_signal<int>&                    OUT_VALUE4,
                 sc_signal<short>&                  OUT_VALUE5,
-                sc_signal<char>&                   OUT_VALUE6,
+                sc_signal<signed char>&            OUT_VALUE6,
                 sc_signal<bool>&                   OUT_VALID
         )
         : 

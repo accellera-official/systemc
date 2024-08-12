@@ -48,8 +48,8 @@ int sc_main (int argc , char *argv[]) {
   sc_signal<long>             stimulus_line3;
   sc_signal<int>              stimulus_line4;
   sc_signal<short>            stimulus_line5;
-  sc_signal<char>             stimulus_line6;
-  sc_signal<char>             stimulus_line7;
+  sc_signal<signed char>      stimulus_line6;
+  sc_signal<signed char>      stimulus_line7;
   sc_signal<bool>             input_valid;
   sc_signal<bool>             ack;
   sc_signal<bool>             output_valid;
@@ -58,7 +58,7 @@ int sc_main (int argc , char *argv[]) {
   sc_signal<long>             result_line3;
   sc_signal<int>              result_line4;
   sc_signal<short>            result_line5;
-  sc_signal<char>             result_line6;
+  sc_signal<signed char>      result_line6;
 
   input_valid = 0;
   output_valid = 0;

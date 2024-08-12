@@ -49,8 +49,8 @@ void stimulus::entry() {
     long           tmp3;
     int            tmp4;
     short          tmp5;
-    char           tmp6;
-    char           tmp7;
+    signed char    tmp6;
+    signed char    tmp7;
 
     tmp1 = "0b01010101";
     tmp2 = "0b00000010";
