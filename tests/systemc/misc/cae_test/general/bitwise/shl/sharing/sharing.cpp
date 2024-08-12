@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  sharing.cpp -- 
+  sharing.cpp --
 
   Original Author: Rocco Jonack, Synopsys, Inc., 1999-07-30
 
@@ -54,8 +54,8 @@ void sharing::entry()
   int             tmp4r;
   short           tmp5;
   short           tmp5r;
-  char            tmp6;
-  char            tmp6r;
+  signed char     tmp6;
+  signed char     tmp6r;
 
 // define 1 dimensional array
    unsigned int  tmp7[2];
@@ -99,16 +99,16 @@ void sharing::entry()
     tmp4 = in_value4.read();
     tmp5 = in_value5.read();
     tmp6 = in_value6.read();
-    
+
     out_ack.write(true);
 
     //execute mixed data type shit left operations
     tmp1r = tmp1 << (tmp7[0] % 8);
     tmp2r = tmp2 << 2;
     tmp3r = tmp3 << 1;
-    tmp4r = tmp4 << (tmp7[1] % 32);
+    tmp4r = static_cast<unsigned>(tmp4) << (tmp7[1] % 32);
     tmp5r = tmp3 << ((unsigned int)tmp1.to_int() % 32);
-    tmp6r = tmp6 << 1;
+    tmp6r = static_cast<unsigned char>(tmp6) << 1;
 
     //write outputs
     out_value1.write(tmp1r);
@@ -117,7 +117,7 @@ void sharing::entry()
     out_value4.write(tmp4r);
     out_value5.write(tmp5r);
     out_value6.write(tmp6r);
-  
+
     out_valid.write(true);
     wait();
     out_ack.write(false);
@@ -127,10 +127,10 @@ void sharing::entry()
     tmp1r = tmp1 << (tmp7[0] % 8);
     tmp2r = tmp2 << (tmp4 % 8);
     tmp3r = tmp3 << (tmp5 % 32);
-    tmp4r = tmp4 << 2;
+    tmp4r = static_cast<unsigned>(tmp4) << 2;
     tmp5r = tmp3 << ((unsigned int)(tmp5) % 32);
-    tmp6r = tmp6 << (tmp2.to_uint() % 8);
- 
+    tmp6r = static_cast<unsigned char>(tmp6) << (tmp2.to_uint() % 8);
+
     //write outputs
     out_value1.write(tmp1r);
     out_value2.write(tmp2r);
@@ -138,7 +138,7 @@ void sharing::entry()
     out_value4.write(tmp4r);
     out_value5.write(tmp5r);
     out_value6.write(tmp6r);
- 
+
     out_valid.write(true);
     wait();
     out_ack.write(false);
@@ -146,5 +146,5 @@ void sharing::entry()
 
  }
 
-} // End 
+} // End
 
