@@ -70,12 +70,7 @@ static inline void sc_cor_qt_finish_stack_switch( sc_cor_qt* old_cor, sc_cor_qt*
 
 static std::size_t sc_pagesize()
 {
-    static std::size_t pagesize = 0;
-
-    if( pagesize == 0 ) {
-        pagesize = sysconf( _SC_PAGESIZE );
-    }
-
+    static std::size_t pagesize = sysconf( _SC_PAGESIZE );
     sc_assert( pagesize != 0 );
     return pagesize;
 }
