@@ -104,10 +104,22 @@ function(add_systemc_library libName scBuildDefine)
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
     if (APPLE)
-        # It's OK that _sc_main, __sanitizer_start_switch_fiber, and
-        # __sanitizer_finish_switch_fiber are undefined symbols.
-        set_target_properties (${libName} PROPERTIES LINK_FLAGS
-        -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
+      # sc_main is OK to be undefined
+      target_link_options(systemc PRIVATE "LINKER:-U,_sc_main")
+
+      # undefined symbols for Asan support on QuickThreads
+      if (QT_ARCH)
+        set(_undef_scope PRIVATE)
+        if (NOT BUILD_SHARED_LIBS)
+          set(_undef_scope INTERFACE)
+        endif()
+        set(_undef_syms
+          ___sanitizer_start_switch_fiber
+          ___sanitizer_finish_switch_fiber
+        )
+        list(TRANSFORM _undef_syms PREPEND "LINKER:-U,")
+        target_link_options(${libName} ${_undef_scope} ${_undef_syms})
+      endif()
     endif(APPLE)
 
     target_link_libraries(
