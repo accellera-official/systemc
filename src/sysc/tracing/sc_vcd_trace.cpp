@@ -124,10 +124,9 @@ public:
     // Make this virtual as some derived classes may overwrite
     virtual void print_variable_declaration_line(FILE* f, const char* scoped_name);
 
-    void compose_data_line(char* rawdata, char* compdata, size_t compdata_n);
-    std::string compose_line(const std::string& data);
+    void print_data_line(FILE* f, const char* rawdata);
 
-    virtual ~vcd_trace();
+    virtual ~vcd_trace() = default;
 
     const std::string name;
     const std::string vcd_name;
@@ -146,56 +145,23 @@ vcd_trace::vcd_trace(const std::string& name_, const std::string& vcd_name_)
 }
 
 void
-vcd_trace::compose_data_line(char* rawdata, char* compdata, size_t compdata_n)
+vcd_trace::print_data_line(FILE* f, const char* rawdata)
 {
-    sc_assert(rawdata != compdata);
-
     if(bit_width == 0)
-    {
-        compdata[0] = '\0';
-    }
-    else
-    {
-        if(bit_width == 1)
-        {
-            compdata[0] = rawdata[0];
-            strcpy(&(compdata[1]), vcd_name.c_str());
-        }
-        else
-        {
-            const char* effective_begin = strip_leading_bits(rawdata);
-// FIXME: see
-// https://github.com/OSCI-WG/systemc/pull/642 
-// https://github.com/OSCI-WG/systemc/issues/600
-// https://github.com/OSCI-WG/systemc/pull/645
-#if defined(__GNUC__) && !defined(__clang__)
-#  pragma GCC diagnostic push
-#  pragma GCC diagnostic ignored "-Wformat-truncation"
-#endif
-            std::snprintf(compdata, compdata_n, "b%s %s", effective_begin, vcd_name.c_str());
-#if defined(__GNUC__) && !defined(__clang__)
-#  pragma GCC diagnostic pop
-#endif
-        }
-    }
-}
+        return;
 
-// same as above but not that ugly
-std::string
-vcd_trace::compose_line(const std::string& data)
-{
-  if(bit_width == 0)
-    return "";
-  if(bit_width == 1)
-    return data + vcd_name;
-  return std::string("b")+strip_leading_bits(data.c_str())+" "+vcd_name;
+    if(bit_width == 1) {
+        std::fprintf(f, "%c%s", *rawdata, vcd_name.c_str());
+        return;
+    }
+
+    const char* effective_begin = strip_leading_bits(rawdata);
+    std::fprintf(f, "b%s %s", effective_begin, vcd_name.c_str());
 }
 
 void
 vcd_trace::print_variable_declaration_line(FILE* f, const char* scoped_name)
 {
-    char buf[2000];
-
     if ( bit_width <= 0 )
     {
         std::stringstream ss;
@@ -204,25 +170,14 @@ vcd_trace::print_variable_declaration_line(FILE* f, const char* scoped_name)
         return;
     }
 
-    if ( bit_width == 1 )
-    {
-        std::snprintf(buf, sizeof(buf), "$var %s  % 3d  %s  %s       $end\n",
-                      vcd_types[vcd_var_type],
-                      bit_width,
-                      vcd_name.c_str(),
-                      scoped_name);
-    }
-    else
-    {
-        std::snprintf(buf, sizeof(buf), "$var %s  % 3d  %s  %s [%d:0]  $end\n",
-                      vcd_types[vcd_var_type],
-                      bit_width,
-                      vcd_name.c_str(),
-                      scoped_name,
-                      bit_width-1);
+    if ( bit_width == 1 ) {
+        std::fprintf(f, "$var %s  % 3d  %s  %s       $end\n",
+                     vcd_types[vcd_var_type], bit_width, vcd_name.c_str(), scoped_name);
+        return;
     }
 
-    std::fputs(buf, f);
+    std::fprintf(f, "$var %s  % 3d  %s  %s [%d:0]  $end\n",
+                 vcd_types[vcd_var_type], bit_width, vcd_name.c_str(), scoped_name, bit_width-1);
 }
 
 void
@@ -264,11 +219,6 @@ vcd_trace::strip_leading_bits(const char* originalbuf)
     return position-1;
 }
 
-vcd_trace::~vcd_trace()
-{
-  /* Intentionally Blank */
-}
-
 
 template <class T>
 class vcd_T_trace : public vcd_trace
@@ -289,7 +239,7 @@ class vcd_T_trace : public vcd_trace
 
     void write( FILE* f )
     {
-        std::fprintf( f, "%s", compose_line( object.to_string() ).c_str() );
+        print_data_line( f, object.to_string().c_str() );
         old_value = object;
     }
 
@@ -395,11 +345,7 @@ vcd_bool_trace::changed()
 void
 vcd_bool_trace::write(FILE* f)
 {
-    if (object == true) std::fputc('1', f);
-    else std::fputc('0', f);
-
-    std::fprintf(f,"%s", vcd_name.c_str());
-
+    std::fprintf(f,"%c%s", "01"[+object], vcd_name.c_str());
     old_value = object;
 }
 
@@ -434,11 +380,7 @@ vcd_sc_bit_trace::changed()
 void
 vcd_sc_bit_trace::write(FILE* f)
 {
-    if (object == true) std::fputc('1', f);
-    else std::fputc('0', f);
-
-    std::fprintf(f,"%s", vcd_name.c_str());
-
+    std::fprintf(f,"%c%s", "01"[+object], vcd_name.c_str());
     old_value = object;
 }
 
@@ -477,12 +419,8 @@ vcd_sc_logic_trace::changed()
 void
 vcd_sc_logic_trace::write(FILE* f)
 {
-    char out_char;
-    out_char = map_sc_logic_state_to_vcd_state(object.to_char());
-    std::fputc(out_char, f);
-
-    std::fprintf(f,"%s", vcd_name.c_str());
-
+    char out_char = map_sc_logic_state_to_vcd_state(object.to_char());
+    std::fprintf(f,"%c%s", out_char, vcd_name.c_str());
     old_value = object;
 }
 
@@ -501,6 +439,7 @@ public:
 protected:
     const sc_dt::sc_unsigned& object;
     sc_dt::sc_unsigned old_value;
+    std::vector<char> rawdata;
 };
 
 
@@ -522,23 +461,12 @@ vcd_sc_unsigned_trace::changed()
 void
 vcd_sc_unsigned_trace::write(FILE* f)
 {
-    static std::vector<char> compdata(1024), rawdata(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( compdata.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( compdata ); // resize without copying values
-        std::vector<char>( sz ).swap( rawdata );
-    }
-    char *rawdata_ptr  = &rawdata[0];
-
-    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    char *rawdata_ptr  = rawdata.data();
+    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0], compdata.size());
-
-    std::fputs(&compdata[0], f);
+    print_data_line(f, rawdata.data());
     old_value = object;
 }
 
@@ -546,6 +474,7 @@ void
 vcd_sc_unsigned_trace::set_width()
 {
     bit_width = object.length();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 
@@ -563,6 +492,7 @@ public:
 protected:
     const sc_dt::sc_signed& object;
     sc_dt::sc_signed old_value;
+    std::vector<char> rawdata;
 };
 
 
@@ -583,23 +513,12 @@ vcd_sc_signed_trace::changed()
 void
 vcd_sc_signed_trace::write(FILE* f)
 {
-    static std::vector<char> compdata(1024), rawdata(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( compdata.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( compdata ); // resize without copying values
-        std::vector<char>( sz ).swap( rawdata );
-    }
-    char *rawdata_ptr  = &rawdata[0];
-
-    for (int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
+    char *rawdata_ptr  = rawdata.data();
+    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0], compdata.size());
-
-    std::fputs(&compdata[0], f);
+    print_data_line(f, rawdata.data());
     old_value = object;
 }
 
@@ -607,12 +526,15 @@ void
 vcd_sc_signed_trace::set_width()
 {
     bit_width = object.length();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 /*****************************************************************************/
 
 class vcd_sc_uint_base_trace : public vcd_trace {
 public:
+    static const int max_width = sizeof(sc_dt::uint64) * BITS_PER_BYTE;
+
     vcd_sc_uint_base_trace(const sc_dt::sc_uint_base& object_,
 			   const std::string& name_,
 			   const std::string& vcd_name_);
@@ -645,17 +567,12 @@ vcd_sc_uint_base_trace::changed()
 void
 vcd_sc_uint_base_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
-
-    int bitindex;
-    for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
+    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata, sizeof(compdata));
-
-    std::fputs(compdata, f);
+    print_data_line(f, rawdata);
     old_value = object;
 }
 
@@ -670,6 +587,8 @@ vcd_sc_uint_base_trace::set_width()
 
 class vcd_sc_int_base_trace : public vcd_trace {
 public:
+    static const int max_width = sizeof(sc_dt::uint64) * BITS_PER_BYTE;
+
     vcd_sc_int_base_trace(const sc_dt::sc_int_base& object_,
 			  const std::string& name_,
 			  const std::string& vcd_name_);
@@ -700,17 +619,12 @@ vcd_sc_int_base_trace::changed()
 void
 vcd_sc_int_base_trace::write(FILE* f)
 {
-    char rawdata[1000], *rawdata_ptr = rawdata;
-    char compdata[1000];
-
-    int bitindex;
-    for (bitindex = object.length()-1; bitindex >= 0; --bitindex) {
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
+    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(rawdata, compdata, sizeof(compdata));
-
-    std::fputs(compdata, f);
+    print_data_line(f, rawdata);
     old_value = object;
 }
 
@@ -823,6 +737,7 @@ protected:
 
     const sc_dt::sc_fxnum& object;
     sc_dt::sc_fxnum old_value;
+    std::vector<char> rawdata;
 
 };
 
@@ -848,24 +763,12 @@ vcd_sc_fxnum_trace::changed()
 void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
-    static std::vector<char> compdata(1024), rawdata(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( compdata.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( compdata ); // resize without copying values
-        std::vector<char>( sz ).swap( rawdata );
-    }
-    char *rawdata_ptr  = &rawdata[0];
-
-    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
-    {
+    char *rawdata_ptr  = rawdata.data();
+    for(int bitindex = bit_width; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0], compdata.size());
-
-    std::fputs( &compdata[0], f );
+    print_data_line(f, rawdata.data());
     old_value = object;
 }
 
@@ -873,6 +776,7 @@ void
 vcd_sc_fxnum_trace::set_width()
 {
     bit_width = object.wl();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 /*****************************************************************************/
@@ -892,6 +796,7 @@ protected:
 
     const sc_dt::sc_fxnum_fast& object;
     sc_dt::sc_fxnum_fast old_value;
+    std::vector<char> rawdata;
 
 };
 
@@ -918,24 +823,12 @@ vcd_sc_fxnum_fast_trace::changed()
 void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
-    static std::vector<char> compdata(1024), rawdata(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( compdata.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( compdata ); // resize without copying values
-        std::vector<char>( sz ).swap( rawdata );
-    }
-    char *rawdata_ptr  = &rawdata[0];
-
-    for(int bitindex = object.wl() - 1; bitindex >= 0; -- bitindex )
-    {
+    char *rawdata_ptr  = rawdata.data();
+    for(int bitindex = bit_width; bitindex >= 0; -- bitindex ) {
         *rawdata_ptr ++ = "01"[object[bitindex]];
     }
     *rawdata_ptr = '\0';
-    compose_data_line(&rawdata[0], &compdata[0], compdata.size());
-
-    std::fputs( &compdata[0], f );
+    print_data_line(f, rawdata.data());
     old_value = object;
 }
 
@@ -943,6 +836,7 @@ void
 vcd_sc_fxnum_fast_trace::set_width()
 {
     bit_width = object.wl();
+    rawdata.resize(bit_width+1); // incl trailing 0
 }
 
 
@@ -1019,7 +913,6 @@ template<typename T, bool Signed>
 void vcd_builtin_trace<T, Signed>::write(FILE* f)
 {
     char rawdata[max_width + /*\0*/ 1];
-    char compdata[sizeof(rawdata) + /*vcd name*/ 5 + /*vcd format*/ 2];
     int bitindex = 0;
 
     if (attr::overflow(object))
@@ -1037,8 +930,7 @@ void vcd_builtin_trace<T, Signed>::write(FILE* f)
         }
     }
     rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata, sizeof(compdata));
-    std::fputs(compdata, f);
+    print_data_line(f, rawdata);
     old_value = object;
 }
 
@@ -1148,19 +1040,16 @@ void vcd_double_trace::write(FILE* f)
 
 /*****************************************************************************/
 
-class vcd_enum_trace : public vcd_trace {
+class vcd_enum_trace : public vcd_builtin_trace<unsigned>
+{
+    using base_type = vcd_builtin_trace<unsigned>;
 public:
     vcd_enum_trace(const unsigned& object_,
 		   const std::string& name_,
 		   const std::string& vcd_name_,
 		   const char** enum_literals);
-    void write(FILE* f);
-    bool changed();
 
 protected:
-    const unsigned& object;
-    unsigned old_value;
-    unsigned mask;
     const char** literals;
     unsigned nliterals;
 };
@@ -1170,8 +1059,8 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 			       const std::string& name_,
 			       const std::string& vcd_name_,
 			       const char** enum_literals_)
-: vcd_trace(name_, vcd_name_), object(object_), old_value(object_),
-  mask(~0U), literals(enum_literals_), nliterals(0)
+: base_type(object_, name_, vcd_name_, 32),
+  literals(enum_literals_), nliterals(0)
 {
     // find number of bits required to represent enumeration literal - counting loop
     for (nliterals = 0; enum_literals_[nliterals]; nliterals++) continue;
@@ -1184,41 +1073,7 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
         bit_width++;
     }
 
-    // Set the mask
-    if (bit_width < 32) {
-      mask = ~(~0U << bit_width);
-    } else {
-      mask = ~0U;
-    }
-}
-
-bool vcd_enum_trace::changed()
-{
-    return object != old_value;
-}
-
-void vcd_enum_trace::write(FILE* f)
-{
-    char rawdata[1000];
-    char compdata[1000];
-    int bitindex;
-
-    // Check for overflow
-    if ((object & mask) != object) {
-        for (bitindex = 0; bitindex < bit_width; bitindex++) {
-            rawdata[bitindex] = 'x';
-        }
-    } else {
-        unsigned long bit_mask = 1ul << (bit_width-1);
-        for (bitindex = 0; bitindex < bit_width; bitindex++) {
-            rawdata[bitindex] = (object & bit_mask)? '1' : '0';
-            bit_mask = bit_mask >> 1;
-        }
-    }
-    rawdata[bitindex] = '\0';
-    compose_data_line(rawdata, compdata, sizeof(compdata));
-    std::fputs(compdata, f);
-    old_value = object;
+    base_type::init(bit_width);
 }
 
 /*****************************************************************************
