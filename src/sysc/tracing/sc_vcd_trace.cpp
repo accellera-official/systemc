@@ -836,7 +836,7 @@ void
 vcd_sc_fxnum_fast_trace::set_width()
 {
     bit_width = object.wl();
-    rawdata.resize(bit_width+1); // incl trailing 0
+    rawdata.resize(bit_width + 1); // incl trailing 0
 }
 
 
