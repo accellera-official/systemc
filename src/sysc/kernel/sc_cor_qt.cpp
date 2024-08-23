@@ -61,7 +61,7 @@ static inline void sc_cor_qt_start_stack_switch( sc_cor_qt* old_cor, sc_cor_qt* 
 static inline void sc_cor_qt_finish_stack_switch( sc_cor_qt* old_cor, sc_cor_qt* new_cor )
 {
     if (sanitizer_finish_switch_fiber_weak != nullptr) {
-        auto ** stack_bottom = const_cast<const void**>(&old_cor->m_stack);
+        auto** stack_bottom = const_cast<const void**>(&old_cor->m_stack);
         sanitizer_finish_switch_fiber_weak(new_cor->m_fake_stack, stack_bottom, &old_cor->m_stack_size);
     }
 }
@@ -258,8 +258,8 @@ extern "C"
 void*
 sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor_p, void* new_cor_p )
 {
-    auto * old_cor = static_cast<sc_cor_qt*>( old_cor_p );
-    auto * new_cor = static_cast<sc_cor_qt*>( new_cor_p );
+    auto* old_cor = static_cast<sc_cor_qt*>( old_cor_p );
+    auto* new_cor = static_cast<sc_cor_qt*>( new_cor_p );
 
     old_cor->m_sp = sp;
     sc_cor_qt_finish_stack_switch( old_cor, new_cor );
@@ -283,8 +283,8 @@ extern "C"
 void*
 sc_cor_qt_aborthelp( qt_t*, void* old_cor_p, void* new_cor_p )
 {
-    auto * old_cor = static_cast<sc_cor_qt*>( old_cor_p );
-    auto * new_cor = static_cast<sc_cor_qt*>( new_cor_p );
+    auto* old_cor = static_cast<sc_cor_qt*>( old_cor_p );
+    auto* new_cor = static_cast<sc_cor_qt*>( new_cor_p );
 
     sc_cor_qt_finish_stack_switch( old_cor, new_cor );
     return 0;
@@ -293,8 +293,8 @@ sc_cor_qt_aborthelp( qt_t*, void* old_cor_p, void* new_cor_p )
 void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
-    auto * new_cor = static_cast<sc_cor_qt*>( next_cor );
-    auto * old_cor = set_current( new_cor );
+    auto* new_cor = static_cast<sc_cor_qt*>( next_cor );
+    auto* old_cor = set_current( new_cor );
 
     sc_cor_qt_start_stack_switch( old_cor, new_cor );
     QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, new_cor, new_cor->m_sp );
