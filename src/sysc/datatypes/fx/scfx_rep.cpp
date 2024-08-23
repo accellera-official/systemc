@@ -120,6 +120,7 @@ scfx_rep::scfx_rep( int a )
 	}
 	else
         {
+            // -INT_MIN cannot be represented in int, cast to unsigned first to negate to itself
             m_mant[2] = -static_cast<word>(a);
             m_sign = -1;
         }
@@ -158,6 +159,7 @@ scfx_rep::scfx_rep( long a )
         }
         else
         {
+            // -LONG_MIN cannot be represented in int, cast to unsigned long first to negate to itself
             a = -static_cast<unsigned long>(a);
             m_sign = -1;
         }
@@ -249,8 +251,10 @@ scfx_rep::scfx_rep( int64 a )
 	}
 	else
 	{
-            m_mant[1] = static_cast<word>( -static_cast<uint64>(a) );
-            m_mant[2] = static_cast<word>( (-static_cast<uint64>(a)) >> bits_in_word );
+            // -INT64_MIN cannot be represented in int, cast to uint64 first to negate to itself
+            a = -static_cast<uint64>(a);
+            m_mant[1] = static_cast<word>( a );
+            m_mant[2] = static_cast<word>( a >> bits_in_word );
             m_sign = -1;
 	}
 	find_sw();
