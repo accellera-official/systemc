@@ -462,8 +462,8 @@ void
 vcd_sc_unsigned_trace::write(FILE* f)
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());
@@ -514,8 +514,8 @@ void
 vcd_sc_signed_trace::write(FILE* f)
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());
@@ -568,8 +568,8 @@ void
 vcd_sc_uint_base_trace::write(FILE* f)
 {
     char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
-    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata);
@@ -620,8 +620,8 @@ void
 vcd_sc_int_base_trace::write(FILE* f)
 {
     char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
-    for(int bitindex = bit_width - 1; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr++ = "01"[object[bitindex].to_bool()];
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata);
@@ -764,8 +764,8 @@ void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bitindex = bit_width; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr ++ = "01"[object[bitindex]];
+    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+        *rawdata_ptr ++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());
@@ -824,8 +824,8 @@ void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bitindex = bit_width; bitindex >= 0; -- bitindex ) {
-        *rawdata_ptr ++ = "01"[object[bitindex]];
+    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+        *rawdata_ptr ++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());
@@ -885,7 +885,7 @@ public:
     vcd_builtin_trace(const type& object_,
                       const std::string& name_,
                       const std::string& vcd_name_,
-                      int   width_);
+                      int   width_ = max_width);
 
     bool changed() { return object != old_value; }
     void write(FILE* f);
@@ -903,7 +903,7 @@ vcd_builtin_trace<T, Signed>::vcd_builtin_trace( const type& object_,
                                                  int width_ )
   : vcd_trace(name_, vcd_name_), object(object_), old_value(object_)
 {
-    bit_width = sc_min(max_width, sc_max(width_, 0));
+    bit_width = sc_min(+max_width, sc_max(width_, 0));
     if (bit_width < max_width)
        attr::init(bit_width);
 }
@@ -912,24 +912,23 @@ vcd_builtin_trace<T, Signed>::vcd_builtin_trace( const type& object_,
 template<typename T, bool Signed>
 void vcd_builtin_trace<T, Signed>::write(FILE* f)
 {
-    char rawdata[max_width + /*\0*/ 1];
-    int bitindex = 0;
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
 
     if (attr::overflow(object))
     {
-        for (; bitindex < bit_width; bitindex++) {
-            rawdata[bitindex] = 'x';
+        for (int bit_index = 0; bit_index < bit_width; ++bit_index) {
+            *rawdata_ptr++ = 'x';
         }
     }
     else
     {
         auto bit_mask = utype{1} << (bit_width-1);
-        for (; bitindex < bit_width; bitindex++) {
-            rawdata[bitindex] = (object & bit_mask)? '1' : '0';
+        for (int bit_index = 0; bit_index < bit_width; ++bit_index) {
+            *rawdata_ptr++ = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
         }
     }
-    rawdata[bitindex] = '\0';
+    *rawdata_ptr = '\0';
     print_data_line(f, rawdata);
     old_value = object;
 }
@@ -1059,7 +1058,7 @@ vcd_enum_trace::vcd_enum_trace(const unsigned& object_,
 			       const std::string& name_,
 			       const std::string& vcd_name_,
 			       const char** enum_literals_)
-: base_type(object_, name_, vcd_name_, 32),
+: base_type(object_, name_, vcd_name_),
   literals(enum_literals_), nliterals(0)
 {
     // find number of bits required to represent enumeration literal - counting loop
