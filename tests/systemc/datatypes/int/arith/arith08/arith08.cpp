@@ -87,7 +87,7 @@ sc_main(int, char**)
                     signed int qj = (jj < 5) ? valj[jj] :
 		                               (rng.rand() & ((1 << j) - 1));
 
-		    qi = (static_cast<unsigned>(qi) << (32 - i)) >> (32 - i);
+		    qi = (qi << (32 - i)) >> (32 - i);
 		    qj = sign_extend(qj,j);
 
                     x = qi;
