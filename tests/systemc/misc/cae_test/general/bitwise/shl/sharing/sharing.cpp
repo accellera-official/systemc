@@ -107,7 +107,7 @@ void sharing::entry()
     tmp2r = tmp2 << 2;
     tmp3r = tmp3 << 1;
     tmp4r = static_cast<unsigned>(tmp4) << (tmp7[1] % 32);
-    tmp5r = tmp3 << ((unsigned int)tmp1.to_int() % 32);
+    tmp5r = tmp3 << (static_cast<unsigned>(tmp1.to_int()) % 32);
     tmp6r = static_cast<unsigned char>(tmp6) << 1;
 
     //write outputs
@@ -128,7 +128,7 @@ void sharing::entry()
     tmp2r = tmp2 << (tmp4 % 8);
     tmp3r = tmp3 << (tmp5 % 32);
     tmp4r = static_cast<unsigned>(tmp4) << 2;
-    tmp5r = tmp3 << ((unsigned int)(tmp5) % 32);
+    tmp5r = tmp3 << (static_cast<unsigned>(tmp5) % 32);
     tmp6r = static_cast<unsigned char>(tmp6) << (tmp2.to_uint() % 8);
 
     //write outputs
