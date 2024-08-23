@@ -243,7 +243,7 @@ wif_builtin_trace<T, Signed>::wif_builtin_trace( const type& object_,
                                                  int width_ )
   : wif_trace(name_, wif_name_), object(object_), old_value(object_)
 {
-    bit_width = sc_min(max_width, sc_max(width_, 0));
+    bit_width = sc_min(+max_width, sc_max(width_, 0));
     if (bit_width < max_width)
        attr::init(bit_width);
     wif_type = "BIT";
@@ -253,26 +253,24 @@ wif_builtin_trace<T, Signed>::wif_builtin_trace( const type& object_,
 template<typename T, bool Signed>
 void wif_builtin_trace<T, Signed>::write(FILE* f)
 {
-    char buf[1000];
-    int bitindex = 0;
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
 
     if (attr::overflow(object))
     {
-        for (; bitindex < bit_width; bitindex++) {
-            buf[bitindex]='0';
+        for (int bit_index = 0; bit_index < bit_width; ++bit_index) {
+            *rawdata_ptr++ = '0';
         }
     }
     else
     {
         auto bit_mask = utype{1} << (bit_width-1);
-        for (; bitindex < bit_width; bitindex++)
-        {
-            buf[bitindex] = (object & bit_mask)? '1' : '0';
+        for (int bit_index = 0; bit_index < bit_width; ++bit_index) {
+            *rawdata_ptr++ = (object & bit_mask)? '1' : '0';
             bit_mask = bit_mask >> 1;
         }
     }
-    buf[bitindex] = '\0';
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf);
+    *rawdata_ptr = '\0';
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata);
     old_value = object;
 }
 
@@ -414,6 +412,7 @@ public:
 protected:
     const sc_dt::sc_unsigned& object;
     sc_dt::sc_unsigned old_value;
+    std::vector<char> rawdata;
 };
 
 
@@ -433,26 +432,19 @@ bool wif_sc_unsigned_trace::changed()
 
 void wif_sc_unsigned_trace::write(FILE* f)
 {
-    static std::vector<char> buf(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( buf.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    char *rawdata_ptr  = rawdata.data();
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
-    char *buf_ptr = &buf[0];
-
-    for(int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[object[bitindex].to_bool()];
-    }
-    *buf_ptr = '\0';
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), &buf[0]);
+    *rawdata_ptr = '\0';
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
     old_value = object;
 }
 
 void wif_sc_unsigned_trace::set_width()
 {
     bit_width = object.length();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 
@@ -470,6 +462,7 @@ public:
 protected:
     const sc_dt::sc_signed& object;
     sc_dt::sc_signed old_value;
+    std::vector<char> rawdata;
 };
 
 
@@ -489,32 +482,26 @@ bool wif_sc_signed_trace::changed()
 
 void wif_sc_signed_trace::write(FILE* f)
 {
-    static std::vector<char> buf(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( buf.size() <= static_cast<size_t>(object.length()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.length()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    char *rawdata_ptr  = rawdata.data();
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
-    char *buf_ptr = &buf[0];
-
-    for(int bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[object[bitindex].to_bool()];
-    }
-    *buf_ptr = '\0';
-
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), &buf[0]);
+    *rawdata_ptr = '\0';
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
     old_value = object;
 }
 
 void wif_sc_signed_trace::set_width()
 {
     bit_width = object.length();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 /*****************************************************************************/
 
-class wif_sc_uint_base_trace: public wif_trace {
+class wif_sc_uint_base_trace: public wif_trace
+{
+    static const int max_width = sizeof(sc_dt::uint64) * BITS_PER_BYTE;
 public:
     wif_sc_uint_base_trace(const sc_dt::sc_uint_base& object_,
 			   const std::string& name_,
@@ -546,14 +533,12 @@ bool wif_sc_uint_base_trace::changed()
 
 void wif_sc_uint_base_trace::write(FILE* f)
 {
-    char buf[1000], *buf_ptr = buf;
-
-    int bitindex;
-    for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[object[bitindex].to_bool()];
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
-    *buf_ptr = '\0';
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf);
+    *rawdata_ptr = '\0';
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata);
     old_value = object;
 }
 
@@ -565,7 +550,9 @@ void wif_sc_uint_base_trace::set_width()
 
 /*****************************************************************************/
 
-class wif_sc_int_base_trace: public wif_trace {
+class wif_sc_int_base_trace: public wif_trace
+{
+    static const int max_width = sizeof(sc_dt::int64) * BITS_PER_BYTE;
 public:
     wif_sc_int_base_trace(const sc_dt::sc_int_base& object_,
 			  const std::string& name_,
@@ -596,15 +583,12 @@ bool wif_sc_int_base_trace::changed()
 
 void wif_sc_int_base_trace::write(FILE* f)
 {
-    char buf[1000], *buf_ptr = buf;
-
-    int bitindex;
-    for(bitindex = object.length() - 1; bitindex >= 0; --bitindex) {
-        *buf_ptr++ = "01"[object[bitindex].to_bool()];
+    char rawdata[max_width + /*\0*/ 1], *rawdata_ptr = rawdata;
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
+        *rawdata_ptr++ = "01"[object[bit_index].to_bool()];
     }
-    *buf_ptr = '\0';
-
-    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), buf);
+    *rawdata_ptr = '\0';
+    std::fprintf(f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata);
     old_value = object;
 }
 
@@ -714,6 +698,7 @@ protected:
 
     const sc_dt::sc_fxnum& object;
     sc_dt::sc_fxnum old_value;
+    std::vector<char> rawdata;
 
 };
 
@@ -740,22 +725,11 @@ wif_sc_fxnum_trace::changed()
 void
 wif_sc_fxnum_trace::write( FILE* f )
 {
-    static std::vector<char> buf(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( buf.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    char *rawdata_ptr  = rawdata.data();
+    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+        *rawdata_ptr ++ = "01"[object[bit_index]];
     }
-    char *buf_ptr = &buf[0];
-
-    for(int bitindex = object.wl() - 1; bitindex >= 0; --bitindex)
-    {
-        *buf_ptr ++ = "01"[object[bitindex]];
-    }
-    *buf_ptr = '\0';
-
-    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), &buf[0]);
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
     old_value = object;
 }
 
@@ -763,6 +737,7 @@ void
 wif_sc_fxnum_trace::set_width()
 {
     bit_width = object.wl();
+    rawdata.resize(bit_width + 1); // include trailing \0
 }
 
 /*****************************************************************************/
@@ -782,6 +757,7 @@ protected:
 
     const sc_dt::sc_fxnum_fast& object;
     sc_dt::sc_fxnum_fast old_value;
+    std::vector<char> rawdata;
 
 };
 
@@ -809,22 +785,12 @@ wif_sc_fxnum_fast_trace::changed()
 void
 wif_sc_fxnum_fast_trace::write( FILE* f )
 {
-    static std::vector<char> buf(1024);
-    typedef std::vector<char>::size_type size_t;
-
-    if ( buf.size() <= static_cast<size_t>(object.wl()) ) { // include trailing \0
-        size_t sz = ( static_cast<size_t>(object.wl()) + 4096 ) & (~static_cast<size_t>(4096-1));
-        std::vector<char>( sz ).swap( buf ); // resize without copying values
+    char *rawdata_ptr  = rawdata.data();
+    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+        *rawdata_ptr ++ = "01"[object[bit_index]];
     }
-    char *buf_ptr = &buf[0];
-
-    for(int bitindex = object.wl() - 1; bitindex >= 0; --bitindex)
-    {
-        *buf_ptr ++ = "01"[object[bitindex]];
-    }
-    *buf_ptr = '\0';
-
-    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), &buf[0]);
+    *rawdata_ptr = '\0';
+    std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
     old_value = object;
 }
 
@@ -832,6 +798,7 @@ void
 wif_sc_fxnum_fast_trace::set_width()
 {
     bit_width = object.wl();
+    rawdata.resize(bit_width+1); // incl trailing 0
 }
 
 /*****************************************************************************/
