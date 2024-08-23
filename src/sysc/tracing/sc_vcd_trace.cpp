@@ -345,7 +345,7 @@ vcd_bool_trace::changed()
 void
 vcd_bool_trace::write(FILE* f)
 {
-    std::fprintf(f,"%c%s", "01"[+object], vcd_name.c_str());
+    std::fprintf(f,"%c%s", "01"[object], vcd_name.c_str());
     old_value = object;
 }
 
@@ -380,7 +380,7 @@ vcd_sc_bit_trace::changed()
 void
 vcd_sc_bit_trace::write(FILE* f)
 {
-    std::fprintf(f,"%c%s", "01"[+object], vcd_name.c_str());
+    std::fprintf(f,"%c%s", "01"[object], vcd_name.c_str());
     old_value = object;
 }
 
@@ -765,7 +765,7 @@ vcd_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
     for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
-        *rawdata_ptr ++ = "01"[object[bit_index]];
+        *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());
@@ -825,7 +825,7 @@ vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
     for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
-        *rawdata_ptr ++ = "01"[object[bit_index]];
+        *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
     print_data_line(f, rawdata.data());

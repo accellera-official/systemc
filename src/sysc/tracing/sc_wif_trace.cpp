@@ -311,11 +311,7 @@ wif_bool_trace::changed()
 void
 wif_bool_trace::write( FILE* f )
 {
-    if( object == true ) {
-	std::fprintf( f, "assign %s \'1\' ;\n", wif_name.c_str() );
-    } else {
-	std::fprintf( f, "assign %s \'0\' ;\n", wif_name.c_str() );
-    }
+    std::fprintf( f, "assign %s \'%c\' ;\n", wif_name.c_str(), "01"[object] );
     old_value = object;
 }
 
@@ -350,11 +346,7 @@ bool wif_sc_bit_trace::changed()
 
 void wif_sc_bit_trace::write(FILE* f)
 {
-    if (object == true) {
-        std::fprintf(f, "assign %s \'1\' ;\n", wif_name.c_str());
-    } else {
-	std::fprintf(f, "assign %s \'0\' ;\n", wif_name.c_str());
-    }
+    std::fprintf( f, "assign %s \'%c\' ;\n", wif_name.c_str(), "01"[object] );
     old_value = object;
 }
 
@@ -727,7 +719,7 @@ wif_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
     for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
-        *rawdata_ptr ++ = "01"[object[bit_index]];
+        *rawdata_ptr++ = "01"[object[bit_index]];
     }
     std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
     old_value = object;
@@ -787,7 +779,7 @@ wif_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
     for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
-        *rawdata_ptr ++ = "01"[object[bit_index]];
+        *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
     std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
