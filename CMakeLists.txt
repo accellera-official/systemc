@@ -73,15 +73,9 @@
 #
 # - *BSD (GCC, Clang): i386, x86_64
 #
-# - Linux (GCC, Clang): sparc, powerpc
-#
 # - Linux (Clang): aarch64
 #
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
-#
-# - Solaris (GCC and native compiler): sparc
-#
-# - HP-UX (GCC and native compiler): hppa
 #
 # The build process can be configured through the configuration variables
 # offered to the user in the CMake console and GUI (ccmake and cmake-gui,
@@ -333,15 +327,9 @@ if (APPLE)
 endif (APPLE)
 
 include (CheckSymbolExists)
-check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
-check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
-check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
-check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
 check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
 check_symbol_exists (__i386 "" HAS__i386_DEFINED)
 check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
-check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
-check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 
 
 # Set SystemC_TARGET_ARCH according to the detected
@@ -367,12 +355,6 @@ if (NOT SystemC_TARGET_ARCH)
       set (_TARGET_ARCH "linux64")
     elseif (HAS__aarch64__DEFINED)
       set (_TARGET_ARCH "linuxaarch64")
-    elseif (HAS__powerpc_DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxppc")
-    elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxsparc")
     else (HAS__i386_DEFINED)
       # Untested platform.
       set (_TARGET_ARCH "linuxunknown")
@@ -386,22 +368,6 @@ if (NOT SystemC_TARGET_ARCH)
       # Untested platform.
       set (_TARGET_ARCH "bsdunknown")
     endif (HAS__i386_DEFINED)
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS"
-          AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "sparcOS5")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "HP-UX" AND HAS__hppa_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "hpux11")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    if (HAS__LP64__DEFINED)
-      set (_TARGET_ARCH "${_TARGET_ARCH}64")
-    endif (HAS__LP64__DEFINED)
   elseif (MSVC)
     set (_TARGET_ARCH "msvc")
     if (CMAKE_CL_64)
@@ -452,10 +418,6 @@ elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
       message (FATAL_ERROR "QuickThreads is not supported on macOS ${arch} universal build.")
     endif()
   endforeach()
-elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-  set (QT_ARCH "sparc")
-elseif (HAS__hppa_DEFINED)
-  set (QT_ARCH "hppa")
 elseif (HAS__x86_64__DEFINED)
   set (QT_ARCH "x86_64")
 elseif (HAS__i386_DEFINED)
