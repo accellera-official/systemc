@@ -93,8 +93,8 @@ sc_main( int argc, char* argv[] )
 	*/
             for (int ii = 0; ii < 10; ++ii) {
                 for (int jj = 0; jj < 10; ++jj) {
-                    signed int qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
-                    signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
+                    signed int qi = (ii < 5) ? vali[ii] : static_cast<unsigned>(rng.rand() & ((1 << i) - 1));
+                    signed int qj = (jj < 5) ? valj[jj] : static_cast<unsigned>(rng.rand() & ((1 << j) - 1));
 
 		    qi = sign_extend(qi, i-1);
 		    qj = sign_extend(qj, j-1);
@@ -152,7 +152,7 @@ sc_main( int argc, char* argv[] )
                     if (jj < i - 1) {
                         z = x << jj;
                         for (int r = 0; r < i; ++r) {
-                            sc_assert( (bool) z[r] == !!((qi << jj) & (1 << r)) );
+                            sc_assert( (bool) z[r] == !!((static_cast<unsigned>(qi) << jj) & (1 << r)) );
                         }
                         z = x >> jj;
                         for (int r = 0; r < i; ++r) {

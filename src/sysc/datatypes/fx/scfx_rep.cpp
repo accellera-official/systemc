@@ -119,10 +119,11 @@ scfx_rep::scfx_rep( int a )
 	    m_sign = 1;
 	}
 	else
-	{
-	    m_mant[2] = -a;
-	    m_sign = -1;
-	}
+        {
+            // -INT_MIN cannot be represented in int, cast to unsigned first to negate to itself
+            m_mant[2] = -static_cast<word>(a);
+            m_sign = -1;
+        }
     }
     else
         set_zero();
@@ -158,7 +159,8 @@ scfx_rep::scfx_rep( long a )
         }
         else
         {
-            a = -a;
+            // -LONG_MIN cannot be represented in int, cast to unsigned long first to negate to itself
+            a = -static_cast<unsigned long>(a);
             m_sign = -1;
         }
 #       if defined(SC_LONG_64)
@@ -249,9 +251,11 @@ scfx_rep::scfx_rep( int64 a )
 	}
 	else
 	{
-	    m_mant[1] = static_cast<word>( -a );
-	    m_mant[2] = static_cast<word>( (-a) >> bits_in_word );
-	    m_sign = -1;
+            // -INT64_MIN cannot be represented in int, cast to uint64 first to negate to itself
+            a = -static_cast<uint64>(a);
+            m_mant[1] = static_cast<word>( a );
+            m_mant[2] = static_cast<word>( a >> bits_in_word );
+            m_sign = -1;
 	}
 	find_sw();
     }
@@ -1651,7 +1655,7 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
 
 	for( i2  = 0; i2 * half_word_incr < len_rhs; i2 += half_word_incr )
 	{
-	    ls.l  += v1 * s2[i2];
+	    ls.l  += static_cast<word>(v1) * static_cast<word>(s2[i2]);
 	    ls.s.l = ls.s.u + ( ( t[i2] += ls.s.l ) < ls.s.l );
 	    ls.s.u = 0;
 	}
