@@ -53,9 +53,9 @@ class sc_cor_qt
 public:
 
     // constructor
-    sc_cor_qt()
-      : m_stack_size( 0 ), m_stack( 0 ), m_sp( 0 ), m_pkg( 0 )
-    {}
+    sc_cor_qt() = default;
+    sc_cor_qt( const sc_cor_qt& ) = delete;
+    sc_cor_qt& operator = ( const sc_cor_qt& ) = delete;
 
     // destructor
     virtual ~sc_cor_qt();
@@ -64,16 +64,14 @@ public:
     virtual void stack_protect( bool enable );
 
 public:
-    std::size_t    m_stack_size;  // stack size
-    void*          m_stack;       // stack
-    qt_t*          m_sp;          // stack pointer
+    std::size_t    m_stack_size = 0U;      // stack size
+    void*          m_stack = nullptr;      // stack
+    qt_t*          m_sp = nullptr;         // stack pointer
+    void*          m_fake_stack = nullptr; // used by Asan
 
-    sc_cor_pkg_qt* m_pkg;         // the creating coroutine package
+    sc_cor_pkg_qt* m_pkg = nullptr;    // the creating coroutine package
 
 private:
-    // disabled
-    sc_cor_qt( const sc_cor_qt& );
-    sc_cor_qt& operator = ( const sc_cor_qt& );
 };
 
 

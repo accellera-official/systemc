@@ -35,8 +35,9 @@ import re
 import subprocess
 import sys
 from difflib import unified_diff
-from os import environ as env, uname
+from os import environ as env
 from pathlib import Path
+from platform import uname
 
 if (sys.version_info.major, sys.version_info.minor) >= (3, 8):
     from shlex import join as shjoin
@@ -49,9 +50,10 @@ else:
 
 
 # setup logger
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG, handlers=[])
 logger = logging.getLogger("run-test")
 
+# get variables from env, properly die if they are missing
 TEST_BUILD_TYPE = env["TEST_BUILD_TYPE"]
 TEST_FULLNAME = env["TEST_FULLNAME"]
 TEST_LEAFNAME = env["TEST_LEAFNAME"]
@@ -77,7 +79,7 @@ def str2bool(val: str) -> bool:
 
 
 def detect_arch() -> str:
-    arch = env["SYSTEMC_ARCH"]
+    arch = env["SYSTEMC_ARCH"]  # set by cmake
     if arch == "macosuniversal":
         machine = uname().machine
         return {"x86_64": "macosx64", "arm64": "macosarm64"}[machine]
@@ -143,7 +145,7 @@ def strip_log(log_file: Path) -> Path:
 def strip_trace(trace_file: Path) -> Path:
     "harmonize simulation output before golden trace comparison"
 
-    stripped_file = Path(f"{trace_file}.stripped)")
+    stripped_file = Path(f"{trace_file}.stripped")
     logger.debug("stripping trace file '%s' to '%s'", trace_file, stripped_file)
 
     with trace_file.open() as trace_fd:
@@ -156,6 +158,27 @@ def strip_trace(trace_file: Path) -> Path:
             stripped_fd.writelines(trace_fd.readlines())
 
     return stripped_file
+
+
+def lookup_golden(golden_dir: Path, output_file: str) -> Path:
+    # default golden log location
+    golden_file = golden_dir / output_file
+
+    suffixes = [SYSTEMC_ARCH]
+
+    for suffix in suffixes:
+        specialized_golden = golden_dir / f"{output_file}.{suffix}"
+        logger.debug("checking golden log file '%s'", specialized_golden)
+        if specialized_golden.exists():
+            golden_file = specialized_golden
+            break
+
+    if not golden_file.exists():
+        msg = f"missing golden log file {golden_file}"
+        raise GoldenLogComparisonError(msg)
+
+    logger.debug("found golden log file '%s'", golden_file)
+    return golden_file
 
 
 def compare_logfile() -> None:
@@ -179,11 +202,7 @@ def compare_logfile() -> None:
         msg = f"missing golden log dir {golden_dir}"
         raise GoldenLogComparisonError(msg)
 
-    golden_file = golden_dir / f"{output_file}.{SYSTEMC_ARCH}"
-    if not golden_file.exists():
-        golden_file = golden_dir / output_file
-    logger.debug("found golden log file '%s'", golden_file)
-
+    golden_file = lookup_golden(golden_dir, output_file)
     with golden_file.open() as golden_fd:
         golden_lines = golden_fd.readlines()
     with stripped_file.open() as stripped_fd:
@@ -210,6 +229,19 @@ def compare_logfile() -> None:
         raise GoldenLogComparisonError(msg)
 
 
+def sanitizer_suppressions(san: str) -> None:
+    "add sanitizer suppressions file to the environment"
+
+    sanitizer_suppressions = Path(Path(f"{TEST_FULLNAME}").name) / f"{san.lower()}_suppressions.txt"
+    options_var = f"{san.upper()}_OPTIONS"
+    if sanitizer_suppressions.exists():
+        suppression_option = f"suppressions={sanitizer_suppressions}"
+        env[options_var] = f"{env[options_var]}:{suppression_option}" if options_var in env else suppression_option
+        env[options_var] = f"print_suppressions=0:{env[options_var]}"
+    if options_var in env:
+        logger.info("%s = %s", options_var, env[options_var])
+
+
 def main() -> None:
     "main regression test execution wrapper"
 
@@ -219,7 +251,10 @@ def main() -> None:
         err_msg = "no command specified"
         raise RuntimeError(err_msg)
 
-    # get variables from env, properly die if they are missing
+    # log INFO to console
+    out_log = logging.StreamHandler()
+    out_log.setLevel(logging.INFO)
+    logger.addHandler(out_log)
 
     # create logfile in the current working directory
     # use mode='w' to overwrite file (default will append logs for each run)
@@ -236,13 +271,9 @@ def main() -> None:
 
     # check for sanitizer suppressions
     if TEST_BUILD_TYPE.lower().endswith("san"):
-        sanitizer_suppressions = Path(Path(f"{TEST_FULLNAME}").name) / f"{TEST_BUILD_TYPE.lower()}_suppressions.txt"
-        options_var = f"{TEST_BUILD_TYPE.upper()}_OPTIONS"
-        if sanitizer_suppressions.exists():
-            suppression_option = f"suppressions={sanitizer_suppressions}"
-            env[options_var] = f"{env[options_var]}:{suppression_option}" if options_var in env else suppression_option
-        if options_var in env:
-            logger.info("%s = %s", options_var, env[options_var])
+        sanitizer_suppressions(TEST_BUILD_TYPE)
+        if TEST_BUILD_TYPE.lower() == "asan":  # AddressSanitizer (potentially) includes LeakSanitizer
+            sanitizer_suppressions("lsan")
 
     try:
         with Path(TEST_LOGFILE).open("w") as logfile_fd:
