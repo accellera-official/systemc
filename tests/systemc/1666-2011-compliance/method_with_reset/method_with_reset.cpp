@@ -171,24 +171,28 @@ struct Top: sc_module
     clk.write(false);
     m1.disable();
     m2.disable();
-    
-    sc_spawn_options opt3;
-    opt3.spawn_method();
-    opt3.set_sensitivity( &clk.posedge_event() );
-    opt3.reset_signal_is(sreset, true);
-    opt3.async_reset_signal_is(areset, true);
-    m3 = sc_spawn(sc_bind( &Top::spawned_method, this ), "m3", &opt3);
- 
-    sc_spawn_options opt4; 
-    opt4.spawn_method();
-    opt4.set_sensitivity( &m3.reset_event() );
-    opt4.dont_initialize();
-    m4 = sc_spawn(sc_bind( &Top::reset_handler, this), "m4", &opt4);
-    
-    sc_spawn_options opt5;
-    opt5.spawn_method();
-    m5 = sc_spawn(sc_bind( &Top::reset_or_terminated_handler, this), "m5", &opt5);
-    
+
+    {
+      sc_spawn_options opt3;
+      opt3.spawn_method();
+      opt3.set_sensitivity( &clk.posedge_event() );
+      opt3.reset_signal_is(sreset, true);
+      opt3.async_reset_signal_is(areset, true);
+      m3 = sc_spawn(sc_bind( &Top::spawned_method, this ), "m3", &opt3);
+    }
+    {
+      sc_spawn_options opt4;
+      opt4.spawn_method();
+      opt4.set_sensitivity( &m3.reset_event() );
+      opt4.dont_initialize();
+      m4 = sc_spawn(sc_bind( &Top::reset_handler, this), "m4", &opt4);
+    }
+    {
+      sc_spawn_options opt5;
+      opt5.spawn_method();
+      m5 = sc_spawn(sc_bind( &Top::reset_or_terminated_handler, this), "m5", &opt5);
+    }
+
     std::vector<sc_event*> vec = this->get_child_events();
     sc_assert( vec.size() == 0 );
     wait(10, SC_NS);
@@ -437,6 +441,7 @@ int sc_main(int argc, char* argv[])
   sc_assert( top.f57 );
   sc_assert( top.f58 );
 
+  sc_stop();
   cout << endl << "Success" << endl;
   return 0;
 }

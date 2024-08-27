@@ -247,11 +247,19 @@ set (SystemCTLM_SOVERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINO
 # Build options
 ###############################################################################
 
-if (NOT CMAKE_BUILD_TYPE)
+if(PROJECT_IS_TOP_LEVEL AND NOT WIN32)
+  set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES Asan Msan Tsan UBsan)
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported on AppleClang
+    set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES} Lsan)
+  endif()
+  set(CMAKE_CONFIGURATION_TYPES Release Debug RelWithDebInfo ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES})
+endif()
+
+if(NOT CMAKE_BUILD_TYPE AND NOT GENERATOR_IS_MULTI_CONFIG)
   set (CMAKE_BUILD_TYPE Release CACHE STRING
-       "Choose the type of build, options are: empty, Debug, Release, RelWithDebInfo, MinSizeRel."
+       "Choose the type of build, options are: empty, ${CMAKE_CONFIGURATION_TYPES}."
        FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
@@ -562,6 +570,25 @@ endif()
 # On Xcode, we need to disable the -Wconversion warning explicitly
 if(XCODE)
   add_compile_options($<$<CXX_COMPILER_ID:AppleClang>:-Wno-conversion>)
+endif()
+
+# Sanitizer setup
+if(DEFINED SYSTEMC_SANITIZER_CONFIGURATION_TYPES)
+  function(set_sanitizer_flags type sanitizer cxx_flags)
+    set(_common_option "-fsanitize=${sanitizer}")
+    set(CMAKE_C_FLAGS_${type}   "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CFLAGS for ${type}" FORCE)
+    set(CMAKE_CXX_FLAGS_${type} "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CXXFLAGS for ${type}" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS_${type}    "${_common_option}" CACHE STRING "LINKER_FLAGS for ${type}" FORCE)
+    set(CMAKE_SHARED_LINKER_FLAGS_${type} "${_common_option}" CACHE STRING "SHARED_LINKER_FLAGS for ${type}" FORCE)
+  endfunction()
+
+  set_sanitizer_flags(ASAN  address   "-fno-optimize-sibling-calls -g -O1")
+  set_sanitizer_flags(MSAN  memory    "-fno-optimize-sibling-calls -fsanitize-memory-track-origins -g -O1")
+  set_sanitizer_flags(TSAN  thread    "-g -O1")
+  set_sanitizer_flags(UBSAN undefined "-g -O1")
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported
+    set_sanitizer_flags(LSAN  leak    "-g -O1")
+  endif()
 endif()
 
 ###############################################################################
