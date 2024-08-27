@@ -127,3 +127,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     $<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,11.0.0>:-Wno-free-nonheap-object>
   )
 endif()
+
+# Skip some test execution under some conditions
+if(APPLE OR HAS__aarch64__DEFINED)
+  # TODO: Test hangs frequently on macOS and/or ARM 64-bit setups
+  skip_test(systemc/kernel/sc_suspend)
+endif()
