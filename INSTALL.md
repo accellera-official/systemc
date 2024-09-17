@@ -585,6 +585,7 @@ settings to all build configurations.
    Supported values are
      * `SC_CPLUSPLUS=201703L` (C++17, ISO/IEC 14882:2017)
      * `SC_CPLUSPLUS=202002L` (C++20, ISO/IEC 14882:2020)
+     * `SC_CPLUSPLUS=202302L` (C++23, ISO/IEC 14882:2023)
 
    Note: _This symbol needs to be consistently defined in the library
             and any application linking against the built library._

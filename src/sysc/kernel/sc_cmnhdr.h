@@ -96,6 +96,7 @@
 // Selected C++ standard baseline, supported values are
 //   201703L (C++17, ISO/IEC 14882:2017)
 //   202002L (C++20, ISO/IEC 14882:2020)
+//   202302L (C++23, ISO/IEC 14882:2023)
 //
 // This macro can be used inside the library sources to make certain assumptions
 // on the available features in the underlying C++ implementation.
