@@ -46,9 +46,9 @@ add_executable(async_suspend async_suspend.cpp)
 target_link_libraries(async_suspend SystemC::systemc Threads::Threads)
 
 if(ASYNC_SUSPEND_MATPLOT)
-    find_package(Python3 REQUIRED COMPONENTS Development)
+    find_package(Python3 REQUIRED COMPONENTS Development NumPy)
     target_link_libraries(async_suspend ${Python3_LIBRARIES})
-    target_include_directories(async_suspend PRIVATE ${Python3_INCLUDE_DIRS})
+    target_include_directories(async_suspend PRIVATE ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
     add_definitions(-DWITHMATPLOT)
 endif()
 
