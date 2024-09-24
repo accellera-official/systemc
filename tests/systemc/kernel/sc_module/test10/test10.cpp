@@ -94,23 +94,24 @@ SC_MODULE(A)
 
   void thread()
   {
+    static const size_t big_buffer_size = 0x300000 / sizeof(int);
     int sum = 0;
-    int x[1];
-    size_t stack_end = (size_t)x;
-    size_t stack_start = (size_t)stack_end - 0x300000;
+    int x[big_buffer_size];
+    auto stack_end = reinterpret_cast<uintptr_t>(x + big_buffer_size);
+    auto stack_start = stack_end - sizeof(x);
 
 #if 0
     std::cout << "stack start at 0x" << std::hex << stack_start << std::endl;
     std::cout << "stack end at 0x" << std::hex << stack_end << std::endl;
 #endif
 
-    for ( size_t stack_p = stack_start + 0x1000; stack_p < stack_end; stack_p += 0x1000 ) {
+    for ( auto stack_p = stack_start + 0x1000; stack_p < stack_end; stack_p += 0x1000 ) {
 #if 0
     std::cout << "access at 0x" << std::hex << stack_p
               << std::hex << " " << (stack_end - stack_p) << " "
               << *(int*)stack_p << std::endl;
 #else
-    sum = sum + *(int*)stack_p;
+        sum += *reinterpret_cast<int*>(stack_p);
 #endif
     }
     std::cout << sum << std::endl;
