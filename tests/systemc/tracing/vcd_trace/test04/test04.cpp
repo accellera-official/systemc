@@ -72,8 +72,8 @@ void proc1::entry()
     obj2 = 31;
     obj3 = -1023;
     obj4 = 2047;
-	obj5 = -1;
-	obj5 = ~(obj5 << 40);
+    obj5 = -1;
+    obj5 = ~static_cast<int64>(static_cast<uint64>(obj5) << 40);
     wait();
     obj1 = 1;
     obj2 = -2;
