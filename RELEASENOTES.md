@@ -217,7 +217,7 @@ Here is an overview of deprecated features:
 
 IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC implementations.
 `std::string_view` is used in new APIs.  However, `const char *` are still used
-in several locations and will be progressively cleaned-up in the upcoming 
+in several locations and will be progressively cleaned-up in the upcoming
 releases.
 
 
