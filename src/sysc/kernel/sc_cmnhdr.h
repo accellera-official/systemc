@@ -96,24 +96,28 @@
 // Selected C++ standard baseline, supported values are
 //   201703L (C++17, ISO/IEC 14882:2017)
 //   202002L (C++20, ISO/IEC 14882:2020)
+//   202302L (C++23, ISO/IEC 14882:2023)
 //
-// This macro can be used inside the library sources to make certain assumptions
-// on the available features in the underlying C++ implementation.
-//
-#ifndef SC_CPLUSPLUS
-# if defined(_MSVC_LANG) // MSVC 2015 Update 3 or later, use compiler setting
-#   define SC_CPLUSPLUS _MSVC_LANG
-# else  // not _MSVC_LANG
-// use compiler setting
-#   define SC_CPLUSPLUS __cplusplus
-# endif
-#endif // SC_CPLUSPLUS
-
 // SystemC reference implementation requires C++17
 #define SC_CPLUSPLUS_BASE_ 201703L
-#if SC_CPLUSPLUS < SC_CPLUSPLUS_BASE_
-#   error **** SystemC requires a C++ compiler version of at least C++17 ****
+//
+// The SC_CPLUSPLUS macro can be used inside the library sources to make certain
+// assumptions on the available features in the underlying C++ implementation.
+//
+#if defined(_MSVC_LANG) // MSVC 2015 Update 3 or later, use compiler setting
+#  define SC_CPLUSPLUS_AUTO_ _MSVC_LANG
+#else  // not _MSVC_LANG, use standard macro
+#  define SC_CPLUSPLUS_AUTO_ __cplusplus
 #endif
+#if SC_CPLUSPLUS_AUTO_ < SC_CPLUSPLUS_BASE_
+#  error **** SystemC requires a C++ standard version of at least C++17 ****
+#endif
+
+#ifndef SC_CPLUSPLUS // assume standard version selected by the compiler
+#  define SC_CPLUSPLUS SC_CPLUSPLUS_AUTO_
+#elif SC_CPLUSPLUS > SC_CPLUSPLUS_AUTO_
+#  error **** SC_CPLUSPLUS cannot be higher than C++ standard selected by the compiler ****
+#endif // SC_CPLUSPLUS
 
 // The IEEE_1666_CPLUSPLUS macro is meant to be queried in the models,
 // checking for availability of SystemC features relying on specific

@@ -71,6 +71,10 @@ obtain from the following sources:
   * Clang   http://clang.llvm.org/
   * make    http://www.gnu.org/software/make/make.html
 
+Note: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC implementations,
+      see [RELEASENOTES.md](RELEASENOTES.md).  Make sure to configure your compiler
+      accordingly (see below)_.
+
 
 ## Basic SystemC Installation
 
@@ -133,18 +137,18 @@ To install SystemC on a UNIX system, do the following steps:
      it prints messages to inform you of the features it is checking.
      It also detects the platform.
 
-     _Note for System V users_:  
-     If you are using 'csh' on an older version of System V, you might
-     need to use the `sh ../configure` command instead of `../configure`.
-     Otherwise, 'csh' will attempt to 'configure' itself.
-
      Note: _As IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC
-            implementations, make sure you enable the compiler flag to 
-            select C++17, e.g.:
+            implementations, make sure you enable the compiler flag to
+            select C++17, e.g._:
 
      ```bash
      ../configure 'CXXFLAGS=-std=c++17'
      ```
+
+     Compiling this implementation for newer C++ standards is generally
+     possible and tested at a best effort basis.  Prefer C++17 for full
+     IEEE Std. 1666-2023 conformance, see also `SC_CPLUSPLUS` macro
+     documentation below.
 
      SystemC 3.0.0 includes a fixed-point package that is always built.
      When compiling your applications with fixed-point types, you still have
@@ -579,15 +583,17 @@ settings to all build configurations.
  * `SC_CPLUSPLUS`  
    Override automatically detected C++ standard support
 
-   This setting allows downgrading the assumed version of the
+   This setting allows _downgrading_ the assumed version of the
    underlying C++ standard on the current platform.  By default,
-   the latest supported version is chosen.
-   Supported values are
+   the compiler-selected version is chosen.
+
+   Currently known values are:
      * `SC_CPLUSPLUS=201703L` (C++17, ISO/IEC 14882:2017)
      * `SC_CPLUSPLUS=202002L` (C++20, ISO/IEC 14882:2020)
+     * `SC_CPLUSPLUS=202302L` (C++23, ISO/IEC 14882:2023)
 
    Note: _This symbol needs to be consistently defined in the library
-            and any application linking against the built library._
+         and any application linking against the built library._
 
 
  * `SC_DEFAULT_WRITER_POLICY=<sc_writer_policy>`  
