@@ -80,6 +80,14 @@ int sc_main( int ac, char *av[] )
   PRINT(i16);
   sc_assert( i16 == -257 );
 
+  // Assignments from sc_bigint<W> then xor_reduce (issue #95) :
+
+  sc_dt::sc_bigint<5> x = -1;
+  sc_dt::sc_uint<5>   y;
+  y = x;
+  PRINT(y);
+  sc_assert(y.xor_reduce() == 1);
+
   std::cout << "OK" << std::endl;
   return 0;
 }

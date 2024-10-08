@@ -43,6 +43,7 @@ const sc_uint<W>& sc_uint<W>::operator = ( const sc_bigint<W1>& source )
     else {
         m_val = ( (int64)source.digit[1] << BITS_PER_DIGIT ) | *source.digit;
     }
+    extend_sign(); 
     return *this;
 }
 
@@ -57,6 +58,7 @@ const sc_uint<W>& sc_uint<W>::operator = ( const sc_biguint<W1>& source )
     else {
         m_val = ( (uint64)source.digit[1] << BITS_PER_DIGIT ) | *source.digit;
     }
+    extend_sign(); 
     return *this;
 }
 
