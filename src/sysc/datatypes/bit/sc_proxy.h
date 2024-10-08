@@ -874,7 +874,7 @@ sc_proxy<X>::assign_( const char* a )
     int i = 0;
     for( ; i < min_len; ++ i ) {
 	char c = s[s_len - i - 1];
-	x.set_bit( i, sc_logic::char_to_logic[(int)c] );
+	x.set_bit( i, sc_logic::to_value(c) );
     }
     // if formatted, fill the rest with sign(s), otherwise fill with zeros
     sc_logic_value_t fill = (s[s_len] == 'F' ? sc_logic_value_t( s[0] - '0' )
