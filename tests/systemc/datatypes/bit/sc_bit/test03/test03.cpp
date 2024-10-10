@@ -44,7 +44,7 @@
             TYPE var(TARGET); \
 	    std::cout << " is mapped to " << var << std::endl; \
 	} \
-	catch( sc_core::sc_report rep )\
+	catch( const sc_core::sc_report & )\
 	{\
 	    std::cout << " IS NOT LEGAL!!!" << std::endl; \
 	}\
