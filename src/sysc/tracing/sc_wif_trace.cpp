@@ -1226,9 +1226,8 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 
     bool time_printed = false;
-    wif_trace* const* const l_traces = &traces[0];
-    for (int i = 0; i < (int)traces.size(); i++) {
-        wif_trace* t = l_traces[i];
+    for (size_t i = 0; i < traces.size(); i++) {
+        wif_trace* t = traces[i];
         if(t->changed()){
             if(time_printed == false) {
 
