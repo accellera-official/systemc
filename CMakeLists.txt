@@ -73,15 +73,9 @@
 #
 # - *BSD (GCC, Clang): i386, x86_64
 #
-# - Linux (GCC, Clang): sparc, powerpc
-#
 # - Linux (Clang): aarch64
 #
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
-#
-# - Solaris (GCC and native compiler): sparc
-#
-# - HP-UX (GCC and native compiler): hppa
 #
 # The build process can be configured through the configuration variables
 # offered to the user in the CMake console and GUI (ccmake and cmake-gui,
@@ -247,11 +241,19 @@ set (SystemCTLM_SOVERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINO
 # Build options
 ###############################################################################
 
-if (NOT CMAKE_BUILD_TYPE)
+if(PROJECT_IS_TOP_LEVEL AND NOT WIN32)
+  set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES Asan Msan Tsan UBsan)
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported on AppleClang
+    set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES} Lsan)
+  endif()
+  set(CMAKE_CONFIGURATION_TYPES Release Debug RelWithDebInfo ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES})
+endif()
+
+if(NOT CMAKE_BUILD_TYPE AND NOT GENERATOR_IS_MULTI_CONFIG)
   set (CMAKE_BUILD_TYPE Release CACHE STRING
-       "Choose the type of build, options are: empty, Debug, Release, RelWithDebInfo, MinSizeRel."
+       "Choose the type of build, options are: empty, ${CMAKE_CONFIGURATION_TYPES}."
        FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
@@ -325,15 +327,9 @@ if (APPLE)
 endif (APPLE)
 
 include (CheckSymbolExists)
-check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
-check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
-check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
-check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
 check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
 check_symbol_exists (__i386 "" HAS__i386_DEFINED)
 check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
-check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
-check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
 
 
 # Set SystemC_TARGET_ARCH according to the detected
@@ -359,12 +355,6 @@ if (NOT SystemC_TARGET_ARCH)
       set (_TARGET_ARCH "linux64")
     elseif (HAS__aarch64__DEFINED)
       set (_TARGET_ARCH "linuxaarch64")
-    elseif (HAS__powerpc_DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxppc")
-    elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxsparc")
     else (HAS__i386_DEFINED)
       # Untested platform.
       set (_TARGET_ARCH "linuxunknown")
@@ -378,22 +368,6 @@ if (NOT SystemC_TARGET_ARCH)
       # Untested platform.
       set (_TARGET_ARCH "bsdunknown")
     endif (HAS__i386_DEFINED)
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS"
-          AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "sparcOS5")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "HP-UX" AND HAS__hppa_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "hpux11")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    if (HAS__LP64__DEFINED)
-      set (_TARGET_ARCH "${_TARGET_ARCH}64")
-    endif (HAS__LP64__DEFINED)
   elseif (MSVC)
     set (_TARGET_ARCH "msvc")
     if (CMAKE_CL_64)
@@ -444,10 +418,6 @@ elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
       message (FATAL_ERROR "QuickThreads is not supported on macOS ${arch} universal build.")
     endif()
   endforeach()
-elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-  set (QT_ARCH "sparc")
-elseif (HAS__hppa_DEFINED)
-  set (QT_ARCH "hppa")
 elseif (HAS__x86_64__DEFINED)
   set (QT_ARCH "x86_64")
 elseif (HAS__i386_DEFINED)
@@ -562,6 +532,25 @@ endif()
 # On Xcode, we need to disable the -Wconversion warning explicitly
 if(XCODE)
   add_compile_options($<$<CXX_COMPILER_ID:AppleClang>:-Wno-conversion>)
+endif()
+
+# Sanitizer setup
+if(DEFINED SYSTEMC_SANITIZER_CONFIGURATION_TYPES)
+  function(set_sanitizer_flags type sanitizer cxx_flags)
+    set(_common_option "-fsanitize=${sanitizer}")
+    set(CMAKE_C_FLAGS_${type}   "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CFLAGS for ${type}" FORCE)
+    set(CMAKE_CXX_FLAGS_${type} "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CXXFLAGS for ${type}" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS_${type}    "${_common_option}" CACHE STRING "LINKER_FLAGS for ${type}" FORCE)
+    set(CMAKE_SHARED_LINKER_FLAGS_${type} "${_common_option}" CACHE STRING "SHARED_LINKER_FLAGS for ${type}" FORCE)
+  endfunction()
+
+  set_sanitizer_flags(ASAN  address   "-fno-optimize-sibling-calls -g -O1")
+  set_sanitizer_flags(MSAN  memory    "-fno-optimize-sibling-calls -fsanitize-memory-track-origins -g -O1")
+  set_sanitizer_flags(TSAN  thread    "-g -O1")
+  set_sanitizer_flags(UBSAN undefined "-g -O1")
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported
+    set_sanitizer_flags(LSAN  leak    "-g -O1")
+  endif()
 endif()
 
 ###############################################################################

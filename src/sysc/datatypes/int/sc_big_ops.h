@@ -466,7 +466,7 @@ inline
 const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator ^ ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -706,7 +706,7 @@ operator % ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::mod_result
+const typename sc_big_op_info<WL,false,WR,false>::mod_result
 operator % ( const sc_biguint<WL>& numer, const sc_biguint<WR>& denom )
 {
     typename sc_big_op_info<WL,false,WR,false>::mod_result result(0, 0);

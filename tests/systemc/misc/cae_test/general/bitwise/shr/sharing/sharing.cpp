@@ -54,8 +54,8 @@ void sharing::entry()
   int             tmp4r;
   short           tmp5;
   short           tmp5r;
-  char            tmp6;
-  char            tmp6r;
+  signed char     tmp6;
+  signed char     tmp6r;
 
 // define 1 dimensional array
    unsigned int  tmp7[2];

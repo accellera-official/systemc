@@ -624,7 +624,12 @@ sc_event& sc_process_b::terminated_event()
 // +----------------------------------------------------------------------------
 void sc_process_b::trigger_reset_event()
 {
-    if ( m_reset_event_p ) m_reset_event_p->notify();
+    sc_assert( m_reset_event_p );
+    if (m_simc->evaluation_phase()) {
+        m_reset_event_p->notify();
+    } else {
+        m_reset_event_p->notify(SC_ZERO_TIME);
+    }
 }
 
 //------------------------------------------------------------------------------

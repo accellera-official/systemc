@@ -55,7 +55,7 @@ struct Top : sc_core::sc_module {
 	// Case 1: constructor and pass in function object
 	vector1.init(N, my_module_creator("value of extra arg"));
 
-	// Case 2: pass in a member function using Boost bind
+	// Case 2: pass in a member function using sc_bind
 	vector2.init(N,
 	    sc_core::sc_bind(&Top::my_module_creator_func, this, sc_unnamed::_1, sc_unnamed::_2));
     }

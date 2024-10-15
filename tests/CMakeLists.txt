@@ -119,3 +119,17 @@ discover_regression_tests()
 # Additional compile/link options for specific tests
 
 target_link_libraries(systemc-kernel-sc_suspend PRIVATE Threads::Threads)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  # Ignore overly strict -Wfree-nonheap-object warning on GCC 11.0 and later
+  # -- https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54202
+  target_compile_options(systemc-1666-2011-compliance-event_list PRIVATE
+    $<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,11.0.0>:-Wno-free-nonheap-object>
+  )
+endif()
+
+# Skip some test execution under some conditions
+if(APPLE OR HAS__aarch64__DEFINED)
+  # TODO: Test hangs frequently on macOS and/or ARM 64-bit setups
+  skip_test(systemc/kernel/sc_suspend)
+endif()

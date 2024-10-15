@@ -58,7 +58,7 @@ SC_MODULE(Test_peq_with_cb)
       if (flag1) cout << "Called peq_cb with section = " << section << "\n";
       flag1 = false;
       sc_assert( t >= sc_time(0, SC_NS) && t <= sc_time(50, SC_NS) );
-      sc_assert( adr >= 0 && adr < 50);
+      sc_assert( adr < 50);
     }
     else if (section == 2)
     {
@@ -133,7 +133,7 @@ SC_MODULE(Test_peq_with_get)
           if (flag3) cout << "Called get_next_transaction with section = " << section << "\n";
           flag3 = false;
           sc_assert( t >= sc_time(1000, SC_NS) && t <= sc_time(1050, SC_NS) );
-          sc_assert( adr >= 0 && adr < 50);
+          sc_assert( adr < 50);
         }
         else if (section == 4)
         {

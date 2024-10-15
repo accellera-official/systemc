@@ -54,7 +54,7 @@ test_sc_length_param()
     try {
         sc_length_param c( -1 );
         cout << c << endl;
-    } catch( sc_report x ) {
+    } catch( const sc_report & x ) {
         cout << "\nException caught" << endl;
         cout << x.what() << endl;
     }

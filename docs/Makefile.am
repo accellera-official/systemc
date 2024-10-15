@@ -79,7 +79,7 @@ DOCDIRS = \
 uninstall-hook:
 	test ! -d "$(docdir)" || ( set -e ; cd "$(docdir)" ; \
 	  for dir in $(DOCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-	  cd - ; rmdir --ignore-fail-on-non-empty "$(docdir)" )
+	  cd - ; rmdir "$(docdir)" || true )
 
 endif # SEPARATE_INSTALL_TREE
 

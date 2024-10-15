@@ -535,6 +535,7 @@ class SC_API sc_uint_base : public sc_value_base
 
     void check_value() const;
 
+protected:
     void extend_sign()
 	{
 #ifdef DEBUG_SYSTEMC

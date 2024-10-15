@@ -1,4 +1,4 @@
-# Release Notes for SystemC 3.0.0
+# Release Notes for SystemC 3.0.1
 
 Laurent Maillet-Contoz, STMicroelectronics
 
@@ -27,7 +27,7 @@ Andrew C. Goodrich
 
 ## 1. IMPORTANT
 
-This is the release of the SystemC 3.0.0 Class Library.
+This is the release of the SystemC 3.0.1 Class Library.
 This release implements the IEEE 1666-2023 Language Reference Manual.
 
 1. This release is supported on the following platform combinations 
@@ -101,15 +101,13 @@ defined binary interface across different
 
 ## 2. What's new in this release?
 
-This version of SystemC contains the Reference Implementation simulator
-for the IEEE Std. 1666-2023 SystemC standard.  Please consult the IEEE Std. 1666-2023
-SystemC Language Reference Manual for details about the current SystemC standard.
+This version of SystemC contains bug fixes and minor improvements of Reference Implementation
+simulator.
 
-Compared to the 2.3.4 release, this release has the following new items:
+Please consult the IEEE Std. 1666-2023 SystemC Language Reference Manual for details about the current SystemC standard.
 
-  - New features and API changes implemented to reflect the IEEE Std. 1666-2023
-    revision, see section 3.
-  
+Compared to the 3.0.0 release, this release has the following new items:
+
   - Bug fixes and enhancements, see section 4.
 
   - Deprecated features, see section 5.
@@ -121,103 +119,53 @@ Compared to the 2.3.4 release, this release has the following new items:
 
 ## 3. New features
 
-Here is an overview of the new features available in 3.0.0.
-
-  - New class `sc_core::sc_stage_callback_if` provides an interface to enable
-    user-defined callbacks during elaboration or simulation stages that are 
-    otherwise not available to the application.
-
-  - New functions to suspend and unsuspend the simulation kernel.
-
-  - The constructor macro `SC_CTOR` now supports additional constructor 
-    parameters.
-
-  - Class `sc_core::sc_event` introduces the member function triggered to 
-    determine whether an event has recently been triggered.
-
-  - The enumeration type `sc_core::sc_time_unit` now supports 
-    attosecond (`sc_core::SC_AS`), zeptosecond (`sc_core::SC_ZS`), 
-    and yoctosecond (`sc_core::SC_YS`).
-
-  - Class `sc_core::sc_time` supports a constructor passing the time as string
-    argument.
-
-  - New class `sc_core::sc_hierarchy_scope` provides an interface to allow an 
-    application to place objects of type `sc_core::sc_object` in an object 
-    hierarchy outside the current hierarchical scope.
-
-  - New functions are defined to register and un-register hierarchical names.
-
-  - New static object `sc_core::sc_unbound` can be used in an application to 
-    make an unbound (open) connection to a port.  In addition, the function 
-    `sc_core::sc_tie::value(const &T)` can be used to tie a port to a specified 
-    value of type `T`.
-
-  - New definition supports tracing of types `sc_core::sc_event` and
-    `sc_core::sc_time` using `sc_core::sc_trace`.
-
-  - New functions `sc_core::sc_vector::emplace_back` and
-    `sc_core::sc_vector::emplace_back_with_name` support making incremental 
-    additions to `sc_core::sc_vector`.
-
-  - Added support for C++20, lambda functions for sc_spawn and sc_bind
-
+Being a bug fix release, SystemC 3.0.1 does not provide new features.
 
 ## 4. Bug fixes and enhancements
 
-Following is the list of bug fixes and enhancements for the 3.0.0 release:
+Following is the list of bug fixes and enhancements for the 3.0.1 release:
 
-  - Execution speed improvements for the SystemC data-types
+  - Implemented remaining changes to match sc_bind up to the IEEE1666-2023 revised definition
 
-  - Fixed MSVC warnings in examples
+  - Updated implementation of reset event notification in sc_process_b::trigger_reset_event to align to IEEE1666-2023
+  
+  - Refactored integer tracing & file writing in sc_{vcd,wif}_trace
 
-  - Fixed set_stack_size issue on Windows
+  - Fixed issue in QuickThreads assembly on Arm 64-bit architectures
 
-  - Fixed sc_vector iterator comparisons in C++20
+  - Cleaned up various compiler warnings
 
-  - Fixed Automake flow for data-types
+  - Improved sanitizers setup and addressed sanitizers findings
 
-  - Fixed various warnings and cleanup in tests
+  - Addressed sanitizers findings in tests
 
-  - Improved windows support (recent Visual Studio files, tests cleanup)
+  - Fixed SC_METHOD,SC_(C)THREAD false-positive warning on GCC/ARM64
 
-  - Removed obsolete macros
+  - Cleaned up member initialization for simple_target_socket{,_tagged}
 
-  - Droped unused Boost package
+  - Fixed failing signal_rv tests
 
-  - Droped legacy coroutine stack allocation for QuickThreads 
+  - Update Linux/AArch64 support & cleaned up redundant golden log files in tests
 
-  - Various clean-up thanks to the support of c++17 as new baseline for SystemC
+  - Fixed result type mismatches in sc_big_ops.h
+  
+  - Fixed several value initialization issues with sc_bv and sc_lv variables
 
-  - Fixed various invalid UTF-8 charcters in comments
+  - Fixed assignment issue to sc_uint and sc_int
 
-  - Fixed big integers issue in constructor
+  - Fixed issues in autotools build targets install, uninstall, dist and distcheck
 
-  - Improved CMake support
-
-  - Merged SystemC regression tests in distribution
-
+  - Removed no longer supported configurations from build flows
 
 ## 5. Deprecated features
 
-Here is an overview of deprecated features:
-
-  - Macro `SC_HAS_PROCESS` is not required anymore and has been deprecated
-
-  - constructor: `sc_time(double, bool)` has been deprecated
-
-  - constructor: `sc_time(uint64, bool)` has been deprecated
-
-  - function: `sc_set_default_time_unit` has been deprecated
-
-  - function: `sc_get_default_time_unit` has been deprecated 
-
+No new deprecated features in this release.
 
 ## 6. C++17 support
 
 IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC implementations.
 `std::string_view` is used in new APIs.  However, `const char *` are still used
-in several locations and will be progressively cleaned-up in the upcoming 
+in several locations and will be progressively cleaned-up in the upcoming
 releases.
 
 
@@ -236,7 +184,7 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
     generated, even though such a warning is mandated by IEEE Std. 1666-2023.
 
   - Some typos have not been fixed yet in the version of the IEEE Std. 1666-2023 
-    document available online, but have been implemented in this release:
+    document available online, but have been implemented from SystemC 3.0.0 onwards:
 
     - the following stage callbacks are implemented
       ``` 
@@ -245,12 +193,6 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
       ```
     - `static const sc_event & none()` is implemented
     - `IEEE_1666_SYSTEMC` is set to `202301L`
-
-  - The SystemC non regression test suite still available does not take into
-    account all the alignments done in the reference implementation to align
-    to IEEE Std. 1666-2023.  Therefore, the non regression tests might not 
-    compile or not behave as expected, this will be fixed in an upcoming 
-    delivery.
 
   - The sign-extension of mixed-signedness logic expressions (&,|)
     involving one `sc_bigint<>` operand and C++ builtin integral types
@@ -264,37 +206,16 @@ library build time.  See [INSTALL.md](INSTALL.md) file.
     expecting one of these types.  For `sc_time`, use the new nested type
     `sc_time::value_type` to hold values of the underlying representation.
 
-  - Bit/logic-vector reductions (or_reduce, and_reduce, etc.) return an
-    `sc_logic_value_t` enum value, instead of a `bool` or `sc_logic` 
-    (as required as of IEEE Std. 1666-2011).  Using the return value of these
-    functions in a boolean context, e.g.
-    ```
-      if ( lv.or_reduce() ) { /* ... */ }
-    ```
-    might lead to wrong results in case of `'X'` or `'Z'` bits in the vector.
-    Avoid this by converting the result to an `sc_logic` first and perform
-    a safe conversion to bool:
-    ```
-      if ( sc_logic( lv.or_reduce() ).to_bool() ) { /* ... */ }
-    ```
-
   - The current implementation of bit-wise operations on `sc_bv` and other
     bit types implicitly uses the left-hand argument as the size of the result
     rather than the size of the larger operand, as required by the 
     IEEE Std. 1666 standard.
-
-  - The fixed-point implementation is not working correctly on MSVC 2017
-    or later, when built with optimization enabled (Release mode, 64-bit).
-    On this compiler/platform, optimization needs to be disabled when using the
-    fixed-point library (for all SystemC versions before and including 2.3.2).
 
   - Some paths in this release are longer than the historical 99 character
     limit of tar archives, and several Windows archivers (e.g. WinZip)
     have been reported to trip over this.  The open source archiver 7-zip
     (http://7-zip.org) is known to work.
 
-  - Some warnings related to overloaded virtual functions are reported when using 
-    gcc 13 or clang17. They will be fixed in an upcoming version of the library. 
 
 ## 9. Fixed-point library
 

@@ -143,15 +143,8 @@ AS_CASE([$target],
   [*bsd*|*dragonfly*],[TARGET_ARCH=bsd],
   [*mingw*],          [TARGET_ARCH=mingw],
   [*cygwin*],         [TARGET_ARCH=cygwin],
-  [sparc-*-solaris*], [TARGET_ARCH=sparcOS5],
-  [*hpux11*],         [TARGET_ARCH=hpux11],
   dnl default
   [AC_MSG_ERROR("sorry...architecture not supported")])
-
-dnl Adjust for GCC on Solaris and HP-UX
-AS_CASE([${TARGET_ARCH}],
-  [hpux11|sparcOS5],
-    [AS_VAR_IF([GXX],[yes],[TARGET_ARCH="gcc${TARGET_ARCH}"])])
 
 dnl
 dnl Refine architecture settings
@@ -199,14 +192,6 @@ AS_CASE([${TARGET_ARCH}],
        [x*86|i*86], dnl
          [CPU_ARCH="i386"
           QT_ARCH="iX86"],
-       [powerpc64], dnl
-         [TARGET_ARCH="${TARGET_ARCH}ppc64"
-          CPU_ARCH="ppc64"
-          QT_ARCH="pthreads"],
-       [powerpc], dnl
-         [TARGET_ARCH="${TARGET_ARCH}ppc"
-          CPU_ARCH="ppc"
-          QT_ARCH="pthreads"],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
@@ -214,29 +199,7 @@ AS_CASE([${TARGET_ARCH}],
        [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
         EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
-    ],
-
-  [gcchpux11],dnl
-    [QT_ARCH="hppa"],
-  [hpux11],dnl
-    [QT_ARCH="hppa"
-     AS_VAR_IF([CXX_COMP],[aCC], dnl
-       [EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
-        EXTRA_CFLAGS="-Wa,-w36"
-        OPT_CXXFLAGS="+O1"
-        : ${CCAS=/usr/ccs/bin/as}],
-       [AC_MSG_ERROR("sorry...compiler not supported")])],
-
-  [gccsparcOS5],dnl
-    [QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R"],
-  [sparcOS5],dnl
-    [QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R"
-     AS_VAR_IF([CXX_COMP],[CC], dnl
-       [EXTRA_CXXFLAGS=""
-        EXTRA_CFLAGS=""],
-       [AC_MSG_ERROR("sorry...compiler not supported")])]
+    ]
 ) dnl AS_CASE([$TARGET_ARCH])
 
 dnl include EXTRA_CXXFLAGS in EXTRA_(C|AS)FLAGS by default
@@ -453,9 +416,6 @@ dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
 AM_CONDITIONAL([QT_ARCH_AARCH64], [ test "${QT_ARCH}" = "aarch64" ])
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
-AM_CONDITIONAL([QT_ARCH_POWERPC_MACOSX], [ test "${QT_ARCH}" = "powerpc-apple-macosx" ])
-AM_CONDITIONAL([QT_ARCH_SPARC], [ test "${QT_ARCH}" = "sparc-os2" ])
-AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 
 dnl
 dnl pkg-config setup
@@ -596,7 +556,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF

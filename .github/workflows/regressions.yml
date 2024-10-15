@@ -1,0 +1,69 @@
+name: regressions
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [20.04, 22.04]
+        platform: [linux/amd64, linux/arm64]
+        target: [gcc-shared-regression, clang-shared-regression]
+    steps:
+    - name: Install qemu-user-static
+      run: |
+        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
+          sudo apt-get update && sudo apt-get install -y qemu-user-static
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  almalinux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [8, 9]
+        platform: [linux/amd64, linux/arm64]
+        target: [gcc-shared-regression, clang-shared-regression]
+    steps:
+    - name: Install qemu-user-static
+      run: |
+        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
+          sudo apt-get update && sudo apt-get install -y qemu-user-static
+        fi
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [clang-shared-regression]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        SYSTEMC_CI_TARGET=${{ matrix.target }} SYSTEMC_SRC_PATH=$PWD docker/entrypoint.sh
+  windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        cmake -B BUILD/RELEASE/BUILD -DENABLE_REGRESSION=true .
+        cmake --build BUILD/RELEASE/BUILD --config RELEASE --parallel
+        cmake --install BUILD/RELEASE/BUILD --config RELEASE

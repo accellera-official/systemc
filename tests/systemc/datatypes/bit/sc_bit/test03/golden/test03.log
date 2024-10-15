@@ -1,0 +1,45 @@
+SystemC Simulation
+
+Legal sc_bv<W> initialization values: 
+
+    sc_bv<10>var("0bsm11101") is mapped to 0000011101
+    sc_bv<5>var("0bus11101") is mapped to 11101
+    sc_bv<15>var("0d245") is mapped to 000000011110101
+    sc_bv<5>var("01011") is mapped to 01011
+    sc_bv<12>var(1366) is mapped to 010101010110
+    sc_bv<12>var(2366) is mapped to 100100111110
+    sc_bv<8>var("0x61") is mapped to 01100001
+    sc_bv<8>var("0x66") is mapped to 01100110
+
+Illegal sc_bv<W> initialization values: 
+
+    sc_bv<5>var("0b0011x") IS NOT LEGAL!!!
+    sc_bv<5>var("0bsm1110z") IS NOT LEGAL!!!
+    sc_bv<5>var("0bus1110x") IS NOT LEGAL!!!
+    sc_bv<5>var("01xz1") IS NOT LEGAL!!!
+
+Legal sc_lv<W> initialization values: 
+
+    sc_lv<5>var("01xz0") is mapped to 01XZ0
+    sc_lv<5>var("11x01") is mapped to 11X01
+    sc_lv<5>var("0b1x011") is mapped to 1X011
+    sc_lv<5>var("0bsm1101") is mapped to 01101
+    sc_lv<5>var("0bxxxxx") is mapped to XXXXX
+    sc_lv<5>var("0b0zzxx") is mapped to 0ZZXX
+    sc_lv<5>var("XXXX") is mapped to 0XXXX
+    sc_lv<12>var(0366) is mapped to 000011110110
+    sc_lv<12>var(1366) is mapped to 010101010110
+    sc_lv<15>var(2366) is mapped to 000100100111110
+    sc_lv<8>var("0x61") is mapped to 01100001
+    sc_lv<8>var("0x66") is mapped to 01100110
+    sc_lv<15>var("0d245") is mapped to 000000011110101
+
+Illegal sc_lv<W> initialization values: 
+
+    sc_lv<5>var("00x66") IS NOT LEGAL!!!
+    sc_lv<5>var("01366") IS NOT LEGAL!!!
+    sc_lv<5>var("01x66") IS NOT LEGAL!!!
+    sc_lv<5>var("0b1junk") IS NOT LEGAL!!!
+    sc_lv<5>var("0bsm1x01") IS NOT LEGAL!!!
+    sc_lv<5>var("23456") IS NOT LEGAL!!!
+Program completed

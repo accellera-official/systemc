@@ -20,6 +20,10 @@
 
 _qt_start:
 qt_start:
+    // clear frame/link registers at stack root
+    mov x30, xzr
+    mov x29, xzr
+
     mov x0, x25
     mov x1, x26
     mov x2, x27

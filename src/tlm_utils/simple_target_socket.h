@@ -64,7 +64,6 @@ public:
     : base_type(n)
     , m_fw_process(this)
     , m_bw_process(this)
-    , m_current_transaction()
   {
     bind(m_fw_process);
   }
@@ -547,7 +546,7 @@ private:
   bw_process m_bw_process;
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
-  transaction_type* m_current_transaction = NULL;
+  transaction_type* m_current_transaction = nullptr;
 };
 
 template< typename MODULE, unsigned int BUSWIDTH = 32
@@ -1102,7 +1101,7 @@ private:
   bw_process m_bw_process;
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
-  transaction_type* m_current_transaction;
+  transaction_type* m_current_transaction = nullptr;
 };
 
 template< typename MODULE, unsigned int BUSWIDTH = 32

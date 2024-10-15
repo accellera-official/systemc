@@ -131,14 +131,7 @@ EXTRA_DIST += \
 	$(NO_H_FILES) \
 	$(NO_S_FILES)
 
-CLEANFILES += \
-	$(QT_ARCH_FILES) \
-	configuration
-
 if WANT_QT_THREADS
-
-BUILT_SOURCES = \
-	configuration
 
 noinst_LTLIBRARIES = libqt.la
 
@@ -155,45 +148,17 @@ qtmds_o_CCASFLAGS = \
 	$(AM_CCASFLAGS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES)
 
 # only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
-QT_ARCH_FILES = \
-	qtmds.s
+QT_ARCH_FILES =
 
 if QT_ARCH_AARCH64
-QT_ARCH_IMPL = md/aarch64.s
+QT_ARCH_FILES += md/aarch64.s
 endif
 if QT_ARCH_X86
-QT_ARCH_IMPL = md/i386.s
+QT_ARCH_FILES += md/i386.s
 endif
 if QT_ARCH_X86_64
-QT_ARCH_IMPL = md/iX86_64.s
+QT_ARCH_FILES += md/iX86_64.s
 endif
-if QT_ARCH_POWERPC_MACOSX
-QT_ARCH_FILES+=qtmdc.c
-QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
-endif
-if QT_ARCH_SPARC
-QT_ARCH_IMPL = md/sparc.s
-endif
-if QT_ARCH_HPPA
-QT_ARCH_IMPL = md/hppa.s
-endif
-
-# ensure to use a working link command in 'config'
-export LN_S
-
-configuration:
-if SEPARATE_BUILD_TREE # copy arch files to build tree
-	$(AM_V_at)for file in $(QT_ARCH_IMPL); do  \
-	  $(MKDIR_P) `dirname "$$file"` ;             \
-	  $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
-	done
-endif # SEPARATE_BUILD_TREE
-	$(AM_V_GEN)$(SHELL) $(srcdir)/config $(QT_ARCH)
-
-if SEPARATE_BUILD_TREE
-CLEANFILES += \
-	 $(QT_ARCH_IMPL)
-endif # SEPARATE_BUILD_TREE
 
 endif #  WANT_QT_THREADS
 

@@ -561,6 +561,7 @@ class SC_API sc_int_base : public sc_value_base
 
     void check_value() const;
 
+protected:
     void extend_sign()
 	{
 #ifdef DEBUG_SYSTEMC
@@ -700,7 +701,7 @@ public:
 
 
     sc_int_base& operator <<= ( int_type v )
-	{ m_val <<= v; extend_sign(); return *this; }
+        { m_val = static_cast<int_type>(static_cast<uint64>(m_val) << v); extend_sign(); return *this; }
 
     sc_int_base& operator >>= ( int_type v )
 	{ m_val >>= v; /* no sign extension needed */ return *this; }

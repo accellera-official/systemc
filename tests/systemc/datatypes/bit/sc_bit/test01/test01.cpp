@@ -47,7 +47,7 @@ void cover_sc_bit()
     try {
 	sc_bit foo(2);
     }
-    catch (sc_report) {
+    catch (sc_report &) {
 	cout << "Caught exception for sc_bit(2)\n";
     }
     sc_bit bc0('0');
@@ -55,7 +55,7 @@ void cover_sc_bit()
     try {
 	sc_bit foo('2');
     }
-    catch (sc_report) {
+    catch (sc_report &) {
 	cout << "Caught exception for sc_bit('2')\n";
     }
     sc_bit blc0(sc_logic('0'));
