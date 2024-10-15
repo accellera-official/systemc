@@ -650,12 +650,6 @@ EXTRA_CXXFLAGS
 PKGCONFIG_LDPRIV
 PKGCONFIG_CFLAGS
 PKGCONFIG_DEFINES
-QT_ARCH_HPPA_FALSE
-QT_ARCH_HPPA_TRUE
-QT_ARCH_SPARC_FALSE
-QT_ARCH_SPARC_TRUE
-QT_ARCH_POWERPC_MACOSX_FALSE
-QT_ARCH_POWERPC_MACOSX_TRUE
 QT_ARCH_X86_64_FALSE
 QT_ARCH_X86_64_TRUE
 QT_ARCH_AARCH64_FALSE
@@ -5039,21 +5033,8 @@ case $target in #(
     TARGET_ARCH=mingw ;; #(
   *cygwin*) :
     TARGET_ARCH=cygwin ;; #(
-  sparc-*-solaris*) :
-    TARGET_ARCH=sparcOS5 ;; #(
-  *hpux11*) :
-    TARGET_ARCH=hpux11 ;; #(
   *) :
       as_fn_error $? "\"sorry...architecture not supported\"" "$LINENO" 5 ;;
-esac
-
-case ${TARGET_ARCH} in #(
-  hpux11|sparcOS5) :
-    if test "x$GXX" = xyes; then :
-  TARGET_ARCH="gcc${TARGET_ARCH}"
-fi ;; #(
-  *) :
-     ;;
 esac
 
 case ${TARGET_ARCH} in #(
@@ -5106,14 +5087,6 @@ esac
   x*86|i*86) :
              CPU_ARCH="i386"
           QT_ARCH="iX86" ;; #(
-  powerpc64) :
-             TARGET_ARCH="${TARGET_ARCH}ppc64"
-          CPU_ARCH="ppc64"
-          QT_ARCH="pthreads" ;; #(
-  powerpc) :
-             TARGET_ARCH="${TARGET_ARCH}ppc"
-          CPU_ARCH="ppc"
-          QT_ARCH="pthreads" ;; #(
   *) :
     as_fn_error $? "\"sorry...architecture not supported\"" "$LINENO" 5 ;;
 esac
@@ -5125,31 +5098,7 @@ esac
 else
   as_fn_error $? "\"sorry...compiler not supported\"" "$LINENO" 5
 fi
-     ;; #(
-  gcchpux11) :
-        QT_ARCH="hppa" ;; #(
-  hpux11) :
-        QT_ARCH="hppa"
-     if test "x$CXX_COMP" = xaCC; then :
-         EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
-        EXTRA_CFLAGS="-Wa,-w36"
-        OPT_CXXFLAGS="+O1"
-        : ${CCAS=/usr/ccs/bin/as}
-else
-  as_fn_error $? "\"sorry...compiler not supported\"" "$LINENO" 5
-fi ;; #(
-  gccsparcOS5) :
-        QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R" ;; #(
-  sparcOS5) :
-        QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R"
-     if test "x$CXX_COMP" = xCC; then :
-         EXTRA_CXXFLAGS=""
-        EXTRA_CFLAGS=""
-else
-  as_fn_error $? "\"sorry...compiler not supported\"" "$LINENO" 5
-fi
+
  ;; #(
   *) :
      ;;
@@ -17153,30 +17102,6 @@ else
   QT_ARCH_X86_64_FALSE=
 fi
 
- if  test "${QT_ARCH}" = "powerpc-apple-macosx" ; then
-  QT_ARCH_POWERPC_MACOSX_TRUE=
-  QT_ARCH_POWERPC_MACOSX_FALSE='#'
-else
-  QT_ARCH_POWERPC_MACOSX_TRUE='#'
-  QT_ARCH_POWERPC_MACOSX_FALSE=
-fi
-
- if  test "${QT_ARCH}" = "sparc-os2" ; then
-  QT_ARCH_SPARC_TRUE=
-  QT_ARCH_SPARC_FALSE='#'
-else
-  QT_ARCH_SPARC_TRUE='#'
-  QT_ARCH_SPARC_FALSE=
-fi
-
- if  test "${QT_ARCH}" = "hppa" ; then
-  QT_ARCH_HPPA_TRUE=
-  QT_ARCH_HPPA_FALSE='#'
-else
-  QT_ARCH_HPPA_TRUE='#'
-  QT_ARCH_HPPA_FALSE=
-fi
-
 
 PKGCONFIG_DEFINES=
 PKGCONFIG_CFLAGS=
@@ -17428,18 +17353,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${QT_ARCH_X86_64_TRUE}" && test -z "${QT_ARCH_X86_64_FALSE}"; then
   as_fn_error $? "conditional \"QT_ARCH_X86_64\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${QT_ARCH_POWERPC_MACOSX_TRUE}" && test -z "${QT_ARCH_POWERPC_MACOSX_FALSE}"; then
-  as_fn_error $? "conditional \"QT_ARCH_POWERPC_MACOSX\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${QT_ARCH_SPARC_TRUE}" && test -z "${QT_ARCH_SPARC_FALSE}"; then
-  as_fn_error $? "conditional \"QT_ARCH_SPARC\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${QT_ARCH_HPPA_TRUE}" && test -z "${QT_ARCH_HPPA_FALSE}"; then
-  as_fn_error $? "conditional \"QT_ARCH_HPPA\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -19765,7 +19678,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF

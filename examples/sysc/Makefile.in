@@ -1442,8 +1442,7 @@ async_suspend_EXTRA = \
 	2.1/forkjoin/forkjoin.sln \
 	2.1/forkjoin/forkjoin.vcxproj \
 	2.1/forkjoin/CMakeLists.txt \
-	2.1/forkjoin/Makefile \
-	2.1/forkjoin/README.txt
+	2.1/forkjoin/Makefile
 
 2_1_reset_signal_is_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)

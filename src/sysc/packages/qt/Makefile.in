@@ -106,10 +106,9 @@ target_triplet = @target@
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
 @DISABLE_VCD_SCOPES_TRUE@am__append_10 = -DSC_DISABLE_VCD_SCOPES
-@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__append_11 = qtmdc.c
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@am__append_12 = \
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	 $(QT_ARCH_IMPL)
-
+@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@am__append_11 = md/aarch64.s
+@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@am__append_12 = md/i386.s
+@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = md/iX86_64.s
 subdir = src/sysc/packages/qt
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
@@ -130,10 +129,14 @@ libqt_la_LIBADD =
 am__libqt_la_SOURCES_DIST = qt.c
 am__objects_1 = libqt_la-qt.lo
 @WANT_QT_THREADS_TRUE@am_libqt_la_OBJECTS = $(am__objects_1)
-@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@am__objects_2 = libqt_la-qtmdc.lo
-@WANT_QT_THREADS_TRUE@am__objects_3 = libqt_la-qtmds.lo \
-@WANT_QT_THREADS_TRUE@	$(am__objects_2)
-@WANT_QT_THREADS_TRUE@nodist_libqt_la_OBJECTS = $(am__objects_3)
+am__dirstamp = $(am__leading_dot)dirstamp
+@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@am__objects_2 = md/libqt_la-aarch64.lo
+@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@am__objects_3 =  \
+@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@	md/libqt_la-i386.lo
+@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@am__objects_4 = md/libqt_la-iX86_64.lo
+@WANT_QT_THREADS_TRUE@am__objects_5 = $(am__objects_2) \
+@WANT_QT_THREADS_TRUE@	$(am__objects_3) $(am__objects_4)
+@WANT_QT_THREADS_TRUE@nodist_libqt_la_OBJECTS = $(am__objects_5)
 libqt_la_OBJECTS = $(am_libqt_la_OBJECTS) $(nodist_libqt_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -158,8 +161,7 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/libqt_la-qt.Plo \
-	./$(DEPDIR)/libqt_la-qtmdc.Plo
+am__depfiles_remade = ./$(DEPDIR)/libqt_la-qt.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -381,7 +383,7 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
 	$(am__append_10)
 
 # initialize some useful variables (filled later)
-CLEANFILES = $(QT_ARCH_FILES) configuration $(am__append_12)
+CLEANFILES = 
 EXTRA_DIST = CHANGES config INSTALL Makefile.base README README.MISC \
 	README.PORT b.h meas.c stp.c stp.h time/assim time/cswap \
 	time/go time/init time/prim time/raw time/README.time \
@@ -447,9 +449,6 @@ NO_S_FILES = \
 	md/vax_b.s \
 	md/vax.s
 
-@WANT_QT_THREADS_TRUE@BUILT_SOURCES = \
-@WANT_QT_THREADS_TRUE@	configuration
-
 @WANT_QT_THREADS_TRUE@noinst_LTLIBRARIES = libqt.la
 @WANT_QT_THREADS_TRUE@nodist_libqt_la_SOURCES = \
 @WANT_QT_THREADS_TRUE@	$(QT_ARCH_FILES)
@@ -465,15 +464,9 @@ NO_S_FILES = \
 
 
 # only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
-@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = qtmds.s $(am__append_11)
-@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/aarch64.s
-@QT_ARCH_HPPA_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/hppa.s
-@QT_ARCH_POWERPC_MACOSX_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/powerpc_mach.s md/powerpc.c
-@QT_ARCH_SPARC_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/sparc.s
-@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/iX86_64.s
-@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@QT_ARCH_IMPL = md/i386.s
-all: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = $(am__append_11) \
+@WANT_QT_THREADS_TRUE@	$(am__append_12) $(am__append_13)
+all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj .s
@@ -518,18 +511,30 @@ clean-noinstLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
+md/$(am__dirstamp):
+	@$(MKDIR_P) md
+	@: > md/$(am__dirstamp)
+md/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) md/$(DEPDIR)
+	@: > md/$(DEPDIR)/$(am__dirstamp)
+md/libqt_la-aarch64.lo: md/$(am__dirstamp) \
+	md/$(DEPDIR)/$(am__dirstamp)
+md/libqt_la-i386.lo: md/$(am__dirstamp) md/$(DEPDIR)/$(am__dirstamp)
+md/libqt_la-iX86_64.lo: md/$(am__dirstamp) \
+	md/$(DEPDIR)/$(am__dirstamp)
 
 libqt.la: $(libqt_la_OBJECTS) $(libqt_la_DEPENDENCIES) $(EXTRA_libqt_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libqt_la_LINK) $(am_libqt_la_rpath) $(libqt_la_OBJECTS) $(libqt_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f md/*.$(OBJEXT)
+	-rm -f md/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libqt_la-qt.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libqt_la-qtmdc.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -568,13 +573,6 @@ libqt_la-qt.lo: qt.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libqt_la-qt.lo `test -f 'qt.c' || echo '$(srcdir)/'`qt.c
 
-libqt_la-qtmdc.lo: qtmdc.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libqt_la-qtmdc.lo -MD -MP -MF $(DEPDIR)/libqt_la-qtmdc.Tpo -c -o libqt_la-qtmdc.lo `test -f 'qtmdc.c' || echo '$(srcdir)/'`qtmdc.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libqt_la-qtmdc.Tpo $(DEPDIR)/libqt_la-qtmdc.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='qtmdc.c' object='libqt_la-qtmdc.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libqt_la-qtmdc.lo `test -f 'qtmdc.c' || echo '$(srcdir)/'`qtmdc.c
-
 .s.o:
 	$(AM_V_CCAS)$(CCASCOMPILE) -c -o $@ $<
 
@@ -584,14 +582,21 @@ libqt_la-qtmdc.lo: qtmdc.c
 .s.lo:
 	$(AM_V_CCAS)$(LTCCASCOMPILE) -c -o $@ $<
 
-libqt_la-qtmds.lo: qtmds.s
-	$(AM_V_CCAS)$(LIBTOOL) $(AM_V_lt) $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o libqt_la-qtmds.lo `test -f 'qtmds.s' || echo '$(srcdir)/'`qtmds.s
+md/libqt_la-aarch64.lo: md/aarch64.s
+	$(AM_V_CCAS)$(LIBTOOL) $(AM_V_lt) $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o md/libqt_la-aarch64.lo `test -f 'md/aarch64.s' || echo '$(srcdir)/'`md/aarch64.s
+
+md/libqt_la-i386.lo: md/i386.s
+	$(AM_V_CCAS)$(LIBTOOL) $(AM_V_lt) $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o md/libqt_la-i386.lo `test -f 'md/i386.s' || echo '$(srcdir)/'`md/i386.s
+
+md/libqt_la-iX86_64.lo: md/iX86_64.s
+	$(AM_V_CCAS)$(LIBTOOL) $(AM_V_lt) $(libqt_la_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CCAS) $(AM_CCASFLAGS) $(CCASFLAGS) -c -o md/libqt_la-iX86_64.lo `test -f 'md/iX86_64.s' || echo '$(srcdir)/'`md/iX86_64.s
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf md/.libs md/_libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -679,12 +684,10 @@ distdir-am: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) check-am
+check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-install: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) install-am
+install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -711,11 +714,12 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f md/$(DEPDIR)/$(am__dirstamp)
+	-rm -f md/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
@@ -723,7 +727,6 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/libqt_la-qt.Plo
-	-rm -f ./$(DEPDIR)/libqt_la-qtmdc.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -770,7 +773,6 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/libqt_la-qt.Plo
-	-rm -f ./$(DEPDIR)/libqt_la-qtmdc.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -789,7 +791,7 @@ ps-am:
 
 uninstall-am:
 
-.MAKE: all check install install-am install-strip
+.MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
 	clean-generic clean-libtool clean-noinstLTLIBRARIES \
@@ -807,16 +809,6 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
-
-# ensure to use a working link command in 'config'
-@WANT_QT_THREADS_TRUE@export LN_S
-
-@WANT_QT_THREADS_TRUE@configuration:
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	$(AM_V_at)for file in $(QT_ARCH_IMPL); do  \
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	  $(MKDIR_P) `dirname "$$file"` ;             \
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	  $(INSTALL_DATA) $(srcdir)/$$file ./$$file ; \
-@SEPARATE_BUILD_TREE_TRUE@@WANT_QT_THREADS_TRUE@	done
-@WANT_QT_THREADS_TRUE@	$(AM_V_GEN)$(SHELL) $(srcdir)/config $(QT_ARCH)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

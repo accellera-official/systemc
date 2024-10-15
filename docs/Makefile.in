@@ -574,7 +574,7 @@ uninstall-am: uninstall-nobase_docDATA
 @SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
 @SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(docdir)" || ( set -e ; cd "$(docdir)" ; \
 @SEPARATE_INSTALL_TREE_TRUE@	  for dir in $(DOCDIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir --ignore-fail-on-non-empty "$(docdir)" )
+@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir "$(docdir)" || true )
 
 doxygen: sysc/doxygen/Doxyfile tlm/doxygen/Doxyfile
 	@(cd sysc/doxygen && $(DOXYGEN))

@@ -800,7 +800,7 @@ uninstall-am: uninstall-nobase_buildexamplesDATA
 @SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
 @SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(buildexamplesdir)" || ( set -e ;  cd "$(buildexamplesdir)" ; \
 @SEPARATE_INSTALL_TREE_TRUE@	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir --ignore-fail-on-non-empty "$(buildexamplesdir)" )
+@SEPARATE_INSTALL_TREE_TRUE@	  cd - ; rmdir "$(buildexamplesdir)" || true)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

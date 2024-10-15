@@ -397,6 +397,7 @@ top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I config
 SUBDIRS = \
 	src \
+	docs \
 	examples
 
 DOC_FILES = \
@@ -418,7 +419,9 @@ EXTRA_DIST = \
 	CMakeLists.txt \
 	cmake/SystemCLanguageConfig.cmake.in \
 	cmake/SystemCTLMConfig.cmake.in \
-	cmake/run_test.cmake \
+	cmake/SystemCTesting.cmake \
+	cmake/run-example.cmake \
+	cmake/run-test.py \
 	\
 	msvc16/SystemC/SystemC.sln \
 	msvc16/SystemC/SystemC.props \
@@ -931,8 +934,8 @@ uninstall-am: uninstall-rootdocDATA
 
 
 @SEPARATE_INSTALL_TREE_TRUE@uninstall-hook:
-@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(docdir)" || rmdir --ignore-fail-on-non-empty "$(docdir)"
-@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(prefix)" || rmdir --ignore-fail-on-non-empty "$(prefix)"
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(docdir)" || rmdir "$(docdir)" || true
+@SEPARATE_INSTALL_TREE_TRUE@	test ! -d "$(prefix)" || rmdir "$(prefix)" || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
