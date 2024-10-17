@@ -62,7 +62,14 @@ case "$SYSTEMC_CI_TARGET" in
     BUILD_REGRESSIONS=true
     CXX_FLAGS="$CXX_FLAGS -fsanitize=undefined"
     ;;
-  *)
+  clang-shared-regression-tsan)
+    CC=clang
+    CXX=clang++
+    BUILD_SHARED_LIBRARY=true
+    BUILD_REGRESSIONS=true
+    CXX_FLAGS="$CXX_FLAGS -fsanitize=thread"
+    ;;
+   *)
     echo "Error: Unknown SYSTEMC_CI_TARGET '$SYSTEMC_CI_TARGET'"
     exit 1
     ;;
