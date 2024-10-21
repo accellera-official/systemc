@@ -58,30 +58,50 @@ int sc_main( int, char*[] )
     sc_report_handler::set_actions( SC_ID_SET_TIME_RESOLUTION_, SC_DO_NOTHING );
     sc_report_handler::set_actions( SC_ID_TIME_CONVERSION_FAILED_, SC_DISPLAY );
 
-    unsigned resolutions[] = { 100, 10, 1 };
-    sc_time_unit resunit   = SC_FS;
-    unsigned* res = resolutions;
+    sc_dt::uint64 resolutions[] = {
+       10'000'000'000'000'000,
+          100'000'000'000'000,
+            1'000'000'000'000,
+               10'000'000'000,
+                  100'000'000,
+                    1'000'000,
+                      100'000,
+                       10'000,
+                        1'000,
+                          100,
+                           10,
+                            1
+    };
+    sc_time_unit resunit   = SC_YS;
 
-    while( true )
+    for( auto res : resolutions )
     {
+        sc_set_time_resolution( res, resunit );
         std::cout << "\nResolution = " << sc_get_time_resolution() << std::endl;
 
         check_time( sc_time(  10,   SC_NS),  SC_NS,  "10 ns" );
         check_time( sc_time( 100,   SC_NS),  SC_NS, "100 ns" );
-        check_time( sc_time(1000,   SC_NS),  SC_US,   "1 us" );
-        check_time( sc_time(   0.1, SC_US),  SC_NS, "100 ns" );
-        check_time( sc_time(   1,   SC_US),  SC_US,   "1 us" );
-        check_time( sc_time(  10,   SC_US),  SC_US,  "10 us" );
-        check_time( sc_time( 100,   SC_US),  SC_US, "100 us" );
-        check_time( sc_time(1000,   SC_US),  SC_MS,   "1 ms" );
-        check_time( sc_time( 100,  SC_SEC), SC_SEC, "100 s" );
 
-        // exit loop before final resolution update
-        if (res == resolutions + (sizeof(resolutions)/sizeof(*resolutions)))
-            break;
+        if ( res > 10 ) {
+            check_time( sc_time(1000,   SC_NS),  SC_US,   "1 us" );
+            check_time( sc_time(   0.1, SC_US),  SC_NS, "100 ns" );
+            check_time( sc_time(   1,   SC_US),  SC_US,   "1 us" );
+            check_time( sc_time(  10,   SC_US),  SC_US,  "10 us" );
+            check_time( sc_time( 100,   SC_US),  SC_US, "100 us" );
+        }
 
-        sc_set_time_resolution( *res, resunit );
-        res++;
+        if ( res > 1'000'000 ) {
+            check_time( sc_time(1000,   SC_US),  SC_MS,   "1 ms" );
+            check_time( sc_time( 100,  SC_SEC), SC_SEC, "100 s" );
+        }
+    }
+
+    {
+      sc_set_time_resolution(1, SC_SEC);
+      std::cout << "\nResolution = " << sc_get_time_resolution() << std::endl;
+
+      auto t = sc_core::sc_time(1, SC_SEC);
+      check_time( t, SC_SEC, "1 s");
     }
 
     cout << "\nProgram completed" << endl;
