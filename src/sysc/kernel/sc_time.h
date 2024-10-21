@@ -472,7 +472,7 @@ operator << ( ::std::ostream& os, const sc_time& t )
 
 struct SC_API sc_time_params
 {
-    double time_resolution;		// in femto seconds
+    double time_resolution;  // in yocto seconds
     bool   time_resolution_specified;
     bool   time_resolution_fixed;
 

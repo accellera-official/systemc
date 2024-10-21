@@ -81,15 +81,13 @@ sc_time_tuple::init( value_type val )
     sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
     time_params->time_resolution_fixed = true;
 
-    value_type tr  = static_cast<sc_dt::int64>( time_params->time_resolution );
-    unsigned scale = 0;
-    while( ( tr % 10 ) == 0 ) {
-        tr /= 10;
-        scale++;
-    }
-    sc_assert( tr == 1 );
+    auto tr_log10 = std::log10( time_params->time_resolution );
+    auto scale = static_cast<unsigned>( tr_log10 );
 
-    unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
+    [[maybe_unused]] double ignored = 0.0;
+    sc_assert( std::modf( tr_log10, &ignored ) == 0.0 );
+
+    constexpr unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
     unsigned tu = tu_max - (scale / 3);
     while( tu > 0 && ( val % 10 ) == 0 ) {
         val /= 10;
