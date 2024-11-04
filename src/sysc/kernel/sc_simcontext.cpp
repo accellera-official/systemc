@@ -1761,10 +1761,16 @@ sc_start()
               SC_EXIT_ON_STARVATION );
 }
 
+static int g_exit = EXIT_SUCCESS;
+SC_API int
+sc_exit_code() {
+    return g_exit;
+}
 
 SC_API void
-sc_stop()
+sc_stop(int exit_code)
 {
+    if (g_exit!=EXIT_SUCCESS) g_exit = exit_code;
     sc_get_curr_simcontext()->stop();
 }
 
