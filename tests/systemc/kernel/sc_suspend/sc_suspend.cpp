@@ -126,7 +126,6 @@ SC_MODULE (tester) {
         t([&] {
             std::unique_lock<decltype(mutex)> lock(mutex);
             condition.wait(lock);
-            SC_REPORT_INFO("child thread", "Release child thread");
             start.notify();
         }),
         start(false)
