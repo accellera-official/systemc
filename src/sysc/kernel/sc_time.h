@@ -138,6 +138,8 @@ public:
     static sc_time from_value( value_type );
     static sc_time from_seconds( double );
 
+    static constexpr sc_time max();
+
     // relational operators
 
     bool operator == ( const sc_time& ) const;
@@ -168,6 +170,9 @@ public:
     void print( ::std::ostream& os = std::cout ) const;
 
 private: // implementation-defined
+    struct max_time_tag {};
+    explicit constexpr sc_time( max_time_tag );
+
     sc_time( double, sc_time_unit, sc_simcontext* );
 
 private:
@@ -244,6 +249,16 @@ sc_time::from_seconds( double v )
     return sc_time( v, SC_SEC );
 }
 
+inline constexpr
+sc_time::sc_time( max_time_tag )
+  : m_value( ~value_type{} )
+{}
+
+inline constexpr
+sc_time sc_time::max()
+{
+    return sc_time( max_time_tag{} );
+}
 
 
 // conversion functions
