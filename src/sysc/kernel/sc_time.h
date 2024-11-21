@@ -117,22 +117,15 @@ public:
     // constructors
 
     constexpr sc_time() = default;
-    sc_time( const sc_time& );
     sc_time( double, sc_time_unit );
 
     // convert time object from string
-    // For C++ versions prior to C++17, offer some (non-standard) backwards compatibility
-    // using std::string instead of std::string_view
     explicit sc_time( std::string_view strv );
     static sc_time from_string( std::string_view strv );
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
     sc_time( value_type, bool scale );
-
-    // assignment operator
-
-    sc_time& operator = ( const sc_time& );
 
     // conversion functions
 
@@ -230,11 +223,6 @@ extern SC_API const sc_time SC_ZERO_TIME;
 
 
 inline
-sc_time::sc_time( const sc_time& t )
-: m_value( t.m_value )
-{}
-
-inline
 sc_time_tuple::sc_time_tuple( value_type v )
   : m_value(), m_unit( SC_SEC ), m_offset(1)
 {
@@ -257,16 +245,6 @@ sc_time::from_seconds( double v )
     return sc_time( v, SC_SEC );
 }
 
-
-// assignment operator
-
-inline
-sc_time&
-sc_time::operator = ( const sc_time& t )
-{
-    m_value = t.m_value;
-    return *this;
-}
 
 
 // conversion functions
