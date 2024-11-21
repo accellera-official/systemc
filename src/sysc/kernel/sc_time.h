@@ -217,10 +217,9 @@ inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-extern SC_API const sc_time SC_ZERO_TIME;
-
 // constructors
 
+inline constexpr sc_time SC_ZERO_TIME;
 
 inline
 sc_time_tuple::sc_time_tuple( value_type v )
