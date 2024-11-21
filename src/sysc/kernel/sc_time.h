@@ -67,19 +67,19 @@ class SC_API sc_time_tuple;
 // integer of at least 64 bits declared as sc_time::value_type.
 // ----------------------------------------------------------------------------
 
-#define SC_TIME_DT sc_dt::uint64 
+#define SC_TIME_DT sc_dt::uint64
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
 //
 //  Enumeration of time units.
-//  NOTE: From IEEE Std 1666-2023 onwards, enumeration constant values are 
-//        implementation-defined. The constant values for SC_SEC, SC_MS, 
-//        SC_US, SC_NS, SC_PS and SC_FS follow IEEE Std 1666-2011 to enable 
+//  NOTE: From IEEE Std 1666-2023 onwards, enumeration constant values are
+//        implementation-defined. The constant values for SC_SEC, SC_MS,
+//        SC_US, SC_NS, SC_PS and SC_FS follow IEEE Std 1666-2011 to enable
 //        backwards compatibility.
 // ----------------------------------------------------------------------------
 
-enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2, 
+enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2,
                     SC_PS = 1, SC_FS = 0, SC_AS = -1, SC_ZS = -2, SC_YS = -3 };
 
 // ----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ public:
 
     // constructors
 
-    sc_time();
+    constexpr sc_time() = default;
     sc_time( const sc_time& );
     sc_time( double, sc_time_unit );
 
@@ -178,7 +178,7 @@ private: // implementation-defined
     sc_time( double, sc_time_unit, sc_simcontext* );
 
 private:
-    value_type m_value;
+    value_type m_value{};
 };
 
 // ----------------------------------------------------------------------------
@@ -228,10 +228,6 @@ extern SC_API const sc_time SC_ZERO_TIME;
 
 // constructors
 
-inline
-sc_time::sc_time()
-: m_value( 0 )
-{}
 
 inline
 sc_time::sc_time( const sc_time& t )
