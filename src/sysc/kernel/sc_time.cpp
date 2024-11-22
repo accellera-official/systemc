@@ -69,6 +69,17 @@ const char* time_units[] = {
     "ys"
 };
 
+
+static void inline time_params_freeze( sc_time_params* tp )
+{
+    tp->time_resolution_fixed.store( true, std::memory_order_relaxed );
+}
+
+[[nodiscard]] static bool inline time_params_frozen( sc_time_params* tp )
+{
+    return tp->time_resolution_fixed.load();
+}
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time_tuple
 //
@@ -78,8 +89,8 @@ const char* time_units[] = {
 void
 sc_time_tuple::init( value_type val )
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-    time_params->time_resolution_fixed = true;
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
 
     auto tr_log10 = std::log10( time_params->time_resolution );
     auto scale = static_cast<unsigned>( tr_log10 );
@@ -149,13 +160,12 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( v != 0 ) {
+        time_params_freeze( tp );
         double scale_fac = time_values[5-tu] / tp->time_resolution; // sc_time_unit constants have offset of 5
         // linux bug workaround; don't change next two lines
         volatile double tmp = v * scale_fac + 0.5;
         t = static_cast<sc_dt::int64>( tmp );
-        tp->time_resolution_fixed = true;
     }
-
     return t;
 }
 
@@ -225,7 +235,8 @@ sc_time::sc_time( double v, bool scale )
     }
 
     if( v != 0 ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
         if( scale ) {
             double scale_fac = sc_dt::uint64_to_double( time_params->default_time_unit );
             // linux bug workaround; don't change next two lines
@@ -236,7 +247,6 @@ sc_time::sc_time( double v, bool scale )
             volatile double tmp = v + 0.5;
             m_value = static_cast<sc_dt::int64>( tmp );
         }
-        time_params->time_resolution_fixed = true;
     }
 }
 
@@ -251,7 +261,8 @@ sc_time::sc_time( value_type v, bool scale )
     }
 
     if( v != 0 ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
         if( scale ) {
             double scale_fac = sc_dt::uint64_to_double(
             time_params->default_time_unit );
@@ -261,7 +272,6 @@ sc_time::sc_time( value_type v, bool scale )
         } else {
             m_value = v;
         }
-        time_params->time_resolution_fixed = true;
     }
 }
 
@@ -280,8 +290,8 @@ sc_time::from_value( value_type v )
 {
     sc_time t;
     if( v != 0 && v != ~sc_dt::UINT64_ZERO ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-        time_params->time_resolution_fixed = true;
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
     }
     t.m_value = v;
     return t;
@@ -293,10 +303,12 @@ sc_time::from_value( value_type v )
 double
 sc_time::to_default_time_units() const
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
     if( m_value == 0 )
         return 0.0;
-    time_params->time_resolution_fixed = true;
+
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
+
     return ( sc_dt::uint64_to_double( m_value ) /
         sc_dt::uint64_to_double( time_params->default_time_unit ) );
 }
@@ -304,10 +316,12 @@ sc_time::to_default_time_units() const
 double
 sc_time::to_seconds() const
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
     if( m_value == 0 )
         return 0.0;
-    time_params->time_resolution_fixed = true;
+
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
+
     return ( sc_dt::uint64_to_double( m_value ) *
         ( time_params->time_resolution / time_values[0] ) ); 
 }
@@ -336,10 +350,6 @@ sc_time_params::sc_time_params()
     default_time_unit_specified( false )
 {}
 
-sc_time_params::~sc_time_params()
-{}
-
-
 // ----------------------------------------------------------------------------
 
 // functions for accessing the time resolution and default time unit
@@ -366,7 +376,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
     }
 
-    sc_time_params* time_params = simc->m_time_params;
+    auto * time_params = simc->m_time_params;
 
     // can be specified only once
     if( time_params->time_resolution_specified ) {
@@ -374,7 +384,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // can only be specified before any sc_time is constructed
-    if( time_params->time_resolution_fixed ) {
+    if( time_params_frozen( time_params ) ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "sc_time object(s) constructed" );
     }
 
@@ -430,19 +440,16 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
                          "value not a power of ten" );
     }
 
-    sc_simcontext* simc = sc_get_curr_simcontext();
-
     // can only be specified during elaboration
     if( sc_is_running() ) {
         SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "simulation running" );
     }
 
-    sc_time_params* time_params = simc->m_time_params;
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
 
     // can only be specified before any sc_time is constructed
-    if( time_params->time_resolution_fixed ) {
-        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-                         "sc_time object(s) constructed" );
+    if( time_params_frozen( time_params ) ) {
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "sc_time object(s) constructed" );
     }
 
     // can be specified only once
