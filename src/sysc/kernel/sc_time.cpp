@@ -92,14 +92,9 @@ sc_time_tuple::init( value_type val )
     auto * time_params = sc_get_curr_simcontext()->m_time_params;
     time_params_freeze( time_params );
 
-    auto tr_log10 = std::log10( time_params->time_resolution );
-    auto scale = static_cast<unsigned>( tr_log10 );
-
-    [[maybe_unused]] double ignored = 0.0;
-    sc_assert( std::modf( tr_log10, &ignored ) == 0.0 );
-
     constexpr unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
-    unsigned tu = tu_max - (scale / 3);
+    auto scale = time_params->time_resolution_log10;
+    auto tu = tu_max - (scale / 3);
     while( tu > 0 && ( val % 10 ) == 0 ) {
         val /= 10;
         scale++;
@@ -344,6 +339,7 @@ sc_time::print( ::std::ostream& os ) const
 
 sc_time_params::sc_time_params()
   : time_resolution( time_values[4] ),  // default 1 ps
+    time_resolution_log10( static_cast<unsigned>(log10(time_resolution)) ),
     time_resolution_specified( false ),
     time_resolution_fixed( false ),
     default_time_unit( 1000 ),          // default 1 ns
@@ -369,14 +365,12 @@ sc_set_time_resolution( double v, sc_time_unit tu )
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value not a power of ten" );
     }
 
-    sc_simcontext* simc = sc_get_curr_simcontext();
-
     // can only be specified during elaboration
     if( sc_is_running() ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
     }
 
-    auto * time_params = simc->m_time_params;
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
 
     // can be specified only once
     if( time_params->time_resolution_specified ) {
@@ -405,6 +399,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     time_params->time_resolution = resolution;
+    time_params->time_resolution_log10 = static_cast<unsigned>( log10( resolution ) );
     time_params->time_resolution_specified = true;
 }
 

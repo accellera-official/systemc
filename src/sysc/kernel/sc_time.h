@@ -473,7 +473,8 @@ operator << ( ::std::ostream& os, const sc_time& t )
 
 struct SC_API sc_time_params
 {
-    double              time_resolution;  // in femto seconds
+    double              time_resolution;  // in yocto seconds
+    unsigned            time_resolution_log10;
     bool                time_resolution_specified;
     std::atomic<bool>   time_resolution_fixed;
 
