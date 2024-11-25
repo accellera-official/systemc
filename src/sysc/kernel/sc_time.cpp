@@ -477,11 +477,6 @@ sc_get_default_time_unit()
     return sc_time::from_value( time_unit );
 }
 
-
-// ----------------------------------------------------------------------------
-
-const sc_time SC_ZERO_TIME;
-
 } // namespace sc_core
 
 // $Log: sc_time.cpp,v $
