@@ -34,6 +34,7 @@
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/fx/scfx_ieee.h"
 
+#include <atomic>
 #include <iostream>
 
 #include <string_view>
@@ -460,15 +461,15 @@ operator << ( ::std::ostream& os, const sc_time& t )
 
 struct SC_API sc_time_params
 {
-    double time_resolution;  // in yocto seconds
-    bool   time_resolution_specified;
-    bool   time_resolution_fixed;
+    double              time_resolution;  // in yocto seconds
+    unsigned            time_resolution_log10;
+    bool                time_resolution_specified;
+    std::atomic<bool>   time_resolution_fixed;
 
     sc_time::value_type default_time_unit;		// in time resolution
     bool                default_time_unit_specified;
 
     sc_time_params();
-    ~sc_time_params();
 };
 
 
