@@ -36,6 +36,7 @@
 #include <mutex>
 #include <thread>
 #include <condition_variable>
+#include <atomic>
 
 #include "tlm.h"
 #include "tlm_utils/simple_initiator_socket.h"
@@ -110,8 +111,8 @@ public:
     collector &col;                // just used to print out the results
 
 
-    bool running;
-    bool finished;
+    std::atomic<bool> running;
+    std::atomic<bool> finished;
 
     asynctestnode(sc_core::sc_module_name name, collector &c) :
         init_socket("output"),

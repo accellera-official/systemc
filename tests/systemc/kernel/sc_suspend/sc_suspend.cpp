@@ -41,62 +41,85 @@
 #include <systemc>
 #include <thread>
 
-class async_event : public sc_core::sc_prim_channel, public sc_core::sc_event, public sc_core::sc_stage_callback_if
+class async_event : public sc_core::sc_prim_channel,
+                    public sc_core::sc_event,
+                    public sc_core::sc_stage_callback_if 
 {
 private:
-    int outstanding;
     sc_core::sc_time m_delay;
     std::thread::id tid;
     std::mutex mutex; // Belt and braces
+    bool outstanding=false;
 
 public:
-    async_event(bool start_attached = true): outstanding(0)
-    {
+    async_event(bool start_attached = true) {
         sc_core::sc_register_stage_callback(*this, sc_core::SC_PRE_PAUSE | sc_core::SC_PRE_SUSPEND | sc_core::SC_POST_SUSPEND);
         tid = std::this_thread::get_id();
-        outstanding = 0;
         enable_attach_suspending(start_attached);
     }
 
     void async_notify() { notify(); }
 
-    void notify(sc_core::sc_time delay = sc_core::sc_time(sc_core::SC_ZERO_TIME))
-    {
+    void notify() {
+        if (tid == std::this_thread::get_id()) {
+            sc_core::sc_event::notify();
+        } else {
+            notify(sc_core::SC_ZERO_TIME);
+        }
+    }
+    void notify(double d, sc_core::sc_time_unit u) {
+        notify(sc_core::sc_time(d, u));
+    }
+    void notify(sc_core::sc_time delay) {
         if (tid == std::this_thread::get_id()) {
             sc_core::sc_event::notify(delay);
         } else {
             mutex.lock();
             m_delay = delay;
-            outstanding++;
+            outstanding = true;
             mutex.unlock();
             async_request_update();
         }
     }
 
-    void async_attach_suspending() { this->sc_core::sc_prim_channel::async_attach_suspending(); }
+    bool triggered() const {
+        if (tid == std::this_thread::get_id()) {
+            return sc_core::sc_event::triggered();
+        } else {
+            SC_REPORT_ERROR("async_event",
+                            "It is an error to call triggered() from outside "
+                            "the SystemC thread");
+        }
+        return false;
+    }
+    void async_attach_suspending() {
+        this->sc_core::sc_prim_channel::async_attach_suspending();
+    }
 
-    void async_detach_suspending() { this->sc_core::sc_prim_channel::async_detach_suspending(); }
+    void async_detach_suspending() {
+        this->sc_core::sc_prim_channel::async_detach_suspending();
+    }
 
-    void enable_attach_suspending(bool e)
-    {
-        mutex.lock();
+    void enable_attach_suspending(bool e) {
         e ? this->async_attach_suspending() : this->async_detach_suspending();
-        mutex.unlock();
     }
 
 private:
-    void update(void)
-    {
+    void update(void) {
         mutex.lock();
         // we should be in SystemC thread
         if (outstanding) {
             sc_event::notify(m_delay);
-            outstanding--;
-            if (outstanding) request_update();
+            outstanding = false;
         }
         mutex.unlock();
     }
-
+    void start_of_simulation() {
+        // we should be in SystemC thread
+        if (outstanding) {
+            request_update();
+        }
+    }
     void stage_callback(const sc_core::sc_stage& stage)
     {
         std::ostringstream stage_str;
@@ -116,6 +139,7 @@ private:
 };
 
 SC_MODULE (tester) {
+    bool released = false;
     std::mutex mutex;
     std::condition_variable condition;
     std::thread t;
@@ -125,8 +149,7 @@ SC_MODULE (tester) {
     SC_CTOR (tester) :
         t([&] {
             std::unique_lock<decltype(mutex)> lock(mutex);
-            condition.wait(lock);
-            SC_REPORT_INFO("child thread", "Release child thread");
+            condition.wait(lock, [&](){return released;});
             start.notify();
         }),
         start(false)
@@ -157,6 +180,7 @@ SC_MODULE (tester) {
 
             // triggure the other thread to release us !
             std::lock_guard<decltype(mutex)> lock(mutex);
+            released = true;
             condition.notify_one();
         } else {
             SC_REPORT_INFO("tester", ("Unsuspend at SystemC time: " + sc_core::sc_time_stamp().to_string()).c_str());
