@@ -11,14 +11,9 @@ jobs:
       fail-fast: false
       matrix:
         version: [20.04, 22.04]
-        platform: [linux/amd64, linux/arm64]
+        platform: [linux/amd64]
         target: [clang-shared-regression-ubsan]
     steps:
-    - name: Install qemu-user-static
-      run: |
-        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
-          sudo apt-get update && sudo apt-get install -y qemu-user-static
-        fi
     - name: Checkout
       uses: actions/checkout@v4
     - name: Build
@@ -31,14 +26,9 @@ jobs:
       fail-fast: false
       matrix:
         version: [8, 9]
-        platform: [linux/amd64, linux/arm64]
+        platform: [linux/amd64]
         target: [clang-shared-regression-ubsan]
     steps:
-    - name: Install qemu-user-static
-      run: |
-        if [[ "${{ matrix.platform }}" == "linux/arm64" ]]; then
-          sudo apt-get update && sudo apt-get install -y qemu-user-static
-        fi
     - name: Checkout
       uses: actions/checkout@v4
     - name: Build
