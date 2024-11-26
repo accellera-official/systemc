@@ -119,7 +119,8 @@ inline void sc_start( double duration, sc_time_unit unit,
     sc_start( sc_time(duration,unit), p );
 }
 
-extern SC_API void sc_stop();
+extern SC_API void sc_stop(int exit_code = EXIT_SUCCESS);
+extern SC_API int sc_exit_code();
 
 // friend function declarations
 
