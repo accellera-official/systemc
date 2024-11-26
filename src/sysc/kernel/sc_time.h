@@ -379,9 +379,7 @@ inline
 sc_time&
 sc_time::operator *= ( double d )
 {
-    // linux bug workaround; don't change next two lines
-    volatile double tmp = static_cast<double>( m_value ) * d + 0.5;
-    m_value = static_cast<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( static_cast<double>(m_value) * d + 0.5 );
     return *this;
 }
 
@@ -389,9 +387,7 @@ inline
 sc_time&
 sc_time::operator /= ( double d )
 {
-    // linux bug workaround; don't change next two lines
-    volatile double tmp = static_cast<double>( m_value ) / d + 0.5;
-    m_value = static_cast<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( static_cast<double>(m_value) / d + 0.5 );
     return *this;
 }
 

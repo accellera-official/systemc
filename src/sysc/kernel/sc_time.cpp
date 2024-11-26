@@ -233,14 +233,10 @@ sc_time::sc_time( double v, bool scale )
         auto * time_params = sc_get_curr_simcontext()->m_time_params;
         time_params_freeze( time_params );
         if( scale ) {
-            double scale_fac = static_cast<double>( time_params->default_time_unit );
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = v * scale_fac + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            auto scale_fac = static_cast<double>( time_params->default_time_unit );
+            m_value = static_cast<sc_dt::int64>( v * scale_fac + 0.5 );
         } else {
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = v + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            m_value = static_cast<sc_dt::int64>( v + 0.5 );
         }
     }
 }
@@ -259,10 +255,8 @@ sc_time::sc_time( value_type v, bool scale )
         auto * time_params = sc_get_curr_simcontext()->m_time_params;
         time_params_freeze( time_params );
         if( scale ) {
-            double scale_fac = static_cast<double>( time_params->default_time_unit );
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = static_cast<double>( v ) * scale_fac + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            auto scale_fac = static_cast<double>( time_params->default_time_unit );
+            m_value  = static_cast<sc_dt::int64>( static_cast<double>(v) * scale_fac + 0.5 );
         } else {
             m_value = v;
         }
@@ -381,15 +375,14 @@ sc_set_time_resolution( double v, sc_time_unit tu )
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "sc_time object(s) constructed" );
     }
 
-    // must be larger than or equal to 1 fs
-    volatile double resolution = v * time_values[5-tu]; // sc_time_unit constants have offset of 5
+    // must be larger than or equal to 1 ys
+    auto resolution = v * time_values[5-tu]; // sc_time_unit constants have offset of 5
     if( resolution < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value smaller than 1 ys" );
     }
 
     // recalculate the default time unit
-    volatile double time_unit = static_cast<double>( time_params->default_time_unit )
-      * ( time_params->time_resolution / resolution );
+    auto time_unit = static_cast<double>(time_params->default_time_unit) * (time_params->time_resolution / resolution);
     if( time_unit < 1.0 ) {
       SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
       time_params->default_time_unit = 1;
@@ -453,8 +446,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 
     // must be larger than or equal to the time resolution
     // sc_time_unit constants have offset of 5
-    volatile double time_unit = ( v * time_values[5-tu] ) /
-                                  time_params->time_resolution;
+    auto time_unit = ( v * time_values[5-tu] ) / time_params->time_resolution;
     if( time_unit < 1.0 ) {
         SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
                          "value smaller than time resolution" );
