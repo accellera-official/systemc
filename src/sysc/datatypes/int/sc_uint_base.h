@@ -826,7 +826,7 @@ public:
 	{ return (uint64) m_val; }
 
     double to_double() const
-        { return uint64_to_double( m_val ); }
+        { return static_cast<double>( m_val ); }
 
 
     long long_low() const

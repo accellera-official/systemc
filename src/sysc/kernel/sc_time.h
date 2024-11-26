@@ -276,7 +276,7 @@ inline
 double
 sc_time::to_double() const  // relative to the time resolution
 {
-    return sc_dt::uint64_to_double( m_value );
+    return static_cast<double>( m_value );
 }
 
 
@@ -284,7 +284,7 @@ inline
 double
 sc_time_tuple::to_double() const // relative to the normalized time unit
 {
-    return sc_dt::uint64_to_double( m_value ) * m_offset;
+    return static_cast<double>( m_value ) * m_offset;
 }
 
 
@@ -380,7 +380,7 @@ sc_time&
 sc_time::operator *= ( double d )
 {
     // linux bug workaround; don't change next two lines
-    volatile double tmp = sc_dt::uint64_to_double( m_value ) * d + 0.5;
+    volatile double tmp = static_cast<double>( m_value ) * d + 0.5;
     m_value = static_cast<sc_dt::int64>( tmp );
     return *this;
 }
@@ -390,7 +390,7 @@ sc_time&
 sc_time::operator /= ( double d )
 {
     // linux bug workaround; don't change next two lines
-    volatile double tmp = sc_dt::uint64_to_double( m_value ) / d + 0.5;
+    volatile double tmp = static_cast<double>( m_value ) / d + 0.5;
     m_value = static_cast<sc_dt::int64>( tmp );
     return *this;
 }

@@ -233,7 +233,7 @@ sc_time::sc_time( double v, bool scale )
         auto * time_params = sc_get_curr_simcontext()->m_time_params;
         time_params_freeze( time_params );
         if( scale ) {
-            double scale_fac = sc_dt::uint64_to_double( time_params->default_time_unit );
+            double scale_fac = static_cast<double>( time_params->default_time_unit );
             // linux bug workaround; don't change next two lines
             volatile double tmp = v * scale_fac + 0.5;
             m_value = static_cast<sc_dt::int64>( tmp );
@@ -259,10 +259,9 @@ sc_time::sc_time( value_type v, bool scale )
         auto * time_params = sc_get_curr_simcontext()->m_time_params;
         time_params_freeze( time_params );
         if( scale ) {
-            double scale_fac = sc_dt::uint64_to_double(
-            time_params->default_time_unit );
+            double scale_fac = static_cast<double>( time_params->default_time_unit );
             // linux bug workaround; don't change next two lines
-            volatile double tmp = sc_dt::uint64_to_double( v ) * scale_fac + 0.5;
+            volatile double tmp = static_cast<double>( v ) * scale_fac + 0.5;
             m_value = static_cast<sc_dt::int64>( tmp );
         } else {
             m_value = v;
@@ -304,8 +303,8 @@ sc_time::to_default_time_units() const
     auto * time_params = sc_get_curr_simcontext()->m_time_params;
     time_params_freeze( time_params );
 
-    return ( sc_dt::uint64_to_double( m_value ) /
-        sc_dt::uint64_to_double( time_params->default_time_unit ) );
+    return ( static_cast<double>( m_value ) /
+        static_cast<double>( time_params->default_time_unit ) );
 }
 
 double
@@ -317,8 +316,8 @@ sc_time::to_seconds() const
     auto * time_params = sc_get_curr_simcontext()->m_time_params;
     time_params_freeze( time_params );
 
-    return ( sc_dt::uint64_to_double( m_value ) *
-        ( time_params->time_resolution / time_values[0] ) ); 
+    return ( static_cast<double>( m_value ) *
+        ( time_params->time_resolution / time_values[0] ) );
 }
 
 
@@ -389,7 +388,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // recalculate the default time unit
-    volatile double time_unit = sc_dt::uint64_to_double( time_params->default_time_unit ) 
+    volatile double time_unit = static_cast<double>( time_params->default_time_unit )
       * ( time_params->time_resolution / resolution );
     if( time_unit < 1.0 ) {
       SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
