@@ -876,7 +876,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = sc_time::max() - m_curr_time;
+    sc_time non_overflow_time = (sc_time::max)() - m_curr_time;
     if ( duration > non_overflow_time )
     {
         SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
@@ -1650,7 +1650,7 @@ SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
 
     else
     {
-        result = sc_time::max();
+        result = (sc_time::max)();
         simc_p->next_time(result);
         result -= sc_time_stamp();
     }
@@ -1756,7 +1756,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 SC_API void
 sc_start()
 {
-    sc_start( sc_time::max() - sc_time_stamp(),
+    sc_start( (sc_time::max)() - sc_time_stamp(),
               SC_EXIT_ON_STARVATION );
 }
 

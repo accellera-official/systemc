@@ -139,7 +139,7 @@ public:
     static sc_time from_value( value_type );
     static sc_time from_seconds( double );
 
-    static constexpr sc_time max();
+    static constexpr sc_time (max)();
 
     // relational operators
 
@@ -256,7 +256,7 @@ sc_time::sc_time( max_time_tag )
 {}
 
 inline constexpr
-sc_time sc_time::max()
+sc_time (sc_time::max)()
 {
     return sc_time( max_time_tag{} );
 }
