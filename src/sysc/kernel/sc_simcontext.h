@@ -761,7 +761,7 @@ extern SC_API void sc_initialize();
 
 inline const sc_time& sc_max_time() // Get maximum time value.
 {
-    static constexpr sc_time max_time = (sc_time::max)();
+    static constexpr sc_time max_time = sc_time::max();
     return max_time;
 }
 
