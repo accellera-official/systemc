@@ -718,7 +718,7 @@ void
 wif_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
@@ -778,7 +778,7 @@ void
 wif_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
