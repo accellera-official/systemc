@@ -131,6 +131,8 @@ Following is the list of bug fixes and enhancements for the 3.0.2 release:
   
   - Fixed mutexes in sc_prim_channel
   
+  - Fixed crash when writing empty trace files with debug assertions on
+  
   - Implemented small changes to sc_time, SC_ZERO_TIME and sc_max_time to improve efficiency in C++17
  
   - Implemented clean-ups and initial thread-safety properties to sc_time
