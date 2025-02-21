@@ -764,7 +764,7 @@ void
 vcd_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
@@ -824,7 +824,7 @@ void
 vcd_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
@@ -1374,9 +1374,8 @@ vcd_trace_file::cycle(bool this_is_a_delta_cycle)
 
     // Now do the actual printing
     bool time_printed = false;
-    vcd_trace* const* const l_traces = &traces[0];
-    for (int i = 0; i < (int)traces.size(); i++) {
-        vcd_trace* t = l_traces[i];
+    for (size_t i = 0; i < traces.size(); i++) {
+        vcd_trace* t = traces[i];
         if(t->changed()) {
             if(!time_printed){
                 print_time_stamp(now_units_high, now_units_low);

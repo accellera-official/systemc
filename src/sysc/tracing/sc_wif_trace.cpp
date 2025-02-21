@@ -718,7 +718,7 @@ void
 wif_sc_fxnum_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     std::fprintf( f, "assign %s \"%s\" ;\n", wif_name.c_str(), rawdata.data());
@@ -778,7 +778,7 @@ void
 wif_sc_fxnum_fast_trace::write( FILE* f )
 {
     char *rawdata_ptr  = rawdata.data();
-    for(int bit_index = bit_width; bit_index >= 0; --bit_index) {
+    for(int bit_index = bit_width - 1; bit_index >= 0; --bit_index) {
         *rawdata_ptr++ = "01"[object[bit_index]];
     }
     *rawdata_ptr = '\0';
@@ -1226,9 +1226,8 @@ wif_trace_file::cycle(bool this_is_a_delta_cycle)
     }
 
     bool time_printed = false;
-    wif_trace* const* const l_traces = &traces[0];
-    for (int i = 0; i < (int)traces.size(); i++) {
-        wif_trace* t = l_traces[i];
+    for (size_t i = 0; i < traces.size(); i++) {
+        wif_trace* t = traces[i];
         if(t->changed()){
             if(time_printed == false) {
 
