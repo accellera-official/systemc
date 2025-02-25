@@ -57,12 +57,14 @@ void test::entry()
       case 0:
 	y = 1;
       j = 2;
+	break;
       case 1:
 	y = y + 1;
 	break;
       case 2:
 	y = y + 1;
       j = 2;
+	break;
       default:
 	y = y + 1;
 	break;

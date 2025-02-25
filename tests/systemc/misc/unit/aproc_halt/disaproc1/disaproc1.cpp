@@ -105,7 +105,7 @@ aproc2::entry()
     wait();
     int loops = 0;
     while (true) {
-        d = a * b;
+        d = a && b;
         cout << "d is (a * b)" << endl;
         wait();
         if ((bool) b == 0) {

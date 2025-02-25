@@ -133,10 +133,7 @@ void cycle_model::parse_hex(char *name) {
     int length;
     // char length_string[2];
     char length_string[3];
-    if(strncpy(length_string,&(line_buffer[1]),2)==NULL) {
-      fprintf(stderr,"Error in parsing length\n");
-      exit(-1);
-    }
+    memcpy(length_string, &(line_buffer[1]),2);
     length_string[2] = 0;
     length = (int)strtol(length_string, (char **)NULL, 16);
 #ifdef DEBUG
@@ -147,10 +144,7 @@ void cycle_model::parse_hex(char *name) {
     int address;
     // char address_string[4];
     char address_string[5];
-    if(strncpy(address_string,&(line_buffer[3]),4)==NULL) {
-      fprintf(stderr,"Error in parsing address\n");
-      exit(-1);
-    }
+    memcpy(address_string,&(line_buffer[3]),4);
     address_string[4] = 0;
     address = (int)strtol(address_string, (char **)NULL, 16);
 #ifdef DEBUG
@@ -162,10 +156,7 @@ void cycle_model::parse_hex(char *name) {
     int record_type;
     // char record_string[2];
     char record_string[3];
-    if(strncpy(record_string,&(line_buffer[7]),2)==NULL) {
-      fprintf(stderr,"Error in parsing record type\n");
-      exit(-1);
-    }
+    memcpy(record_string,&(line_buffer[7]),2);
     record_string[2] = 0;
     record_type = (int)strtol(record_string, (char **)NULL, 16);
 #ifdef DEBUG
@@ -184,19 +175,15 @@ void cycle_model::parse_hex(char *name) {
     // parse data bytes
     char instr_string[3];
     for(int i=0;i<length;i++) {
-      if(strncpy(instr_string,&(line_buffer[2*i+9]),2)==NULL) {
-	fprintf(stderr,"Error in parsing data byte %d\n",i);
-	exit(-1);
-      }
-
-    instr_string[2] = 0;
-    int temp = (int)strtol(instr_string, (char **)NULL, 16);
-    instr_mem[address++] = temp;
+      memcpy(instr_string,&(line_buffer[2*i+9]),2);
+      instr_string[2] = 0;
+      int temp = (int)strtol(instr_string, (char **)NULL, 16);
+      instr_mem[address++] = temp;
 #ifdef DEBUG
-    printf("data byte = %x\n",temp);
+      printf("data byte = %x\n",temp);
 #endif
     }
-    
+
     // skip the checksum bits
 
     // verify end of line
@@ -773,6 +760,7 @@ void cycle_model::decode(int opcode, instr* i) {
     i->src1.type = o_acc;
     i->dst.type = o_dir;
     i->cycle = 2;
+    break;
   }
   case 0x88:
   case 0x89:
@@ -1517,7 +1505,7 @@ int cycle_model::write_back(operand* op, int v) {
 //
 //--------------------------------------------------------------------
 void cycle_model::execute(instr *i) {
-  int in1, in2, out = 0;
+  int in1 = 0, in2 = 0, out = 0;
 
   // fetch operands ---------------------------------------------------
   if(i->n_src>=1)
