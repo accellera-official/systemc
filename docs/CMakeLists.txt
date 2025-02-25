@@ -42,6 +42,7 @@
 set (DOC_FILES
          DEVELOPMENT.md
          git_branches.svg
+         INSTALL_USING_AUTOTOOLS.md
          sysc/README
          sysc/SIGN_EXTENSION.md
          tlm/tlm_README.md)

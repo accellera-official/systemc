@@ -1,4 +1,4 @@
-# Release Notes for SystemC 3.0.1
+# Release Notes for SystemC 3.0.2
 
 Laurent Maillet-Contoz, STMicroelectronics
 
@@ -27,7 +27,7 @@ Andrew C. Goodrich
 
 ## 1. IMPORTANT
 
-This is the release of the SystemC 3.0.1 Class Library.
+This is the release of the SystemC 3.0.2 Class Library.
 This release implements the IEEE 1666-2023 Language Reference Manual.
 
 1. This release is supported on the following platform combinations 
@@ -119,9 +119,26 @@ Compared to the 3.0.0 release, this release has the following new items:
 
 ## 3. New features
 
-Being a bug fix release, SystemC 3.0.1 does not provide new features.
+Being a bug fix release, SystemC 3.0.2 does not provide new features.
 
 ## 4. Bug fixes and enhancements
+
+Following is the list of bug fixes and enhancements for the 3.0.2 release:
+
+  - Fixed the time resolution handling for coarse SystemC time resolutions (e.g. 1 second) as reported in accellera-official/systemc#98
+  
+  - Fixed a small off-by-one error in the tracing code for sc_fxnum and sc_fxnum_fast
+  
+  - Fixed mutexes in sc_prim_channel
+  
+  - Fixed crash when writing empty trace files with debug assertions on
+  
+  - Implemented small changes to sc_time, SC_ZERO_TIME and sc_max_time to improve efficiency in C++17
+ 
+  - Implemented clean-ups and initial thread-safety properties to sc_time
+  
+  - Improved sanitizers support
+  
 
 Following is the list of bug fixes and enhancements for the 3.0.1 release:
 
