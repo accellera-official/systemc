@@ -64,12 +64,15 @@ SystemC can be installed on the following platforms:
 
 Note 1: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC
         implementations, see [RELEASENOTES.md](RELEASENOTES.md).  Make
-        sure to configure your compiler accordingly (see below)_.
+        sure to configure your compiler accordingly (see below)._
 
 Note 2: _Not all combinations are equally well-tested and some combinations
         may not work as expected.  Please report your findings by following
         the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
 
+Note 3: _CMake is the recommended build flow SystemC. Installation using the
+        legacy GNU Autotools build flow can be found 
+        [here](docs/install-using-automake.md)._
 
 ## 2. Installation Notes for CMake
 

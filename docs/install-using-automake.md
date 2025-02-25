@@ -1,11 +1,11 @@
-# Installation using Autotools
+# Installation using GNU Autotools
 
-NOTE: Usage of the Autotools build flow will be deprecated as part of SystemC 3.1.
-It it recommended to use the CMake build system instead.
+Note 1: _Usage of the GNU Autotools build flow will be deprecated as part of SystemC 3.1.
+        It it recommended to use the CMake build system instead, see [INSTALL.md](../INSTALL.md)._
 
-Note: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC implementations,
-      see [RELEASENOTES.md](../RELEASENOTES.md).  Make sure to configure your compiler
-      accordingly (see below)_.
+Note 2: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC implementations,
+        see [RELEASENOTES.md](../RELEASENOTES.md).  Make sure to configure your compiler
+        accordingly (see below)._
 
 ## Basic SystemC Installation
 
