@@ -41,7 +41,7 @@ DOXYGEN=doxygen
 DOC_FILES = \
 	DEVELOPMENT.md \
 	git_branches.svg \
-	install-using-automake.md
+	INSTALL_USING_AUTOTOOLS.md
 
 ##
 ## SystemC documentation

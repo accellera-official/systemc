@@ -72,7 +72,7 @@ Note 2: _Not all combinations are equally well-tested and some combinations
 
 Note 3: _CMake is the recommended build flow SystemC. Installation using the
         legacy GNU Autotools build flow can be found 
-        [here](docs/install-using-automake.md)._
+        [here](docs/INSTALL_USING_AUTOTOOLS.md)._
 
 ## 2. Installation Notes for CMake
 
