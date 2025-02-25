@@ -549,10 +549,6 @@ several changes are needed.
     has been primarily done on macOS (x86_64 and i686), Linux (x86_64 and
     i686) and Windows 10 using Visual Studio 2019 (16) (Win32 and x64).
 
-  - The CMake build scripts do not configure and install `systemc.pc` and
-    `tlm.pc` for `pkg-config`.
-
-
 ## 5. Resources
 
 * [CMake][1]
