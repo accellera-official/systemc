@@ -351,7 +351,7 @@ syntax has to define the following variables:
 
  * `CMAKE_SYSTEM_NAME` (mandatory), e.g., "Linux", "Windows", "Darwin"
  * `CMAKE_SYSTEM_VERSION` (optional)`
- * `CMAKE_SYSTEM_PROCESSOR` (optional), e.g., "i386", "x86_64", "ppc", "ppc64"
+ * `CMAKE_SYSTEM_PROCESSOR` (optional), e.g., "i386", "x86_64"
  * `CMAKE_C_COMPILER` (mandatory), name of C compiler executable
  * `CMAKE_CXX_COMPILER` (mandatory), name of C compiler executable
  * `CMAKE_FIND_ROOT_PATH` (optional), root to target include and library directories
