@@ -62,12 +62,14 @@ SystemC can be installed on the following platforms:
       -  x64 (64-bit)
       -  Static library, DLL
 
-Note: _Not all combinations are equally well-tested and some combinations
-      may not work as expected.  Please report your findings by following
-      the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
+Note 1: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC
+        implementations, see [RELEASENOTES.md](RELEASENOTES.md).  Make
+        sure to configure your compiler accordingly (see below)_.
 
-The [RELEASENOTES.md](RELEASENOTES.md) file contains a list of detailed platforms,
-architectures, and compiler versions that have been used for testing this release.
+Note 2: _Not all combinations are equally well-tested and some combinations
+        may not work as expected.  Please report your findings by following
+        the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
+
 
 ## 2. Installation Notes for CMake
 
@@ -76,23 +78,24 @@ architectures, and compiler versions that have been used for testing this releas
 To build, install, and use SystemC, you need the following tools:
 
   1. GNU C++ compiler (version 9.3 or later), or
-     Clang C++ compiler (version 13.0 or later)
-  2. GNU Make (make)
+     Clang C++ compiler (version 13.0 or later), or
+     Visual Studio C++ (version msvc16 (2019) or later)
+  2. GNU Make (make) or Ninja
   3. CMake
-  4. Visual Studio C++ (Windows platform only)
 
-GCC, Clang, make, and CMake are free software that you can
+GCC, Clang, make, Ninja, and CMake are free software that you can
 obtain from the following sources:
 
   * GCC     https://www.gnu.org/software/gcc/index.html
   * Clang   https://clang.llvm.org/
   * make    https://www.gnu.org/software/make/make.html
+  * Ninja   https://ninja-build.org/
   * CMake   https://cmake.org/
 
-The CMake build scripts are compatible with CMake >=3.1 and have been
+The CMake build scripts are compatible with CMake >=3.5 and have been
 tested on the following OS/processor/compiler platforms:
 
-  * macOS >= 11.6 until 14.1 (GCC, Xcode/AppleClang): x64
+  * macOS >= 13.6 until 15.4 (Xcode/AppleClang): x86_64, Apple Silicon, universal binary 
   * Linux (GCC, Clang): i386, x86_64
   * Linux (GCC): aarch64
   * Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains, Visual C++):
@@ -105,7 +108,7 @@ sources using CMake:
 
   1. Download and install CMake from [this website][1] (Linux
      distributions provide often a package).  Note, the CMake script have been
-     developed for CMake >= 3.1.
+     developed for CMake >= 3.5.
 
   2. Create a build subdirectory:
 
@@ -320,7 +323,9 @@ it, but depending on the chosen compiler options, it may need adjustment.
 
 #### Cross Compilation on macOS
 
-On macOS, a similar approach as in section 3.1 can be adopted.  However,
+On macOS, a similar approach as in
+[Section 3.1](#31-microsoft-visual-studio-c-2017-compiler-version-150-or-later)
+can be adopted.  However,
 it has to be noted that Apple's versions of GCC and Clang don't support
 `-m32` and `-m64`, but the more flexible `-arch <arm64|x86_64>`
 parameter.  The latter can be even repeated several times on the command
@@ -338,7 +343,8 @@ or in variable editors of `ccmake` and `cmake-gui`.
 
 If you are using MacPorts or Homebrew versions of GCC, you will have
 to make sure that you install universal variants of the compiler
-toolchain.  Then, you can follow the instruction in section 3.1.
+toolchain.  Then, you can follow the instruction in
+[Section 3.1](#31-microsoft-visual-studio-c-2017-compiler-version-150-or-later).
 
 #### Generic Cross Compilation to a Target System
 
@@ -397,14 +403,14 @@ As an example, here is a minimal `CMakeLists.txt` to compile the `simple_perf`
 SystemC example as a stand-alone application:
 
       --- Start: CMakeLists.txt ---
-      cmake_minimum_required(VERSION 3.1)
+      cmake_minimum_required(VERSION 3.5)
       project(simple_perf CXX)
 
       set (CMAKE_PREFIX_PATH /opt/systemc)
       find_package(SystemCLanguage CONFIG REQUIRED)
 
       set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
-           "C++ standard to build all targets. Supported values are 98, 11, 14, and 17.")
+           "C++ standard to build all targets. Minimum version is C++17.")
       set (CMAKE_CXX_STANDARD_REQUIRED ${SystemC_CXX_STANDARD_REQUIRED} CACHE BOOL
            "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
 
@@ -412,22 +418,18 @@ SystemC example as a stand-alone application:
       target_link_libraries(simple_perf SystemC::systemc)
       --- End: CMakeLists.txt ---
 
+
 ## 3. Installation Notes for Windows using Visual Studio C++
 
 This release has been tested on Visual C++ version 2019 running Windows 10.
 
 Note: _This section covers the installation based on Microsoft Visual C++.
-      For Cygwin or MinGW-based installations, see Section 1._
+      For Cygwin or MinGW-based installations, see [Section 1](#1-system-requirements)._
 
 Note: _If you experience spurious errors about missing files in the
-      downloaded archive, please make sure to either download the
-      ZIP archive from accellera.org or use a reliable archive software,
-      fully supporting modern tar archive versions._
-
-Some paths in the SystemC archive are longer than the historical
-99 character limit, and several Windows archivers (e.g. WinZip)
-have been reported to trip over this.  The open source archiver
-[7-zip](http://7-zip.org/) is known to work.
+      downloaded archive, please make sure to download the release
+      from the [Accellera public SystemC repository][9] and use an
+      extractor supporting tar.gz archives._
 
 ### 3.1 Microsoft Visual Studio C++ 2017 (compiler version 15.0) or later
 
@@ -535,6 +537,7 @@ several changes are needed.
 3. When running the simulation, you need to add the location of the
    SystemC DLL to your `PATH` variable.
 
+
 ## 4. Known Problems
 
   - The CMake build scripts require more thorough testing of the various build
@@ -544,6 +547,7 @@ several changes are needed.
 
   - The CMake build scripts do not configure and install `systemc.pc` and
     `tlm.pc` for `pkg-config`.
+
 
 ## 5. Resources
 
@@ -558,8 +562,9 @@ several changes are needed.
 [1]: https://cmake.org/ "Cross Platform Make Homepage"
 [2]: https://cmake.org/documentation/
 [3]: https://gitlab.kitware.com/cmake/community/-/wikis/Home
-[4]: https://cmake.org/Bug/view.php?id=12928
+[4]: https://gitlab.kitware.com/cmake/cmake/-/issues/12928
 [5]: https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#cross-compiling
-[6]: https://gitlab.kitware.com/cmake/mastering-cmake
+[6]: https://cmake.org/cmake/help/book/mastering-cmake/
 [7]: https://www.macports.org/
 [8]: https://brew.sh/
+[9]: https://github.com/accellera-official/systemc
