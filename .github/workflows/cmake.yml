@@ -5,14 +5,14 @@ on:
   pull_request:
 
 jobs:
-  build_ubuntu:
+  ubuntu:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         version: [20.04, 22.04]
         platform: [linux/amd64, linux/arm64]
-        regression: [ON, OFF]
+        target: [gcc-shared, gcc-static, clang-shared, clang-static]
     steps:
     - name: Install qemu-user-static
       run: |
@@ -23,16 +23,16 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       run: |
-        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} --build-arg BUILD_REGRESSION=${{ matrix.regression }} -f docker/ubuntu.dockerfile .
-        docker run systemc_test
-  build_almalinux:
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  almalinux:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         version: [8, 9]
         platform: [linux/amd64, linux/arm64]
-        regression: [ON, OFF]
+        target: [gcc-shared, gcc-static, clang-shared, clang-static]
     steps:
     - name: Install qemu-user-static
       run: |
@@ -43,5 +43,27 @@ jobs:
       uses: actions/checkout@v4
     - name: Build
       run: |
-        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} --build-arg BUILD_REGRESSION=${{ matrix.regression }} -f docker/alma.dockerfile .
-        docker run systemc_test
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [clang-shared, clang-static]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        SYSTEMC_CI_TARGET=${{ matrix.target }} SYSTEMC_SRC_PATH=$PWD docker/entrypoint.sh
+  windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        cmake -B BUILD/RELEASE/BUILD .
+        cmake --build BUILD/RELEASE/BUILD --config RELEASE --parallel
+        cmake --install BUILD/RELEASE/BUILD --config RELEASE

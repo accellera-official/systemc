@@ -535,6 +535,7 @@ class SC_API sc_uint_base : public sc_value_base
 
     void check_value() const;
 
+protected:
     void extend_sign()
 	{
 #ifdef DEBUG_SYSTEMC
@@ -825,7 +826,7 @@ public:
 	{ return (uint64) m_val; }
 
     double to_double() const
-        { return uint64_to_double( m_val ); }
+        { return static_cast<double>( m_val ); }
 
 
     long long_low() const

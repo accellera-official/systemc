@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  test01.cpp -- 
+  test01.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,6 +35,7 @@
 
  *****************************************************************************/
 
+#define SC_INCLUDE_FX
 #include "systemc.h"
 
 SC_MODULE( proc1 )
@@ -46,6 +47,8 @@ SC_MODULE( proc1 )
   sc_logic obj2;
   sc_bv<4> obj3;
   sc_lv<4> obj4;
+  sc_fixed<16, 8>  obj5;
+  sc_ufixed<16, 8> obj6;
 
   proc1( sc_module_name NAME,
 	 sc_signal<bool>& CLK)
@@ -57,12 +60,14 @@ SC_MODULE( proc1 )
     obj2 = 0;
     obj3 = "0000";
     obj4 = "0000";
+    obj5 = 0.0;
+    obj6 = 0.0;
   }
 
   void entry();
 };
-  
-void proc1::entry() 
+
+void proc1::entry()
 {
   sc_bv<4> bv;
   sc_lv<4> sv;
@@ -75,18 +80,22 @@ void proc1::entry()
     obj2 = 1;
     obj3 = "0000";
     obj4 = "1111";
+    obj5 = 254.5;
+    obj6 = 254.5;
     wait();
     obj1 = 1;
     obj2 = 0;
     obj3 = "1010";
     obj4 = "1011";
+    obj5 = 3.303;
     wait();
     obj3 = bv;
     obj4 = sv;
+    obj6 = 4.404;
     wait();
   }
 }
-  
+
 
 int sc_main(int ac, char *av[])
 {
@@ -102,6 +111,8 @@ int sc_main(int ac, char *av[])
   sc_trace(tf, P1.obj2, "SC_Logic");
   sc_trace(tf, P1.obj3, "SC_BV");
   sc_trace(tf, P1.obj4, "SC_LV");
+  sc_trace(tf, P1.obj5, "SC_Fixed");
+  sc_trace(tf, P1.obj6, "SC_Ufixed");
   sc_trace(tf, clock, "Clock");
 
   clock.write(0);

@@ -42,29 +42,27 @@
 
 namespace sc_core {
 
-
-
-// ----------------------------------------------------------------------------
-
 // ----------------------------------------------------------------------------
 //  Sanitizer helpers
 // ----------------------------------------------------------------------------
 
-static void __sanitizer_start_switch_fiber(void** fake, void* stack_base,
-    size_t size) __attribute__((weakref("__sanitizer_start_switch_fiber")));
-static void __sanitizer_finish_switch_fiber(void* fake, void** stack_base,
-    size_t* size) __attribute__((weakref("__sanitizer_finish_switch_fiber")));
+static void sanitizer_start_switch_fiber_weak( void** fake, void const* stack, size_t size)
+    __attribute__((__weakref__("__sanitizer_start_switch_fiber")));
+static void sanitizer_finish_switch_fiber_weak(void* fake, void const** old_stack, size_t* old_size)
+    __attribute__((__weakref__("__sanitizer_finish_switch_fiber")));
 
-static void __sanitizer_start_switch_cor_qt( sc_cor_qt* next ) {
-    if (&__sanitizer_start_switch_fiber != NULL) {
-        __sanitizer_start_switch_fiber( NULL, next->m_stack,
-                                        next->m_stack_size );
+static inline void sc_cor_qt_start_stack_switch( sc_cor_qt* old_cor, sc_cor_qt* new_cor )
+{
+    if (sanitizer_start_switch_fiber_weak != nullptr) {
+        sanitizer_start_switch_fiber_weak(&old_cor->m_fake_stack, new_cor->m_stack, new_cor->m_stack_size);
     }
 }
 
-static void __sanitizer_finish_switch_cor_qt() {
-    if (&__sanitizer_finish_switch_fiber != NULL) {
-        __sanitizer_finish_switch_fiber( NULL, NULL, NULL );
+static inline void sc_cor_qt_finish_stack_switch( sc_cor_qt* old_cor, sc_cor_qt* new_cor )
+{
+    if (sanitizer_finish_switch_fiber_weak != nullptr) {
+        auto** stack_bottom = const_cast<const void**>(&old_cor->m_stack);
+        sanitizer_finish_switch_fiber_weak(new_cor->m_fake_stack, stack_bottom, &old_cor->m_stack_size);
     }
 }
 
@@ -72,12 +70,7 @@ static void __sanitizer_finish_switch_cor_qt() {
 
 static std::size_t sc_pagesize()
 {
-    static std::size_t pagesize = 0;
-
-    if( pagesize == 0 ) {
-        pagesize = sysconf( _SC_PAGESIZE );
-    }
-
+    static std::size_t pagesize = sysconf( _SC_PAGESIZE );
     sc_assert( pagesize != 0 );
     return pagesize;
 }
@@ -90,8 +83,22 @@ static std::size_t sc_pagesize()
 
 sc_cor_qt::~sc_cor_qt()
 {
+    if (SC_UNLIKELY_(this == m_pkg->get_main())) {
+        return; // don't delete main stack
+    }
     if ( m_stack ) {
         ::munmap( m_stack, m_stack_size );
+    }
+    if (m_fake_stack) { // cleanup fake stack, when running under Asan
+        void* save_fake_stack;
+        const void* stack_bottom;
+        size_t stack_size;
+
+        sanitizer_start_switch_fiber_weak(&save_fake_stack, nullptr, 0U);
+        sanitizer_finish_switch_fiber_weak(m_fake_stack, &stack_bottom, &stack_size);
+
+        sanitizer_start_switch_fiber_weak(nullptr, stack_bottom, stack_size);
+        sanitizer_finish_switch_fiber_weak(save_fake_stack, nullptr, nullptr);
     }
 }
 
@@ -249,20 +256,24 @@ sc_cor_pkg_qt::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
 
 extern "C"
 void*
-sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor, void* )
+sc_cor_qt_yieldhelp( qt_t* sp, void* old_cor_p, void* new_cor_p )
 {
-    reinterpret_cast<sc_cor_qt*>( old_cor )->m_sp = sp;
-    __sanitizer_finish_switch_cor_qt();
+    auto* old_cor = static_cast<sc_cor_qt*>( old_cor_p );
+    auto* new_cor = static_cast<sc_cor_qt*>( new_cor_p );
+
+    old_cor->m_sp = sp;
+    sc_cor_qt_finish_stack_switch( old_cor, new_cor );
     return 0;
 }
 
 void
 sc_cor_pkg_qt::yield( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = set_current( new_cor );
-    __sanitizer_start_switch_cor_qt( new_cor );
-    QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, 0, new_cor->m_sp );
+    auto* new_cor = static_cast<sc_cor_qt*>( next_cor );
+    auto* old_cor = set_current( new_cor );
+
+    sc_cor_qt_start_stack_switch( old_cor, new_cor );
+    QUICKTHREADS_BLOCK( sc_cor_qt_yieldhelp, old_cor, new_cor, new_cor->m_sp );
 }
 
 
@@ -270,17 +281,23 @@ sc_cor_pkg_qt::yield( sc_cor* next_cor )
 
 extern "C"
 void*
-sc_cor_qt_aborthelp( qt_t*, void*, void* )
+sc_cor_qt_aborthelp( qt_t*, void* old_cor_p, void* new_cor_p )
 {
+    auto* old_cor = static_cast<sc_cor_qt*>( old_cor_p );
+    auto* new_cor = static_cast<sc_cor_qt*>( new_cor_p );
+
+    sc_cor_qt_finish_stack_switch( old_cor, new_cor );
     return 0;
 }
 
 void
 sc_cor_pkg_qt::abort( sc_cor* next_cor )
 {
-    sc_cor_qt* new_cor = static_cast<sc_cor_qt*>( next_cor );
-    sc_cor_qt* old_cor = set_current( new_cor );
-    QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, 0, new_cor->m_sp );
+    auto* new_cor = static_cast<sc_cor_qt*>( next_cor );
+    auto* old_cor = set_current( new_cor );
+
+    sc_cor_qt_start_stack_switch( old_cor, new_cor );
+    QUICKTHREADS_ABORT( sc_cor_qt_aborthelp, old_cor, new_cor, new_cor->m_sp );
 }
 
 

@@ -10,8 +10,6 @@ Info: tester: Suspend at SystemC time: 350 us
 
 Info: async_event: Called stage_callback at stage: SC_PRE_SUSPEND
 
-Info: child thread: Release child thread
-
 Info: tester: Restart SystemC time: 350 us
 
 Info: tester: Start to advance SystemC time: 350 us

@@ -7,7 +7,7 @@ $scope module SystemC $end
 $var wire    8  aaaaa  Char [7:0]  $end
 $var wire   16  aaaab  Short [15:0]  $end
 $var wire   32  aaaac  Int [31:0]  $end
-$var wire   32  aaaad  Long [31:0]  $end
+$var wire   64  aaaad  Long [63:0]  $end
 $var wire    1  aaaae  Clock       $end
 $upscope $end
 $enddefinitions  $end

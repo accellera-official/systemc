@@ -127,3 +127,4 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     $<$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,11.0.0>:-Wno-free-nonheap-object>
   )
 endif()
+

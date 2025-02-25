@@ -61,7 +61,7 @@ class top : public sc_module
 {
 public:
 
-  top(sc_module_name name) : sc_module(name) 
+  top(sc_module_name name) : sc_module(name)
   {
      SC_THREAD(main);
   }
@@ -90,14 +90,14 @@ public:
     // Test that threads in thread pool are successfully reused ...
 
     for (int i = 0 ; i < 10; i++)
-      sc_spawn(&r, [=]{ return wait_and_end(i); } );
+      sc_spawn(&r, [i,this]{ return wait_and_end(i); } );
 
     wait(20, SC_NS);
 
     // Test thread reuse
 
     for (int i = 0 ; i < 10; i++)
-      sc_spawn(&r, [=]{ return wait_and_end(i); } );
+      sc_spawn(&r, [i,this]{ return wait_and_end(i); } );
 
     wait(20, SC_NS);
 

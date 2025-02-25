@@ -32,6 +32,10 @@
 #  define SC_INCLUDE_WINDOWS_H // include Windows.h, if needed
 #endif
 
+#ifndef NOMINMAX
+#  define NOMINMAX // sc_time::max
+#endif
+
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_simcontext.h"
 #if defined(__GNUC__) && __USING_SJLJ_EXCEPTIONS__

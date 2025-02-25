@@ -41,17 +41,6 @@
 cmake_minimum_required(VERSION 3.8) # cxx_std_17
 
 ###############################################################################
-# Configure QuickThreads
-###############################################################################
-
-# Set QuickThread sources used by SystemC depending on target platform
-if (QT_ARCH STREQUAL "sparc")
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s
-                      COMMAND sed 's/_qt_/qt_/' ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s > ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sysc/packages/qt/md/sparc.s)
-endif (QT_ARCH STREQUAL "sparc")
-
-###############################################################################
 # Build rules for SystemC library
 ###############################################################################
 
@@ -104,10 +93,22 @@ function(add_systemc_library libName scBuildDefine)
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
     if (APPLE)
-        # It's OK that _sc_main, __sanitizer_start_switch_fiber, and
-        # __sanitizer_finish_switch_fiber are undefined symbols.
-        set_target_properties (${libName} PROPERTIES LINK_FLAGS
-        -Wl,-U,_sc_main,-U,___sanitizer_start_switch_fiber,-U,___sanitizer_finish_switch_fiber)
+      # sc_main is OK to be undefined
+      target_link_options(systemc PRIVATE "LINKER:-U,_sc_main")
+
+      # undefined symbols for Asan support on QuickThreads
+      if (QT_ARCH)
+        set(_undef_scope PRIVATE)
+        if (NOT BUILD_SHARED_LIBS)
+          set(_undef_scope INTERFACE)
+        endif()
+        set(_undef_syms
+          ___sanitizer_start_switch_fiber
+          ___sanitizer_finish_switch_fiber
+        )
+        list(TRANSFORM _undef_syms PREPEND "LINKER:-U,")
+        target_link_options(${libName} ${_undef_scope} ${_undef_syms})
+      endif()
     endif(APPLE)
 
     target_link_libraries(
@@ -121,7 +122,7 @@ function(add_systemc_library libName scBuildDefine)
         LINKER_LANGUAGE CXX
         VERSION ${SystemCLanguage_VERSION}
         SOVERSION ${SystemCLanguage_SOVERSION}
-        INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR})
+        )
 
 endfunction(add_systemc_library)
 
@@ -410,28 +411,16 @@ set(SYSTEMC_CORE_SRC
         tlm_utils/tlm_quantumkeeper.h
         # QuickThreads
         $<$<BOOL:${QT_ARCH}>:
-        sysc/packages/qt/qt.c
-        $<$<STREQUAL:${QT_ARCH},sparc>:
-        ${CMAKE_CURRENT_BINARY_DIR}/sysc/packages/qt/md/sparc.s>
-        $<$<STREQUAL:${QT_ARCH},hppa>:sysc/packages/qt/md/hppa.s>
-        $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
-        $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
-        $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
-        $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
-        sysc/packages/qt/md/aarch64.h
-        sysc/packages/qt/md/axp.h
-        sysc/packages/qt/md/hppa.h
-        sysc/packages/qt/md/i386.h
-        sysc/packages/qt/md/iX86_64.h
-        sysc/packages/qt/md/ksr1.h
-        sysc/packages/qt/md/m88k.h
-        sysc/packages/qt/md/mips.h
-        sysc/packages/qt/md/powerpc_mach.h
-        sysc/packages/qt/md/powerpc_sys5.h
-        sysc/packages/qt/md/sparc.h
-        sysc/packages/qt/md/vax.h
-        sysc/packages/qt/qt.h
-        sysc/packages/qt/qtmd.h
+          sysc/packages/qt/qt.c
+          $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
+          $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
+          $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
+          $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
+          sysc/packages/qt/md/aarch64.h
+          sysc/packages/qt/md/i386.h
+          sysc/packages/qt/md/iX86_64.h
+          sysc/packages/qt/qt.h
+          sysc/packages/qt/qtmd.h
         >
         )
 

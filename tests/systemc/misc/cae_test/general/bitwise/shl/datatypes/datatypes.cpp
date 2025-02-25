@@ -106,9 +106,9 @@ void datatypes::entry()
     tmp1r = tmp1 << (tmp7[0] % 8);
     tmp2r = tmp2 << 2;	
     tmp3r = tmp3 << 1;
-    tmp4r = tmp4 << (tmp7[1] % 16);
-    tmp5r = tmp3 << ((unsigned int)(tmp1.to_int()) % 32);
-    tmp6r = tmp6 << 1;
+    tmp4r = static_cast<unsigned>(tmp4) << (tmp7[1] % 16);
+    tmp5r = tmp3 << (static_cast<unsigned>(tmp1.to_int()) % 32);
+    tmp6r = static_cast<unsigned char>(tmp6) << 1;
 
     //write outputs
     out_value1.write(tmp1r);
@@ -125,11 +125,11 @@ void datatypes::entry()
 
     //execute mixed data type shift left operations
     tmp1r = tmp1 << (tmp7[0] % 8);
-    tmp2r = tmp2 << (unsigned int)(tmp4 % 8);
-    tmp3r = tmp3 << (short)(tmp5 % 32);
-    tmp4r = tmp4 << 2;
-    tmp5r = tmp3 << ((unsigned int)(tmp5) % 16);
-    tmp6r = tmp6 << (tmp2.to_uint() % 32);
+    tmp2r = tmp2 << static_cast<unsigned>(tmp4 % 8);
+    tmp3r = tmp3 << static_cast<short>(tmp5 % 32);
+    tmp4r = static_cast<unsigned>(tmp4) << 2;
+    tmp5r = tmp3 << (static_cast<unsigned>(tmp5) % 16);
+    tmp6r = static_cast<unsigned>(tmp6) << (tmp2.to_uint() % 32);
  
     //write outputs
     out_value1.write(tmp1r);
