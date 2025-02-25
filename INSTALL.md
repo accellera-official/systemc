@@ -424,7 +424,8 @@ SystemC example as a stand-alone application:
 This release has been tested on Visual C++ version 2019 running Windows 10.
 
 Note: _This section covers the installation based on Microsoft Visual C++.
-      For Cygwin or MinGW-based installations, see [Section 1](#1-system-requirements)._
+      For Cygwin or MinGW-based installations, see
+      [Section 2](#2-installation-notes-for-cmake)._
 
 Note: _If you experience spurious errors about missing files in the
       downloaded archive, please make sure to download the release
