@@ -93,7 +93,6 @@ include 2.1/sc_export/test.am
 include 2.1/sc_report/test.am
 include 2.1/scx_barrier/test.am
 include 2.1/scx_mutex_w_policy/test.am
-include 2.1/specialized_signals/test.am
 examples_DIRS += 2.1
 
 ## 2.3 examples
