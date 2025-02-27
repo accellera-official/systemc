@@ -43,6 +43,13 @@
 #pragma warning(disable: 4251) // DLL import for std::vector
 #endif
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
 namespace sc_core {
 
 class sc_event_finder;
@@ -636,6 +643,11 @@ sc_port_b<IF>::make_sensitive( sc_method_handle handle_p,
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(pop)
+#endif
+
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
 #endif
 
 /*****************************************************************************
