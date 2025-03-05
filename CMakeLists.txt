@@ -646,7 +646,6 @@ add_subdirectory (tests)
 
 install (FILES AUTHORS.md
                INSTALL.md
-               cmake/INSTALL_USING_CMAKE.md
                LICENSE
                NOTICE
                README.md
