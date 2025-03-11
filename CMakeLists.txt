@@ -165,8 +165,7 @@
 #
 ###############################################################################
 
-cmake_minimum_required (VERSION 3.5)
-cmake_policy(SET CMP0001 NEW)
+cmake_minimum_required (VERSION 3.5...3.31)
 
 project (SystemCLanguage CXX C)
 
@@ -646,7 +645,6 @@ add_subdirectory (tests)
 
 install (FILES AUTHORS.md
                INSTALL.md
-               cmake/INSTALL_USING_CMAKE.md
                LICENSE
                NOTICE
                README.md

@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  disaproc1.cpp -- 
+  disaproc1.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -103,10 +103,9 @@ void
 aproc2::entry()
 {
     wait();
-    int loops = 0;
     while (true) {
         d = a && b;
-        cout << "d is (a * b)" << endl;
+        cout << "d is (a && b)" << endl;
         wait();
         if ((bool) b == 0) {
             d = a / (b + 1);
@@ -116,16 +115,6 @@ aproc2::entry()
             cout << "d is (a / b)" << endl;
         }
         wait();
-        if (loops < 1) {
-            // sc_assert( a.sensitive_aprocs_neg.size() == 2 );
-            // sc_assert( a.sensitive_aprocs.size() == 2 );
-        }
-        if (loops > 5) {
-            /* By this time aproc1 should have died. */
-            // sc_assert( a.sensitive_aprocs_neg.size() == 1 );
-            // sc_assert( a.sensitive_aprocs.size() == 1 );
-        }
-        loops++;
     }
 }
 
@@ -146,7 +135,7 @@ SC_MODULE( sync1 )
            sc_signal<bool>& B,
            const sc_signal<bool>& C,
            const sc_signal<bool>& D )
-        : 
+        :
           a(A), b(B), c(C), d(D)
 
     {

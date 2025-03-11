@@ -98,7 +98,7 @@ obtain from the following sources:
 The CMake build scripts are compatible with CMake >=3.5 and have been
 tested on the following OS/processor/compiler platforms:
 
-  * macOS >= 13.6 until 15.4 (Xcode/AppleClang): x86_64, Apple Silicon, universal binary 
+  * macOS >= 13.6 until 15.4 (Xcode/AppleClang): x86_64, Apple Silicon, universal binary
   * Linux (GCC, Clang): i386, x86_64
   * Linux (GCC): aarch64
   * Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains, Visual C++):
@@ -109,9 +109,8 @@ tested on the following OS/processor/compiler platforms:
 Typically, the following steps need to be followed to compile the
 sources using CMake:
 
-  1. Download and install CMake from [this website][1] (Linux
-     distributions provide often a package).  Note, the CMake script have been
-     developed for CMake >= 3.5.
+  1. Download and install CMake from [this website][1]
+     (Linux distributions provide often a package).
 
   2. Create a build subdirectory:
 
