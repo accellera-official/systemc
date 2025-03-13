@@ -23,7 +23,6 @@
 #include "tlm_core/tlm_2/tlm_sockets/tlm_base_socket_if.h"
 #include "tlm_core/tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h"
 
-
 namespace tlm {
 
 template <unsigned int BUSWIDTH = 32,
@@ -116,12 +115,44 @@ public:
     bind(s);
   }
 
+  
+  // +----------------------------------------------------------------------------------------------
+  // |"validate_hierarchical_bind"
+  // | 
+  // | This method checks the sockets of a potential bind to make sure it conforms to the IEEE 1666
+  // | standard. At present that means making sure if there is a multi-target socket in the bind 
+  // | the other socket is also multi-target.
+  // |
+  // | Arguments:
+  // |     other = socket to bind with this object instance.
+  // +----------------------------------------------------------------------------------------------
+  void validate_hierarchical_bind( base_type& other )
+  {
+    std::ostringstream error_message;
+    unsigned int       other_type = other.get_socket_category();
+    unsigned int       our_type = get_socket_category();
+
+    if ( tlm::TLM_MULTI_TARGET_SOCKET == our_type ) {
+      if ( other_type != tlm::TLM_MULTI_TARGET_SOCKET ) {
+        error_message << "Attempt to bind multi-target socket " << this->name() 
+	              << " to a non-multi-target socket";
+	SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
+      }
+    }
+    else if ( other_type == tlm::TLM_MULTI_TARGET_SOCKET ) {
+      error_message << "Attempt to bind non-multi-target socket " << this->name() 
+                    << " to a multi-target socket";
+      SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
+    }
+  }
+
   //
   // Bind target socket to target socket (hierarchical bind)
   // - Binds both the export and the port
   //
   virtual void bind(base_type& s)
   {
+    validate_hierarchical_bind(s);
     // export
     (get_base_export())(s.get_base_export());
     // port
