@@ -286,14 +286,8 @@ public:
     virtual void bind( IF& interface_ )
 	{ base_type::bind( interface_ ); }
 
-#if defined(__clang__) || \
-   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
-#pragma GCC diagnostic pop
-#endif
-
     void operator () ( IF& interface_ )
 	{ this->bind( interface_ ); }
-
 
     // bind a parent port with type IF to this port
 
@@ -302,6 +296,11 @@ public:
 
     void operator () ( port_type& parent_ )
 	{ this->bind( parent_ ); }
+
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 
 
     // number of connected interfaces
