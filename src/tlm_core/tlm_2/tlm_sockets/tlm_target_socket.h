@@ -116,46 +116,39 @@ public:
   }
 
   
-  // +----------------------------------------------------------------------------------------------
-  // |"validate_hierarchical_bind"
-  // | 
-  // | This method checks the sockets of a potential bind to make sure it conforms to the IEEE 1666
-  // | standard. At present that means making sure if there is a multi-target socket in the bind 
-  // | the other socket is also multi-target.
-  // |
-  // | Arguments:
-  // |     other = socket to bind with this object instance.
-  // +----------------------------------------------------------------------------------------------
-  void validate_hierarchical_bind( base_type& other )
-  {
-    std::ostringstream error_message;
-    unsigned int       other_type = other.get_socket_category();
-    unsigned int       our_type = get_socket_category();
-
-    if ( tlm::TLM_MULTI_TARGET_SOCKET == our_type ) {
-      if ( other_type != tlm::TLM_MULTI_TARGET_SOCKET ) {
-        error_message << "Attempt to bind multi-target socket " << this->name() 
-	              << " to a non-multi-target socket";
-	SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
-      }
-    }
-    else if ( other_type == tlm::TLM_MULTI_TARGET_SOCKET ) {
-      error_message << "Attempt to bind non-multi-target socket " << this->name() 
-                    << " to a multi-target socket";
-      SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
-    }
-  }
-
+  // "tlm_base_target_socket<>::bind(tlm_base_target_socket<>)"
   //
-  // Bind target socket to target socket (hierarchical bind)
-  // - Binds both the export and the port
+  // Bind a target socket to this object instance (target socket), a hierarchical bind. 
+  // The bind is done to both the port and export.
   //
+  // Arguments:
+  //   s = socket to be bound to this object instance.
+  //
+  // Notes:
+  //   (1) IEEE 1666 forbids the  hierarchical bind of a multi-target socket to a non-multi-target
+  //       socket, so we check if this object instance is non-multi-target and the socket to 
+  //       be bound is multi-target.
+  //   (2) The opposite hierarchical bind, a non-multi-target socket to a multi-target socket 
+  //       will result in a compiler error, so we don't need to check that case.
+
   virtual void bind(base_type& s)
   {
-    validate_hierarchical_bind(s);
-    // export
+    // Look for an illegal bind (see note 1 above.)
+
+    if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() &&
+         s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
+        std::ostringstream error_message;
+        error_message << "Attempt to bind a multi-target socket to non-multi-target socket " 
+	              << this->name();
+        SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
+    }
+
+    // bind the exports
+
     (get_base_export())(s.get_base_export());
-    // port
+
+    // bind the ports
+
     (s.get_base_port())(get_base_port());
   }
 
