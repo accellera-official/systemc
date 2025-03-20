@@ -261,6 +261,7 @@ extern SC_API const char SC_ID_INTERNAL_ERROR_[];
 extern SC_API const char SC_ID_ASSERTION_FAILED_[];
 extern SC_API const char SC_ID_OUT_OF_BOUNDS_[];
 extern SC_API const char SC_ID_ABORT_[];
+extern SC_API const char SC_ID_STANDARDS_VIOLATION_[];
 
 // backward compatibility with 2.0+
 extern SC_API const char SC_ID_REGISTER_ID_FAILED_[];

@@ -125,9 +125,9 @@ public:
   //   s = socket to be bound to this object instance.
   //
   // Notes:
-  //   (1) IEEE 1666 forbids the  hierarchical bind of a multi-target socket to a non-multi-target
-  //       socket, so we check if this object instance is non-multi-target and the socket to 
-  //       be bound is multi-target.
+  //   (1) IEEE 1666 forbids the hierarchical bind of a multi-target socket to a non-multi-target
+  //       socket, so we check if the object to be bound is multi-target and this object instance 
+  //       is not multi-target.
   //   (2) The opposite hierarchical bind, a non-multi-target socket to a multi-target socket 
   //       will result in a compiler error, so we don't need to check that case.
 
@@ -135,12 +135,13 @@ public:
   {
     // Look for an illegal bind (see note 1 above.)
 
-    if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() &&
-         s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
+    if ( s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
+      if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() ) {
         std::ostringstream error_message;
         error_message << "Attempt to bind a multi-target socket to non-multi-target socket " 
 	              << this->name();
-        SC_REPORT_FATAL(sc_core::SC_ID_INTERNAL_ERROR_, error_message.str().c_str() );
+        SC_REPORT_FATAL(sc_core::SC_ID_STANDARDS_VIOLATION_, error_message.str().c_str() );
+      }
     }
 
     // bind the exports
