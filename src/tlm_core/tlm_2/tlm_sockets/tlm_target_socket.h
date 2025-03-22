@@ -138,9 +138,9 @@ public:
     if ( s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
       if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() ) {
         std::ostringstream error_message;
-        error_message << "Attempt to bind a multi-target socket to non-multi-target socket " 
-	              << this->name();
-        SC_REPORT_FATAL(sc_core::SC_ID_STANDARDS_VIOLATION_, error_message.str().c_str() );
+        error_message << "Attempt to bind a multi-target socket to non-multi-target socket '" 
+	              << this->name() << "'";
+        SC_REPORT_ERROR(sc_core::SC_ID_INVALID_BINDING_, error_message.str().c_str() );
       }
     }
 

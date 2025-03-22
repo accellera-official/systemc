@@ -796,7 +796,7 @@ const char SC_ID_INTERNAL_ERROR_[]      = "internal error";
 const char SC_ID_ASSERTION_FAILED_[]    = "assertion failed";
 const char SC_ID_OUT_OF_BOUNDS_[]       = "out of bounds";
 const char SC_ID_ABORT_[]               = "simulation aborted";
-const char SC_ID_STANDARDS_VIOLATION_[] = "IEEE 1666 standard violation";
+const char SC_ID_INVALID_BINDING_[]     = "invalid binding";
 
 #define DEFINE_MSG(id,n)                                                     \
     {                                                                        \
