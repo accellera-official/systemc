@@ -22,6 +22,7 @@
 
 #include "tlm_core/tlm_2/tlm_sockets/tlm_base_socket_if.h"
 #include "tlm_core/tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h"
+#include "sysc/communication/sc_communication_ids.h"
 
 namespace tlm {
 
@@ -137,10 +138,7 @@ public:
 
     if ( s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
       if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() ) {
-        std::ostringstream error_message;
-        error_message << "Attempt to bind a multi-target socket to non-multi-target socket '" 
-	              << this->name() << "'";
-        SC_REPORT_ERROR(sc_core::SC_ID_INVALID_BINDING_, error_message.str().c_str() );
+        SC_REPORT_ERROR(SC_ID_INVALID_HIERARCHICAL_BIND_, this->name());
       }
     }
 
