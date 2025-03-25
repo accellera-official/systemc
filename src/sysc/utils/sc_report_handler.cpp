@@ -788,14 +788,14 @@ sc_actions sc_report_handler::get_catch_actions()
 // predefined messages
 //
 
-const char SC_ID_REGISTER_ID_FAILED_[] = "register_id failed";
-const char SC_ID_UNKNOWN_ERROR_[]      = "unknown error";
-const char SC_ID_WITHOUT_MESSAGE_[]    = "";
-const char SC_ID_NOT_IMPLEMENTED_[]    = "not implemented";
-const char SC_ID_INTERNAL_ERROR_[]     = "internal error";
-const char SC_ID_ASSERTION_FAILED_[]   = "assertion failed";
-const char SC_ID_OUT_OF_BOUNDS_[]      = "out of bounds";
-const char SC_ID_ABORT_[]              = "simulation aborted";
+const char SC_ID_REGISTER_ID_FAILED_[]  = "register_id failed";
+const char SC_ID_UNKNOWN_ERROR_[]       = "unknown error";
+const char SC_ID_WITHOUT_MESSAGE_[]     = "";
+const char SC_ID_NOT_IMPLEMENTED_[]     = "not implemented";
+const char SC_ID_INTERNAL_ERROR_[]      = "internal error";
+const char SC_ID_ASSERTION_FAILED_[]    = "assertion failed";
+const char SC_ID_OUT_OF_BOUNDS_[]       = "out of bounds";
+const char SC_ID_ABORT_[]               = "simulation aborted";
 
 #define DEFINE_MSG(id,n)                                                     \
     {                                                                        \
