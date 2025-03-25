@@ -96,6 +96,13 @@ public:
     return "tlm_base_target_socket";
   }
 
+#if defined(__clang__) || \
+  (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif  
+
   //
   // Bind target socket to initiator socket
   // - Binds the port of the initiator socket to the export of the target
@@ -151,6 +158,11 @@ public:
   {
     bind(s);
   }
+
+#if defined(__clang__) || \
+  (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 
   //
   // Forward to 'size()' of port class
