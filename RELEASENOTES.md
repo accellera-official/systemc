@@ -43,29 +43,24 @@ This release implements the IEEE 1666-2023 Language Reference Manual.
 | AlmaLinux 8         |     arm64     |  gcc  8.5.0
 | AlmaLinux 9         |     amd64     |  gcc 11.4.1
 | AlmaLinux 9         |     arm64     |  gcc 11.4.1
-| Debian 12.5         |     amd64     |  gcc 12.3.0 
-| Debian 12.5         |     amd64     |  gcc 13.2.0 
-| Debian 12.5         |     amd64     |  gcc 13.2.0 with --std=c++20
-| Rhel 7.9            |     x86_64    |  gcc 9.3.0
-| Rhel 8.8            |     amd64     |  gcc 9.4.0
-| Rhel 8.8            |     amd64     |  gcc 13.1.0
-| Rhel 8.8            |     amd64     |  clang 17.0.6
-| Rhel 8.9            |     amd64     |  gcc 8.5.0
-| Rhel 8.9            |     amd64     |  gcc 11.2.1
-| Rhel 8.9            |     amd64     |  gcc 12.2.1
+| Debian 12.9         |     x86_64    |  gcc 12.4
+| Debian 12.9         |     x86_64    |  gcc 14.2 
+| Rhel 8.10           |     x86_64    |  gcc 8.5
+| Rhel 8.9            |     x86_64    |  gcc 11.2
+| Rhel 8.10           |     x86_64    |  gcc GCC 12.2
+| Rhel 8.10           |     x86_64    |  gcc 13.1
+| Rhel 8.10           |     x86_64    |  Clang 16.0.6
 | Rhel 8.9            |     amd64     |  coside clang 16.0.6
 | Rhel 8.9            |     amd64     |  coside gcc 13.1.0
 | Windows 10          |               |  msvc16 (2019)
 | Windows 11          |               |  msvc16 (2019)
 | Windows 11          |               |  msvc17 (2022)
-| macOS 12 (Monterey) | x86_64        | AppleClang 13 
-| macOS 12 (Monterey) | arm64         | AppleClang 13
-| macOS 13 (Ventura)  | x86_64        | AppleClang 14 
-| macOS 13 (Ventura)  | arm64         | AppleClang 14
-| macOS 14 (Sonoma)   | x86_64        | AppleClang 14
-| macOS 14 (Sonoma)   | arm64         | AppleClang 14 
-| macOS 14 (Sonoma)   | x86_64        | AppleClang 15
-| macOS 14 (Sonoma)   | arm64         | AppleClang 15
+| macOS 13 (Ventura)  | x86_64        |  AppleClang 14
+| macOS 13 (Ventura)  | arm64         |  AppleClang 14
+| macOS 14 (Sonoma)   | x86_64        |  AppleClang 15
+| macOS 14 (Sonoma)   | arm64         |  AppleClang 15
+| macOS 15 (Sequoia)  | x86_64        |  AppleClang 16
+| macOS 15 (Sequoia)  | arm64         |  AppleClang 16
 
 
 Warning: _The fixed-point data-types are not working as defined on
@@ -83,7 +78,7 @@ on the following formerly supported platforms:
 * Cygwin 1.7 or later (x86, x86_64) with GNU C++ compiler
 * Msys/MinGW32 GNU C++ compiler
 
-2. (In)compatibility note
+1. (In)compatibility note
 
 While it is possible to build SystemC as a shared library (both on
 ELF-based systems and well as a DLL on Windows), there is no explicitly
