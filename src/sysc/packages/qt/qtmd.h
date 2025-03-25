@@ -12,4 +12,8 @@
 #include "sysc/packages/qt/md/powerpc_sys5.h"
 #elif defined( __aarch64__ )
 #include "sysc/packages/qt/md/aarch64.h"
+#elif defined( __riscv ) && ( __riscv_xlen == 64 )
+#include "sysc/packages/qt/md/riscv64.h"
+#else
+#error "Unknown architecture!"
 #endif
