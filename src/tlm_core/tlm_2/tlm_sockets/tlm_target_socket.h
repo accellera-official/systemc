@@ -138,7 +138,7 @@ public:
 
     if ( s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
       if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() ) {
-        SC_REPORT_ERROR(SC_ID_INVALID_HIERARCHICAL_BIND_, this->name());
+        SC_REPORT_ERROR(sc_core::SC_ID_INVALID_HIERARCHICAL_BIND_, this->name());
       }
     }
 
