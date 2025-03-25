@@ -90,7 +90,6 @@
 #define SC_UNSIGNED_H
 
 
-#include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"

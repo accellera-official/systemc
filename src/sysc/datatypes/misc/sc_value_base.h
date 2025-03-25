@@ -71,7 +71,7 @@ class sc_unsigned;
 //  Abstract base class of all SystemC native variables. It provides
 //  support for concatenation operations via a set of virtual methods. 
 //  A general description of the methods appear with their default 
-//  definitions in sc_object.cpp.
+//  definitions in sc_value_base.cpp.
 // ----------------------------------------------------------------------------
 
 class SC_API sc_value_base 
