@@ -53,7 +53,7 @@ function(add_systemc_library libName scBuildDefine)
     target_compile_features(
         ${libName}
         PUBLIC
-        cxx_std_17)
+        cxx_std_20)
 
     target_compile_definitions (
         ${libName}
@@ -418,6 +418,8 @@ set(SYSTEMC_CORE_SRC
           sysc/packages/qt/qt.h
           sysc/packages/qt/qtmd.h
         >
+        # sc_log
+        sc_log/sc_log.cpp
         )
 
 set(SYSTEMC_CORE_SRC_PRIVATE
