@@ -78,9 +78,16 @@ function(configure_and_add_regression_test TEST_PATH)
   set(workdir ${CMAKE_CURRENT_BINARY_DIR}/Testing/${TEST_PATH})
   get_filename_component(leafdir ${TEST_PATH} NAME)
   file(MAKE_DIRECTORY ${workdir})
-  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                  ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}
-                  ${workdir}/${leafdir})
+  if (UNIX)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                    ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}
+                    ${workdir}/${leafdir})
+  else()
+    # use mklink /J (junction) on Windows to avoid need for special privileges
+    file(TO_NATIVE_PATH ${workdir}/${leafdir} _dstDir)
+    file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH} _srcDir)
+    execute_process(COMMAND cmd.exe /c mklink /J "${_dstDir}" "${_srcDir}")
+  endif()
 
   set(env
     SYSTEMC_REGRESSION=1
