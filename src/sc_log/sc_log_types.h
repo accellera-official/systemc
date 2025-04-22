@@ -26,6 +26,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include <climits>
 
 #include <sysc/utils/sc_report.h>
 
@@ -121,7 +122,7 @@ inline std::ostream &operator<<(std::ostream &os, log_levels const &val) {
 class call_sc_name_fn {
   template <class T>
   static auto test(T *p)
-      -> decltype(p->sc_core::sc_module::name(), std::true_type());
+      -> decltype(p->name(), std::true_type());
   template <class T> static auto test(...) -> decltype(std::false_type());
 
   template <class T>
@@ -132,7 +133,7 @@ public:
   template <class TYPE>
   auto operator()(TYPE *p) const
       -> std::enable_if_t<has_method<TYPE>, const char *> {
-    return p->sc_core::sc_module::name();
+    return p->name();
   }
 
   // define a function IF NOT the method exists
