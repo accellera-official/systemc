@@ -27,8 +27,14 @@ if (NOT ENABLE_REGRESSION)
   return()
 endif()
 
+cmake_minimum_required(VERSION 3.12...3.31) # FindPython3
+
 set(TEST_CATEGORY tests)
 include(SystemCTesting)
+
+###############################################################################
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED) # needed for run-test.py
 
 ###############################################################################
 
@@ -67,7 +73,7 @@ function(configure_and_add_regression_test TEST_PATH)
 
   set(testname ${TEST_PATH}${TEST_SUFFIX})
   add_test(NAME ${testname}
-           COMMAND ${PROJECT_SOURCE_DIR}/cmake/run-test.py  $<TARGET_FILE:${TEST_NAME}>)
+           COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/cmake/run-test.py  $<TARGET_FILE:${TEST_NAME}>)
 
   set(workdir ${CMAKE_CURRENT_BINARY_DIR}/Testing/${TEST_PATH})
   get_filename_component(leafdir ${TEST_PATH} NAME)
