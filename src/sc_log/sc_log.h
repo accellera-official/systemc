@@ -28,6 +28,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+#include <format>
 
 #include <sc_log/sc_log_types.h>
 
