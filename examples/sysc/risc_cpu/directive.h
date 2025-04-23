@@ -37,7 +37,7 @@
 
 
 //#define DEBUG true
-#define TRACE false
+//#define TRACE false
 #define PRINT_IFU true
 #define PRINT_ID true
 #define PRINT_PU false
