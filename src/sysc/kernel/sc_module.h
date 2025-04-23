@@ -88,8 +88,9 @@ class SC_API sc_module
 	friend class sc_process_b;
     friend class sc_simcontext;
     friend class sc_initializer_function;
-public:
+protected:
     sc_log::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE;
+public:
 
     sc_simcontext* sc_get_curr_simcontext()
 	{ return simcontext(); }

@@ -42,7 +42,7 @@ SC_MODULE(mod_a) {
   SC_CTOR(mod_a) {
     for (auto l : sc_log::log_level_map) {
       auto i = l.first;
-      SC_LOG_AT(i, SCMOD) << " Log to SCMOD" << " (at level "<< i<<")";
+      SC_LOG_AT(i, name()) << " Log to name()" << " (at level "<< i<<")";
       SC_LOG_AT(i, ()) <<  " Log to default ()" << " (at level "<< i<<")";
       SC_LOG_AT(i, (TST)) << " Log to test_handler" << " (at level "<< i<<")";
     }

@@ -14,13 +14,9 @@
  * limitations under the License.
  *******************************************************************************/
 /*
- * sc_report.cpp
- *
  *  Created on: 19.09.2017
  *      Author: eyck@minres.com
- *
- * THIS FILE IS INTENDED TO BE UP-STREAMED
- */
+ */ 
 
 #include "sc_log/sc_log_types.h"
 #include "sysc/kernel/sc_simcontext.h"

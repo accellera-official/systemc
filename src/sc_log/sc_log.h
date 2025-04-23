@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-/*
- *
- * THIS FILE IS INTENDED TO BE UP-STREAMED
- */
-#ifndef _SC_LOG_REPORT_H_
-#define _SC_LOG_REPORT_H_
+
+#ifndef _SC_LOG_H_
+#define _SC_LOG_H_
 
 #define SC_HAS_SC_LOG
 
@@ -66,7 +63,6 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
 #define SC_LOG_HANDLE_NAME(x) _SC_LOG_CAT(SC_LOG_LOG_LEVEL_CACHE, x)
 
 /* User interface macros */
-#define SCMOD this->sc_core::sc_module::name()
 #define SC_LOG_HANDLE(...)                                                     \
   sc_log::sc_log_logger_cache _SC_LOG_IIF(                                     \
       _SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))(                       \
@@ -89,24 +85,24 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
 // This HAS to be done as a macro, because the first argument may be a string
 // or a cache'd level
 
-/*** Helper macros for SCP_ report macros ****/
-#define SCP_VBSTY_CHECK_CACHED(lvl, features, cached, ...)                     \
+/*** Helper macros for SC_LOG_ report macros ****/
+#define SC_LOG_VBSTY_CHECK_CACHED(lvl, features, cached, ...)                     \
   (cached.level >= lvl) &&                                                     \
       (cached.get_log_verbosity_cached(sc_log::call_sc_name_fn()(this),        \
                                        typeid(*this).name()) >= lvl)
 
-#define SCP_VBSTY_CHECK_UNCACHED(lvl, ...)                                     \
+#define SC_LOG_VBSTY_CHECK_UNCACHED(lvl, ...)                                     \
   (::sc_log::get_log_verbosity(__VA_ARGS__) >= lvl)
 
-#define SCP_VBSTY_CHECK(lvl, ...)                                              \
+#define SC_LOG_VBSTY_CHECK(lvl, ...)                                              \
   _SC_LOG_IIF(_SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))                \
-  (SCP_VBSTY_CHECK_CACHED(                                                     \
+  (SC_LOG_VBSTY_CHECK_CACHED(                                                     \
        lvl, _SC_LOG_FIRST_ARG(__VA_ARGS__),                                    \
        SC_LOG_HANDLE_NAME(                                                     \
            _SC_LOG_EXPAND(_SC_LOG_FIRST_ARG _SC_LOG_FIRST_ARG(__VA_ARGS__)))), \
-   SCP_VBSTY_CHECK_UNCACHED(lvl, ##__VA_ARGS__))
+   SC_LOG_VBSTY_CHECK_UNCACHED(lvl, ##__VA_ARGS__))
 
-#define SCP_GET_FEATURES(...)                                                  \
+#define SC_LOG_GET_FEATURES(...)                                                  \
   _SC_LOG_IIF(_SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))                \
   (_SC_LOG_FIRST_ARG _SC_LOG_EXPAND((_SC_LOG_POP_ARG(                          \
        __VA_ARGS__,                                                            \
@@ -117,16 +113,16 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
 
 #define _SC_LOG_FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
 
-#define SCP_MSG(lvl, ...)                                                      \
-  ::sc_log::ScLogger<::sc_core::SC_INFO, false>(__FILE__, __LINE__, lvl)       \
-          .type(SCP_GET_FEATURES(__VA_ARGS__))                                 \
+#define SC_LOG_MSG(lvl, ...)                                                      \
+  ::sc_log::sc_logger<::sc_core::SC_INFO, false>(__FILE__, __LINE__, lvl)       \
+          .type(SC_LOG_GET_FEATURES(__VA_ARGS__))                                 \
           .get()                                                               \
       << _SC_LOG_FMT_EMPTY_STR
 /*** End HELPER Macros *******/
 
 #define SC_LOG_AT(lvl, ...)                                                    \
-  if (SCP_VBSTY_CHECK(lvl, __VA_ARGS__))                                       \
-  SCP_MSG(lvl, __VA_ARGS__)
+  if (SC_LOG_VBSTY_CHECK(lvl, __VA_ARGS__))                                       \
+  SC_LOG_MSG(lvl, __VA_ARGS__)
 
 #define SC_CRITICAL(...) SC_LOG_AT(sc_log::log_levels::CRITICAL, __VA_ARGS__)
 #define SC_WARN(...) SC_LOG_AT(sc_log::log_levels::WARN, __VA_ARGS__)
@@ -134,5 +130,5 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
 #define SC_DEBUG(...) SC_LOG_AT(sc_log::log_levels::DEBUG, __VA_ARGS__)
 #define SC_TRACE(...) SC_LOG_AT(sc_log::log_levels::TRACE, __VA_ARGS__)
 
-/** @} */ // end of sc_log-report
-#endif    /* _SC_LOG_REPORT_H_ */
+/** @} */ // end of sc_log
+#endif    /* _SC_LOG_H_ */

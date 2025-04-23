@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-/*
- *
- * THIS FILE IS INTENDED TO BE UP-STREAMED
- */
-#ifndef _SC_LOG_REPORT_TYPES_H_
-#define _SC_LOG_REPORT_TYPES_H_
+
+#ifndef _SC_LOG_TYPES_H_
+#define _SC_LOG_TYPES_H_
 
 #include <array>
 #include <cstring>
@@ -210,46 +207,46 @@ inline log_levels get_log_verbosity(std::string const &t) {
 std::vector<std::string> get_logging_parameters();
 
 /**
- * @struct ScLogger
+ * @struct sc_logger
  * @brief the logger class
  *
- * The ScLogger creates a RTTI based output stream to be used similar to
+ * The sc_logger creates a RTTI based output stream to be used similar to
  * std::cout
  *
  * @tparam SEVERITY
  */
 template <sc_core::sc_severity SEVERITY, bool WITH_ACTIONS = false>
-struct ScLogger {
+struct sc_logger {
   /**
-   * @fn  ScLogger(const char*, int, int=sc_core::SC_MEDIUM)
+   * @fn  sc_logger(const char*, int, int=sc_core::SC_MEDIUM)
    * @brief
    *
    * @param file where the log entry originates
    * @param line number where the log entry originates
    * @param verbosity the log level
    */
-  ScLogger(const char *file, int line,
+  sc_logger(const char *file, int line,
            log_levels verbosity = sc_log::log_levels::INFO)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
-  ScLogger() = delete;
+  sc_logger() = delete;
 
-  ScLogger(const ScLogger &) = delete;
+  sc_logger(const sc_logger &) = delete;
 
-  ScLogger(ScLogger &&) = delete;
+  sc_logger(sc_logger &&) = delete;
 
-  ScLogger &operator=(const ScLogger &) = delete;
+  sc_logger &operator=(const sc_logger &) = delete;
 
-  ScLogger &operator=(ScLogger &&) = delete;
+  sc_logger &operator=(sc_logger &&) = delete;
   /**
-   * @fn  ~ScLogger()
+   * @fn  ~sc_logger()
    * @brief the destructor generating the SystemC report
    *
    * NB a destructor should not throw an exception, here we attempt to prevent
    * the sc_report_handler from throwing The ScLogging interface is _ONLY_ for
    * logging, simulation control should happen in user code.
    */
-  virtual ~ScLogger() noexcept(true) {
+  virtual ~sc_logger() noexcept(true) {
     auto old = sc_core::sc_report_handler::set_actions(SEVERITY);
     if (WITH_ACTIONS == false) {
       sc_core::sc_report_handler::set_actions(
@@ -262,34 +259,34 @@ struct ScLogger {
     sc_core::sc_report_handler::set_actions(SEVERITY, old);
   }
   /**
-   * @fn ScLogger& type()
+   * @fn sc_logger& type()
    * @brief reset the category of the log entry
    *
    * @return reference to self for chaining
    */
-  inline ScLogger &type() {
+  inline sc_logger &type() {
     this->t = nullptr;
     return *this;
   }
   /**
-   * @fn ScLogger& type(const char*)
+   * @fn sc_logger& type(const char*)
    * @brief set the category of the log entry
    *
    * @param t type of th elog entry
    * @return reference to self for chaining
    */
-  inline ScLogger &type(char const *t) {
+  inline sc_logger &type(char const *t) {
     this->t = const_cast<char *>(t);
     return *this;
   }
   /**
-   * @fn ScLogger& type(std::string const&)
+   * @fn sc_logger& type(std::string const&)
    * @brief set the category of the log entry
    *
    * @param t type of th elog entry
    * @return reference to self for chaining
    */
-  inline ScLogger &type(std::string const &t) {
+  inline sc_logger &type(std::string const &t) {
     this->t = const_cast<char *>(t.c_str());
     return *this;
   }
@@ -314,4 +311,4 @@ protected:
 #define SC_LOG_LOG_LEVEL_CACHE _m_sc_log_log_level_cache_
 
 /** @} */ // end of sc_log
-#endif    /* _SC_LOG_REPORT_H_ */
+#endif    /* _SC_LOG_TYPES_H_ */
