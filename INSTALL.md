@@ -16,7 +16,7 @@
 
 3. Installation Notes for Windows using Visual Studio C++
 
-   3.1 Microsoft Visual Studio C++ 2017 (compiler version 15.0) or later
+   3.1 Microsoft Visual Studio C++ 2019 (compiler version 16.0) or later
 
    3.2 Creating SystemC Applications
 
@@ -178,7 +178,7 @@ sources using CMake:
      * `ENABLE_REGRESSION`
        Add build targets for all regression tests under the `tests/` folder,
        add composite targets `all-tests` and `check-tests` to build and run
-       all of them (default: OFF).
+       all of them (default: `OFF`).
 
      * `CMAKE_BUILD_TYPE`
        Specifies the build type on single-configuration generators.
@@ -326,7 +326,7 @@ it, but depending on the chosen compiler options, it may need adjustment.
 #### Cross Compilation on macOS
 
 On macOS, a similar approach as in
-[Section 3.1](#31-microsoft-visual-studio-c-2017-compiler-version-150-or-later)
+[Section 3.1](#31-microsoft-visual-studio-c-2019-compiler-version-160-or-later)
 can be adopted.  However,
 it has to be noted that Apple's versions of GCC and Clang don't support
 `-m32` and `-m64`, but the more flexible `-arch <arm64|x86_64>`
@@ -346,7 +346,7 @@ or in variable editors of `ccmake` and `cmake-gui`.
 If you are using MacPorts or Homebrew versions of GCC, you will have
 to make sure that you install universal variants of the compiler
 toolchain.  Then, you can follow the instruction in
-[Section 3.1](#31-microsoft-visual-studio-c-2017-compiler-version-150-or-later).
+[Section 3.1](#31-microsoft-visual-studio-c-2019-compiler-version-160-or-later).
 
 #### Generic Cross Compilation to a Target System
 
@@ -434,7 +434,7 @@ Note: _If you experience spurious errors about missing files in the
       from the [Accellera public SystemC repository][9] and use an
       extractor supporting tar.gz archives._
 
-### 3.1 Microsoft Visual Studio C++ 2017 (compiler version 15.0) or later
+### 3.1 Microsoft Visual Studio C++ 2019 (compiler version 16.0) or later
 
 The download directory contains two subdirectories: `msvc16` and
 `examples/build-msvc`.
