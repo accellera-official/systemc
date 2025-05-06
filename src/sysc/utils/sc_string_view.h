@@ -41,7 +41,7 @@ namespace sc_core {
 
 /// non-owning, constant reference to a string
 // TODO: add ABI guard against inconsistent configurations
-class SC_API sc_string_view
+class sc_string_view
   : public std::string_view
 {
   typedef std::string_view base_type;
@@ -79,7 +79,7 @@ public:
 };     // class sc_string_view
 
 /// non-owning, constant reference to null-terminated string
-class SC_API sc_zstring_view : public sc_string_view
+class sc_zstring_view : public sc_string_view
 {
   typedef sc_string_view base_type;
 

@@ -455,7 +455,7 @@ operator << ( ::std::ostream& os, const sc_time& t )
 //  Struct that holds the time resolution and default time unit.
 // ----------------------------------------------------------------------------
 
-struct SC_API sc_time_params
+struct sc_time_params
 {
     double              time_resolution;  // in yocto seconds
     unsigned            time_resolution_log10;
