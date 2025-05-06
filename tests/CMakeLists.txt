@@ -27,8 +27,14 @@ if (NOT ENABLE_REGRESSION)
   return()
 endif()
 
+cmake_minimum_required(VERSION 3.12...3.31) # FindPython3
+
 set(TEST_CATEGORY tests)
 include(SystemCTesting)
+
+###############################################################################
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED) # needed for run-test.py
 
 ###############################################################################
 
@@ -67,14 +73,21 @@ function(configure_and_add_regression_test TEST_PATH)
 
   set(testname ${TEST_PATH}${TEST_SUFFIX})
   add_test(NAME ${testname}
-           COMMAND ${PROJECT_SOURCE_DIR}/cmake/run-test.py  $<TARGET_FILE:${TEST_NAME}>)
+           COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/cmake/run-test.py  $<TARGET_FILE:${TEST_NAME}>)
 
   set(workdir ${CMAKE_CURRENT_BINARY_DIR}/Testing/${TEST_PATH})
   get_filename_component(leafdir ${TEST_PATH} NAME)
   file(MAKE_DIRECTORY ${workdir})
-  execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
-                  ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}
-                  ${workdir}/${leafdir})
+  if (UNIX)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
+                    ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}
+                    ${workdir}/${leafdir})
+  else()
+    # use mklink /J (junction) on Windows to avoid need for special privileges
+    file(TO_NATIVE_PATH ${workdir}/${leafdir} _dstDir)
+    file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH} _srcDir)
+    execute_process(COMMAND cmd.exe /c mklink /J "${_dstDir}" "${_srcDir}")
+  endif()
 
   set(env
     SYSTEMC_REGRESSION=1
