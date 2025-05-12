@@ -66,6 +66,7 @@ protected:
     // constructors
     sc_prim_channel();
     explicit sc_prim_channel( const char* );
+    explicit sc_prim_channel( bool );
 
     // destructor
     virtual ~sc_prim_channel();
@@ -229,7 +230,9 @@ private:
 class sc_prim_channel_registry
 {
     friend class sc_simcontext;
+    friend class sc_prim_channel;
 
+    void insert_internal( sc_prim_channel& );
 public:
 
     void insert( sc_prim_channel& );
