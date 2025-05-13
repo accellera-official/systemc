@@ -298,10 +298,6 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_cmnhdr.h
         sysc/kernel/sc_constants.h
         sysc/kernel/sc_cor.h
-        sysc/kernel/sc_cor_fiber.h
-        sysc/kernel/sc_cor_pthread.h
-        sysc/kernel/sc_cor_qt.h
-        sysc/kernel/sc_cthread_process.h
         sysc/kernel/sc_dynamic_processes.h
         sysc/kernel/sc_event.h
         sysc/kernel/sc_except.h
@@ -309,36 +305,23 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_join.h
         sysc/kernel/sc_kernel_ids.h
         sysc/kernel/sc_macros.h
-        sysc/kernel/sc_method_process.h
         sysc/kernel/sc_module.h
         sysc/kernel/sc_module_name.h
-        sysc/kernel/sc_module_registry.h
-        sysc/kernel/sc_name_gen.h
         sysc/kernel/sc_object.h
-        sysc/kernel/sc_object_int.h
-        sysc/kernel/sc_object_manager.h
-        sysc/kernel/sc_stage_callback_registry.h
         sysc/kernel/sc_process.h
         sysc/kernel/sc_process_handle.h
-        sysc/kernel/sc_reset.h
         sysc/kernel/sc_runnable.h
-        sysc/kernel/sc_runnable_int.h
         sysc/kernel/sc_sensitive.h
         sysc/kernel/sc_simcontext.h
-        sysc/kernel/sc_simcontext_int.h
         sysc/kernel/sc_spawn.h
         sysc/kernel/sc_spawn_options.h
         sysc/kernel/sc_status.h
-        sysc/kernel/sc_thread_process.h
         sysc/kernel/sc_time.h
         sysc/kernel/sc_ver.h
         sysc/kernel/sc_wait.h
         sysc/kernel/sc_wait_cthread.h
         sysc/tracing/sc_trace.h
-        sysc/tracing/sc_trace_file_base.h
         sysc/tracing/sc_tracing_ids.h
-        sysc/tracing/sc_vcd_trace.h
-        sysc/tracing/sc_wif_trace.h
         sysc/utils/sc_hash.h
         sysc/utils/sc_iostream.h
         sysc/utils/sc_list.h
@@ -349,7 +332,6 @@ set(SYSTEMC_CORE_SRC
         sysc/utils/sc_pvector.h
         sysc/utils/sc_report.h
         sysc/utils/sc_report_handler.h
-        sysc/utils/sc_stop_here.h
         sysc/utils/sc_string.h
         sysc/utils/sc_string_view.h
         sysc/utils/sc_temporary.h
@@ -425,6 +407,27 @@ set(SYSTEMC_CORE_SRC
         >
         )
 
+set(SYSTEMC_CORE_SRC_PRIVATE
+        sysc/kernel/sc_cor_fiber.h
+        sysc/kernel/sc_cor_pthread.h
+        sysc/kernel/sc_cor_qt.h
+        sysc/kernel/sc_cthread_process.h
+        sysc/kernel/sc_method_process.h
+        sysc/kernel/sc_module_registry.h
+        sysc/kernel/sc_name_gen.h
+        sysc/kernel/sc_object_int.h
+        sysc/kernel/sc_object_manager.h
+        sysc/kernel/sc_stage_callback_registry.h
+        sysc/kernel/sc_reset.h
+        sysc/kernel/sc_runnable_int.h
+        sysc/kernel/sc_simcontext_int.h
+        sysc/kernel/sc_thread_process.h
+        sysc/tracing/sc_trace_file_base.h
+        sysc/tracing/sc_vcd_trace.h
+        sysc/tracing/sc_wif_trace.h
+        sysc/utils/sc_stop_here.h
+        )
+
 set(SYSTEMC_SC_MAIN_SRC
         systemc.h
         tlm.h
@@ -435,6 +438,12 @@ set(SYSTEMC_SC_MAIN_SRC
 
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
+# Build exclusion list
+foreach(header IN LISTS SYSTEMC_CORE_SRC_PRIVATE)
+    list(APPEND SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE PATTERN ${header} EXCLUDE)
+endforeach()
+
+
 # Windows DLLs can't contain unresolved symbols, so we need to spilt library
 # into two:
 #  - ${SYSTEMC_DLL_TARGET}.dll is a shared library without unresolved symbols
@@ -443,7 +452,7 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     set(SYSTEMC_DLL_TARGET systemc-${SystemCLanguage_VERSION})
 
-    add_systemc_library(${SYSTEMC_DLL_TARGET} SC_BUILD SHARED ${SYSTEMC_CORE_SRC} )
+    add_systemc_library(${SYSTEMC_DLL_TARGET} SC_BUILD SHARED ${SYSTEMC_CORE_SRC} ${SYSTEMC_CORE_SRC_PRIVATE})
 
     add_systemc_library(systemc SC_BUILD_OFF STATIC ${SYSTEMC_SC_MAIN_SRC} )
 
@@ -478,6 +487,7 @@ else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
     add_systemc_library(systemc
             SC_BUILD
             ${SYSTEMC_CORE_SRC}
+            ${SYSTEMC_CORE_SRC_PRIVATE}
             ${SYSTEMC_SC_MAIN_SRC}
             )
 
@@ -509,8 +519,12 @@ install (FILES systemc tlm
 install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
-         FILES_MATCHING PATTERN "*.h")
+         FILES_MATCHING PATTERN "*.h"
+                        # explicitly exclude former NO_H_FILES
+                        ${SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE})
 install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
-         FILES_MATCHING PATTERN "*.hpp")
+         FILES_MATCHING PATTERN "*.hpp"
+                        # explicitly exclude former NO_H_FILES
+                        ${SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE})
