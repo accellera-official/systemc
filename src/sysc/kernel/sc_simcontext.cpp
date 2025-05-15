@@ -305,14 +305,22 @@ sc_simcontext::init()
 
     // ALLOCATE VARIOUS MANAGERS AND REGISTRIES:
 
-    m_object_manager = new sc_object_manager;
+    if (sc_curr_simcontext && this!=sc_curr_simcontext) {            // Requesting a 'parallel' simcontext
+        m_object_manager = sc_curr_simcontext->get_object_manager(); // Keep the SAME object manager
+        m_name_gen = sc_curr_simcontext->m_name_gen;
+        //dynamic_log_verbosity = sc_curr_simcontext->dynamic_log_verbosity; remember to put this in for SC_LOG!
+        m_parent_context=sc_curr_simcontext;
+    } else {
+        m_object_manager = new sc_object_manager;
+        m_name_gen = new sc_name_gen;
+        m_parent_context=nullptr;
+    }
     m_module_registry = new sc_module_registry( *this );
     m_port_registry = new sc_port_registry( *this );
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
     m_stage_cb_registry = new sc_stage_callback_registry( *this );
     m_stub_registry = new sc_stub_registry( *this );
-    m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
 
@@ -661,7 +669,7 @@ sc_simcontext::elaborate()
     // (not added to public object hierarchy)
 
     m_method_invoker_p =
-      new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
+        new sc_invoke_method(("$$$$kernel_module$$$$_invoke_method$" + std::to_string((uint64_t)((void*)this))).c_str());
 
     set_simulation_status(SC_BEFORE_END_OF_ELABORATION);
     for( int cd = 0; cd != 4; /* empty */ )
@@ -1553,8 +1561,8 @@ void sc_simcontext::post_suspend() const
 	static sc_simcontext sc_default_global_context;
 	sc_simcontext* sc_curr_simcontext = &sc_default_global_context;
 #else
-	SC_API sc_simcontext* sc_curr_simcontext = 0;
-	SC_API sc_simcontext* sc_default_global_context = 0;
+	thread_local SC_API sc_simcontext* sc_curr_simcontext = 0;
+	thread_local SC_API sc_simcontext* sc_default_global_context = 0;
 #endif
 #else
 // Not MT-safe!
