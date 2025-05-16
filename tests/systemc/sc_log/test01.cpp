@@ -40,7 +40,7 @@
 SC_MODULE(mod_a) {
   SC_LOG_HANDLE((TST), "test_handler");
   SC_CTOR(mod_a) {
-    for (auto l : sc_log::log_level_map) {
+    for (auto l : sc_core::log_level_map) {
       auto i = l.first;
       SC_LOG_AT(i, name()) << " Log to name()" << " (at level "<< i<<")";
       SC_LOG_AT(i, ()) <<  " Log to default ()" << " (at level "<< i<<")";
@@ -55,27 +55,27 @@ SC_MODULE(mod_a) {
   }
 };
 
-class scp_logger_test : public sc_log::sc_log_global_logger_handler {
-  sc_log::log_levels operator()(struct sc_log::sc_log_logger_cache &logger,
+class scp_logger_test : public sc_core::sc_log_global_logger_handler {
+  sc_core::log_levels operator()(struct sc_core::sc_log_logger_cache &logger,
                                 std::string_view scname,
                                 const char *tname) const {
     if (logger.features.size() && logger.features[0] == "test_handler") {
-      return sc_log::log_levels::INFO;
+      return sc_core::log_levels::INFO;
     }
     if (scname == "sc_log_test") {
       /* test every time, and dont cache */
-      return sc_log::log_levels::WARN;
+      return sc_core::log_levels::WARN;
     }
     /* Cache this one which will catch the normal SCMOD case for mod_a */
-    logger.level = sc_log::log_levels::TRACE;
-    return sc_log::log_levels::TRACE;
+    logger.level = sc_core::log_levels::TRACE;
+    return sc_core::log_levels::TRACE;
   }
 };
 static scp_logger_test test_logger_handler;
 
 void report_handler(const sc_core::sc_report& rep, const sc_core::sc_actions& actions)
 {
-    cout << "TEST REPORT: "<<sc_log::as_log(rep.get_verbosity()) << " : [" << rep.get_msg_type() <<"] "<< rep.get_msg() <<std::endl;
+    cout << "TEST REPORT: "<<sc_core::as_log(rep.get_verbosity()) << " : [" << rep.get_msg_type() <<"] "<< rep.get_msg() <<std::endl;
 }
 
 
@@ -83,10 +83,10 @@ int sc_main(int, char *[]) {
   ::sc_core::sc_report_handler::set_verbosity_level(sc_core::SC_DEBUG);
   ::sc_core::sc_report_handler::set_handler(report_handler);
   for (int i = 0; i < 500; i += 50) {
-    cout << i << " is log_level " << sc_log::as_log(i) << endl;
+    cout << i << " is log_level " << sc_core::as_log(i) << endl;
   }
   cout << "Test string based handler" << std::endl;
-  for (auto l : sc_log::log_level_map) {
+  for (auto l : sc_core::log_level_map) {
     SC_LOG_AT(l.first, "sc_log_test") << l.second;
   }
 

@@ -18,7 +18,7 @@
  *      Author: eyck@minres.com
  */ 
 
-#include "sc_log/sc_log_types.h"
+#include "sysc/log/sc_log_types.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include <unordered_map>
 
@@ -28,9 +28,9 @@ namespace {
 // races in the unordered_map
 
 #ifdef DISABLE_REPORT_THREAD_LOCAL
-std::unordered_map<uint64_t, sc_log::log_levels> lut;
+std::unordered_map<uint64_t, sc_core::log_levels> lut;
 #else
-thread_local std::unordered_map<uint64_t, sc_log::log_levels> lut;
+thread_local std::unordered_map<uint64_t, sc_core::log_levels> lut;
 #endif
 
 // BKDR hash algorithm
@@ -45,10 +45,10 @@ auto char_hash(char const *str) -> uint64_t {
 }
 } // namespace
 
-sc_log::log_levels
-sc_log::sc_log_logger_cache::get_log_verbosity_cached(const char *scname,
+sc_core::log_levels
+sc_core::sc_log_logger_cache::get_log_verbosity_cached(const char *scname,
                                                       const char *tname = "") {
-  if (level != sc_log::log_levels::UNSET) {
+  if (level != sc_core::log_levels::UNSET) {
     return level;
   }
 
@@ -63,23 +63,23 @@ sc_log::sc_log_logger_cache::get_log_verbosity_cached(const char *scname,
                                                               tname);
 }
 
-auto sc_log::get_log_verbosity(char const *str) -> sc_log::log_levels {
+auto sc_core::get_log_verbosity(char const *str) -> sc_core::log_levels {
   auto k = char_hash(str);
   auto it = lut.find(k);
   if (it != lut.end()) {
     return it->second;
   }
 
-  sc_log::sc_log_logger_cache tmp;
+  sc_core::sc_log_logger_cache tmp;
   lut[k] = tmp.get_log_verbosity_cached(str);
   return lut[k];
 }
 
-sc_log::sc_log_global_logger_handler::sc_log_global_logger_handler() {
-  std::function<sc_log::log_levels(sc_log::sc_log_logger_cache &, const char *,
+sc_core::sc_log_global_logger_handler::sc_log_global_logger_handler() {
+  std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &, const char *,
                                    const char *)>
-      fn = [&](sc_log::sc_log_logger_cache &logger, const char *sc_name,
-               const char *t_name) -> sc_log::log_levels {
+      fn = [&](sc_core::sc_log_logger_cache &logger, const char *sc_name,
+               const char *t_name) -> sc_core::log_levels {
     return operator()(logger, sc_name, t_name);
   };
   ::sc_core::sc_get_curr_simcontext()->set_log_verbosity_fn(fn);

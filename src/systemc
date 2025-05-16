@@ -134,7 +134,7 @@
 #include "sysc/utils/sc_vector.h"
 #include "sysc/utils/sc_string.h"
 
-#include "sc_log/sc_log.h"
+#include "sysc/log/sc_log.h"
 
 #endif // !defined(SYSTEMC_INCLUDED)
 

@@ -204,6 +204,7 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_ver.cpp
         sysc/kernel/sc_wait.cpp
         sysc/kernel/sc_wait_cthread.cpp
+        sysc/log/sc_log.cpp
         sysc/tracing/sc_trace.cpp
         sysc/tracing/sc_trace_file_base.cpp
         sysc/tracing/sc_vcd_trace.cpp
@@ -333,6 +334,8 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_ver.h
         sysc/kernel/sc_wait.h
         sysc/kernel/sc_wait_cthread.h
+        sysc/log/sc_log.h
+        sysc/log/sc_log_types.h
         sysc/tracing/sc_trace.h
         sysc/tracing/sc_tracing_ids.h
         sysc/utils/sc_hash.h
@@ -418,8 +421,6 @@ set(SYSTEMC_CORE_SRC
           sysc/packages/qt/qt.h
           sysc/packages/qt/qtmd.h
         >
-        # sc_log
-        sc_log/sc_log.cpp
         )
 
 set(SYSTEMC_CORE_SRC_PRIVATE

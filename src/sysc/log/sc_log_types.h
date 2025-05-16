@@ -32,7 +32,7 @@
  */
 /**@{*/
 //! @brief Logging  utilities
-namespace sc_log {
+namespace sc_core {
 
 /************************
  * Provide a set of names and conversions that are suitable for logging levels
@@ -226,7 +226,7 @@ struct sc_logger {
    * @param verbosity the log level
    */
   sc_logger(const char *file, int line,
-           log_levels verbosity = sc_log::log_levels::INFO)
+           log_levels verbosity = sc_core::log_levels::INFO)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
   sc_logger() = delete;
@@ -306,7 +306,7 @@ protected:
   const log_levels level;
 };
 
-} // namespace sc_log
+} // namespace sc_core
 
 #define SC_LOG_LOG_LEVEL_CACHE _m_sc_log_log_level_cache_
 

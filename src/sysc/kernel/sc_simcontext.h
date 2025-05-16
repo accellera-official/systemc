@@ -37,7 +37,7 @@
 #include "sysc/kernel/sc_stage_callback_if.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
-#include "sc_log/sc_log_types.h"
+#include "sysc/log/sc_log_types.h"
 
 #include "sysc/communication/sc_host_mutex.h"
 
@@ -183,8 +183,8 @@ class SC_API sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
-    friend class sc_log::sc_log_global_logger_handler;
-    friend struct sc_log::sc_log_logger_cache;
+    friend class sc_core::sc_log_global_logger_handler;
+    friend struct sc_core::sc_log_logger_cache;
     friend SC_API sc_dt::uint64 sc_delta_count();
     friend SC_API const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
@@ -335,18 +335,18 @@ public:
 
   protected:
     void set_log_verbosity_fn(
-        std::function<sc_log::log_levels(sc_log::sc_log_logger_cache &,
+        std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &,
                                          const char *, const char *)>
             fn) {
       dynamic_log_verbosity = fn;
     }
-    sc_log::log_levels get_log_verbosity(sc_log::sc_log_logger_cache &logger,
+    sc_core::log_levels get_log_verbosity(sc_core::sc_log_logger_cache &logger,
                                          const char *sc_name,
                                          const char *typ_name) {
       if (dynamic_log_verbosity)
         return dynamic_log_verbosity(logger, sc_name, typ_name);
       else
-        return sc_log::as_log(sc_report_handler::get_verbosity_level());
+        return sc_core::as_log(sc_report_handler::get_verbosity_level());
     }
 
 private:
@@ -398,7 +398,7 @@ private:
 
     inline void set_simulation_status(sc_status status);
 
-    std::function<sc_log::log_levels(sc_log::sc_log_logger_cache &, const char* , const char* )> dynamic_log_verbosity;
+    std::function<log_levels(sc_log_logger_cache &, const char* , const char* )> dynamic_log_verbosity;
 
 private:
 
