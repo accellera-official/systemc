@@ -38,11 +38,13 @@
 #
 ###############################################################################
 
-cmake_minimum_required(VERSION 3.8...3.31)
+cmake_minimum_required(VERSION 3.16...3.31)
 
 ###############################################################################
 # Build rules for SystemC library
 ###############################################################################
+
+option(SYSTEMC_UNITY_BUILD "Enable unity build" OFF)
 
 function(add_systemc_library libName scBuildDefine)
 
@@ -123,6 +125,14 @@ function(add_systemc_library libName scBuildDefine)
         VERSION ${SystemCLanguage_VERSION}
         SOVERSION ${SystemCLanguage_SOVERSION}
         )
+
+    if(SYSTEMC_UNITY_BUILD)
+      message(STATUS "Enable SystemC unity build")
+      set_target_properties(${libName} PROPERTIES UNITY_BUILD ON)
+      set_source_files_properties(sysc/utils/sc_utils_ids.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+    else()
+      message(STATUS "Disable SystemC unity build")
+    endif()
 
 endfunction(add_systemc_library)
 
