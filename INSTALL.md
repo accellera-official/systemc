@@ -405,7 +405,7 @@ As an example, here is a minimal `CMakeLists.txt` to compile the `simple_perf`
 SystemC example as a stand-alone application:
 
       --- Start: CMakeLists.txt ---
-      cmake_minimum_required(VERSION 3.5)
+      cmake_minimum_required(VERSION 3.16)
       project(simple_perf CXX)
 
       set (CMAKE_PREFIX_PATH /opt/systemc)
