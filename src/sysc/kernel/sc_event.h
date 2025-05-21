@@ -34,7 +34,9 @@
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/communication/sc_writer_policy.h"
+#include "sysc/communication/sc_prim_channel.h"
 #include "sysc/utils/sc_ptr_flag.h"
+#include <mutex>
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -273,6 +275,66 @@ class SC_API sc_event
     friend class sc_join;
     friend class sc_trace_file;
 
+    class pending_helper : public sc_prim_channel
+    {
+        std::mutex mutex;
+        class sc_event *event;
+
+        bool valid=false;
+        bool cancel=false;
+        bool timed=false;
+        sc_time time;
+
+        void update(void) {
+            mutex.lock();
+            if (valid) {
+                if (cancel) {
+                    valid=false;
+                    mutex.unlock();
+                    event->cancel();
+                } else {
+                    valid=false;
+                    auto t=time;
+                    auto t_valid=timed;
+                    mutex.unlock();
+                    if (t_valid) {
+                        event->notify(t);
+                    } else {
+                        event->notify();
+                    }
+                }
+            } else {
+                mutex.unlock();
+            }
+        }
+
+        public:
+        void pending_notify(sc_time t) {
+            std::lock_guard<std::mutex> lg(mutex);
+            time=t;
+            timed=true;
+            valid=true;
+            async_request_update();
+        }
+        void pending_notify() {
+            std::lock_guard<std::mutex> lg(mutex);
+            timed=false;
+            valid=true;
+            async_request_update();
+        }
+        void pending_cancel() {
+            std::lock_guard<std::mutex> lg(mutex);
+            valid=true;
+            cancel=true;
+            async_request_update();
+        }
+
+        pending_helper(sc_event *e) : sc_prim_channel(true) {
+            event=e;
+        }
+
+    };
+    friend class pending_helper;
 public:
 
     sc_event();
@@ -354,6 +416,9 @@ private:
     // disabled
     sc_event( const sc_event& );
     sc_event& operator = ( const sc_event& );
+
+    pending_helper m_async_helper;
+
 };
 
 // ----------------------------------------------------------------------------
@@ -424,6 +489,10 @@ inline
 void
 sc_event::notify_internal( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify(t);
+        return;
+    }
     if( t == SC_ZERO_TIME ) {
         // add this event to the delta events set
         m_delta_event_index = m_simc->add_delta_event( this );
@@ -441,6 +510,10 @@ inline
 void
 sc_event::notify_next_delta()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify(SC_ZERO_TIME);
+        return;
+    }
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
     }
