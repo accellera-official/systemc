@@ -665,11 +665,6 @@ install (EXPORT SystemCLanguageTargets
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
          COMPONENT dev)
 
-# Register the SystemCLanguage and SystemCTLM packages for use from the
-# build tree. (This registers the build tree with the global CMake-registry.)
-export (PACKAGE SystemCLanguage)
-export (PACKAGE SystemCTLM)
-
 # Create the <Package>Config.cmake and <Package>ConfigVersion files
 include(CMakePackageConfigHelpers)
 configure_package_config_file(cmake/SystemCLanguageConfig.cmake.in
