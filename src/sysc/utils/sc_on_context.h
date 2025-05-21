@@ -34,6 +34,7 @@
 #include <condition_variable>
 #include <queue>
 #include <future>
+#include <chrono>
 
 #include <sysc/kernel/sc_simcontext.h>
 #include <sysc/kernel/sc_event.h>
@@ -81,7 +82,9 @@ protected:
         {
             auto future = m_task.get_future();
 
-            future.wait();
+                while (!m_cancelled &&
+                    future.wait_for(std::chrono::milliseconds(500))==std::future_status::timeout)
+                    {}
 
             if (!m_cancelled) {
                 future.get();
@@ -110,7 +113,7 @@ protected:
         std::unique_lock<std::mutex> lock(m_async_jobs_mutex);
         running = true;
         for (; running;) {
-            while (!m_async_jobs.empty()) {
+            while (running && !m_async_jobs.empty()) {
                 m_running_job = m_async_jobs.front();
                 m_async_jobs.pop();
 
@@ -181,7 +184,7 @@ public:
     void stop()
     {
         running = false;
-        m_jobs_handler_event.notify();
+        m_jobs_handler_event.notify(sc_core::SC_ZERO_TIME);
     }
 
     void end_of_simulation()
@@ -213,10 +216,14 @@ public:
 
             {
                 std::lock_guard<std::mutex> lock(m_async_jobs_mutex);
-                m_async_jobs.push(job);
+                if (running) {
+                    m_async_jobs.push(job);
+                } else {
+                    return false;
+                }
             }
 
-            m_jobs_handler_event.notify();
+            m_jobs_handler_event.notify(sc_core::SC_ZERO_TIME);
 
             if (wait) {
                 /* Wait for job completion */

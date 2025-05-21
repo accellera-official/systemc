@@ -282,6 +282,7 @@ class SC_API sc_event
 
         bool valid=false;
         bool cancel=false;
+        bool timed=false;
         sc_time time;
 
         void update(void) {
@@ -294,9 +295,13 @@ class SC_API sc_event
                 } else {
                     valid=false;
                     auto t=time;
+                    auto t_valid=timed;
                     mutex.unlock();
-                    event->cancel();
-                    event->notify(t);
+                    if (t_valid) {
+                        event->notify(t);
+                    } else {
+                        event->notify();
+                    }
                 }
             } else {
                 mutex.unlock();
@@ -305,17 +310,22 @@ class SC_API sc_event
 
         public:
         void pending_notify(sc_time t) {
-            mutex.lock();
+            std::lock_guard<std::mutex> lg(mutex);
             time=t;
+            timed=true;
             valid=true;
-            mutex.unlock();
+            async_request_update();
+        }
+        void pending_notify() {
+            std::lock_guard<std::mutex> lg(mutex);
+            timed=false;
+            valid=true;
             async_request_update();
         }
         void pending_cancel() {
-            mutex.lock();
+            std::lock_guard<std::mutex> lg(mutex);
             valid=true;
             cancel=true;
-            mutex.unlock();
             async_request_update();
         }
 
