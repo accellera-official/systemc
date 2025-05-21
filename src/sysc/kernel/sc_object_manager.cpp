@@ -98,7 +98,9 @@ sc_object_manager::~sc_object_manager()
 // | Result is an std::string containing the name.
 // +----------------------------------------------------------------------------
 std::string sc_object_manager::create_name(const char* leaf_name) 
-{ 
+{
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     bool        clash;                  // true if path name exists in obj table
     std::string leafname_string;        // string containing the leaf name.
     std::string parentname_string;      // parent path name 
@@ -337,6 +339,8 @@ sc_object_manager::hierarchy_size()
 bool
 sc_object_manager::insert_external_name(const std::string& name)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     if(!name_exists(name)) {
         m_instance_table[name].m_element_p = NULL;
         m_instance_table[name].m_name_origin = SC_NAME_EXTERNAL;
@@ -368,6 +372,8 @@ sc_object_manager::insert_external_name(const std::string& name)
 void
 sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     m_instance_table[name].m_element_p = static_cast<void*>(event_p);
     m_instance_table[name].m_name_origin = SC_NAME_EVENT;
 }
@@ -385,6 +391,8 @@ sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 void
 sc_object_manager::insert_object(const std::string& name, sc_object* object_p)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     m_instance_table[name].m_element_p = static_cast<void*>(object_p);
     m_instance_table[name].m_name_origin = SC_NAME_OBJECT;
 }
@@ -479,6 +487,8 @@ sc_object_manager::top_of_module_name_stack_name() const
 void
 sc_object_manager::remove_event(const std::string& name)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()
@@ -501,6 +511,8 @@ sc_object_manager::remove_event(const std::string& name)
 void
 sc_object_manager::remove_object(const std::string& name)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()
@@ -523,6 +535,8 @@ sc_object_manager::remove_object(const std::string& name)
 bool
 sc_object_manager::remove_external_name(const std::string& name)
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()

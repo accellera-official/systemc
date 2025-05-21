@@ -244,7 +244,7 @@ sc_mempool_int::~sc_mempool_int()
     delete[] allocators;
 }
 
-static sc_mempool_int* the_mempool = 0;
+thread_local static sc_mempool_int* the_mempool = 0;
 
 void*
 sc_mempool_int::do_allocate(std::size_t sz)

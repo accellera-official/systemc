@@ -372,6 +372,7 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
+    if (m_parent_context) return;           // assume the parent will delete us
     // remove remaining zombie processes
     do_collect_processes();
 
@@ -385,13 +386,15 @@ sc_simcontext::clean()
     delete m_null_event_p;
     delete m_timed_events;
     delete m_process_table;
-    delete m_name_gen;
     delete m_stage_cb_registry;
     delete m_prim_channel_registry;
     delete m_export_registry;
     delete m_port_registry;
     delete m_module_registry;
-    delete m_object_manager;
+    if (!m_parent_context) {
+        delete m_name_gen;
+        delete m_object_manager;
+    }
 
     m_delta_events.clear();
     m_child_objects.clear();
@@ -1703,7 +1706,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         exit_time = context_p->m_curr_time + duration;
 
     // called with duration = SC_ZERO_TIME for the first time
-    static bool init_delta_or_pending_updates =
+    thread_local static bool init_delta_or_pending_updates =
          ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
 
     // If the simulation status is bad issue the appropriate message:

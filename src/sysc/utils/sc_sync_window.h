@@ -1,4 +1,3 @@
-
 /*****************************************************************************
 
   Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
@@ -43,17 +42,20 @@ struct sc_sync_policy_base {
   virtual sc_core::sc_time quantum() = 0;
   virtual bool keep_alive() = 0;
 };
-struct sc_sync_policy_sc_zero_time : sc_sync_policy_base {
-  sc_core::sc_time quantum() { return SC_ZERO_TIME; }
-  bool keep_alive() { return false; }
-};
-struct sc_sync_policy_tlm_quantum : sc_sync_policy_base {
+struct sc_sync_policy_tlm_quantum : public sc_sync_policy_base {
   sc_core::sc_time quantum() {
     return tlm_utils::tlm_quantumkeeper::get_global_quantum();
   }
   bool keep_alive() { return true; }
 };
-
+struct sc_sync_policy_in_sync : public sc_sync_policy_base {
+  sc_core::sc_time quantum() {
+    return sc_core::sc_pending_activity()
+               ? sc_core::sc_time_to_pending_activity()
+               : sc_core::SC_ZERO_TIME;
+  }
+  bool keep_alive() { return false; }
+};
 /**
  * @brief windowed synchronizer, template sc_sync_policy gives the quantum
  * (dynamically) and specifies if the window should stay open indefinitely or
@@ -61,7 +63,7 @@ struct sc_sync_policy_tlm_quantum : sc_sync_policy_base {
  *
  * @tparam sc_sync_policy
  */
-template <class sc_sync_policy = sc_sync_policy_sc_zero_time>
+template <class sc_sync_policy = sc_sync_policy_in_sync>
 class sc_sync_windowed : public sc_core::sc_module,
                          public sc_core::sc_prim_channel {
   static_assert(std::is_base_of<sc_sync_policy_base, sc_sync_policy>::value,
@@ -69,6 +71,7 @@ class sc_sync_windowed : public sc_core::sc_module,
 
   sc_core::sc_event m_sweep_ev;
   sc_ob_event m_step_ev;
+  sc_event m_update_ev;
   std::mutex m_mutex;
   sc_sync_policy policy;
 
@@ -88,11 +91,15 @@ public:
 
 private:
   window m_window;
+  window m_incomming_window; // used to hold the window values coming in from
+                             // the other side.
+
   std::function<void(const window &)> m_other_async_set_window_fn;
 
-  void do_other_async_set_window_fn(const window &p_w) {
+  void do_other_async_set_window_fn(window w) {
     if (m_other_async_set_window_fn) {
-      m_other_async_set_window_fn(p_w);
+      auto now = sc_core::sc_time_stamp();
+      m_other_async_set_window_fn(w);
     }
   }
 
@@ -108,11 +115,7 @@ private:
 
       /* We should suspend at this point, and wait for the other side to catch
        * up */
-      auto q = (policy.quantum() == sc_core::SC_ZERO_TIME)
-                   ? sc_core::sc_time_to_pending_activity()
-                   : policy.quantum();
-
-      do_other_async_set_window_fn({now, now + q});
+      do_other_async_set_window_fn({now, now + policy.quantum()});
 
       if (!policy.keep_alive())
         async_attach_suspending();
@@ -123,12 +126,16 @@ private:
       if (!policy.keep_alive())
         async_detach_suspending();
 
-      auto q = (policy.quantum() == sc_core::SC_ZERO_TIME)
-                   ? sc_core::sc_time_to_pending_activity()
-                   : policy.quantum();
-      do_other_async_set_window_fn({now, now + q});
+      // We are about to advance to the next event, so may as well set that as
+      // the window now
+      do_other_async_set_window_fn(
+          {now + (sc_core::sc_pending_activity()
+                      ? sc_core::sc_time_to_pending_activity()
+                      : sc_core::SC_ZERO_TIME),
+           now + policy.quantum()});
+
       /* Re-notify event - maybe presumably moved */
-      m_step_ev.notify(std::min(q, to - now));
+      m_step_ev.notify(to - now);
     }
   }
 
@@ -136,18 +143,16 @@ private:
    * Handle all sweep requests, once we arrive at a sweep point, tell the other
    * side.
    */
-  virtual void sweep_helper() {
+  void sweep_helper() {
     auto now = sc_core::sc_time_stamp();
-
-    auto q = (policy.quantum() == sc_core::SC_ZERO_TIME)
-                 ? sc_core::sc_time_to_pending_activity()
-                 : policy.quantum();
-    do_other_async_set_window_fn({now, now + q});
+    do_other_async_set_window_fn({now, now + policy.quantum()});
   }
 
   /* Manage the Sync aync update  */
   void update() {
     std::lock_guard<std::mutex> lg(m_mutex);
+    // Now we are on our thread, it's safe to update our window.
+    m_window = m_incomming_window;
     auto now = sc_core::sc_time_stamp();
 
     if (m_window.from > now) {
@@ -155,13 +160,8 @@ private:
     } else {
       m_sweep_ev.cancel(); // no need to fire event.
     }
-
-    /* let stepper handle suspend/resume */
-    m_step_ev.notify(sc_core::SC_ZERO_TIME);
-    if (m_window == open_window) {
-      /* The other side is signalling that they have no more events */
-      sc_stop();
-    }
+    /* let stepper handle suspend/resume, must time notify */
+    m_update_ev.notify(sc_core::SC_ZERO_TIME);
   }
 
 public:
@@ -172,20 +172,23 @@ public:
    * the 'to'.
    */
   void async_set_window(window w) {
-    /* Only accept updated windows so we dont re-send redundant updates */
+    /* Only accept updated windows so we dont re-send redundant updates
+     * safe at this point to compair against m_window as we took the lock
+     */
     std::lock_guard<std::mutex> lg(m_mutex);
+    m_incomming_window = w;
     if (!(w == m_window)) {
-      m_window = w;
       async_request_update();
     }
   }
-
-  void end_of_simulation() { do_other_async_set_window_fn(open_window); }
-
-  void start_of_simulation() { m_step_ev.notify(sc_core::SC_ZERO_TIME); }
+  void detach() {
+    async_detach_suspending();
+    m_other_async_set_window_fn(open_window);
+  }
   void bind(sc_sync_windowed *other) {
     if (m_other_async_set_window_fn) {
-      SC_REPORT_WARNING("sc_sync_window",
+      SC_REPORT_WARNING(
+          "sc_sync_window",
           "m_other_async_set_window_fn was already registered or other "
           "sc_sync_windowed was already bound!");
     }
@@ -195,7 +198,8 @@ public:
   }
   void register_sync_cb(std::function<void(const window &)> fn) {
     if (m_other_async_set_window_fn) {
-      SC_REPORT_WARNING("sc_sync_window",
+      SC_REPORT_WARNING(
+          "sc_sync_window",
           "m_other_async_set_window_fn was already registered or other "
           "sc_sync_windowed was already bound!");
     }
@@ -210,7 +214,9 @@ public:
 
     SC_METHOD(step_helper);
     dont_initialize();
-    sensitive << m_step_ev;
+    sensitive << m_step_ev << m_update_ev;
+
+    m_step_ev.notify(sc_core::SC_ZERO_TIME);
 
     this->sc_core::sc_prim_channel::async_attach_suspending();
   }

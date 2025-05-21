@@ -4,10 +4,12 @@
 #include <tlm_utils/simple_target_socket.h>
 
 #include "sysc/utils/sc_parallel.h"
+#include <unistd.h>
 
 std::mutex mutex;
 
 int do_work() {
+    return 1;
   int f = 0;
   for (int j = 0; j < 50000; j++) {
     for (int k = 0; k < 10000; k++) {
@@ -76,6 +78,12 @@ public:
     SC_REPORT_INFO(name(), "Constructor done");
   }
 
+  void end_of_elaboration() {
+    SC_REPORT_INFO(name(), "end_of_elaboration");
+  }
+  void start_of_simulation() {
+    SC_REPORT_INFO(name(), "start_of_simulation");
+  }
   sc_in<bool> in;
 
   tlm_utils::simple_initiator_socket<my_parallel_module> socket;
@@ -122,6 +130,13 @@ SC_MODULE(My_normal_module) {
     socket.register_b_transport(this, &My_normal_module::b_transport);
   }
   sc_out<bool> out;
+
+  void end_of_elaboration() {
+    SC_REPORT_INFO(name(), "end_of_elaboration");
+  }
+  void start_of_simulation() {
+    SC_REPORT_INFO(name(), "start_of_simulation");
+  }
 };
 
 void report_handler(const sc_core::sc_report &rep,
@@ -138,13 +153,13 @@ int sc_main(int argc, char *argv[]) {
   ::sc_core::sc_report_handler::set_verbosity_level(sc_core::SC_DEBUG);
   ::sc_core::sc_report_handler::set_handler(report_handler);
 
-  tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::SC_ZERO_TIME);
-  // tlm_utils::tlm_quantumkeeper::set_global_quantum(
-  //          sc_core::sc_time(100, sc_core::SC_MS));
+  tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(100, sc_core::SC_MS));
 
-  SC_PARALLEL(my_parallel_module, sc_core::sc_sync_policy_tlm_quantum)
-  mp("Parallel");
   My_normal_module mn("Normal");
+  //my_parallel_module mp("Parallel");
+  SC_PARALLEL(my_parallel_module, sc_core::sc_sync_policy_tlm_quantum) mp("Parallel");
+  //SC_PARALLEL(my_parallel_module, sc_core::sc_sync_policy_in_sync) mp("Parallel");
+
   sc_signal<bool> sig;
   mn.out(sig);
   mp.in(sig);

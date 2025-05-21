@@ -92,7 +92,7 @@ void
 sc_event::notify()
 {
     if (m_simc != sc_get_curr_simcontext()) {
-        m_async_helper.pending_notify(SC_ZERO_TIME);
+        m_async_helper.pending_notify();
         return;
     }
     // immediate notification
@@ -113,7 +113,6 @@ void
 sc_event::notify( const sc_time& t )
 {
     if (m_simc != sc_get_curr_simcontext()) {
-        std::cout << name()<<"HERE: ("<<t<<")\n";
         m_async_helper.pending_notify(t);
         return;
     }
@@ -182,6 +181,10 @@ static void sc_warn_notify_delayed()
 void
 sc_event::notify_delayed()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify();
+        return;
+    }
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -194,6 +197,11 @@ sc_event::notify_delayed()
 void
 sc_event::notify_delayed( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify(t);
+        return;
+    }
+
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -557,7 +565,7 @@ union sc_event_timed_u
     char              dummy[sizeof( sc_event_timed )];
 };
 
-static
+thread_local static
 sc_event_timed_u* free_list = 0;
 
 void*
