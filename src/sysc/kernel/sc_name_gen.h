@@ -30,6 +30,7 @@
 #ifndef SC_NAME_GEN
 #define SC_NAME_GEN
 
+#include <mutex>
 #include <string>
 #include "sysc/utils/sc_hash.h"
 
@@ -52,7 +53,7 @@ public:
                                  bool preserve_first = false );
 
 private:
-
+    std::mutex       m_mutex;
     sc_strhash<int*> m_unique_name_map;
     std::string      m_unique_name;
 
