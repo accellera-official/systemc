@@ -1,3 +1,4 @@
+#include <mutex>
 #include <systemc.h>
 
 #include <tlm_utils/simple_initiator_socket.h>
@@ -9,14 +10,25 @@
 std::mutex mutex;
 
 int do_work() {
-    return 1;
-  int f = 0;
-  for (int j = 0; j < 50000; j++) {
-    for (int k = 0; k < 10000; k++) {
+  double f = 0;
+  for (double j = 0; j < 100; j++) {
+    for (double k = 0; k < 100; k++) {
       f += (j * k);
     }
   }
   return f;
+}
+sc_core::sc_time time1 = SC_ZERO_TIME;
+sc_core::sc_time time2 = SC_ZERO_TIME;
+sc_core::sc_time worst = SC_ZERO_TIME;
+
+std::mutex tm;
+void snaptime(sc_time &time) {
+  std::lock_guard<std::mutex> lg(tm);
+  time = sc_time_stamp();
+  auto d = (time1 > time2) ? time1 - time2 : time2 - time1;
+  if (d > worst)
+    worst = d;
 }
 
 SC_MODULE(my_parallel_module) {
@@ -31,9 +43,10 @@ SC_MODULE(my_parallel_module) {
 
   void t3() {
     SC_REPORT_INFO(name(), "T3");
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 150000; i++) {
       SC_REPORT_INFO(name(), "T3 waiting");
       wait(100, sc_core::SC_MS);
+      snaptime(time1);
 
       SC_REPORT_INFO(name(), "T3 do work");
       int f = do_work();
@@ -44,13 +57,17 @@ SC_MODULE(my_parallel_module) {
     SC_REPORT_INFO(name(), "T3 finished loop");
   }
 
-  void m2() {
-    SC_REPORT_INFO(name(), "Send TXN");
-    tlm::tlm_generic_payload trans;
-    sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+  void t4() {
+    while (1) {
+      wait(send_txn);
 
-    socket->b_transport(trans, delay);
-    SC_REPORT_INFO(name(), "done TXN");
+      SC_REPORT_INFO(name(), "Send TXN");
+      tlm::tlm_generic_payload trans;
+      sc_core::sc_time delay = sc_core::SC_ZERO_TIME;
+
+      socket->b_transport(trans, delay);
+      SC_REPORT_INFO(name(), "done TXN");
+    }
   }
   void m1() {
 
@@ -67,23 +84,17 @@ public:
     SC_THREAD(t1);
     SC_THREAD(t2);
     SC_THREAD(t3);
+    SC_THREAD(t4);
 
     SC_METHOD(m1);
     sensitive << in;
     dont_initialize();
 
-    SC_METHOD(m2);
-    sensitive << send_txn;
-    dont_initialize();
     SC_REPORT_INFO(name(), "Constructor done");
   }
 
-  void end_of_elaboration() {
-    SC_REPORT_INFO(name(), "end_of_elaboration");
-  }
-  void start_of_simulation() {
-    SC_REPORT_INFO(name(), "start_of_simulation");
-  }
+  void end_of_elaboration() { SC_REPORT_INFO(name(), "end_of_elaboration"); }
+  void start_of_simulation() { SC_REPORT_INFO(name(), "start_of_simulation"); }
   sc_in<bool> in;
 
   tlm_utils::simple_initiator_socket<my_parallel_module> socket;
@@ -103,9 +114,11 @@ SC_MODULE(My_normal_module) {
 
   void t3() {
     SC_REPORT_INFO(name(), "T3");
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 150000; i++) {
       SC_REPORT_INFO(name(), "T3 waiting");
-      wait(50, sc_core::SC_MS);
+      wait(100, sc_core::SC_MS);
+      snaptime(time2);
+
       SC_REPORT_INFO(name(), "T3 do work");
 
       int f = do_work();
@@ -114,7 +127,7 @@ SC_MODULE(My_normal_module) {
       SC_REPORT_INFO(
           name(), ("Sending signal" + std::string((i & 0x1) ? "True" : "False"))
                       .c_str());
-      out.write(i & 0x1);
+      //      out.write(i & 0x1);
       SC_REPORT_INFO(name(), "T3 done waiting");
     }
     SC_REPORT_INFO(name(), "T3 finished loop");
@@ -131,21 +144,24 @@ SC_MODULE(My_normal_module) {
   }
   sc_out<bool> out;
 
-  void end_of_elaboration() {
-    SC_REPORT_INFO(name(), "end_of_elaboration");
-  }
-  void start_of_simulation() {
-    SC_REPORT_INFO(name(), "start_of_simulation");
-  }
+  void end_of_elaboration() { SC_REPORT_INFO(name(), "end_of_elaboration"); }
+  void start_of_simulation() { SC_REPORT_INFO(name(), "start_of_simulation"); }
 };
 
 void report_handler(const sc_core::sc_report &rep,
                     const sc_core::sc_actions &actions) {
+#if DEBUG
   std::lock_guard<std::mutex> lock(mutex);
-  cout << "thread:" << std::this_thread::get_id()
+  auto now = std::chrono::high_resolution_clock::now();
+  auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    now.time_since_epoch())
+                    .count();
+
+  cout << now_ms % 10000 << " thread:" << std::this_thread::get_id()
        << " simcontext:" << sc_core::sc_get_curr_simcontext()
        << " time:" << sc_core::sc_time_stamp() << " "
        << " : [" << rep.get_msg_type() << "] " << rep.get_msg() << std::endl;
+#endif
 }
 
 int sc_main(int argc, char *argv[]) {
@@ -153,7 +169,8 @@ int sc_main(int argc, char *argv[]) {
   ::sc_core::sc_report_handler::set_verbosity_level(sc_core::SC_DEBUG);
   ::sc_core::sc_report_handler::set_handler(report_handler);
 
-  tlm_utils::tlm_quantumkeeper::set_global_quantum(sc_core::sc_time(100, sc_core::SC_MS));
+  tlm_utils::tlm_quantumkeeper::set_global_quantum(
+      sc_core::sc_time(200, sc_core::SC_MS));
 
   My_normal_module mn("Normal");
   //my_parallel_module mp("Parallel");
@@ -168,6 +185,7 @@ int sc_main(int argc, char *argv[]) {
 
   SC_REPORT_INFO("main", "before start");
   sc_start();
+  std::cout << "Worst diff: " << worst << "\n";
   SC_REPORT_INFO("main", "finished");
 
   return 0;
