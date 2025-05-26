@@ -16,7 +16,8 @@
 
 /*****************************************************************************
 
-  sc_ob_event.h -- Event that fires only when there are subsequent events
+ sc_ob_event.h -- Event that fires only when the simulator arrives at the
+ notification time, or there are subsequent events
 
   Original Author: Mark burton
 
@@ -30,9 +31,6 @@
 #define _SC_OB_EVENT_
 
 #include <systemc>
-#include <tlm>
-
-#include <string>
 
 namespace sc_core {
 class sc_ob_event : public sc_core::sc_module,
@@ -75,19 +73,20 @@ public:
     m_scheduled = sc_core::sc_time_stamp() + delay;
     sc_core::sc_register_stage_callback(*this, sc_core::SC_POST_UPDATE);
   }
-
+  void cancel() {
+    sc_core::sc_event::cancel();
+    sc_core::sc_unregister_stage_callback(*this, sc_core::SC_POST_UPDATE);
+  }
   void stage_callback(const sc_core::sc_stage &stage) {
-//    if (sc_core::sc_pending_activity()) {    // should the event fire is there is pending activity, or if we arrive at the time?
-      sc_core::sc_time pending = sc_core::sc_time_stamp();
-      if (sc_core::sc_pending_activity_at_future_time()) {
-        pending += sc_core::sc_time_to_pending_activity();
-      }
+    sc_core::sc_time pending = sc_core::sc_time_stamp();
+    if (sc_core::sc_pending_activity_at_future_time()) {
+      pending += sc_core::sc_time_to_pending_activity();
+    }
 
-      if (pending >= m_scheduled) {
-        m_th.resume();
-        sc_core::sc_unregister_stage_callback(*this, sc_core::SC_POST_UPDATE);
-      }
-//    }
+    if (pending >= m_scheduled) {
+      m_th.resume();
+      sc_core::sc_unregister_stage_callback(*this, sc_core::SC_POST_UPDATE);
+    }
   }
 
   ~sc_ob_event() {}

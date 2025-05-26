@@ -313,8 +313,11 @@ private:
         // forward call
         sc_assert(m_mod);
         if (!m_on_ctx.is_on_sysc()) {
+          sc_core::sc_time our_time=sc_core::sc_time_stamp();
+          sc_core::sc_time their_time;
           m_on_ctx.run(
-              [this, &trans, &t]() { (m_mod->*m_b_transport_ptr)(trans, t); });
+              [this, &trans, &t, &our_time, &their_time]() { if (our_time>sc_core::sc_time_stamp()) wait(our_time-sc_core::sc_time_stamp()); (m_mod->*m_b_transport_ptr)(trans, t); their_time=sc_core::sc_time_stamp(); });
+          if (their_time>sc_core::sc_time_stamp()) wait(their_time-sc_core::sc_time_stamp());
         } else {
           (m_mod->*m_b_transport_ptr)(trans, t);
         }

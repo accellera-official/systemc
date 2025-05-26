@@ -38,6 +38,7 @@
 
 namespace sc_core {
 
+template <typename T, class SYNC_POLICY> class sc_parallel;
 /**
  * @brief Simcontext handler, encapsulates a simcontext
  * This is required for the templated class to work, and hence is required in
@@ -46,7 +47,7 @@ namespace sc_core {
  */
 template <class SYNC_POLICY = sc_core::sc_sync_policy_in_sync>
 class _internal_simcontext_handler {
-
+  template <typename T, class S> friend class sc_parallel;
   /**
    * @brief Helper to capture start of simulation and start std::thread
    *
@@ -131,6 +132,7 @@ class _internal_simcontext_handler {
     sc_sync_windowed<SYNC_POLICY> *m_sync_child;
   };
 
+private:
   sc_core::sc_simcontext *m_old_simcontext =
       sc_get_curr_simcontext(); // Side effect create simcontext if we are the
                                 // first module
@@ -139,7 +141,6 @@ class _internal_simcontext_handler {
   control_module m_ctrl_module;
   sc_sync_windowed<SYNC_POLICY> m_sync_parent;
 
-public:
   void use_simcontext() {
     assert(sc_curr_simcontext != &m_simcontext);
     m_old_simcontext = sc_curr_simcontext;
@@ -148,6 +149,7 @@ public:
 
   void revert_simcontext() { sc_curr_simcontext = m_old_simcontext; }
 
+public:
   _internal_simcontext_handler()
       : m_ctrl_module("ctrl_module", this), m_sync_parent("sync_parent") {
     SYNC_POLICY sync_policy;

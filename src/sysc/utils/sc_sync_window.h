@@ -79,14 +79,14 @@ public:
   struct window {
     sc_core::sc_time from;
     sc_core::sc_time to;
-    bool operator==(window other) {
+    bool operator==(const window &other) const {
       return other.to == to && other.from == from;
     }
   };
 
-  const struct window zero_window = {sc_core::SC_ZERO_TIME,
+  static inline const struct window zero_window = {sc_core::SC_ZERO_TIME,
                                      sc_core::SC_ZERO_TIME};
-  const struct window open_window = {sc_core::SC_ZERO_TIME,
+  static inline const struct window open_window = {sc_core::SC_ZERO_TIME,
                                      sc_core::sc_max_time()};
 
 private:
@@ -98,7 +98,6 @@ private:
 
   void do_other_async_set_window_fn(window w) {
     if (m_other_async_set_window_fn) {
-      auto now = sc_core::sc_time_stamp();
       m_other_async_set_window_fn(w);
     }
   }
@@ -109,6 +108,8 @@ private:
     auto now = sc_core::sc_time_stamp();
     auto to = m_window.to;
 
+    /* The step helper has to handle both suspend and resume (because of
+     * SystemC) */
     if (now >= to) {
       sc_core::sc_unsuspend_all(); // such that pending activity is valid if
                                    // it's needed below.
@@ -122,17 +123,12 @@ private:
       sc_core::sc_suspend_all();
 
     } else {
+      /* the only way to get here is if we have a 'new' window from the other
+       * side. we are here just to unsuspend */
       sc_core::sc_unsuspend_all();
       if (!policy.keep_alive())
         async_detach_suspending();
-
-      // We are about to advance to the next event, so may as well set that as
-      // the window now
-      do_other_async_set_window_fn(
-          {now + (sc_core::sc_pending_activity()
-                      ? sc_core::sc_time_to_pending_activity()
-                      : sc_core::SC_ZERO_TIME),
-           now + policy.quantum()});
+    //do_other_async_set_window_fn({now, now + policy.quantum()});
 
       /* Re-notify event - maybe presumably moved */
       m_step_ev.notify(to - now);
@@ -162,6 +158,9 @@ private:
     }
     /* let stepper handle suspend/resume, must time notify */
     m_update_ev.notify(sc_core::SC_ZERO_TIME);
+//    std::ostringstream s;
+//    s << "Got Window: " << m_window.from << " - " << m_window.to;
+//    SC_REPORT_INFO(sc_core::sc_module::name(), s.str().c_str());
   }
 
 public:
@@ -171,7 +170,7 @@ public:
    * Input: window  - Window to set for sync. Sweep till the 'from' and step to
    * the 'to'.
    */
-  void async_set_window(window w) {
+  void async_set_window(const window &w) {
     /* Only accept updated windows so we dont re-send redundant updates
      * safe at this point to compair against m_window as we took the lock
      */
@@ -192,9 +191,7 @@ public:
           "m_other_async_set_window_fn was already registered or other "
           "sc_sync_windowed was already bound!");
     }
-    m_other_async_set_window_fn = [other](const window &w) {
-      other->async_set_window(w);
-    };
+    m_other_async_set_window_fn = std::bind(&sc_sync_windowed::async_set_window, other, std::placeholders::_1);
   }
   void register_sync_cb(std::function<void(const window &)> fn) {
     if (m_other_async_set_window_fn) {
@@ -216,7 +213,7 @@ public:
     dont_initialize();
     sensitive << m_step_ev << m_update_ev;
 
-    m_step_ev.notify(sc_core::SC_ZERO_TIME);
+    m_step_ev.notify(policy.quantum());
 
     this->sc_core::sc_prim_channel::async_attach_suspending();
   }

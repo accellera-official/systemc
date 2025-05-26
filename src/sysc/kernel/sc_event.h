@@ -275,64 +275,44 @@ class SC_API sc_event
     friend class sc_join;
     friend class sc_trace_file;
 
-    class pending_helper : public sc_prim_channel
-    {
-        std::mutex mutex;
-        class sc_event *event;
+    class pending_helper : public sc_prim_channel {
+      std::mutex mutex;
+      class sc_event *event;
 
-        bool valid=false;
-        bool cancel=false;
-        bool timed=false;
-        sc_time time;
+      bool cancel = false;
+      sc_time time;
 
-        void update(void) {
-            mutex.lock();
-            if (valid) {
-                if (cancel) {
-                    valid=false;
-                    mutex.unlock();
-                    event->cancel();
-                } else {
-                    valid=false;
-                    auto t=time;
-                    auto t_valid=timed;
-                    mutex.unlock();
-                    if (t_valid) {
-                        event->notify(t);
-                    } else {
-                        event->notify();
-                    }
-                }
+      void update(void) {
+        std::lock_guard<std::mutex> lg(mutex);
+        if (cancel) {
+          event->cancel();
+        } else {
+            if (time < sc_time_stamp()) {
+                event->notify(SC_ZERO_TIME);
             } else {
-                mutex.unlock();
+                event->notify(time-sc_time_stamp());
             }
         }
+      }
 
-        public:
-        void pending_notify(sc_time t) {
-            std::lock_guard<std::mutex> lg(mutex);
-            time=t;
-            timed=true;
-            valid=true;
-            async_request_update();
-        }
-        void pending_notify() {
-            std::lock_guard<std::mutex> lg(mutex);
-            timed=false;
-            valid=true;
-            async_request_update();
-        }
-        void pending_cancel() {
-            std::lock_guard<std::mutex> lg(mutex);
-            valid=true;
-            cancel=true;
-            async_request_update();
-        }
+    public:
+      void pending_notify(sc_time t) {
+        std::lock_guard<std::mutex> lg(mutex);
+        time = t+sc_time_stamp();
+        async_request_update();
+      }
+      void pending_notify() {
+        std::lock_guard<std::mutex> lg(mutex);
+        time = SC_ZERO_TIME;
+        async_request_update();
+      }
+      void pending_cancel() {
+        std::lock_guard<std::mutex> lg(mutex);
+        cancel = true;
+        async_request_update();
+      }
 
-        pending_helper(sc_event *e) : sc_prim_channel(true) {
-            event=e;
-        }
-
+      pending_helper(sc_event *e) : sc_prim_channel(true) { event = e; }
     };
     friend class pending_helper;
 public:

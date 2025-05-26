@@ -223,7 +223,7 @@ public:
                 }
             }
 
-            m_jobs_handler_event.notify(sc_core::SC_ZERO_TIME);
+            m_jobs_handler_event.notify();
 
             if (wait) {
                 /* Wait for job completion */
