@@ -161,8 +161,6 @@
 #
 # - Test on as many different hardware / OS platforms as possible.
 #
-# - Configure and install systemc.pc and tlm.pc for pkg-config
-#
 ###############################################################################
 
 cmake_minimum_required (VERSION 3.5...3.31)
@@ -697,4 +695,61 @@ install(FILES "${PROJECT_BINARY_DIR}/SystemCLanguageConfig.cmake"
 install(FILES "${PROJECT_BINARY_DIR}/SystemCTLMConfig.cmake"
               "${PROJECT_BINARY_DIR}/SystemCTLMConfigVersion.cmake"
         DESTINATION "${SystemCTLM_INSTALL_CMAKEDIR}"
+        COMPONENT dev)
+
+###############################################################################
+# Configure and install systemc.pc and tlm.pc for pkg-config
+###############################################################################
+
+# pkg-config template substitution
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "\${prefix}")
+if(INSTALL_TO_LIB_TARGET_ARCH_DIR)
+  set(LIB_ARCH_SUFFIX "-${SystemC_TARGET_ARCH}")
+else()
+  set(LIB_ARCH_SUFFIX "")
+endif()
+set(libdir "\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}")
+set(includedir "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}")
+
+# SystemC pkg-config variables
+set(TARGET_ARCH "${SystemC_TARGET_ARCH}")
+set(PACKAGE_NAME "SystemC")
+set(PACKAGE_VERSION "${SystemCLanguage_VERSION}")
+set(PACKAGE_URL "https://www.accellera.org/downloads/standards/systemc")
+set(PACKAGE "systemc")
+
+# TLM pkg-config variables
+set(TLM_PACKAGE_VERSION "${SystemCTLM_VERSION}")
+
+# Set compilation and linking flags for SystemC
+set(PKGCONFIG_CFLAGS "")
+set(PKGCONFIG_DEFINES "")
+set(PKGCONFIG_LDPRIV "")
+
+if(ENABLE_PTHREADS)
+  get_target_property(pthread_cflags Threads::Threads INTERFACE_COMPILE_OPTIONS)
+  if(pthread_cflags)
+    set(PKGCONFIG_CFLAGS ${PKGCONFIG_CFLAGS} ${pthread_cflags})
+  endif()
+  get_target_property(pthread_lib Threads::Threads INTERFACE_LINK_LIBRARIES)
+  if(pthread_lib)
+    set(PKGCONFIG_LDPRIV ${PKGCONFIG_LDPRIV} ${pthread_lib})
+  endif()
+endif()
+
+# Configure systemc.pc
+configure_file("${PROJECT_SOURCE_DIR}/src/systemc.pc.in"
+               "${PROJECT_BINARY_DIR}/systemc.pc"
+               @ONLY)
+
+# Configure tlm.pc
+configure_file("${PROJECT_SOURCE_DIR}/src/tlm.pc.in"
+               "${PROJECT_BINARY_DIR}/tlm.pc"
+               @ONLY)
+
+# Install pkg-config files
+install(FILES "${PROJECT_BINARY_DIR}/systemc.pc"
+              "${PROJECT_BINARY_DIR}/tlm.pc"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
         COMPONENT dev)
