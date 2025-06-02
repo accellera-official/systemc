@@ -664,7 +664,7 @@ to_string( const scfx_ieee_double&,
 	   sc_numrep,
 	   int,
 	   sc_fmt,
-	   const scfx_params* = 0 );
+	   const scfx_params*);
 
 
 // explicit conversion to character string
