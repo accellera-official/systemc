@@ -94,7 +94,7 @@ class sc_cor_pkg_pthread
   : public sc_cor_pkg
 {
     friend void* sc_cor_pthread::invoke_module_method( void* context_p );
-public:
+  public:
 
     // constructor
     sc_cor_pkg_pthread( sc_simcontext* simc );
