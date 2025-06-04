@@ -59,16 +59,16 @@ class sc_cor_pthread : public sc_cor
     // destructor
     virtual ~sc_cor_pthread();
 
-	// module method invocator (starts thread execution)
-	static void* invoke_module_method( void* context_p );
+    // module method invocator (starts thread execution)
+    static void* invoke_module_method( void* context_p );
 
   public:
-	sc_cor_fn*          m_cor_fn;		// Core function.
-	void*               m_cor_fn_arg;	// Core function argument.
-	pthread_mutex_t     m_mutex;        // Mutex to suspend thread on.
+    sc_cor_fn*          m_cor_fn;		// Core function.
+    void*               m_cor_fn_arg;	// Core function argument.
+    pthread_mutex_t     m_mutex;        // Mutex to suspend thread on.
     sc_cor_pkg_pthread* m_pkg_p;        // the creating coroutine package
-	pthread_cond_t      m_pt_condition; // Condition waiting for.
-	pthread_t           m_thread;       // Our pthread storage.
+    pthread_cond_t      m_pt_condition; // Condition waiting for.
+    pthread_t           m_thread;       // Our pthread storage.
 
 private:
 
