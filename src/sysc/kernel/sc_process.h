@@ -401,7 +401,7 @@ class SC_API sc_process_b : public sc_object_host {
                                                     // requesting global suspension.
 
   protected:
-    static sc_process_b* m_last_created_process_p; // Last process created.
+    thread_local static sc_process_b* m_last_created_process_p; // Last process created.
 };
 
 

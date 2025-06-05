@@ -447,6 +447,8 @@ private:
     int                         m_suspend;
     int                         m_unsuspendable;
 
+    sc_simcontext*              m_parent_context;
+
 private:
 
     // disabled
@@ -459,8 +461,8 @@ private:
 // Not MT safe.
 
 #if 1
-extern SC_API sc_simcontext* sc_curr_simcontext;
-extern SC_API sc_simcontext* sc_default_global_context;
+extern thread_local SC_API sc_simcontext* sc_curr_simcontext;
+extern thread_local SC_API sc_simcontext* sc_default_global_context;
 
 inline sc_simcontext*
 sc_get_curr_simcontext()

@@ -147,8 +147,8 @@ class SC_API sc_process_handle {
     sc_process_b* m_target_p;   // Target for this object instance.
 
   protected:
-    static std::vector<sc_event*>  empty_event_vector;  // If m_target_p == 0.
-    static std::vector<sc_object*> empty_object_vector; // If m_target_p == 0.
+    thread_local static std::vector<sc_event*>  empty_event_vector;  // If m_target_p == 0.
+    thread_local static std::vector<sc_object*> empty_object_vector; // If m_target_p == 0.
     static sc_event&               non_event();         // If m_target_p == 0.
 };
 
