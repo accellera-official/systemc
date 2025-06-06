@@ -70,7 +70,7 @@ class sc_cor_pthread : public sc_cor
     pthread_cond_t      m_pt_condition; // Condition waiting for.
     pthread_t           m_thread;       // Our pthread storage.
 
-private:
+  private:
 
     // disabled
     sc_cor_pthread( const sc_cor_pthread& );
@@ -114,14 +114,14 @@ class sc_cor_pkg_pthread
     // get the main coroutine
     virtual sc_cor* get_main();
 
-private:
+  private:
 
     sc_cor_pthread   m_main_cor;    // Main coroutine
     sc_cor_pthread*  m_curr_cor;    // Active coroutine
     pthread_mutex_t  m_create_mtx;  // See note (1) above
     pthread_cond_t   m_create_cond; // See note (1) above
 
-private:
+  private:
 
     // disabled
     sc_cor_pkg_pthread();
