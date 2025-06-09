@@ -77,7 +77,8 @@ sc_cor_std_thread::sc_cor_std_thread( sc_cor_fn fn, void* arg_p )
 sc_cor_std_thread::~sc_cor_std_thread()
 {
     DEBUGF << this << ": sc_cor_std_thread::~sc_cor_std_thread()" << std::endl;
-    delete m_thread_p; // @@@@#### okay?
+    m_thread_p->join();
+    delete m_thread_p; 
 }
 
 
@@ -121,12 +122,6 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
 }
 
 
-// ----------------------------------------------------------------------------
-//  CLASS : sc_cor_pkg_std_thread
-//
-//  Coroutine package class implemented with Posix Threads.
-// ----------------------------------------------------------------------------
-
 // +------------------------------------------------------------------------------------------------
 // |"sc_cor_pkg_std_thread::sc_cor_pkg_std_thread"
 // | 
@@ -162,7 +157,6 @@ sc_cor_pkg_std_thread::~sc_cor_pkg_std_thread()
 {
 }
 
-// create a new coroutine
 
 // +------------------------------------------------------------------------------------------------
 // |"sc_cor_pkg_std_thread::create"
