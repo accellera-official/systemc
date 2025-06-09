@@ -31,7 +31,7 @@
 #define SC_COR_QT_H
 
 
-#if !defined(_WIN32) && !defined(WIN32) && !defined(WIN64)  && !defined(SC_USE_PTHREADS)
+#if !defined(_WIN32) && !defined(WIN32) && !defined(WIN64)  && !defined(SC_USE_PTHREADS) && !defined(SC_USE_STD_THREADS)
 
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/packages/qt/qt.h"

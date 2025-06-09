@@ -78,6 +78,7 @@ NO_H_FILES += \
 	kernel/sc_cor_fiber.h \
 	kernel/sc_cor_pthread.h \
 	kernel/sc_cor_qt.h \
+	kernel/sc_cor_std_thread.h \
 	kernel/sc_cthread_process.h \
 	kernel/sc_method_process.h \
 	kernel/sc_module_registry.h \
@@ -124,6 +125,9 @@ CXX_COR_FILES = kernel/sc_cor_qt.cpp
 else
 if WANT_PTHREADS_THREADS
 CXX_COR_FILES = kernel/sc_cor_pthread.cpp
+else
+if WANT_STD_THREADS_THREADS
+CXX_COR_FILES = kernel/sc_cor_std_thread.cpp
 else
 CXX_COR_FILES = kernel/sc_cor_fiber.cpp
 endif

@@ -113,6 +113,9 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
+# ENABLE_STD_THREADS            Use standar libary threads for SystemC processes instead
+#                               of QuickThreads on Unix or Fiber on Windows.
+#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -275,6 +278,10 @@ option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
+option (ENABLE_STD_THREADS
+        "Use standard library threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+        OFF)
+
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
         OFF)
@@ -407,6 +414,8 @@ endif (NOT SystemC_TARGET_ARCH)
 message (STATUS "Detect the target processor architecture for QuickThreads.")
 if (ENABLE_PTHREADS)
   set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (ENABLE_STD_THREADS)
+  set (QT_ARCH "IGNORE") # std threads will be used for the SystemC coroutines.
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
@@ -435,11 +444,13 @@ if (QT_ARCH)
   enable_language (ASM)
 else (QT_ARCH)
   # Otherwise, fall back to Pthreads or Fiber.
-  if (NOT MSVC)
-    set (ENABLE_PTHREADS TRUE CACHE BOOL
-         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+  if (NOT ENABLE_STD_THREADS)
+      if (NOT MSVC)
+        set (ENABLE_PTHREADS TRUE CACHE BOOL
+             "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
          FORCE)
-  endif (NOT MSVC)
+      endif (NOT MSVC)
+  endif (NOT ENABLE_STD_THREADS)
 endif (QT_ARCH)
 
 
@@ -595,11 +606,8 @@ endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
-if (ENABLE_PTHREADS)
-  message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-else (ENABLE_PTHREADS)
-  message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+message (STATUS "ENABLE_STD_THREADS = ${ENABLE_STD_THREADS}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message (STATUS "OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
