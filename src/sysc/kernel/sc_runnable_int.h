@@ -69,7 +69,7 @@ namespace sc_core {
 // in the queue.
 //
 // This allows a null m_execute_p field in an sc_process_b instance to 
-// indicate that the instance has not on the queued. That prevents an sc_process_b 
+// indicate that the instance has not been queued. That prevents an sc_process_b 
 // instance from being queued twice.
 //
 // Not using a separate field in a runnable entry to indicate when it is queued 
@@ -138,6 +138,10 @@ inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 // This method initializes this object instance. Note we allocate the queue
 // heads if necessary. This is done here rather than in the constructor for
 // this class to eliminate CTOR processing errors with gcc.
+//
+// Notes:
+//   (1) See the notes above the definition of the sc_runnable class for details 
+//       about the ready-to-run queue structure.
 //------------------------------------------------------------------------------
 inline void sc_runnable::init()
 {
