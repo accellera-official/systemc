@@ -101,7 +101,7 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
 
     // SUSPEND THE THREAD SO WE CAN GAIN CONTROL FROM THE STD_THREAD PACKAGE:
     //
-    // Since std_cor_pkg_std_thread::create  schedules each thread behind our back for its
+    // Since std_cor_pkg_std_thread::create schedules each thread behind our back for its
     // initial execution we immediately suspend a newly created thread
     // here so we can control when its execution will occur. We also wake
     // up the main thread which is waiting for this thread to execute to this
