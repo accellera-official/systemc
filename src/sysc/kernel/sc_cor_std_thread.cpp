@@ -52,7 +52,7 @@ namespace sc_core {
 // | other than initialize some fields. The real work occurs in sc_cor_pkg_std_thread::create().
 // +------------------------------------------------------------------------------------------------
 sc_cor_std_thread::sc_cor_std_thread( sc_cor_fn fn, void* arg_p )
-    : m_cor_fn_arg( 0 ), m_lock(m_mutex), m_pkg_p( 0 )
+    : m_active(false), m_cor_fn_arg( 0 ), m_lock(m_mutex), m_pkg_p( 0 )
 {
     DEBUGF << this << ": sc_cor_std_thread::sc_cor_std_thread()" << std::endl;
 }
@@ -98,6 +98,7 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
     // wait point.
 
     DEBUGF << p << ": child signalling main thread " << endl;
+    p->m_active = true;
     p->m_pkg_p->m_create_cond.notify_one();
     DEBUGF << p << ": child waiting to be invoked " << endl;
     p->m_condition.wait(p->m_lock);
@@ -196,7 +197,7 @@ sc_cor_pkg_std_thread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg 
 
     DEBUGF << &m_main_cor << ": main thread waiting for signal from "
            << cor_p << std::endl;
-    m_create_cond.wait(m_create_lock);
+    m_create_cond.wait(m_create_lock,[=]() { return cor_p->is_active(); });
     
     DEBUGF << &m_main_cor << ": exiting sc_cor_pkg_std_thread::create("
            << cor_p << ")" << std::endl;
