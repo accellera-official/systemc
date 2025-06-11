@@ -65,14 +65,13 @@ class sc_cor_std_thread : public sc_cor
 
     inline bool is_active() { return m_active; }
 
-  public: // the order of the fields below matters: e.g., mutex must come before lock.
+  public: 
 
     bool                         m_active;       // Thread is active.
     sc_cor_fn*                   m_cor_fn;       // Core function.
     void*                        m_cor_fn_arg;   // Core function argument.
-    std::mutex                   m_mutex;        // Mutex
-    std::unique_lock<std::mutex> m_lock;         // Lock to suspend thread on.
     std::condition_variable      m_condition;    // Condition waiting for.
+    std::mutex                   m_mutex;        // Mutex
     sc_cor_pkg_std_thread*       m_pkg_p;        // the creating coroutine package
     std::thread*                 m_thread_p;     // Our std::thread.
 
@@ -121,13 +120,12 @@ class sc_cor_pkg_std_thread
     // get the main coroutine
     virtual sc_cor* get_main();
 
-private: // the order of the fields below matters: e.g., mutex must come before lock.
+private: 
 
     sc_cor_std_thread            m_main_cor;     // Main coroutine
     sc_cor_std_thread*           m_curr_cor;     // Active coroutine
     std::condition_variable      m_create_cond;  // Condition waiting for.
     std::mutex                   m_create_mutex; // Mutex for lock.
-    std::unique_lock<std::mutex> m_create_lock;  // Lock to suspend thread on.
 
 private:
 

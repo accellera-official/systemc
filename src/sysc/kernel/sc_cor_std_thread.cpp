@@ -52,7 +52,7 @@ namespace sc_core {
 // | other than initialize some fields. The real work occurs in sc_cor_pkg_std_thread::create().
 // +------------------------------------------------------------------------------------------------
 sc_cor_std_thread::sc_cor_std_thread( sc_cor_fn fn, void* arg_p )
-    : m_active(false), m_cor_fn_arg( 0 ), m_lock(m_mutex), m_pkg_p( 0 )
+    : m_active(false), m_cor_fn_arg( 0 ), m_pkg_p( 0 )
 {
     DEBUGF << this << ": sc_cor_std_thread::sc_cor_std_thread()" << std::endl;
 }
@@ -101,7 +101,10 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
     p->m_active = true;
     p->m_pkg_p->m_create_cond.notify_one();
     DEBUGF << p << ": child waiting to be invoked " << endl;
-    p->m_condition.wait(p->m_lock);
+    {
+	std::unique_lock<std::mutex> lk(p->m_mutex);  
+        p->m_condition.wait(lk);
+    }
 
 
     // CALL THE SYSTEMC CODE THAT WILL ACTUALLY START THE THREAD OFF:
@@ -127,7 +130,6 @@ sc_cor_pkg_std_thread::sc_cor_pkg_std_thread( sc_simcontext* simc )
   : sc_cor_pkg( simc )
   , m_main_cor( NULL, NULL ) 
   , m_curr_cor( &m_main_cor )
-  , m_create_lock(m_create_mutex)
 {
     m_main_cor.m_pkg_p = this;
 
@@ -197,7 +199,10 @@ sc_cor_pkg_std_thread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg 
 
     DEBUGF << &m_main_cor << ": main thread waiting for signal from "
            << cor_p << std::endl;
-    m_create_cond.wait(m_create_lock,[=]() { return cor_p->is_active(); });
+    {
+	std::unique_lock<std::mutex> lk(m_create_mutex);  
+        m_create_cond.wait(lk);
+    }
     
     DEBUGF << &m_main_cor << ": exiting sc_cor_pkg_std_thread::create("
            << cor_p << ")" << std::endl;
@@ -227,8 +232,14 @@ sc_cor_pkg_std_thread::yield( sc_cor* next_cor_p )
     DEBUGF << from_p << ": switch to " << to_p << std::endl;
     if ( to_p != from_p )
     {
-	to_p->m_condition.notify_one();
-	from_p->m_condition.wait(from_p->m_lock);
+	{
+	    std::unique_lock<std::mutex> to_lock(to_p->m_mutex);
+	    to_p->m_condition.notify_one();
+	}
+	{
+	    std::unique_lock<std::mutex> from_lock(from_p->m_mutex);
+	    from_p->m_condition.wait(from_lock);
+	}
     }
 
     m_curr_cor = from_p; // When we come out of wait make ourselves active.
@@ -244,8 +255,10 @@ sc_cor_pkg_std_thread::abort( sc_cor* next_cor_p )
     sc_cor_std_thread* n_p = static_cast<sc_cor_std_thread*>(next_cor_p);
 
     DEBUGF << m_curr_cor << ": aborting, switching to " << n_p << std::endl;
-    n_p->m_condition.notify_one();
-    // @@@@#### how to terminate???
+    {
+	std::unique_lock<std::mutex> to_lock(n_p->m_mutex);
+	n_p->m_condition.notify_one();
+    }
 }
 
 
