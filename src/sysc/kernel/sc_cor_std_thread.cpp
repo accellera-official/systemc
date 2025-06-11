@@ -42,16 +42,6 @@ using namespace std;
 
 namespace sc_core {
 
-#if 0 // REMOVE @@@@####
-// MAKE SURE WE HAVE A NULL THAT WILL WORK:
-
-#if defined(__hpux)
-#   define STD_THREAD_NULL cma_c_null
-#else  // !defined(__hpux)
-#   define STD_THREAD_NULL NULL
-#endif // !defined(__hpux)
-#endif // @@@@####
-
 #define DEBUGF \
     if (0) std::cout << "sc_cor_std_thread.cpp(" << __LINE__ << ") "
 
@@ -71,13 +61,13 @@ sc_cor_std_thread::sc_cor_std_thread( sc_cor_fn fn, void* arg_p )
 // +------------------------------------------------------------------------------------------------
 // |"sc_cor_std_thread::~sc_cor_std_thread"
 // | 
-// | This is the object instance destructor for this object type. It frees the std::thread 
-// | associated with this object.
+// | This is the object instance destructor for this object type. It detaches and frees the 
+// | std::thread associated with this object instance.
 // +------------------------------------------------------------------------------------------------
 sc_cor_std_thread::~sc_cor_std_thread()
 {
     DEBUGF << this << ": sc_cor_std_thread::~sc_cor_std_thread()" << std::endl;
-    m_thread_p->join();
+    m_thread_p->detach(); 
     delete m_thread_p; 
 }
 
