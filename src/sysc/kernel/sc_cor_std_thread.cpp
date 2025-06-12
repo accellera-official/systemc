@@ -95,15 +95,15 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
     // up the main thread which is waiting for this thread to execute to this
     // wait point.
 
-    std::unique_lock<std::mutex> main_lock(p->m_pkg_p->m_create_mutex, std::defer_lock);  
+    std::unique_lock<std::mutex> create_lock(p->m_pkg_p->m_create_mutex, std::defer_lock);  
     std::unique_lock<std::mutex> child_lock(p->m_mutex, std::defer_lock);  
 
     DEBUGF << p << ": child signalling main thread " << endl;
-    main_lock.lock();
+    create_lock.lock();
     p->m_pkg_p->m_create_cond.notify_one();
     DEBUGF << p << ": child waiting to be invoked " << endl;
     child_lock.lock();
-    main_lock.unlock();
+    create_lock.unlock();
     p->m_condition.wait(child_lock);
     child_lock.unlock();
 
@@ -193,16 +193,16 @@ sc_cor_pkg_std_thread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg 
     // This scheme results in the newly created thread being dormant before
     // the main thread continues execution.
 
-    std::unique_lock<std::mutex> main_lock(m_create_mutex, std::defer_lock);  
-    main_lock.lock();
+    std::unique_lock<std::mutex> create_lock(m_create_mutex, std::defer_lock);  
+    create_lock.lock();
     DEBUGF << &m_main_cor << ": about to create actual thread "
            << cor_p << std::endl;
     cor_p->m_thread_p = new std::thread(sc_cor_std_thread::invoke_thread, cor_p);
 
     DEBUGF << &m_main_cor << ": main thread waiting for signal from "
            << cor_p << std::endl;
-    m_create_cond.wait(main_lock);
-    main_lock.unlock();
+    m_create_cond.wait(create_lock);
+    create_lock.unlock();
     
     DEBUGF << &m_main_cor << ": exiting sc_cor_pkg_std_thread::create("
            << cor_p << ")" << std::endl;
@@ -232,14 +232,15 @@ sc_cor_pkg_std_thread::yield( sc_cor* next_cor_p )
     DEBUGF << from_p << ": switch to " << to_p << std::endl;
     if ( to_p != from_p )
     {
-	{
-	    std::unique_lock<std::mutex> to_lock(to_p->m_mutex);
-	    to_p->m_condition.notify_one();
-	}
-	{
-	    std::unique_lock<std::mutex> from_lock(from_p->m_mutex);
-	    from_p->m_condition.wait(from_lock);
-	}
+	std::unique_lock<std::mutex> to_lock(to_p->m_mutex,std::defer_lock);
+	std::unique_lock<std::mutex> from_lock(from_p->m_mutex,std::defer_lock);
+
+	to_lock.lock();
+	to_p->m_condition.notify_one();
+	from_lock.lock();
+	to_lock.unlock();
+	from_p->m_condition.wait(from_lock);
+	from_lock.unlock();
     }
 
     m_curr_cor = from_p; // When we come out of wait make ourselves active.
