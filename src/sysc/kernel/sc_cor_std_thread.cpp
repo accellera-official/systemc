@@ -33,8 +33,7 @@
 
 // ORDER OF THE INCLUDES AND namespace sc_core IS IMPORTANT!!!
 
-#include "sc_cor_std_thread.h"
-//  #include "sysc/kernel/sc_cor_std_thread.h"
+#include "sysc/kernel/sc_cor_std_thread.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/utils/sc_report.h"
 
@@ -43,7 +42,7 @@ using namespace std;
 namespace sc_core {
 
 #define DEBUGF \
-    if (0) std::cout << "sc_cor_std_thread.cpp(" << __LINE__ << ") "
+    if (false) std::cout << "sc_cor_std_thread.cpp(" << __LINE__ << ") "
 
 // +------------------------------------------------------------------------------------------------
 // |"sc_cor_std_thread::sc_cor_std_thread"
@@ -52,7 +51,7 @@ namespace sc_core {
 // | other than initialize some fields. The real work occurs in sc_cor_pkg_std_thread::create().
 // +------------------------------------------------------------------------------------------------
 sc_cor_std_thread::sc_cor_std_thread( sc_cor_fn fn, void* arg_p )
-    : m_active(false), m_cor_fn_arg( 0 ), m_pkg_p( 0 )
+    : m_cor_fn_arg( 0 ), m_pkg_p( 0 )
 {
     DEBUGF << this << ": sc_cor_std_thread::sc_cor_std_thread()" << std::endl;
 }
@@ -88,7 +87,6 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
     sc_cor_std_thread* p = static_cast<sc_cor_std_thread*>(context_p);
     DEBUGF << p << ": sc_cor_std_thread::invoke_thread()" << std::endl;
 
-
     // SUSPEND THE THREAD SO WE CAN GAIN CONTROL FROM THE STD_THREAD PACKAGE:
     //
     // Since std_cor_pkg_std_thread::create schedules each thread behind our back for its
@@ -97,15 +95,17 @@ void sc_cor_std_thread::invoke_thread(void* context_p)
     // up the main thread which is waiting for this thread to execute to this
     // wait point.
 
+    std::unique_lock<std::mutex> main_lock(p->m_pkg_p->m_create_mutex, std::defer_lock);  
+    std::unique_lock<std::mutex> child_lock(p->m_mutex, std::defer_lock);  
+
     DEBUGF << p << ": child signalling main thread " << endl;
-    p->m_active = true;
+    main_lock.lock();
     p->m_pkg_p->m_create_cond.notify_one();
     DEBUGF << p << ": child waiting to be invoked " << endl;
-    {
-	std::unique_lock<std::mutex> lk(p->m_mutex);  
-        p->m_condition.wait(lk);
-    }
-
+    child_lock.lock();
+    main_lock.unlock();
+    p->m_condition.wait(child_lock);
+    child_lock.unlock();
 
     // CALL THE SYSTEMC CODE THAT WILL ACTUALLY START THE THREAD OFF:
 
@@ -193,16 +193,16 @@ sc_cor_pkg_std_thread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg 
     // This scheme results in the newly created thread being dormant before
     // the main thread continues execution.
 
+    std::unique_lock<std::mutex> main_lock(m_create_mutex, std::defer_lock);  
+    main_lock.lock();
     DEBUGF << &m_main_cor << ": about to create actual thread "
            << cor_p << std::endl;
     cor_p->m_thread_p = new std::thread(sc_cor_std_thread::invoke_thread, cor_p);
 
     DEBUGF << &m_main_cor << ": main thread waiting for signal from "
            << cor_p << std::endl;
-    {
-	std::unique_lock<std::mutex> lk(m_create_mutex);  
-        m_create_cond.wait(lk);
-    }
+    m_create_cond.wait(main_lock);
+    main_lock.unlock();
     
     DEBUGF << &m_main_cor << ": exiting sc_cor_pkg_std_thread::create("
            << cor_p << ")" << std::endl;

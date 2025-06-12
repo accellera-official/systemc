@@ -63,11 +63,8 @@ class sc_cor_std_thread : public sc_cor
     // module method invocator (starts thread execution)
     static void invoke_thread( void* context_p ); 
 
-    inline bool is_active() { return m_active; }
-
   public: 
 
-    bool                         m_active;       // Thread is active.
     sc_cor_fn*                   m_cor_fn;       // Core function.
     void*                        m_cor_fn_arg;   // Core function argument.
     std::condition_variable      m_condition;    // Condition waiting for.
