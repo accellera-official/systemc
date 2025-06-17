@@ -71,6 +71,7 @@ function(add_systemc_library libName scBuildDefine)
         $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
         $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
         $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
+        $<$<BOOL:${ENABLE_STD_THREADS}>:SC_USE_STD_THREADS>
         $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
         SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
         $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
@@ -178,6 +179,7 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_cor_fiber.cpp
         sysc/kernel/sc_cor_pthread.cpp
         sysc/kernel/sc_cor_qt.cpp
+        sysc/kernel/sc_cor_std_thread.cpp
         sysc/kernel/sc_cthread_process.cpp
         sysc/kernel/sc_event.cpp
         sysc/kernel/sc_except.cpp
@@ -421,6 +423,7 @@ set(SYSTEMC_CORE_SRC_PRIVATE
         sysc/kernel/sc_cor_fiber.h
         sysc/kernel/sc_cor_pthread.h
         sysc/kernel/sc_cor_qt.h
+        sysc/kernel/sc_cor_std_thread.h
         sysc/kernel/sc_cthread_process.h
         sysc/kernel/sc_method_process.h
         sysc/kernel/sc_module_registry.h

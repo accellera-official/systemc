@@ -66,7 +66,7 @@
 //------------------------------------------------------------------------------
 // architecture-specific default stack sizes
 //------------------------------------------------------------------------------
-#elif !defined(SC_USE_PTHREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
+#elif !defined(SC_USE_PTHREADS) && !defined(SC_USE_STD_THREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
 #   define SC_DEFAULT_STACK_SIZE_ 0x50000
 
 #elif defined(SC_LONG_64) || defined(__x86_64__) || defined(__LP64__) || \
