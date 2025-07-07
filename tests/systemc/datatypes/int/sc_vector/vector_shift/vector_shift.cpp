@@ -368,8 +368,7 @@ class ShiftRightSigned : public ShiftRightSigned<W-D,D>
       sc_bigint<W>     source;
       constexpr size_t digits_n = SC_DIGIT_COUNT(W);
       sc_bigint<W>     actual;
-      sc_digit        actual_bits[digits_n];
-      sc_digit        expected[digits_n];
+      sc_digit         expected[digits_n];
 
       fill( digits_n, source, fill_value );
 
@@ -384,7 +383,7 @@ class ShiftRightSigned : public ShiftRightSigned<W-D,D>
           cout << "    source       " << hex << source << dec << " width " << W << endl;
           cout << "    shift    " << shift_i << endl;
           cout << "    expected "; dump( result_digits_n, expected );
-          cout << "    actual   "; dump( result_digits_n, actual_bits );
+          cout << "    actual   "; dump( result_digits_n, actual.get_raw() );
           sc_assert(false);
         }
       }
@@ -407,7 +406,8 @@ class ShiftRightUnsigned : public ShiftRightUnsigned<W-D,D>
       sc_biguint<W>   source;
       constexpr auto  digits_n = SC_DIGIT_COUNT(W);
       sc_biguint<W>   actual;
-      sc_digit        expected[digits_n]; // expected[digits_n];
+      sc_digit        expected[digits_n];
+
       fill( digits_n, source, fill_value );
 
       for ( size_t shift_i = 1; shift_i < W; ++shift_i ) {
