@@ -534,14 +534,14 @@ template<int W>
 template<int WO>
 sc_bv<W>& sc_bv<W>::operator = ( const sc_biguint<WO>& v )
 {
-    *this = v.sc_unsigned_proxy();
+    return *this = v.sc_unsigned_proxy();
 }
 
 template<int W>
 template<int WO>
 sc_lv<W>& sc_lv<W>::operator = ( const sc_biguint<WO>& v )
 {
-    *this = v.sc_unsigned_proxy();
+    return *this = v.sc_unsigned_proxy();
 }
 
 
