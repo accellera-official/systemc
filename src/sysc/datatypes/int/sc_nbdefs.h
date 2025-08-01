@@ -98,8 +98,8 @@ namespace sc_dt
 //     for their values. This includes the small vector support to eliminate malloc and free
 //     for smaller values. (See SC_BASE_VEC_DIGITS below).
 
-#define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
+// #define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
+#define SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE
 // #define SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE
 
 #if !defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS) && \
