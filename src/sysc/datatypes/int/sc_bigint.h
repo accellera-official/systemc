@@ -696,26 +696,6 @@ public: // explicit conversion to character string:
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
 
-#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-public: // "mirror" for sc_signed concatenation support:
-    virtual int concat_length(bool* xz_present_p) const 
-        { return sc_signed_proxy().concat_length( xz_present_p ); }
-    virtual uint64 concat_get_uint64() const 
-        { return sc_signed_proxy().concat_get_uint64(); }
-    virtual bool concat_get_ctrl( sc_digit* dst_p, int low_i ) const 
-        { return sc_signed_proxy().concat_get_ctrl(dst_p,low_i); }
-    virtual bool concat_get_data( sc_digit* dst_p, int low_i ) const 
-        { return sc_signed_proxy().concat_get_data(dst_p,low_i); }
-    virtual void concat_set(int64 src, int low_i)
-        { sc_signed_proxy().concat_set(src, low_i);}
-    virtual void concat_set(const sc_signed& src, int low_i)
-        { sc_signed_proxy().concat_set(src, low_i); }
-    virtual void concat_set(const sc_unsigned& src, int low_i)
-        { sc_signed_proxy().concat_set(src, low_i); }
-    virtual void concat_set(uint64 src, int low_i)
-        { sc_signed_proxy().concat_set(src, low_i); }
-#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-
 public: // field and template value accesses:
   inline int              get_actual_length() const { return W; }
   inline const sc_digit*  get_digits() const        { return digit; }
