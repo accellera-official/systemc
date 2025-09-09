@@ -1157,6 +1157,18 @@ public: // Temporary object support:
   static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
   static size_t       m_temporaries_i;
 
+    // +--------------------------------------------------------------------------------------------
+    // |"allocate_temporary"
+    // | 
+    // | This method only occurs exists if sc_biguint<W> does not have an sc_unsigned base class.
+    // | It allocates a temporary sc_unsigned instance with supplied width and data.
+    // |
+    // | Arguments:
+    // |     nb       = number of bits in the sc_unsigned instance
+    // |     digits_p =  digit storage in the sc_biguint instance
+    // | Result:
+    // |     temporary sc_unsigned instance that was allocated.
+    // +--------------------------------------------------------------------------------------------
   static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p )
   {
       sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
