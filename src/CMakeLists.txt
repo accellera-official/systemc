@@ -467,6 +467,10 @@ endforeach()
 
     add_systemc_library(systemc SC_BUILD_OFF STATIC ${SYSTEMC_SC_MAIN_SRC} )
 
+    add_library(systemc_if INTERFACE)
+    target_link_libraries(systemc_if INTERFACE systemc systemc-${SystemCLanguage_VERSION})
+
+
     if (MSVC) # lib.exe should be available from MSVC command promt
 
         add_custom_command(
@@ -481,18 +485,21 @@ endforeach()
         add_custom_command(
                 TARGET systemc
                 POST_BUILD
-                COMMAND ar x $<TARGET_FILE:systemc>
-                COMMAND ar x $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>
-                COMMAND del *.a
-                COMMAND ar qc $<TARGET_FILE:systemc>  *.o *.obj
-                COMMAND del *.o *.obj
+                COMMAND ${CMAKE_COMMAND} -E echo "CREATE $<TARGET_FILE:systemc>" > merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_FILE:systemc>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "SAVE" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "END" >> merge_script.mri
+                COMMAND ar -M < merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E remove merge_script.mri
                 COMMENT "Combining SystemC libs..."
         )
 
     endif(MSVC)
 
-    set(SYSTEMC_TARGETS systemc ${SYSTEMC_DLL_TARGET})
+    set(SYSTEMC_TARGETS systemc_if systemc ${SYSTEMC_DLL_TARGET})
 
+    add_library(SystemC::systemc ALIAS systemc_if)
 else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     add_systemc_library(systemc
@@ -504,9 +511,9 @@ else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     set(SYSTEMC_TARGETS systemc)
 
+    add_library(SystemC::systemc ALIAS systemc)
 endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-add_library(SystemC::systemc ALIAS systemc)
 
 install(TARGETS ${SYSTEMC_TARGETS} EXPORT SystemCLanguageTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
