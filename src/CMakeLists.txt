@@ -38,11 +38,13 @@
 #
 ###############################################################################
 
-cmake_minimum_required(VERSION 3.8) # cxx_std_17
+cmake_minimum_required(VERSION 3.16...3.31)
 
 ###############################################################################
 # Build rules for SystemC library
 ###############################################################################
+
+option(SYSTEMC_UNITY_BUILD "Enable unity build" OFF)
 
 function(add_systemc_library libName scBuildDefine)
 
@@ -69,6 +71,7 @@ function(add_systemc_library libName scBuildDefine)
         $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
         $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
         $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
+        $<$<BOOL:${ENABLE_STD_THREADS}>:SC_USE_STD_THREADS>
         $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
         SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
         $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
@@ -124,6 +127,15 @@ function(add_systemc_library libName scBuildDefine)
         SOVERSION ${SystemCLanguage_SOVERSION}
         )
 
+    if(SYSTEMC_UNITY_BUILD)
+      message(STATUS "Enable SystemC unity build")
+      set_target_properties(${libName} PROPERTIES UNITY_BUILD ON)
+      set_source_files_properties(sysc/kernel/sc_main.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+      set_source_files_properties(sysc/utils/sc_utils_ids.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+    else()
+      message(STATUS "Disable SystemC unity build")
+    endif()
+
 endfunction(add_systemc_library)
 
 set(SYSTEMC_CORE_SRC
@@ -168,6 +180,7 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_cor_fiber.cpp
         sysc/kernel/sc_cor_pthread.cpp
         sysc/kernel/sc_cor_qt.cpp
+        sysc/kernel/sc_cor_std_thread.cpp
         sysc/kernel/sc_cthread_process.cpp
         sysc/kernel/sc_event.cpp
         sysc/kernel/sc_except.cpp
@@ -298,10 +311,6 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_cmnhdr.h
         sysc/kernel/sc_constants.h
         sysc/kernel/sc_cor.h
-        sysc/kernel/sc_cor_fiber.h
-        sysc/kernel/sc_cor_pthread.h
-        sysc/kernel/sc_cor_qt.h
-        sysc/kernel/sc_cthread_process.h
         sysc/kernel/sc_dynamic_processes.h
         sysc/kernel/sc_event.h
         sysc/kernel/sc_except.h
@@ -309,36 +318,23 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_join.h
         sysc/kernel/sc_kernel_ids.h
         sysc/kernel/sc_macros.h
-        sysc/kernel/sc_method_process.h
         sysc/kernel/sc_module.h
         sysc/kernel/sc_module_name.h
-        sysc/kernel/sc_module_registry.h
-        sysc/kernel/sc_name_gen.h
         sysc/kernel/sc_object.h
-        sysc/kernel/sc_object_int.h
-        sysc/kernel/sc_object_manager.h
-        sysc/kernel/sc_stage_callback_registry.h
         sysc/kernel/sc_process.h
         sysc/kernel/sc_process_handle.h
-        sysc/kernel/sc_reset.h
         sysc/kernel/sc_runnable.h
-        sysc/kernel/sc_runnable_int.h
         sysc/kernel/sc_sensitive.h
         sysc/kernel/sc_simcontext.h
-        sysc/kernel/sc_simcontext_int.h
         sysc/kernel/sc_spawn.h
         sysc/kernel/sc_spawn_options.h
         sysc/kernel/sc_status.h
-        sysc/kernel/sc_thread_process.h
         sysc/kernel/sc_time.h
         sysc/kernel/sc_ver.h
         sysc/kernel/sc_wait.h
         sysc/kernel/sc_wait_cthread.h
         sysc/tracing/sc_trace.h
-        sysc/tracing/sc_trace_file_base.h
         sysc/tracing/sc_tracing_ids.h
-        sysc/tracing/sc_vcd_trace.h
-        sysc/tracing/sc_wif_trace.h
         sysc/utils/sc_hash.h
         sysc/utils/sc_iostream.h
         sysc/utils/sc_list.h
@@ -349,7 +345,6 @@ set(SYSTEMC_CORE_SRC
         sysc/utils/sc_pvector.h
         sysc/utils/sc_report.h
         sysc/utils/sc_report_handler.h
-        sysc/utils/sc_stop_here.h
         sysc/utils/sc_string.h
         sysc/utils/sc_string_view.h
         sysc/utils/sc_temporary.h
@@ -415,6 +410,7 @@ set(SYSTEMC_CORE_SRC
           $<$<STREQUAL:${QT_ARCH},x86_64>:sysc/packages/qt/md/iX86_64.s>
           $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
           $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
+          $<$<STREQUAL:${QT_ARCH},riscv64>:sysc/packages/qt/md/riscv64.s>
           $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
           sysc/packages/qt/md/aarch64.h
           sysc/packages/qt/md/i386.h
@@ -422,6 +418,28 @@ set(SYSTEMC_CORE_SRC
           sysc/packages/qt/qt.h
           sysc/packages/qt/qtmd.h
         >
+        )
+
+set(SYSTEMC_CORE_SRC_PRIVATE
+        sysc/kernel/sc_cor_fiber.h
+        sysc/kernel/sc_cor_pthread.h
+        sysc/kernel/sc_cor_qt.h
+        sysc/kernel/sc_cor_std_thread.h
+        sysc/kernel/sc_cthread_process.h
+        sysc/kernel/sc_method_process.h
+        sysc/kernel/sc_module_registry.h
+        sysc/kernel/sc_name_gen.h
+        sysc/kernel/sc_object_int.h
+        sysc/kernel/sc_object_manager.h
+        sysc/kernel/sc_stage_callback_registry.h
+        sysc/kernel/sc_reset.h
+        sysc/kernel/sc_runnable_int.h
+        sysc/kernel/sc_simcontext_int.h
+        sysc/kernel/sc_thread_process.h
+        sysc/tracing/sc_trace_file_base.h
+        sysc/tracing/sc_vcd_trace.h
+        sysc/tracing/sc_wif_trace.h
+        sysc/utils/sc_stop_here.h
         )
 
 set(SYSTEMC_SC_MAIN_SRC
@@ -434,6 +452,12 @@ set(SYSTEMC_SC_MAIN_SRC
 
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
+# Build exclusion list
+foreach(header IN LISTS SYSTEMC_CORE_SRC_PRIVATE)
+    list(APPEND SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE PATTERN ${header} EXCLUDE)
+endforeach()
+
+
 # Windows DLLs can't contain unresolved symbols, so we need to spilt library
 # into two:
 #  - ${SYSTEMC_DLL_TARGET}.dll is a shared library without unresolved symbols
@@ -442,7 +466,7 @@ if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     set(SYSTEMC_DLL_TARGET systemc-${SystemCLanguage_VERSION})
 
-    add_systemc_library(${SYSTEMC_DLL_TARGET} SC_BUILD SHARED ${SYSTEMC_CORE_SRC} )
+    add_systemc_library(${SYSTEMC_DLL_TARGET} SC_BUILD SHARED ${SYSTEMC_CORE_SRC} ${SYSTEMC_CORE_SRC_PRIVATE})
 
     add_systemc_library(systemc SC_BUILD_OFF STATIC ${SYSTEMC_SC_MAIN_SRC} )
 
@@ -477,6 +501,7 @@ else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
     add_systemc_library(systemc
             SC_BUILD
             ${SYSTEMC_CORE_SRC}
+            ${SYSTEMC_CORE_SRC_PRIVATE}
             ${SYSTEMC_SC_MAIN_SRC}
             )
 
@@ -508,8 +533,12 @@ install (FILES systemc tlm
 install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
-         FILES_MATCHING PATTERN "*.h")
+         FILES_MATCHING PATTERN "*.h"
+                        # explicitly exclude former NO_H_FILES
+                        ${SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE})
 install (DIRECTORY ./
          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
          COMPONENT dev
-         FILES_MATCHING PATTERN "*.hpp")
+         FILES_MATCHING PATTERN "*.hpp"
+                        # explicitly exclude former NO_H_FILES
+                        ${SYSTEMC_CORE_SRC_PRIVATE_EXCLUDE})

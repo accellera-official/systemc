@@ -70,7 +70,6 @@
 #define SC_INT_BASE_H
 
 #include "sysc/kernel/sc_cmnhdr.h"
-#include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_length_param.h"

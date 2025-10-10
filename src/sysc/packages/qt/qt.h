@@ -14,7 +14,7 @@
 #ifndef QUICKTHREADS_QT_H
 #define QUICKTHREADS_QT_H
 
-#if !defined(SC_USE_PTHREADS)
+#if !defined(SC_USE_PTHREADS) && !defined(SC_USE_STD_THREADS)
 
 #ifdef __cplusplus
 extern "C" {
@@ -192,5 +192,5 @@ extern void *qt_blocki (qt_helper_t *h, void *a0, void *a1,
 }		/* Match `extern "C" {' at top. */
 #endif
 
-#endif // !defined(SC_USE_PTHREADS)
+#endif // !defined(SC_USE_PTHREADS) && !defined(SC_USE_STD_THREADS)
 #endif /* ndef QUICKTHREADS_H */

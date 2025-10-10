@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [20.04, 22.04]
+        version: [20.04, 22.04, 24.04]
         platform: [linux/amd64]
         target: [clang-shared-regression-tsan]
     steps:
@@ -27,6 +27,36 @@ jobs:
       matrix:
         version: [8, 9]
         platform: [linux/amd64]
+        target: [clang-shared-regression-tsan]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg ALMA_VERSION=${{ matrix.version }} -f docker/alma.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  ubuntu-arm:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [20.04, 22.04, 24.04]
+        platform: [linux/arm64]
+        target: [clang-shared-regression-tsan]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Build
+      run: |
+        docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
+        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+  almalinux-arm:
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [8, 9]
+        platform: [linux/arm64]
         target: [clang-shared-regression-tsan]
     steps:
     - name: Checkout

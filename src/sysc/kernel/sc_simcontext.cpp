@@ -34,6 +34,7 @@
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
+#include "sysc/kernel/sc_cor_std_thread.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"

@@ -49,8 +49,6 @@
 
 #define GET_UNSIGNEDS(OFFSET,EXPECTED) \
 { \
-	GET_UNSIGNED(left_sc_bigint12,OFFSET,EXPECTED); \
-	GET_UNSIGNED(left_sc_biguint12,OFFSET,EXPECTED); \
 	GET_UNSIGNED(left_sc_int12,OFFSET,EXPECTED); \
 	GET_UNSIGNED(left_sc_uint12,OFFSET,EXPECTED); \
 	GET_UNSIGNED(left_sc_int12[1],OFFSET,((EXPECTED>>1)&1)); \
@@ -70,8 +68,8 @@
 
 #define GET_UINT64S(EXPECTED) \
 { \
-	GET_UINT64(left_sc_bigint12,EXPECTED) \
-	GET_UINT64(left_sc_biguint12,EXPECTED) \
+	GET_UINT64(left_sc_signed12,EXPECTED) \
+	GET_UINT64(left_sc_unsigned12,EXPECTED) \
 	GET_UINT64(left_sc_int12,EXPECTED) \
 	GET_UINT64(left_sc_uint12,EXPECTED) \
 	GET_UINT64(left_sc_int12[1],         ((EXPECTED>>1)&1)) \
@@ -91,8 +89,8 @@
 
 #define LENGTHS(WIDTH) \
 { \
-	LENGTH(left_sc_bigint12,WIDTH) \
-	LENGTH(left_sc_biguint12,WIDTH) \
+	LENGTH(left_sc_signed12,WIDTH) \
+	LENGTH(left_sc_unsigned12,WIDTH) \
 	LENGTH(left_sc_int12,WIDTH) \
 	LENGTH(left_sc_uint12,WIDTH) \
 }
@@ -110,8 +108,8 @@
 #define SET_SIGNED(VALUE,OFFSET,EXPECTED) \
 { \
 	right_sc_bigint32 = VALUE; \
-	SET(left_sc_bigint12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
-	SET(left_sc_biguint12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_signed12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_unsigned12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_int12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_uint12,right_sc_bigint32,VALUE,OFFSET,EXPECTED); \
 }
@@ -119,8 +117,8 @@
 #define SET_S64(VALUE,OFFSET,EXPECTED) \
 { \
 	right_s64 = VALUE; \
-	SET(left_sc_bigint12,right_s64,VALUE,OFFSET,EXPECTED); \
-	SET(left_sc_biguint12,right_s64,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_signed12,right_s64,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_unsigned12,right_s64,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_int12,right_s64,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_uint12,right_s64,VALUE,OFFSET,EXPECTED); \
 }
@@ -128,8 +126,8 @@
 #define SET_UNSIGNED(VALUE,OFFSET,EXPECTED) \
 { \
 	right_sc_biguint32 = VALUE; \
-	SET(left_sc_bigint12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
-	SET(left_sc_biguint12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_signed12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_unsigned12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_int12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_uint12,right_sc_biguint32,VALUE,OFFSET,EXPECTED); \
 }
@@ -137,8 +135,8 @@
 #define SET_U64(VALUE,OFFSET,EXPECTED) \
 { \
 	right_u64 = VALUE; \
-	SET(left_sc_bigint12,right_u64,VALUE,OFFSET,EXPECTED); \
-	SET(left_sc_biguint12,right_u64,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_signed12,right_u64,VALUE,OFFSET,EXPECTED); \
+	SET(left_sc_unsigned12,right_u64,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_int12,right_u64,VALUE,OFFSET,EXPECTED); \
 	SET(left_sc_uint12,right_u64,VALUE,OFFSET,EXPECTED); \
 }
@@ -151,7 +149,7 @@
 
 SC_MODULE(X)
 {
-    SC_CTOR(X)
+   SC_CTOR(X) : left_sc_signed12(12),left_sc_unsigned12(12)
 	{
 		SC_CTHREAD(sync, clk.pos());
 	}
@@ -168,11 +166,11 @@ SC_MODULE(X)
 		}
 	}
 
-	sc_in_clk                	clk;
-	sc_int<12>               	left_sc_int12;
-	sc_bigint<12>            	left_sc_bigint12;
-	sc_biguint<12>           	left_sc_biguint12;
-	sc_uint<12>              	left_sc_uint12;
+	sc_in_clk                clk;
+	sc_int<12>               left_sc_int12;
+	sc_signed            	 left_sc_signed12;
+	sc_unsigned           	 left_sc_unsigned12;
+	sc_uint<12>              left_sc_uint12;
 
 	sc_int<32>               right_sc_int32;
 	sc_bigint<32>            right_sc_bigint32;

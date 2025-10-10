@@ -22,7 +22,7 @@
 
 #include "tlm_core/tlm_2/tlm_sockets/tlm_base_socket_if.h"
 #include "tlm_core/tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h"
-
+#include "sysc/communication/sc_communication_ids.h"
 
 namespace tlm {
 
@@ -96,6 +96,13 @@ public:
     return "tlm_base_target_socket";
   }
 
+#if defined(__clang__) || \
+  (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif  
+
   //
   // Bind target socket to initiator socket
   // - Binds the port of the initiator socket to the export of the target
@@ -116,15 +123,38 @@ public:
     bind(s);
   }
 
+  
+  // "tlm_base_target_socket<>::bind(tlm_base_target_socket<>)"
   //
-  // Bind target socket to target socket (hierarchical bind)
-  // - Binds both the export and the port
+  // Bind a target socket to this object instance (target socket), a hierarchical bind. 
+  // The bind is done to both the port and export.
   //
+  // Arguments:
+  //   s = socket to be bound to this object instance.
+  //
+  // Notes:
+  //   (1) IEEE 1666 forbids the hierarchical bind of a multi-target socket to a non-multi-target
+  //       socket, so we check if the object to be bound is multi-target and this object instance 
+  //       is not multi-target.
+  //   (2) The opposite hierarchical bind, a non-multi-target socket to a multi-target socket 
+  //       will result in a compiler error, so we don't need to check that case.
+
   virtual void bind(base_type& s)
   {
-    // export
+    // Look for an illegal bind (see note 1 above.)
+
+    if ( s.get_socket_category() == tlm::TLM_MULTI_TARGET_SOCKET ) {
+      if ( tlm::TLM_MULTI_TARGET_SOCKET != get_socket_category() ) {
+        SC_REPORT_ERROR(sc_core::SC_ID_INVALID_HIERARCHICAL_BIND_, this->name());
+      }
+    }
+
+    // bind the exports
+
     (get_base_export())(s.get_base_export());
-    // port
+
+    // bind the ports
+
     (s.get_base_port())(get_base_port());
   }
 
@@ -151,6 +181,11 @@ public:
   {
     bind(s);
   }
+
+#if defined(__clang__) || \
+  (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
 
   //
   // Forward to 'size()' of port class

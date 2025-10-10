@@ -28,13 +28,13 @@ rem
 rem  You can specify the version and the platform to use via additional
 rem  command-line options given to vsvars.bat, e.g.
 rem
-rem    vsvars.bat [arch]               # load MSVC 2010 for [arch]
+rem    vsvars.bat [platform]           # load MSVC 2019 for [platform]
 rem    vsvars.bat [version]            # load MSVC [version] for x86
 rem    vsvars.bat [version] [platform] # load MSVC [version] for [platform]
 rem
-rem    vsvars.bat 2010 amd64  # load 64-bit tools for MSVC 10.0
-rem    vsvars.bat 11.0        # load default (x86) tools for MSVC 2012
-rem    vsvars.bat x86_amd64   # load x64 cross-tools for MSVC 2010
+rem    vsvars.bat 2022 amd64  # load 64-bit tools for MSVC 2022 (17.0)
+rem    vsvars.bat 17.0        # load default (x86) tools for MSVC 2022 (17.0)
+rem    vsvars.bat x86_amd64   # load x64 cross-tools for MSVC 2019 (16.0)
 rem
 rem ***************************************************************************
 
@@ -42,72 +42,16 @@ set SYSTEMC_MSVC_VERSION=
 set SYSTEMC_MSVC_PLATFORM=
 set VCVARSDIR=
 
-if "%1" == "8.0"   goto check_MSVC80
-if "%1" == "2005"  goto check_MSVC80
-if "%1" == "9.0"   goto check_MSVC90
-if "%1" == "2008"  goto check_MSVC90
-if "%1" == "10.0"  goto check_MSVC100
-if "%1" == "2010"  goto check_MSVC100
-if "%1" == "11.0"  goto check_MSVC110
-if "%1" == "2011"  goto check_MSVC110
-if "%1" == "2012"  goto check_MSVC110
-if "%1" == "12.0"  goto check_MSVC120
-if "%1" == "2013"  goto check_MSVC120
-if "%1" == "2014"  goto check_MSVC120
-if "%1" == "14.0"  goto check_MSVC140
-if "%1" == "2015"  goto check_MSVC140
 if "%1" == "15.0"  goto check_MSVC150
 if "%1" == "2017"  goto check_MSVC150
 if "%1" == "16.0"  goto check_MSVC160
 if "%1" == "2019"  goto check_MSVC160
+if "%1" == "17.0"  goto check_MSVC170
+if "%1" == "2022"  goto check_MSVC170
 
 if not "%1" == "" set SYSTEMC_MSVC_PLATFORM=%1
 if     "%1" == "" set SYSTEMC_MSVC_PLATFORM=x86
-goto check_MSVC100
-
-rem We rely on the variables VSXXXCOMNTOOLS to be set by the MSVC
-rem installation.  This should be usually the case by default.
-
-rem For MSVC 2017 and newer, VSXXXCOMNTOOLS is not defined anymore,
-rem and we need to set the variable ourselves. We will check for the
-rem Community and Professions release in the most commonly used 
-rem install directories 
-
-:check_MSVC80
-set SYSTEMC_MSVC_VERSION=8.0 (2005)
-set VSINSTALLDIR=%VS80COMNTOOLS%..\..\
-set MSVC=msvc80
-goto load_MSVC
-
-:check_MSVC90
-set SYSTEMC_MSVC_VERSION=9.0 (2008)
-set VSINSTALLDIR=%VS90COMNTOOLS%..\..\
-set MSVC=msvc90
-goto load_MSVC
-
-:check_MSVC100
-set SYSTEMC_MSVC_VERSION=10.0 (2010)
-set VSINSTALLDIR=%VS100COMNTOOLS%..\..\
-set MSVC=msvc10
-goto load_MSVC
-
-:check_MSVC110
-set SYSTEMC_MSVC_VERSION=11.0 (2012)
-set VSINSTALLDIR=%VS110COMNTOOLS%..\..\
-set MSVC=msvc11
-goto load_MSVC
-
-:check_MSVC120
-set SYSTEMC_MSVC_VERSION=12.0 (2013)
-set VSINSTALLDIR=%VS120COMNTOOLS%..\..\
-set MSVC=msvc12
-goto load_MSVC
-
-:check_MSVC140
-set SYSTEMC_MSVC_VERSION=14.0 (2015)
-set VSINSTALLDIR=%VS140COMNTOOLS%..\..\
-set MSVC=msvc14
-goto load_MSVC
+goto check_MSVC160
 
 :check_MSVC150
 set SYSTEMC_MSVC_VERSION=15.0 (2017)
@@ -129,6 +73,17 @@ set VSINSTALLDIR=%VS160COMNTOOLS%..\..\
 if exist "%VSINSTALLDIR%" goto load_MSVC
 set VS160COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\Tools\
 set VSINSTALLDIR=%VS160COMNTOOLS%..\..\
+goto load_MSVC
+
+:check_MSVC170
+set SYSTEMC_MSVC_VERSION=17.0 (2022)
+set MSVC=msvc17
+set VCVARSDIR=Auxiliary\Build\
+set VS170COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\Common7\Tools\
+set VSINSTALLDIR=%VS170COMNTOOLS%..\..\
+if exist "%VSINSTALLDIR%" goto load_MSVC
+set VS170COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio\2022\Professional\Common7\Tools\
+set VSINSTALLDIR=%VS170COMNTOOLS%..\..\
 goto load_MSVC
 
 :load_MSVC

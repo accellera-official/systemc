@@ -113,6 +113,9 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
+# ENABLE_STD_THREADS            Use standar libary threads for SystemC processes instead
+#                               of QuickThreads on Unix or Fiber on Windows.
+#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -165,8 +168,7 @@
 #
 ###############################################################################
 
-cmake_minimum_required (VERSION 3.5)
-cmake_policy(SET CMP0001 NEW)
+cmake_minimum_required (VERSION 3.5...3.31)
 
 project (SystemCLanguage CXX C)
 
@@ -260,8 +262,11 @@ if (NOT (WIN32 OR CYGWIN))
 else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
+
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  endif (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
@@ -274,6 +279,10 @@ option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+        OFF)
+
+option (ENABLE_STD_THREADS
+        "Use standard library threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
@@ -408,6 +417,8 @@ endif (NOT SystemC_TARGET_ARCH)
 message (STATUS "Detect the target processor architecture for QuickThreads.")
 if (ENABLE_PTHREADS)
   set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (ENABLE_STD_THREADS)
+  set (QT_ARCH "IGNORE") # std threads will be used for the SystemC coroutines.
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
@@ -424,6 +435,8 @@ elseif (HAS__i386_DEFINED)
   set (QT_ARCH "i386")
 elseif (HAS__aarch64__DEFINED)
   set (QT_ARCH "aarch64")
+elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
+  set (QT_ARCH "riscv64")
 else (ENABLE_PTHREADS)
   message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
   set (QT_ARCH "IGNORE")
@@ -434,11 +447,13 @@ if (QT_ARCH)
   enable_language (ASM)
 else (QT_ARCH)
   # Otherwise, fall back to Pthreads or Fiber.
-  if (NOT MSVC)
-    set (ENABLE_PTHREADS TRUE CACHE BOOL
-         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+  if (NOT ENABLE_STD_THREADS)
+      if (NOT MSVC)
+        set (ENABLE_PTHREADS TRUE CACHE BOOL
+             "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
          FORCE)
-  endif (NOT MSVC)
+      endif (NOT MSVC)
+  endif (NOT ENABLE_STD_THREADS)
 endif (QT_ARCH)
 
 
@@ -463,7 +478,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   elseif (UNIX)
     set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
   elseif (WIN32)
-    file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
+    file (TO_CMAKE_PATH "$ENV{ProgramFiles}" _WIN32_INSTALL_PREFIX)
     set (_CMAKE_INSTALL_PREFIX "${_WIN32_INSTALL_PREFIX}/SystemC")
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
@@ -594,11 +609,8 @@ endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
-if (ENABLE_PTHREADS)
-  message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-else (ENABLE_PTHREADS)
-  message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+message (STATUS "ENABLE_STD_THREADS = ${ENABLE_STD_THREADS}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message (STATUS "OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
@@ -646,7 +658,6 @@ add_subdirectory (tests)
 
 install (FILES AUTHORS.md
                INSTALL.md
-               cmake/INSTALL_USING_CMAKE.md
                LICENSE
                NOTICE
                README.md
