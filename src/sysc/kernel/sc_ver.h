@@ -55,7 +55,7 @@ extern SC_API const std::string  sc_copyright_string;
 
 #define SYSTEMC_3_0_2
 
-#define SYSTEMC_VERSION       20250221
+#define SYSTEMC_VERSION       20251010
 #define SC_VERSION_ORIGINATOR "Accellera"
 #define SC_VERSION_MAJOR      3
 #define SC_VERSION_MINOR      0
