@@ -128,11 +128,22 @@ Following is the list of bug fixes and enhancements for the 3.0.2 release:
   
   - Fixed crash when writing empty trace files with debug assertions on
   
+  - fixed an error in the tracing code for sc_fxnum and sc_fxnum_fast 
+  
   - Implemented small changes to sc_time, SC_ZERO_TIME and sc_max_time to improve efficiency in C++17
+  
+  - Updated big datatype storage configurations
  
   - Implemented clean-ups and initial thread-safety properties to sc_time
   
+  - implemented various clean-ups in sc_time 
+  
   - Improved sanitizers support
+  
+  - Improved test scenarios 
+  
+  - Improved CMake flow
+
   
 
 Following is the list of bug fixes and enhancements for the 3.0.1 release:
