@@ -575,11 +575,7 @@ void
 sc_signed::dump(::std::ostream& os) const
 {
   // Save the current setting, and set the base to decimal.
-#if defined(__MINGW32__)
-  std::_Ios_Fmtflags old_flags = os.setf(::std::ios::dec,::std::ios::basefield);
-#else
-  fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
-#endif
+  auto old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
 
   os << "width = " << length() << ::std::endl;
   os << "value = " << *this << ::std::endl;
