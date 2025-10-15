@@ -398,7 +398,7 @@ sc_fifo<T>::buf_write( const T& val_ )
     if( m_free == 0 ) {
 	return false;
     }
-    m_buf[m_wi] = val_;
+    new (&m_buf[m_wi]) T(val_);
     m_wi = ( m_wi + 1 ) % m_size;
     m_free --;
     return true;
@@ -412,8 +412,8 @@ sc_fifo<T>::buf_read( T& val_ )
     if( m_free == m_size ) {
 	return false;
     }
-    val_ = m_buf[m_ri];
-    m_buf[m_ri] = T(); // clear entry for boost::shared_ptr, et al.
+    new (&val_) T(m_buf[m_ri]);
+    m_buf[m_ri].~T();
     m_ri = ( m_ri + 1 ) % m_size;
     m_free ++;
     return true;
