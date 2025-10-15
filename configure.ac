@@ -38,13 +38,8 @@ dnl ***************************************************************************
 dnl
 dnl Initialization.
 dnl
-AC_INIT([SystemC],
-        [3.0.2],
-        [http://forums.accellera.org/forum/9-systemc/],
-        [systemc],
-        [http://accellera.org/],
-)
 dnl version of the included TLM library
+AC_INIT([SystemC],[3.0.2],[http://forums.accellera.org/forum/9-systemc/],[systemc],[http://accellera.org/],[])
 TLM_PACKAGE_VERSION=2.0.6
 AC_SUBST(TLM_PACKAGE_VERSION)
 
@@ -55,7 +50,7 @@ AC_CONFIG_MACRO_DIR([config])
 dnl
 dnl Some simple checks.
 dnl
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([1.10 tar-pax -Werror -Wno-portability no-define subdir-objects foreign])
 dnl 1.10 needed for .s file support of LIBTOOLFLAGS
 
@@ -229,7 +224,7 @@ dnl    detect C++ library dependencies, esp. for cross-compilation
 CXXFLAGS_USER="${CXXFLAGS}"
 CXXFLAGS="${EXTRA_CXXFLAGS} ${CXXFLAGS}"
 dnl
-AC_PROG_LIBTOOL
+LT_INIT
 dnl  - restore user-given CXXFLAGS
 CXXFLAGS="${CXXFLAGS_USER}"
 
@@ -354,6 +349,20 @@ AM_CONDITIONAL([WANT_OPTIMIZE], [test x$enable_optimize = xyes])
 AC_MSG_RESULT($enable_optimize)
 
 dnl
+dnl use std::thread for SystemC processes
+dnl
+AC_MSG_CHECKING([whether to use C++ std::thread for SystemC processes])
+AC_ARG_ENABLE([stdthreads],
+  AS_HELP_STRING([--enable-stdthreads],
+                 [use C++ std::thread for SystemC processes]),
+  [AS_CASE(["${enableval}"],dnl
+    [yes],[enable_pthreads=no],dnl
+    [no],[],dnl
+    [AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads])])],
+  [enable_std_threads=no])
+
+
+dnl
 dnl use pthreads for SystemC processes
 dnl
 AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
@@ -364,7 +373,8 @@ AC_ARG_ENABLE([pthreads],
     [yes],dnl
       [AS_IF([test x"$ax_pthread_ok" = xyes],[QT_ARCH=pthreads],
         [enable_pthreads=no
-         AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])]
+         AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])],
+        [enable_std_threads=no]
       )],
     [no],[],
     [AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads])])],
@@ -384,10 +394,12 @@ AS_IF([test x"$QT_ARCH" = xpthreads -a x"$enable_pthreads" = xno],[dnl
     [AC_MSG_ERROR([pthread processes required on target architecture ${target}])])dnl
 ])
 
+AM_CONDITIONAL([WANT_STD_THREADS_THREADS],dnl
+     [test x"$enable_std_threads" = xyes])
 AM_CONDITIONAL([WANT_PTHREADS_THREADS],dnl
      [test x"$enable_pthreads" = xyes])
 AM_CONDITIONAL([WANT_QT_THREADS],dnl
-     [test x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
+     [test x"$enable_std_threads" = xno -a x"$enable_pthreads" = xno -a x"$QT_ARCH" != xnone ])
 
 AM_CONDITIONAL([USES_PTHREADS_LIB],dnl
   [test x"$enable_pthreads" = xyes])
@@ -459,7 +471,7 @@ AC_SUBST(QT_ARCH)
 dnl
 dnl Create the Makefiles.
 dnl
-AC_OUTPUT(
+AC_CONFIG_FILES([
  Makefile 
  src/Makefile 
  src/systemc.pc
@@ -475,7 +487,8 @@ AC_OUTPUT(
  docs/Makefile
  docs/sysc/doxygen/Doxyfile
  docs/tlm/doxygen/Doxyfile
-)
+])
+AC_OUTPUT
 
 dnl
 dnl print configuration summary

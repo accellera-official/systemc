@@ -131,6 +131,7 @@ CXX_COR_FILES = kernel/sc_cor_std_thread.cpp
 else
 CXX_COR_FILES = kernel/sc_cor_fiber.cpp
 endif
+endif
 endif # co-routine implementation
 
 INCDIRS += \
