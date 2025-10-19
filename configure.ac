@@ -363,7 +363,6 @@ AC_ARG_ENABLE([stdthreads],
 
 
 dnl
-dnl
 dnl use pthreads for SystemC processes
 dnl
 AC_MSG_CHECKING([whether to use POSIX threads for SystemC processes])
@@ -374,8 +373,8 @@ AC_ARG_ENABLE([pthreads],
     [yes],dnl
       [AS_IF([test x"$ax_pthread_ok" = xyes],[QT_ARCH=pthreads],
         [enable_pthreads=no
-	 AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])],
-	 [enable_std_threads=no]
+         AC_MSG_WARN([no pthread support found, ignore --enable-pthreads])],
+        [enable_std_threads=no]
       )],
     [no],[],
     [AC_MSG_ERROR([bad value ${enableval} for --enable-pthreads])])],
