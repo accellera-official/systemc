@@ -352,8 +352,8 @@ dnl
 dnl use std::thread for SystemC processes
 dnl
 AC_MSG_CHECKING([whether to use C++ std::thread for SystemC processes])
-AC_ARG_ENABLE([stdthreads],
-  AS_HELP_STRING([--enable-stdthreads],
+AC_ARG_ENABLE([std-threads],
+  AS_HELP_STRING([--enable-std-threads],
                  [use C++ std::thread for SystemC processes]),
   [AS_CASE(["${enableval}"],dnl
     [yes],[enable_pthreads=no],dnl
