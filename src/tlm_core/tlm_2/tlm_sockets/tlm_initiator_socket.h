@@ -23,13 +23,6 @@
 #include "tlm_core/tlm_2/tlm_sockets/tlm_base_socket_if.h"
 #include "tlm_core/tlm_2/tlm_2_interfaces/tlm_fw_bw_ifs.h"
 
-#if defined(__clang__) || \
-   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
-// ignore warning about deliberately hidden "bind()" overloads
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#endif
-
 namespace tlm {
 
 template <unsigned int BUSWIDTH = 32,
@@ -103,6 +96,13 @@ public:
     return "tlm_base_initiator_socket";
   }
 
+#if defined(__clang__) || \
+  (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
   //
   // Bind initiator socket to target socket
   // - Binds the port of the initiator socket to the export of the target
@@ -154,10 +154,15 @@ public:
     bind(s);
   }
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
+
   // Implementation of tlm_base_socket_if functions
   virtual unsigned int                    get_bus_width() const
     { return BUSWIDTH; }
-  virtual sc_core::sc_type_index          get_protocol_types() const
+  virtual std::type_index                 get_protocol_types() const
     { return typeid(typename BW_IF::protocol_types); }
   virtual tlm_socket_category             get_socket_category() const
     { return TLM_INITIATOR_SOCKET; }
@@ -219,10 +224,5 @@ public:
 };
 
 } // namespace tlm
-
-#if defined(__clang__) || \
-   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
-#pragma GCC diagnostic pop
-#endif
 
 #endif // TLM_CORE_TLM_INITIATOR_SOCKET_H_INCLUDED_

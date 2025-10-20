@@ -101,10 +101,12 @@ SC_DEFINE_MESSAGE( SC_ID_ATTEMPT_TO_WRITE_TO_CLOCK_,  125,
    "attempt to write the value of an sc_clock instance" )
 SC_DEFINE_MESSAGE( SC_ID_SC_EXPORT_ALREADY_BOUND_,  126,
     "sc_export instance already bound" )
-SC_DEFINE_MESSAGE( SC_ID_OPERATION_ON_NON_SPECIALIZED_SIGNAL_,  127,
-    "attempted specalized signal operation on non-specialized signal" )
+SC_DEFINE_MESSAGE( SC_ID_INVALID_HIERARCHICAL_BIND_,  127,
+    "attempt to bind a multi-target socket to a non-multi-target socket" )
 SC_DEFINE_MESSAGE( SC_ID_ATTEMPT_TO_BIND_CLOCK_TO_OUTPUT_,  128,
     "attempted to bind sc_clock instance to sc_inout or sc_out" )
+SC_DEFINE_MESSAGE( SC_ID_INSERT_STUB_,  129,
+    "insert sc_stub failed" )
 
 /* 
 $Log: sc_communication_ids.h,v $

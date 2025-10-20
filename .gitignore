@@ -38,6 +38,7 @@ Makefile.in
 # ignore recommended build directory and variants
 /build*/
 /objdir*/
+/inst*/
 
 # ignore in-tree installation
 /include/
@@ -54,6 +55,9 @@ Makefile.in
 *.XML
 *.opensdf
 *.db
+
+# exception vcsproj filters
+!*.vcxproj.filters
 
 .vs/
 .vscode/
@@ -72,9 +76,19 @@ _UpgradeReport_Files/
 #/msvc*/SystemC/DebugDLL/
 #/msvc*/SystemC/_UpgradeReport_Files/
 
+# ignore project specific settings
+.project
+.project/
+.settings/
+.vscode/
+
 .clang-format
 
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
 /docs/*/doxygen/*.tag
-/.project
+
+# ignore test execution results
+run*/
+/tests/scripts/systemc/
+/tests/scripts/tlm/

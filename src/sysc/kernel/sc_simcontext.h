@@ -76,6 +76,7 @@ class sc_method_process;
 class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
+class sc_stub_registry;
 
 extern sc_simcontext* sc_get_curr_simcontext();
 
@@ -188,7 +189,6 @@ class SC_API sc_simcontext
     friend SC_API bool sc_is_running( const sc_simcontext* simc_p );
     friend SC_API void sc_pause();
     friend SC_API bool sc_end_of_simulation_invoked();
-    friend SC_API int sc_elab_and_sim( int argc, char* argv[] );
     friend SC_API void sc_start( const sc_time&, sc_starvation_policy );
     friend SC_API bool sc_start_of_simulation_invoked();
     friend void sc_thread_cor_fn(void*);
@@ -252,6 +252,7 @@ public:
     sc_export_registry* get_export_registry();
     sc_prim_channel_registry* get_prim_channel_registry();
     sc_stage_callback_registry* get_stage_cb_registry();
+    sc_stub_registry* get_stub_registry();
 
     std::string construct_hierarchical_name(const sc_object* parent,
                                             const std::string& name);
@@ -291,15 +292,11 @@ public:
 
     int next_proc_id();
 
-    void add_trace_file( sc_trace_file* );
-    void remove_trace_file( sc_trace_file* );
-
     friend SC_API void    sc_set_time_resolution( double, sc_time_unit );
     friend SC_API sc_time sc_get_time_resolution();
     friend SC_API void    sc_set_default_time_unit( double, sc_time_unit );
     friend SC_API sc_time sc_get_default_time_unit();
 
-    const sc_time& max_time() const;
     const sc_time& time_stamp() const;
 
     sc_dt::uint64 change_stamp() const;
@@ -396,6 +393,7 @@ private:
     sc_export_registry*         m_export_registry;
     sc_prim_channel_registry*   m_prim_channel_registry;
     sc_stage_callback_registry* m_stage_cb_registry;
+    sc_stub_registry*           m_stub_registry;
 
     sc_name_gen*                m_name_gen;
 
@@ -423,8 +421,7 @@ private:
 
     sc_time_params*             m_time_params;
     sc_time                     m_curr_time;
-    mutable sc_time             m_max_time;
- 
+
     sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
@@ -584,6 +581,13 @@ sc_simcontext::get_stage_cb_registry()
 }
 
 inline
+sc_stub_registry*
+sc_simcontext::get_stub_registry()
+{
+    return m_stub_registry;
+}
+
+inline
 sc_curr_proc_handle
 sc_simcontext::get_curr_proc_info()
 {
@@ -596,18 +600,6 @@ int
 sc_simcontext::next_proc_id()
 {
     return ( ++ m_next_proc_id );
-}
-
-
-inline
-const sc_time&
-sc_simcontext::max_time() const
-{
-    if ( m_max_time == SC_ZERO_TIME )
-    {
-        m_max_time = sc_time::from_value( ~sc_dt::UINT64_ZERO );
-    }
-    return m_max_time;
 }
 
 inline
@@ -767,7 +759,12 @@ sc_set_random_seed( unsigned int seed_ );
 
 extern SC_API void sc_initialize();
 
-extern SC_API const sc_time& sc_max_time();    // Get maximum time value.
+inline const sc_time& sc_max_time() // Get maximum time value.
+{
+    static constexpr sc_time max_time = sc_time::max();
+    return max_time;
+}
+
 extern SC_API const sc_time& sc_time_stamp();  // Current simulation time.
 extern SC_API double sc_simulation_time();     // Current time in default time units.
 

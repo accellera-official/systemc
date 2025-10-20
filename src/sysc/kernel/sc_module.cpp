@@ -76,7 +76,7 @@ sc_bind_proxy::sc_bind_proxy( sc_port_base& port_ )
 {}
 
 
-SC_API const sc_bind_proxy SC_BIND_PROXY_NIL;
+const sc_bind_proxy SC_BIND_PROXY_NIL;
 
 
 // ----------------------------------------------------------------------------

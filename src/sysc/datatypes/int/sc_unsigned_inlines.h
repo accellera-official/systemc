@@ -227,7 +227,7 @@ sc_unsigned::sc_unsigned(const sc_bv_base& v) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf( msg, BUFSIZ, "%s::%s( sc_bv_base ) : nb = %d is not valid",
+        std::snprintf( msg, sizeof(msg), "%s::%s( sc_bv_base ) : nb = %d is not valid",
                  "sc_unsigned", "sc_unsigned", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -251,7 +251,7 @@ sc_unsigned::sc_unsigned(const sc_lv_base& v) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf( msg, BUFSIZ, "%s::%s( sc_lv_base ) : nb = %d is not valid",
+        std::snprintf( msg, sizeof(msg), "%s::%s( sc_lv_base ) : nb = %d is not valid",
                  "sc_unsigned", "sc_unsigned", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -298,7 +298,7 @@ sc_unsigned::operator = ( int64 from )
 {
     int to_hod = get_hod();
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( to_hod > 0 ) {
         *to_p++ = from >> BITS_PER_DIGIT;
     }
@@ -335,7 +335,7 @@ sc_unsigned::operator = ( uint64 from )
 {
     int to_hod = get_hod();
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( to_hod > 0 ) {
         *to_p++ = from >> 32;
     }

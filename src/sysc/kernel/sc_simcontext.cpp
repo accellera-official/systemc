@@ -34,6 +34,7 @@
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
+#include "sysc/kernel/sc_cor_std_thread.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
@@ -51,6 +52,7 @@
 #include "sysc/communication/sc_port.h"
 #include "sysc/communication/sc_export.h"
 #include "sysc/communication/sc_prim_channel.h"
+#include "sysc/communication/sc_stub.h"
 #include "sysc/tracing/sc_trace.h"
 #include "sysc/utils/sc_mempool.h"
 #include "sysc/utils/sc_list.h"
@@ -310,6 +312,7 @@ sc_simcontext::init()
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
     m_stage_cb_registry = new sc_stage_callback_registry( *this );
+    m_stub_registry = new sc_stub_registry( *this );
     m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
@@ -337,7 +340,6 @@ sc_simcontext::init()
     m_collectable = new sc_process_list;
     m_time_params = new sc_time_params;
     m_curr_time = SC_ZERO_TIME;
-    m_max_time = SC_ZERO_TIME;
     m_change_stamp = 0;
     m_delta_count = 0;
     m_initial_delta_count_at_current_time = 0;
@@ -366,6 +368,7 @@ sc_simcontext::clean()
     // remove remaining zombie processes
     do_collect_processes();
 
+    delete m_stub_registry;
     delete m_method_invoker_p;
     delete m_error;
     delete m_cor_pkg;
@@ -398,13 +401,13 @@ sc_simcontext::clean()
 sc_simcontext::sc_simcontext() :
     m_object_manager(0), m_module_registry(0), m_port_registry(0),
     m_export_registry(0), m_prim_channel_registry(0),
-    m_stage_cb_registry(0), m_name_gen(0),
+    m_stage_cb_registry(0), m_stub_registry(0), m_name_gen(0),
     m_process_table(0), m_curr_proc_info(), m_current_writer(0),
     m_write_check(SC_SIGNAL_WRITE_CHECK_DEFAULT_), m_next_proc_id(-1),
     m_child_events(), m_child_objects(), m_delta_events(), m_timed_events(0),
     m_trace_files(), m_something_to_trace(false), m_runnable(0), m_collectable(0),
-    m_time_params(), m_curr_time(SC_ZERO_TIME), m_max_time(SC_ZERO_TIME),
-    m_change_stamp(0), m_delta_count(0), m_initial_delta_count_at_current_time(0),
+    m_time_params(), m_change_stamp(0),
+    m_delta_count(0), m_initial_delta_count_at_current_time(0),
     m_forced_stop(false), m_paused(false),
     m_ready_to_simulate(false), m_elaboration_done(false),
     m_execution_phase(phase_initialize), m_error(0),
@@ -874,7 +877,7 @@ sc_simcontext::simulate( const sc_time& duration )
 	return;
     }
 
-    sc_time non_overflow_time = max_time() - m_curr_time;
+    sc_time non_overflow_time = sc_time::max() - m_curr_time;
     if ( duration > non_overflow_time )
     {
         SC_REPORT_ERROR(SC_ID_SIMULATION_TIME_OVERFLOW_, "");
@@ -1248,22 +1251,6 @@ sc_simcontext::create_thread_process(
 	m_process_table->push_front( handle );
     }
     return sc_process_handle(handle);
-}
-
-void
-sc_simcontext::add_trace_file( sc_trace_file* tf )
-{
-    m_trace_files.push_back( tf );
-    m_something_to_trace = true;
-}
-
-void
-sc_simcontext::remove_trace_file( sc_trace_file* tf )
-{
-    m_trace_files.erase(
-        std::remove( m_trace_files.begin(), m_trace_files.end(), tf )
-    );
-    m_something_to_trace = ( m_trace_files.size() > 0 );
 }
 
 sc_cor*
@@ -1653,7 +1640,7 @@ SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
     // If there is an activity pending at the current time
     // return a delta of zero.
 
-    sc_time result=SC_ZERO_TIME; // time of pending activity.
+    sc_time result; // time of pending activity.
 
     if ( simc_p->pending_activity_at_current_time() )
     {
@@ -1664,7 +1651,7 @@ SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* simc_p )
 
     else
     {
-        result = simc_p->max_time();
+        result = sc_time::max();
         simc_p->next_time(result);
         result -= sc_time_stamp();
     }
@@ -1770,7 +1757,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 SC_API void
 sc_start()
 {
-    sc_start( sc_max_time() - sc_time_stamp(),
+    sc_start( sc_time::max() - sc_time_stamp(),
               SC_EXIT_ON_STARVATION );
 }
 
@@ -1824,12 +1811,6 @@ SC_API sc_object* sc_find_object( const char* name )
     return sc_get_curr_simcontext()->get_object_manager()->find_object( name );
 }
 
-
-SC_API const sc_time&
-sc_max_time()
-{
-    return sc_get_curr_simcontext()->max_time();
-}
 
 SC_API const sc_time&
 sc_time_stamp()

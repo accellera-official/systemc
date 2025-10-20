@@ -37,6 +37,7 @@ ACLOCAL_AMFLAGS= -I config
 
 SUBDIRS = \
 	src \
+	docs \
 	examples
 
 DOC_FILES = \
@@ -46,8 +47,7 @@ DOC_FILES = \
 	INSTALL.md \
 	LICENSE \
 	README.md \
-	RELEASENOTES \
-	cmake/INSTALL_USING_CMAKE
+	RELEASENOTES.md 
 
 EXTRA_DIST = \
 	$(DOC_FILES) \
@@ -58,14 +58,16 @@ EXTRA_DIST = \
 	CMakeLists.txt \
 	cmake/SystemCLanguageConfig.cmake.in \
 	cmake/SystemCTLMConfig.cmake.in \
-	cmake/run_test.cmake \
+	cmake/SystemCTesting.cmake \
+	cmake/run-example.cmake \
+	cmake/run-test.py \
 	\
-	msvc10/SystemC/SystemC.sln \
-	msvc10/SystemC/SystemC.props \
-	msvc10/SystemC/SystemC.vcxproj \
-	msvc10/SystemC/SystemC.vcxproj.filters \
-	msvc10/SystemC/SystemC-core.vcxproj \
-	msvc10/SystemC/SystemC-core.vcxproj.filters
+	msvc16/SystemC/SystemC.sln \
+	msvc16/SystemC/SystemC.props \
+	msvc16/SystemC/SystemC.vcxproj \
+	msvc16/SystemC/SystemC.vcxproj.filters \
+	msvc16/SystemC/SystemC-core.vcxproj \
+	msvc16/SystemC/SystemC-core.vcxproj.filters
 
 ## ****************************************************************************
 
@@ -76,8 +78,8 @@ rootdoc_DATA = \
 	$(DOC_FILES)
 
 uninstall-hook:
-	test ! -d "$(docdir)" || rmdir --ignore-fail-on-non-empty "$(docdir)"
-	test ! -d "$(prefix)" || rmdir --ignore-fail-on-non-empty "$(prefix)"
+	test ! -d "$(docdir)" || rmdir "$(docdir)" || true
+	test ! -d "$(prefix)" || rmdir "$(prefix)" || true
 
 endif # SEPARATE_INSTALL_TREE
 

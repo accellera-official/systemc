@@ -33,10 +33,6 @@
 #ifndef TLM_UTILS_SIMPLE_TARGET_SOCKET_H_INCLUDED_
 #define TLM_UTILS_SIMPLE_TARGET_SOCKET_H_INCLUDED_
 
-#ifndef SC_INCLUDE_DYNAMIC_PROCESSES // needed for sc_spawn
-#  define SC_INCLUDE_DYNAMIC_PROCESSES
-#endif
-
 #include <systemc>
 #include <tlm>
 #include "tlm_utils/convenience_socket_bases.h"
@@ -550,7 +546,7 @@ private:
   bw_process m_bw_process;
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
-  transaction_type* m_current_transaction;
+  transaction_type* m_current_transaction = nullptr;
 };
 
 template< typename MODULE, unsigned int BUSWIDTH = 32
@@ -1105,7 +1101,7 @@ private:
   bw_process m_bw_process;
   std::map<transaction_type*, sc_core::sc_event *> m_pending_trans;
   sc_core::sc_event m_end_request;
-  transaction_type* m_current_transaction;
+  transaction_type* m_current_transaction = nullptr;
 };
 
 template< typename MODULE, unsigned int BUSWIDTH = 32

@@ -42,9 +42,7 @@
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/utils/sc_list.h"
 
-#if SC_CPLUSPLUS >= 201103L
-# include <type_traits> // std::remove_reference
-#endif
+#include <type_traits> // std::remove_reference
 
 namespace sc_core {
 
@@ -411,40 +409,50 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 #define SC_MODULE(user_module_name)                                           \
     struct user_module_name : ::sc_core::sc_module
 
-#if SC_CPLUSPLUS >= 201103L
-    #define SC_HAS_PROCESS(user_module_name)                                  \
-        static_assert(true, "SC_HAS_PROCESS is a no-op, avoid stray ; token")
-        // TODO: add deprecation warning?
-
-    #define SC_CURRENT_USER_MODULE_TYPE \
-        std::remove_reference<decltype(*this)>::type
-#else
-    // the SC_HAS_PROCESS macro call must be followed by a ;
-    #define SC_HAS_PROCESS(user_module_name)                                  \
-        typedef user_module_name SC_CURRENT_USER_MODULE
-
-    #define SC_CURRENT_USER_MODULE_TYPE SC_CURRENT_USER_MODULE
+#if !defined(SC_ALLOW_DEPRECATED_IEEE_API) 
+    [[deprecated("SC_HAS_PROCESS(user_module_name) is obsolete in IEEE 1666-2023, define SC_ALLOW_DEPRECATED_IEEE_API to suppress.")]]
 #endif
+    [[maybe_unused]] 
+static inline constexpr bool sc_has_process_used = true;
+#define SC_HAS_PROCESS(user_module_type) \
+    static_assert(sc_core::sc_has_process_used, "no-op to avoid stray ';'")
+
+#define SC_CURRENT_USER_MODULE_TYPE \
+    std::remove_reference<decltype(*this)>::type
 
 // SC_CTOR  --------------------------------------------------------------------
 
 #define SC_CTOR(...)                                                      \
         SC_CTOR_IMPL_(__VA_ARGS__)(__VA_ARGS__)
 
-// SC_CTOR( user_module_name )
+// SC_CTOR(user_module_name)
 #define SC_CTOR_IMPL_ONE_(user_module_name)                               \
-        SC_HAS_PROCESS(user_module_name);                                 \
-        user_module_name( ::sc_core::sc_module_name )
+    user_module_name( ::sc_core::sc_module_name )
 
-// SC_CTOR( user_module_name , ... )
+// SC_CTOR(user_module_name, ...)
 #define SC_CTOR_IMPL_MORE_(user_module_name, ...)                         \
-        SC_HAS_PROCESS(user_module_name);                                 \
-        user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
-
+    user_module_name( ::sc_core::sc_module_name, __VA_ARGS__)
 #define SC_CTOR_IMPL_(...)                                                \
       SC_CONCAT_HELPER_(SC_CTOR_IMPL_, SC_VARARG_HELPER_EXPAND_(__VA_ARGS__))
 
+
 // ----------------------------------------------------------------------------
+
+#if defined(__aarch64__) && defined(__GNUC__) && !defined(__clang__)
+// Suppress false positive warning by GCC on ARM64 about
+// static_cast of pointer to member function of base class
+
+#define SC_PROCESS_MACRO_BEGIN_                                     \
+  do { _Pragma("GCC diagnostic push")                               \
+       _Pragma("GCC diagnostic ignored \"-Wshift-negative-value\"")
+
+#define SC_PROCESS_MACRO_END_                                 \
+  ; _Pragma("GCC diagnostic pop") } while(false) SC_SEMICOLON_
+
+#else
+#  define SC_PROCESS_MACRO_BEGIN_ /* empty */
+#  define SC_PROCESS_MACRO_END_   SC_SEMICOLON_
+#endif
 
 // The this-> construct in the macros below is required when a templated class
 // has a templated parent that is derived from sc_module:
@@ -455,19 +463,22 @@ extern SC_API sc_module* sc_module_dynalloc(sc_module*);
 // class A : public B<X>
 
 #define SC_CTHREAD(func, edge)                                                \
+    SC_PROCESS_MACRO_BEGIN_                                                   \
     this->declare_cthread_process                                             \
       ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func, edge )    \
-    SC_SEMICOLON_
+    SC_PROCESS_MACRO_END_
 
 #define SC_METHOD(func)                                                       \
+    SC_PROCESS_MACRO_BEGIN_                                                   \
     this->declare_method_process                                              \
       ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
-    SC_SEMICOLON_
+    SC_PROCESS_MACRO_END_
 
 #define SC_THREAD(func)                                                       \
+    SC_PROCESS_MACRO_BEGIN_                                                   \
     this->declare_thread_process                                              \
       ( SC_MAKE_FUNC_PTR(SC_CURRENT_USER_MODULE_TYPE, func), #func )          \
-    SC_SEMICOLON_
+    SC_PROCESS_MACRO_END_
 
 
 // ----------------------------------------------------------------------------

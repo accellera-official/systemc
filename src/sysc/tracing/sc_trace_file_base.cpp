@@ -89,7 +89,7 @@ sc_trace_file_base::~sc_trace_file_base()
         fclose(fp);
 
     // unregister from simcontext
-    sc_get_curr_simcontext()->remove_trace_file( this );
+    sc_unregister_stage_callback( *this, SC_PRE_TIMESTEP | SC_POST_UPDATE );
 }
 
 /*****************************************************************************/

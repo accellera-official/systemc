@@ -1,0 +1,21 @@
+SystemC Simulation
+
+	 FINAL MEMORY VALUES
+Memory Location 1 : 	0000000000000000
+Memory Location 2 : 	0000000011100000
+Memory Location 3 : 	0000000011111000
+Memory Location 4 : 	0000000011110000
+Memory Location 5 : 	0000000010010000
+Memory Location 6 : 	0000000010011000
+Memory Location 7 : 	0000000010001000
+Memory Location 8 : 	0000000011111100
+Memory Location 9 : 	0000000000000000
+Memory Location 10 : 	0000000000000000
+Memory Location 11 : 	0000000000000000
+Memory Location 12 : 	0000000000000000
+Memory Location 13 : 	0000000000000000
+Memory Location 14 : 	0000000000000000
+Memory Location 15 : 	0000000000000000
+Memory Location 16 : 	0000000000000000
+
+Info: /OSCI/SystemC: Simulation stopped by user.

@@ -93,7 +93,6 @@
 #define SC_SIGNED_H
 
 
-#include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/utils/sc_iostream.h"
 #include "sysc/utils/sc_temporary.h"
@@ -138,12 +137,13 @@ class sc_fxnum_fast;
 
   // Unary arithmetic operators
 
-  sc_signed operator + (const sc_signed&   u);
-  sc_signed operator - (const sc_signed&   u);
+  SC_API sc_signed operator + (const sc_signed&   u);
+  SC_API sc_signed operator - (const sc_signed&   u);
+  SC_API sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
 
-  sc_signed operator ~ (const sc_signed& u);
+  SC_API sc_signed operator ~ (const sc_signed& u);
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_signed_bitref_r
@@ -151,7 +151,7 @@ class sc_fxnum_fast;
 //  Proxy class for sc_signed bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_signed_bitref_r : public sc_value_base
+class SC_API sc_signed_bitref_r : public sc_value_base
 {
     friend class sc_signed;
 
@@ -261,7 +261,7 @@ operator<<( ::std::ostream&, const sc_signed_bitref_r& );
 //  Proxy class for sc_signed bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_signed_bitref
+class SC_API sc_signed_bitref
     : public sc_signed_bitref_r
 {
     friend class sc_signed;
@@ -317,7 +317,7 @@ operator>>( ::std::istream&, sc_signed_bitref& );
 //  Proxy class for sc_signed part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_signed_subref_r : public sc_value_base
+class SC_API sc_signed_subref_r : public sc_value_base
 {
     friend class sc_signed;
     friend class sc_signed_signal;
@@ -466,7 +466,7 @@ operator<<( ::std::ostream&, const sc_signed_subref_r& );
 //  Proxy class for sc_signed part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_signed_subref
+class SC_API sc_signed_subref
     : public sc_signed_subref_r
 {
     friend class sc_signed;
@@ -547,7 +547,7 @@ operator>>( ::std::istream&, sc_signed_subref& );
 //  Arbitrary precision signed number.
 // ----------------------------------------------------------------------------
 
-class sc_signed : public sc_value_base
+class SC_API sc_signed : public sc_value_base
 {
     friend class sc_concatref;
     friend class sc_signed_bitref_r;
@@ -559,10 +559,8 @@ class sc_signed : public sc_value_base
     friend class sc_unsigned_subref_r;
     template<int W> friend class sc_bigint;
     template<int W> friend class sc_biguint;
-#ifndef ALIAS_SC_INT
     template<int W> friend class sc_int;
     template<int W> friend class sc_uint;
-#endif
   // Needed for types using sc_signed.
   typedef bool elemtype;
 
@@ -1097,7 +1095,7 @@ public:
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
-          result.digit[0] = tmp;
+          result.digit[0] = (sc_digit)tmp;
           if ( nb > 32 ) {
               result.digit[1] = (tmp >>32);
           }
@@ -1138,13 +1136,13 @@ public:
 
   // Unary arithmetic operators
 
-  friend sc_signed operator + (const sc_signed&   u);
-  friend sc_signed operator - (const sc_signed&   u);
-  friend sc_signed operator - (const sc_unsigned& u);
+  friend SC_API sc_signed operator + (const sc_signed&   u);
+  friend SC_API sc_signed operator - (const sc_signed&   u);
+  friend SC_API sc_signed operator - (const sc_unsigned& u);
 
   // Bitwise NOT operator (unary).
 
-  friend sc_signed operator ~ (const sc_signed& u);
+  friend SC_API sc_signed operator ~ (const sc_signed& u);
 
 protected:
 
@@ -1170,6 +1168,18 @@ public: // Temporary object support:
   static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
   static size_t     m_temporaries_i;
 
+    // +--------------------------------------------------------------------------------------------
+    // |"allocate_temporary"
+    // | 
+    // | This method only occurs exists if sc_bigint<W> does not have an sc_signed base class.
+    // | It allocates a temporary sc_signed instance with supplied width and data.
+    // |
+    // | Arguments:
+    // |     nb       = number of bits in the sc_signed instance
+    // |     digits_p =  digit storage in the sc_bigint instance
+    // | Result:
+    // |     temporary sc_signed instance that was allocated.
+    // +--------------------------------------------------------------------------------------------
   static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p )
   {
 
@@ -1190,7 +1200,7 @@ protected:
       int shift = std::numeric_limits<sc_digit>::digits-1-SC_BIT_INDEX(nbits-1);
       shift = shift > 0 ? shift : 0;
       unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[ndigits-1] << shift);
-      digit[ndigits-1] = tmp >> shift;
+      digit[ndigits-1] = (sc_digit)(tmp >> shift);
   }
 
 
@@ -1369,7 +1379,7 @@ sc_signed::sc_signed( const sc_generic_base<T>& v )
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf(msg, BUFSIZ,
+        std::snprintf(msg, sizeof(msg),
 		    "sc_unsigned( sc_generic_base<T> ) : nb = %d is not valid", nb);
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }
@@ -1545,7 +1555,7 @@ inline
 long
 sc_signed::to_long() const
 {
-    long result =  ( sizeof(long) < 5 ) ? to_int() : to_int64();
+    long result = ( sizeof(long) < 5 ) ? to_int() : (long)to_int64();
     return result;
 }
 
@@ -1555,7 +1565,7 @@ unsigned long
 sc_signed::to_ulong() const
 {
     unsigned long result =
-        ( sizeof(unsigned long) < 5 ) ? to_uint() : to_uint64();
+        ( sizeof(unsigned long) < 5 ) ? to_uint() : (unsigned long)to_uint64();
     return result;
 }
 
@@ -1631,7 +1641,7 @@ sc_signed::sc_signed( int nb ) :
         nbits = num_bits( nb );
     } else {
         char msg[BUFSIZ];
-        std::snprintf(msg, BUFSIZ, "%s::%s( int nb ) : nb = %d is not valid",
+        std::snprintf(msg, sizeof(msg), "%s::%s( int nb ) : nb = %d is not valid",
                  "sc_signed", "sc_signed", nb );
         SC_REPORT_ERROR( sc_core::SC_ID_INIT_FAILED_, msg );
     }

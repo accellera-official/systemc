@@ -120,7 +120,8 @@ sc_vector_base::check_init( size_type n ) const
 void
 sc_vector_base::init_lock_cb()
 {
-    sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION);
+    if ( !simcontext()->elaboration_done() )
+      sc_register_stage_callback(*this, SC_POST_END_OF_ELABORATION);
 }
 
 void

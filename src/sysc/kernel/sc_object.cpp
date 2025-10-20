@@ -79,8 +79,6 @@ sc_hierarchy_scope::sc_hierarchy_scope( root_tag )
     }
 }
 
-#if SC_CPLUSPLUS >= 201103L
-
 sc_hierarchy_scope::sc_hierarchy_scope(sc_hierarchy_scope&& that)
   : m_simc(that.m_simc)
   , m_scoped_top(that.m_scoped_top)
@@ -88,29 +86,7 @@ sc_hierarchy_scope::sc_hierarchy_scope(sc_hierarchy_scope&& that)
     that.m_simc = nullptr;
 }
 
-#else // SC_CPLUSPLUS >= 201103L
-
-sc_hierarchy_scope::sc_hierarchy_scope(move_tag from)
-  : m_simc(from.simc)
-  , m_scoped_top(from.scope)
-{}
-
-sc_hierarchy_scope::move_tag::move_tag( sc_hierarchy_scope& s )
-  : simc( s.m_simc )
-  , scope( s.m_scoped_top )
-{
-    s.m_simc = NULL;
-}
-
-sc_hierarchy_scope::move_tag
-sc_hierarchy_scope::move()
-{
-  return move_tag( *this );
-}
-
-#endif // SC_CPLUSPLUS >= 201103L
-
-sc_hierarchy_scope::~sc_hierarchy_scope() SC_NOEXCEPT_EXPR_(false)
+sc_hierarchy_scope::~sc_hierarchy_scope() noexcept(false)
 {
     if (m_simc)
     {
@@ -401,7 +377,7 @@ sc_object::get_parent() const
     return get_parent_object();
 }
 
-SC_NODISCARD_ sc_object::hierarchy_scope
+[[nodiscard]] sc_object::hierarchy_scope
 sc_object::get_hierarchy_scope()
 {
     sc_object_host* parent = static_cast<sc_object_host*>( get_parent_object() );
@@ -545,7 +521,7 @@ sc_object_host::gen_unique_name( const char* basename_, bool preserve_first )
     return m_name_gen_p->gen_unique_name( basename_, preserve_first );
 }
 
-SC_NODISCARD_ sc_object::hierarchy_scope
+[[nodiscard]] sc_object::hierarchy_scope
 sc_object_host::get_hierarchy_scope()
 {
     return sc_hierarchy_scope( sc_hierarchy_scope::kernel_tag(), this ).move();

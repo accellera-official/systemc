@@ -20,8 +20,8 @@
 //=====================================================================
 /// @file example_system_top.cpp
 //
-/// @brief This class instantiates components that compose the TLM2 
-///        example system. The same block diagram is  instantiated 
+/// @brief This class instantiates components that compose the TLM2
+///        example system. The same block diagram is  instantiated
 ///        for each version, but with different components
 //
 //=====================================================================
@@ -31,29 +31,29 @@
 //    Charles Wilson, ESLX
 //    Jack Donovan, ESLX
 //=====================================================================
-#include "at_4_phase_top.h"           	// example system top header
+#include "at_4_phase_top.h"                 // example system top header
 
 //=====================================================================
 ///  @fn example_system_top::example_system_top
 //
 ///  @details
-///    The construcor method calls the bind methods
-///    to connect the example components. 
+///    The constructor method calls the bind methods
+///    to connect the example components.
 //
 //=====================================================================
-example_system_top::example_system_top  
-( sc_core::sc_module_name name             
+example_system_top::example_system_top
+( sc_core::sc_module_name name
 )
-  : sc_core::sc_module                      /// Init SC base
-    ( name                                 
+  : sc_core::sc_module                      // Init SC base
+    ( name
     )
-  , m_bus                                   /// Init Simple Bus
-    ( "m_bus"                              
+  , m_bus                                   // Init Simple Bus
+    ( "m_bus"
     )
-    
-  , m_at_target_4_phase_1                   /// Init intance 1 of AT target
+
+  , m_at_target_4_phase_1                   // Init instance 1 of AT target
     ( "m_at_target_4_phase_1"               // module name
-    , 201                                   /// 1st Target ID is 201
+    , 201                                   // 1st Target ID is 201
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
     , 4                                     // memory width (bytes)
@@ -61,10 +61,10 @@ example_system_top::example_system_top
     , sc_core::sc_time(50, sc_core::SC_NS)  // read response delay
     , sc_core::sc_time(30, sc_core::SC_NS)  // write response delay
     )
-    
-  , m_at_target_4_phase_2                   /// Init instance 2 of AT target
+
+  , m_at_target_4_phase_2                   // Init instance 2 of AT target
     ( "m_at_target_4_phase_2"               // module name
-    , 202                                   /// 2nd Target ID is 202
+    , 202                                   // 2nd Target ID is 202
     , "memory_socket_1"                     // socket name
     , 4*1024                                // memory size (bytes)
     , 4                                     // memory width (bytes)
@@ -72,19 +72,19 @@ example_system_top::example_system_top
     , sc_core::sc_time(50, sc_core::SC_NS)  // read response delay
     , sc_core::sc_time(30, sc_core::SC_NS)  // write response delay
     )
-    
-  , m_initiator_1                           /// Init Instance 1 of AT initiator
+
+  , m_initiator_1                           // Init Instance 1 of AT initiator
     ( "m_initiator_1"                       // module name
-    , 101                                   /// 1st Initiator ID is 101
-    , 0x0000000000000100                    // fitst base address
+    , 101                                   // 1st Initiator ID is 101
+    , 0x0000000000000100                    // first base address
     , 0x0000000010000100                    // second base address
     , 2                                     // active transactions
     )
-    
-  , m_initiator_2                           /// Init initiator 2
+
+  , m_initiator_2                           // Init initiator 2
     ( "m_initiator_2"                       // module name
-    , 102                                   /// 2nd Initiator ID is 102
-    , 0x0000000000000200                    // fitst base address
+    , 102                                   // 2nd Initiator ID is 102
+    , 0x0000000000000200                    // first base address
     , 0x0000000010000200                    // second base address
     , 2                                     // active transactions
     )

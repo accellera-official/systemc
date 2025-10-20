@@ -165,6 +165,14 @@ private: // backward compatibility with 2.0+
 
 public:
 
+    /* PJF extra wrapper to match SC_REPORT_INFO etc macros */
+    static void report(sc_severity,
+		       int         id,
+		       const char* add_msg,
+		       int         verbosity,
+		       const char* file,
+		       int         line);
+
     static void report(sc_severity,
 		       int         id,
 		       const char* add_msg,

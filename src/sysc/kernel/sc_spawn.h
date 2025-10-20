@@ -30,8 +30,10 @@
  *****************************************************************************/
 
 
-#if !defined(sc_spawn_h_INCLUDED)
-#define sc_spawn_h_INCLUDED
+#ifndef SC_SPAWN_H_INCLUDED_
+#define SC_SPAWN_H_INCLUDED_
+
+#include <type_traits>
 
 #include "sysc/kernel/sc_process_handle.h"
 #include "sysc/kernel/sc_spawn_options.h"
@@ -72,19 +74,20 @@ class sc_process_b;
 //     It performs a () operation on m_object.
 //=============================================================================
 template<typename T>
-class sc_spawn_object : public sc_process_host {
-  public:
-    sc_spawn_object( T object) : m_object(object)
-    {
-    }
+class sc_spawn_object : public sc_process_host
+{
+public:
+    explicit sc_spawn_object( T object )
+      : m_object(object)
+    {}
 
     virtual void semantics()
     {
         m_object();
     }
 
-  protected:
-    T                        m_object;
+protected:
+    T m_object;
 };
 
 
@@ -100,43 +103,36 @@ class sc_spawn_object : public sc_process_host {
 //     name_p   =   optional name for object instance, or zero.
 //     opt_p    ->  optional spawn options for process, or zero for the default.
 //------------------------------------------------------------------------------
-template <typename T>
-inline sc_process_handle sc_spawn( 
-    T object, 
-    const char* name_p = 0,
-    const sc_spawn_options* opt_p = 0)
+template< typename T
+        , typename std::enable_if<std::is_invocable_v<T>,bool>::type = true
+>
+inline sc_process_handle
+sc_spawn( T object, const char* name_p = 0, const sc_spawn_options* opt_p = 0 )
 {
-    sc_simcontext*      context_p;
-    sc_spawn_object<T>* spawn_p;
-    
-    context_p = sc_get_curr_simcontext();
-    spawn_p = new sc_spawn_object<T>(object);
+    auto * context_p = sc_get_curr_simcontext();
+    auto * spawn_p = new sc_spawn_object<T>(object);
     if ( !opt_p || !opt_p->is_method() )
     {
-            sc_process_handle thread_handle = context_p->create_thread_process( 
+        sc_process_handle thread_handle = context_p->create_thread_process(
             name_p, true,
-            SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
-            spawn_p, opt_p 
+            SC_MAKE_FUNC_PTR(sc_spawn_object<T>, semantics),
+            spawn_p, opt_p
         );
         return thread_handle;
     }
     else
     {
-            sc_process_handle method_handle = context_p->create_method_process( 
+        sc_process_handle method_handle = context_p->create_method_process(
             name_p, true,
-            SC_MAKE_FUNC_PTR(sc_spawn_object<T>,semantics), 
-            spawn_p, opt_p 
+            SC_MAKE_FUNC_PTR(sc_spawn_object<T>, semantics),
+            spawn_p, opt_p
         );
         return method_handle;
     }
 }
 
 //=============================================================================
-// CLASS sc_spawn_object_v<T> for all compilers except HP aCC
-//              or
-// CLASS sc_spawn_object_v<T, R> for HP aCC which tries to match this 
-// one template argument class when the sc_spawn() declared above is
-// invoked with 3 arguments or 2 arguments, and generates compiler errors.
+// CLASS sc_spawn_object_v<T, R>
 //
 // This templated helper class allows an object to provide the execution 
 // semantics for a process via its () operator. An instance of the supplied 
@@ -144,9 +140,9 @@ inline sc_process_handle sc_spawn(
 // for execution. The () operator returns a value, which will be stored at the 
 // location specified by the supplied pointer. An example of an object that 
 // might be used for this helper function would be valued sc_bind bound
-// function or method. 
+// function or method.
 //
-//   sc_spawn_object_v( typename F::result_type* r_p, T f, const char* name_p,
+//   sc_spawn_object_v( R* r_p, T f, const char* name_p,
 //                      const sc_spawn_options* opt_p )
 //       r_p      -> where to place the result of the function invocation.
 //       f        =  information to be executed.
@@ -181,115 +177,54 @@ inline sc_process_handle sc_spawn(
 //     opt_p    -> optional spawn options for process, or zero for the default.
 //------------------------------------------------------------------------------
 
-#if !defined (__HP_aCC)
-
-template<typename T>
-class sc_spawn_object_v : public sc_process_host {
-  public:
-    sc_spawn_object_v( typename T::result_type* r_p, T object ) :
-        m_object(object), m_result_p(r_p)
-    {
-    }
-
-    virtual void semantics()
-    {
-        *m_result_p = m_object();
-    }
-
-  protected:
-    T                        m_object;
-    typename T::result_type* m_result_p;
-};
-
-template <typename T>
-inline sc_process_handle sc_spawn( 
-    typename T::result_type* r_p, 
-    T object, 
-    const char* name_p = 0,
-    const sc_spawn_options* opt_p = 0)
-{
-    sc_simcontext*      context_p;
-    sc_spawn_object_v<T>* spawn_p;
-    
-    context_p = sc_get_curr_simcontext();
-    
-    spawn_p = new sc_spawn_object_v<T>(r_p, object);
-    if ( !opt_p || !opt_p->is_method() )
-    {
-            sc_process_handle thread_handle = context_p->create_thread_process( 
-            name_p, true,
-            SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
-            spawn_p, opt_p 
-        );
-        return thread_handle;
-    }
-    else
-    {
-            sc_process_handle method_handle = context_p->create_method_process( 
-            name_p, true,
-            SC_MAKE_FUNC_PTR(sc_spawn_object_v<T>,semantics), 
-            spawn_p, opt_p 
-        );
-        return method_handle;
-    }
-}
-
-#else
-// for HP aCC
 template<typename T, typename R>
-class sc_spawn_object_v : public sc_process_host {
-  public:
-    sc_spawn_object_v( R* r_p, T object) :
-        m_object(object), m_result_p(r_p)
-    {
-    }
+class sc_spawn_object_v : public sc_process_host
+{
+public:
+    sc_spawn_object_v( R* r_p, T object )
+      : m_object(object)
+      , m_result_p(r_p)
+    {}
 
     virtual void semantics()
     {
         *m_result_p = m_object();
     }
 
-  protected:
+protected:
     T  m_object;
     R* m_result_p;
 };
 
-template <typename T, typename R>
-inline sc_process_handle sc_spawn( 
-    R* r_p, 
-    T object, 
-    const char* name_p = 0,
-    const sc_spawn_options* opt_p = 0)
+template< typename T, typename R
+        , typename std::enable_if_t<std::is_invocable_r_v<R,T>, bool> = true
+>
+inline sc_process_handle
+sc_spawn( R* r_p, T object, const char* name_p = 0, const sc_spawn_options* opt_p = 0 )
 {
-    sc_simcontext*      context_p;
-    sc_spawn_object_v<T,R>* spawn_p;
-    
-    context_p = sc_get_curr_simcontext();
-    
-    spawn_p = new sc_spawn_object_v<T,R>(r_p, object);
+    using spawn_object_t = sc_spawn_object_v<T,R>;
+    auto* context_p = sc_get_curr_simcontext();
+    auto* spawn_p   = new spawn_object_t(r_p, object);
+
     if ( !opt_p || !opt_p->is_method() )
     {
-            sc_process_handle thread_handle = context_p->create_thread_process( 
+        sc_process_handle thread_handle = context_p->create_thread_process(
             name_p, true,
-            static_cast<sc_core::sc_entry_func>(
-                &sc_spawn_object_v<T,R>::semantics),
-            spawn_p, opt_p 
+            SC_MAKE_FUNC_PTR(spawn_object_t,semantics),
+            spawn_p, opt_p
         );
         return thread_handle;
     }
     else
     {
-            sc_process_handle method_handle = context_p->create_method_process( 
+        sc_process_handle method_handle = context_p->create_method_process(
             name_p, true,
-            static_cast<sc_core::sc_entry_func>(
-                &sc_spawn_object_v<T,R>::semantics), 
-            spawn_p, opt_p 
+            SC_MAKE_FUNC_PTR(spawn_object_t,semantics),
+            spawn_p, opt_p
         );
         return method_handle;
     }
 }
-
-#endif // HP
 
 } // namespace sc_core
 
@@ -334,4 +269,4 @@ inline sc_process_handle sc_spawn(
 // Revision 1.3  2006/01/13 18:44:30  acg
 // Added $Log to record CVS changes into the source.
 
-#endif // !defined(sc_spawn_h_INCLUDED)
+#endif // SC_SPAWN_H_INCLUDED_

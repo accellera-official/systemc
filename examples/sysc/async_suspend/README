@@ -1,22 +1,22 @@
 
 This is a simple test for async suspend:
 
- 	 Each 'node' consists of a SystemC thread, and a p_thread component.
+ 	 Each 'node' consists of a SystemC thread, and a std::thread component.
  	
- 	 The p_thread gets transactions from a queue (or creates new ones), and 'sends'
+ 	 The std::thread gets transactions from a queue (or creates new ones), and 'sends'
  	 them by poting them to a 'mailbox' (txn), and then signalling SystemC using
  	 an async_events (sendIt). It then uses a 'semaphore' (txnSent) to wait till
  	 the txn is sent, before sending another one.
- 	 The p_thread has it's own notion of 'time' (myTime)
+ 	 The std::thread has it's own notion of 'time' (myTime)
  	
  	 Meanwhile, the SystemC thread recieves the async event (sendIt), in a
  	 SC_THREAD (sendTxns). This must be a thread, so that 'wait' can be called.
  	 The txn's are sent to a 'random' other node, where they are processed by a
  	 b_transport which calls wait().
- 	 Once done, sendTxns releases the semaphore allowing the p_thread to continue.
+ 	 Once done, sendTxns releases the semaphore allowing the std::thread to continue.
  	
  	 In order to maintain syncronisation, the SystemC thread can do 2 things:
- 	  1. If the 'nodes' local time (myTime) is ahead of SystemC, the p_thread
+ 	  1. If the 'nodes' local time (myTime) is ahead of SystemC, the std::thread
  	  semaphore is released by notifying a method at the appropriate myTime.
  	  2. Else SystemC is requested to suspend (waiting for the node to catch up).
  	

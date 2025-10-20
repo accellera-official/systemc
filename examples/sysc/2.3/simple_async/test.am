@@ -50,6 +50,9 @@ examples_TESTS += 2.3/simple_async/test
 2_3_simple_async_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
+2_3_simple_async_test_LDFLAGS = \
+	-pthread
+
 2_3_simple_async_test_SOURCES = \
 	$(2_3_simple_async_H_FILES) \
 	$(2_3_simple_async_CXX_FILES)

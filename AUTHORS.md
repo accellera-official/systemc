@@ -1,48 +1,85 @@
-Authors of SystemC / TLM
-========================
+# Authors
 
- *  Daniel Aarno,                Intel Corporation
- *  James Aldis,                 Texas Instruments
- *  Guillaume Audeon,            ARM Ltd.
- *  John Aynsley,                Doulos, Inc.
- *  Mohamed Bamakhrama,          Intel Corporation
- *  Martin Barnasconi,           NXP Semiconductors
- *  Bishnupriya Bhattacharya,    Cadence Design Systems, Inc.
- *  David Black,                 Doulos, Inc.
- *  Bill Bunton,                 XtremeEDA Corp.
- *  Gene Bushuyev,               Synopsys, Inc.
- *  Mark Burton,                 GreenSocs
- *  Jerome Cornet,               STMicroelectronics
- *  Guillaume Delbergue,         GreenSocs
- *  Jack Donovan,                XtremeEDA Corp.
- *  Ali Dasdan,                  Synopsys, Inc.
- *  Alan Fitch,                  Doulos, Inc.
- *  Ralph Görgen,                NXP Semiconductors
- *  Abhijit Ghosh,               Synopsys, Inc.
- *  Andy Goodrich,               Forte Design Systems, Inc.
- *  Robert Günzel,               GreenSocs
- *  Andreas Hedström,            Intel Corporation
- *  Philipp A. Hartmann,         Intel Corporation
- *  Gino van Hauwermeiren,       NXP Semiconductors N.V.
- *  Andreas Hedstrom,            Intel Corporation
- *  Ulrich Holtmann,             Synopsys, Inc.
- *  Martin Janssen,              Synopsys, Inc.
- *  Peter de Jager,              Intel Corporation
- *  Vijay Kumar,                 CoWare, Inc.
- *  Joshua Landau,               ARM Ltd.
- *  Stan Y. Liao,                Synopsys, Inc.
- *  David Long,                  Doulos, Inc.
- *  Torsten Mähne,               Bern University of Applied Sciences
- *  Marcelo Montoreano,          Synopsys, Inc.
- *  Eric Paire,                  STMicroelectronics
- *  Sonal Podder,                Intel Corporation
- *  Roman I Popov,               Intel Corporation
- *  Cesar Quiroz,                CoWare, Inc.
- *  Amit Rao,                    Synopsys, Inc.
- *  Harish Sarin,                CoWare, Inc.
- *  Stuart Swan,                 Cadence Design Systems, Inc.
- *  Thomas Uhle,                 Fraunhofer-Gesellschaft
- *  Bart Vanthournout,           CoWare, Inc.
- *  Dirk Vermeersch,             CoWare, Inc.
- *  Trevor Wieman,               Intel Corporation
- *  Charles Wilson,              XtremeEDA Corp.
+ *  Daniel Aarno (@DAarno)
+ *  James Aldis
+ *  Bas Arts (@basarts)
+ *  Guillaume Audeon (@gjaudeon)
+ *  John Aynsley (aynsley)
+ *  Mohamed Bamakhrama (@mohamed)
+ *  Martin Barnasconi (@barnasc)
+ *  Bishnupriya Bhattacharya (@bpriya)
+ *  David Black (@dcblack)
+ *  Bill Bunton (@bbunton)
+ *  Gene Bushuyev
+ *  Mark Burton (@markfoodyburton)
+ *  Jerome Cornet (@jeromecornetst)
+ *  Ali Dasdan
+ *  Guillaume Delbergue (@guyguy333)
+ *  Jack Donovan
+ *  Frederic Doucet (@frdoucet)
+ *  Paul Ehrlich (@eactor)
+ *  Karsten Einwich (@Einwich)
+ *  Alan Fitch (@apfitch)
+ *  Haozhuo Gao (@HZ-HZ)
+ *  Ralph Görgen (@ralphg)
+ *  Abhijit Ghosh
+ *  Andy Goodrich (@AndrewGoodrich)
+ *  Robert Günzel
+ *  Damien Hedde (@dhedde)
+ *  Andreas Hedström (@andreashedstrom-intel)
+ *  Philipp A. Hartmann (@pah)
+ *  Gino van Hauwermeiren
+ *  Ulrich Holtmann
+ *  Peter de Jager (@peterdejager-github)
+ *  Martin Janssen (@martin-janssen)
+ *  Lukas Jünger (@aut0)
+ *  Vijay Kumar
+ *  Joshua Landau (@JoshuaLandau-ARM)
+ *  Stan Y. Liao
+ *  David Long (@david-long-doulos)
+ *  Torsten Mähne (@maehne)
+ *  Laurent Maillet-Contoz (@lmailletcontoz)
+ *  Marcelo Montoreano
+ *  Eric Paire (@epaire)
+ *  Sonal Podder (@sonalpoddar)
+ *  Roman I Popov (@ripopov)
+ *  Cesar Quiroz
+ *  Amit Rao
+ *  Harish Sarin
+ *  Stuart Swan
+ *  Andres Takach (@andres-takach)
+ *  Thomas Uhle (@uhle)
+ *  Bart Vanthournout (@bartvt)
+ *  Dirk Vermeersch
+ *  veeYceeY (@veeYceeY)
+ *  Thilo Vörtler (@voertler)
+ *  Trevor Wieman (@twieman)
+ *  Charles Wilson
+ *  Richard Xia (@richardxia)
+ *  Felix Yan (@felixonmars)
+
+# Companies
+
+ * Apple Inc.
+ * ARM Ltd.
+ * Bern University of Applied Sciences
+ * Cadence Design Systems, Inc.
+ * Circuitsutra Technologies Pvt Ltd.
+ * COSEDA Technologies GmbH
+ * CoWare, Inc.
+ * Doulos, Inc.
+ * Ericsson AB
+ * Fraunhofer-Gesellschaft
+ * GreenSocs
+ * Intel Corporation
+ * MachineWare GmbH
+ * Mentor Graphics Corporation
+ * NXP Semiconductors
+ * OFFIS eV
+ * Qualcomm Technologies, Inc
+ * Siemens
+ * STMicroelectronics
+ * Synopsys, Inc.
+ * Texas Instruments
+ * Université Pierre et Marie Curie
+ * XtremeEDA Corp.

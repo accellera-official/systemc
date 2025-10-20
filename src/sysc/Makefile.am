@@ -51,7 +51,6 @@ include tracing/files.am
 include utils/files.am
 
 # include individual third-party packages
-include packages/boost.am
 if WANT_QT_THREADS
 include packages/qt.am
 endif

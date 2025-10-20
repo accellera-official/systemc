@@ -19,8 +19,7 @@
 
 /*****************************************************************************
 
-  forkjoin.cpp -- Demo "new" fork/join and dynamic thread
-              creation within SystemC 2.1.
+  forkjoin.cpp -- Demo fork/join and dynamic thread creation
 
 
   Original Author: Stuart Swan, Cadence Design Systems, Inc., 2002-10-22
@@ -38,7 +37,6 @@
  *****************************************************************************/
 
 
-#define SC_INCLUDE_DYNAMIC_PROCESSES
 #include <systemc.h>
 
 
@@ -63,7 +61,6 @@ int ref_function(const double& d)
 class top : public sc_module
 {
 public:
-  SC_HAS_PROCESS(top);
 
   top(sc_module_name name) : sc_module(name) 
   {

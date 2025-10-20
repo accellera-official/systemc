@@ -1,855 +1,569 @@
-Installation Notes for SystemC
-==============================
+# Installation Notes for SystemC
 
-**Contents**
- * [Installation Notes for Unix][unix]
- * [Installation Notes for Windows][win]
- * [SystemC Library Configuration Switches][config]
+## Table of Contents
 
-> **Note**  
->  A new CMake-based build system for SystemC is part of this distribution,
->  which unifies the configuration of the SystemC sources on different Unix
->  and Windows platforms. It is able to generate the necessary files to
->  compile/install SystemC using different command-line build tools (e.g.
->  GNU Make or Ninja) and IDEs (e.g., Eclipse, Xcode, MS Visual Studio C++,
->  or Kdevelop). The installation notes for SystemC using CMake can be
->  found in the file [cmake/INSTALL_USING_CMAKE][cmake].
+1. System Requirements
 
-Installation Notes for Unix
-===========================
+2. Installation Notes for CMake
 
-System Requirements
--------------------
+   2.1 Sources for Compilers and Related Tools
 
-SystemC can be installed on the following UNIX, or UNIX-like platforms:
+   2.2 Installation Steps
+
+   2.3 Cross compilation
+
+   2.4 Finding and Using SystemC with CMake
+
+3. Installation Notes for Windows using Visual Studio C++
+
+   3.1 Microsoft Visual Studio C++ 2019 (compiler version 16.0) or later
+
+   3.2 Creating SystemC Applications
+
+   3.3 Building against a SystemC DLL
+
+4. Known Problems
+
+5. Resources
+
+
+## 1. System Requirements
+
+SystemC can be installed on the following platforms:
 
   * Linux
     * Architectures
-      - x86 (32-bit)
       - x86_64 (64-bit)
-      - x86 (32-bit) application running on x86_64 (64-bit) kernel  
+      - x86 (32-bit) application running on x86_64 (64-bit) kernel
         (`../configure --host=i686-linux-gnu`)
     * Compilers
       - GNU C++ compiler
       - Clang C++ compiler
       - or compatible
 
-  * Mac OS X
+  * macOS
     * Architectures
-      - x86 (32-bit)
-      - x86_64 (64-bit)
-      - powerpc (32-bit)   [deprecated]
-      - powerpc64 (64-bit) [deprecated]
-    * Compilers
-      - GNU C++ compiler
-      - Clang C++ compiler
-      - or compatible
-
-  * Solaris
-    * Architectures
-      - SPARC (32-bit)
-    * Compilers
-      - GNU C++ compiler
-      - Sun/Solaris Studio
-
-  * BSD
-    * Architectures
-      - x86 (32-bit)
+      - Apple Silicon
       - x86_64 (64-bit)
     * Compilers
-      - GNU C++ compiler
       - Clang C++ compiler
       - or compatible
 
   * Windows
     * Compatibility layer
-      - Cygwin
       - MinGW / MSYS
     * Architectures
-      - x86 (32-bit)
       - x86_64 (64-bit)
     * Compilers
       - GNU C++ compiler
       - or compatible
+    * Visual Studio C++
+      -  Win32 (32-bit)
+      -  x64 (64-bit)
+      -  Static library, DLL
 
-Note: _Not all combinations are equally well-tested and some combinations
-      may not work as expected.  Please report your findings by following
-      the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
+Note 1: _IEEE Std. 1666-2023 mandates C++17 as the baseline for SystemC
+        implementations, see [RELEASENOTES.md](RELEASENOTES.md).  Make
+        sure to configure your compiler accordingly (see below)._
 
-The [RELEASENOTES](RELEASENOTES.md) file contains a list of detailed platforms,
-architectures, and compiler versions that have been used for testing this release.
+Note 2: _Not all combinations are equally well-tested and some combinations
+        may not work as expected.  Please report your findings by following
+        the instructions in the [CONTRIBUTING](CONTRIBUTING.md) file._
 
+Note 3: _CMake is the recommended build flow SystemC. Installation using the
+        legacy GNU Autotools build flow can be found 
+        [here](docs/INSTALL_USING_AUTOTOOLS.md)._
 
-Sources for Compilers and Related Tools
----------------------------------------
+## 2. Installation Notes for CMake
 
-To build, install, and use SystemC on UNIX platforms, you need
-the following tools:
+### 2.1 Sources for Compilers and Related Tools
 
-  1. GNU C++ compiler (version 3.4 or later), or
-     Clang C++ compiler (version 3.0 or later)
-  2. GNU Make (gmake)
+To build, install, and use SystemC, you need the following tools:
 
-GCC, Clang, and gmake are free software that you can
+  1. GNU C++ compiler (version 9.3 or later), or
+     Clang C++ compiler (version 13.0 or later), or
+     Visual Studio C++ (version msvc16 (2019) or later)
+  2. GNU Make (make) or Ninja
+  3. CMake
+
+GCC, Clang, make, Ninja, and CMake are free software that you can
 obtain from the following sources:
 
-  * GCC     http://www.gnu.org/software/gcc/gcc.html
-  * Clang   http://clang.llvm.org/
-  * gmake   http://www.gnu.org/software/make/make.html
-
-
-Basic SystemC Installation
---------------------------
-
-To install SystemC on a UNIX system, do the following steps:
-
-  1. Change to the top level directory (e.g. `systemc-2.3.3`)
-
-  2. Create a temporary directory, e.g.,
-     ```bash
-     mkdir objdir
-     ```
-  3. Change to the temporary directory, e.g.,
-     ```bash
-     cd objdir
-     ```
-  4. Choose your compiler by setting the `CXX` environment variable
-     (the configure script tries to guess the default compiler, if
-      this step is omitted).
-     If you use a POSIX-compatible shell (e.g. bash):
-     ```bash
-     export CXX="<compiler>"
-     ```
-     e.g. for GCC compilers
-     ```bash
-     export CXX=g++
-     ```
-     The Clang compiler is usually named `clang++`, thus e.g.
-     ```bash
-     export CXX=clang++
-     ```
-     When using a C shell (e.g. `csh`/`tcsh`), the syntax to set the
-     environment variable is different:
-     ```sh
-     setenv CXX g++
-     ```
-     For the Sun/Solaris Studio compilers, use
-     ```bash
-     setenv CXX CC
-     ```
-     You can also specify an absolute path to the compiler of your choice.
-     See also the Section [Compilation and Linking Options][comp] below.
-
-  5. **Configure the package** for your system, e.g.,
-     (The `configure` script is explained below.)
-
-     ```bash
-     ../configure
-     ```
-
-     While the 'configure' script is running, which takes a few moments,
-     it prints messages to inform you of the features it is checking.
-     It also detects the platform.
-
-     _Note for System V users_:  
-     If you are using 'csh' on an older version of System V, you might
-     need to use the `sh ../configure` command instead of `../configure`.
-     Otherwise, 'csh' will attempt to 'configure' itself.
-
-     SystemC 2.3 includes a fixed-point package that is always built.
-     When compiling your applications with fixed-point types, you still have
-     to use compiler flag `-DSC_INCLUDE_FX`. Note that compile times increase
-     when using this compiler flag.
-
-     In case you want to install the package in another place than the
-     top level directory, configure the package e.g. as follows:
-
-     ```bash
-     ../configure --prefix=/usr/local/systemc-2.3.3
-     ```
-
-     Note: _Make sure you have created the target directory before installing
-     the package. Do _not_ use `/usr/local` as a prefix, unless you
-     follow the Unix/FHS directory layouts (see below)._
-
-     A fine grained configuration of the installation directories can
-     be achieved via additional options, given to the configure script.
-
-     By default, the files are installed directly to the `PREFIX` directory
-     root and the library is installed to `PREFIX/lib-<TARGETARCH>`,
-     depending on the current target architecture.  This may be undesired
-     in cases where the package is meant to be installed in a system-wide
-     location as part of shared (default) library and include hierarchies
-     (e.g. `/usr/local`, `/usr`, `/opt`, ...).  To follow the Unix/FHS directory
-     standards, you can use the following options:
-
-     ```
-       --with-unix-layout     use Unix directory layout for installation
-                              [default=no]
-     ``` 
-     when "yes", the following (fine-grained) settings will be used:
-     ```
-       --includedir=DIR       C++ header files      [PREFIX/include]
-       --libdir=DIR           object code libraries [EPREFIX/lib]
-       --docdir=DIR           documentation root    [DATAROOTDIR/doc/systemc]
-     ```
-
-      The library destination itself can be further and separately configured
-      by using the following option:
-
-      ```
-       --with-arch-suffix     add suffix to library installation directory
-                              [default=-<TARGETARCH>]
-      ```
-
-      With this option, one can easily follow e.g. the "multi-arch"
-      conventions on some platforms:
-
-      ```bash
-      ../configure --with-arch-suffix=32                # lib32
-      ../configure --with-arch-suffix=/x86_64-linux-gnu # lib/x86_64-linux-gnu
-      ```
- 
-     Several options are available to the configure script to modify
-     the compiler configuration and the selection of certain features:
-
-     ```
-       --disable-shared        do not build shared library (libsystemc.so)
-       --enable-debug          include debugging symbols
-       --disable-optimize      disable compiler optimization
-       --enable-pthreads       use POSIX threads for SystemC processes
-       --enable-phase-callbacks
-                               enable simulation phase callbacks (experimental)
-     ```
-
-     See the section on the general usage of the `configure` script and
-     `../configure --help` for more information.
-
-     Note: _When linking against a static library of SystemC with asynchronous
-            update support enabled, you may need to explicitly link against the
-            pthread library as well (`-lpthread`)._
-
-     Note: _If you change the configuration after having compiled the
-            package already, you should run a `gmake clean` before
-            recompiling._
-
-  6. **Compile the package**
-
-     ```bash
-     gmake
-     ```
-
-     Note: _The explicit gmake targets `opt` and `debug`, etc. have
-            been removed in this package.  Use the corresponding
-            options to the configure script instead._
-
-  7. At this point you may wish to verify the compiled package by
-     testing the example suite.
-
-     ```bash
-     gmake check
-     ```
-
-     This will compile and run the examples in the subdirectory
-     examples.
-
-  8. **Install the package**
-
-     ```bash
-     gmake install
-     ```
-
-  9. You can now remove the temporary directory, .e.g,
-
-     ```bash
-     cd ..
-     rm -rf objdir
-     ```
-
-     Alternatively, you can keep the temporary directory to allow you to
-     1) Experiment with the examples.
-     2) Later uninstall the package.
-     
-     To clean up the temporary directory, enter:
-     ```bash
-     gmake clean
-     ```
-
-     To uninstall the package, enter:
-     ```bash
-     gmake uninstall
-     ```
-
-### Running the Examples
-
-Copies of the examples reside in the temporary directory - see
-instruction 7 above for details on building and running them.
-
-In addition, a copy of the example code resides in the directory
-examples at the highest level of the installation (or in the
-shared documentation install directory).
-
-Use the Makefiles provided in  the `examples` directory as templates
-for Makefiles you need for compiling your own examples.
-
-
-### Using the Configure Script
-
-The `configure` shell script tries to determine the correct values for
-various system-dependent variables used during compilation. It uses
-these values to create a `Makefile` in each directory of the package.
-It also creates one or more `.h` files containing system-dependent
-definitions if needed. Then, it creates the following files:
-
-* `config.status`  
-    A shell script that you can run at another time to
-    recreate the current configuration.
-
-* `config.cache`  
-    A file in which the configure test results are
-    saved to speed up reconfiguration.
-    Data is appended to the `config.cache` file.
-    You can remove unwanted data.
-
-* `config.log`  
-    A file in which compiler output is saved.
-    This is used to debug the configure script.
-
-If you need to use other commands to successfully compile the package
-on your system, please try to determine if the configure script can be used
-for these commands. Then, send either a diff file or instructions about
-the commands you used to the e-mail address provided in the README file.
-This information will be used to improve the installation process in
-the next release.
-
-The `configure.ac` file is provided in case you want to change or regenerate
-the `configure` script, for example to use a newer version of `autoconf`.
-The `configure.ac` file is used by the `autoconf` program to create the
-`configure` script.
-
-Note for (key) developers:
-
-  In case you have changed the `configure.ac` file or one of the
-  `Makefile.am` files:
-
-  - Use 
-    ```bash
-    gmake distclean
-    ```
-    to remove the generated `configure` script, the generated `aclocal.m4`
-   file and the generated `Makefile.in` files.
-
-  - Use the `config/bootstrap` script to generate the `configure` script
-    and the necessary `Makefile.in` files. This script makes use of the
-    GNU auto-tools `aclocal`, `automake`, and `autoconf`.
-
-
-Compilation and Linking Options
--------------------------------
-
-Some systems require compilation or linking options that the `configure`
-script does not define. You can define the initial values for these
-options by setting them in your environment before running the
-`configure` script.
-
-Instead of passing the variables via the environment, it is preferred
-to pass the values as options to the configure script:
-
-```sh
-../configure CXX=g++-4.4 LIBS=-lposix
-```
-
-
-### Specifying the System Type
-
-Some features cannot be automatically determined by `configure` unless
-it can detect the host type on which the package will run.
-If it prints a message that it cannot determine the host type,
-use the `--host=TYPE` option to define it. TYPE can either be a
-short system name, such as `sun4`, or a canonical name with three fields:
-
-     CPU-COMPANY-SYSTEM
-
-See the `config.sub` file for details about the values of each field. If
-the `config.sub` file is not included in the package, the package does not
-need to know the host type.
-
-If you are building compiler tools for cross-compiling, you can also
-use the `--target=TYPE` option to select the type of system for which
-the code is produced and the `--build=TYPE` option to select the type of
-system on which you are compiling the package.
-
-
-### Sharing Defaults
-
-You can set the default values that `configure` scripts share by
-creating a site shell script called `config.site`. This file contains the
-default values for variables like `CC`, `cache_file`, and `prefix`.
-The `configure` script looks for the `config.site` file in the following
-search precedence:
-
-  1. `PREFIX/share/config.site`
-  2. `PREFIX/etc/config.site`
-
-Alternatively, you can set the `CONFIG_SITE` environment variable to the
-site script path.
-
-Note: _The `configure` script for some systems does not look for a site script._
-
-
-### Operation Controls
-
-The `configure` script recognizes the following additional options to control
-its operation:
-
-`--cache-file=FILE`  
-        Use and save the test results in FILE instead of
-        `./config.cache`. Set FILE to `/dev/null` to disable caching
-        when debugging `configure`.
-
-`--help`  
-        Print a summary of `configure` options and exit.
-
-`--quiet`  
-`--silent`  
-`-q`  
-        Do not print messages about checks being made.
-        To suppress all normal output, redirect it to `/dev/null`.
-        Error messages continue to print.
-
-`--srcdir=DIR`  
-        Look for the package's source code in directory DIR.
-        Typically `configure` determines the directory automatically.
-
-`--version`  
-        Print the version of `autoconf` used to generate the `configure`
-        script and exit.
-
-Other options that are rarely used are available in the `configure` script.
-Use the `--help` option to print a list.
-
-
---------------------------------------------------------------------------
-Installation Notes for Windows
-==========================================================================
-
-This release has been tested on Visual C++ versions 2010 through 2015,
-running on Windows 8.1 and Windows 10.
+  * GCC     https://www.gnu.org/software/gcc/index.html
+  * Clang   https://clang.llvm.org/
+  * make    https://www.gnu.org/software/make/make.html
+  * Ninja   https://ninja-build.org/
+  * CMake   https://cmake.org/
+
+The CMake build scripts are compatible with CMake >=3.5 and have been
+tested on the following OS/processor/compiler platforms:
+
+  * macOS >= 13.6 until 15.4 (Xcode/AppleClang): x86_64, Apple Silicon, universal binary
+  * Linux (GCC, Clang): i386, x86_64
+  * Linux (GCC): aarch64
+  * Windows (MSYS2 with the MinGW-W32 or MinGW-W64 GCC toolchains, Visual C++):
+    x86 (Win32), AMD64 (x64)
+
+### 2.2 Installation Steps
+
+Typically, the following steps need to be followed to compile the
+sources using CMake:
+
+  1. Download and install CMake from [this website][1]
+     (Linux distributions provide often a package).
+
+  2. Create a build subdirectory:
+
+         $ pwd
+         .../systemc/
+         $ mkdir build
+
+  3. Launch the interactive cmake console program `ccmake` (on Unix) or
+     the CMake GUI (Unix, macOS, Windows) and specify the source
+     (`.../systemc`) and build directory (`.../systemc/build`).  For
+     the console based `ccmake`, this is done by changing into the build
+     directory and launching `ccmake` with the relative path to the source
+     root directory as an argument:
+
+         $ cd build/
+         $ ccmake ..
+
+     For cmake-gui, the same approach works:
+
+         $ cd build/
+         $ cmake-gui ..
+
+     Alternatively, the CMake GUI allows to directly enter the paths to the
+     sources and build directory in the top of its main window.
+
+  4. Configure the sources by pressing 'c' or clicking on
+     "Configure".  Depending on the operating system, CMake will ask the user
+     what it should generate Makefiles or IDE project files (Eclipse,
+     Xcode, Kdevelop, Microsoft Visual Studio C++).  CMake will parse the file
+     `CMakeLists.txt` in the source root directory and configure the sources
+     accordingly carrying out all necessary platform-specific checks.
+
+     The CMake build scripts detect the actual features provided by the
+     target (Unix or Windows) platform.  On Unix (including macOS), shared
+     libraries can be built.  If the QuickThreads library provides support
+     for the target processor, it will be automatically used.  Otherwise, we
+     rely on Pthreads on Unix and Fiber on Windows.  By default, the SystemC
+     library installation will follow the GNU standard installation layout
+     so that also other SystemC libraries (SystemC, SCV, TLM, AMS
+     extensions) can be installed into the same directory hierarchy (Unix:
+     `/opt/systemc/`; Windows: `$ENV{ProgramFiles}/SystemC/`).  The target
+     platform's conventions are respected meaning usually `include/` for the
+     headers and `lib/`, `lib64/`, or `lib/<multiarch-tuple>/` for the
+     libraries.  The `lib-${SYSTEMC_TARGET_ARCH})/` convention is not used
+     by default, as `${SYSTEMC_TARGET_ARCH}` does not reliably encode the
+     OS/processor/compiler tuple.
+
+     The build process can be configured through the configuration
+     variables offered to the user in the CMake console and GUI (`ccmake` and
+     `cmake-gui`, respectively).  Each variable is annotated with a brief
+     documentation string.  The most important variables are:
+
+     * `BUILD_SHARED_LIBS`
+       Build shared instead of static libraries
+       (default: `ON` if not targeting Windows).
+
+     * `BUILD_SOURCE_DOCUMENTATION`
+       Build source code documentation using Doxygen (default: `OFF`).
+
+     * `ENABLE_EXAMPLES`
+       Add build targets for all examples under the `examples/` folder,
+       add composite targets `all-examples` and `check-examples` to
+       build and run all of them (default: `ON`).
+
+     * `ENABLE_REGRESSION`
+       Add build targets for all regression tests under the `tests/` folder,
+       add composite targets `all-tests` and `check-tests` to build and run
+       all of them (default: `OFF`).
+
+     * `CMAKE_BUILD_TYPE`
+       Specifies the build type on single-configuration generators.
+       (default: `Release`).
+
+     * `CMAKE_CXX_STANDARD`
+       C++ standard to build all targets.  (default: `17`).
+
+     * `CMAKE_CXX_STANDARD_REQUIRED`
+       The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.
+       (default: `ON`).
+
+     * `CMAKE_INSTALL_PREFIX`
+       Root directory of the SystemC libraries installation (defaults to
+       `$ENV{SYSTEMC_HOME}` if set to an absolute path and otherwise to either
+       `/opt/systemc/` (Unix-like platforms including CYGWIN),
+       `$ENV{ProgramFiles}/SystemC/` (on Windows systems), or
+       `${CMAKE_INSTALL_PREFIX}/systemc`.
+
+     * `CMAKE_OSX_ARCHITECTURES`
+       Architectures for cross-compilation on macOS (default: _empty_,
+       i.e., only for the system processor).
+
+     * `CMAKE_VERBOSE_MAKEFILE`
+       Generate a verbose Makefile (default: `OFF`).
+
+     * `ENABLE_WARNINGS_AS_ERRORS`
+       Treat compiler warnings as errors on supported compilers (default: `OFF`).
+
+     * `DISABLE_COPYRIGHT_MESSAGE`
+        Do not print the copyright message when starting the application.
+        (default: `OFF`).
+
+     * `ENABLE_ASSERTIONS`
+       Always enable the `sc_assert` expressions (default: `ON`).
+
+     * `ENABLE_PTHREADS`
+       Use POSIX threads for SystemC processes instead of QuickThreads on Unix
+       or Fiber on Windows.
+
+     * `SystemC_TARGET_ARCH`
+       Target architecture according to the Accellera SystemC conventions set
+       either from `$ENV{SYSTEMC_TARGET_ARCH}`, `$ENV{SYSTEMC_ARCH}`, or
+       detected by CMake.
+
+     * `INSTALL_TO_LIB_BUILD_TYPE_DIR`
+       Install the libraries to `lib-${CMAKE_BUILD_TYPE}` to enable parallel
+       installation of the different build variants. (default: `OFF`).
+
+     * `INSTALL_TO_LIB_TARGET_ARCH_DIR`
+       Install the libraries to `lib-<target-arch>` to facilitate linking
+       applications, which build systems assume to find SystemC in
+       `lib-<target-arch>`. (default: `OFF`).
+
+     * `INSTALL_LIB_TARGET_ARCH_SYMLINK`
+       On Unix, install a symlink `lib-<target-arch>` to
+       `lib-${CMAKE_BUILD_TYPE}` facilitating the linking of user code, which
+       build system assumes to find the SystemC libraries under
+       `lib-<target-arch>`.  (default: `OFF`).
+
+     Other configuration variables will be proposed by CMake depending on the
+     OS and detected processor, compiler, and libraries.  For more information,
+     please refer to the [CMake documentation][1].
+
+     The configuration step needs to be repeated until no new configuration
+     variables appear.
+
+  5. Generate the Makefiles or IDE project files by pressing 'g' or
+     clicking on "Generate".
+
+  6. Compile, test, and install the libraries using make or the IDE:
+
+         $ make
+         $ make check
+         $ sudo make install
+
+More documentation on using CMake is available from the the [CMake Wiki][3].
+
+### 2.3 Cross Compilation
+
+CMake supports cross compilation on a host system for a different
+target architecture.  Depending on the scenario, different approaches
+can be used.
+
+#### Cross Compilation for 32-bit on a 64-bit platform using GCC
+
+This section is primarily relevant for users of 64-bit versions of
+Linux and Windows.
+
+On 64-bit platforms like Linux x86_64 and Windows AMD64, the OS
+provides usually for backward-compatibility the capability to execute
+64-bit and 32-bit applications.  To this end, it provides 32-bit and
+64-bit versions of all runtime libraries (on Linux, they can be
+usually found in the lib/ and lib64/ directories).  On these platforms,
+the GCC toolchain is usually installed in a multi-lib variant, which
+supports the compilation and linking of 64-bit and 32-bit applications
+and libraries.  The word width of the target architecture is simply
+chosen with the `-m64` or `-m32` option, which has to be consistently
+passed at each compiler and linker call.
+
+Therefore, it is in principle sufficient to add `-m32` to the
+corresponding CMake variables containing the flags to be passed to the
+linker and compiler:
+
+       CMAKE_C_FLAGS
+       CMAKE_CXX_FLAGS
+       CMAKE_EXE_LINKER_FLAGS
+       CMAKE_MODULE_LINKER_FLAGS
+       CMAKE_SHARED_LINKER_FLAGS
+       CMAKE_STATIC_LINKER_FLAGS
+
+These flags should be already set upon the first CMake invocation in a
+new build directory, as most system introspection results are cached
+over multiple CMake runs.  You can do so via the `-D<VAR>=<VALUE>`
+option of `cmake`, `ccmake`, and `cmake-gui`.
+
+In a similar way, the particular C or C++ compiler can be chosen by
+providing the name (optionally preceded by the path) of the compiler
+executables:
+
+       CMAKE_C_COMPILER
+       CMAKE_CXX_COMPILER
+
+However, it is very handy to know that CMake honors the standard
+environment variables `CC` (C compiler), `CXX` (C++ compiler), `CFLAGS`
+(C compiler flags), `CXXFLAGS` (C++ compiler flags), and `LDFLAGS` (linker
+flags), which are also used by other tools such as GNU Make, to
+initialize the above variables upon its first call in a new build
+directory. Note, that `CPPFLAGS` is currently ignored by CMake, see
+[this issue][4].
+
+On certain platforms, CMake might have trouble to find the right
+library for the target processor architecture when using
+`find_package()` or `find_library()` in the CMake scripts.  In that case, it
+can help to explicitly set the following global property in your CMake
+file before issuing any `find_package()` or `find_library()` in your CMake
+script:
+
+       set_property (GLOBAL FIND_LIBRARY_USE_LIB64_PATHS <TRUE|FALSE>)
+
+If set to `TRUE`, it will look for the library in `lib64/` instead of `lib/`.
+This property is usually automatically set on platforms known to need
+it, but depending on the chosen compiler options, it may need adjustment.
+
+#### Cross Compilation on macOS
+
+On macOS, a similar approach as in
+[Section 3.1](#31-microsoft-visual-studio-c-2019-compiler-version-160-or-later)
+can be adopted.  However,
+it has to be noted that Apple's versions of GCC and Clang don't support
+`-m32` and `-m64`, but the more flexible `-arch <arm64|x86_64>`
+parameter.  The latter can be even repeated several times on the command
+line to create universal binaries able to run on several processor
+architectures.  CMake has native support for this command line option,
+which value can be set centrally in the CMake scripts and will be then
+passed on to the compilers and linker.
+It is sufficient to set the variable `CMAKE_OSX_ARCHITECTURES` to the
+desired target architecture(s).  Multiple architectures are separated
+with a `;`. You can do so already on the command line
+
+      $ cmake .. -DCMAKE_OSX_ARCHITECTURES='x86_64;arm64'
+
+or in variable editors of `ccmake` and `cmake-gui`.
+
+If you are using MacPorts or Homebrew versions of GCC, you will have
+to make sure that you install universal variants of the compiler
+toolchain.  Then, you can follow the instruction in
+[Section 3.1](#31-microsoft-visual-studio-c-2019-compiler-version-160-or-later).
+
+#### Generic Cross Compilation to a Target System
+
+As CMake cannot guess the target system, a number of variables have to
+be preset so that the correct compiler toolchain and libraries are
+found.  It is recommended to do this with a so-called toolchain file,
+which is passed as an argument to `cmake`, `ccmake` or `cmake-gui` using the
+option `-DCMAKE_TOOLCHAIN_FILE=<path-to-file>`. The file in CMake
+syntax has to define the following variables:
+
+ * `CMAKE_SYSTEM_NAME` (mandatory), e.g., "Linux", "Windows", "Darwin"
+ * `CMAKE_SYSTEM_VERSION` (optional)`
+ * `CMAKE_SYSTEM_PROCESSOR` (optional), e.g., "i386", "x86_64"
+ * `CMAKE_C_COMPILER` (mandatory), name of C compiler executable
+ * `CMAKE_CXX_COMPILER` (mandatory), name of C compiler executable
+ * `CMAKE_FIND_ROOT_PATH` (optional), root to target include and library directories
+ * `CMAKE_FIND_ROOT_PATH_MODE_PROGRAM`, either "NEVER", "ONLY", or "BOTH" (default)
+ * `CMAKE_FIND_ROOT_PATH_MODE_LIBRARY`, either "NEVER", "ONLY", or "BOTH" (default)
+ * `CMAKE_FIND_ROOT_PATH_MODE_INCLUDE`, either "NEVER", "ONLY", or "BOTH" (default)
+
+The necessary steps are discussed in detail on the CMake [Cross Compiling][5] page.
+
+### 2.4 Finding and Using SystemC with CMake
+
+The CMake build scripts install CMake package config files to facilitate finding
+the SystemC and TLM libraries.  The packages are called `SystemCLanguage` and
+`SystemCTLM`.  As the TLM support is compiled into the SystemC library, the package
+`SystemCTLM` just finds the matching SystemC library as a dependency.  As SystemC
+is usually installed in its own directory tree, you have to tell CMake where to
+look for the package config files by setting the variable `CMAKE_PREFIX_PATH` to
+the root directory of your SystemC installation before calling `find_package()`.
+
+The `SystemCLanguage` package provides the imported target `SystemC::systemc` to
+which an application or library should link to.  Linking to an imported target
+ensures that all necessary preprocessor definitions, compiler options, and
+transitive link libraries are used when compiling and linking the application.
+
+The `SystemCLanguage` package exports a number of variables:
+
+ * `SystemC_TARGET_ARCH`
+   Target architecture according to the Accellera SystemC conventions
+
+ * `SystemC_CXX_STANDARD`
+   Preferred C++ standard
+
+ * `SystemC_CXX_STANDARD_REQUIRED`
+   Determine whether the selected C++ standard is a requirement
+
+The `SystemC_CXX_STANDARD` and `SystemC_CXX_STANDARD_REQUIRED` variables should be
+used to initialize the respective `CMAKE_CXX_STANDARD` and
+`CMAKE_CXX_STANDARD_REQUIRED` variables in the CMake build scripts of the
+application/library. Alternatively, the `CXX_STANDARD` and `CXX_STANDARD_REQUIRED`
+target properties can be set directly.
+
+As an example, here is a minimal `CMakeLists.txt` to compile the `simple_perf`
+SystemC example as a stand-alone application:
+
+      --- Start: CMakeLists.txt ---
+      cmake_minimum_required(VERSION 3.16)
+      project(simple_perf CXX)
+
+      set (CMAKE_PREFIX_PATH /opt/systemc)
+      find_package(SystemCLanguage CONFIG REQUIRED)
+
+      set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD} CACHE STRING
+           "C++ standard to build all targets. Minimum version is C++17.")
+      set (CMAKE_CXX_STANDARD_REQUIRED ${SystemC_CXX_STANDARD_REQUIRED} CACHE BOOL
+           "The with CMAKE_CXX_STANDARD selected C++ standard is a requirement.")
+
+      add_executable(simple_perf simple_perf.cpp)
+      target_link_libraries(simple_perf SystemC::systemc)
+      --- End: CMakeLists.txt ---
+
+
+## 3. Installation Notes for Windows using Visual Studio C++
+
+This release has been tested on Visual C++ version 2019 running Windows 10.
 
 Note: _This section covers the installation based on Microsoft Visual C++.
-      For Cygwin or MinGW-based installations, see Section 1._
-
+      For Cygwin or MinGW-based installations, see
+      [Section 2](#2-installation-notes-for-cmake)._
 
 Note: _If you experience spurious errors about missing files in the
-      downloaded archive, please make sure to either download the
-      ZIP archive from accellera.org or use a reliable archive software,
-      fully supporting modern tar archive versions._
+      downloaded archive, please make sure to download the release
+      from the [Accellera public SystemC repository][9] and use an
+      extractor supporting tar.gz archives._
 
- Some paths in the SystemC archive are longer than the historical
-      99 character limit, and several Windows archivers (e.g. WinZip)
-      have been reported to trip over this.  The open source archiver
-      [7-zip](http://7-zip.org/) is known to work.
+### 3.1 Microsoft Visual Studio C++ 2019 (compiler version 16.0) or later
 
-
-
-Microsoft Visual C++ 2010 (compiler version 10.0) or later
-----------------------------------------------------------
-
-The download directory contains two subdirectories: `msvc10` and
+The download directory contains two subdirectories: `msvc16` and
 `examples/build-msvc`.
 
-The 'msvc10' directory contains the project and workspace files to
-compile the 'systemc.lib' library. Double-click on the 'SystemC.sln'
-file to launch Visual C++ 2010 with the workspace file. The workspace file
-will have the proper switches set to compile for Visual C++ 2010.
+The `msvc16` directory contains the project and workspace files to
+compile the `systemc.lib` library. Double-click on the `SystemC.sln`
+file to launch Visual C++ 2019 with the workspace file.  The workspace file
+will have the proper switches set to compile for Visual C++ 2019.
 Select `Build SystemC` under the Build menu or press F7 to build
 `systemc.lib`.
 
 The `examples/build-msvc` directory contains the project and workspace
-files to compile the SystemC examples. Go to one of the examples
-subdirectories and double-click on the .vcxproj file to launch Visual C++
-with the workspace file. The workspace file will have the proper switches
-set to compile for Visual C++ 2010. Select 'Build <example>.exe' under the
+files to compile the SystemC examples.  Go to one of the examples
+subdirectories and double-click on the `.vcxproj` file to launch Visual C++
+with the workspace file.  The workspace file will have the proper switches
+set to compile for Visual C++ 2019.  Select `Build <example>.exe` under the
 Build menu or press F7 to build the example executable.
 
-For convenience, a combined solution file 'SystemC_examples.sln' with
-all example projects can be found in the 'examples/build-msvc' directory.
-A similar solution file 'tlm_examples.sln' for the TLM examples is available
+For convenience, a combined solution file `SystemC_examples.sln` with
+all example projects can be found in the `examples/build-msvc` directory.
+A similar solution file `tlm_examples.sln` for the TLM examples is available
 as well.
 
-The provided project files are prepared for both the 32-bit 'Win32' and
-64-bit 'x64' configurations.  Please refer to the Microsoft Visual Studio
+The provided project files are prepared for both the 32-bit (Win32) and
+64-bit (x64) configurations.  Please refer to the Microsoft Visual Studio
 documentation for details about 64-bit builds.
 
 In addition to building static libraries for SystemC, the provided project
 files include support for building a SystemC DLL (configurations `DebugDLL`,
 `ReleaseDLL`).
 
+### 3.2 Creating SystemC Applications
 
+ 1. Start Visual Studio.  From the Start Page select New Project and Win32
+    Console Project.  Type the project name and select a suitable location
+    then click OK.
 
-Creating SystemC Applications
------------------------------
+ 2. Select the Application Settings page of the Win32 Application Wizard
+    and make sure the 'Empty project' box is ticked.  Click 'Finish' to
+    complete the wizard.
 
-1. Start Visual Studio. From the Start Page select New Project and Win32
-   Console Project. Type the project name and select a suitable location
-   then click OK.
+ 3. Add new/existing C++ files to the project and edit code.
 
-2. Select the Application Settings page of the Win32 Application Wizard
-   and make sure the 'Empty project' box is ticked. Click 'Finish' to
-   complete the wizard.
+ 4. Display the project Property Pages by selecting 'Properties...' from
+    the Project menu.
 
-3. Add new/existing C++ files to the project and edit code.
+ 5. From the C/C++ tab, select the Language properties and set
+    'Enable Run-Time Type Info' to Yes.
 
-4. Display the project Property Pages by selecting 'Properties...' from
-   the Project menu.
+ 6. From the C/C++ tab, select the Command Line properties and add `/vmg`
+    to the 'Additional Options:' box.
 
-5. From the C/C++ tab, select the Language properties and set
-   'Enable Run-Time Type Info' to Yes.
+ 7. From the Linker tab, select the Input properties and type `systemc.lib`
+    in the 'Additional Dependencies' box.
 
-6. From the C/C++ tab, select the Command Line properties and add `/vmg`
-   to the 'Additional Options:' box.
-
-7. From the Linker tab, select the Input properties and type `systemc.lib`
-   in the 'Additional Dependencies' box.
-
-8. Click OK.
-
+ 8. Click OK.
 
 Also make sure that the compiler and linker can find the SystemC header
-and library files respectively. There are two ways to do this:
+and library files respectively.  There are two ways to do this:
 
 To update the include file and library directory search paths for all
 projects:
 
-1. Select Tools -> Options... and the Projects -> VC++ Directories tab
+ 1. Select Tools -> Options... and the Projects -> VC++ Directories tab
 
-2. Select show directories for: Library files
+ 2. Select show directories for: Library files
 
-3. Select the 'New' icon and browse to: C:\systemc-2.3.2\msvc10\systemc\debug
+ 3. Select the 'New' icon and browse to: `C:\systemc-3.0.0\msvc16\systemc\debug`
 
-4. Select show directories for: Include files
+ 4. Select show directories for: Include files
 
-5. Select the 'New' icon and browse to: C:\systemc-2.3.2\src
+ 5. Select the 'New' icon and browse to: `C:\systemc-3.0.0\src`
 
-To add the include file and library directory search paths for the current
-project only:
+ To add the include file and library directory search paths for the current
+ project only:
 
-1. Display the project Property Pages by selecting 'Properties...' from
-   the Project menu.
+ 1. Display the project Property Pages by selecting 'Properties...' from
+    the Project menu.
 
-2. From the C/C++ tab, select the General properties and type the path to the
-   SystemC 'src' directory in the text entry field labeled
-  'Additional include directories' (e.g. the examples use `..\..\..\src`).
+ 2. From the C/C++ tab, select the General properties and type the path to the
+    SystemC `src` directory in the text entry field labeled
+    'Additional include directories' (e.g., the examples use `..\..\..\src`).
 
-3. From the Linker tab, select the General properties and type the path to
-   the SystemC library:   ...\systemc-2.3.2\msvc10\systemc\debug
-   in the 'Additional Library Directories:' box.
+ 3. From the Linker tab, select the General properties and type the path to
+    the SystemC library: `...\systemc-3.0.0\msvc16\systemc\debug`
+    in the 'Additional Library Directories:' box.
 
-9. Click OK.
+ 4. Click OK.
 
-
-Building against a SystemC DLL
-------------------------------
+### 3.3 Building against a SystemC DLL
 
 In order to link your application against a DLL-build of SystemC (build
 configurations `DebugDLL`, `ReleaseDLL` in the SystemC library build),
 several changes are needed.
 
 1. Adjust the linker library directory settings to reference `DebugDLL`
-   (or `ReleaseDLL`) instead of `Debug` or `Release`, respecitvely:  
-      `...\systemc-2.3.3\msvc10\systemc\DebugDLL`
+   (or `ReleaseDLL`) instead of `Debug` or `Release`, respectively:
+      `...\systemc-3.0.0\msvc16\systemc\DebugDLL`
 
-2. Add the preprocessor switch `SC_WIN_DLL` to your project's properties  
+2. Add the preprocessor switch `SC_WIN_DLL` to your project's properties
    (C/C++ -> Preprocessor -> Preprocessor Definitions).
 
 3. When running the simulation, you need to add the location of the
    SystemC DLL to your `PATH` variable.
 
 
---------------------------------------------------------------------------
-SystemC Library Configuration Switches
-==========================================================================
-
-In addition to the explicitly selectable feature given as options to
-the `configure` script (see 1.), some aspects of the library
-implementation can be controlled via
-
- - preprocessor switches given during library build
- - preprocessor switches added while building a SystemC application
- - environment variables
-
-The currently supported switches are documented in this section.
-
-Preprocessor switches
----------------------
-
-Additional preprocessor switches for the library build can be passed
-to the configure script via the `CXXFLAGS` variable:
-
-```sh
-  ../configure CXXFLAGS="-DSC_OVERRIDE_DEFAULT_STACK_SIZE=0x80000"
-```
-
-In Visual C++, the preprocessor symbols can be added to the project
-configuration via the 'C/C++' tab under the 'Preprocessor' properties
-in the 'Preprocessor definitions' setting.  Alternatively, you can add
-the switches to the 'SystemC.vsprops' property sheet to apply these
-settings to all build configurations.
-
-
- * `SC_CPLUSPLUS`  
-   Override automatically detected C++ standard support
-
-   This setting allows downgrading the assumed version of the
-   underlying C++ standard on the current platform.  By default,
-   the latest supported version is chosen.
-   Supported values are
-     * `SC_CPLUSPLUS=199701L` (C++03, ISO/IEC 14882:1998, 14882:2003)
-     * `SC_CPLUSPLUS=201103L` (C++11, ISO/IEC 14882:2011)
-     * `SC_CPLUSPLUS=201402L` (C++14, ISO/IEC 14882:2014)
-     * `SC_CPLUSPLUS=201703L` (C++17, ISO/IEC 14882:2017)
-
-   Note: _This symbol needs to be consistently defined in the library
-            and any application linking against the built library._
-
-
- * `SC_DEFAULT_WRITER_POLICY=<sc_writer_policy>`  
-   Override default value for the signal writer policy
-
-   This setting allows deactivating the multiple writer checks for
-   sc_signals at (application) compile time.  This mechanism supersedes
-   the old environment variable SC_SIGNAL_WRITE_CHECK (see below).
-
-   Supported values:
-     * `SC_ONE_WRITER`        (default)
-     * `SC_MANY_WRITERS`      (allow multiple writers in different deltas)
-     * `SC_UNCHECKED_WRITERS` (non-standard, disable all checks)
-
-   Note: _Only effective when building an application._  
-   Note: _This setting needs to be consistently set across all
-         translation units of an application._
-
-
- * `SC_DISABLE_VCD_SCOPES`  
-   Disable grouping of VCD trace variables in hierarchical scopes
-   by default
-
-   Note: _Only effective during library build._  
-   See : Environment variable `SC_VCD_SCOPES`
-
-
- * `SC_DISABLE_VIRTUAL_BIND`  
-   Keep the "bind" function of sc_ports non-virtual
-
-   When this symbol is defined, the `bind()` function in sc_ports is
-   kept non-virtual (although it is required to be `virtual` since
-   IEEE 1666-2011).
-
-   Note: _This symbol needs to be consistently defined in the library
-     and any application linking against the built library._
-
-
- * `SC_DISABLE_COPYRIGHT_MESSAGE`  
-   Do not print the copyright message when starting the application
-
-   Note: _This does not remove the copyright from the binary.
-         sc_core::sc_copyright() still works as expected._  
-   Note: _Only effective during library build._  
-   See : Environment variable `SC_COPYRIGHT_MESSAGE`
-
-
- * `SC_ENABLE_ASSERTIONS`  
-   Always enable the `sc_assert` expressions
-
-   Some build systems define `NDEBUG` by default in optimised build
-   configurations. As a result, the SystemC assertion macro `sc_assert()`
-   is disabled (similar to the C `assert()` macro).  By defining this
-   preprocessor symbol (when building the library and/or an application),
-   the `sc_assert()` checks are always enabled, irrespectively of the
-   definition of `NDEBUG`.
-
-
- * `SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS`
-   Allow a process to trigger itself immediately
-
-   Allow a method process to trigger itself immediately by using
-   ```cpp
-   next_trigger( ev ); // or a static sensitivity
-   ev.notify();
-   ```
-
-   This behaviour has been disabled by default in IEEE 1666-2011 and
-   can be reenabled by this option.
-
-   Note: _Only effective during library build._
-
-
- * `SC_ENABLE_EARLY_MAXTIME_CREATION`  
-   Allow creation of sc_time objects with a value of `sc_max_time()`
-   before finalizing the time resolution
-
-   In IEEE 1666-2011, it is not allowed to create `sc_time` objects with
-   a non-`SC_ZERO_TIME` value before setting/changing the time resolution.
-   This preprocessor switch activates an extension to allow the
-   initialization of `sc_time` variables with `sc_max_time()` while
-   still accepting changes to the time resolution afterwards.
-
-   ```cpp
-   sc_time t = sc_max_time();
-   sc_set_time_resolution( 1, SC_NS ); // OK, with this extension
-   ```
-   The time resolution will still be fixed, once you have explicitly or
-   implicitly relied on the physical value (i.e., the relation to seconds)
-   of any sc_time object.
-
-   Note: _Only effective during library build._
-
-
- * `SC_INCLUDE_DYNAMIC_PROCESSES`  
-   Enable dynamic process support (sc_spawn, sc_bind)
-
-   To improve compilation times, the functions for spawing dynamic
-   processes are not included by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use dynamically spawned processes.
-
-   Note: _Can be optionally set per translation unit in an application._
-
-   Note: _Some TLM convenience sockets require this feature and define
-      the symbol for you if needed._
-
-
- * `SC_INCLUDE_FX`  
-   Enable SystemC fix-point datatypes
-
-   To improve compilation times, the fixpoint datatypes are not enabled
-   by default in an SystemC application.
-   Define this symbol before including the SystemC header in your
-   application, if you want to use the SystemC fixpoint types.
-
-   Note: _Is by default always defined during the library build to enable
-         later use of the fixpoint datatypes in an application._
-
-   Note: _Can be optionally set per translation unit in an application._
-
-
- * `SC_INCLUDE_STRSTREAM`  
-   Include (deprecated) `<strstream>` header from `<systemc.h>`
-
-   Pre-standard C++ compilers had support for an old stringstream
-   implementation called 'strstream'.  In the unlikely case that your
-   application still relies on this deprecated class and that `<systemc.h>`
-   includes this header for you automatically, you now need to define this
-   symbol when building your application.
-
-   Note: _Only effective when building an application._
-
-
- * `SC_INCLUDE_WINDOWS_H`  
-   Explicitly include `<windows.h>` header from `<systemc>` header
-
-   Previous versions of SystemC always included the full `<windows.h>`
-   header on all Windows platforms.  This adds unnecessary bloat to
-   many SystemC applications, increasing compilation times.
-   If you rely on the inclusion of the `<windows.h>` header in your
-   application, you can add this symbol to the list of preprocessor
-   switches for your compiler.
-
-   Note: _Only effective when building an application._
-
-
- * `SC_INCLUDE_EXTRA_STD_HEADERS`  
-   Include `<cstring>` and `<sstream>` headers from `<systemc>` header
-
-   Previous versions of SystemC implicitly included the `<cstring>` and
-  `<sstream>` headers on all platforms without depending on their
-   contents.
-   If you rely on the inclusion of these headers in your application,
-   you can add this symbol to the list of preprocessor switches for
-   your compiler.
-
-   Note: _Only effective when building an application._
-
-
- * `SC_ALLOW_MACROS_WITHOUT_SEMICOLON`  
-   Allow using (process) macros without terminating semicolon
-
-   Previous versions of SystemC allowed using some macros
-   without a trailing semicolon.  This is no longer supported by
-   default.  Defining the above macro restores the old behavior.
-   Affected macros: `SC_METHOD`, `SC_(C)THREAD`, `SC_NEW`.
-
-   Note: _Only effective when building an application._
-
-
- * `SC_OVERRIDE_DEFAULT_STACK_SIZE=<size>`  
-   Define the default stack size used for SystemC (thread) processes
-
-   Note: _Only effective during library build._
-
-
- * `SC_USE_SC_STRING_OLD` / `SC_USE_STD_STRING`
-   Define `sc_string` symbol.
-
-   Pre-IEEE-1666 versions of SystemC included an `sc_string` class for
-   string objects.  This class has been superseeded by `std::string` these
-   days.
-   If your application still relies on `sc_string` being available, set one
-   of the two supported preprocessor switches to provide it:
-
-   `SC_USE_SC_STRING_OLD`  
-     Uses old implementation `sc_string_old` to provide `sc_string`:
-    ```cpp
-    typedef sc_string_old sc_string;
-    ```
-
-   `SC_USE_STD_STRING`  
-     Provide `sc_string` as an alias to `std::string`:
-    ```cpp
-    typedef std::string sc_string;
-    ```
-
- * `SC_WIN_DLL`  
-   Build (against) a DLL build of SystemC (Windows/MSVC only)
-
-   Needs to be set when building a SystemC DLL on Windows, as well
-   as when building an application/library to be linked against a
-   DLL version of SystemC.
-
-
-Influential environment variables
----------------------------------
-
-Currently, three environment variables are checked at library load time
-and influence the SystemC library's behaviour:
-
- * `SC_COPYRIGHT_MESSAGE=DISABLE`  
-    Run-time alternative to `SC_DISABLE_COPYRIGHT_MESSAGE` (see above).
-
- * `SC_SIGNAL_WRITE_CHECK=DISABLE`, `SC_SIGNAL_WRITE_CHECK=CONFLICT`  
-    Run-time alternative to `SC_DEFAULT_WRITER_POLICY` (see above).
-
-   - `DISABLE`  = disable all checks for conflicting writes
-                  (`SC_UNCHECKED_WRITERS`)
-   - `CONFLICT` = detect conflicting writes within the same
-                  evaluation phase (`SC_MANY_WRITERS`)
-
- * `SC_DEPRECATION_WARNINGS=DISABLE`  
-    Do not issue warnings about using deprecated features as of
-    IEEE 1666-2011.
-
- * `SC_VCD_SCOPES=DISABLE`, `SC_VCD_SCOPES=ENABLE`  
-    Run-time configuration of hierarchically scoped names in VCD
-    trace files (see `SC_DISABLE_VCD_SCOPES`).
-
-
-Usually, it is not recommended to use any of these variables in new or
-on-going projects.  They have been added to simplify the transition of
-legacy code.
-
-
-[unix]: #installation-notes-for-unix
-[comp]: #compilation-and-linking-options
-[win]: #installation-notes-for-windows
-[config]: #systemc-library-configuration-switches
-[cmake]: cmake/INSTALL_USING_CMAKE
+## 4. Known Problems
+
+  - The CMake build scripts require more thorough testing of the various build
+    configurations on as many platforms as possible.  For the moment, testing
+    has been primarily done on macOS (x86_64 and i686), Linux (x86_64 and
+    i686) and Windows 10 using Visual Studio 2019 (16) (Win32 and x64).
+
+## 5. Resources
+
+* [CMake][1]
+* [CMake Documentation][2]
+* [CMake Wiki][3]
+* [Mastering CMake][6]
+* [The MacPorts Project Homepage][7]
+* [Homebrew - The missing package manager for macOS][8]
+
+
+[1]: https://cmake.org/ "Cross Platform Make Homepage"
+[2]: https://cmake.org/documentation/
+[3]: https://gitlab.kitware.com/cmake/community/-/wikis/Home
+[4]: https://gitlab.kitware.com/cmake/cmake/-/issues/12928
+[5]: https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#cross-compiling
+[6]: https://cmake.org/cmake/help/book/mastering-cmake/
+[7]: https://www.macports.org/
+[8]: https://brew.sh/
+[9]: https://github.com/accellera-official/systemc

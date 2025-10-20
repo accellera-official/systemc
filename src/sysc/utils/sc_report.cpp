@@ -142,7 +142,7 @@ sc_report::swap( sc_report & that )
     swap( m_what,            that.m_what );
 } 
 
-sc_report::~sc_report() SC_NOEXCEPT_
+sc_report::~sc_report() noexcept
 {
     if ( file != empty_str )
 	delete[] file;
@@ -176,6 +176,20 @@ const char* sc_report::get_process_name() const
 
 static bool warnings_are_errors = false;
 static const char unknown_id[] = "unknown id";
+
+void sc_report_handler::report(sc_severity severity_,
+			       int         id_,
+			       const char* msg_,
+                               int         verbosity_,
+			       const char* file_,
+			       int         line_ )
+{
+    sc_report_handler::report(severity_,
+			                     id_,
+                                             msg_,
+			                     file_,
+                                             line_ );
+}
 
 void sc_report_handler::report(sc_severity severity_,
 			       int         id_,

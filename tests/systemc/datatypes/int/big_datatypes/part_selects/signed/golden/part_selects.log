@@ -1,0 +1,12 @@
+SystemC Simulation
+Selection(0xffffffff)
+SelectionWrite(0xffffffff)
+Selection(0x55555555)
+SelectionWrite(0x55555555)
+Selection(0xaaaaaaaa)
+Selection(0xaaaaaaaa)
+Selection(0x99999999)
+SelectionWrite(0x99999999)
+Selection(0x66666666)
+SelectionWrite(0x66666666)
+Big value signed selection completed

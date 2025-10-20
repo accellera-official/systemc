@@ -1,0 +1,4 @@
+SystemC Simulation
+top.A sc_signal
+top.B sc_signal
+program completed

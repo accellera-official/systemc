@@ -39,7 +39,7 @@ dnl
 dnl Initialization.
 dnl
 AC_INIT([SystemC],
-        [2.4.0],
+        [3.0.2],
         [http://forums.accellera.org/forum/9-systemc/],
         [systemc],
         [http://accellera.org/],
@@ -138,20 +138,13 @@ dnl
 dnl Prepare architecture alias (to be refined later)
 dnl
 AS_CASE([$target],
-  [*-apple-*],        [TARGET_ARCH=macosx],
+  [*-apple-*],        [TARGET_ARCH=macos],
   [*linux*],          [TARGET_ARCH=linux],
   [*bsd*|*dragonfly*],[TARGET_ARCH=bsd],
   [*mingw*],          [TARGET_ARCH=mingw],
   [*cygwin*],         [TARGET_ARCH=cygwin],
-  [sparc-*-solaris*], [TARGET_ARCH=sparcOS5],
-  [*hpux11*],         [TARGET_ARCH=hpux11],
   dnl default
   [AC_MSG_ERROR("sorry...architecture not supported")])
-
-dnl Adjust for GCC on Solaris and HP-UX
-AS_CASE([${TARGET_ARCH}],
-  [hpux11|sparcOS5],
-    [AS_VAR_IF([GXX],[yes],[TARGET_ARCH="gcc${TARGET_ARCH}"])])
 
 dnl
 dnl Refine architecture settings
@@ -184,55 +177,29 @@ AS_CASE([${TARGET_ARCH}],
        [mingw*],[QT_ARCH="none"])
     ],
 
-  [macosx],dnl
+  [macos],dnl
     [LDFLAG_RPATH="-Wl,-rpath -Wl,"
      # check CPU architecture
      AS_CASE([${target_cpu}], dnl
        [x86_64|amd64], dnl
-         [TARGET_ARCH="${TARGET_ARCH}64"
+         [TARGET_ARCH="${TARGET_ARCH}x64"
           CPU_ARCH="x86_64"
           QT_ARCH="x86_64"],
+       [aarch64|arm64], dnl
+         [TARGET_ARCH="${TARGET_ARCH}arm64"
+          CPU_ARCH="arm64"
+          QT_ARCH="aarch64"],
        [x*86|i*86], dnl
          [CPU_ARCH="i386"
           QT_ARCH="iX86"],
-       [powerpc64], dnl
-         [TARGET_ARCH="${TARGET_ARCH}ppc64"
-          CPU_ARCH="ppc64"
-          QT_ARCH="pthreads"],
-       [powerpc], dnl
-         [TARGET_ARCH="${TARGET_ARCH}ppc"
-          CPU_ARCH="ppc"
-          QT_ARCH="powerpc-apple-macosx"],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
      AS_VAR_IF([GXX],[yes],dnl
        [EXTRA_CXXFLAGS="${EXTRA_CXXFLAGS} -arch ${CPU_ARCH}"
-        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH} -x assembler"],
+        EXTRA_ASFLAGS="${EXTRA_ASFLAGS} -arch ${CPU_ARCH}"],
        [AC_MSG_ERROR("sorry...compiler not supported")])
-    ],
-
-  [gcchpux11],dnl
-    [QT_ARCH="hppa"],
-  [hpux11],dnl
-    [QT_ARCH="hppa"
-     AS_VAR_IF([CXX_COMP],[aCC], dnl
-       [EXTRA_CXXFLAGS="-AA -ext +DA2.0 +DS2.0"
-        EXTRA_CFLAGS="-Wa,-w36"
-        OPT_CXXFLAGS="+O1"
-        : ${CCAS=/usr/ccs/bin/as}],
-       [AC_MSG_ERROR("sorry...compiler not supported")])],
-
-  [gccsparcOS5],dnl
-    [QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R"],
-  [sparcOS5],dnl
-    [QT_ARCH="sparc-os2"
-     LDFLAG_RPATH="-Wl,-R"
-     AS_VAR_IF([CXX_COMP],[CC], dnl
-       [EXTRA_CXXFLAGS=""
-        EXTRA_CFLAGS=""],
-       [AC_MSG_ERROR("sorry...compiler not supported")])]
+    ]
 ) dnl AS_CASE([$TARGET_ARCH])
 
 dnl include EXTRA_CXXFLAGS in EXTRA_(C|AS)FLAGS by default
@@ -250,11 +217,6 @@ dnl
 dnl check for pthreads compiler flags.
 dnl
 AX_PTHREAD
-
-dnl
-dnl check for presence of posix_memalign function
-dnl
-AC_CHECK_FUNC([posix_memalign],[AC_DEFINE([SC_HAVE_POSIX_MEMALIGN],[1])])
 
 dnl
 dnl Libtool setup
@@ -449,36 +411,15 @@ AM_CONDITIONAL([DISABLE_VCD_SCOPES],dnl
 AC_MSG_RESULT($enable_vcd_scopes)
 
 dnl
-dnl enable legacy memory management for allocating coroutine stack
-dnl
-AC_MSG_CHECKING([whether to enable legacy memory managment for allocating coroutine stack])
-AC_ARG_ENABLE([legacy_mem_mgmt],
-  [AS_HELP_STRING([--enable-legacy-mem-mgmt],
-                  [enable legacy memory management for coroutine stack
-                   @<:@yes|no(=default)@:>@])],
-  [AS_CASE(["${enableval}"],dnl
-    [yes],       [enable_legacy_mem_mgmt=yes],
-    [no|default],[enable_legacy_mem_mgmt=no],
-    [AC_MSG_ERROR([bad value ${enableval} for --enable-legacy-mem-mgmt])])],
-  [enable_legacy_mem_mgmt=no])
-AM_CONDITIONAL([ENABLE_LEGACY_MEM_MGMT],dnl
-               [test x"$enable_legacy_mem_mgmt" = xyes])
-AC_MSG_RESULT($enable_legacy_mem_mgmt)
-
-dnl
 dnl Set conditionals for various quick thread architectures:
 dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
 AM_CONDITIONAL([QT_ARCH_AARCH64], [ test "${QT_ARCH}" = "aarch64" ])
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
-AM_CONDITIONAL([QT_ARCH_POWERPC_MACOSX], [ test "${QT_ARCH}" = "powerpc-apple-macosx" ])
-AM_CONDITIONAL([QT_ARCH_SPARC], [ test "${QT_ARCH}" = "sparc-os2" ])
-AM_CONDITIONAL([QT_ARCH_HPPA], [ test "${QT_ARCH}" = "hppa" ])
 
 dnl
 dnl pkg-config setup
 dnl
-LIBCONFIG_DEFINES=
 PKGCONFIG_DEFINES=
 PKGCONFIG_CFLAGS=
 PKGCONFIG_LDPRIV=
@@ -496,24 +437,10 @@ dnl check for additional (header+lib) compiler flags
 dnl
 # AC_CHECK_DEFINE([DEBUG_SYSTEMC],
 #   [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DDEBUG_SYSTEMC"])
-AC_CHECK_DEFINE([SC_DISABLE_VIRTUAL_BIND],dnl
-  [PKGCONFIG_DEFINES="${PKGCONFIG_DEFINES} -DSC_DISABLE_VIRTUAL_BIND"
-   sysc_non_1666=yes])
-
-dnl
-dnl check for additional library compiler flags (documentation only)
-dnl
-AC_CHECK_DEFINE([SC_ENABLE_IMMEDIATE_SELF_NOTIFICATION],dnl
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_IMMEDIATE_SELF_NOTIFICATION"
-   sysc_non_1666=yes])
-AC_CHECK_DEFINE([SC_ENABLE_EARLY_MAXTIME_CREATION],dnl
-  [LIBCONFIG_DEFINES="${LIBCONFIG_DEFINES} -DSC_ENABLE_EARLY_MAXTIME_CREATION"
-   sysc_non_1666=yes])
 
 dnl
 dnl Substitution variables.
 dnl
-AC_SUBST(LIBCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_DEFINES)
 AC_SUBST(PKGCONFIG_CFLAGS)
 AC_SUBST(PKGCONFIG_LDPRIV)
@@ -583,14 +510,11 @@ AS_IF([test -n "${sysc_flags}"],dnl
 [sysc_flags="${as_nl} User-provided command-line flags :${as_nl}${sysc_flags}"])
 
 dnl prepare printing of additional settings
-AS_IF([test -n "${PKGCONFIG_DEFINES}" -o -n "${LIBCONFIG_DEFINES}"],[dnl
+AS_IF([test -n "${PKGCONFIG_DEFINES}"],[dnl
 sysc_additional="${as_nl} Detected additional settings:"
 AS_IF([test -n "${PKGCONFIG_DEFINES}"],dnl
   [AS_VAR_APPEND([sysc_additional],dnl
                  ["${as_nl}    ${PKGCONFIG_DEFINES}"])])
-AS_IF([test -n "${LIBCONFIG_DEFINES}"],dnl
-  [AS_VAR_APPEND([sysc_additional],dnl
-                 ["${as_nl}    ${LIBCONFIG_DEFINES}"])])
 AS_VAR_APPEND([sysc_additional],["${as_nl}"])dnl
 ]) dnl additional settings
 
@@ -632,7 +556,6 @@ Configuration summary of $PACKAGE_STRING for $target
    Include debugging symbols      : $enable_debug
    Coroutine package for processes: $sysc_coroutine
    Enable VCD scopes by default   : $enable_vcd_scopes
-   Enable legacy mem. mangement   : $enable_legacy_mem_mgmt
  ${sysc_additional}
 ---------------------------------------------------------------------
 EOF

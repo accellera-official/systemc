@@ -1,7 +1,11 @@
     .text
     .align  2
 
+#ifdef __APPLE__
+    .extern _qt_error
+#else
     .extern qt_error
+#endif
     .globl _qt_start
     .globl qt_start
     .globl _qt_abort
@@ -16,6 +20,10 @@
 
 _qt_start:
 qt_start:
+    // clear frame/link registers at stack root
+    mov x30, xzr
+    mov x29, xzr
+
     mov x0, x25
     mov x1, x26
     mov x2, x27
@@ -23,7 +31,13 @@ qt_start:
 
     // The branch above should never return,
     // and there is nowhere for us to return to.
-    br =qt_error
+#ifdef __APPLE__
+    adrp x0, _qt_error@GOTPAGE
+    ldr  x0, [x0, _qt_error@GOTPAGEOFF]
+    br   x0
+#else
+    b qt_error
+#endif
 
 _qt_abort:
 qt_abort:

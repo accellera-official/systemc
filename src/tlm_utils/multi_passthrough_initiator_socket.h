@@ -21,6 +21,13 @@
 
 #include "multi_socket_bases.h"
 
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+// ignore warning about deliberately hidden "bind()" overloads
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#endif
+
 namespace tlm_utils {
 
 /*
@@ -283,4 +290,10 @@ public:
 };
 
 } // namespace tlm_utils
+
+#if defined(__clang__) || \
+   (defined(__GNUC__) && ((__GNUC__ * 1000 + __GNUC_MINOR__) >= 4006))
+#pragma GCC diagnostic pop
+#endif
+
 #endif // TLM_UTILS_MULTI_PASSTHROUGH_INITIATOR_SOCKET_H_INCLUDED_

@@ -20,8 +20,8 @@
 //=====================================================================
 ///  @file example_main.cpp
 ///
-///  @brief Example main instantiates the example system top and call 
-///  sc_start() 
+///  @brief Example main instantiates the example system top and call
+///  sc_start
 ///
 //=====================================================================
 //  Original Authors:
@@ -36,19 +36,19 @@
 #define REPORT_DEFINE_GLOBALS
 
 #include "reporting.h"                  // reporting utilities
-#include "at_2_phase_top.h"  		    // top module
-#include "tlm.h"            			// TLM header
+#include "at_2_phase_top.h"             // top module
+#include "tlm.h"                        // TLM header
 
 //=====================================================================
 ///  @fn sc_main
-//  
+//
 ///  @brief SystemC entry point
-//  
+//
 ///  @details
-///    This is the SystemC entry point for the example system.  The argc and argv 
-///    parameters are not used.  Simulation runtime is not specified when 
-///    “sc_start()” is called, the example’s traffic generator will run to 
-///    completion, ending the simulation. 
+///    This is the SystemC entry point for the example system.  The argc and argv
+///    parameters are not used.  Simulation runtime is not specified when
+///    sc_start is called, the example's traffic generator will run to
+///    completion, ending the simulation.
 ///
 //=====================================================================
 int                                     // return status
@@ -58,8 +58,8 @@ sc_main                                 // SystemC entry point
 )
 {
   REPORT_ENABLE_ALL_REPORTING ();
-  
-  example_system_top top("top");        // instantiate a exmaple top module
+
+  example_system_top top("top");        // instantiate an example top module
 
   sc_core::sc_start();                  // start the simulation
 

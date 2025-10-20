@@ -575,11 +575,7 @@ void
 sc_signed::dump(::std::ostream& os) const
 {
   // Save the current setting, and set the base to decimal.
-#if defined(__MINGW32__)
-  std::_Ios_Fmtflags old_flags = os.setf(::std::ios::dec,::std::ios::basefield);
-#else
-  fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
-#endif
+  auto old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
 
   os << "width = " << length() << ::std::endl;
   os << "value = " << *this << ::std::endl;
@@ -611,7 +607,7 @@ sc_signed::check_if_outside(int bit_num) const
 #ifdef DEBUG_SYSTEMC
       if( bit_num < 0 || bit_num >= nbits ) {
 	  char msg[BUFSIZ];
-	  std::snprintf(msg, BUFSIZ, "%s::check_if_outside( int bit_num ) : "
+	  std::snprintf(msg, sizeof(msg), "%s::check_if_outside( int bit_num ) : "
 		   "bit_num = %d is out of bounds",
 		   "sc_signed", bit_num );
 	  SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );

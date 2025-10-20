@@ -1,0 +1,603 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDLL|Win32">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugDLL|x64">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|Win32">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|x64">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C4BB70F7-ECD9-4E8D-9898-AC8F7FB73414}</ProjectGuid>
+    <RootNamespace>SystemC</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(ProjectDir)\SystemC.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">$(Platform)\$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">$(Configuration)\int-$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">$(Platform)\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">$(Platform)\$(Configuration)\int-$(ProjectName)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionName)-$(SYSTEMC_VERSION)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog />
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_BUILD;_DEBUG;_LIB;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <BuildLog />
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_BUILD;_DEBUG;_LIB;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog />
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_BUILD;NDEBUG;_LIB;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <BuildLog />
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_BUILD;NDEBUG;_LIB;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <BuildLog />
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_WIN_DLL;SC_BUILD;_DEBUG;_USRDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <BuildLog />
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_WIN_DLL;SC_BUILD;_DEBUG;_USRDLL;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <BuildLog />
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_WIN_DLL;SC_BUILD;NDEBUG;_USRDLL;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <BuildLog />
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SC_WIN_DLL;SC_BUILD;NDEBUG;_USRDLL;WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\sysc\kernel\sc_attribute.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bit.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_bv_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_clock.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_cor_fiber.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_cthread_process.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_event.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_event_finder.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_event_queue.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_except.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_export.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxcast_switch.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxdefs.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxnum.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxnum_observer.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxtype_params.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxval.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\sc_fxval_observer.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_hash.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_int_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_int32_mask.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_int64_io.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_int64_mask.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_interface.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_join.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_length_param.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_list.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_logic.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\bit\sc_lv_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_mempool.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_method_process.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_module.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_module_name.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_module_registry.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_mutex.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_name_gen.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_nbutils.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_object.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_object_manager.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_stage_callback_registry.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_port.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_pq.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_prim_channel.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_process.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_report.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_report_handler.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_reset.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_semaphore.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_sensitive.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_signal.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_signal_ports.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_signal_resolved.cpp" />
+    <ClCompile Include="..\..\src\sysc\communication\sc_signal_resolved_ports.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_signed.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_simcontext.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_spawn_options.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_stop_here.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_thread_process.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_time.cpp" />
+    <ClCompile Include="..\..\src\sysc\tracing\sc_trace.cpp" />
+    <ClCompile Include="..\..\src\sysc\tracing\sc_trace_file_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_uint_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\int\sc_unsigned.cpp" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_stub.h" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_utils_ids.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\misc\sc_value_base.cpp" />
+    <ClCompile Include="..\..\src\sysc\tracing\sc_vcd_trace.cpp" />
+    <ClCompile Include="..\..\src\sysc\utils\sc_vector.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_ver.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_wait.cpp" />
+    <ClCompile Include="..\..\src\sysc\kernel\sc_wait_cthread.cpp" />
+    <ClCompile Include="..\..\src\sysc\tracing\sc_wif_trace.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_mant.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_pow10.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_rep.cpp" />
+    <ClCompile Include="..\..\src\sysc\datatypes\fx\scfx_utils.cpp" />
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.cpp" />
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.cpp" />
+    <ClCompile Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.cpp" />
+    <ClCompile Include="..\..\src\tlm_utils\convenience_socket_bases.cpp" />
+    <ClCompile Include="..\..\src\tlm_utils\instance_specific_extensions.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\sysc\communication\sc_buffer.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_clock.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_clock_ports.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_communication_ids.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_event_finder.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_event_queue.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_export.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_fifo.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_fifo_ifs.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_fifo_ports.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_host_mutex.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_host_semaphore.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_interface.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_mutex.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_mutex_if.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_port.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_prim_channel.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_semaphore.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_ifs.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_ports.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_resolved.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_resolved_ports.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_rv.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_signal_rv_ports.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_writer_policy.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit_ids.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bit_proxies.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bv.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_bv_base.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_logic.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_lv.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_lv_base.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\bit\sc_proxy.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\fx.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_ieee.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_mant.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_other_defs.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_params.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_pow10.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_rep.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_string.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\scfx_utils.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_context.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fix.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fixed.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxcast_switch.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxdefs.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxnum.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxnum_observer.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxtype_params.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxval.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fxval_observer.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_fx_ids.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_ufix.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\fx\sc_ufixed.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_big_ops.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_bigint.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_bigint_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_biguint.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_biguint_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int_base.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_int_ids.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_length_param.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbdefs.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_nbutils.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_signed.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_signed_friends.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_signed_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_signed_ops.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_uint.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_uint_base.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_uint_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_unsigned.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_unsigned_friends.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_unsigned_inlines.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\int\sc_vector_utils.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\misc\sc_concatref.h" />
+    <ClInclude Include="..\..\src\sysc\datatypes\misc\sc_value_base.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_attribute.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_cmnhdr.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_constants.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_cor.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_cor_fiber.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_cthread_process.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_dynamic_processes.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_event.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_except.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_externs.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_join.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_kernel_ids.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_macros.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_method_process.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_module.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_module_name.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_initializer_function.h " />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_module_registry.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_name_gen.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_object.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_object_int.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_object_manager.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_stage_callback_if.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_stage_callback_registry.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_process.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_process_handle.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_reset.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_runnable.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_runnable_int.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_sensitive.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_simcontext.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_simcontext_int.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_spawn.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_spawn_options.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_status.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_thread_process.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_time.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_ver.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_wait.h" />
+    <ClInclude Include="..\..\src\sysc\kernel\sc_wait_cthread.h" />
+    <ClInclude Include="..\..\src\sysc\tracing\sc_trace.h" />
+    <ClInclude Include="..\..\src\sysc\tracing\sc_trace_file_base.h" />
+    <ClInclude Include="..\..\src\sysc\tracing\sc_tracing_ids.h" />
+    <ClInclude Include="..\..\src\sysc\tracing\sc_vcd_trace.h" />
+    <ClInclude Include="..\..\src\sysc\tracing\sc_wif_trace.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_hash.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_iostream.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_list.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_machine.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_mempool.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_pq.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_ptr_flag.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_pvector.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_report.h" />
+    <ClInclude Include="..\..\src\sysc\communication\sc_semaphore_if.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_report_handler.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_stop_here.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_string.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_string_view.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_temporary.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_typeindex.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_utils_ids.h" />
+    <ClInclude Include="..\..\src\sysc\utils\sc_vector.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_fifo.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_if.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_port.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_analysis_triple.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_analysis\tlm_write_if.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_core_ifs.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_fifo_ifs.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_master_slave_ifs.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_1_interfaces\tlm_tag.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_adapters\tlm_adapters.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\circular_buffer.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_peek.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_put_get.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_fifo\tlm_fifo_resize.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_req_rsp_channels\tlm_put_get_imp.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_channels\tlm_req_rsp_channels\tlm_req_rsp_channels.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_ports\tlm_event_finder.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_ports\tlm_nonblocking_port.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_1\tlm_req_rsp\tlm_req_rsp.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_2_interfaces.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_dmi.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_2_interfaces\tlm_fw_bw_ifs.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_array.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_endian_conv.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_generic_payload.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_gp.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_helpers.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_generic_payload\tlm_phase.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_global_quantum.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_quantum\tlm_quantum.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_base_socket_if.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_initiator_socket.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_sockets.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_sockets\tlm_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_core\tlm_2\tlm_version.h" />
+    <ClInclude Include="..\..\src\tlm_utils\convenience_socket_bases.h" />
+    <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions.h" />
+    <ClInclude Include="..\..\src\tlm_utils\instance_specific_extensions_int.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_passthrough_initiator_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_passthrough_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\multi_socket_bases.h" />
+    <ClInclude Include="..\..\src\tlm_utils\passthrough_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\peq_with_cb_and_phase.h" />
+    <ClInclude Include="..\..\src\tlm_utils\peq_with_get.h" />
+    <ClInclude Include="..\..\src\tlm_utils\simple_initiator_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\simple_target_socket.h" />
+    <ClInclude Include="..\..\src\tlm_utils\tlm_quantumkeeper.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

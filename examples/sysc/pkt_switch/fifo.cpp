@@ -35,8 +35,6 @@
 
  *****************************************************************************/
 
-#undef SC_INCLUDE_FX
-
 #include "fifo.h"
 
     void fifo::pkt_in(const pkt& data_pkt)
@@ -55,6 +53,7 @@
             regs[0] = regs[1];
 	    regs[1] = regs[2];
 	    regs[2] = regs[3];
+	    full = false;
         } 
       return(temp);  
     }

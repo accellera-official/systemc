@@ -44,6 +44,14 @@ namespace sc_dt {
 // |     Constant reference to this object instance.
 // +----------------------------------------------------------------------------
 template<int W>
+inline const sc_biguint<W>&
+sc_biguint<W>::operator = (const sc_biguint<W>& from)
+{
+    vector_copy( DIGITS_N, from.get_digits(), get_digits() );
+    return *this;
+}
+
+template<int W>
 template<int WO>
 inline const sc_biguint<W>&
 sc_biguint<W>::operator = (const sc_biguint<WO>& from)
@@ -94,7 +102,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = ( int64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -144,7 +152,7 @@ inline const sc_biguint<W>&
 sc_biguint<W>::operator = ( uint64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -504,6 +512,8 @@ sc_biguint<W>::operator>>=(int v)
   return *this;
 }
 
+// sc_bv<W> and sc_lv<W> constructors and assignments using an sc_biguint<WO> value:
+
 template<int W>
 template<int WO>
 sc_bv<W>::sc_bv( const sc_biguint<WO>& v )
@@ -518,6 +528,20 @@ sc_lv<W>::sc_lv( const sc_biguint<WO>& v )
     : sc_lv_base(W)
 {
     *this = v.sc_unsigned_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_bv<W>& sc_bv<W>::operator = ( const sc_biguint<WO>& v )
+{
+    return *this = v.sc_unsigned_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_lv<W>& sc_lv<W>::operator = ( const sc_biguint<WO>& v )
+{
+    return *this = v.sc_unsigned_proxy();
 }
 
 

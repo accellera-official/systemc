@@ -41,25 +41,19 @@
 #include <string>
 #include <algorithm>
 
-#ifdef SC_ENABLE_EARLY_MAXTIME_CREATION
-#  define SC_MAXTIME_ALLOWED_ 1
-#else
-#  define SC_MAXTIME_ALLOWED_ 0
-#endif
-
 namespace sc_core {
 
 static
-const double time_values[] = {  
+const double time_values[] = {
     1e24, // s
     1e21, // ms
     1e18, // us
     1e15, // ns
     1e12, // ps
     1e9,  // fs
-    1e6,  // as 
+    1e6,  // as
     1e3,  // zs
-    1     // ys 
+    1     // ys
 };
 
 static
@@ -75,6 +69,17 @@ const char* time_units[] = {
     "ys"
 };
 
+
+static void inline time_params_freeze( sc_time_params* tp )
+{
+    tp->time_resolution_fixed.store( true, std::memory_order_relaxed );
+}
+
+[[nodiscard]] static bool inline time_params_frozen( sc_time_params* tp )
+{
+    return tp->time_resolution_fixed.load();
+}
+
 // ----------------------------------------------------------------------------
 //  CLASS : sc_time_tuple
 //
@@ -84,21 +89,12 @@ const char* time_units[] = {
 void
 sc_time_tuple::init( value_type val )
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-#   if SC_MAXTIME_ALLOWED_
-        time_params->time_resolution_fixed = true;
-#   endif // SC_MAXTIME_ALLOWED_
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
 
-    value_type tr  = static_cast<sc_dt::int64>( time_params->time_resolution );
-    unsigned scale = 0;
-    while( ( tr % 10 ) == 0 ) {
-        tr /= 10;
-        scale++;
-    }
-    sc_assert( tr == 1 );
-
-    unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
-    unsigned tu = tu_max - (scale / 3);
+    constexpr unsigned tu_max = sizeof(time_units) / sizeof(time_units[0])-1;
+    auto scale = time_params->time_resolution_log10;
+    auto tu = tu_max - (scale / 3);
     while( tu > 0 && ( val % 10 ) == 0 ) {
         val /= 10;
         scale++;
@@ -115,7 +111,7 @@ sc_time_tuple::init( value_type val )
 bool
 sc_time_tuple::has_value() const
 {
-    return ( m_value < ( (~sc_dt::UINT64_ZERO) / m_offset ) );
+    return ( m_value < ( ~value_type{} / m_offset ) );
 }
 
 sc_time::value_type
@@ -159,13 +155,12 @@ from_value_and_unit( double v, sc_time_unit tu, sc_time_params* tp )
 {
     sc_time::value_type t = 0;
     if( v != 0 ) {
+        time_params_freeze( tp );
         double scale_fac = time_values[5-tu] / tp->time_resolution; // sc_time_unit constants have offset of 5
         // linux bug workaround; don't change next two lines
         volatile double tmp = v * scale_fac + 0.5;
         t = static_cast<sc_dt::int64>( tmp );
-        tp->time_resolution_fixed = true;
     }
-
     return t;
 }
 
@@ -179,7 +174,7 @@ sc_time_from_string( const std::string& str, sc_time_params* tp )
     // (2) exponent (optional)
     // (3) scale (optional)
     // (4) unit (optional)
-    std::smatch match; 
+    std::smatch match;
 
     if( !std::regex_search(str, match, reg) ) {
         SC_REPORT_ERROR( SC_ID_TIME_CONVERSION_FAILED_, "invalid value given" );
@@ -230,23 +225,19 @@ sc_time::sc_time( double v, bool scale )
     static bool warn_constructor=true;
     if ( warn_constructor ) {
         warn_constructor=false;
-        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-            "deprecated constructor: sc_time(double,bool)");
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, "deprecated constructor: sc_time(double,bool)");
     }
 
     if( v != 0 ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
+
         if( scale ) {
-            double scale_fac = sc_dt::uint64_to_double( time_params->default_time_unit );
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = v * scale_fac + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            auto scale_fac = static_cast<double>( time_params->default_time_unit );
+            m_value = static_cast<sc_dt::int64>( v * scale_fac + 0.5 );
         } else {
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = v + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            m_value = static_cast<sc_dt::int64>( v + 0.5 );
         }
-        time_params->time_resolution_fixed = true;
     }
 }
 
@@ -256,55 +247,39 @@ sc_time::sc_time( value_type v, bool scale )
     static bool warn_constructor=true;
     if ( warn_constructor ) {
         warn_constructor=false;
-        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
-            "deprecated constructor: sc_time(uint64,bool)");
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, "deprecated constructor: sc_time(uint64,bool)");
     }
 
     if( v != 0 ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
+
         if( scale ) {
-            double scale_fac = sc_dt::uint64_to_double(
-            time_params->default_time_unit );
-            // linux bug workaround; don't change next two lines
-            volatile double tmp = sc_dt::uint64_to_double( v ) * scale_fac + 0.5;
-            m_value = static_cast<sc_dt::int64>( tmp );
+            auto scale_fac = static_cast<double>( time_params->default_time_unit );
+            m_value  = static_cast<sc_dt::int64>( static_cast<double>(v) * scale_fac + 0.5 );
         } else {
             m_value = v;
         }
-        time_params->time_resolution_fixed = true;
     }
 }
 
-#if SC_CPLUSPLUS >= 201703L
 sc_time::sc_time( std::string_view strv )
   : m_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) )
 {}
 
 sc_time
-sc_time::from_string( std::string_view strv ) 
+sc_time::from_string( std::string_view strv )
 {
     return from_value( sc_time_from_string(strv.data(), sc_get_curr_simcontext()->m_time_params) );
 }
-#else
-sc_time::sc_time( const std::string& str )
-  : m_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) )
-{}
-
-sc_time
-sc_time::from_string( const std::string& str ) 
-{
-    return from_value( sc_time_from_string(str, sc_get_curr_simcontext()->m_time_params) );
-}
-#endif
-
 
 sc_time
 sc_time::from_value( value_type v )
 {
     sc_time t;
-    if( v != 0 && !(SC_MAXTIME_ALLOWED_ && v == ~sc_dt::UINT64_ZERO) ) {
-        sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-        time_params->time_resolution_fixed = true;
+    if( v != 0 && v != ~value_type{} ) {
+        auto * time_params = sc_get_curr_simcontext()->m_time_params;
+        time_params_freeze( time_params );
     }
     t.m_value = v;
     return t;
@@ -316,27 +291,25 @@ sc_time::from_value( value_type v )
 double
 sc_time::to_default_time_units() const
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-#   if SC_MAXTIME_ALLOWED_
-        if( m_value == 0 )
-            return 0.0;
-        time_params->time_resolution_fixed = true;
-#   endif // SC_MAXTIME_ALLOWED_
-    return ( sc_dt::uint64_to_double( m_value ) /
-        sc_dt::uint64_to_double( time_params->default_time_unit ) );
+    if( m_value == 0 )
+        return 0.0;
+
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
+
+    return static_cast<double>(m_value) / static_cast<double>(time_params->default_time_unit);
 }
 
 double
 sc_time::to_seconds() const
 {
-    sc_time_params* time_params = sc_get_curr_simcontext()->m_time_params;
-#   if SC_MAXTIME_ALLOWED_
-        if( m_value == 0 )
-            return 0.0;
-        time_params->time_resolution_fixed = true;
-#   endif // SC_MAXTIME_ALLOWED_
-    return ( sc_dt::uint64_to_double( m_value ) *
-        time_params->time_resolution  / time_values[0] ); 
+    if( m_value == 0 )
+        return 0.0;
+
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
+    time_params_freeze( time_params );
+
+    return static_cast<double>( m_value ) * (time_params->time_resolution / time_values[0]);
 }
 
 
@@ -357,15 +330,12 @@ sc_time::print( ::std::ostream& os ) const
 
 sc_time_params::sc_time_params()
   : time_resolution( time_values[4] ),  // default 1 ps
+    time_resolution_log10( static_cast<unsigned>(log10(time_resolution)) ),
     time_resolution_specified( false ),
     time_resolution_fixed( false ),
     default_time_unit( 1000 ),          // default 1 ns
     default_time_unit_specified( false )
 {}
-
-sc_time_params::~sc_time_params()
-{}
-
 
 // ----------------------------------------------------------------------------
 
@@ -382,25 +352,16 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // must be a power of ten
-    double dummy;
-#if defined( __HP_aCC ) || defined(__ppc__)
-    // aCC seems to have a bug in modf()
-    if( modf( log10( v < 1.0 ? 1.0/v : v ), &dummy ) != 0.0 ) {
-#else
-    if( modf( log10( v ), &dummy ) != 0.0 ) {
-#endif
-    SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-        "value not a power of ten" );
+    if( double dummy; modf( log10( v ), &dummy ) != 0.0 ) {
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value not a power of ten" );
     }
-
-    sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
     if( sc_is_running() ) {
         SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "simulation running" );
     }
 
-    sc_time_params* time_params = simc->m_time_params;
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
 
     // can be specified only once
     if( time_params->time_resolution_specified ) {
@@ -408,21 +369,18 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     // can only be specified before any sc_time is constructed
-    if( time_params->time_resolution_fixed ) {
-        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-                         "sc_time object(s) constructed" );
+    if( time_params_frozen( time_params ) ) {
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "sc_time object(s) constructed" );
     }
 
-    // must be larger than or equal to 1 fs
-    volatile double resolution = v * time_values[5-tu]; // sc_time_unit constants have offset of 5
+    // must be larger than or equal to 1 ys
+    auto resolution = v * time_values[5-tu]; // sc_time_unit constants have offset of 5
     if( resolution < 1.0 ) {
-        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_,
-                         "value smaller than 1 ys" );
+        SC_REPORT_ERROR( SC_ID_SET_TIME_RESOLUTION_, "value smaller than 1 ys" );
     }
 
     // recalculate the default time unit
-    volatile double time_unit = sc_dt::uint64_to_double( time_params->default_time_unit ) 
-      * ( time_params->time_resolution / resolution );
+    auto time_unit = static_cast<double>(time_params->default_time_unit) * (time_params->time_resolution / resolution);
     if( time_unit < 1.0 ) {
       SC_REPORT_WARNING( SC_ID_DEFAULT_TIME_UNIT_CHANGED_, 0 );
       time_params->default_time_unit = 1;
@@ -431,6 +389,7 @@ sc_set_time_resolution( double v, sc_time_unit tu )
     }
 
     time_params->time_resolution = resolution;
+    time_params->time_resolution_log10 = static_cast<unsigned>( log10( resolution ) );
     time_params->time_resolution_specified = true;
 }
 
@@ -448,8 +407,7 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     if ( warn_default_time_unit )
     {
         warn_default_time_unit=false;
-        SC_REPORT_INFO( SC_ID_IEEE_1666_DEPRECATION_,
-                        "deprecated function: sc_set_default_time_unit");
+        SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_, "deprecated function: sc_set_default_time_unit");
     }
 
     // first perform the necessary checks
@@ -460,25 +418,20 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
     }
 
     // must be a power of ten
-    double dummy;
-    if( modf( log10( v ), &dummy ) != 0.0 ) {
-        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-                         "value not a power of ten" );
+    if( double dummy; modf( log10( v ), &dummy ) != 0.0 ) {
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "value not a power of ten" );
     }
-
-    sc_simcontext* simc = sc_get_curr_simcontext();
 
     // can only be specified during elaboration
     if( sc_is_running() ) {
         SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "simulation running" );
     }
 
-    sc_time_params* time_params = simc->m_time_params;
+    auto * time_params = sc_get_curr_simcontext()->m_time_params;
 
     // can only be specified before any sc_time is constructed
-    if( time_params->time_resolution_fixed ) {
-        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-                         "sc_time object(s) constructed" );
+    if( time_params_frozen( time_params ) ) {
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "sc_time object(s) constructed" );
     }
 
     // can be specified only once
@@ -488,11 +441,9 @@ sc_set_default_time_unit( double v, sc_time_unit tu )
 
     // must be larger than or equal to the time resolution
     // sc_time_unit constants have offset of 5
-    volatile double time_unit = ( v * time_values[5-tu] ) /
-                                  time_params->time_resolution;
+    auto time_unit = ( v * time_values[5-tu] ) / time_params->time_resolution;
     if( time_unit < 1.0 ) {
-        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_,
-                         "value smaller than time resolution" );
+        SC_REPORT_ERROR( SC_ID_SET_DEFAULT_TIME_UNIT_, "value smaller than time resolution" );
     }
 
     time_params->default_time_unit = static_cast<sc_dt::int64>( time_unit );
@@ -509,16 +460,9 @@ sc_get_default_time_unit()
         SC_REPORT_INFO(SC_ID_IEEE_1666_DEPRECATION_,
             "deprecated function: sc_get_default_time_unit");
     }
-    return sc_time::from_value(
-        sc_get_curr_simcontext()->m_time_params->default_time_unit );
+    auto time_unit = sc_get_curr_simcontext()->m_time_params->default_time_unit;
+    return sc_time::from_value( time_unit );
 }
-
-
-// ----------------------------------------------------------------------------
-
-SC_API const sc_time SC_ZERO_TIME;
-
-#undef SC_MAXTIME_ALLOWED_
 
 } // namespace sc_core
 

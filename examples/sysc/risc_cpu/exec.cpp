@@ -92,7 +92,7 @@ void exec::entry(){
                 	wait();	// so that BC has something to do
                 	wait();
                 	break;
-        	case 6:         // divide assume 2 clock cycle multiplication
+        	case 6:         // divide assume 2 clock cycle division
 			if (dinb_tmp == 0) {
 				printf("Division Exception - Divide by zero \n");
 			} else {

@@ -69,16 +69,16 @@ SC_THROW        Throw a C++ exception (sc_exception) that represents the
                 access the report instance later.
 
 SC_LOG          Print the report into the report log, typically a file on
-                disk. The actual behaviour is defined by the report handler
+                disk. The actual behavior is defined by the report handler
                 function described below.
 
 SC_DISPLAY      Display the report to the screen, typically by writing it in
                 to the standard output channel using std::cout.
 
 SC_INTERRUPT    Interrupt simulation if simulation is not being run in batch
-                mode. Actual behaviour is implementation defined, the
+                mode. Actual behavior is implementation defined, the
                 default configuration calls sc_interrupt_here(...) debugging
-                hook and has no furhter side effects.
+                hook and has no further side effects.
 
 SC_CACHE_REPORT Save a copy of the report. The report could be read later
                 using sc_report_handler::get_cached_report(). The reports
@@ -93,7 +93,7 @@ the responsibility of execution the requested actions. Application is able
 to redefine the report handler to take additional steps on execution of a
 specific action or extend the default set of possible actions.
 As the report handler is responsible for all predefined actions it can also
-be used to redefine the behaviour of predefined actions.
+be used to redefine the behavior of predefined actions.
 
 Each exception report can be configured to take one or more sc_actions.
 Multiple actions can be specified using bit-wise OR. When SC_DO_NOTHING is
@@ -233,7 +233,7 @@ are still active if they are mentioned by force(sc_actions) call.
 
 Restore default behavior by clearing previous calls to suppress(). The
 return value is the actions that were suppressed prior to this call.
-The default behaviour does not suppress any actions.
+The default behavior does not suppress any actions.
 
     sc_actions force(
         sc_actions actions

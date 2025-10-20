@@ -34,11 +34,10 @@
 #include "sysc/datatypes/int/sc_nbdefs.h"
 #include "sysc/datatypes/fx/scfx_ieee.h"
 
+#include <atomic>
 #include <iostream>
 
-#if SC_CPLUSPLUS >= 201703L
 #include <string_view>
-#endif
 
 namespace sc_core {
 
@@ -69,19 +68,19 @@ class SC_API sc_time_tuple;
 // integer of at least 64 bits declared as sc_time::value_type.
 // ----------------------------------------------------------------------------
 
-#define SC_TIME_DT sc_dt::uint64 
+#define SC_TIME_DT sc_dt::uint64
 
 // ----------------------------------------------------------------------------
 //  ENUM : sc_time_unit
 //
 //  Enumeration of time units.
-//  NOTE: From IEEE Std 1666-2023 onwards, enumeration constant values are 
-//        implementation-defined. The constant values for SC_SEC, SC_MS, 
-//        SC_US, SC_NS, SC_PS and SC_FS follow IEEE Std 1666-2011 to enable 
+//  NOTE: From IEEE Std 1666-2023 onwards, enumeration constant values are
+//        implementation-defined. The constant values for SC_SEC, SC_MS,
+//        SC_US, SC_NS, SC_PS and SC_FS follow IEEE Std 1666-2011 to enable
 //        backwards compatibility.
 // ----------------------------------------------------------------------------
 
-enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2, 
+enum sc_time_unit { SC_SEC = 5, SC_MS = 4, SC_US = 3, SC_NS = 2,
                     SC_PS = 1, SC_FS = 0, SC_AS = -1, SC_ZS = -2, SC_YS = -3 };
 
 // ----------------------------------------------------------------------------
@@ -97,20 +96,20 @@ class SC_API sc_time
     friend class sc_event;
     friend class sc_clock;
 
-    friend void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
-    friend void wait( const sc_time&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event&, sc_simcontext* );
-    friend void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
-    friend void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void next_trigger( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( const sc_time&, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_and_list&, sc_simcontext* );
+    friend SC_API void wait( double v, sc_time_unit, const sc_event_or_list&, sc_simcontext* );
 
 public:
 
@@ -118,28 +117,16 @@ public:
 
     // constructors
 
-    sc_time();
-    sc_time( const sc_time& );
+    constexpr sc_time() = default;
     sc_time( double, sc_time_unit );
 
     // convert time object from string
-    // For C++ versions prior to C++17, offer some (non-standard) backwards compatibility
-    // using std::string instead of std::string_view
-#if SC_CPLUSPLUS >= 201703L
     explicit sc_time( std::string_view strv );
     static sc_time from_string( std::string_view strv );
-#else
-    explicit sc_time( const std::string& str );
-    static sc_time from_string( const std::string& str );
-#endif
 
     // deprecated, use from_value(v)
     sc_time( double, bool scale );
     sc_time( value_type, bool scale );
-
-    // assignment operator
-
-    sc_time& operator = ( const sc_time& );
 
     // conversion functions
 
@@ -151,6 +138,8 @@ public:
 
     static sc_time from_value( value_type );
     static sc_time from_seconds( double );
+
+    static constexpr sc_time max();
 
     // relational operators
 
@@ -182,10 +171,13 @@ public:
     void print( ::std::ostream& os = std::cout ) const;
 
 private: // implementation-defined
+    struct max_time_tag {};
+    explicit constexpr sc_time( max_time_tag );
+
     sc_time( double, sc_time_unit, sc_simcontext* );
 
 private:
-    value_type m_value;
+    value_type m_value{};
 };
 
 // ----------------------------------------------------------------------------
@@ -231,19 +223,9 @@ inline ::std::ostream& operator << ( ::std::ostream&, const sc_time& );
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-extern SC_API const sc_time SC_ZERO_TIME;
+inline constexpr sc_time SC_ZERO_TIME;
 
 // constructors
-
-inline
-sc_time::sc_time()
-: m_value( 0 )
-{}
-
-inline
-sc_time::sc_time( const sc_time& t )
-: m_value( t.m_value )
-{}
 
 inline
 sc_time_tuple::sc_time_tuple( value_type v )
@@ -268,15 +250,15 @@ sc_time::from_seconds( double v )
     return sc_time( v, SC_SEC );
 }
 
+inline constexpr
+sc_time::sc_time( max_time_tag )
+  : m_value( ~value_type{} )
+{}
 
-// assignment operator
-
-inline
-sc_time&
-sc_time::operator = ( const sc_time& t )
+inline constexpr
+sc_time sc_time::max()
 {
-    m_value = t.m_value;
-    return *this;
+    return sc_time( max_time_tag{} );
 }
 
 
@@ -294,7 +276,7 @@ inline
 double
 sc_time::to_double() const  // relative to the time resolution
 {
-    return sc_dt::uint64_to_double( m_value );
+    return static_cast<double>( m_value );
 }
 
 
@@ -302,7 +284,7 @@ inline
 double
 sc_time_tuple::to_double() const // relative to the normalized time unit
 {
-    return sc_dt::uint64_to_double( m_value ) * m_offset;
+    return static_cast<double>( m_value ) * m_offset;
 }
 
 
@@ -397,9 +379,7 @@ inline
 sc_time&
 sc_time::operator *= ( double d )
 {
-    // linux bug workaround; don't change next two lines
-    volatile double tmp = sc_dt::uint64_to_double( m_value ) * d + 0.5;
-    m_value = static_cast<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( static_cast<double>(m_value) * d + 0.5 );
     return *this;
 }
 
@@ -407,9 +387,7 @@ inline
 sc_time&
 sc_time::operator /= ( double d )
 {
-    // linux bug workaround; don't change next two lines
-    volatile double tmp = sc_dt::uint64_to_double( m_value ) / d + 0.5;
-    m_value = static_cast<sc_dt::int64>( tmp );
+    m_value = static_cast<sc_dt::int64>( static_cast<double>(m_value) / d + 0.5 );
     return *this;
 }
 
@@ -477,17 +455,17 @@ operator << ( ::std::ostream& os, const sc_time& t )
 //  Struct that holds the time resolution and default time unit.
 // ----------------------------------------------------------------------------
 
-struct SC_API sc_time_params
+struct sc_time_params
 {
-    double time_resolution;		// in femto seconds
-    bool   time_resolution_specified;
-    bool   time_resolution_fixed;
+    double              time_resolution;  // in yocto seconds
+    unsigned            time_resolution_log10;
+    bool                time_resolution_specified;
+    std::atomic<bool>   time_resolution_fixed;
 
     sc_time::value_type default_time_unit;		// in time resolution
     bool                default_time_unit_specified;
 
     sc_time_params();
-    ~sc_time_params();
 };
 
 

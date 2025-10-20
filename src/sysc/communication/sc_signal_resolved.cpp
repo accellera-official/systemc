@@ -42,7 +42,7 @@ namespace sc_core {
 // 0 is O.K. This might not be true for all technologies, but is certainly
 // true for CMOS, the predominant technology in use today.
 
-SC_API const sc_dt::sc_logic_value_t
+const sc_dt::sc_logic_value_t
 sc_logic_resolution_tbl[4][4] =
 {   //    0      1      Z      X
     { sc_dt::Log_0, sc_dt::Log_X, sc_dt::Log_0, sc_dt::Log_X }, // 0

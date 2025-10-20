@@ -46,7 +46,7 @@ examples_FILES = \
 	build-msvc/Makefile \
 	build-msvc/Makefile.config \
 	build-msvc/Makefile.rules \
-	build-msvc/READMEcommandlinemsvc.txt \
+	build-msvc/README_MSVC.md \
 	build-msvc/SystemC_examples.props \
 	build-msvc/SystemC_examples.sln \
 	build-msvc/openhere.bat \
@@ -67,7 +67,7 @@ examples_DIRS = \
 uninstall-hook:
 	test ! -d "$(buildexamplesdir)" || ( set -e ;  cd "$(buildexamplesdir)" ; \
 	  for dir in $(examples_DIRS) ; do test ! -d $$dir || rmdir $$dir ; done ; \
-	  cd - ; rmdir --ignore-fail-on-non-empty "$(buildexamplesdir)" )
+	  cd - ; rmdir "$(buildexamplesdir)" || true)
 
 endif # SEPARATE_INSTALL_TREE
 

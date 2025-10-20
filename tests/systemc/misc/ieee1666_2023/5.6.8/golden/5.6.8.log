@@ -1,0 +1,6 @@
+SystemC Simulation
+0 s waiting in ~wait_on_exit()
+10 ns waiting in ~wait_on_exit()
+20 ns waiting in ~wait_on_exit()
+25 ns caught exception
+program completed

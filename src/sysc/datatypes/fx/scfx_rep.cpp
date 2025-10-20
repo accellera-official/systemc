@@ -119,10 +119,11 @@ scfx_rep::scfx_rep( int a )
 	    m_sign = 1;
 	}
 	else
-	{
-	    m_mant[2] = -a;
-	    m_sign = -1;
-	}
+        {
+            // -INT_MIN cannot be represented in int, cast to unsigned first to negate to itself
+            m_mant[2] = -static_cast<word>(a);
+            m_sign = -1;
+        }
     }
     else
         set_zero();
@@ -158,7 +159,8 @@ scfx_rep::scfx_rep( long a )
         }
         else
         {
-            a = -a;
+            // -LONG_MIN cannot be represented in int, cast to unsigned long first to negate to itself
+            a = -static_cast<unsigned long>(a);
             m_sign = -1;
         }
 #       if defined(SC_LONG_64)
@@ -249,9 +251,11 @@ scfx_rep::scfx_rep( int64 a )
 	}
 	else
 	{
-	    m_mant[1] = static_cast<word>( -a );
-	    m_mant[2] = static_cast<word>( (-a) >> bits_in_word );
-	    m_sign = -1;
+            // -INT64_MIN cannot be represented in int, cast to uint64 first to negate to itself
+            a = -static_cast<uint64>(a);
+            m_mant[1] = static_cast<word>( a );
+            m_mant[2] = static_cast<word>( a >> bits_in_word );
+            m_sign = -1;
 	}
 	find_sw();
     }
@@ -767,7 +771,7 @@ scfx_rep::from_string( const char* s, int cte_wl )
 
     if( mant_is_neg )
     {
-	m_mant[m_msw] |=  ~0U << scfx_find_msb( m_mant[m_msw] );
+	m_mant[m_msw] |=  ~UINT64_ZERO << scfx_find_msb( m_mant[m_msw] );
 	for( int i = m_msw + 1; i < m_mant.size(); ++ i )
 	    m_mant[i] = static_cast<word>( -1 );
 	complement( m_mant, m_mant, m_mant.size() );
@@ -1245,7 +1249,7 @@ print_other( scfx_string& s, const scfx_rep& a, sc_numrep numrep, int w_prefix,
 
     if( lsb > 0 && fmt == SC_F )
     {
-	for( int i = lsb / step; i > 0; i -- )
+	for( i = lsb / step; i > 0; i -- )
 	    s += '0';
     }
 
@@ -1651,7 +1655,7 @@ multiply( scfx_rep& result, const scfx_rep& lhs, const scfx_rep& rhs,
 
 	for( i2  = 0; i2 * half_word_incr < len_rhs; i2 += half_word_incr )
 	{
-	    ls.l  += v1 * s2[i2];
+	    ls.l  += static_cast<word>(v1) * static_cast<word>(s2[i2]);
 	    ls.s.l = ls.s.u + ( ( t[i2] += ls.s.l ) < ls.s.l );
 	    ls.s.u = 0;
 	}
@@ -2812,7 +2816,7 @@ scfx_rep::dump( ::std::ostream& os ) const
     for( int i = size() - 1; i >= 0; i -- )
     {
 	char buf[BUFSIZ];
-	std::snprintf( buf, BUFSIZ, " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
+	std::snprintf( buf, sizeof(buf), " %d: %10u (%8x)", i, (int) m_mant[i], (int) m_mant[i] );
 	os << buf << ::std::endl;
     }
 

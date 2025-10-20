@@ -1,0 +1,12 @@
+SystemC Simulation
+
+v1.to_string(sc_dt::SC_BIN,true) = 0b0100
+
+v2.to_string(sc_dt::SC_CSD,false) = 1000-000-0
+
+v3.to_string(sc_dt::SC_HEX) = 0x007
+
+lv.to_string(sc_dt::SC_HEX) = 0x0ffff
+
+bv.to_string(sc_dt::SC_BIN) = 0b011110000
+program completed

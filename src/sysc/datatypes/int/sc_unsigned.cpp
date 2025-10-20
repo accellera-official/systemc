@@ -194,7 +194,7 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
 
     if ( dst_i == end_i )
     {
-	mask = ~(~0U << left_shift);
+	mask = ~(~UINT64_ZERO << left_shift);
 	dst_p[dst_i] = ( ( dst_p[dst_i] & mask ) |
 	    (digit[0] << left_shift) ) & DIGIT_MASK;
     }
@@ -220,7 +220,7 @@ bool sc_unsigned::concat_get_data( sc_digit* dst_p, int low_i ) const
     {
 	high_i = SC_BIT_INDEX(high_i);
 	right_shift = BITS_PER_DIGIT - left_shift;
-	mask = ~(~0U << left_shift);
+	mask = ~(~UINT64_ZERO << left_shift);
 	right_word = digit[0];
 	dst_p[dst_i] = (dst_p[dst_i] & mask) |
 	    ((right_word << left_shift) & DIGIT_MASK);
@@ -474,12 +474,6 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
   // Initialize buf to zero.
   vector_zero(0, buf_ndigits, buf);
 
-  const sc_digit *digit_or_d;
-
-    sc_digit* d = sc_temporary_digits.allocate(buf_ndigits);
-
-    digit_or_d = digit;
-
   // Copy the bits from digit to buf. The division and mod operations
   // below can be converted to addition/subtraction and comparison
   // operations at the expense of complicating the code. We can do it
@@ -487,7 +481,7 @@ sc_unsigned::get_packed_rep(sc_digit *buf) const
 
   for (int i = length() - 1; i >= 0; --i) {
 
-    if ((digit_or_d[SC_DIGIT_INDEX(i)] & one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
+    if ((digit[SC_DIGIT_INDEX(i)] & one_and_zeros(SC_BIT_INDEX(i))) != 0) // Test.
 
       buf[i / BITS_PER_DIGIT_TYPE] |=
         one_and_zeros(SC_BIT_INDEX(i)); // Set.
@@ -560,11 +554,7 @@ void
 sc_unsigned::dump(::std::ostream& os) const
 {
   // Save the current setting, and set the base to decimal.
-#if defined(__MINGW32__)
-  std::_Ios_Fmtflags old_flags = os.setf(::std::ios::dec,::std::ios::basefield);
-#else
-  fmtflags old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
-#endif
+  auto old_flags = os.setf(::std::ios::dec, ::std::ios::basefield);
 
   os << "width = " << length() << ::std::endl;
   os << "value = " << *this << ::std::endl;
@@ -596,7 +586,7 @@ sc_unsigned::check_if_outside(int bit_num) const
 #ifdef DEBUG_SYSTEMC
       if( bit_num < 0 || bit_num >= nbits ) {
 	  char msg[BUFSIZ];
-	  std::snprintf(msg, BUFSIZ, "%s::check_if_outside( int bit_num ) : "
+	  std::snprintf(msg, sizeof(msg), "%s::check_if_outside( int bit_num ) : "
 		   "bit_num = %d is out of bounds",
 		   "sc_unsigned", bit_num );
 	  SC_REPORT_WARNING( sc_core::SC_ID_OUT_OF_BOUNDS_, msg );

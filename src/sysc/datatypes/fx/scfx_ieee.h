@@ -223,15 +223,15 @@ inline
 int
 scfx_ieee_double::exponent() const
 {
-    return m_id.s.exponent - SCFX_IEEE_DOUBLE_BIAS;
+    return static_cast<int>(m_id.s.exponent) - SCFX_IEEE_DOUBLE_BIAS;
 }
 
 inline
 void
 scfx_ieee_double::exponent( int a )
 {
-    m_id.s.exponent = (SCFX_IEEE_DOUBLE_BIAS + a)
-                      & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE);
+    m_id.s.exponent = static_cast<unsigned int>((SCFX_IEEE_DOUBLE_BIAS + a)
+                      & SCFX_MASK_(SCFX_IEEE_DOUBLE_E_SIZE));
 }
 
 inline
@@ -669,27 +669,6 @@ double scfx_pow2( int exp )
         r.exponent( exp );
     }
     return r;
-}
-
-
-// ----------------------------------------------------------------------------
-//  FUNCTION : uint64_to_double
-//
-//  Platform independent conversion from double uint64 to double.
-//  Needed because VC++6 doesn't support this conversion.
-// ----------------------------------------------------------------------------
-
-inline
-double
-uint64_to_double( uint64 a )
-{
-#if defined( _MSC_VER ) || defined( __clang__ )
-    // conversion from uint64 to double not implemented; use int64
-    double tmp = static_cast<double>( static_cast<int64>( a ) );
-    return ( tmp >= 0 ) ? tmp : tmp + sc_dt::scfx_pow2( 64 );
-#else
-    return static_cast<double>( a );
-#endif
 }
 
 } // namespace sc_dt

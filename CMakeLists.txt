@@ -64,7 +64,7 @@
 #
 # - Linux (GCC): aarch64
 #
-# - Mac OS X >= 10.5 (GCC, Clang): i386, x86_64, ppc
+# - macOS >= 11.6 (Xcode/AppleClang): arm64, x86_64
 #
 # - Windows (MingW32 GCC + optionally MSYS): x86
 #
@@ -73,27 +73,14 @@
 #
 # - *BSD (GCC, Clang): i386, x86_64
 #
-# - Linux (GCC, Clang): sparc, powerpc
-#
 # - Linux (Clang): aarch64
 #
-# - Mac OS X <= 10.5 (GCC): ppc, ppc64
-#
 # - Windows (Cygwin GCC, MingW32 GCC, Visual C++): x86, AMD64
-#
-# - Solaris (GCC and native compiler): sparc
-#
-# - HP-UX (GCC and native compiler): hppa
 #
 # The build process can be configured through the configuration variables
 # offered to the user in the CMake console and GUI (ccmake and cmake-gui,
 # respectively). Each variable is annotated with a brief documentation string.
 # The most important variables are:
-#
-# BIGINT_CONFIGURATION          Configuration of big integer datatypes
-#                               (one of BASE_CLASS_HAS_STORAGE
-#                                       TEMPLATE_CLASS_HAS_STORAGE
-#                                       TEMPLATE_CLASS_HAS_NO_BASE_CLASS )
 #
 # BUILD_SHARED_LIBS             Build shared instead of static libraries
 #                               (default: ON if not targetting Windows).
@@ -103,12 +90,6 @@
 #
 # CMAKE_BUILD_TYPE              Specifies the build type on single-configuration
 #                               generators. (default: Release).
-#
-# CMAKE_CXX_STANDARD            C++ standard to build all targets. Supported
-#                               values are 98, 11, and 14. (default: 98)
-#
-# CMAKE_CXX_STANDARD_REQUIRED   The with CMAKE_CXX_STANDARD selected C++ standard
-#                               is a requirement. (default: ON)
 #
 # CMAKE_INSTALL_PREFIX          Root directory of the SystemC libraries
 #                               installation (defaults to $ENV{SYSTEMC_HOME}
@@ -126,29 +107,14 @@
 # DISABLE_COPYRIGHT_MESSAGE     Do not print the copyright message when starting
 #                               the application. (default: OFF)
 #
-# DISABLE_VIRTUAL_BIND          Disable the definition of bind() member
-#                               functions of ports and exports as "virtual",
-#                               which is incompatible with old TLM library
-#                               implementations (< 2.0.2).
-#
 # ENABLE_ASSERTIONS             Always enable the `sc_assert' expressions
 #                               (default: ON)
-#
-# ENABLE_EARLY_MAXTIME_CREATION Allow creation of sc_time objects with a value
-#                               of sc_max_time() before finalizing the time
-#                               resolution.
-#
-# ENABLE_IMMEDIATE_SELF_NOTIFICATIONS  Enable immediate self-notification of
-#                               processes, which is no longer supported due to
-#                               changes in IEEE Std 1666-2011 (see
-#                               sc_event::notify, 5.10.6).
 #
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
-# ENABLE_LEGACY_MEM_MGMT        Use std::malloc or posix_memalign to allocate the
-#                               stack of the coroutines instead of mmap. ASAN will
-#                               not work with this.
+# ENABLE_STD_THREADS            Use standar libary threads for SystemC processes instead
+#                               of QuickThreads on Unix or Fiber on Windows.
 #
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
@@ -202,11 +168,20 @@
 #
 ###############################################################################
 
-
-cmake_minimum_required (VERSION 3.1)
-cmake_policy(SET CMP0001 NEW)
+cmake_minimum_required (VERSION 3.5...3.31)
 
 project (SystemCLanguage CXX C)
+
+# check for multi-config generators (Ninja, Visual Studio, Xcode, ...)
+get_property(GENERATOR_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+# detect if we are building as package, or by add_subdirectory (pre-3.21 support)
+if(NOT DEFINED PROJECT_IS_TOP_LEVEL)
+  set(PROJECT_IS_TOP_LEVEL TRUE)
+  if(NOT PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(PROJECT_IS_TOP_LEVEL FALSE)
+  endif()
+endif()
 
 set(SystemCLanguage_VERSION_FILE "${PROJECT_SOURCE_DIR}/src/sysc/kernel/sc_ver.h")
 if(EXISTS ${SystemCLanguage_VERSION_FILE})
@@ -268,31 +243,31 @@ set (SystemCTLM_SOVERSION "${SystemCTLM_VERSION_MAJOR}.${SystemCTLM_VERSION_MINO
 # Build options
 ###############################################################################
 
-if (NOT CMAKE_BUILD_TYPE)
+if(PROJECT_IS_TOP_LEVEL AND NOT WIN32)
+  set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES Asan Msan Tsan UBsan)
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported on AppleClang
+    set(SYSTEMC_SANITIZER_CONFIGURATION_TYPES ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES} Lsan)
+  endif()
+  set(CMAKE_CONFIGURATION_TYPES Release Debug RelWithDebInfo ${SYSTEMC_SANITIZER_CONFIGURATION_TYPES})
+endif()
+
+if(NOT CMAKE_BUILD_TYPE AND NOT GENERATOR_IS_MULTI_CONFIG)
   set (CMAKE_BUILD_TYPE Release CACHE STRING
-       "Choose the type of build, options are: empty, Debug, Release, RelWithDebInfo, MinSizeRel."
+       "Choose the type of build, options are: empty, ${CMAKE_CONFIGURATION_TYPES}."
        FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
+endif()
 
 if (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." ON)
 else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
+
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  message (WARNING "The compilation of SystemC as a DLL on Windows is currently not supported!")
-  set (BUILD_SHARED_LIBS CACHE BOOL "Build shared libraries." OFF FORCE)
-endif (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-
-
-set(BigIntConfigs "TEMPLATE_CLASS_HAS_NO_BASE_CLASS" "TEMPLATE_CLASS_HAS_STORAGE" "BASE_CLASS_HAS_STORAGE")
-#set(BIGINT_CONFIGURATION "BASE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
-set(BIGINT_CONFIGURATION "TEMPLATE_CLASS_HAS_STORAGE" CACHE STRING "Configuration of big integers.")
-set_property(CACHE BIGINT_CONFIGURATION PROPERTY STRINGS ${BigIntConfigs})
-set(BASE_VEC_DIGITS_CONFIG "8" CACHE STRING "Size of default allocation of SC_BASE_VEC_DIGITS in sc_unsigned/sc_signed.")
-set_property(CACHE BASE_VEC_DIGITS_CONFIG PROPERTY VALUE ${BASE_VEC_DIGITS_CONFIG} )
-
-option (ALIAS_INT_TO_BIGINT "alias int to bigints" OFF)
+  if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  endif (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
 
@@ -300,25 +275,21 @@ option (DISABLE_COPYRIGHT_MESSAGE "Do not print the copyright message when start
 
 option (DISABLE_VCD_SCOPES "Put all traces in a single dummy scope. For compatibility with SystemC 2.3.1." OFF)
 
-option (DISABLE_VIRTUAL_BIND "Disable the definition of bind() member functions of ports and exports as \"virtual\", which is incompatible with old TLM library implementations (< 2.0.2)." OFF)
-
 option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
-
-option (ENABLE_EARLY_MAXTIME_CREATION "Allow creation of sc_time objects with a value of sc_max_time() before finalizing the time resolution." ON)
-
-option (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS "Enable immediate self-notification of processes, which is no longer supported due to changes in IEEE Std 1666-2011 (see sc_event::notify, 5.10.6)." OFF)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+        OFF)
+
+option (ENABLE_STD_THREADS
+        "Use standard library threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
         "Install the libraries to lib-${CMAKE_BUILD_TYPE} to enable parallel installation of the different build variants. (default: OFF)"
         OFF)
 
-option (ENABLE_LEGACY_MEM_MGMT
-        "Use of std::malloc or posix_memalign instead of mmap to allocate coroutine stack. Breaks ASAN."
-        OFF)
+option (ALLOW_DEPRECATED_IEEE_API "Suppress warnings for use of deprecated features in IEEE Std. 1666" OFF)
 
 if (NOT INSTALL_TO_LIB_BUILD_TYPE_DIR)
   option (INSTALL_TO_LIB_TARGET_ARCH_DIR "Install the libraries to lib-<target-arch> to facilitate linking applications, which build systems assume to find SystemC in lib-<target-arch>. (default: OFF)" OFF)
@@ -337,11 +308,12 @@ if (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
   message (SEND_ERROR "Negative default stack size requested for SystemC (thread) processes.")
 endif (OVERRIDE_DEFAULT_STACK_SIZE LESS 0)
 
+# Testing
+option(ENABLE_EXAMPLES   "Build examples" ${PROJECT_IS_TOP_LEVEL})
+option(ENABLE_REGRESSION "Build regression tests" OFF)
+
 mark_as_advanced(DISABLE_COPYRIGHT_MESSAGE
-                 DISABLE_VIRTUAL_BIND
                  ENABLE_ASSERTIONS
-                 ENABLE_EARLY_MAXTIME_CREATION
-                 ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
                  OVERRIDE_DEFAULT_STACK_SIZE
                  DISABLE_VCD_SCOPES)
 
@@ -354,50 +326,36 @@ message (STATUS "Checking OS and processor type.")
 
 if (APPLE)
   list (LENGTH CMAKE_OSX_ARCHITECTURES N_OSX_ARCHITECTURES)
+  if (NOT DEFINED CMAKE_OSX_ARCHITECTURES_CACHED OR NOT ("${CMAKE_OSX_ARCHITECTURES}" STREQUAL "${CMAKE_OSX_ARCHITECTURES_CACHED}"))
+    set(CMAKE_OSX_ARCHITECTURES_CACHED "${CMAKE_OSX_ARCHITECTURES}" CACHE INTERNAL "" FORCE)
+    unset(SystemC_TARGET_ARCH CACHE)
+    unset(HAS__aarch64__DEFINED CACHE)
+    unset(HAS__i386_DEFINED CACHE)
+    unset(HAS__x86_64__DEFINED CACHE)
+  endif()
 endif (APPLE)
 
-if (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
-  if (APPLE)
-    if (N_OSX_ARCHITECTURES EQUAL 1)
-      message (STATUS "The target architecture will be passed explicitly to the Apple compiler.")
-      set (CMAKE_REQUIRED_FLAGS "-arch ${CMAKE_OSX_ARCHITECTURES}")
-    endif (N_OSX_ARCHITECTURES EQUAL 1)
-    unset (HAS__i386_DEFINED CACHE)
-    unset (HAS__x86_64__DEFINED CACHE)
-    unset (HAS__ppc__DEFINED CACHE)
-  endif (APPLE)
-  include (CheckSymbolExists)
-  check_symbol_exists (__LP64__ "" HAS__LP64__DEFINED)
-  check_symbol_exists (__sparc "" HAS__sparc_DEFINED)
-  check_symbol_exists (__sparc__ "" HAS__sparc__DEFINED)
-  check_symbol_exists (__hppa "" HAS__hppa_DEFINED)
-  check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
-  check_symbol_exists (__i386 "" HAS__i386_DEFINED)
-  check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
-  check_symbol_exists (__ppc__ "" HAS__ppc__DEFINED)
-  check_symbol_exists (__powerpc "" HAS__powerpc_DEFINED)
-endif (NOT APPLE OR (APPLE AND (N_OSX_ARCHITECTURES LESS 2)))
+include (CheckSymbolExists)
+check_symbol_exists (__x86_64__ "" HAS__x86_64__DEFINED)
+check_symbol_exists (__i386 "" HAS__i386_DEFINED)
+check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
 
 
 # Set SystemC_TARGET_ARCH according to the detected
 # OS/processor/compiler platform
 if (NOT SystemC_TARGET_ARCH)
-  if ($ENV{SYSTEMC_TARGET_ARCH})
+  if (DEFINED ENV{SYSTEMC_TARGET_ARCH})
     message (STATUS "Using SYSTEMC_TARGET_ARCH from the environment.")
     set (_TARGET_ARCH $ENV{SYSTEMC_TARGET_ARCH})
   elseif (APPLE)
     if (N_OSX_ARCHITECTURES GREATER 1)
-      set (_TARGET_ARCH "macosxuniversal")
-    elseif (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosx")
+      set (_TARGET_ARCH "macosuniversal")
+    elseif (HAS__aarch64__DEFINED)
+      set (_TARGET_ARCH "macosarm64")
     elseif (HAS__x86_64__DEFINED)
       set (_TARGET_ARCH "macosx64")
-    elseif (HAS__ppc__DEFINED)
-      set (_TARGET_ARCH "macosxppc")
-    elseif (HAS__ppc64__DEFINED)
-      set (_TARGET_ARCH "macosxppc64")
-    else (HAS__i386_DEFINED)
-      set (_TARGET_ARCH "macosxunknown")
+    else (N_OSX_ARCHITECTURES GREATER 1)
+      set (_TARGET_ARCH "macosunknown")
     endif (N_OSX_ARCHITECTURES GREATER 1)
   elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     if (HAS__i386_DEFINED)
@@ -406,12 +364,6 @@ if (NOT SystemC_TARGET_ARCH)
       set (_TARGET_ARCH "linux64")
     elseif (HAS__aarch64__DEFINED)
       set (_TARGET_ARCH "linuxaarch64")
-    elseif (HAS__powerpc_DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxppc")
-    elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-      # Untested platform.
-      set (_TARGET_ARCH "linuxsparc")
     else (HAS__i386_DEFINED)
       # Untested platform.
       set (_TARGET_ARCH "linuxunknown")
@@ -425,22 +377,6 @@ if (NOT SystemC_TARGET_ARCH)
       # Untested platform.
       set (_TARGET_ARCH "bsdunknown")
     endif (HAS__i386_DEFINED)
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "SunOS"
-          AND (HAS__sparc_DEFINED OR HAS__sparc__DEFINED))
-    # Untested platform.
-    set (_TARGET_ARCH "sparcOS5")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  elseif (UNIX AND CMAKE_SYSTEM_NAME STREQUAL "HP-UX" AND HAS__hppa_DEFINED)
-    # Untested platform.
-    set (_TARGET_ARCH "hpux11")
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      set (_TARGET_ARCH "gcc${_TARGET_ARCH}")
-    endif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    if (HAS__LP64__DEFINED)
-      set (_TARGET_ARCH "${_TARGET_ARCH}64")
-    endif (HAS__LP64__DEFINED)
   elseif (MSVC)
     set (_TARGET_ARCH "msvc")
     if (CMAKE_CL_64)
@@ -468,11 +404,10 @@ if (NOT SystemC_TARGET_ARCH)
   else ($ENV{SYSTEMC_TARGET_ARCH})
     # Unknown platform, so guess a SystemC target architecture value.
     string (TOLOWER "${CMAKE_SYSTEM_NAME}${CMAKE_PROCESSOR_NAME}" _TARGET_ARCH)
-  endif ($ENV{SYSTEMC_TARGET_ARCH})
+  endif (DEFINED ENV{SYSTEMC_TARGET_ARCH})
   set (SystemC_TARGET_ARCH ${_TARGET_ARCH} CACHE STRING "SystemC Target Architecture")
   unset (_TARGET_ARCH)
 endif (NOT SystemC_TARGET_ARCH)
-
 
 ###############################################################################
 # Configure QuickThreads
@@ -482,61 +417,56 @@ endif (NOT SystemC_TARGET_ARCH)
 message (STATUS "Detect the target processor architecture for QuickThreads.")
 if (ENABLE_PTHREADS)
   set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (ENABLE_STD_THREADS)
+  set (QT_ARCH "IGNORE") # std threads will be used for the SystemC coroutines.
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
-  set (QT_ARCH "IGNORE") # For universal libraries, Pthreads will be used for the SystemC coroutines.
-elseif (HAS__sparc_DEFINED OR HAS__sparc__DEFINED)
-  set (QT_ARCH "sparc")
-elseif (HAS__hppa_DEFINED)
-  set (QT_ARCH "hppa")
+  foreach(arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+    if (arch MATCHES "^(arm64|i386|x86_64)$")
+      set(QT_ARCH "multi")
+    else()
+      message (FATAL_ERROR "QuickThreads is not supported on macOS ${arch} universal build.")
+    endif()
+  endforeach()
 elseif (HAS__x86_64__DEFINED)
   set (QT_ARCH "x86_64")
 elseif (HAS__i386_DEFINED)
   set (QT_ARCH "i386")
 elseif (HAS__aarch64__DEFINED)
   set (QT_ARCH "aarch64")
-elseif (HAS__ppc__DEFINED)
-  set (QT_ARCH "powerpc_mach")
-elseif (HAS__powerpc__DEFINED)
-  set (QT_ARCH "powerpc_sys5")
+elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
+  set (QT_ARCH "riscv64")
 else (ENABLE_PTHREADS)
   message (WARNING "QuickThreads is not supported on ${CMAKE_SYSTEM} on ${CMAKE_SYSTEM_PROCESSOR}.")
   set (QT_ARCH "IGNORE")
 endif (ENABLE_PTHREADS)
 
 if (QT_ARCH)
-  # QuickThreads stack protection can benefit from posix_memalign
-  include(CheckSymbolExists)
-  check_symbol_exists(posix_memalign "stdlib.h" HAVE_POSIX_MEMALIGN)
-
   # To build QuickThreads, enable the assembler support.
   enable_language (ASM)
 else (QT_ARCH)
   # Otherwise, fall back to Pthreads or Fiber.
-  if (NOT MSVC)
-    set (ENABLE_PTHREADS TRUE CACHE BOOL
-         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+  if (NOT ENABLE_STD_THREADS)
+      if (NOT MSVC)
+        set (ENABLE_PTHREADS TRUE CACHE BOOL
+             "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
          FORCE)
-  endif (NOT MSVC)
+      endif (NOT MSVC)
+  endif (NOT ENABLE_STD_THREADS)
 endif (QT_ARCH)
 
 
 ###############################################################################
 # Configure Pthreads or Fiber if necessary.
 ###############################################################################
+
+set (THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 if (WIN32 AND ENABLE_PTHREADS)
   message (FATAL_ERROR "Pthreads is not supported on ${CMAKE_SYSTEM}.")
 endif (WIN32 AND ENABLE_PTHREADS)
-
-if (ENABLE_PTHREADS OR NOT QT_ARCH)
-  set (THREADS_PREFER_PTHREAD_FLAG ON)
-  find_package (Threads REQUIRED)
-  if (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-    message (SEND_ERROR "Failed to find the Pthreads library required to implement the SystemC coroutines and async_request_update() of primitive channels on Unix.")
-  endif (ENABLE_PTHREADS AND NOT CMAKE_USE_PTHREADS_INIT)
-endif (ENABLE_PTHREADS OR NOT QT_ARCH)
-
 
 ###############################################################################
 # Set the installation paths
@@ -548,7 +478,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   elseif (UNIX)
     set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
   elseif (WIN32)
-    file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
+    file (TO_CMAKE_PATH "$ENV{ProgramFiles}" _WIN32_INSTALL_PREFIX)
     set (_CMAKE_INSTALL_PREFIX "${_WIN32_INSTALL_PREFIX}/SystemC")
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
@@ -602,6 +532,41 @@ mark_as_advanced(SystemCLanguage_INSTALL_CMAKEDIR SystemCTLM_INSTALL_CMAKEDIR)
 set(SystemCLanguage_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCLanguage_INSTALL_CMAKEDIR}")
 set(SystemCTLM_INSTALL_FULL_CMAKEDIR "${CMAKE_INSTALL_PREFIX}/${SystemCTLM_INSTALL_CMAKEDIR}")
 
+###############################################################################
+# Global compiler flags (including examples/tests)
+###############################################################################
+
+option(ENABLE_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+if(ENABLE_WARNINGS_AS_ERRORS)
+  add_compile_options(
+    $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror>
+    $<$<CXX_COMPILER_ID:MSVC>:/WX>
+  )
+endif()
+
+# On Xcode, we need to disable the -Wconversion warning explicitly
+if(XCODE)
+  add_compile_options($<$<CXX_COMPILER_ID:AppleClang>:-Wno-conversion>)
+endif()
+
+# Sanitizer setup
+if(DEFINED SYSTEMC_SANITIZER_CONFIGURATION_TYPES)
+  function(set_sanitizer_flags type sanitizer cxx_flags)
+    set(_common_option "-fsanitize=${sanitizer}")
+    set(CMAKE_C_FLAGS_${type}   "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CFLAGS for ${type}" FORCE)
+    set(CMAKE_CXX_FLAGS_${type} "${_common_option} -fno-omit-frame-pointer ${cxx_flags}" CACHE STRING "CXXFLAGS for ${type}" FORCE)
+    set(CMAKE_EXE_LINKER_FLAGS_${type}    "${_common_option}" CACHE STRING "LINKER_FLAGS for ${type}" FORCE)
+    set(CMAKE_SHARED_LINKER_FLAGS_${type} "${_common_option}" CACHE STRING "SHARED_LINKER_FLAGS for ${type}" FORCE)
+  endfunction()
+
+  set_sanitizer_flags(ASAN  address   "-fno-optimize-sibling-calls -g -O1")
+  set_sanitizer_flags(MSAN  memory    "-fno-optimize-sibling-calls -fsanitize-memory-track-origins -g -O1")
+  set_sanitizer_flags(TSAN  thread    "-g -O1")
+  set_sanitizer_flags(UBSAN undefined "-g -O1")
+  if(NOT CMAKE_CXX_COMPILER_ID STREQUAL AppleClang) # LeakSanitizer not supported
+    set_sanitizer_flags(LSAN  leak    "-g -O1")
+  endif()
+endif()
 
 ###############################################################################
 # Configure RPATH so that all targets find the libraries they link to
@@ -612,8 +577,7 @@ set (CMAKE_MACOSX_RPATH TRUE)
 
 # Use, i.e., don't skip, the full RPATH for the build tree.
 set (CMAKE_SKIP_BUILD_RPATH  FALSE)
-# For build, don't use the install RPATH already (but later on when
-# installing).
+# For build, don't use the install RPATH already (but later on when installing).
 set (CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 # Set the RPATH to be used when installing.
 set (CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
@@ -637,29 +601,18 @@ message (STATUS "Settings to build SystemC ${SystemCLanguage_VERSION} (${SystemC
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "BUILD_SHARED_LIBS = ${BUILD_SHARED_LIBS}")
 message (STATUS "BUILD_SOURCE_DOCUMENTATION = ${BUILD_SOURCE_DOCUMENTATION}")
-message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message (STATUS "ENABLE_EXAMPLES = ${ENABLE_EXAMPLES}")
+message (STATUS "ENABLE_REGRESSION = ${ENABLE_REGRESSION}")
+if (NOT GENERATOR_IS_MULTI_CONFIG)
+  message (STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
-if (DISABLE_VIRTUAL_BIND)
-  message ("DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
-else (DISABLE_VIRTUAL_BIND)
-  message (STATUS "DISABLE_VIRTUAL_BIND = ${DISABLE_VIRTUAL_BIND}")
-endif (DISABLE_VIRTUAL_BIND)
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
-message (STATUS "ENABLE_EARLY_MAXTIME_CREATION = ${ENABLE_EARLY_MAXTIME_CREATION}")
-if (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  message ("ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
-else (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-  message (STATUS "ENABLE_IMMEDIATE_SELF_NOTIFICATIONS = ${ENABLE_IMMEDIATE_SELF_NOTIFICATIONS}")
-endif (ENABLE_IMMEDIATE_SELF_NOTIFICATIONS)
-if (ENABLE_PTHREADS)
-  message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-else (ENABLE_PTHREADS)
-  message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-endif (ENABLE_PTHREADS)
-message (STATUS "ENABLE_LEGACY_MEM_MGMT = ${ENABLE_LEGACY_MEM_MGMT}")
+message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+message (STATUS "ENABLE_STD_THREADS = ${ENABLE_STD_THREADS}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
-  message ("OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
+  message (STATUS "OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
 message (STATUS "SystemC_TARGET_ARCH = ${SystemC_TARGET_ARCH}")
 message (STATUS "SystemCLanguage_VERSION = ${SystemCLanguage_VERSION}")
@@ -668,8 +621,6 @@ message (STATUS "INSTALL_TO_LIB_BUILD_TYPE_DIR = ${INSTALL_TO_LIB_BUILD_TYPE_DIR
 message (STATUS "INSTALL_TO_LIB_TARGET_ARCH_DIR = ${INSTALL_TO_LIB_TARGET_ARCH_DIR}")
 message (STATUS "INSTALL_LIB_TARGET_ARCH_SYMLINK = ${INSTALL_LIB_TARGET_ARCH_SYMLINK}")
 message (STATUS "------------------------------------------------------------------------")
-message (STATUS "CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")
-message (STATUS "CMAKE_CXX_STANDARD_REQUIRED = ${CMAKE_CXX_STANDARD_REQUIRED}")
 message (STATUS "CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
 message (STATUS "CMAKE_SYSTEM_PROCESSOR = ${CMAKE_SYSTEM_PROCESSOR}")
 message (STATUS "QT_ARCH = ${QT_ARCH}")
@@ -682,18 +633,6 @@ endif (DEFINED CMAKE_OSX_DEPLOYMENT_TARGET)
 if (DEFINED CMAKE_OSX_SYSROOT)
   message (STATUS "CMAKE_OSX_SYSROOT = ${CMAKE_OSX_SYSROOT}")
 endif(DEFINED CMAKE_OSX_SYSROOT)
-if (DEFINED Threads_FOUND)
-  message (STATUS "Threads_FOUND = ${Threads_FOUND}")
-endif (DEFINED Threads_FOUND)
-if (DEFINED CMAKE_USE_PTHREADS_INIT)
-  message (STATUS "CMAKE_USE_PTHREADS_INIT = ${CMAKE_USE_PTHREADS_INIT}")
-endif (DEFINED CMAKE_USE_PTHREADS_INIT)
-if (DEFINED CMAKE_USE_WIN32_THREADS_INIT)
-  message (STATUS "CMAKE_USE_WIN32_THREADS_INIT = ${CMAKE_USE_WIN32_THREADS_INIT}")
-endif (DEFINED CMAKE_USE_WIN32_THREADS_INIT)
-if (DEFINED CMAKE_THREAD_LIBS_INIT)
-  message (STATUS "CMAKE_THREAD_LIBS_INIT = ${CMAKE_THREAD_LIBS_INIT}")
-endif (DEFINED CMAKE_THREAD_LIBS_INIT)
 message (STATUS "------------------------------------------------------------------------")
 message (STATUS "CMAKE_INSTALL_PREFIX = ${CMAKE_INSTALL_PREFIX}")
 message (STATUS "CMAKE_INSTALL_BINDIR = ${CMAKE_INSTALL_BINDIR}")
@@ -703,15 +642,15 @@ message (STATUS "CMAKE_INSTALL_LIBDIR = ${CMAKE_INSTALL_LIBDIR}")
 message (STATUS "INSTALL_CMAKEDIR = ${INSTALL_CMAKEDIR}")
 message (STATUS "========================================================================")
 
-
 ###############################################################################
 # Subdirectories
 ###############################################################################
 
-add_subdirectory (docs)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 add_subdirectory (src)
+add_subdirectory (docs)
 add_subdirectory (examples)
-
+add_subdirectory (tests)
 
 ###############################################################################
 # Install README files
@@ -719,11 +658,10 @@ add_subdirectory (examples)
 
 install (FILES AUTHORS.md
                INSTALL.md
-               cmake/INSTALL_USING_CMAKE
                LICENSE
                NOTICE
                README.md
-               RELEASENOTES
+               RELEASENOTES.md
          DESTINATION ${CMAKE_INSTALL_DOCDIR}
          COMPONENT doc)
 

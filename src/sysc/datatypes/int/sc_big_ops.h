@@ -104,7 +104,7 @@ sc_big_add( RESULT& result, const LEFT&  left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value + right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     else if ( (int)LEFT::HOD >= (int)RIGHT::HOD ) {
@@ -132,21 +132,20 @@ operator + ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::add_result 
+const typename sc_big_op_info<WL,false,WR,true>::add_result 
 operator + ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::add_result result(0, 0);
-    // sc_big_add<WL,true,WR,false>(result, left, right);
+    typename sc_big_op_info<WL,false,WR,true>::add_result result(0, 0);
     sc_big_add(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::add_result 
+const typename sc_big_op_info<WL,true,WR,false>::add_result 
 operator + ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::add_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::add_result result(0, 0);
     // sc_big_add<WL,false,WR,true>(result, left, right);
     sc_big_add(result, left, right);
     return result;
@@ -241,20 +240,20 @@ operator & ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::bit_result 
+const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator & ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::bit_result 
+const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator & ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_and(result, left, right);
     return result;
 }
@@ -347,20 +346,20 @@ operator | ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::bit_result 
+const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator | ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::bit_result 
+const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator | ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_or(result, left, right);
     return result;
 }
@@ -454,20 +453,20 @@ operator ^ ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::bit_result 
+const typename sc_big_op_info<WL,false,WR,true>::bit_result 
 operator ^ ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::bit_result 
+const typename sc_big_op_info<WL,true,WR,false>::bit_result 
 operator ^ ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::bit_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::bit_result result(0, 0);
     sc_big_xor(result, left, right);
     return result;
 }
@@ -534,7 +533,7 @@ sc_big_divide( RESULT& result, const LEFT&  left, const RIGHT& right )
 	}
 	if ( right_value != 0 ) {
 	    result_value = left_value / right_value;
-	    *result_p = result_value;
+	    *result_p = (sc_digit)result_value;
 	    result_p[1] = (result_value >> BITS_PER_DIGIT);
 	    ok = true;
 	}
@@ -570,20 +569,20 @@ operator / ( const sc_bigint<WL>& numer, const sc_bigint<WR>& denom )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::div_result
+const typename sc_big_op_info<WL,false,WR,true>::div_result
 operator / ( const sc_biguint<WL>& numer, const sc_bigint<WR>& denom )
 {
-    typename sc_big_op_info<WL,true,WR,false>::div_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::div_result
+const typename sc_big_op_info<WL,true,WR,false>::div_result
 operator / ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
 {
-    typename sc_big_op_info<WL,false,WR,true>::div_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::div_result result(0, 0);
     sc_big_divide(result, numer, denom);
     return result;
 }
@@ -650,7 +649,7 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
         }
 	if ( 0 != right_value ) {
 	    result_value = left_value % right_value;
-	    *result_p = result_value;
+	    *result_p = (sc_digit)result_value;
 	    result_p[1] = (result_value >> BITS_PER_DIGIT);
 	    ok = true;
 	}
@@ -687,18 +686,8 @@ operator % ( const sc_bigint<WL>& numer, const sc_bigint<WR>& denom )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::mod_result
-operator % ( const sc_biguint<WL>& numer, const sc_bigint<WR>& denom )
-{
-    typename sc_big_op_info<WL,true,WR,false>::mod_result result(0, 0);
-    sc_big_modulo(result, numer, denom);
-    return result;
-}
-
-template<int WL, int WR>
-inline
 const typename sc_big_op_info<WL,false,WR,true>::mod_result
-operator % ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
+operator % ( const sc_biguint<WL>& numer, const sc_bigint<WR>& denom )
 {
     typename sc_big_op_info<WL,false,WR,true>::mod_result result(0, 0);
     sc_big_modulo(result, numer, denom);
@@ -707,7 +696,17 @@ operator % ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::mod_result
+const typename sc_big_op_info<WL,true,WR,false>::mod_result
+operator % ( const sc_bigint<WL>& numer, const sc_biguint<WR>& denom )
+{
+    typename sc_big_op_info<WL,true,WR,false>::mod_result result(0, 0);
+    sc_big_modulo(result, numer, denom);
+    return result;
+}
+
+template<int WL, int WR>
+inline
+const typename sc_big_op_info<WL,false,WR,false>::mod_result
 operator % ( const sc_biguint<WL>& numer, const sc_biguint<WR>& denom )
 {
     typename sc_big_op_info<WL,false,WR,false>::mod_result result(0, 0);
@@ -763,7 +762,7 @@ sc_big_multiply( RESULT& result, const LEFT& left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value * right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     vector_multiply( LEFT::HOD,   left.get_digits(), 
@@ -783,20 +782,20 @@ operator * ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::mul_result
+const typename sc_big_op_info<WL,false,WR,true>::mul_result
 operator * ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::mul_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::mul_result
+const typename sc_big_op_info<WL,true,WR,false>::mul_result
 operator * ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::mul_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::mul_result result(0, 0);
     sc_big_multiply(result, left, right);
     return result;
 }
@@ -858,7 +857,7 @@ sc_big_subtract( RESULT& result, const LEFT&  left, const RIGHT& right )
 	    right_value = (int64)*right_p;
 	}
 	result_value = left_value - right_value;
-	*result_p = result_value;
+	*result_p = (sc_digit)result_value;
 	result_p[1] = (result_value >> BITS_PER_DIGIT);
     }
     else if ( (const int)LEFT::HOD > (const int)RIGHT::HOD ) {
@@ -891,20 +890,20 @@ operator - ( const sc_bigint<WL>& left, const sc_bigint<WR>& right )
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,true,WR,false>::sub_result
+const typename sc_big_op_info<WL,false,WR,true>::sub_result
 operator - ( const sc_biguint<WL>& left, const sc_bigint<WR>& right )
 {
-    typename sc_big_op_info<WL,true,WR,false>::sub_result result(0, 0);
+    typename sc_big_op_info<WL,false,WR,true>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }
 
 template<int WL, int WR>
 inline
-const typename sc_big_op_info<WL,false,WR,true>::sub_result
+const typename sc_big_op_info<WL,true,WR,false>::sub_result
 operator - ( const sc_bigint<WL>& left, const sc_biguint<WR>& right )
 {
-    typename sc_big_op_info<WL,false,WR,true>::sub_result result(0, 0);
+    typename sc_big_op_info<WL,true,WR,false>::sub_result result(0, 0);
     sc_big_subtract(result, left, right);
     return result;
 }

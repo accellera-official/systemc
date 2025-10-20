@@ -18,12 +18,10 @@
  *****************************************************************************/
 
 #include "tlm_core/tlm_2/tlm_generic_payload/tlm_gp.h"
-#include "sysc/utils/sc_typeindex.h" // sc_typeindex
 
 #include <map>
 #include <cstring>  // std::memcpy et.al.
-
-using sc_core::sc_type_index;
+#include <typeindex> 
 
 namespace tlm {
 
@@ -37,7 +35,7 @@ template class SC_API tlm_array<tlm_extension_base*>;
 class tlm_extension_registry
 {
     typedef unsigned int key_type;
-    typedef std::map<sc_core::sc_type_index, key_type> type_map;
+    typedef std::map<std::type_index, key_type> type_map;
 public:
     static tlm_extension_registry& instance()
     {
@@ -46,7 +44,7 @@ public:
         return *instance_;
     }
 
-    unsigned int register_extension(sc_type_index type)
+    unsigned int register_extension(std::type_index type)
     {
         type_map::const_iterator it = ids_.find( type );
 

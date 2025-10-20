@@ -44,17 +44,20 @@ namespace sc_dt {
 // |     Constant reference to this object instance.
 // +----------------------------------------------------------------------------
 template<int W>
+inline const sc_bigint<W>&
+sc_bigint<W>::operator = (const sc_bigint<W>& from)
+{
+    vector_copy( DIGITS_N, from.get_digits(), get_digits() );
+    return *this;
+}
+
+template<int W>
 template<int WO>
 inline const sc_bigint<W>&
 sc_bigint<W>::operator = (const sc_bigint<WO>& from)
 {
-    if ( W == WO ) {
-        vector_copy( DIGITS_N, from.get_digits(), get_digits() );
-    }
-    else {
-	vector_copy( sc_bigint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, get_digits() );
-	adjust_hod();
-    }
+    vector_copy( sc_bigint<WO>::DIGITS_N, from.get_digits(), DIGITS_N, get_digits() );
+    adjust_hod();
     return *this;
 }
 
@@ -104,7 +107,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( int64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -141,7 +144,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( int from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
 	vector_fill( from < 0 ? -1 : 0, HOD-1, to_p );
     }
@@ -154,7 +157,7 @@ inline const sc_bigint<W>&
 sc_bigint<W>::operator = ( uint64 from )
 {
     sc_digit* to_p = get_digits();
-    *to_p++ = from;
+    *to_p++ = (sc_digit)from;
     if ( HOD > 0 ) {
         *to_p++ = from >> 32;
     }
@@ -224,7 +227,7 @@ sc_bigint<W>::operator - ()
     sc_digit* result_digits = result.get_digits();
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
         carry += ~digit[digit_i];
-        result_digits[digit_i] = carry;
+        result_digits[digit_i] = (sc_digit)carry;
 	carry >>=BITS_PER_DIGIT;
     }
     return result;
@@ -516,7 +519,7 @@ sc_bigint<W>::operator>>(int v) const
     return result;
 }
 
-// sc_bv<W> and sc_lv<W> constructors using an sc_bigint<WO> value:
+// sc_bv<W> and sc_lv<W> constructors and assignments using an sc_bigint<WO> value:
 
 template<int W>
 template<int WO>
@@ -532,6 +535,20 @@ sc_lv<W>::sc_lv( const sc_bigint<WO>& v )
     : sc_lv_base(W)
 {
     *this = v.sc_signed_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_bv<W>& sc_bv<W>::operator = ( const sc_bigint<WO>& v )
+{
+    return *this = v.sc_signed_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_lv<W>& sc_lv<W>::operator = ( const sc_bigint<WO>& v )
+{
+    return *this = v.sc_signed_proxy();
 }
 
 } // namespace sc_dt

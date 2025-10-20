@@ -43,7 +43,7 @@ namespace sc_core {
 // approximate it by size_t
 typedef std::size_t uintptr_t;
 
-SC_API const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
+const double PHASH_DEFAULT_GROW_FACTOR     = 2.0;
 
 class SC_API sc_phash_elem {
     friend class sc_phash_base;

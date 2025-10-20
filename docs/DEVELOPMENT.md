@@ -1,37 +1,25 @@
-Development process of the Accellera SystemC implementation
-===========================================================
+# Development process of the Accellera SystemC implementation
 
 This document focuses on the technical aspects related to the development
-of the SystemC implementation. Legal and formal procedures are documented
-at http://accellera.org/about/policies-and-procedures.
+of the SystemC implementation.  Legal and formal procedures are documented
+at https://accellera.org/about/policies-and-procedures.
 
----------------------------------------------------------------------
-Repository setup
----------------------------------------------------------------------
+## Repository setup
 
-The central source code repository of the Accellera SystemC implementation is
-hosted in two [Git][6] repositories at [GitHub](http://github.com).  The main
-repositories are **private** to the [`OSCI-WG` organization][7] and can be
-found at:
+The central source code repository of the Accellera SystemC reference
+implementation is hosted in two [Git][1] repositories at [GitHub][2].
 
- * https://github.com/OSCI-WG/systemc             (core SystemC library)
- * https://github.com/OSCI-WG/systemc-regressions (regression test suite)
+The **public** repository can be found at:
 
-A read-only, **public** copy of these repositories can be found at
+ * https://github.com/accellera-official/systemc
 
- * https://github.com/accellera-official/systemc             (core SystemC library)
- * https://github.com/accellera-official/systemc-regressions (regression test suite)
+A **private** repository for Accellera members can be found at:
 
-Members of the GitHub [`OSCI-WG` organization][7] with the necessary access
-rights can clone the repositories via SSH from the locations
+ * https://github.com/OSCI-WG/systemc
 
-     git clone -o osci-wg git@github.com:OSCI-WG/systemc.git
-     git clone -o osci-wg git@github.com:OSCI-WG/systemc-regressions.git
-
-respectively.
-
-To obtain access to the repositories and the GitHub organization in general,
-LWG members can contact the LWG chairs at <mailto:lwg-chair@lists.accellera.org>
+To obtain access to the private repository and the [`OSCI-WG` organization][3]
+in general, members of the Accellera SystemC Language Working Group (LWG) can
+contact the LWG chair at <mailto:lwg-chair@lists.accellera.org>
 including their GitHub account name.
 
 >  *Note:*
@@ -39,43 +27,42 @@ including their GitHub account name.
 >  to allow using the default remote name `origin` for a personal fork
 >  where you can push your changes by default, see [below](#basic-branch-setup).
 
-Comprehensive documentation about [Git][6], a distributed version control
-system, can be found in the [Pro Git book][8], also available online.
+Comprehensive documentation about [Git][1], a distributed version control
+system, can be found in the [Pro Git book][4], also available online.
 Since Git is 'distributed', it is a very natural choice for the distributed
 development process needed for collaboratively evolving the reference
 implementation of SystemC.
 
+### Relationship between public and private repositories
 
-### Relationship between private and public repositories
+The **public** repository contains the latest development version of the
+Accellera SystemC reference implementation, including bug fixes and other
+capabilities approved and released by the SystemC Language Working Group.
 
-New features and enhancements are developed by the LWG in the **private**
-repositories, see below.  Please check the [CONTRIBUTING][9] guidelines
-how to join Accellera and its working groups to contribute to the
-development of SystemC.
+>  *Note:*
+>  The development version in the main branch might differ from the latest
+>  [released][9] or [tagged][10] versions.  For the latest stable version,
+>  please use a release or tag.
 
-The **public** repositories are typically updated only together with
-public releases of the Accellera SystemC reference implementation.
+The **private** repository contains features or enhancements under development
+by the SystemC Language Working Group.
 
-In-between public releases, bug fixes may be published via the public
-repositories as well.  In this case, the updated `public` branch
-including the new bug fixes, is then merged back into the `master`
-branch to make sure the fix is part of the next release.
-
+Please check the [CONTRIBUTING][5] guidelines how to join Accellera and its
+working groups to contribute to the development of SystemC.
 
 ### Creating a personal fork
 
 In order to contribute changes to the different repositories, it is
-recommended to create personal (or company-based) [forks][10] of the
+recommended to create personal (or company-based) [forks][6] of the
 repositories on GitHub and push the proposed changes (bugfixes,
-features, ...) there.  These forks are also only accessible to members
-of the [`OSCI-WG` GitHub organization][7].  Details of the intended
-work-flow are described in the next [section](#basic-branch-setup).
+features, ...) there.  Details of the intended workflow are described
+in the next [section](#basic-branch-setup).
 It is convenient to add this GitHub fork as a remote to your local
 clone of the repository:
 
       cd <repo>/
       git remote add origin git@github.com:<your-account>/<repo>.git
-      git branch --set-upstream master origin/master
+      git branch --set-upstream main origin/main
 
 Any changes can then be pushed to GitHub using:
 
@@ -90,86 +77,66 @@ Any changes can then be pushed to GitHub using:
    remote branches to the repository.
 
 A basic cheat sheet containing the an overview of the general
-Git commands and workflow can be found [online][11].
+Git commands and workflow can be found [online][7].
 
- [6]: http://git-scm.com "Git version control system"
- [7]: https://github.com/osci-wg "Accellera WG GitHub organization"
- [8]: http://git-scm.com/book "Pro Git Book"
- [9]: ../CONTRIBUTING.md "Contriubting to SystemC"
-[10]: https://help.github.com/articles/fork-a-repo
-[11]: http://zrusin.blogspot.de/2007/09/git-cheat-sheet.html "Git Cheat Sheet"
+## Development flow
 
-
----------------------------------------------------------------------
-Development flow
----------------------------------------------------------------------
-
+This section explains the development flow for both **public** and
+**private** repository.
 
 ### Basic branch setup
 
-The main idea is to have two main branches, one for the development,
-one for the releases.
+The following branches exist in a SystemC repository:
 
-* **master**
+* **main**
 
-  The latest and greatest `HEAD` of the LWG development.
-  This is where all the new features and fixes go.
+  The latest and greatest `HEAD` of the SystemC development.
+  This is where all finalized and approved features and fixes go.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository.
 
-* **public**
+* **develop**
 
-  The latest revision pushed to the public repository of SystemC.
-  This may also include changes, that are not yet part of an
-  official release package.
+  This branch is used for development and testing of enhancements,
+  new features and fixes which are not yet finalized and approved.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository, however, the branch in the **private** repository
+  might be ahead of the **pubic** branch because of some LWG specific
+  developments.
 
 * **release**
 
   This branch is used to create the release tarballs, both internal
-  and public snapshots, typically based on the `public` branch.
+  and public snapshots, typically based on the `main` branch.
+  The aim is to keep this branch identical between the **pubic** and
+  **private** repository.
+
+In addition, these repositories may contain additional branches for dedicated
+feature developments, but it is expected that these branches are merged into
+the `main` or `develop` branch.
 
 For the **regressions**, the `release` branch is more or less just a pointer
 to the latest revision of a snapshot (or release).  It is still useful
 to keep a named branching point, in case of required hotfixes.
 
 For the **core library**, the `release` branch is to be different from the
-`master` branch.  The idea is to fully track the contents of the released
-tarball.  This requires the following changes compared to the `master`
+`main` branch.  The idea is to fully track the contents of the released
+tarball.  This requires the following changes compared to the `main`
 branch:
 
   - The Automake generated files are added to this tree.
   - Accellera internal files are stripped
     (`.gitignore`, internal documentation, ...).
 
-To prepare a release, the `master` branch would then be merged into the
-`release` branch, the automake files would be updated (if necessary) and
+To prepare a release, the `main` branch would then be merged into the
+`release` branch, the Automake files would be updated (if necessary) and
 the clean working tree could be used as baseline for the tarball (e.g.,
 via `git-archive(1)`).  Details are described in the next section
 [release management](#release-management).  The history of the (core library)
 repostitory could then look like shown in the following graph
 (time progresses upwards):
 
-       time  feature   master hotfix release
-             branches    |         | |
-        ^      |  |
-        |                [master]
-        |                |           [release]
-        ^          ----- o           |
-        |         /      |           o - [systemc-2.3.0.1]
-        |        /    -- o          /|
-        |       /    /   |         o |
-        ^      |  o--   ...         \|
-        |      o ...     |  -------- o - [systemc-2.3.0]
-        |      |  o     .../         |
-        |      o   \---- o -[public] ..
-        ^       \       \|           |
-        |        ------- o           o   (internal snapshot)
-        |               ...          |
-        ^                            o - [systemc-2.2.0]
-
-It should usually be sufficient to keep the two branches `master`
-and `release`, and cherry-pick hotfixes for emergency releases
-directly on top of the `release` branch.  For convenience, an
-additional `public` branch could be used to mark the branching
-point for the last `release`.
+![Git branches](./git_branches.svg)
 
 If more sophisticated version branches are needed, a development
 model similar to the well-known ["successful branching model"][12]
@@ -178,27 +145,24 @@ be needed for the SystemC implementation, as we usually
 maintain only a single (i.e., the latest) public release of the
 kernel.
 
-[12]: http://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"
-
-
 ### Adding a feature (set)
 
 The development of a new contribution in form of a feature or a
 complex bug fix is best done in a new feature branch, which is
-forked and checked out from the Accellera `master` branch:
+forked and checked out from the Accellera `develop` branch:
 
-      git checkout -b <company>-<feature-xyz> master
+      git checkout -b <company>-<feature-xyz> develop
 
 Then code up the new contribution.  Please try to facilitate code
 review by other Accellera members by logically grouping your changes into
 one commit per addressed issue. For the commit messages, please
-consider to follow these suggestions: 
+consider to follow these suggestions:
 
 >  *Note:* **Commit messages**
 >
 >  Though not required, it's a good idea to begin the commit message with
 >  a single short (less than 50 character) line summarizing the change,
->  followed by a blank line and then a more thorough description. Tools
+>  followed by a blank line and then a more thorough description.  Tools
 >  that turn commits into email, for example, use the first line on the
 >  `Subject:` line and the rest of the commit in the body.
 
@@ -206,22 +170,22 @@ consider to follow these suggestions:
 >
 > In order to document that contributions are submitted under the
 > Apache-2.0 license (see `LICENSE`), a sign-off procedure is
-> defined in the [contributing guidelines][9].
+> defined in the [contributing guidelines][5].
 
-During the development of the contribution, the `master` branch may
-receive other commits. In that case, consider rebasing the commits in
-your feature branch onto the `HEAD` of the `master` branch to keep the
-history clean. Once the contribution is ready for review by the
+During the development of the contribution, the `develop` branch may
+receive other commits.  In that case, consider rebasing the commits in
+your feature branch onto the `HEAD` of the `develop` branch to keep the
+history clean.  Once the contribution is ready for review by the
 working group, push the feature branch in your fork of the respective
 repository on GitHub:
 
       git push <your-github-fork-remote-name> <company>-<feature-xyz>
 
-Then, send a [pull request][13] either manually or via [GitHub][13] to
+Then, send a [pull request][8] either manually or via [GitHub][8] to
 initiate the code review by the working group members.  The summary
 can be manually generated by
 
-      git request-pull master git@github.com/<account>/<repo>.git \
+      git request-pull develop git@github.com/<account>/<repo>.git \
               <company-feature-xyz>
 
 to be sent to the LWG reflector.
@@ -235,12 +199,12 @@ clone of the repository
       git fetch  <remote-name>
 
       # examine differences
-      git diff master..<remote-name>/<company-feature-xyz>
+      git diff develop..<remote-name>/<company-feature-xyz>
       git log <remote-name>/<company-feature-xyz>
 
 After the contribution is accepted, it will be merged into the working group's
-`master` branch by the responsible source code maintainer.  This should
-be done with an explicit *merge commit*, to keep the individual 
+`develop` branch by the responsible source code maintainer.  This should
+be done with an explicit *merge commit*, to keep the individual
 contributions separated:
 
       git merge --no-ff --log \
@@ -248,18 +212,16 @@ contributions separated:
 
 Instead of fully merging the contribution, the maintainer may choose
 to cherry-pick individual commits or to rebase the feature branch on
-an intermittently updated `master`. He may also request additional
-changes to be done by the submitter. In that case, the submitter may
-need to merge recent changes to the `master` branch into his feature
+an intermittently updated `develop`.  He may also request additional
+changes to be done by the submitter.  In that case, the submitter may
+need to merge recent changes to the `develop` branch into his feature
 branch before carrying out the requested changes.
 
-After the contribution has been fully merged into `master`, the
+After the contribution has been fully merged into `develop`, the
 feature branch in the local and Github fork may be deleted.
 
       git branch -d <company-feature-xyz>      # delete local branch
       git push  origin :<company-feature-xyz>  # delete remote branch
-
-[13]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
 
 ### Maintaining a private (set of) branches
 
@@ -270,19 +232,19 @@ while being able to pick fixes from the Accellera Working Group's tree
 implementation.
 
 For this purpose members may employ the already mentioned ["successful
-branching model"][12] by Vincent Driessen. The vendor can branch its
+branching model"][12] by Vincent Driessen.  The vendor can branch its
 own development branch, e.g., `develop-<vendor>` from the already
-tracked working group development branch `master` in his clone of the WG
-repository. The vendor is then able to integrate commits on the WG
+tracked working group development branch `develop` in his clone of the LWG
+repository.  The vendor is then able to integrate commits on the LWG
 development branch by merging it into his his vendor development
 branch.
 
-Bug fixes to be contributed back to the WG consist usually of one or
-several isolated commits. They need to be cherry-picked from the
-vendor's development branch into a new branch created from the WG
+Bug fixes to be contributed back to the LWG consist usually of one or
+several isolated commits.  They need to be cherry-picked from the
+vendor's development branch into a new branch created from the LWG
 development branch:
 
-      git checkout -b <vendor>-fix-<bug> origin/master
+      git checkout -b <vendor>-fix-<bug> origin/develop
       git cherry-pick <commit>...
 
 Once, the bug fix branch is ready, it should be pushed into the
@@ -290,25 +252,22 @@ vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
 A new feature consists usually of a series of commits developed in a
-dedicated feature branched of the vendor's or WG's development
-branch. Only in the first case, a rebase on the top of the WG's
-development branch is necessary. To this end, branch first from the
+dedicated feature branched of the vendor's or LWG's development
+branch.  Only in the first case, a rebase on the top of the WG's
+development branch is necessary.  To this end, branch first from the
 feature branch:
 
       git checkout -b <vendor>-<new-feature> <private-feature-branch>
-      git rebase [-i|--interactive] --onto origin/master develop-<vendor>
+      git rebase [-i|--interactive] --onto origin/develop develop-<vendor>
 
 Once, the bug fix branch is ready, it should be pushed into the
 vendor's github account and a pull request created, as described in
 the [feature branch section](#adding-a-feature-set).
 
-
----------------------------------------------------------------------
-Versioning scheme
----------------------------------------------------------------------
+## Versioning scheme
 
 In general, the versioning pattern for the SystemC/TLM reference
-implementation follows the scheme defined in IEEE Std. 1666-2011 (8.6.5),
+implementation follows the scheme defined in IEEE Std. 1666-2023 (8.6.5),
 based on `Major.Minor.Patch` numbers and a date (for prereleases).
 
 *Note:* In general, no compatibility guarantees are attached to these version
@@ -319,8 +278,8 @@ The individual parts of the SystemC/TLM versions reported via the corresponding
 header files should be  be handled according to the following criteria:
 
  * Update **major version** only together with
-   * IEEE 1666 update
-   * and/or major new language features (e.g. in pre-releases for IEEE update)
+   * IEEE Standard 1666 update
+   * and/or major new language features (e.g., in pre-releases for IEEE update)
  * Update **minor version** for new Accellera standard release
    * Significant language extension proposals to be added to next IEEE release
  * Update **patch version** for minor API changes
@@ -338,38 +297,46 @@ header files should be  be handled according to the following criteria:
 The overall release date (see [next section](#release-management)) of the
 PoC release tarball should reflect the date of the archive creation.
 
+## Release management
 
----------------------------------------------------------------------
-Release management
----------------------------------------------------------------------
+To prepare a new release tarball, along with a tagged release at GitHub,
+the following set steps are to be performed by the maintainer
 
-To prepare a new release tarball, the following set steps are to be
-performed by the maintainer
+1. **Merge enhancements, new features and fixes to be released**
 
-0. **Prepare the release in the `master` branch**
+   The latest enhancements, features and fixes are available in the
+   `develop` branch. The LWG should decide which features are merged
+   into the `main` branch, to make them part of a release.
+
+   The maintainer will merge one or more commits from the `develop` branch
+   into the `main` branch.
+
+2. **Prepare the release in the `main` branch**
 
    Before creating a release snapshot, the documentation and version
-   information in the package should be updated within the `master`
+   information in the package should be updated within the `main`
    branch.  This includes files like
-   - `ChangeLog`, `RELEASENOTES`, `README`, `INSTALL`
+   - `RELEASENOTES.md`, `README.md`, `INSTALL.md`
    - [Version headers](#versioning-scheme)
 
    During the release preparation phase, other functional changes
-   should not be added/merged to the `master` branch.
+   should not be added/merged to the `main` branch.
 
-1. **Update the `release` branch**
+3. **Update the `release` branch**
 
         # switch to release branch
         git checkout release
 
-        # merge master branch
-        git merge --no-commit master
+        # merge main branch
+        git merge --no-commit main
         git rm <new-internal-file...> # drop new or changed "private" files
-        git commit -m "merge master branch for x.x.x release"
-        
-        *NOTE:* `.gitignore` has to be removed in this branch otherwise Makefile.in files are missing in the commit as well as in the subsequent git archive step. 
+        git commit -m "merge main branch for x.x.x release"
 
-2. **Update the Autoconf (and other auto-generated) files**
+        *NOTE:* `.gitignore` has to be removed in this branch otherwise
+                `Makefile.in`` files are missing in the commit as well
+                as in the subsequent git archive step.
+
+4. **Update the Autoconf (and other auto-generated) files**
 
         autoreconf -if # or config/bootstrap
         git add -u     # add changed files
@@ -377,17 +344,17 @@ performed by the maintainer
         git add <new files to distribute>
         git commit -m "update autogenerated files for x.x.x release"
 
-3. **Tag the release revision**
+5. **Tag the release revision**
 
    In order to keep track of the release snapshots, the revisions used
    for creating the release tarballs should be marked with an *annotated*
    and optionally signed Git tag.
 
         # git tag -a -m "<package> <version>" <version> <refspec>
-        git tag -a -m "SystemC 2.3.0" 2.3.0 release
+        git tag -a -m "SystemC 3.0.0" 3.0.0 release
 
    The tagname should contain the `<version>`, following the versioning rules
-   in IEEE 1666-2011.  There are three standard formats:
+   in IEEE Std. 1666-2023.  There are three standard formats:
    * `x.x.x_beta_<isodate>` for beta/internal versions
    * `x.x.x_pub_rev_<isodate>` for public review versions, and
    * `x.x.x` for public release versions.
@@ -395,7 +362,7 @@ performed by the maintainer
    > *NOTE:* The tag should be on the `release` branch, to enable the
    > automated tarball creation in the next step.
 
-4. **Create the release tarball**
+6. **Create the release tarball**
 
    `git archive` can then be used to create the release tarball.
    `git describe` can be used to obtain the correct tarball name
@@ -409,39 +376,32 @@ performed by the maintainer
    > *NOTE:* Even without a tag, a quick-shot release of the
    >         release branch can be generated this way.
 
-5. **Publish the release**
+7. **Publish the release**
 
    Upload the archive to the LWG area for internal review
-   and push the changes to GitHub.
+   and push the changes to the GitHub **public** and/or **private**
+   repositories.
 
-        git push osci-wg master release <version>
+        git push osci-wg main release <version>
+        git push accellera-official main release <version>
 
    > *NOTE:* The tag needs to be pushed explicitly.
 
    > *NOTE:* For each tag pushed to the GitHub repository, the corresponding
              release archive can be downloaded from GitHub directly via
-             `https://github.com/osci-wg/systemc/releases/tag/<version>`.
+             `https://github.com/osci-wg/systemc/releases/tag/<version>` or
+             `https://github.com/accellera-official/systemc/releases/tag/<version>`
 
-   For **public** releases, update the `public` branch and repeat the same
-   steps for the public repositories:
-
-        git push osci-wg master:public
-        git push accellera-official master release <version>
-
----------------------------------------------------------------------
-Issue tracking
----------------------------------------------------------------------
+## Issue tracking
 
 Open issues (bugs, cleanups, features) related to the reference
 implementation of SystemC/TLM are tracked via GitHub:
 
- * <https://github.com/OSCI-WG/systemc/issues>             (core library)
- * <https://github.com/OSCI-WG/systemc-regressions/issues> (regression tests)
+ * <https://github.com/OSCI-WG/systemc/issues>
 
 Some issues might be reported against the public repositories as well:
 
- * <https://github.com/accellera-official/systemc/issues>             (core library)
- * <https://github.com/accellera-official/systemc-regressions/issues> (regression tests)
+ * <https://github.com/accellera-official/systemc/issues>
 
 > *NOTE:* For issues discussed in the LWG, the internal issue tracker is preferred.
           An internal issue clone will be added for publicly reported issues.
@@ -454,42 +414,43 @@ Issues are grouped (by using labels) in the following categories for
 different parts of the implementation:
 
  * `core`           - SystemC core language, i.e. everything in `sc_core`
- * `datatypes`      - SystemC datatypes, i.e. in `sc_dt`
+ * `datatypes`      - SystemC data-types, i.e. in `sc_dt`
  * `tlm`            - TLM-1.0, TLM-2.0
  * `infrastructure` - build system(s), scripts, etc.
 
 Additional labels are used to classify issues according to their
 severity (10 highest), according to the following guidelines:
 
- * `10-critical`  
+ * `10-critical`
    Show-stoppers that must be fixed, affects all (or at least most)
    platforms and violates fundamental specifications for most applications.
 
- * `09-serious`  
+ * `09-serious`
    At least one of the explicitly supported platforms is affected and
    causes significant problems for many applications.
- 
- * `06-medium`  
+
+ * `06-medium`
    Covers an area, where the standard may not be clearly specified.
    May require changes to external/standard API.
- 
- * `05-feature`  
-   New feature proposal, beyond the current standard. Includes internal
-   (and external, providing adoption by IEEE P1666 WG) API changes.
- 
- * `04-errata`  
+
+ * `05-feature`
+   New feature proposal, beyond the current standard.  Includes internal
+   (and external, providing adoption by the IEEE P1666 working group)
+   API changes.
+
+ * `04-errata`
    Inconvenience (errata) for users of many platforms, workaround available.
    Solution may require internal API changes.
 
- * `02-documentation`  
-   Documentation inconsistency or insufficiency (e.g. whitepaper unclear
+ * `02-documentation`
+   Documentation inconsistency or insufficiency (e.g., whitepaper unclear
    or misleading), no code changes.
 
- * `01-inconvenience`  
+ * `01-inconvenience`
    Inconvenience (workaround available), for some platforms
    (e.g. users of Visual Studio 2003)
- 
- * `00-cosmetic`  
+
+ * `00-cosmetic`
    Changes addressing performance or clarity of implementation,
    no API changes.
 
@@ -499,21 +460,33 @@ the issue is added to the issue tracking system, a classification is done
 (including a target milestone), and preferably a responsible person is
 assigned.
 
+## Changelog
 
----------------------------------------------------------------------
-Changelog
----------------------------------------------------------------------
+* 2024-02-27
+  * rename master into main
+  * introduce branch develop. Remove branch public
+  * update git branches picture
+  * update development flow description
+
+* 2024-02-19
+  * fix typos
+  * update names of references
+  * links replaced by https where possible
+
+* v3.0 (2024-02-16)
+  * Update explanation and use model of public and private repositories
+  * Remove separate repositories for regression tests
 
 * v2.2 (2019-11-10)
   * Fix link to policies and procedures
-  * Add reference to sign-off process described in `CONTRIBUTING.md`
+  * Add reference to sign-off process described in `CONTRIBUTING`
 
 * v2.1 (2019-04-23)
   * Update information about public repositories and their relation
     to the WG-internal repositories.
 
 * v2.0 (2018-10-01)
-  * Reorganize contents between `CONTRIBUTING.md` and `DEVELOPMENT.md`
+  * Reorganize contents between `CONTRIBUTING` and `DEVELOPMENT`
   * Add information about public repositories
   * Formatting fixes and cleanups
 
@@ -529,13 +502,18 @@ Changelog
 * v0.9 - Initial proposal to the Accellera SystemC LWG (2012-09-25)
   * To be discussed during the October LWG phone conference
 
+## Authors of this document
 
----------------------------------------------------------------------
-Authors
----------------------------------------------------------------------
+Lynn Bannister, Martin Barnasconi, Mark Burton, Philipp A. Hartmann, Torsten Maehne
 
-  * Philipp A. Hartmann <philipp.a.hartmann@intel.com>
-  * Torsten Maehne      <torsten.maehne@bfh.ch>
-  * Mark Burton         <mark@greensocs.com>
-  * Minor cosmetics edits, Lynn Bannister <lynn@accellera.org>
-
+ [1]: https://git-scm.com "Git version control system"
+ [2]: https://github.com
+ [3]: https://github.com/osci-wg "Accellera WG GitHub organization"
+ [4]: https://git-scm.com/book "Pro Git Book"
+ [5]: ../CONTRIBUTING.md "Contriubting to SystemC"
+ [6]: https://help.github.com/articles/fork-a-repo
+ [7]: http://zrusin.blogspot.de/2007/09/git-cheat-sheet.html "Git Cheat Sheet"
+ [8]: https://help.github.com/articles/using-pull-requests "Using Pull Requests - github:help"
+ [9]: https://github.com/accellera-official/systemc/releases
+ [10]: https://github.com/accellera-official/systemc/tags
+ [12]: https://nvie.com/posts/a-successful-git-branching-model/ "'A successful Git branching model' by Vincent Driessen"

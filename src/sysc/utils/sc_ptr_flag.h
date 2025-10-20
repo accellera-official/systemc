@@ -37,13 +37,9 @@ namespace sc_core {
 template<typename T>
 class sc_ptr_flag
 {
-#if SC_CPLUSPLUS >= 201103L
     typedef std::uintptr_t uintptr_type;
     static_assert( alignof(T) > 1
         , "Unsupported platform/type, need spare LSB of pointer to store flag" );
-#else
-    typedef std::size_t uintptr_type;
-#endif // C++11
 public:
     typedef T*  pointer;
     typedef T&  reference;
@@ -54,9 +50,6 @@ public:
     sc_ptr_flag(pointer p, bool f = false)
       : m_data(reinterpret_cast<uintptr_type>(p))
     {
-#if SC_CPLUSPLUS < 201103L
-        sc_assert( ( m_data & flag_mask ) == 0x0 );
-#endif // C++03
         set_flag(f);
     }
 
@@ -72,9 +65,6 @@ public:
 
     void reset(pointer p)
     {
-#if SC_CPLUSPLUS < 201103L
-        sc_assert( ( reinterpret_cast<uintptr_type>(p) & flag_mask ) == 0x0 );
-#endif // C++03
         m_data = reinterpret_cast<uintptr_type>(p) | static_cast<uintptr_type>(get_flag());
     }
 

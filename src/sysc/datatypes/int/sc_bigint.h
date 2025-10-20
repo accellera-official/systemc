@@ -117,6 +117,14 @@ public:
     #endif
 	{ }
 
+    inline sc_bigint( const sc_bigint<W>& v ) 
+    #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
+        : sc_signed( W, compile_time_digits )
+    #elif defined(SC_BIGINT_CONFIG_BASE_CLASS_HAS_STORAGE)
+        : sc_signed( W, false )
+    #endif
+        { *this = v; }
+
     template<int WO>
     inline sc_bigint( const sc_bigint<WO>& v ) 
     #if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE)
@@ -306,9 +314,10 @@ public:
  
     // assignment operators
 
+    inline const sc_bigint<W>& operator = ( const sc_bigint<W>& other );
+
     template<int WO>
     inline const sc_bigint<W>& operator = ( const sc_bigint<WO>& other );
-	// { sc_signed::operator = ( v ); return *this; }
 
     template<int WO>
     inline const sc_bigint<W>& operator = ( const sc_biguint<WO>& other );
@@ -636,7 +645,7 @@ public:
     {
         const int shift = (BITS_PER_DIGIT-1)-SC_BIT_INDEX(W-1);
 	unsigned long long tmp = (std::make_signed<sc_digit>::type) (digit[HOD] << shift);
-        digit[HOD] = tmp >> shift ;
+        digit[HOD] = (sc_digit)(tmp >> shift) ;
     }
 
 public:
@@ -686,11 +695,6 @@ public: // explicit conversion to character string:
     const std::string to_string( sc_numrep numrep, bool w_prefix ) const {
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
-
-#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-public: // "mirror" for sc_value_base concatenation support:
-  int              concat_length(bool xzp) const    { return W; }
-#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
 
 public: // field and template value accesses:
   inline int              get_actual_length() const { return W; }

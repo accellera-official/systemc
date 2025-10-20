@@ -40,27 +40,19 @@
 
 
 set (DOC_FILES
-	       DEVELOPMENT.md
-	       sysc/README
-	       sysc/archived/README
-	       sysc/archived/FuncSpec20.pdf
-	       sysc/archived/WhitePaper20.pdf
-	       sysc/archived/UserGuide20.pdf
-	       sysc/archived/SystemC_2_1_overview.pdf
-	       sysc/archived/SystemC_2_1_features.pdf
-	       sysc/SystemC_2011_New_Features.pdf
-	       tlm/release/TLM_2_0_requirements.pdf
-	       tlm/release/TLM_2_0_white_paper.pdf
-	       tlm/release/README.txt
-	       tlm/release/TLM_2_0_presentation.ppt
-	       tlm/release/TLM_2_0_presentation.pdf
-	       tlm/tlm_README)
+         DEVELOPMENT.md
+         git_branches.svg
+         INSTALL_USING_AUTOTOOLS.md
+         sysc/README
+         sysc/SIGN_EXTENSION.md
+         tlm/tlm_README.md)
 
 foreach (DOC_FILE ${DOC_FILES})
   get_filename_component (DOC_INSTALL_PATH ${DOC_FILE} PATH)
   install (FILES ${DOC_FILE}
            DESTINATION ${CMAKE_INSTALL_DOCDIR}/${DOC_INSTALL_PATH}
-           COMPONENT doc)
+           COMPONENT doc
+           OPTIONAL)
 endforeach (DOC_FILE ${DOC_FILES})
 
 if (BUILD_SOURCE_DOCUMENTATION)

@@ -1,0 +1,4 @@
+SystemC Simulation
+
+Error: (E120) sc_export instance has no interface: top.targ_vec_0.xp
+In file: <removed by verify.pl>

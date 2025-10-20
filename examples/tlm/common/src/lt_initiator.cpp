@@ -44,7 +44,6 @@ static const char *filename = "lt_initiator.cpp"; ///< filename for reporting
 ///    This is the class constructor.
 ///
 //==============================================================================
-SC_HAS_PROCESS(lt_initiator);
 lt_initiator::lt_initiator                        // constructor
 ( sc_module_name name                             // module name
 , const unsigned int  ID                          // initiator ID

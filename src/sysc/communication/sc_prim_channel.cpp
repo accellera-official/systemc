@@ -150,8 +150,9 @@ class sc_prim_channel_registry::async_update_list
 {
 public:
 
-    bool pending() const
+    bool pending()
     {
+        sc_scoped_lock lock( m_mutex );
 	return m_push_queue.size() != 0;
     }
 
@@ -195,7 +196,6 @@ public:
 
     void attach_suspending( sc_prim_channel& p )
     {
-        sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
           std::find(m_suspending_channels.begin(), m_suspending_channels.end(), &p);
         if ( it == m_suspending_channels.end() ) {
@@ -207,7 +207,6 @@ public:
 
     void detach_suspending( sc_prim_channel& p )
     {
-        sc_scoped_lock lock( m_mutex );
         std::vector<sc_prim_channel*>::iterator it =
           std::find(m_suspending_channels.begin(), m_suspending_channels.end(), &p);
         if ( it != m_suspending_channels.end() ) {

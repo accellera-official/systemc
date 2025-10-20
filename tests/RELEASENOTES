@@ -1,0 +1,101 @@
+        Release Notes for SystemC 2.3.3 regression test suite
+        =====================================================
+
+
+CONTENTS
+========
+
+  1) What's new in this release?
+
+  2) Bug fixes and enhancements
+
+  3) Other changes
+
+  4) Known limitations
+
+
+1) What's new in this release?
+==============================
+
+Since the 2.3.0 release, TLM2 and SystemC regressions are now combined into
+this single suite.
+
+Compatibility across different platforms has been greatly improved and
+support for new platforms has been added (additional BSD flavours,
+MacOS X 64-bit, Windows 64-bit (MSVC, Cygwin, MinGW)).
+
+Improved coverage of SystemC features, including tests for the new features
+and bugfixes added to the 2.3.* releases.
+
+
+2) Bug fixes and enhancements
+=============================
+
+This is a summary of the main changes:
+
+  - Regression script verify.pl has been extended to be more flexible for
+    custom platform setups.
+
+    Especially in cases of custom arch suffixes (or library directories)
+    used for the SystemC installation, the default location guessing in
+    verify.pl may fail.
+
+    New options have been added to affect the compiler/linker invocation and
+    architecture selection:
+      -arch <arch> Override SystemC architecture.
+      -dll         Link against SystemC DLL (Windows/MSVC only).
+      -D <symbol>  Additional predefined macros (may be added multiple times).
+      -I <dir>     Additional include directory (may be added multiple times).
+      -L <dir>     Additional linker directory (may be added multiple times).
+      -l <libname> Additional library to link (may be added mutliple times).
+      -M(D,T)[d]   Select MSVC runtime library (default: -MT[d]).
+      -o <opts>    Additional (custom) compiler options.
+
+  - A new "-recheck" option has been added to verify.pl to rerun the
+    tests that failed in a previous run, e.g. to add '-no-cleanup'
+    and/or '-g' for further analysis.
+
+  - Added support for Microsoft Visual Studio 2015.
+
+
+3) Other changes
+================
+
+Here is an overview of changes with respect to previous releases:
+
+  - The environment variables RT_ADD_INCLUDES, RT_ADD_LDLIBS, and 
+    RT_ADD_LDPATHS now need to omit the compiler flags prefixes
+    (-I, -l, -L) and should consist of directories or library names
+    only.  Consider to use the new "-I", "-l", "-L" options of the
+    verify.pl script.
+
+  - On FreeBSD platforms, the target alias is now assumed to be "bsd(64)",
+    instead of "freebsd(64)".  Use the "-arch" option to override this
+    change.
+
+
+4) Known limitations
+====================
+
+Here is a list of known limitations in this release:
+
+  - Not all options of the verify.pl script are fully functional.
+
+  - The regression test suite does not cover all the SystemC source code,
+    though it is improved compared to previous versions.
+
+  - Some datatype tests take a long time to either compile or run.
+
+  - Some golden log comparisons may fail between compiler versions and/or
+    with enabled optimizations.  As long as the differences to the provided
+    golden log files are only in the least-significant digits of floating
+    point numbers, those changes are assumed to be safely ignorable.
+
+  - Some golden log comparisons may fail in case of disabled/differently
+    configured library options.  Check the test output/diff for missing
+    features and re-check your SystemC library configuration.
+
+  - Some paths in this release are longer than the historical 99 character
+    limit of tar archives, and several Windows archivers (e.g. WinZip)
+    have been reported to trip over this.  The open source archiver 7-zip
+    (http://7-zip.org) is known to work.

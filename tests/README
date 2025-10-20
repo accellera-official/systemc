@@ -1,0 +1,235 @@
+                 SystemC regression test suite
+                 =============================
+
+This is the SystemC regression test suite.
+
+Note: for Windows users, please also refer to README_windows.txt
+
+CONTENTS
+========
+
+ 1) Organization
+
+ 2) Running tests
+
+ 3) Adding new tests
+
+
+1) Organization
+===============
+
+  The regression test suite is organized as follows. At the top level,
+  we have a 'scripts' directory, an 'include' directory and several
+  tests directories (currently 'systemc' and 'tlm').
+
+  The 'scripts' directory contains the regression test
+  script(s). Right now, this directory contains a single script,
+  'verify.pl'. This script is written in perl. It works with perl5,
+  which must be located in /usr/bin, or in your path if running on Windows.
+
+  The 'include' directory contains top-level include files share across
+  tests. The directory 'include/<toplevel>' is automatically added to a
+  tests include path for tests underneath the '<toplevel>' tests
+  directory.
+
+  The tests directories 'systemc' and 'tlm' contain the regression tests.
+  Each of these contains other subdirectories. Actual tests are located
+  in leaf directories.
+
+  An actual test directory contains one or more source code files
+  (ending in .cpp). If the directory contains one source code file,
+  the name of the test is the filename (without extension) of that
+  source code file. If the directory contains more than one source
+  code file, there must be a file with extension .f that contains a
+  list of source code files (one line per source code file, and the
+  next higher directory must be added, e.g., 'arith_big/main.cpp'). In
+  this case, the name of the test is the filename (without extension)
+  of the .f file.
+
+  The actual test directory may contain property files that tell the
+  regression test script how to deal with the actual test, e.g. a
+  'COMPILE' file tells the regression test script to only compile the
+  source code file(s), and a 'DONTRUN' file tells the regression test
+  script to skip the actual test directory. A 'DONTRUN' file in a non-
+  test directory tells the regression test script to skip the tests in
+  all its subdirectories.
+
+  The actual test directory may contain a 'golden' directory, which
+  contains one or more golden reference files (stripped). The
+  filename of these files is the same as the test name (see above), and
+  the extension starts with '.log'. Platform specific golden reference
+  files append '.<platform>' to the file, e.g. 'test.log.linux64'.
+
+
+2) Running tests
+================
+
+  Regression tests can be run by calling the 'verify.pl' script. But,
+  _do not_ put this script in your path, because the path to the
+  script is used to determine where the regression tests are
+  located.
+
+  The 'verify.pl' script is located in the 'scripts' directory of the
+  SystemC regression test suite. It requires the environment variable
+  'SYSTEMC_HOME' to be set to your SystemC installation.
+
+  Furthermore, you must use the 'CXX' environment variable to select
+  the appropriate target architecture, just like with 'configure' when
+  configuring SystemC.  In some cases (e.g. for testing cross-compiled
+  libraries), the automatic architecture detection can be overridden
+  by specifying the SystemC architecture name via the '-arch' option:
+
+    # assume a 64-bit compiler on Windows/MinGW32
+    > ../scripts/verify.pl -arch mingw64
+
+  Valid settings for 'CXX' on the different platforms are:
+
+  - Linux (multiple architectures):
+    o c++, g++ -> linux[64] (default)
+
+  - Mac OS X (multiple architectures):
+    o c++, g++ -> macos[x64|arm64]
+
+  - Solaris 2.7 and Solaris 2.8:
+    o c++, g++ -> gccsparcOS5 (default)
+    o CC       -> sparcOS5
+
+  - HP-UX 11.00 (untested):
+    o c++, g++ -> gcchpux11
+    o aCC      -> hpux11
+
+  - Windows (Cygwin 1.3 or later, MinGW32/MSYS 1.0.x)
+
+    Note:
+      To run the regression tests on Windows, a basic Un*x shell
+      environment like Cygwin or MinGW/MSYS is required.
+      See also: README_Windows.txt
+
+    o cl       -> msvc80   (Visual C++ 2005)
+               -> msvc90   (Visual C++ 2008)
+               -> msvc10   (Visual C++ 2010)
+               -> msvc11   (Visual C++ 2012)
+               -> msvc12   (Visual C++ 2013)
+               -> msvc14   (Visual C++ 2015)
+    o c++, g++ -> cygwin   (default on Cygwin)
+               -> cygwin64 (64-bit Cygwin, untested)
+               -> mingw    (default on MinGW/MSYS)
+               -> mingw64  (64-bit MinGW-w64 compiler)
+
+  Default, the 'verify.pl' script assumes that the tests are located
+  in '../tests' (wrt the location of the script itself). This can be
+  overruled with environment variable 'SYSTEMC_TEST'.
+
+  The 'verify.pl' script takes directories and names of tests as
+  arguments. For example
+
+    > ../scripts/verify.pl systemc
+
+  runs all the SystemC tests in the regression test suite, and
+
+    > ../scripts/verify.pl tlm
+
+  runs the TLM2 tests, and
+
+    > ../scripts/verify.pl systemc tlm
+
+  runs everything.
+
+  The directories should be relative to '$SYSTEMC_TEST'.
+  By specifying subdirectories, it is possible to run only a subset
+  of the tests in the regression test suite, e.g.
+
+    > ../scripts/verify.pl systemc/datatypes/fx
+
+  will run only the fixed-point regression tests. And if the name of
+  the test/directory is unique, one can enter instead
+
+    > ../scripts/verify.pl fx
+
+  which will run the same tests.
+
+  There are several options that can be specified with the 'verify.pl'
+  script. Most notibly, '-f <file>' which can be used to have a file
+  containing the tests you want to run, '-v' to run with verbose
+  output, and '-g' to run with debug version of the SystemC Library.
+  See '-h' for a list of options.
+
+  Note:
+    Currently, not all options are fully implemented, and some may
+    disappear in the future.
+
+  The (temporary) results of the regression tests are stored in the
+  current directory, i.e., the directory from where the 'verify.pl'
+  script is called. Directories for tests that pass will be cleared
+  (and if possible removed), unless the '-no-cleanup' option is
+  specified. If a test fails all intermediate results will be
+  kept. The directory structure of the (temporary) results is the same
+  as the regression tests under '$SYSTEMC_TEST'. Furthermore, in
+  the current directory, a regression test log file called
+  'verify.log' is created. This file contains the output of running
+  each of the tests, and it contains a summary of which tests failed
+  (with the phase in which they failed) and which tests passed.
+
+  Beware:
+    Always create a _temporary_ directory to run the tests in. You
+    should _never_ run the tests in the directory in which the test
+    sources are located (i.e. '$SYSTEMC_TEST').
+
+
+2.1) Running tests in parallel
+==============================
+
+  To speed up testing an alternative to 'verify.pl' is to generate a
+  Makefile that runs all the tests. The tests can then be executed
+  using the 'make' command with a number of parallel jobs. This can
+  significantly reduce the time it takes to run the regressions during
+  development. Note that running 'verify.pl' is the canonical way of
+  executing the tests and it should always be run before committing
+  any changes to the repository.
+
+  The Makefile can be generated by running the script 'verify.pl' with
+  the option '-M'. It is also possible to run only a subset of the tests
+  in parallel. For example: 'make systemc/communication -j8' will run
+  all tests in the 'systemc/communication' sub-category.
+
+
+3) Adding new tests
+===================
+
+  When adding tests to the SystemC regression test suite, please stick
+  to the following rules.
+
+  - Group tests by feature.
+
+  - Contributions of new tests should be put in a directory next to
+    the 'systemc' directory. This directory could be called 'incoming'.
+    The person(s) responsible for the SystemC regression test suite can
+    then decide when and how to put these tests into the suite.
+
+  - Every test goes into its own directory. This directory must be a
+    leaf directory, that is, it can contain a 'golden' directory for
+    the golden reference files, but it cannot contain directories
+    holding other tests.
+
+  - Source code files must end in '.cpp'.
+
+  - If your test contains more than one source code file, you have to
+    add a '.f' file, which lists the source code files (don't forget
+    to prepend the current directory name -- just one level).
+
+  - When running the test the first time, it will fail, because you
+    don't have a golden reference file. To create this golden
+    reference file, do the following.
+      o Create the directory 'golden' in your test directory.
+      o Make sure that the temporary test file called
+        '<your_test>.log.stripped' is correct.
+      o Copy the above file in the 'golden' directory in your test
+        directory, and name it '<your_test>.log' or
+        '<your_test>.log.<platform>' if you have different results on
+        different platforms. If you do get different results on
+        different platforms, you have to make sure that these
+        differences are harmless and cannot be avoided (e.g. printing
+        floating-point numbers with or without leading 0).
+      o Now run your test again, and verify that it works now.
+
+# Taf!

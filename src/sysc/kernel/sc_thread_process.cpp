@@ -66,7 +66,7 @@
 //------------------------------------------------------------------------------
 // architecture-specific default stack sizes
 //------------------------------------------------------------------------------
-#elif !defined(SC_USE_PTHREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
+#elif !defined(SC_USE_PTHREADS) && !defined(SC_USE_STD_THREADS) && (defined(__CYGWIN32__) || defined(__CYGWIN32))
 #   define SC_DEFAULT_STACK_SIZE_ 0x50000
 
 #elif defined(SC_LONG_64) || defined(__x86_64__) || defined(__LP64__) || \
@@ -83,7 +83,7 @@
 // force 16-byte alignment on coroutine entry functions, needed for
 // QuickThreads (32-bit, see also fixes in qt/md/{i386,iX86_64}.[hs]),
 // and MinGW32 / Cygwin32 compilers on Windows platforms
-#if defined(__GNUC__) && !defined(__ICC) && !defined(__x86_64__) && \
+#if defined(__GNUC__) && !defined(__ICC) && defined(__i386__) && \
     (__GNUC__ > 4 || __GNUC__ == 4 && __GNUC_MINOR__ > 1 )
 # define SC_ALIGNED_STACK_ \
     __attribute__((force_align_arg_pointer))
@@ -683,13 +683,11 @@ bool sc_thread_process::trigger_dynamic( sc_event* e )
     //   (b) If this thread is already runnable can't trigger an event.
 
     // not possible for thread processes!
-#if 0 // ! defined( SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS )
     if ( sc_get_current_process_b() == (sc_process_b*)this )
     {
         report_immediate_self_notification();
         return false;
     }
-#endif // SC_ENABLE_IMMEDIATE_SELF_NOTIFICATIONS
 
     if( is_runnable() )
         return true;

@@ -38,9 +38,7 @@
 
 #include "sysc/kernel/sc_cmnhdr.h"
 
-#if SC_CPLUSPLUS >= 201103L
 #include <functional>
-#endif
 
 #if defined(_MSC_VER) && !defined(SC_WIN_DLL_WARN)
 #pragma warning(push)
@@ -72,7 +70,7 @@ public:
     sc_module_name( const sc_module_name& );
 
     // might throw from initializer function
-    ~sc_module_name() SC_NOEXCEPT_EXPR_(false);
+    ~sc_module_name() noexcept(false);
 
     operator const char*() const;
 
@@ -89,9 +87,7 @@ private:
     sc_module_name* m_next;
     sc_simcontext*  m_simc;
     bool            m_pushed;
-#if SC_CPLUSPLUS >= 201103L
     std::vector<std::function<void()>> m_initializer_fn_vec;
-#endif // C++11
 
 private:
 
@@ -104,9 +100,7 @@ inline void sc_module_name::clear_module( sc_module* module_p )
 {
     sc_assert( m_module_p == module_p );
     m_module_p = module_p = 0; // avoid unused parameter warning (module_p)
-#if SC_CPLUSPLUS >= 201103L
     m_initializer_fn_vec.clear();
-#endif // C++11
 }
 
 inline void sc_module_name::set_module( sc_module* module_p )

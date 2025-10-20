@@ -67,7 +67,6 @@
 #define SC_UINT_BASE_H
 
 
-#include "sysc/kernel/sc_object.h"
 #include "sysc/datatypes/misc/sc_value_base.h"
 #include "sysc/datatypes/int/sc_int_ids.h"
 #include "sysc/datatypes/int/sc_length_param.h"
@@ -103,7 +102,7 @@ class sc_fxnum;
 class sc_fxnum_fast;
 
 
-extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
+extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 
 // friend operator declarations
     inline bool operator == ( const sc_uint_base& a, const sc_uint_base& b );
@@ -121,7 +120,7 @@ extern const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
 //  Proxy class for sc_uint bit selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref_r : public sc_value_base
+class SC_API sc_uint_bitref_r : public sc_value_base
 {
     friend class sc_uint_base;
     friend class sc_uint_signal;
@@ -242,7 +241,7 @@ operator << ( ::std::ostream&, const sc_uint_bitref_r& );
 //  Proxy class for sc_uint bit selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_bitref
+class SC_API sc_uint_bitref
     : public sc_uint_bitref_r
 {
     friend class sc_uint_base;
@@ -296,7 +295,7 @@ operator >> ( ::std::istream&, sc_uint_bitref& );
 //  Proxy class for sc_uint part selection (r-value only).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref_r : public sc_value_base
+class SC_API sc_uint_subref_r : public sc_value_base
 {
     friend class sc_uint_base;
 	friend class sc_uint_subref;
@@ -424,7 +423,7 @@ operator << ( ::std::ostream&, const sc_uint_subref_r& );
 //  Proxy class for sc_uint part selection (r-value and l-value).
 // ----------------------------------------------------------------------------
 
-class sc_uint_subref
+class SC_API sc_uint_subref
     : public sc_uint_subref_r
 {
     friend class sc_uint_base;
@@ -510,7 +509,7 @@ operator >> ( ::std::istream&, sc_uint_subref& );
 //  Base class for sc_uint.
 // ----------------------------------------------------------------------------
 
-class sc_uint_base : public sc_value_base
+class SC_API sc_uint_base : public sc_value_base
 {
     friend class sc_uint_bitref_r;
     friend class sc_uint_bitref;
@@ -535,6 +534,7 @@ class sc_uint_base : public sc_value_base
 
     void check_value() const;
 
+protected:
     void extend_sign()
 	{
 #ifdef DEBUG_SYSTEMC
@@ -825,7 +825,7 @@ public:
 	{ return (uint64) m_val; }
 
     double to_double() const
-        { return uint64_to_double( m_val ); }
+        { return static_cast<double>( m_val ); }
 
 
     long long_low() const

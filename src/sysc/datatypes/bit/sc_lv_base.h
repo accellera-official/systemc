@@ -148,7 +148,7 @@ public:
     // destructor
 
     virtual ~sc_lv_base()
-	{ delete [] m_data; }
+	{ if ( m_data != m_base_vec ) { delete [] m_data; } }
 
 
     // assignment operators
@@ -223,8 +223,8 @@ public:
     sc_digit get_cword( int wi ) const
 	{ return m_ctrl[wi]; }
 
-    void set_cword( int wi, sc_digit w )
-	{ sc_assert ( wi < m_size ); m_ctrl[wi] = w; }
+    void set_cword( int wi, sc_digit w ) 
+        { sc_assert( wi < m_size ); m_ctrl[wi] = w; }
 
     void clean_tail();
 
@@ -239,6 +239,7 @@ protected:
     int     m_size;  // size of the data array
     sc_digit* m_data;  // data array
     sc_digit* m_ctrl;  // dito (control part)
+    sc_digit  m_base_vec[SC_BASE_VEC_DIGITS > 0 ? 2*SC_BASE_VEC_DIGITS : 2];
 };
 
 
@@ -289,7 +290,7 @@ sc_lv_base::set_bit( int i, value_type value )
     sc_digit mask = SC_DIGIT_ONE << bi;
     m_data[wi] |= mask; // set bit to 1
     m_ctrl[wi] |= mask; // set bit to 1
-    m_data[wi] &= value << bi | ~mask;
+    m_data[wi] &= (value&1) << bi | ~mask;
     m_ctrl[wi] &= value >> 1 << bi | ~mask;
 }
 
@@ -300,12 +301,13 @@ sc_lv_base::clean_tail()
 {
     int wi = m_size - 1;
     int bi = m_len % SC_DIGIT_SIZE;
-    sc_digit mask = ~SC_DIGIT_ZERO >> (SC_DIGIT_SIZE - bi);
-	if ( mask )
-	{
-		m_data[wi] &= mask;
-		m_ctrl[wi] &= mask;
-	}
+    sc_digit mask = ~SC_DIGIT_ZERO;
+    if ( bi != 0 ) { mask = mask >> (SC_DIGIT_SIZE - bi); }
+    if ( mask )
+    {
+        m_data[wi] &= mask;
+        m_ctrl[wi] &= mask;
+    }
 }
 
 
@@ -393,9 +395,7 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator & ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x & y );                                                         \
+    return ( x &= b );                                                        \
 }
 DEFN_BITWISE_AND_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_AND_OP_T_NATIVE(long)
@@ -529,9 +529,13 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator | ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x | y );                                                         \
+    if ( sizeof(tp)*8 > static_cast<unsigned>(x.length()) ) {                 \
+        sc_lv_base y( sizeof(tp)*8 );                                         \
+        y = x;                                                                \
+        return y |= b;                                                        \
+    } else {                                                                  \
+        return ( x |= b );                                                    \
+    }                                                                         \
 }
 DEFN_BITWISE_OR_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_OR_OP_T_NATIVE(long)
@@ -664,9 +668,13 @@ sc_lv_base                                                                    \
 sc_proxy<X>::operator ^ ( tp b ) const                                        \
 {                                                                             \
     sc_lv_base x( back_cast() );                                              \
-    sc_lv_base y( 8*sizeof(tp) );                                             \
-    y = b;                                                                    \
-    return ( x ^ y );                                                         \
+    if ( sizeof(tp)*8 > static_cast<unsigned>(x.length()) ) {                 \
+        sc_lv_base y( sizeof(tp)*8 );                                         \
+        y = x;                                                                \
+        return y ^= b;                                                        \
+    } else {                                                                  \
+        return ( x ^= b );                                                    \
+    }                                                                         \
 }
 DEFN_BITWISE_XOR_OP_T_NATIVE(unsigned long)
 DEFN_BITWISE_XOR_OP_T_NATIVE(long)

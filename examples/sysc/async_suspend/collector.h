@@ -54,6 +54,7 @@ public:
 
     void csvreport()
     {
+        std::lock_guard<std::mutex> guard(lock);
         cout << "event";
         for (auto kv : names)
         {
