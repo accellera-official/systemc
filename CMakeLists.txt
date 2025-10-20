@@ -671,11 +671,6 @@ install (FILES AUTHORS.md
 ###############################################################################
 
 # Export the systemc library target for usage by other programs
-# ... to local build tree
-export (TARGETS systemc
-        NAMESPACE SystemC::
-        FILE SystemCLanguageTargets.cmake)
-# ... to installation tree
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
