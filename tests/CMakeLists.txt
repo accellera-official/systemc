@@ -78,7 +78,7 @@ function(configure_and_add_regression_test TEST_PATH)
   set(workdir ${CMAKE_CURRENT_BINARY_DIR}/Testing/${TEST_PATH})
   get_filename_component(leafdir ${TEST_PATH} NAME)
   file(MAKE_DIRECTORY ${workdir})
-  if (UNIX)
+  if (UNIX OR MINGW)
     execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink
                     ${CMAKE_CURRENT_SOURCE_DIR}/${TEST_PATH}
                     ${workdir}/${leafdir})
@@ -96,6 +96,13 @@ function(configure_and_add_regression_test TEST_PATH)
     TEST_LEAFNAME=${TEST_LEAFNAME}
     TEST_BUILD_TYPE=$<CONFIG>
   )
+
+  # Windows might heuristically block some test executables when
+  # their name contains certain keywords, e.g., "update".
+  # Set requested execution level to "asInvoker" to disable heuristic analysis.
+  if (WIN32)
+    list(APPEND env "__COMPAT_LAYER=RunAsInvoker")
+  endif()
 
   set_tests_properties(${testname} PROPERTIES
       LABELS "${TEST_GROUP}"
