@@ -105,10 +105,11 @@ target_triplet = @target@
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-@DISABLE_VCD_SCOPES_TRUE@am__append_10 = -DSC_DISABLE_VCD_SCOPES
-@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@am__append_11 = md/aarch64.s
-@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@am__append_12 = md/i386.s
-@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = md/iX86_64.s
+@WANT_STD_THREADS_THREADS_TRUE@am__append_10 = -DSC_USE_STD_THREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_11 = -DSC_DISABLE_VCD_SCOPES
+@QT_ARCH_AARCH64_TRUE@@WANT_QT_THREADS_TRUE@am__append_12 = md/aarch64.s
+@QT_ARCH_X86_TRUE@@WANT_QT_THREADS_TRUE@am__append_13 = md/i386.s
+@QT_ARCH_X86_64_TRUE@@WANT_QT_THREADS_TRUE@am__append_14 = md/iX86_64.s
 subdir = src/sysc/packages/qt
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
@@ -380,7 +381,7 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10)
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
@@ -464,8 +465,8 @@ NO_S_FILES = \
 
 
 # only add qtmdc.c to QT_ARCH_FILES, if needed for the platform (!=null.c)
-@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = $(am__append_11) \
-@WANT_QT_THREADS_TRUE@	$(am__append_12) $(am__append_13)
+@WANT_QT_THREADS_TRUE@QT_ARCH_FILES = $(am__append_12) \
+@WANT_QT_THREADS_TRUE@	$(am__append_13) $(am__append_14)
 all: all-am
 
 .SUFFIXES:

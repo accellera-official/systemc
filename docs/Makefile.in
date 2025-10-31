@@ -333,8 +333,8 @@ EXTRA_DEFINES = -DSC_INCLUDE_FX
 CLEANFILES = 
 EXTRA_DIST = $(DOC_FILES) CMakeLists.txt
 DOXYGEN = doxygen
-DOC_FILES = DEVELOPMENT.md git_branches.svg sysc/README \
-	sysc/SIGN_EXTENSION.md tlm/tlm_README.md
+DOC_FILES = DEVELOPMENT.md git_branches.svg INSTALL_USING_AUTOTOOLS.md \
+	sysc/README sysc/SIGN_EXTENSION.md tlm/tlm_README.md
 @SEPARATE_INSTALL_TREE_TRUE@nobase_doc_DATA = $(DOC_FILES) \
 @SEPARATE_INSTALL_TREE_TRUE@	sysc/doxygen/Doxyfile \
 @SEPARATE_INSTALL_TREE_TRUE@	tlm/doxygen/Doxyfile

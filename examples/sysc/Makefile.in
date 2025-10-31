@@ -131,8 +131,7 @@ am__EXEEXT_1 = fft/fft_flpt/test$(EXEEXT) fft/fft_fxpt/test$(EXEEXT) \
 	2.1/forkjoin/test$(EXEEXT) 2.1/reset_signal_is/test$(EXEEXT) \
 	2.1/sc_export/test$(EXEEXT) 2.1/sc_report/test$(EXEEXT) \
 	2.1/scx_barrier/test$(EXEEXT) \
-	2.1/scx_mutex_w_policy/test$(EXEEXT) \
-	2.1/specialized_signals/test$(EXEEXT) 2.3/sc_rvd/test$(EXEEXT) \
+	2.1/scx_mutex_w_policy/test$(EXEEXT) 2.3/sc_rvd/test$(EXEEXT) \
 	2.3/sc_ttd/test$(EXEEXT) 2.3/simple_async/test$(EXEEXT)
 am__objects_1 =
 am__dirstamp = $(am__leading_dot)dirstamp
@@ -181,31 +180,19 @@ am_2_1_scx_mutex_w_policy_test_OBJECTS = $(am__objects_1) \
 2_1_scx_mutex_w_policy_test_LDADD = $(LDADD)
 2_1_scx_mutex_w_policy_test_DEPENDENCIES =  \
 	$(top_builddir)/src/libsystemc.la
-am__objects_9 = 2.1/specialized_signals/2_1_specialized_signals_test-main.$(OBJEXT) \
-	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.$(OBJEXT) \
-	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.$(OBJEXT) \
-	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.$(OBJEXT) \
-	2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.$(OBJEXT)
-am_2_1_specialized_signals_test_OBJECTS = $(am__objects_1) \
-	$(am__objects_9)
-2_1_specialized_signals_test_OBJECTS =  \
-	$(am_2_1_specialized_signals_test_OBJECTS)
-2_1_specialized_signals_test_LDADD = $(LDADD)
-2_1_specialized_signals_test_DEPENDENCIES =  \
-	$(top_builddir)/src/libsystemc.la
-am__objects_10 = 2.3/sc_rvd/2_3_sc_rvd_test-main.$(OBJEXT)
-am_2_3_sc_rvd_test_OBJECTS = $(am__objects_1) $(am__objects_10)
+am__objects_9 = 2.3/sc_rvd/2_3_sc_rvd_test-main.$(OBJEXT)
+am_2_3_sc_rvd_test_OBJECTS = $(am__objects_1) $(am__objects_9)
 2_3_sc_rvd_test_OBJECTS = $(am_2_3_sc_rvd_test_OBJECTS)
 2_3_sc_rvd_test_LDADD = $(LDADD)
 2_3_sc_rvd_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_11 = 2.3/sc_ttd/2_3_sc_ttd_test-main.$(OBJEXT)
-am_2_3_sc_ttd_test_OBJECTS = $(am__objects_1) $(am__objects_11)
+am__objects_10 = 2.3/sc_ttd/2_3_sc_ttd_test-main.$(OBJEXT)
+am_2_3_sc_ttd_test_OBJECTS = $(am__objects_1) $(am__objects_10)
 2_3_sc_ttd_test_OBJECTS = $(am_2_3_sc_ttd_test_OBJECTS)
 2_3_sc_ttd_test_LDADD = $(LDADD)
 2_3_sc_ttd_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_12 =  \
+am__objects_11 =  \
 	2.3/simple_async/2_3_simple_async_test-main.$(OBJEXT)
-am_2_3_simple_async_test_OBJECTS = $(am__objects_1) $(am__objects_12)
+am_2_3_simple_async_test_OBJECTS = $(am__objects_1) $(am__objects_11)
 2_3_simple_async_test_OBJECTS = $(am_2_3_simple_async_test_OBJECTS)
 2_3_simple_async_test_LDADD = $(LDADD)
 2_3_simple_async_test_DEPENDENCIES =  \
@@ -214,9 +201,9 @@ am_2_3_simple_async_test_OBJECTS = $(am__objects_1) $(am__objects_12)
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(2_3_simple_async_test_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am__objects_13 =  \
+am__objects_12 =  \
 	async_suspend/async_suspend_test-async_suspend.$(OBJEXT)
-am_async_suspend_test_OBJECTS = $(am__objects_1) $(am__objects_13)
+am_async_suspend_test_OBJECTS = $(am__objects_1) $(am__objects_12)
 async_suspend_test_OBJECTS = $(am_async_suspend_test_OBJECTS)
 async_suspend_test_LDADD = $(LDADD)
 async_suspend_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
@@ -224,59 +211,59 @@ async_suspend_test_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(AM_CXXFLAGS) $(CXXFLAGS) $(async_suspend_test_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am__objects_14 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
+am__objects_13 = fft/fft_flpt/fft_fft_flpt_test-fft.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-main.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-sink.$(OBJEXT) \
 	fft/fft_flpt/fft_fft_flpt_test-source.$(OBJEXT)
-am_fft_fft_flpt_test_OBJECTS = $(am__objects_1) $(am__objects_14)
+am_fft_fft_flpt_test_OBJECTS = $(am__objects_1) $(am__objects_13)
 fft_fft_flpt_test_OBJECTS = $(am_fft_fft_flpt_test_OBJECTS)
 fft_fft_flpt_test_LDADD = $(LDADD)
 fft_fft_flpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_15 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
+am__objects_14 = fft/fft_fxpt/fft_fft_fxpt_test-fft.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-main.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-sink.$(OBJEXT) \
 	fft/fft_fxpt/fft_fft_fxpt_test-source.$(OBJEXT)
-am_fft_fft_fxpt_test_OBJECTS = $(am__objects_1) $(am__objects_15)
+am_fft_fft_fxpt_test_OBJECTS = $(am__objects_1) $(am__objects_14)
 fft_fft_fxpt_test_OBJECTS = $(am_fft_fft_fxpt_test_OBJECTS)
 fft_fft_fxpt_test_LDADD = $(LDADD)
 fft_fft_fxpt_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_16 = fir/fir_test-stimulus.$(OBJEXT) \
+am__objects_15 = fir/fir_test-stimulus.$(OBJEXT) \
 	fir/fir_test-display.$(OBJEXT)
-am__objects_17 = fir/fir_test-fir.$(OBJEXT) \
+am__objects_16 = fir/fir_test-fir.$(OBJEXT) \
 	fir/fir_test-main.$(OBJEXT)
-am_fir_test_OBJECTS = $(am__objects_1) $(am__objects_16) \
-	$(am__objects_17)
+am_fir_test_OBJECTS = $(am__objects_1) $(am__objects_15) \
+	$(am__objects_16)
 fir_test_OBJECTS = $(am_fir_test_OBJECTS)
 fir_test_LDADD = $(LDADD)
 fir_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_18 = fir/stimulus.$(OBJEXT) fir/display.$(OBJEXT)
-am__objects_19 = fir/fir_fsm.$(OBJEXT) fir/fir_data.$(OBJEXT) \
+am__objects_17 = fir/stimulus.$(OBJEXT) fir/display.$(OBJEXT)
+am__objects_18 = fir/fir_fsm.$(OBJEXT) fir/fir_data.$(OBJEXT) \
 	fir/main_rtl.$(OBJEXT)
-am_fir_test_rtl_OBJECTS = $(am__objects_1) $(am__objects_18) \
-	$(am__objects_19)
+am_fir_test_rtl_OBJECTS = $(am__objects_1) $(am__objects_17) \
+	$(am__objects_18)
 fir_test_rtl_OBJECTS = $(am_fir_test_rtl_OBJECTS)
 fir_test_rtl_LDADD = $(LDADD)
 fir_test_rtl_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_20 = pipe/pipe_test-display.$(OBJEXT) \
+am__objects_19 = pipe/pipe_test-display.$(OBJEXT) \
 	pipe/pipe_test-main.$(OBJEXT) pipe/pipe_test-numgen.$(OBJEXT) \
 	pipe/pipe_test-stage1.$(OBJEXT) \
 	pipe/pipe_test-stage2.$(OBJEXT) \
 	pipe/pipe_test-stage3.$(OBJEXT)
-am_pipe_test_OBJECTS = $(am__objects_1) $(am__objects_20)
+am_pipe_test_OBJECTS = $(am__objects_1) $(am__objects_19)
 pipe_test_OBJECTS = $(am_pipe_test_OBJECTS)
 pipe_test_LDADD = $(LDADD)
 pipe_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_21 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
+am__objects_20 = pkt_switch/pkt_switch_test-fifo.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-main.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-receiver.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-sender.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-switch.$(OBJEXT) \
 	pkt_switch/pkt_switch_test-switch_clk.$(OBJEXT)
-am_pkt_switch_test_OBJECTS = $(am__objects_1) $(am__objects_21)
+am_pkt_switch_test_OBJECTS = $(am__objects_1) $(am__objects_20)
 pkt_switch_test_OBJECTS = $(am_pkt_switch_test_OBJECTS)
 pkt_switch_test_LDADD = $(LDADD)
 pkt_switch_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_22 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
+am__objects_21 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-dcache.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-decode.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-exec.$(OBJEXT) \
@@ -287,16 +274,16 @@ am__objects_22 = risc_cpu/risc_cpu_test-bios.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-mmxu.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-paging.$(OBJEXT) \
 	risc_cpu/risc_cpu_test-pic.$(OBJEXT)
-am_risc_cpu_test_OBJECTS = $(am__objects_1) $(am__objects_22)
+am_risc_cpu_test_OBJECTS = $(am__objects_1) $(am__objects_21)
 risc_cpu_test_OBJECTS = $(am_risc_cpu_test_OBJECTS)
 risc_cpu_test_LDADD = $(LDADD)
 risc_cpu_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_23 = rsa/rsa_test-rsa.$(OBJEXT)
-am_rsa_test_OBJECTS = $(am__objects_1) $(am__objects_23)
+am__objects_22 = rsa/rsa_test-rsa.$(OBJEXT)
+am_rsa_test_OBJECTS = $(am__objects_1) $(am__objects_22)
 rsa_test_OBJECTS = $(am_rsa_test_OBJECTS)
 rsa_test_LDADD = $(LDADD)
 rsa_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_24 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
+am__objects_23 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_arbiter.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_main.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_master_blocking.$(OBJEXT) \
@@ -304,17 +291,17 @@ am__objects_24 = simple_bus/simple_bus_test-simple_bus.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_master_non_blocking.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_types.$(OBJEXT) \
 	simple_bus/simple_bus_test-simple_bus_tools.$(OBJEXT)
-am_simple_bus_test_OBJECTS = $(am__objects_1) $(am__objects_24)
+am_simple_bus_test_OBJECTS = $(am__objects_1) $(am__objects_23)
 simple_bus_test_OBJECTS = $(am_simple_bus_test_OBJECTS)
 simple_bus_test_LDADD = $(LDADD)
 simple_bus_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_25 = simple_fifo/simple_fifo_test-simple_fifo.$(OBJEXT)
-am_simple_fifo_test_OBJECTS = $(am__objects_1) $(am__objects_25)
+am__objects_24 = simple_fifo/simple_fifo_test-simple_fifo.$(OBJEXT)
+am_simple_fifo_test_OBJECTS = $(am__objects_1) $(am__objects_24)
 simple_fifo_test_OBJECTS = $(am_simple_fifo_test_OBJECTS)
 simple_fifo_test_LDADD = $(LDADD)
 simple_fifo_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
-am__objects_26 = simple_perf/simple_perf_test-simple_perf.$(OBJEXT)
-am_simple_perf_test_OBJECTS = $(am__objects_1) $(am__objects_26)
+am__objects_25 = simple_perf/simple_perf_test-simple_perf.$(OBJEXT)
+am_simple_perf_test_OBJECTS = $(am__objects_1) $(am__objects_25)
 simple_perf_test_OBJECTS = $(am_simple_perf_test_OBJECTS)
 simple_perf_test_LDADD = $(LDADD)
 simple_perf_test_DEPENDENCIES = $(top_builddir)/src/libsystemc.la
@@ -340,11 +327,6 @@ am__depfiles_remade = 2.1/dpipe/$(DEPDIR)/2_1_dpipe_test-main.Po \
 	2.1/sc_report/$(DEPDIR)/2_1_sc_report_test-main.Po \
 	2.1/scx_barrier/$(DEPDIR)/2_1_scx_barrier_test-main.Po \
 	2.1/scx_mutex_w_policy/$(DEPDIR)/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.Po \
-	2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po \
-	2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po \
-	2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po \
-	2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po \
-	2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po \
 	2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Po \
 	2.3/sc_ttd/$(DEPDIR)/2_3_sc_ttd_test-main.Po \
 	2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po \
@@ -437,7 +419,6 @@ SOURCES = $(2_1_dpipe_test_SOURCES) $(2_1_forkjoin_test_SOURCES) \
 	$(2_1_sc_export_test_SOURCES) $(2_1_sc_report_test_SOURCES) \
 	$(2_1_scx_barrier_test_SOURCES) \
 	$(2_1_scx_mutex_w_policy_test_SOURCES) \
-	$(2_1_specialized_signals_test_SOURCES) \
 	$(2_3_sc_rvd_test_SOURCES) $(2_3_sc_ttd_test_SOURCES) \
 	$(2_3_simple_async_test_SOURCES) $(async_suspend_test_SOURCES) \
 	$(fft_fft_flpt_test_SOURCES) $(fft_fft_fxpt_test_SOURCES) \
@@ -451,7 +432,6 @@ DIST_SOURCES = $(2_1_dpipe_test_SOURCES) $(2_1_forkjoin_test_SOURCES) \
 	$(2_1_sc_export_test_SOURCES) $(2_1_sc_report_test_SOURCES) \
 	$(2_1_scx_barrier_test_SOURCES) \
 	$(2_1_scx_mutex_w_policy_test_SOURCES) \
-	$(2_1_specialized_signals_test_SOURCES) \
 	$(2_3_sc_rvd_test_SOURCES) $(2_3_sc_ttd_test_SOURCES) \
 	$(2_3_simple_async_test_SOURCES) $(async_suspend_test_SOURCES) \
 	$(fft_fft_flpt_test_SOURCES) $(fft_fft_fxpt_test_SOURCES) \
@@ -677,8 +657,8 @@ am__EXEEXT_2 = fft/fft_flpt/test.sh fft/fft_fxpt/test.sh fir/test.sh \
 	2.1/dpipe/test.sh 2.1/forkjoin/test.sh \
 	2.1/reset_signal_is/test.sh 2.1/sc_export/test.sh \
 	2.1/sc_report/test.sh 2.1/scx_barrier/test.sh \
-	2.1/scx_mutex_w_policy/test.sh 2.1/specialized_signals/test.sh \
-	2.3/sc_rvd/test.sh 2.3/sc_ttd/test.sh 2.3/simple_async/test.sh
+	2.1/scx_mutex_w_policy/test.sh 2.3/sc_rvd/test.sh \
+	2.3/sc_ttd/test.sh 2.3/simple_async/test.sh
 am__EXEEXT_3 = $(am__EXEEXT_2)
 TEST_SUITE_LOG = test-suite.log
 TEST_EXTENSIONS = @EXEEXT@ .test
@@ -707,7 +687,6 @@ am__DIST_COMMON = $(srcdir)/2.1/dpipe/test.am \
 	$(srcdir)/2.1/sc_report/test.am \
 	$(srcdir)/2.1/scx_barrier/test.am \
 	$(srcdir)/2.1/scx_mutex_w_policy/test.am \
-	$(srcdir)/2.1/specialized_signals/test.am \
 	$(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am \
 	$(srcdir)/2.3/simple_async/test.am $(srcdir)/Makefile.in \
 	$(srcdir)/async_suspend/test.am $(srcdir)/fft/fft_flpt/test.am \
@@ -922,11 +901,7 @@ examples_FILES = README.txt fft/README $(fft_fft_flpt_H_FILES) \
 	$(2_1_scx_barrier_EXTRA) $(2_1_scx_mutex_w_policy_H_FILES) \
 	$(2_1_scx_mutex_w_policy_CXX_FILES) \
 	$(2_1_scx_mutex_w_policy_BUILD) \
-	$(2_1_scx_mutex_w_policy_EXTRA) \
-	$(2_1_specialized_signals_H_FILES) \
-	$(2_1_specialized_signals_CXX_FILES) \
-	$(2_1_specialized_signals_BUILD) \
-	$(2_1_specialized_signals_EXTRA) $(2_3_sc_rvd_H_FILES) \
+	$(2_1_scx_mutex_w_policy_EXTRA) $(2_3_sc_rvd_H_FILES) \
 	$(2_3_sc_rvd_CXX_FILES) $(2_3_sc_rvd_BUILD) \
 	$(2_3_sc_rvd_EXTRA) $(2_3_sc_ttd_H_FILES) \
 	$(2_3_sc_ttd_CXX_FILES) $(2_3_sc_ttd_BUILD) \
@@ -943,8 +918,8 @@ examples_BUILD = $(fft_fft_flpt_BUILD) $(fft_fft_fxpt_BUILD) \
 	$(2_1_forkjoin_BUILD) $(2_1_reset_signal_is_BUILD) \
 	$(2_1_sc_export_BUILD) $(2_1_sc_report_BUILD) \
 	$(2_1_scx_barrier_BUILD) $(2_1_scx_mutex_w_policy_BUILD) \
-	$(2_1_specialized_signals_BUILD) $(2_3_sc_rvd_BUILD) \
-	$(2_3_sc_ttd_BUILD) $(2_3_simple_async_BUILD)
+	$(2_3_sc_rvd_BUILD) $(2_3_sc_ttd_BUILD) \
+	$(2_3_simple_async_BUILD)
 examples_CLEAN = fft/fft_flpt/run.log \
 	fft/fft_flpt/expected_trimmed.log fft/fft_flpt/run_trimmed.log \
 	fft/fft_flpt/diff.log fft/fft_flpt/out_real \
@@ -984,11 +959,7 @@ examples_CLEAN = fft/fft_flpt/run.log \
 	2.1/scx_mutex_w_policy/run.log \
 	2.1/scx_mutex_w_policy/expected_trimmed.log \
 	2.1/scx_mutex_w_policy/run_trimmed.log \
-	2.1/scx_mutex_w_policy/diff.log \
-	2.1/specialized_signals/run.log \
-	2.1/specialized_signals/expected_trimmed.log \
-	2.1/specialized_signals/run_trimmed.log \
-	2.1/specialized_signals/diff.log 2.3/sc_rvd/run.log \
+	2.1/scx_mutex_w_policy/diff.log 2.3/sc_rvd/run.log \
 	2.3/sc_rvd/expected_trimmed.log 2.3/sc_rvd/run_trimmed.log \
 	2.3/sc_rvd/diff.log 2.3/sc_ttd/run.log \
 	2.3/sc_ttd/expected_trimmed.log 2.3/sc_ttd/run_trimmed.log \
@@ -1001,14 +972,12 @@ examples_TESTS = fft/fft_flpt/test fft/fft_fxpt/test fir/test \
 	async_suspend/test 2.1/dpipe/test 2.1/forkjoin/test \
 	2.1/reset_signal_is/test 2.1/sc_export/test 2.1/sc_report/test \
 	2.1/scx_barrier/test 2.1/scx_mutex_w_policy/test \
-	2.1/specialized_signals/test 2.3/sc_rvd/test 2.3/sc_ttd/test \
-	2.3/simple_async/test
+	2.3/sc_rvd/test 2.3/sc_ttd/test 2.3/simple_async/test
 examples_DIRS = fft/fft_flpt fft/fft_fxpt fft fir pipe pkt_switch \
 	risc_cpu rsa simple_bus simple_fifo simple_perf async_suspend \
 	2.1/dpipe 2.1/forkjoin 2.1/reset_signal_is 2.1/sc_export \
-	2.1/sc_report 2.1/scx_barrier 2.1/scx_mutex_w_policy \
-	2.1/specialized_signals 2.1 2.3/sc_rvd 2.3/sc_ttd \
-	2.3/simple_async 2.3/include 2.3
+	2.1/sc_report 2.1/scx_barrier 2.1/scx_mutex_w_policy 2.1 \
+	2.3/sc_rvd 2.3/sc_ttd 2.3/simple_async 2.3/include 2.3
 fft_fft_flpt_test_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 
@@ -1548,35 +1517,6 @@ async_suspend_EXTRA = \
 	2.1/scx_mutex_w_policy/CMakeLists.txt \
 	2.1/scx_mutex_w_policy/Makefile
 
-2_1_specialized_signals_test_CPPFLAGS = \
-	$(AM_CPPFLAGS)
-
-2_1_specialized_signals_test_SOURCES = \
-	$(2_1_specialized_signals_H_FILES) \
-	$(2_1_specialized_signals_CXX_FILES)
-
-2_1_specialized_signals_H_FILES = \
-	2.1/specialized_signals/scx_signal_int.h \
-	2.1/specialized_signals/scx_signal_uint.h \
-	2.1/specialized_signals/scx_signal_signed.h \
-	2.1/specialized_signals/scx_signal_unsigned.h
-
-2_1_specialized_signals_CXX_FILES = \
-	2.1/specialized_signals/main.cpp \
-	2.1/specialized_signals/scx_signal_int.cpp \
-	2.1/specialized_signals/scx_signal_uint.cpp \
-	2.1/specialized_signals/scx_signal_signed.cpp \
-	2.1/specialized_signals/scx_signal_unsigned.cpp 
-
-2_1_specialized_signals_BUILD = \
-	2.1/specialized_signals/golden.log
-
-2_1_specialized_signals_EXTRA = \
-	2.1/specialized_signals/specialized_signals.sln \
-	2.1/specialized_signals/specialized_signals.vcxproj \
-	2.1/specialized_signals/CMakeLists.txt \
-	2.1/specialized_signals/Makefile
-
 2_3_sc_rvd_test_CPPFLAGS = $(AM_CPPFLAGS) -I \
 	$(srcdir)/2.3/sc_rvd/../include
 2_3_sc_rvd_test_SOURCES = \
@@ -1652,7 +1592,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cpp .lo .log .o .obj .test .test$(EXEEXT) .trs
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/async_suspend/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/async_suspend/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -1672,7 +1612,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__maybe_remake_depfiles);; \
 	esac;
-$(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/async_suspend/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.1/specialized_signals/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am $(am__empty):
+$(top_srcdir)/config/Make-rules.examples $(top_srcdir)/config/Make-rules.common $(srcdir)/fft/fft_flpt/test.am $(srcdir)/fft/fft_fxpt/test.am $(srcdir)/fir/test.am $(srcdir)/pipe/test.am $(srcdir)/pkt_switch/test.am $(srcdir)/risc_cpu/test.am $(srcdir)/rsa/test.am $(srcdir)/simple_bus/test.am $(srcdir)/simple_fifo/test.am $(srcdir)/simple_perf/test.am $(srcdir)/async_suspend/test.am $(srcdir)/2.1/dpipe/test.am $(srcdir)/2.1/forkjoin/test.am $(srcdir)/2.1/reset_signal_is/test.am $(srcdir)/2.1/sc_export/test.am $(srcdir)/2.1/sc_report/test.am $(srcdir)/2.1/scx_barrier/test.am $(srcdir)/2.1/scx_mutex_w_policy/test.am $(srcdir)/2.3/sc_rvd/test.am $(srcdir)/2.3/sc_ttd/test.am $(srcdir)/2.3/simple_async/test.am $(am__empty):
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -1781,31 +1721,6 @@ clean-checkPROGRAMS:
 2.1/scx_mutex_w_policy/test$(EXEEXT): $(2_1_scx_mutex_w_policy_test_OBJECTS) $(2_1_scx_mutex_w_policy_test_DEPENDENCIES) $(EXTRA_2_1_scx_mutex_w_policy_test_DEPENDENCIES) 2.1/scx_mutex_w_policy/$(am__dirstamp)
 	@rm -f 2.1/scx_mutex_w_policy/test$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(2_1_scx_mutex_w_policy_test_OBJECTS) $(2_1_scx_mutex_w_policy_test_LDADD) $(LIBS)
-2.1/specialized_signals/$(am__dirstamp):
-	@$(MKDIR_P) 2.1/specialized_signals
-	@: > 2.1/specialized_signals/$(am__dirstamp)
-2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) 2.1/specialized_signals/$(DEPDIR)
-	@: > 2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-2.1/specialized_signals/2_1_specialized_signals_test-main.$(OBJEXT):  \
-	2.1/specialized_signals/$(am__dirstamp) \
-	2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.$(OBJEXT):  \
-	2.1/specialized_signals/$(am__dirstamp) \
-	2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.$(OBJEXT):  \
-	2.1/specialized_signals/$(am__dirstamp) \
-	2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.$(OBJEXT):  \
-	2.1/specialized_signals/$(am__dirstamp) \
-	2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.$(OBJEXT):  \
-	2.1/specialized_signals/$(am__dirstamp) \
-	2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-
-2.1/specialized_signals/test$(EXEEXT): $(2_1_specialized_signals_test_OBJECTS) $(2_1_specialized_signals_test_DEPENDENCIES) $(EXTRA_2_1_specialized_signals_test_DEPENDENCIES) 2.1/specialized_signals/$(am__dirstamp)
-	@rm -f 2.1/specialized_signals/test$(EXEEXT)
-	$(AM_V_CXXLD)$(CXXLINK) $(2_1_specialized_signals_test_OBJECTS) $(2_1_specialized_signals_test_LDADD) $(LIBS)
 2.3/sc_rvd/$(am__dirstamp):
 	@$(MKDIR_P) 2.3/sc_rvd
 	@: > 2.3/sc_rvd/$(am__dirstamp)
@@ -2094,7 +2009,6 @@ mostlyclean-compile:
 	-rm -f 2.1/sc_report/*.$(OBJEXT)
 	-rm -f 2.1/scx_barrier/*.$(OBJEXT)
 	-rm -f 2.1/scx_mutex_w_policy/*.$(OBJEXT)
-	-rm -f 2.1/specialized_signals/*.$(OBJEXT)
 	-rm -f 2.3/sc_rvd/*.$(OBJEXT)
 	-rm -f 2.3/sc_ttd/*.$(OBJEXT)
 	-rm -f 2.3/simple_async/*.$(OBJEXT)
@@ -2120,11 +2034,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@2.1/sc_report/$(DEPDIR)/2_1_sc_report_test-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@2.1/scx_barrier/$(DEPDIR)/2_1_scx_barrier_test-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@2.1/scx_mutex_w_policy/$(DEPDIR)/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@2.3/sc_ttd/$(DEPDIR)/2_3_sc_ttd_test-main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po@am__quote@ # am--include-marker
@@ -2308,76 +2217,6 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp' object='2.1/scx_mutex_w_policy/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_scx_mutex_w_policy_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/scx_mutex_w_policy/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.obj `if test -f '2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp'; then $(CYGPATH_W) '2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp'; fi`
-
-2.1/specialized_signals/2_1_specialized_signals_test-main.o: 2.1/specialized_signals/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-main.o -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-main.o `test -f '2.1/specialized_signals/main.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/main.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-main.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-main.o `test -f '2.1/specialized_signals/main.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/main.cpp
-
-2.1/specialized_signals/2_1_specialized_signals_test-main.obj: 2.1/specialized_signals/main.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-main.obj -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-main.obj `if test -f '2.1/specialized_signals/main.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/main.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/main.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/main.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-main.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-main.obj `if test -f '2.1/specialized_signals/main.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/main.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/main.cpp'; fi`
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.o: 2.1/specialized_signals/scx_signal_int.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.o -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.o `test -f '2.1/specialized_signals/scx_signal_int.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_int.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_int.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.o `test -f '2.1/specialized_signals/scx_signal_int.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_int.cpp
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.obj: 2.1/specialized_signals/scx_signal_int.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.obj -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.obj `if test -f '2.1/specialized_signals/scx_signal_int.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_int.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_int.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_int.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_int.obj `if test -f '2.1/specialized_signals/scx_signal_int.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_int.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_int.cpp'; fi`
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.o: 2.1/specialized_signals/scx_signal_uint.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.o -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.o `test -f '2.1/specialized_signals/scx_signal_uint.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_uint.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_uint.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.o `test -f '2.1/specialized_signals/scx_signal_uint.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_uint.cpp
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.obj: 2.1/specialized_signals/scx_signal_uint.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.obj -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.obj `if test -f '2.1/specialized_signals/scx_signal_uint.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_uint.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_uint.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_uint.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_uint.obj `if test -f '2.1/specialized_signals/scx_signal_uint.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_uint.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_uint.cpp'; fi`
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.o: 2.1/specialized_signals/scx_signal_signed.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.o -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.o `test -f '2.1/specialized_signals/scx_signal_signed.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_signed.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_signed.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.o `test -f '2.1/specialized_signals/scx_signal_signed.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_signed.cpp
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.obj: 2.1/specialized_signals/scx_signal_signed.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.obj -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.obj `if test -f '2.1/specialized_signals/scx_signal_signed.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_signed.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_signed.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_signed.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_signed.obj `if test -f '2.1/specialized_signals/scx_signal_signed.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_signed.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_signed.cpp'; fi`
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.o: 2.1/specialized_signals/scx_signal_unsigned.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.o -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.o `test -f '2.1/specialized_signals/scx_signal_unsigned.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_unsigned.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_unsigned.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.o `test -f '2.1/specialized_signals/scx_signal_unsigned.cpp' || echo '$(srcdir)/'`2.1/specialized_signals/scx_signal_unsigned.cpp
-
-2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.obj: 2.1/specialized_signals/scx_signal_unsigned.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.obj -MD -MP -MF 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Tpo -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.obj `if test -f '2.1/specialized_signals/scx_signal_unsigned.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_unsigned.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_unsigned.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Tpo 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='2.1/specialized_signals/scx_signal_unsigned.cpp' object='2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_1_specialized_signals_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o 2.1/specialized_signals/2_1_specialized_signals_test-scx_signal_unsigned.obj `if test -f '2.1/specialized_signals/scx_signal_unsigned.cpp'; then $(CYGPATH_W) '2.1/specialized_signals/scx_signal_unsigned.cpp'; else $(CYGPATH_W) '$(srcdir)/2.1/specialized_signals/scx_signal_unsigned.cpp'; fi`
 
 2.3/sc_rvd/2_3_sc_rvd_test-main.o: 2.3/sc_rvd/main.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(2_3_sc_rvd_test_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT 2.3/sc_rvd/2_3_sc_rvd_test-main.o -MD -MP -MF 2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Tpo -c -o 2.3/sc_rvd/2_3_sc_rvd_test-main.o `test -f '2.3/sc_rvd/main.cpp' || echo '$(srcdir)/'`2.3/sc_rvd/main.cpp
@@ -3091,7 +2930,6 @@ clean-libtool:
 	-rm -rf 2.1/sc_report/.libs 2.1/sc_report/_libs
 	-rm -rf 2.1/scx_barrier/.libs 2.1/scx_barrier/_libs
 	-rm -rf 2.1/scx_mutex_w_policy/.libs 2.1/scx_mutex_w_policy/_libs
-	-rm -rf 2.1/specialized_signals/.libs 2.1/specialized_signals/_libs
 	-rm -rf 2.3/sc_rvd/.libs 2.3/sc_rvd/_libs
 	-rm -rf 2.3/sc_ttd/.libs 2.3/sc_ttd/_libs
 	-rm -rf 2.3/simple_async/.libs 2.3/simple_async/_libs
@@ -3457,13 +3295,6 @@ async_suspend/test.sh.log: async_suspend/test.sh
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-2.1/specialized_signals/test.sh.log: 2.1/specialized_signals/test.sh
-	@p='2.1/specialized_signals/test.sh'; \
-	b='2.1/specialized_signals/test.sh'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
 2.3/sc_rvd/test.sh.log: 2.3/sc_rvd/test.sh
 	@p='2.3/sc_rvd/test.sh'; \
 	b='2.3/sc_rvd/test.sh'; \
@@ -3587,8 +3418,6 @@ distclean-generic:
 	-rm -f 2.1/scx_barrier/$(am__dirstamp)
 	-rm -f 2.1/scx_mutex_w_policy/$(DEPDIR)/$(am__dirstamp)
 	-rm -f 2.1/scx_mutex_w_policy/$(am__dirstamp)
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/$(am__dirstamp)
-	-rm -f 2.1/specialized_signals/$(am__dirstamp)
 	-rm -f 2.3/sc_rvd/$(DEPDIR)/$(am__dirstamp)
 	-rm -f 2.3/sc_rvd/$(am__dirstamp)
 	-rm -f 2.3/sc_ttd/$(DEPDIR)/$(am__dirstamp)
@@ -3635,11 +3464,6 @@ distclean: distclean-am
 	-rm -f 2.1/sc_report/$(DEPDIR)/2_1_sc_report_test-main.Po
 	-rm -f 2.1/scx_barrier/$(DEPDIR)/2_1_scx_barrier_test-main.Po
 	-rm -f 2.1/scx_mutex_w_policy/$(DEPDIR)/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po
 	-rm -f 2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Po
 	-rm -f 2.3/sc_ttd/$(DEPDIR)/2_3_sc_ttd_test-main.Po
 	-rm -f 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po
@@ -3747,11 +3571,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f 2.1/sc_report/$(DEPDIR)/2_1_sc_report_test-main.Po
 	-rm -f 2.1/scx_barrier/$(DEPDIR)/2_1_scx_barrier_test-main.Po
 	-rm -f 2.1/scx_mutex_w_policy/$(DEPDIR)/2_1_scx_mutex_w_policy_test-scx_mutex_w_policy.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-main.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_int.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_signed.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_uint.Po
-	-rm -f 2.1/specialized_signals/$(DEPDIR)/2_1_specialized_signals_test-scx_signal_unsigned.Po
 	-rm -f 2.3/sc_rvd/$(DEPDIR)/2_3_sc_rvd_test-main.Po
 	-rm -f 2.3/sc_ttd/$(DEPDIR)/2_3_sc_ttd_test-main.Po
 	-rm -f 2.3/simple_async/$(DEPDIR)/2_3_simple_async_test-main.Po
@@ -3907,8 +3726,6 @@ all:
 #2_1_scx_barrier_FILTER = 
 
 #2_1_scx_mutex_w_policy_FILTER = 
-
-#2_1_specialized_signals_FILTER = 
 
 #2_3_sc_rvd_FILTER = 
 

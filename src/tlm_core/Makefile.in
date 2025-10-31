@@ -105,7 +105,8 @@ target_triplet = @target@
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-@DISABLE_VCD_SCOPES_TRUE@am__append_10 = -DSC_DISABLE_VCD_SCOPES
+@WANT_STD_THREADS_THREADS_TRUE@am__append_10 = -DSC_USE_STD_THREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_11 = -DSC_DISABLE_VCD_SCOPES
 subdir = src/tlm_core
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
@@ -389,7 +390,7 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10)
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 

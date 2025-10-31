@@ -106,13 +106,14 @@ target_triplet = @target@
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-@DISABLE_VCD_SCOPES_TRUE@am__append_10 = -DSC_DISABLE_VCD_SCOPES
+@WANT_STD_THREADS_THREADS_TRUE@am__append_10 = -DSC_USE_STD_THREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_11 = -DSC_DISABLE_VCD_SCOPES
 
 # either for async_update locking or pthread processes
 # Libtool/GCC do not play well together on some platforms
 # with C++ libraries and libpthread dependency, see e.g.
 # http://lists.gnu.org/archive/html/libtool/2012-02/msg00003.html
-@USES_PTHREADS_LIB_TRUE@am__append_11 = $(EXPLICIT_LPTHREAD)
+@USES_PTHREADS_LIB_TRUE@am__append_12 = $(EXPLICIT_LPTHREAD)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
@@ -442,7 +443,7 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10)
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
@@ -477,7 +478,7 @@ nodist_EXTRA_libsystemc_la_SOURCES = sc_nonexistent.cpp
 
 # add main libraries
 libsystemc_la_LIBADD = tlm_utils/libtlm_utils.la \
-	tlm_core/libtlm_core.la sysc/libsysc.la $(am__append_11)
+	tlm_core/libtlm_core.la sysc/libsysc.la $(am__append_12)
 libsystemc_la_LDFLAGS = $(EXTRA_LDFLAGS) -release $(VERSION)
 all: all-recursive
 

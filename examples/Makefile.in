@@ -410,7 +410,7 @@ examples_FILES = \
 	build-msvc/Makefile \
 	build-msvc/Makefile.config \
 	build-msvc/Makefile.rules \
-	build-msvc/READMEcommandlinemsvc.txt \
+	build-msvc/README_MSVC.md \
 	build-msvc/SystemC_examples.props \
 	build-msvc/SystemC_examples.sln \
 	build-msvc/openhere.bat \

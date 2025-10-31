@@ -105,11 +105,12 @@ target_triplet = @target@
 @USES_PTHREADS_LIB_TRUE@am__append_7 = $(PTHREAD_CFLAGS)
 @USES_PTHREADS_LIB_TRUE@am__append_8 = $(PTHREAD_LIBS)
 @WANT_PTHREADS_THREADS_TRUE@am__append_9 = -DSC_USE_PTHREADS
-@DISABLE_VCD_SCOPES_TRUE@am__append_10 = -DSC_DISABLE_VCD_SCOPES
+@WANT_STD_THREADS_THREADS_TRUE@am__append_10 = -DSC_USE_STD_THREADS
+@DISABLE_VCD_SCOPES_TRUE@am__append_11 = -DSC_DISABLE_VCD_SCOPES
 
 # build external QT package separately
-@WANT_QT_THREADS_TRUE@am__append_11 = $(QT_SUBDIR)
-@WANT_QT_THREADS_TRUE@am__append_12 = $(QT_LIB)
+@WANT_QT_THREADS_TRUE@am__append_12 = $(QT_SUBDIR)
+@WANT_QT_THREADS_TRUE@am__append_13 = $(QT_LIB)
 subdir = src/sysc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/ax_pthread.m4 \
@@ -129,15 +130,16 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libsysc_la_DEPENDENCIES = $(LIBADD)
 am__libsysc_la_SOURCES_DIST = kernel/sc_cor_fiber.h \
 	kernel/sc_cor_pthread.h kernel/sc_cor_qt.h \
-	kernel/sc_cthread_process.h kernel/sc_method_process.h \
-	kernel/sc_module_registry.h kernel/sc_name_gen.h \
-	kernel/sc_object_int.h kernel/sc_object_manager.h \
-	kernel/sc_stage_callback_registry.h kernel/sc_reset.h \
-	kernel/sc_runnable_int.h kernel/sc_simcontext_int.h \
-	kernel/sc_thread_process.h datatypes/fx/scfx_pow10.h \
-	tracing/sc_trace_file_base.h tracing/sc_vcd_trace.h \
-	tracing/sc_wif_trace.h utils/sc_stop_here.h \
-	kernel/sc_attribute.cpp kernel/sc_cor_fiber.cpp \
+	kernel/sc_cor_std_thread.h kernel/sc_cthread_process.h \
+	kernel/sc_method_process.h kernel/sc_module_registry.h \
+	kernel/sc_name_gen.h kernel/sc_object_int.h \
+	kernel/sc_object_manager.h kernel/sc_stage_callback_registry.h \
+	kernel/sc_reset.h kernel/sc_runnable_int.h \
+	kernel/sc_simcontext_int.h kernel/sc_thread_process.h \
+	datatypes/fx/scfx_pow10.h tracing/sc_trace_file_base.h \
+	tracing/sc_vcd_trace.h tracing/sc_wif_trace.h \
+	utils/sc_stop_here.h kernel/sc_attribute.cpp \
+	kernel/sc_cor_fiber.cpp kernel/sc_cor_std_thread.cpp \
 	kernel/sc_cor_pthread.cpp kernel/sc_cor_qt.cpp \
 	kernel/sc_cthread_process.cpp kernel/sc_event.cpp \
 	kernel/sc_except.cpp kernel/sc_join.cpp kernel/sc_main.cpp \
@@ -180,7 +182,8 @@ am__libsysc_la_SOURCES_DIST = kernel/sc_cor_fiber.h \
 	utils/sc_utils_ids.cpp utils/sc_vector.cpp
 am__objects_1 =
 am__dirstamp = $(am__leading_dot)dirstamp
-@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@am__objects_2 = kernel/sc_cor_fiber.lo
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@@WANT_STD_THREADS_THREADS_FALSE@am__objects_2 = kernel/sc_cor_fiber.lo
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@@WANT_STD_THREADS_THREADS_TRUE@am__objects_2 = kernel/sc_cor_std_thread.lo
 @WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@am__objects_2 = kernel/sc_cor_pthread.lo
 @WANT_QT_THREADS_TRUE@am__objects_2 = kernel/sc_cor_qt.lo
 am__objects_3 = kernel/sc_attribute.lo $(am__objects_2) \
@@ -284,6 +287,7 @@ am__depfiles_remade = communication/$(DEPDIR)/sc_clock.Plo \
 	kernel/$(DEPDIR)/sc_cor_fiber.Plo \
 	kernel/$(DEPDIR)/sc_cor_pthread.Plo \
 	kernel/$(DEPDIR)/sc_cor_qt.Plo \
+	kernel/$(DEPDIR)/sc_cor_std_thread.Plo \
 	kernel/$(DEPDIR)/sc_cthread_process.Plo \
 	kernel/$(DEPDIR)/sc_event.Plo kernel/$(DEPDIR)/sc_except.Plo \
 	kernel/$(DEPDIR)/sc_join.Plo kernel/$(DEPDIR)/sc_main.Plo \
@@ -614,12 +618,12 @@ AM_LDFLAGS = $(EXTRA_LDFLAGS) $(am__append_8)
 
 # always add fix-point support
 EXTRA_DEFINES = -DSC_INCLUDE_FX -DSC_BUILD $(am__append_9) \
-	$(am__append_10)
+	$(am__append_10) $(am__append_11)
 
 # initialize some useful variables (filled later)
 CLEANFILES = 
 EXTRA_DIST = 
-SUBDIRS = $(am__append_11)
+SUBDIRS = $(am__append_12)
 H_FILES = kernel/sc_attribute.h kernel/sc_cmnhdr.h \
 	kernel/sc_constants.h kernel/sc_cor.h \
 	kernel/sc_dynamic_processes.h kernel/sc_event.h \
@@ -687,15 +691,15 @@ H_FILES = kernel/sc_attribute.h kernel/sc_cmnhdr.h \
 	utils/sc_stop_here.h utils/sc_string.h utils/sc_string_view.h \
 	utils/sc_temporary.h utils/sc_utils_ids.h utils/sc_vector.h
 NO_H_FILES = kernel/sc_cor_fiber.h kernel/sc_cor_pthread.h \
-	kernel/sc_cor_qt.h kernel/sc_cthread_process.h \
-	kernel/sc_method_process.h kernel/sc_module_registry.h \
-	kernel/sc_name_gen.h kernel/sc_object_int.h \
-	kernel/sc_object_manager.h kernel/sc_stage_callback_registry.h \
-	kernel/sc_reset.h kernel/sc_runnable_int.h \
-	kernel/sc_simcontext_int.h kernel/sc_thread_process.h \
-	datatypes/fx/scfx_pow10.h tracing/sc_trace_file_base.h \
-	tracing/sc_vcd_trace.h tracing/sc_wif_trace.h \
-	utils/sc_stop_here.h
+	kernel/sc_cor_qt.h kernel/sc_cor_std_thread.h \
+	kernel/sc_cthread_process.h kernel/sc_method_process.h \
+	kernel/sc_module_registry.h kernel/sc_name_gen.h \
+	kernel/sc_object_int.h kernel/sc_object_manager.h \
+	kernel/sc_stage_callback_registry.h kernel/sc_reset.h \
+	kernel/sc_runnable_int.h kernel/sc_simcontext_int.h \
+	kernel/sc_thread_process.h datatypes/fx/scfx_pow10.h \
+	tracing/sc_trace_file_base.h tracing/sc_vcd_trace.h \
+	tracing/sc_wif_trace.h utils/sc_stop_here.h
 CXX_FILES = kernel/sc_attribute.cpp $(CXX_COR_FILES) \
 	kernel/sc_cthread_process.cpp kernel/sc_event.cpp \
 	kernel/sc_except.cpp kernel/sc_join.cpp kernel/sc_main.cpp \
@@ -739,8 +743,9 @@ CXX_FILES = kernel/sc_attribute.cpp $(CXX_COR_FILES) \
 INCDIRS = kernel communication datatypes/bit datatypes/fx \
 	datatypes/int datatypes/misc datatypes/any datatypes tracing \
 	utils
-LIBADD = $(am__append_12)
-@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_fiber.cpp
+LIBADD = $(am__append_13)
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@@WANT_STD_THREADS_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_fiber.cpp
+@WANT_PTHREADS_THREADS_FALSE@@WANT_QT_THREADS_FALSE@@WANT_STD_THREADS_THREADS_TRUE@CXX_COR_FILES = kernel/sc_cor_std_thread.cpp
 @WANT_PTHREADS_THREADS_TRUE@@WANT_QT_THREADS_FALSE@CXX_COR_FILES = kernel/sc_cor_pthread.cpp
 
 # co-routine implementation
@@ -812,6 +817,8 @@ kernel/$(DEPDIR)/$(am__dirstamp):
 kernel/sc_attribute.lo: kernel/$(am__dirstamp) \
 	kernel/$(DEPDIR)/$(am__dirstamp)
 kernel/sc_cor_fiber.lo: kernel/$(am__dirstamp) \
+	kernel/$(DEPDIR)/$(am__dirstamp)
+kernel/sc_cor_std_thread.lo: kernel/$(am__dirstamp) \
 	kernel/$(DEPDIR)/$(am__dirstamp)
 kernel/sc_cor_pthread.lo: kernel/$(am__dirstamp) \
 	kernel/$(DEPDIR)/$(am__dirstamp)
@@ -1077,6 +1084,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_fiber.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_pthread.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_qt.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cor_std_thread.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_cthread_process.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_event.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@kernel/$(DEPDIR)/sc_except.Plo@am__quote@ # am--include-marker
@@ -1443,6 +1451,7 @@ distclean: distclean-recursive
 	-rm -f kernel/$(DEPDIR)/sc_cor_fiber.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cor_pthread.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cor_qt.Plo
+	-rm -f kernel/$(DEPDIR)/sc_cor_std_thread.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cthread_process.Plo
 	-rm -f kernel/$(DEPDIR)/sc_event.Plo
 	-rm -f kernel/$(DEPDIR)/sc_except.Plo
@@ -1567,6 +1576,7 @@ maintainer-clean: maintainer-clean-recursive
 	-rm -f kernel/$(DEPDIR)/sc_cor_fiber.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cor_pthread.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cor_qt.Plo
+	-rm -f kernel/$(DEPDIR)/sc_cor_std_thread.Plo
 	-rm -f kernel/$(DEPDIR)/sc_cthread_process.Plo
 	-rm -f kernel/$(DEPDIR)/sc_event.Plo
 	-rm -f kernel/$(DEPDIR)/sc_except.Plo
