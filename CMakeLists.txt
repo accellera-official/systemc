@@ -670,7 +670,7 @@ install (FILES AUTHORS.md
 # Provide package of the SystemC library to other programs using CMake
 ###############################################################################
 
-# Export the systemc library target for usage by other programs to installation tree
+# Export the systemc library target for usage by other programs
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}
