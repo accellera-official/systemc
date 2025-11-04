@@ -341,6 +341,18 @@ check_symbol_exists (__i386 "" HAS__i386_DEFINED)
 check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
 
 
+if(DEFINED ENV{MSYSTEM})
+  set(_MSYSTEM "$ENV{MSYSTEM}")
+  if(_MSYSTEM STREQUAL "CLANGARM64")
+    set(HAS_clangarm64_DEFINED TRUE)
+  elseif(_MSYSTEM STREQUAL "UCRT64")
+    set(HAS_ucrt64_DEFINED TRUE)
+  elseif(_MSYSTEM STREQUAL "MINGW64")
+    message(WARNING "MSYS2 MINGW64 environment is deprecated. Please move to UCRT64!")
+    set(HAS_mingw64_DEFINED TRUE)
+  endif()
+endif()
+
 # Set SystemC_TARGET_ARCH according to the detected
 # OS/processor/compiler platform
 if (NOT SystemC_TARGET_ARCH)
@@ -396,8 +408,12 @@ if (NOT SystemC_TARGET_ARCH)
     # MinGW platform, as CYGWIN already has been handled
     if (HAS__i386_DEFINED)
       set (_TARGET_ARCH "mingw")
-    elseif (HAS__x86_64__DEFINED)
+    elseif (HAS_mingw64_DEFINED)
       set (_TARGET_ARCH "mingw64")
+    elseif (HAS_ucrt64_DEFINED)
+      set (_TARGET_ARCH "ucrt64")
+    elseif (HAS_clangarm64_DEFINED)
+      set (_TARGET_ARCH "clangarm64")
     else (HAS__i386_DEFINED)
       set (_TARGET_ARCH "mingwunknown")
     endif (HAS__i386_DEFINED)

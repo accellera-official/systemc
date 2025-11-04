@@ -132,7 +132,7 @@ def strip_log(log_file: Path) -> Path:
     log_lines = log_lines[sim_start:sim_end]
 
     # remove file and line number information (always changes!)
-    re_strip_file_line = re.compile(r"^(In file: )[^:]+:[0-9]+\r?$")
+    re_strip_file_line = re.compile(r"^(In file: ).*:[0-9]+\r?$")
     for i in range(len(log_lines)):
         log_lines[i] = re_strip_file_line.sub(r"\1<removed by verify.pl>", log_lines[i])
 
