@@ -470,10 +470,6 @@ endforeach()
 
     add_systemc_library(systemc SC_BUILD_OFF STATIC ${SYSTEMC_SC_MAIN_SRC} )
 
-    add_library(systemc_if INTERFACE)
-    target_link_libraries(systemc_if INTERFACE systemc systemc-${SystemCLanguage_VERSION})
-
-
     if (MSVC) # lib.exe should be available from MSVC command promt
 
         add_custom_command(
@@ -500,9 +496,8 @@ endforeach()
 
     endif(MSVC)
 
-    set(SYSTEMC_TARGETS systemc_if systemc ${SYSTEMC_DLL_TARGET})
+    set(SYSTEMC_TARGETS systemc ${SYSTEMC_DLL_TARGET})
 
-    add_library(SystemC::systemc ALIAS systemc_if)
 else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     add_systemc_library(systemc
@@ -514,9 +509,9 @@ else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     set(SYSTEMC_TARGETS systemc)
 
-    add_library(SystemC::systemc ALIAS systemc)
 endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
+add_library(SystemC::systemc ALIAS systemc)
 
 install(TARGETS ${SYSTEMC_TARGETS} EXPORT SystemCLanguageTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
