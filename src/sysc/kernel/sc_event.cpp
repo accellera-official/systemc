@@ -30,6 +30,7 @@
 #include <cstring>
 
 #include "sysc/kernel/sc_event.h"
+#include "sc_simcontext.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_stage_callback_registry.h"
 #include "sysc/kernel/sc_process.h"
@@ -61,6 +62,10 @@ sc_event::basename() const
 void
 sc_event::cancel()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_cancel();
+        return;
+    }
     // cancel a delta or timed notification
     switch( m_notify_type ) {
     case DELTA: {
@@ -86,6 +91,10 @@ sc_event::cancel()
 void
 sc_event::notify()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify();
+        return;
+    }
     // immediate notification
     if( !m_simc->evaluation_phase() )
         // coming from
@@ -103,6 +112,10 @@ sc_event::notify()
 void
 sc_event::notify( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify(t);
+        return;
+    }
     if( m_notify_type == DELTA ) {
         return;
     }
@@ -168,6 +181,10 @@ static void sc_warn_notify_delayed()
 void
 sc_event::notify_delayed()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify();
+        return;
+    }
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -180,6 +197,11 @@ sc_event::notify_delayed()
 void
 sc_event::notify_delayed( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_async_helper.pending_notify(t);
+        return;
+    }
+
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -287,6 +309,7 @@ sc_event::sc_event( const char* name )
   , m_threads_dynamic()
   , m_name()
   , m_parent_with_hierarchy_flag(NULL)
+  , m_async_helper(this)
 {
     register_event( name );
 }
@@ -310,6 +333,7 @@ sc_event::sc_event()
   , m_threads_dynamic()
   , m_name()
   , m_parent_with_hierarchy_flag(NULL)
+  , m_async_helper(this)
 {
     register_event( NULL );
 }
@@ -333,6 +357,7 @@ sc_event::sc_event( kernel_tag, const char* name )
   , m_threads_dynamic()
   , m_name()
   , m_parent_with_hierarchy_flag(NULL)
+  , m_async_helper(this)
 {
     register_event( name, /* is_kernel_event = */ true );
 }
@@ -540,7 +565,7 @@ union sc_event_timed_u
     char              dummy[sizeof( sc_event_timed )];
 };
 
-static
+thread_local static
 sc_event_timed_u* free_list = 0;
 
 void*

@@ -45,6 +45,7 @@ sc_name_gen::sc_name_gen() : m_unique_name_map(), m_unique_name()
 
 sc_name_gen::~sc_name_gen()
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
     sc_strhash<int*>::iterator it( m_unique_name_map );
     for( ; ! it.empty(); it ++ ) {
 	delete it.contents();
@@ -58,6 +59,7 @@ sc_name_gen::~sc_name_gen()
 const char*
 sc_name_gen::gen_unique_name( const char* basename_, bool preserve_first )
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
     if( basename_ == 0 || *basename_ == 0 ) {
         SC_REPORT_ERROR( SC_ID_GEN_UNIQUE_NAME_, 0 );
         basename_ = "unnamed"; // usually not reached
