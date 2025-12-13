@@ -501,7 +501,7 @@ sc_big_divide( RESULT& result, const LEFT&  left, const RIGHT& right )
 {
     bool ok;
 
-    if ( 0 == RESULT::HOD ) {
+    if ( 0 == RESULT::HOD && 0 == LEFT::HOD && 0 == RIGHT::HOD ) {
         typename LEFT::HOD_TYPE  left_value = *left.get_digits();
         typename RIGHT::HOD_TYPE right_value = *right.get_digits();
 	if ( 0 != right_value ) {
@@ -616,8 +616,7 @@ void
 sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
 {
     bool ok; // true if operation was okay, false if divide by zero.
-
-    if ( 0 == RESULT::HOD ) {
+    if ( 0 == RESULT::HOD && LEFT::HOD == 0 && RIGHT::HOD == 0 ) {
         typename LEFT::HOD_TYPE  left_value = *left.get_digits();
         typename RIGHT::HOD_TYPE right_value = *right.get_digits();
 	if ( right_value != 0 ) {
@@ -628,7 +627,7 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
 	    ok = false;
 	}
     } 
-    else if ( 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
+    else if ( false && 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
         const sc_digit* left_p = left.get_digits();
         int64           left_value;
         sc_digit*       result_p = result.get_digits();
