@@ -627,7 +627,7 @@ sc_big_modulo( RESULT& result, const LEFT& left, const RIGHT& right )
 	    ok = false;
 	}
     } 
-    else if ( false && 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
+    else if ( 1 == RESULT::HOD && 2 > LEFT::HOD && 2 > RIGHT::HOD ) {
         const sc_digit* left_p = left.get_digits();
         int64           left_value;
         sc_digit*       result_p = result.get_digits();
