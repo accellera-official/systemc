@@ -210,6 +210,31 @@ sc_notify_time_compare( const void* p1, const void* p2 )
     }
 }
 
+void
+sc_simcontext::add_timed_event( sc_event* e, const sc_time& t)
+{
+    if( SC_LIKELY_((m_timed_events->size() > 0) && (t >= m_timed_events->top()->notify_time()) && (t <= this->m_max_event_time))) {
+        for(int i = 1; i <= m_timed_events->size(); ++i) {
+            auto pq_item = this->m_timed_events->operator[](i);
+            if(( t == pq_item->notify_time())) {
+                e->m_event_with_the_same_stamp = pq_item->m_event;
+                pq_item->m_event = e;
+                e->m_timed = pq_item;
+                e->m_notify_type = sc_event::TIMED;
+                return;
+            }
+        }
+    }
+
+    sc_event_timed* et = new sc_event_timed(e, t);
+    this->m_timed_events->insert(et);
+    e->m_timed = et;
+    e->m_event_with_the_same_stamp = {};
+    e->m_notify_type = sc_event::TIMED;
+
+    if( t > this->m_max_event_time ) { this->m_max_event_time = t; }
+
+}
 
 // +============================================================================
 // | CLASS sc_invoke_method - class to invoke sc_method's to support
@@ -950,11 +975,12 @@ sc_simcontext::simulate( const sc_time& duration )
 
 	    do {
 		sc_event_timed* et = m_timed_events->extract_top();
-		sc_event* e = et->event();
-		delete et;
-		if( e != 0 ) {
-		    e->trigger();
-		}
+		auto tmp_event = et->event();
+        while( tmp_event != nullptr) {
+            tmp_event->trigger();
+            tmp_event = tmp_event->m_event_with_the_same_stamp;
+        }
+        delete et;
 	    } while( m_timed_events->size() &&
 		     m_timed_events->top()->notify_time() == t );
 
