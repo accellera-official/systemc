@@ -217,8 +217,16 @@ sc_simcontext::add_timed_event( sc_event* e, const sc_time& t)
         for(int i = 1; i <= m_timed_events->size(); ++i) {
             auto pq_item = this->m_timed_events->operator[](i);
             if(( t == pq_item->notify_time())) {
-                e->m_event_with_the_same_stamp = pq_item->m_event;
-                pq_item->m_event = e;
+                //e->m_event_with_the_same_stamp = pq_item->m_event;
+                if (pq_item->m_event_tail == nullptr) {
+                    pq_item->m_event = e;
+                    pq_item->m_event_tail = e;
+                }
+                else {
+                    pq_item->m_event_tail->m_event_with_the_same_stamp = e;
+                    pq_item->m_event_tail = e;
+                }
+                // pq_item->m_event = e;
                 e->m_timed = pq_item;
                 e->m_notify_type = sc_event::TIMED;
                 return;
@@ -228,6 +236,7 @@ sc_simcontext::add_timed_event( sc_event* e, const sc_time& t)
 
     sc_event_timed* et = new sc_event_timed(e, t);
     this->m_timed_events->insert(et);
+    et->m_event_tail = e;
     e->m_timed = et;
     e->m_event_with_the_same_stamp = {};
     e->m_notify_type = sc_event::TIMED;

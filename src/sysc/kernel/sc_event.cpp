@@ -63,9 +63,13 @@ sc_event::cancel_timed() {
     auto head = m_timed->m_event;
     if( head == this) {
         m_timed->m_event = head->m_event_with_the_same_stamp;
+        if (m_timed->m_event == nullptr) {
+            m_timed->m_event_tail = 0;
+        }
     } else {
         while( head != nullptr) {
             if( head->m_event_with_the_same_stamp == this) {
+                m_timed->m_event_tail = head;
                 head->m_event_with_the_same_stamp = this->m_event_with_the_same_stamp;
                 break;
             }

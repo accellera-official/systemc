@@ -413,6 +413,7 @@ private:
 
     sc_event* m_event;
     sc_time   m_notify_time;
+    sc_event* m_event_tail;
 
 private:
 
