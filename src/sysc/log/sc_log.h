@@ -94,7 +94,7 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 /*** Helper macros for SC_LOG_ report macros ****/
 #define SC_LOG_VBSTY_CHECK_CACHED(lvl, features, cached, ...)                     \
   (cached.level >= lvl) &&                                                     \
-      (cached.get_log_verbosity_cached(sc_core::call_sc_name_fn()(this),        \
+      (cached.get_log_verbosity_cached(sc_core::sc_log_priv__call_sc_name_fn()(this),        \
                                        typeid(*this).name()) >= lvl)
 
 #define SC_LOG_VBSTY_CHECK_UNCACHED(lvl, ...)                                     \

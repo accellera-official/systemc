@@ -122,7 +122,7 @@ inline std::ostream &operator<<(std::ostream &os, log_levels const &val) {
 }
 
 /* Convenience function to allow useage outside of SystemC hierarchy */
-class call_sc_name_fn {
+class sc_log_priv__call_sc_name_fn {
   template <class T>
   static auto test(T *p)
       -> decltype(p->name(), std::true_type());
