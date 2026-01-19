@@ -121,7 +121,7 @@ inline std::ostream &operator<<(std::ostream &os, log_levels const &val) {
   return os;
 }
 
-/* Convenience function to allow useage outside of SystemC heirarchy */
+/* Convenience function to allow useage outside of SystemC hierarchy */
 class call_sc_name_fn {
   template <class T>
   static auto test(T *p)
@@ -278,7 +278,7 @@ struct sc_logger {
    * @fn sc_logger& type(const char*)
    * @brief set the category of the log entry
    *
-   * @param t type of th elog entry
+   * @param t type of the log entry
    * @return reference to self for chaining
    */
   inline sc_logger &type(char const *t) {
@@ -289,7 +289,7 @@ struct sc_logger {
    * @fn sc_logger& type(std::string const&)
    * @brief set the category of the log entry
    *
-   * @param t type of th elog entry
+   * @param t type of the log entry
    * @return reference to self for chaining
    */
   inline sc_logger &type(std::string const &t) {

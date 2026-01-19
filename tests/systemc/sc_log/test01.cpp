@@ -36,6 +36,7 @@
  *****************************************************************************/
 
 #include "systemc.h"
+#include <unordered_set>
 
 SC_MODULE(mod_a) {
   SC_LOG_HANDLE((TST), "test_handler");
@@ -55,10 +56,16 @@ SC_MODULE(mod_a) {
   }
 };
 
-class scp_logger_test : public sc_core::sc_log_global_logger_handler {
+  /* This is an example of how one could construct a class around the basic "set_log_verbosity_fn" API
+   * In doing so, a tool could construct extra functionality (like resetting cached values)
+   * But this is not part of the standard, and tool environments might differ.
+  */
+class scp_logger_test {
+  std::unordered_set<sc_core::sc_log_logger_cache*> loggers;
   sc_core::log_levels operator()(struct sc_core::sc_log_logger_cache &logger,
                                 std::string_view scname,
-                                const char *tname) const {
+                                const char *tname) {
+    loggers.insert(&logger);
     if (logger.features.size() && logger.features[0] == "test_handler") {
       return sc_core::log_levels::INFO;
     }
@@ -70,7 +77,28 @@ class scp_logger_test : public sc_core::sc_log_global_logger_handler {
     logger.level = sc_core::log_levels::TRACE;
     return sc_core::log_levels::TRACE;
   }
+public:
+  scp_logger_test() {
+    std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &,
+                                      const char *, const char *)>
+        fn = [&](sc_core::sc_log_logger_cache &logger, const char *sc_name,
+                 const char *t_name) -> sc_core::log_levels {
+      return operator()(logger, sc_name, t_name);
+    };
+    ::sc_core::sc_get_curr_simcontext()->set_log_verbosity_fn(fn);
+    ::sc_core::sc_report_handler::set_verbosity_level(
+        sc_core::SC_DEBUG); // Set the level in the core to DEBUG such that the
+                            // handler can manage all levels of verbosity
+  }
+  void reset() {
+    for (auto *logger : loggers) {
+      if (logger) {
+        logger->level = sc_core::log_levels::UNSET;
+      }
+    }
+  }
 };
+
 static scp_logger_test test_logger_handler;
 
 void report_handler(const sc_core::sc_report& rep, const sc_core::sc_actions& actions)

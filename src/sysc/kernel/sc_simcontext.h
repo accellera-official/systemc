@@ -38,6 +38,7 @@
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
 #include "sysc/log/sc_log_types.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 #include "sysc/communication/sc_host_mutex.h"
 
@@ -333,12 +334,15 @@ public:
     void pre_suspend() const;
     void post_suspend() const;
 
-  protected:
     void set_log_verbosity_fn(
         std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &,
                                          const char *, const char *)>
             fn) {
-      dynamic_log_verbosity = fn;
+      if (dynamic_log_verbosity) {
+        SC_REPORT_WARNING(SC_LOG_OVERWRITE_VERBOSITY_FN_, 0);
+      } else {
+        dynamic_log_verbosity = fn;
+      }
     }
     sc_core::log_levels get_log_verbosity(sc_core::sc_log_logger_cache &logger,
                                          const char *sc_name,

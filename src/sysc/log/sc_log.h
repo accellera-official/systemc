@@ -36,7 +36,7 @@
 #include <sysc/log/sc_log_types.h>
 
 // must be global for macro to work.
-static const char *_SC_LOG_FMT_EMPTY_STR = "";
+static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 
 /**
  * logging macros
@@ -45,40 +45,40 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
 /**
  * Boilerplate convenience macros
  */
-#define _SC_LOG_CAT(a, ...) _SC_LOG_PRIMITIVE_CAT(a, __VA_ARGS__)
-#define _SC_LOG_PRIMITIVE_CAT(a, ...) a##__VA_ARGS__
+#define SC_LOG_PRIV__CAT(a, ...) SC_LOG_PRIV__PRIMITIVE_CAT(a, __VA_ARGS__)
+#define SC_LOG_PRIV__PRIMITIVE_CAT(a, ...) a##__VA_ARGS__
 
-#define _SC_LOG_IIF(c) _SC_LOG_PRIMITIVE_CAT(_SC_LOG_IIF_, c)
-#define _SC_LOG_IIF_0(t, ...) __VA_ARGS__
-#define _SC_LOG_IIF_1(t, ...) t
+#define SC_LOG_PRIV__IIF(c) SC_LOG_PRIV__PRIMITIVE_CAT(SC_LOG_PRIV__IIF_, c)
+#define SC_LOG_PRIV__IIF_0(t, ...) __VA_ARGS__
+#define SC_LOG_PRIV__IIF_1(t, ...) t
 
-#define _SC_LOG_CHECK_N(x, n, ...) n
-#define _SC_LOG_CHECK(...) _SC_LOG_CHECK_N(__VA_ARGS__, 0, )
-#define _SC_LOG_PROBE(x) x, 1,
+#define SC_LOG_PRIV__CHECK_N(x, n, ...) n
+#define SC_LOG_PRIV__CHECK(...) SC_LOG_PRIV__CHECK_N(__VA_ARGS__, 0, )
+#define SC_LOG_PRIV__PROBE(x) x, 1,
 
-#define _SC_LOG_EXPAND(...) __VA_ARGS__
+#define SC_LOG_PRIV__EXPAND(...) __VA_ARGS__
 
-#define _SC_LOG_FIRST_ARG(f, ...) f
-#define _SC_LOG_POP_ARG(f, ...) __VA_ARGS__
+#define SC_LOG_PRIV__FIRST_ARG(f, ...) f
+#define SC_LOG_PRIV__POP_ARG(f, ...) __VA_ARGS__
 
-#define _SC_LOG_IS_PAREN(x) _SC_LOG_CHECK(_SC_LOG_IS_PAREN_PROBE x)
-#define _SC_LOG_IS_PAREN_PROBE(...) _SC_LOG_PROBE(~)
+#define SC_LOG_PRIV__IS_PAREN(x) SC_LOG_PRIV__CHECK(SC_LOG_PRIV__IS_PAREN_PROBE x)
+#define SC_LOG_PRIV__IS_PAREN_PROBE(...) SC_LOG_PRIV__PROBE(~)
 /********/
 
 /* default logger cache name */
-#define SC_LOG_HANDLE_NAME(x) _SC_LOG_CAT(SC_LOG_LOG_LEVEL_CACHE, x)
+#define SC_LOG_HANDLE_NAME(x) SC_LOG_PRIV__CAT(SC_LOG_LOG_LEVEL_CACHE, x)
 
 /* User interface macros */
 #define SC_LOG_HANDLE(...)                                                     \
-  sc_core::sc_log_logger_cache _SC_LOG_IIF(                                     \
-      _SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))(                       \
+  sc_core::sc_log_logger_cache SC_LOG_PRIV__IIF(                                     \
+      SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))(                       \
       SC_LOG_HANDLE_NAME(                                                      \
-          _SC_LOG_EXPAND(_SC_LOG_FIRST_ARG _SC_LOG_FIRST_ARG(__VA_ARGS__))),   \
+          SC_LOG_PRIV__EXPAND(SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__))),   \
       SC_LOG_HANDLE_NAME()) = {                                                \
       sc_core::log_levels::UNSET,                                               \
       "",                                                                      \
-      {_SC_LOG_IIF(_SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))(          \
-          _SC_LOG_POP_ARG(__VA_ARGS__), ##__VA_ARGS__)}}
+      {SC_LOG_PRIV__IIF(SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))(          \
+          SC_LOG_PRIV__POP_ARG(__VA_ARGS__), ##__VA_ARGS__)}}
 
 #define SC_LOG_HANDLE_VECTOR(NAME)                                             \
   std::vector<sc_core::sc_log_logger_cache> SC_LOG_HANDLE_NAME(NAME)
@@ -101,29 +101,29 @@ static const char *_SC_LOG_FMT_EMPTY_STR = "";
   (::sc_core::get_log_verbosity(__VA_ARGS__) >= lvl)
 
 #define SC_LOG_VBSTY_CHECK(lvl, ...)                                              \
-  _SC_LOG_IIF(_SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))                \
+  SC_LOG_PRIV__IIF(SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))                \
   (SC_LOG_VBSTY_CHECK_CACHED(                                                     \
-       lvl, _SC_LOG_FIRST_ARG(__VA_ARGS__),                                    \
+       lvl, SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__),                                    \
        SC_LOG_HANDLE_NAME(                                                     \
-           _SC_LOG_EXPAND(_SC_LOG_FIRST_ARG _SC_LOG_FIRST_ARG(__VA_ARGS__)))), \
+           SC_LOG_PRIV__EXPAND(SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))), \
    SC_LOG_VBSTY_CHECK_UNCACHED(lvl, ##__VA_ARGS__))
 
 #define SC_LOG_GET_FEATURES(...)                                                  \
-  _SC_LOG_IIF(_SC_LOG_IS_PAREN(_SC_LOG_FIRST_ARG(__VA_ARGS__)))                \
-  (_SC_LOG_FIRST_ARG _SC_LOG_EXPAND((_SC_LOG_POP_ARG(                          \
+  SC_LOG_PRIV__IIF(SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))                \
+  (SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__EXPAND((SC_LOG_PRIV__POP_ARG(                          \
        __VA_ARGS__,                                                            \
        SC_LOG_HANDLE_NAME(                                                     \
-           _SC_LOG_EXPAND(_SC_LOG_FIRST_ARG _SC_LOG_FIRST_ARG(__VA_ARGS__)))   \
+           SC_LOG_PRIV__EXPAND(SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))   \
            .type))),                                                           \
    __VA_ARGS__)
 
-#define _SC_LOG_FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
+#define SC_LOG_PRIV__FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
 
 #define SC_LOG_MSG(lvl, ...)                                                      \
   ::sc_core::sc_logger<::sc_core::SC_INFO, false>(__FILE__, __LINE__, lvl)       \
           .type(SC_LOG_GET_FEATURES(__VA_ARGS__))                                 \
           .get()                                                               \
-      << _SC_LOG_FMT_EMPTY_STR
+      << SC_LOG_PRIV__FMT_EMPTY_STR
 /*** End HELPER Macros *******/
 
 #define SC_LOG_AT(lvl, ...)                                                    \
