@@ -62,8 +62,7 @@ sc_core::sc_log_logger_cache::get_log_verbosity_cached(const char *scname,
 
   type = std::string(scname);
 
-  return sc_core::sc_get_curr_simcontext()->get_log_verbosity(*this, scname,
-                                                              tname);
+  return sc_core::sc_get_log_verbosity(*this, scname, tname);
 }
 
 auto sc_core::get_log_verbosity(char const *str) -> sc_core::log_levels {
@@ -85,7 +84,7 @@ sc_core::sc_log_global_logger_handler::sc_log_global_logger_handler() {
                const char *t_name) -> sc_core::log_levels {
     return operator()(logger, sc_name, t_name);
   };
-  ::sc_core::sc_get_curr_simcontext()->set_log_verbosity_fn(fn);
+  ::sc_core::sc_set_log_verbosity_fn(fn);
   ::sc_core::sc_report_handler::set_verbosity_level(
       sc_core::SC_DEBUG); // Set the level in the core to DEBUG such that the
                           // handler can manage all levels of verbosity

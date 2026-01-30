@@ -56,10 +56,67 @@ SC_MODULE(mod_a) {
   }
 };
 
-  /* This is an example of how one could construct a class around the basic "set_log_verbosity_fn" API
-   * In doing so, a tool could construct extra functionality (like resetting cached values)
-   * But this is not part of the standard, and tool environments might differ.
-  */
+
+/**********************************************************
+ * The mechanism by which SC_LOG macros are enabled and
+ * disabled is implementation-defined.
+ *
+ * The Accellera POC provides functions and a class for this
+ * purpose.
+ *
+ * --------------------------------------------------------
+ * Non-standard API:
+ *
+ * Install a callback used to determine the effective log
+ * level for a given (sc_name, typ_name) pair.
+ *
+ * The cache parameter may be used to remember a computed
+ * level. Once set, the function will not be re-called.
+ * --------------------------------------------------------
+ *
+ * void sc_set_log_verbosity_fn(
+ *     std::function<
+ *         sc_core::log_levels(
+ *             sc_core::sc_log_logger_cache&,
+ *             const char*,
+ *             const char*
+ *         )
+ *     > fn
+ * );
+ *
+ * --------------------------------------------------------
+ * Non-standard API:
+ *
+ * Query the current log verbosity for the given cache and
+ * identifiers.
+ *
+ * If no callback has been installed, the implementation
+ * shall fall back to the global report verbosity.
+ * --------------------------------------------------------
+ *
+ * sc_core::log_levels sc_get_log_verbosity(
+ *     sc_core::sc_log_logger_cache &logger,
+ *     const char *sc_name,
+ *     const char *typ_name);
+ * );
+ *
+ * Together with the sc_log_logger_cache
+ * class, this is used by the SC_LOG macros to determine
+ * whether specific loggers should be enabled.
+ **********************************************************/
+
+/**********************************************************
+ * Example:
+ *
+ * This demonstrates how one could construct a class around
+ * the basic set_log_verbosity_fn API.
+ *
+ * A tool could use this to build additional functionality
+ * (e.g. resetting cached values). This behavior is not
+ * part of the standard, and tool environments may differ.
+ **********************************************************/
+
+
 class scp_logger_test {
   std::unordered_set<sc_core::sc_log_logger_cache*> loggers;
   sc_core::log_levels operator()(struct sc_core::sc_log_logger_cache &logger,
