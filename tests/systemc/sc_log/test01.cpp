@@ -76,10 +76,12 @@ SC_MODULE(mod_a) {
  *
  * void sc_set_log_verbosity_fn(
  *     std::function<
- *         sc_core::log_levels(
- *             sc_core::sc_log_logger_cache&,
- *             const char*,
- *             const char*
+ *         sc_core::sc_log_level(
+ *            sc_core::sc_log_logger_cache &logger,
+ *            const char *file,
+ *            int line,
+ *            std::string_view sc_name,
+ *            const char *typ_name
  *         )
  *     > fn
  * );
@@ -91,12 +93,14 @@ SC_MODULE(mod_a) {
  * identifiers.
  *
  * If no callback has been installed, the implementation
- * shall fall back to the global report verbosity.
+ * will fall back to the global report verbosity.
  * --------------------------------------------------------
  *
- * sc_core::log_levels sc_get_log_verbosity(
+ * sc_core::sc_log_level sc_log_impl::sc_get_log_verbosity(
  *     sc_core::sc_log_logger_cache &logger,
- *     const char *sc_name,
+ *     const char *file,
+ *     int line,
+ *     std::string_view sc_name,
  *     const char *typ_name);
  * );
  *
@@ -119,30 +123,33 @@ SC_MODULE(mod_a) {
 
 class scp_logger_test {
   std::unordered_set<sc_core::sc_log_logger_cache*> loggers;
-  sc_core::log_levels operator()(struct sc_core::sc_log_logger_cache &logger,
+  sc_core::sc_log_level operator()(struct sc_core::sc_log_logger_cache &logger,
+                                const char *file,
+                                int line,
                                 std::string_view scname,
-                                const char *tname) {
+                                const char *tname
+                              ) {
     loggers.insert(&logger);
     if (logger.features.size() && logger.features[0] == "test_handler") {
-      return sc_core::log_levels::INFO;
+      return sc_core::sc_log_level::INFO;
     }
     if (scname == "sc_log_test") {
       /* test every time, and dont cache */
-      return sc_core::log_levels::WARN;
+      return sc_core::sc_log_level::WARN;
     }
     /* Cache this one which will catch the normal SCMOD case for mod_a */
-    logger.level = sc_core::log_levels::TRACE;
-    return sc_core::log_levels::TRACE;
+    logger.level = sc_core::sc_log_level::TRACE;
+    return sc_core::sc_log_level::TRACE;
   }
 public:
   scp_logger_test() {
-    std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &,
-                                      const char *, const char *)>
-        fn = [&](sc_core::sc_log_logger_cache &logger, const char *sc_name,
-                 const char *t_name) -> sc_core::log_levels {
-      return operator()(logger, sc_name, t_name);
+    std::function<sc_core::sc_log_level(sc_core::sc_log_logger_cache &,
+                                      const char *, int, std::string_view, const char*)>
+        fn = [&](sc_core::sc_log_logger_cache &logger, const char *file, int line, std::string_view sc_name,
+                 const char *t_name) -> sc_core::sc_log_level {
+      return operator()(logger, file, line, sc_name, t_name);
     };
-    ::sc_core::sc_get_curr_simcontext()->set_log_verbosity_fn(fn);
+    ::sc_core::sc_log_impl::sc_set_log_verbosity_fn(fn);
     ::sc_core::sc_report_handler::set_verbosity_level(
         sc_core::SC_DEBUG); // Set the level in the core to DEBUG such that the
                             // handler can manage all levels of verbosity
@@ -150,7 +157,7 @@ public:
   void reset() {
     for (auto *logger : loggers) {
       if (logger) {
-        logger->level = sc_core::log_levels::UNSET;
+        logger->level = sc_core::sc_log_level::UNSET;
       }
     }
   }

@@ -45,7 +45,7 @@ namespace sc_core {
  *based on SystemC "verbosity's"
  ************************/
 
-enum class log_levels {
+enum class sc_log_level {
   NONE = sc_core::SC_NONE,
   CRITICAL = sc_core::SC_NONE,
   WARN = sc_core::SC_LOW,
@@ -56,10 +56,10 @@ enum class log_levels {
   UNSET = INT_MAX
 };
 
-const static std::map<log_levels, std::string> log_level_map = {
-    {log_levels::CRITICAL, "CRITICAL"}, {log_levels::NONE, "NONE"},
-    {log_levels::WARN, "WARN"},         {log_levels::INFO, "INFO"},
-    {log_levels::DEBUG, "DEBUG"},       {log_levels::TRACE, "TRACE"}};
+const static std::map<sc_log_level, std::string> log_level_map = {
+    {sc_log_level::CRITICAL, "CRITICAL"}, {sc_log_level::NONE, "NONE"},
+    {sc_log_level::WARN, "WARN"},         {sc_log_level::INFO, "INFO"},
+    {sc_log_level::DEBUG, "DEBUG"},       {sc_log_level::TRACE, "TRACE"}};
 
 /**
  * @fn log as_log(int)
@@ -68,14 +68,14 @@ const static std::map<log_levels, std::string> log_level_map = {
  * @param logLevel the logging level
  * @return the log level
  */
-inline log_levels as_log(int logLevel) {
+inline sc_log_level as_log(int logLevel) {
   auto m = log_level_map;
   for (auto l : m) {
     if (logLevel <= static_cast<int>(l.first)) {
       return l.first;
     }
   }
-  return log_levels::TRACE;
+  return sc_log_level::TRACE;
 }
 
 /**
@@ -85,13 +85,13 @@ inline log_levels as_log(int logLevel) {
  * @param logName the string name for the log level
  * @return the log level
  */
-inline log_levels as_log(std::string logName) {
+inline sc_log_level as_log(std::string logName) {
   auto m = log_level_map;
   for (auto l : m) {
     if (logName == l.second)
       return l.first;
   }
-  return log_levels::TRACE;
+  return sc_log_level::TRACE;
 }
 /**
  * @fn std::istream& operator >>(std::istream&, log&)
@@ -101,7 +101,7 @@ inline log_levels as_log(std::string logName) {
  * @param val the value holding the resulting value
  * @return the input stream
  */
-inline std::istream &operator>>(std::istream &is, log_levels &val) {
+inline std::istream &operator>>(std::istream &is, sc_log_level &val) {
   std::string buf;
   is >> buf;
   val = as_log(buf);
@@ -115,7 +115,7 @@ inline std::istream &operator>>(std::istream &is, log_levels &val) {
  * @param val logging level
  * @return reference to the stream for chaining
  */
-inline std::ostream &operator<<(std::ostream &os, log_levels const &val) {
+inline std::ostream &operator<<(std::ostream &os, sc_log_level const &val) {
   auto m = log_level_map;
   os << m[val];
   return os;
@@ -154,7 +154,7 @@ public:
  *
  */
 struct sc_log_logger_cache {
-  log_levels level = log_levels::UNSET;
+  sc_log_level level = sc_log_level::UNSET;
   std::string type = "";
   std::vector<std::string> features;
 
@@ -163,49 +163,36 @@ struct sc_log_logger_cache {
    *
    * @return log
    */
-  log_levels get_log_verbosity_cached(const char *, const char *);
+  sc_log_level get_log_verbosity_cached(const char *, int, std::string_view, const char *);
 };
 
-class sc_log_global_logger_handler {
-public:
-  virtual log_levels operator()(struct sc_log_logger_cache &logger,
-                                std::string_view scname,
-                                const char *tname) const = 0;
-  sc_log_global_logger_handler();
-};
+/**
+ * @fn sc_core::sc_verbosity get_log_verbosity_uncached(const char*)
+ * @brief get the scope-based verbosity level
+ *
+ * The function returns a scope specific verbosity level if defined (e.g. by
+ * using a CCI param named "log_level"). Otherwise the global verbosity level
+ * is being returned. Note the type name is not available as this form is
+ * expected to be used in static functions.
+ *
+ * @param t the tag name being used (potentially the hierarchy name)
+ * @return the verbosity level
+ */
 
-inline log_levels get_log_verbosity() {
-  return static_cast<log_levels>(
+sc_log_level get_log_verbosity_uncached(char const *file, int line, std::string_view scname);
+
+/**
+ * @fn sc_core::sc_verbosity get_log_verbosity_uncached()
+ * @brief get the global verbosity level
+ *
+ * This is a special case when the user does not provide any tag
+ *
+ * @return the verbosity level
+ */
+inline sc_log_level get_log_verbosity_uncached(char const *file,  int line) {
+  return static_cast<sc_log_level>(
       ::sc_core::sc_report_handler::get_verbosity_level());
 }
-/**
- * @fn sc_core::sc_verbosity get_log_verbosity(const char*)
- * @brief get the scope-based verbosity level
- *
- * The function returns a scope specific verbosity level if defined (e.g. by
- * using a CCI param named "log_level"). Otherwise the global verbosity level
- * is being returned
- *
- * @param t the SystemC hierarchy scope name
- * @return the verbosity level
- */
-
-log_levels get_log_verbosity(char const *t);
-/**
- * @fn sc_core::sc_verbosity get_log_verbosity(const char*)
- * @brief get the scope-based verbosity level
- *
- * The function returns a scope specific verbosity level if defined (e.g. by
- * using a CCI param named "log_level"). Otherwise the global verbosity level
- * is being returned
- *
- * @param t the SystemC hierarchy scope name
- * @return the verbosity level
- */
-inline log_levels get_log_verbosity(std::string const &t) {
-  return get_log_verbosity(t.c_str());
-}
-
 /**
  * @brief Return list of logging parameters that have been used
  *
@@ -232,7 +219,7 @@ struct sc_logger {
    * @param verbosity the log level
    */
   sc_logger(const char *file, int line,
-           log_levels verbosity = sc_core::log_levels::INFO)
+           sc_log_level verbosity = sc_core::sc_log_level::INFO)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
   sc_logger() = delete;
@@ -309,7 +296,7 @@ protected:
   char *t{nullptr};
   const char *file;
   const int line;
-  const log_levels level;
+  const sc_log_level level;
 };
 
 } // namespace sc_core

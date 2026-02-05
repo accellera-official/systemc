@@ -31,61 +31,47 @@ namespace {
 // races in the unordered_map
 
 #ifdef DISABLE_REPORT_THREAD_LOCAL
-std::unordered_map<uint64_t, sc_core::log_levels> lut;
+std::unordered_map<uint64_t, sc_core::sc_log_level> lut;
 #else
-thread_local std::unordered_map<uint64_t, sc_core::log_levels> lut;
+thread_local std::unordered_map<uint64_t, sc_core::sc_log_level> lut;
 #endif
 
 // BKDR hash algorithm
-auto char_hash(char const *str) -> uint64_t {
+auto char_hash(std::string_view str) -> uint64_t {
   constexpr unsigned int seed = 131; // 31  131 1313 13131131313 etc//
   uint64_t hash = 0;
-  while (*str) {
-    hash = (hash * seed) + (*str);
-    str++;
+  for (char c: str) {
+    hash = (hash * seed) + static_cast<unsigned char>(c);
   }
   return hash;
 }
 } // namespace
 
-sc_core::log_levels
-sc_core::sc_log_logger_cache::get_log_verbosity_cached(const char *scname,
+sc_core::sc_log_level
+sc_core::sc_log_logger_cache::get_log_verbosity_cached(const char *file, int line, std::string_view scname,
                                                       const char *tname = "") {
-  if (level != sc_core::log_levels::UNSET) {
+  if (level != sc_core::sc_log_level::UNSET) {
     return level;
   }
 
-  if (!scname && features.size())
-    scname = features[0].c_str();
-  if (!scname)
+  if (!scname.data() && features.size())
+    scname = features[0];
+  if (!scname.data())
     scname = "";
 
-  type = std::string(scname);
+  type = scname;
 
-  return sc_core::sc_get_log_verbosity(*this, scname, tname);
+  return sc_core::sc_log_impl::sc_get_log_verbosity(*this, file, line, scname, tname);
 }
 
-auto sc_core::get_log_verbosity(char const *str) -> sc_core::log_levels {
-  auto k = char_hash(str);
+sc_core::sc_log_level sc_core::get_log_verbosity_uncached(const char *file, int line, std::string_view scname) {
+  auto k = char_hash(scname);
   auto it = lut.find(k);
   if (it != lut.end()) {
     return it->second;
   }
 
   sc_core::sc_log_logger_cache tmp;
-  lut[k] = tmp.get_log_verbosity_cached(str);
+  lut[k] = tmp.get_log_verbosity_cached(file, line, scname);
   return lut[k];
-}
-
-sc_core::sc_log_global_logger_handler::sc_log_global_logger_handler() {
-  std::function<sc_core::log_levels(sc_core::sc_log_logger_cache &, const char *,
-                                   const char *)>
-      fn = [&](sc_core::sc_log_logger_cache &logger, const char *sc_name,
-               const char *t_name) -> sc_core::log_levels {
-    return operator()(logger, sc_name, t_name);
-  };
-  ::sc_core::sc_set_log_verbosity_fn(fn);
-  ::sc_core::sc_report_handler::set_verbosity_level(
-      sc_core::SC_DEBUG); // Set the level in the core to DEBUG such that the
-                          // handler can manage all levels of verbosity
 }

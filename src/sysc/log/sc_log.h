@@ -75,7 +75,7 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
       SC_LOG_HANDLE_NAME(                                                      \
           SC_LOG_PRIV__EXPAND(SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__))),   \
       SC_LOG_HANDLE_NAME()) = {                                                \
-      sc_core::log_levels::UNSET,                                               \
+      sc_core::sc_log_level::UNSET,                                               \
       "",                                                                      \
       {SC_LOG_PRIV__IIF(SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))(          \
           SC_LOG_PRIV__POP_ARG(__VA_ARGS__), ##__VA_ARGS__)}}
@@ -84,7 +84,7 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
   std::vector<sc_core::sc_log_logger_cache> SC_LOG_HANDLE_NAME(NAME)
 #define SC_LOG_HANDLE_VECTOR_PUSH_BACK(NAME, ...)                              \
   SC_LOG_HANDLE_NAME(NAME).push_back(                                          \
-      {sc_core::log_levels::UNSET, "", {__VA_ARGS__}});
+      {sc_core::sc_log_level::UNSET, "", {__VA_ARGS__}});
 
 // critical thing is that the initial if 'fails' as soon as possible - if it is
 // going to pass, we have all the time we want, as we will be logging anyway
@@ -92,13 +92,16 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 // or a cache'd level
 
 /*** Helper macros for SC_LOG_ report macros ****/
-#define SC_LOG_VBSTY_CHECK_CACHED(lvl, features, cached, ...)                     \
-  (cached.level >= lvl) &&                                                     \
-      (cached.get_log_verbosity_cached(sc_core::sc_log_priv__call_sc_name_fn()(this),        \
-                                       typeid(*this).name()) >= lvl)
+#define MUST_BE_NON_STATIC_MEMBER_USE_STRING_TAG_INSTEAD static_cast<void>(this)
+#define SC_LOG_VBSTY_CHECK_CACHED(lvl, features, cached, ...)                  \
+  (MUST_BE_NON_STATIC_MEMBER_USE_STRING_TAG_INSTEAD,                           \
+   (cached.level >= lvl) &&                                                    \
+       (cached.get_log_verbosity_cached(                                       \
+            __FILE__, __LINE__, sc_core::sc_log_priv__call_sc_name_fn()(this), \
+            typeid(*this).name()) >= lvl))
 
 #define SC_LOG_VBSTY_CHECK_UNCACHED(lvl, ...)                                     \
-  (::sc_core::get_log_verbosity(__VA_ARGS__) >= lvl)
+  (::sc_core::get_log_verbosity_uncached(__FILE__, __LINE__, ##__VA_ARGS__) >= lvl)
 
 #define SC_LOG_VBSTY_CHECK(lvl, ...)                                              \
   SC_LOG_PRIV__IIF(SC_LOG_PRIV__IS_PAREN(SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))                \
@@ -114,8 +117,7 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
        __VA_ARGS__,                                                            \
        SC_LOG_HANDLE_NAME(                                                     \
            SC_LOG_PRIV__EXPAND(SC_LOG_PRIV__FIRST_ARG SC_LOG_PRIV__FIRST_ARG(__VA_ARGS__)))   \
-           .type))),                                                           \
-   __VA_ARGS__)
+           .type))), ##__VA_ARGS__)
 
 #define SC_LOG_PRIV__FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
 
@@ -127,13 +129,13 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 /*** End HELPER Macros *******/
 
 #define SC_LOG_AT(lvl, ...)                                                    \
-  if (SC_LOG_VBSTY_CHECK(lvl, __VA_ARGS__))                                       \
-  SC_LOG_MSG(lvl, __VA_ARGS__)
+  if (SC_LOG_VBSTY_CHECK(lvl, ##__VA_ARGS__))                                       \
+  SC_LOG_MSG(lvl, ##__VA_ARGS__)
 
-#define SC_CRITICAL(...) SC_LOG_AT(sc_core::log_levels::CRITICAL, __VA_ARGS__)
-#define SC_WARN(...) SC_LOG_AT(sc_core::log_levels::WARN, __VA_ARGS__)
-#define SC_INFO(...) SC_LOG_AT(sc_core::log_levels::INFO, __VA_ARGS__)
-#define SC_DEBUG(...) SC_LOG_AT(sc_core::log_levels::DEBUG, __VA_ARGS__)
-#define SC_TRACE(...) SC_LOG_AT(sc_core::log_levels::TRACE, __VA_ARGS__)
+#define SC_CRITICAL(...) SC_LOG_AT(sc_core::sc_log_level::CRITICAL, ##__VA_ARGS__)
+#define SC_WARN(...) SC_LOG_AT(sc_core::sc_log_level::WARN, ##__VA_ARGS__)
+#define SC_INFO(...) SC_LOG_AT(sc_core::sc_log_level::INFO, ##__VA_ARGS__)
+#define SC_DEBUG(...) SC_LOG_AT(sc_core::sc_log_level::DEBUG, ##__VA_ARGS__)
+#define SC_TRACE(...) SC_LOG_AT(sc_core::sc_log_level::TRACE, ##__VA_ARGS__)
 
 #endif    /* _SC_LOG_H_ */
