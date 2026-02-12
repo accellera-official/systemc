@@ -1,0 +1,81 @@
+SystemC Simulation
+========================================
+SC_LOG API Comprehensive Test (test02)
+========================================
+
+=== Test Global Static Loggers ===
+[INFO] SystemC: INFO: Global default logger (no tag)
+[WARN] SystemC: WARN: Global default logger, format: test
+[INFO] GlobalTag: INFO: Global logger with tag
+
+=== Test Tag-Based Logging ===
+[INFO] Tag1: INFO: Using Tag1
+[WARN] Tag2: WARN: Using Tag2 with format: value
+[DEBUG] Tag3: DEBUG: Using Tag3
+[TRACE] Tag4: TRACE: Using Tag4 with format: 999
+
+=== Test All Log Levels ===
+[CRITICAL] LevelTest: CRITICAL level test
+[WARN] LevelTest: WARN level test
+[INFO] LevelTest: INFO level test
+[DEBUG] LevelTest: DEBUG level test
+[TRACE] LevelTest: TRACE level test
+[CRITICAL] LevelTest: CRITICAL level test with format: 1
+[WARN] LevelTest: WARN level test with format: 2
+[INFO] LevelTest: INFO level test with format: 3
+[DEBUG] LevelTest: DEBUG level test with format: 4
+[TRACE] LevelTest: TRACE level test with format: 5
+
+=== Test Complex Format Strings ===
+[INFO] FormatTest: Multiple args: 1, 2, 3
+[INFO] FormatTest: Mixed types: int=42, str=hello, float=3.14
+[INFO] FormatTest: Nested braces: {} and value: 123
+[INFO] FormatTest: Empty format string
+
+=== Test Module with Default Logger ===
+[CRITICAL] mod_default: CRITICAL: Default logger, stream syntax
+[WARN] mod_default: WARN: Default logger, stream syntax
+[INFO] mod_default: INFO: Default logger, stream syntax
+[DEBUG] mod_default: DEBUG: Default logger, stream syntax
+[TRACE] mod_default: TRACE: Default logger, stream syntax
+[WARN] mod_default: WARN: Default logger, format syntax with arg: 42
+[INFO] mod_default: INFO: Default logger, format syntax with multiple args: hello world
+
+=== Test Module with Tagged Logger ===
+[CRITICAL] ModuleTag: CRITICAL: Tagged logger
+[WARN] ModuleTag: WARN: Tagged logger
+[INFO] ModuleTag: INFO: Tagged logger
+[DEBUG] ModuleTag: DEBUG: Tagged logger
+[INFO] ModuleTag: INFO: Tagged logger with format: 123
+
+=== Test Module with Multiple Named Loggers ===
+[WARN] Logger1Tag: WARN: Using logger1 with format: test
+[INFO] Logger2Tag: INFO: Using logger2
+[DEBUG] Logger2Tag: DEBUG: Using logger2 with format: 456
+[INFO] mod_multi: INFO: Using default logger
+[TRACE] mod_multi: TRACE: Using default logger with format
+
+=== Test Module with Vector of Loggers ===
+[INFO] VecLogger0: INFO: Vector logger 0
+[WARN] VecLogger0: WARN: Vector logger 0 with format
+[WARN] VecLogger1: WARN: Vector logger 1 with format
+[INFO] VecLogger2: INFO: Vector logger 2
+[WARN] VecLogger2: WARN: Vector logger 2 with format
+
+=== Test SC_LOG_AT Variants ===
+[INFO] mod_log_at: SC_LOG_AT: No args, stream syntax
+[WARN] mod_log_at: SC_LOG_AT: No args, format syntax: 1
+[INFO] LogAtTag: SC_LOG_AT: With logger handle
+[DEBUG] LogAtTag: SC_LOG_AT: With logger handle, format: 2
+[INFO] ExplicitTag: SC_LOG_AT: With explicit tag
+[TRACE] ExplicitTag: SC_LOG_AT: With explicit tag, format: 3
+[WARN] OverrideTag: SC_LOG_AT: Logger + override tag
+[INFO] OverrideTag: SC_LOG_AT: Logger + override tag, format: 4
+
+=== Test Using name() as Tag ===
+[INFO] mod_name_tag: Using name() as tag
+[WARN] mod_name_tag: Using name() as tag with format: mod_name_tag
+
+========================================
+All tests completed successfully!
+========================================

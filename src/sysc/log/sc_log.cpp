@@ -16,62 +16,46 @@
   sc_log.h --SystemC logging functions.
   Original Author: Eyck Jentzsch, MINRES Technologies GmbH
                    Mark Burton, Qualcomm Technologies, Inc.
-                   
+
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
-
-#include "sysc/log/sc_log_types.h"
 #include "sysc/kernel/sc_simcontext.h"
+#include "sysc/log/sc_log_types.h"
+#include <map>
+#include <string_view>
 #include <unordered_map>
 
-namespace {
-// Making this thread_local could cause thread copies of the same cache
-// entries, but more likely naming will be thread local too, and this avoids
-// races in the unordered_map
+namespace sc_core {
 
-#ifdef DISABLE_REPORT_THREAD_LOCAL
-std::unordered_map<uint64_t, sc_core::sc_log_level> lut;
-#else
-thread_local std::unordered_map<uint64_t, sc_core::sc_log_level> lut;
-#endif
+// Definition of log level map (declared as extern in sc_log_types.h)
+// This avoids creating duplicate copies in each translation unit.
+const std::map<sc_log_level, std::string> log_level_map = {
+    {sc_log_level::CRITICAL, "CRITICAL"},
+    {sc_log_level::NONE, "NONE"},
+    {sc_log_level::WARN, "WARN"},
+    {sc_log_level::INFO, "INFO"},
+    {sc_log_level::DEBUG, "DEBUG"},
+    {sc_log_level::TRACE, "TRACE"}
+};
 
-// BKDR hash algorithm
-auto char_hash(std::string_view str) -> uint64_t {
-  constexpr unsigned int seed = 131; // 31  131 1313 13131131313 etc//
-  uint64_t hash = 0;
-  for (char c: str) {
-    hash = (hash * seed) + static_cast<unsigned char>(c);
-  }
-  return hash;
-}
-} // namespace
-
-sc_core::sc_log_level
-sc_core::sc_log_logger_cache::get_log_verbosity_cached(const char *file, int line, std::string_view scname,
-                                                      const char *tname = "") {
-  if (level != sc_core::sc_log_level::UNSET) {
+sc_log_level sc_log_logger_cache::get_log_verbosity_cached(
+    const char *file, int line, std::string_view local_tag) {
+  if (level != sc_log_level::UNSET) {
     return level;
   }
 
-  if (!scname.data() && features.size())
-    scname = features[0];
-  if (!scname.data())
-    scname = "";
-
-  type = scname;
-
-  return sc_core::sc_log_impl::sc_get_log_verbosity(*this, file, line, scname, tname);
+  return sc_log_impl::sc_get_log_verbosity(*this, file, line, local_tag);
 }
 
-sc_core::sc_log_level sc_core::get_log_verbosity_uncached(const char *file, int line, std::string_view scname) {
-  auto k = char_hash(scname);
-  auto it = lut.find(k);
-  if (it != lut.end()) {
-    return it->second;
-  }
+} // namespace sc_core
 
-  sc_core::sc_log_logger_cache tmp;
-  lut[k] = tmp.get_log_verbosity_cached(file, line, scname);
-  return lut[k];
-}
+// Global default logger with empty tag (in global namespace for proper name
+// shadowing). This logger is used when no specific logger handle is provided.
+// Note: Using string_view{} for empty views and nullptr for typename_str.
+sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE{
+    sc_core::sc_log_level::UNSET,  // level
+    std::string_view{},             // tag (empty)
+    std::string_view{},             // scname (empty)
+    nullptr                         // typename_str (no type info)
+};

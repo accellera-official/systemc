@@ -79,7 +79,6 @@ class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
 class sc_stub_registry;
-//class sc_log_global_logger_handler;
 
 extern sc_simcontext* sc_get_curr_simcontext();
 
@@ -153,23 +152,22 @@ SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
 struct sc_log_impl {
 // +------------------------------------------------------------------------------------------------
 // | Non standard API: Install a callback used to determine the effective log level for a given
-// | (sc_name, typ_name) pair. The cache parameter may be used to remember
+// | logger cache and local_tag. The cache parameter may be used to remember
 // | a computed level, once set the function will not be re-called.
 // +------------------------------------------------------------------------------------------------
 static void sc_set_log_verbosity_fn(std::function<sc_core::sc_log_level(
                                  sc_core::sc_log_logger_cache &, const char *,
-                                 int, std::string_view, const char *)>
+                                 int, std::string_view)>
                                  fn);
 
 // +------------------------------------------------------------------------------------------------
-// | Non standard API: Query the current log verbosity for the given handle cache and identifiers.
+// | Non standard API: Query the current log verbosity for the given handle cache and local_tag.
 // | If no callback has been installed, the implementation falls back to
 // | the global report verbosity.
 // +------------------------------------------------------------------------------------------------
 static sc_core::sc_log_level sc_get_log_verbosity(sc_core::sc_log_logger_cache &logger,
                                            const char *file, int line,
-                                           std::string_view sc_name,
-                                           const char *typ_name);
+                                           std::string_view local_tag = {});
 };
 
 class sc_invoke_method;
@@ -360,14 +358,13 @@ public:
 private:
     void set_log_verbosity_fn(std::function<sc_core::sc_log_level(
                                   sc_core::sc_log_logger_cache &, const char *,
-                                  int, std::string_view, const char *)>
+                                  int, std::string_view)>
                                   fn);
     sc_core::sc_log_level get_log_verbosity(
         sc_core::sc_log_logger_cache &,
         const char *file,
         int line,
-        std::string_view sc_name,
-        const char *typ_name="");
+        std::string_view local_tag = {});
 
 private:
     void hierarchy_push(sc_object_host*);
@@ -418,7 +415,7 @@ private:
 
     inline void set_simulation_status(sc_status status);
 
-    std::function<sc_log_level(sc_log_logger_cache &, const char* , int, std::string_view , const char* )> dynamic_log_verbosity;
+    std::function<sc_log_level(sc_log_logger_cache &, const char* , int, std::string_view)> dynamic_log_verbosity;
 
 private:
 

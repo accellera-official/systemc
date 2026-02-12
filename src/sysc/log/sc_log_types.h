@@ -13,10 +13,10 @@
   permissions and limitations under the License.
  *****************************************************************************/
 /*****************************************************************************
-  sc_log.h --SystemC logging functions.
+  sc_log_types.h -- SystemC logging type definitions and utilities.
   Original Author: Eyck Jentzsch, MINRES Technologies GmbH
                    Mark Burton, Qualcomm Technologies, Inc.
-                   
+
   CHANGE LOG AT THE END OF THE FILE
  *****************************************************************************/
 
@@ -24,12 +24,13 @@
 #define _SC_LOG_TYPES_H_
 
 #include <array>
+#include <climits>
 #include <cstring>
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <typeinfo>
 #include <vector>
-#include <climits>
 
 #include <sysc/utils/sc_report.h>
 
@@ -56,10 +57,8 @@ enum class sc_log_level {
   UNSET = INT_MAX
 };
 
-const static std::map<sc_log_level, std::string> log_level_map = {
-    {sc_log_level::CRITICAL, "CRITICAL"}, {sc_log_level::NONE, "NONE"},
-    {sc_log_level::WARN, "WARN"},         {sc_log_level::INFO, "INFO"},
-    {sc_log_level::DEBUG, "DEBUG"},       {sc_log_level::TRACE, "TRACE"}};
+// Map of log levels to their string representations (defined in sc_log.cpp)
+extern const std::map<sc_log_level, std::string> log_level_map;
 
 /**
  * @fn log as_log(int)
@@ -121,11 +120,11 @@ inline std::ostream &operator<<(std::ostream &os, sc_log_level const &val) {
   return os;
 }
 
-/* Convenience function to allow useage outside of SystemC hierarchy */
+/* Convenience helper to detect if a type has a name() method.
+ * This allows logging to work both inside and outside of SystemC hierarchy. */
 class sc_log_priv__call_sc_name_fn {
   template <class T>
-  static auto test(T *p)
-      -> decltype(p->name(), std::true_type());
+  static auto test(T *p) -> decltype(p->name(), std::true_type());
   template <class T> static auto test(...) -> decltype(std::false_type());
 
   template <class T>
@@ -149,50 +148,79 @@ public:
 
 /******************/
 
+// Forward declaration for sc_log_impl (defined in sc_simcontext.h)
+struct sc_log_impl;
+
 /**
- * @brief cached logging information used in the (logger) form.
+ * @brief Cached logging information for a logger instance.
  *
+ * Type choices rationale:
+ * - tag: string_view - references string literals passed to SC_LOG_HANDLE macros
+ * - scname: string_view - references the result of this->name() which has
+ *   static storage duration in sc_object
+ * - typename_str: const char* - directly stores the pointer returned by
+ *   typeid().name() which has static storage duration
+ *
+ * These choices avoid unnecessary string copies while maintaining safety
+ * since all referenced strings have appropriate lifetimes.
  */
 struct sc_log_logger_cache {
   sc_log_level level = sc_log_level::UNSET;
-  std::string type = "";
-  std::vector<std::string> features;
+  std::string_view tag{};      // Logger tag/identifier
+  std::string_view scname{};   // Captured sc_object name (from this->name())
+  const char* typename_str = nullptr; // Captured type name (from typeid(*this).name())
 
   /**
    * @brief Initialize the verbosity cache and/or return the cached value.
    *
-   * @return log
+   * This function checks if the level is already cached, and if not,
+   * queries the dynamic verbosity function.
+   *
+   * @param file source file name
+   * @param line source line number
+   * @param local_tag optional local tag that overrides the effective name
+   * @return log level for this logger
    */
-  sc_log_level get_log_verbosity_cached(const char *, int, std::string_view, const char *);
+  sc_log_level get_log_verbosity_cached(const char *file, int line,
+                                        std::string_view local_tag = {});
 };
 
 /**
- * @fn sc_core::sc_verbosity get_log_verbosity_uncached(const char*)
- * @brief get the scope-based verbosity level
+ * @brief Factory for constructing sc_log_logger_cache objects with captured
+ * context.
  *
- * The function returns a scope specific verbosity level if defined (e.g. by
- * using a CCI param named "log_level"). Otherwise the global verbosity level
- * is being returned. Note the type name is not available as this form is
- * expected to be used in static functions.
+ * Note: C++ cannot infer an owning object's name/type from within the cache's
+ * default constructor, so the owning object pointer must be provided here (when
+ * available).
  *
- * @param t the tag name being used (potentially the hierarchy name)
- * @return the verbosity level
+ * The factory returns string_view for tag and scname (which reference string
+ * literals or existing strings), and const char* for typename_str (from typeid).
  */
+struct sc_log_handle_factory {
+  template <class TYPE>
+  static sc_log_logger_cache make(sc_log_level lvl, const char *tag_str,
+                                  TYPE *p) {
+    const char *n = sc_log_priv__call_sc_name_fn{}(p);
+    const char *t = typeid(*p).name();
+    return sc_log_logger_cache{
+        lvl,
+        tag_str ? std::string_view(tag_str) : std::string_view(),
+        n ? std::string_view(n) : std::string_view(),
+        t  // typeid().name() returns const char* with static storage
+    };
+  }
 
-sc_log_level get_log_verbosity_uncached(char const *file, int line, std::string_view scname);
+  static sc_log_logger_cache make_static(sc_log_level lvl,
+                                         const char *tag_str) {
+    return sc_log_logger_cache{
+        lvl,
+        tag_str ? std::string_view(tag_str) : std::string_view(),
+        std::string_view(),
+        nullptr  // No type information for static loggers
+    };
+  }
+};
 
-/**
- * @fn sc_core::sc_verbosity get_log_verbosity_uncached()
- * @brief get the global verbosity level
- *
- * This is a special case when the user does not provide any tag
- *
- * @return the verbosity level
- */
-inline sc_log_level get_log_verbosity_uncached(char const *file,  int line) {
-  return static_cast<sc_log_level>(
-      ::sc_core::sc_report_handler::get_verbosity_level());
-}
 /**
  * @brief Return list of logging parameters that have been used
  *
@@ -219,7 +247,7 @@ struct sc_logger {
    * @param verbosity the log level
    */
   sc_logger(const char *file, int line,
-           sc_log_level verbosity = sc_core::sc_log_level::INFO)
+            sc_log_level verbosity = sc_core::sc_log_level::INFO)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
   sc_logger() = delete;
@@ -301,6 +329,12 @@ protected:
 
 } // namespace sc_core
 
+// This macro is intentionally in the global namespace to allow it to be
+// used as a member variable name in user classes without namespace qualification.
+// The macro expands to _m_sc_log_log_level_cache_ which uses a leading underscore
+// to indicate it's an implementation detail. While identifiers with leading
+// underscores are generally reserved, this pattern (_m_*) is safe as it doesn't
+// conflict with reserved patterns (__* or _Capital*).
 #define SC_LOG_LOG_LEVEL_CACHE _m_sc_log_log_level_cache_
 
 /** @} */ // end of sc_log
