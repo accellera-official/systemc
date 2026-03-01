@@ -764,8 +764,8 @@ public:
 
     static sc_unsigned* temporary()
     {
-        thread_local sc_core::sc_vpool<sc_unsigned> sc_unsigned_tempoerary_pool(9);
-        return sc_unsigned_tempoerary_pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned> sc_unsigned_temporary_pool(9);
+        return sc_unsigned_temporary_pool.allocate();
     }
 
     // explicit conversions
@@ -1152,11 +1152,6 @@ public:
 
 public: // Temporary object support:
 
-  #define SC_UNSIGNED_TEMPS_N (1 << 15) // SC_UNSIGNED_TEMPS_N must be a power of 2.
-
-  static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
-  static size_t       m_temporaries_i;
-
     // +--------------------------------------------------------------------------------------------
     // |"allocate_temporary"
     // | 
@@ -1171,8 +1166,7 @@ public: // Temporary object support:
     // +--------------------------------------------------------------------------------------------
   static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p )
   {
-      sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
-      m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
+      sc_unsigned* result_p = temporary();
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
