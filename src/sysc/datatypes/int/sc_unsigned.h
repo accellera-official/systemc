@@ -662,8 +662,8 @@ public:
 
     sc_unsigned_bitref* temporary_bitref() const
     {
-        thread_local sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bit_ref_pool(9);
-        return sc_unsigned_bit_ref_pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bitref_pool(9);
+        return sc_unsigned_bitref_pool.allocate();
     }
 
     sc_unsigned_bitref& operator [] ( int i )
