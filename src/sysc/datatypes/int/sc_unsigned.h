@@ -662,8 +662,8 @@ public:
 
     sc_unsigned_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_unsigned_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bit_ref_pool(9);
+        return sc_unsigned_bit_ref_pool.allocate();
     }
 
     sc_unsigned_bitref& operator [] ( int i )
@@ -724,8 +724,8 @@ public:
 
     sc_unsigned_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_unsigned_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned_subref> sc_unsigned_subref_pool(9);
+        return sc_unsigned_subref_pool.allocate();
     }
 
     sc_unsigned_subref& range( int i, int j )
@@ -764,8 +764,8 @@ public:
 
     static sc_unsigned* temporary()
     {
-        static sc_core::sc_vpool<sc_unsigned> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned> sc_unsigned_tempoerary_pool(9);
+        return sc_unsigned_tempoerary_pool.allocate();
     }
 
     // explicit conversions

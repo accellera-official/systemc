@@ -667,8 +667,8 @@ public:
 
     sc_signed_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_signed_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_signed_bitref> sc_signed_bitref_pool(9);
+        return sc_signed_bitref_pool.allocate();
     }
 
     sc_signed_bitref& operator [] ( int i )
@@ -729,14 +729,14 @@ public:
 
     sc_signed_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_signed_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_signed_subref> sc_signed_subref_pool(9);
+        return sc_signed_subref_pool.allocate();
     }
 
     sc_signed_subref& range( int i, int j )
         {
 	    check_range( i, j );
-            sc_signed_subref* result_p = temporary_subref();
+	    sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}
