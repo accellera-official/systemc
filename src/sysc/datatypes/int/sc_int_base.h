@@ -105,12 +105,6 @@ class sc_fxnum_fast;
 
 } // namespace sc_dt
 
-// extern template instantiations
-namespace sc_core {
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_bitref>;
-SC_API_TEMPLATE_DECL_ sc_vpool<sc_dt::sc_int_subref>;
-} // namespace sc_core
-
 namespace sc_dt {
 
 extern SC_API const uint_type mask_int[SC_INTWIDTH][SC_INTWIDTH];
@@ -752,8 +746,8 @@ public:
 
     sc_int_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_int_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_int_bitref> sc_int_bit_ref_pool(9);
+        return sc_int_bit_ref_pool.allocate();
     }
 
 
@@ -767,8 +761,8 @@ public:
 
     sc_int_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_int_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_int_subref> sc_int_subref_pool(9);
+        return sc_int_subref_pool.allocate();
     }
 
 
