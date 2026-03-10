@@ -34,6 +34,7 @@
 #include "sysc/kernel/sc_cor_fiber.h"
 #include "sysc/kernel/sc_cor_pthread.h"
 #include "sysc/kernel/sc_cor_qt.h"
+#include "sysc/kernel/sc_cor_std_thread.h"
 #include "sysc/kernel/sc_event.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_module.h"
@@ -61,6 +62,7 @@
 #include <algorithm>
 #include <cstring>
 #include <sstream>
+#include <functional>
 
 // DEBUGGING MACROS:
 //
@@ -2068,6 +2070,41 @@ SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
 {
   sc_get_curr_simcontext()->get_stage_cb_registry()
                           ->unregister_callback(cb, mask);
+}
+
+//
+// Implementation defined Dynamic log verbosity dispatch
+//
+void sc_simcontext::set_log_verbosity_fn(
+    std::function<sc_core::sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+{
+  if (dynamic_log_verbosity) {
+    SC_REPORT_WARNING(SC_LOG_OVERWRITE_VERBOSITY_FN_, 0);
+  } else {
+    dynamic_log_verbosity = std::move(fn);
+  }
+}
+
+sc_log_level sc_simcontext::get_log_verbosity(sc_log_logger_cache &logger,
+                                              const char *file,
+                                              int line,
+                                              std::string_view local_tag) {
+  if (dynamic_log_verbosity)
+    return dynamic_log_verbosity(logger, file, line, local_tag);
+  else
+    return as_log(sc_report_handler::get_verbosity_level());
+}
+
+// NB these functions are NOT a standard API, but are
+// exposed to provide access to the (implementation defined) dynamic logging configuration
+void sc_log_impl::sc_set_log_verbosity_fn(
+    std::function<sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+{
+  sc_get_curr_simcontext()->set_log_verbosity_fn(std::move(fn));
+}
+sc_log_level sc_log_impl::sc_get_log_verbosity(sc_log_logger_cache &logger, const char *file,
+                                  int line, std::string_view local_tag) {
+  return sc_get_curr_simcontext()->get_log_verbosity(logger, file, line, local_tag);
 }
 
 } // namespace sc_core

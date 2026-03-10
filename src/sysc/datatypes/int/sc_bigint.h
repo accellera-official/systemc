@@ -696,11 +696,6 @@ public: // explicit conversion to character string:
         return sc_signed_proxy().to_string( numrep, w_prefix );
     }
 
-#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-public: // "mirror" for sc_value_base concatenation support:
-  int              concat_length(bool xzp) const    { return W; }
-#endif // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS
-
 public: // field and template value accesses:
   inline int              get_actual_length() const { return W; }
   inline const sc_digit*  get_digits() const        { return digit; }

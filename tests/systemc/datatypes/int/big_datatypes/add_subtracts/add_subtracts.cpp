@@ -318,6 +318,15 @@ class AddSubtract : public AddSubtract<W-D,D>
 
 	}
 
+	// a - b
+
+	v_sc_biguint_a = 0;
+	v_sc_biguint_b = 0;
+	v_sc_biguint_b = ~v_sc_biguint_b;
+	cout << "a(0) - b(fs) = " << (v_sc_biguint_a - v_sc_biguint_b) << endl;
+
+
+
 	((AddSubtract<W-D,D>*)this)->test_signed();
     }
 };

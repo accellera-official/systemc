@@ -87,6 +87,7 @@ namespace sc_dt
 // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS:
 //     Configure sc_bigint and sc_biguint so that they do not have parent classes. That is,
 //     sc_signed is not a parent of sc_bigint, and sc_unsigned is not a parent of sc_biguint.
+//     Create allocate_temporary() methods in sc_signed and sc_unsigned.
 //
 // SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_STORAGE:
 //     Configure sc_bigint and sc_biguint so they have storage for their values rather than

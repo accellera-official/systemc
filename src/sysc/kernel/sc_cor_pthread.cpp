@@ -165,18 +165,18 @@ sc_cor_pkg_pthread::create( std::size_t stack_size, sc_cor_fn* fn, void* arg )
     cor_p->m_cor_fn_arg = arg;
 
 
-	// SET UP THREAD CREATION ATTRIBUTES:
-	//
-	// Use default values except for stack size. If stack size is non-zero
-	// set it.
+    // SET UP THREAD CREATION ATTRIBUTES:
+    //
+    // Use default values except for stack size. If stack size is non-zero
+    // set it.
 
     pthread_attr_t attr;
 	pthread_attr_init( &attr ); 
 	pthread_attr_setdetachstate( &attr, PTHREAD_CREATE_DETACHED );
-	if ( stack_size != 0 )
-	{
-		pthread_attr_setstacksize( &attr, stack_size );
-	}
+    if ( stack_size != 0 )
+    {
+	pthread_attr_setstacksize( &attr, stack_size );
+    }
 
 
     // ALLOCATE THE POSIX THREAD TO USE AND FORCE SEQUENTIAL EXECUTION:

@@ -519,7 +519,7 @@ sc_bigint<W>::operator>>(int v) const
     return result;
 }
 
-// sc_bv<W> and sc_lv<W> constructors using an sc_bigint<WO> value:
+// sc_bv<W> and sc_lv<W> constructors and assignments using an sc_bigint<WO> value:
 
 template<int W>
 template<int WO>
@@ -535,6 +535,20 @@ sc_lv<W>::sc_lv( const sc_bigint<WO>& v )
     : sc_lv_base(W)
 {
     *this = v.sc_signed_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_bv<W>& sc_bv<W>::operator = ( const sc_bigint<WO>& v )
+{
+    return *this = v.sc_signed_proxy();
+}
+
+template<int W>
+template<int WO>
+sc_lv<W>& sc_lv<W>::operator = ( const sc_bigint<WO>& v )
+{
+    return *this = v.sc_signed_proxy();
 }
 
 } // namespace sc_dt

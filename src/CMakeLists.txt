@@ -53,7 +53,7 @@ function(add_systemc_library libName scBuildDefine)
     target_compile_features(
         ${libName}
         PUBLIC
-        cxx_std_17)
+        cxx_std_20)
 
     target_compile_definitions (
         ${libName}
@@ -71,6 +71,7 @@ function(add_systemc_library libName scBuildDefine)
         $<$<BOOL:${DISABLE_VCD_SCOPES}>:SC_DISABLE_VCD_SCOPES>
         $<$<BOOL:${ENABLE_ASSERTIONS}>:SC_ENABLE_ASSERTIONS>
         $<$<BOOL:${ENABLE_PTHREADS}>:SC_USE_PTHREADS>
+        $<$<BOOL:${ENABLE_STD_THREADS}>:SC_USE_STD_THREADS>
         $<$<BOOL:${OVERRIDE_DEFAULT_STACK_SIZE}>:
         SC_OVERRIDE_DEFAULT_STACK_SIZE=${OVERRIDE_DEFAULT_STACK_SIZE}>
         $<$<AND:$<BOOL:${WIN32}>,$<BOOL:${MSVC}>>:_LIB>)
@@ -129,6 +130,7 @@ function(add_systemc_library libName scBuildDefine)
     if(SYSTEMC_UNITY_BUILD)
       message(STATUS "Enable SystemC unity build")
       set_target_properties(${libName} PROPERTIES UNITY_BUILD ON)
+      set_source_files_properties(sysc/kernel/sc_main.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
       set_source_files_properties(sysc/utils/sc_utils_ids.cpp PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
     else()
       message(STATUS "Disable SystemC unity build")
@@ -178,6 +180,7 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_cor_fiber.cpp
         sysc/kernel/sc_cor_pthread.cpp
         sysc/kernel/sc_cor_qt.cpp
+        sysc/kernel/sc_cor_std_thread.cpp
         sysc/kernel/sc_cthread_process.cpp
         sysc/kernel/sc_event.cpp
         sysc/kernel/sc_except.cpp
@@ -201,6 +204,7 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_ver.cpp
         sysc/kernel/sc_wait.cpp
         sysc/kernel/sc_wait_cthread.cpp
+        sysc/log/sc_log.cpp
         sysc/tracing/sc_trace.cpp
         sysc/tracing/sc_trace_file_base.cpp
         sysc/tracing/sc_vcd_trace.cpp
@@ -330,6 +334,8 @@ set(SYSTEMC_CORE_SRC
         sysc/kernel/sc_ver.h
         sysc/kernel/sc_wait.h
         sysc/kernel/sc_wait_cthread.h
+        sysc/log/sc_log.h
+        sysc/log/sc_log_types.h
         sysc/tracing/sc_trace.h
         sysc/tracing/sc_tracing_ids.h
         sysc/utils/sc_hash.h
@@ -421,6 +427,7 @@ set(SYSTEMC_CORE_SRC_PRIVATE
         sysc/kernel/sc_cor_fiber.h
         sysc/kernel/sc_cor_pthread.h
         sysc/kernel/sc_cor_qt.h
+        sysc/kernel/sc_cor_std_thread.h
         sysc/kernel/sc_cthread_process.h
         sysc/kernel/sc_method_process.h
         sysc/kernel/sc_module_registry.h
@@ -466,6 +473,10 @@ endforeach()
 
     add_systemc_library(systemc SC_BUILD_OFF STATIC ${SYSTEMC_SC_MAIN_SRC} )
 
+    add_library(systemc_if INTERFACE)
+    target_link_libraries(systemc_if INTERFACE systemc systemc-${SystemCLanguage_VERSION})
+
+
     if (MSVC) # lib.exe should be available from MSVC command promt
 
         add_custom_command(
@@ -480,18 +491,21 @@ endforeach()
         add_custom_command(
                 TARGET systemc
                 POST_BUILD
-                COMMAND ar x $<TARGET_FILE:systemc>
-                COMMAND ar x $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>
-                COMMAND del *.a
-                COMMAND ar qc $<TARGET_FILE:systemc>  *.o *.obj
-                COMMAND del *.o *.obj
+                COMMAND ${CMAKE_COMMAND} -E echo "CREATE $<TARGET_FILE:systemc>" > merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_FILE:systemc>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "SAVE" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "END" >> merge_script.mri
+                COMMAND ar -M < merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E remove merge_script.mri
                 COMMENT "Combining SystemC libs..."
         )
 
     endif(MSVC)
 
-    set(SYSTEMC_TARGETS systemc ${SYSTEMC_DLL_TARGET})
+    set(SYSTEMC_TARGETS systemc_if systemc ${SYSTEMC_DLL_TARGET})
 
+    add_library(SystemC::systemc ALIAS systemc_if)
 else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     add_systemc_library(systemc
@@ -503,9 +517,9 @@ else(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
     set(SYSTEMC_TARGETS systemc)
 
+    add_library(SystemC::systemc ALIAS systemc)
 endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
-add_library(SystemC::systemc ALIAS systemc)
 
 install(TARGETS ${SYSTEMC_TARGETS} EXPORT SystemCLanguageTargets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

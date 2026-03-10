@@ -39,6 +39,17 @@ namespace sc_core {
 //  CLASS : sc_runnable
 //
 //  Class that manages the ready-to-run queues.
+//
+// Notes:
+//   (1) The ready-to-run queues implement a head pointer and a tail pointer,
+//       allowing a process to be queued at either end of the queue.
+//   (2) An empty ready-to-run queue's head and tail pointers point to the 
+//       same dummy process rather than having a NULL value. That process is 
+//       allocated in sc_runnable::init().
+//   (3) When a process is running its ready-to-run link is set to NULL to 
+//       indicate it is not on the ready-to-run queue. When it is on the 
+//       ready-to-run queue its runnable link is always non-NULL. 
+//       A check for NULL prevents a process from being queued twice.
 //=============================================================================
 
 class SC_API sc_runnable

@@ -124,7 +124,7 @@ class sc_big_op_info
    typedef typename sc_big_op_type<div_bits,signed_result>::top_type div_result;
    typedef typename sc_big_op_type<mod_bits,signed_result>::top_type mod_result;
    typedef typename sc_big_op_type<mul_bits,signed_result>::top_type mul_result;
-   typedef typename sc_big_op_type<sub_bits,signed_result>::top_type sub_result;
+   typedef typename sc_big_op_type<sub_bits,true>::top_type sub_result;
 };
 
 // +============================================================================

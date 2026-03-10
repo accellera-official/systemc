@@ -208,6 +208,8 @@ SC_DEFINE_MESSAGE(SC_ID_UNSUSPENDABLE_NOTHREAD_  , 577,
         "unsuspendable/suspendable only valid inside a process" )
 SC_DEFINE_MESSAGE(SC_ID_UNBALANCED_UNSUSPENDALL_ , 578,
         "Unmatched unsuspendall/suspendall" )
+SC_DEFINE_MESSAGE(SC_LOG_OVERWRITE_VERBOSITY_FN_, 579,
+		"Verbosity function already set - ignoring subsequent calls to set_log_verbosity_fn" )
 
 /*****************************************************************************
 

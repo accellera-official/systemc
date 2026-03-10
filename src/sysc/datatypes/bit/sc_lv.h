@@ -183,6 +183,10 @@ public:
     sc_lv<W>& operator = ( const sc_signed& a )
 	{ sc_lv_base::operator = ( a ); return *this; }
 
+    template<int WO> sc_lv<W>& operator = ( const sc_bigint<WO>& a );
+
+    template<int WO> sc_lv<W>& operator = ( const sc_biguint<WO>& a );
+
     sc_lv<W>& operator = ( const sc_uint_base& a )
 	{ sc_lv_base::operator = ( a ); return *this; }
 

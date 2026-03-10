@@ -113,6 +113,9 @@
 # ENABLE_PTHREADS               Use POSIX threads for SystemC processes instead
 #                               of QuickThreads on Unix or Fiber on Windows.
 #
+# ENABLE_STD_THREADS            Use standar libary threads for SystemC processes instead
+#                               of QuickThreads on Unix or Fiber on Windows.
+#
 # OVERRIDE_DEFAULT_STACK_SIZE   Define the default stack size used for SystemC
 #                               (thread) processes. (> 0)
 #
@@ -259,8 +262,11 @@ if (NOT (WIN32 OR CYGWIN))
 else (NOT (WIN32 OR CYGWIN))
   option (BUILD_SHARED_LIBS "Build shared libraries." OFF)
 endif (NOT (WIN32 OR CYGWIN))
+
 if (BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+    set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+  endif (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
 endif(BUILD_SHARED_LIBS AND (WIN32 OR CYGWIN))
 
 option (BUILD_SOURCE_DOCUMENTATION "Build source documentation with Doxygen." OFF)
@@ -273,6 +279,10 @@ option (ENABLE_ASSERTIONS "Always enable the `sc_assert' expressions." ON)
 
 option (ENABLE_PTHREADS
         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+        OFF)
+
+option (ENABLE_STD_THREADS
+        "Use standard library threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
         OFF)
 
 option (INSTALL_TO_LIB_BUILD_TYPE_DIR
@@ -331,6 +341,18 @@ check_symbol_exists (__i386 "" HAS__i386_DEFINED)
 check_symbol_exists (__aarch64__ "" HAS__aarch64__DEFINED)
 
 
+if(DEFINED ENV{MSYSTEM})
+  set(_MSYSTEM "$ENV{MSYSTEM}")
+  if(_MSYSTEM STREQUAL "CLANGARM64")
+    set(HAS_clangarm64_DEFINED TRUE)
+  elseif(_MSYSTEM STREQUAL "UCRT64")
+    set(HAS_ucrt64_DEFINED TRUE)
+  elseif(_MSYSTEM STREQUAL "MINGW64")
+    message(WARNING "MSYS2 MINGW64 environment is deprecated. Please move to UCRT64!")
+    set(HAS_mingw64_DEFINED TRUE)
+  endif()
+endif()
+
 # Set SystemC_TARGET_ARCH according to the detected
 # OS/processor/compiler platform
 if (NOT SystemC_TARGET_ARCH)
@@ -386,8 +408,12 @@ if (NOT SystemC_TARGET_ARCH)
     # MinGW platform, as CYGWIN already has been handled
     if (HAS__i386_DEFINED)
       set (_TARGET_ARCH "mingw")
-    elseif (HAS__x86_64__DEFINED)
+    elseif (HAS_mingw64_DEFINED)
       set (_TARGET_ARCH "mingw64")
+    elseif (HAS_ucrt64_DEFINED)
+      set (_TARGET_ARCH "ucrt64")
+    elseif (HAS_clangarm64_DEFINED)
+      set (_TARGET_ARCH "clangarm64")
     else (HAS__i386_DEFINED)
       set (_TARGET_ARCH "mingwunknown")
     endif (HAS__i386_DEFINED)
@@ -407,6 +433,8 @@ endif (NOT SystemC_TARGET_ARCH)
 message (STATUS "Detect the target processor architecture for QuickThreads.")
 if (ENABLE_PTHREADS)
   set (QT_ARCH "IGNORE") # Pthreads will be used for the SystemC coroutines.
+elseif (ENABLE_STD_THREADS)
+  set (QT_ARCH "IGNORE") # std threads will be used for the SystemC coroutines.
 elseif (MSVC)
   set (QT_ARCH "IGNORE") # Fibers will be used for the SystemC coroutines.
 elseif (APPLE AND (N_OSX_ARCHITECTURES GREATER 1))
@@ -435,11 +463,13 @@ if (QT_ARCH)
   enable_language (ASM)
 else (QT_ARCH)
   # Otherwise, fall back to Pthreads or Fiber.
-  if (NOT MSVC)
-    set (ENABLE_PTHREADS TRUE CACHE BOOL
-         "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
+  if (NOT ENABLE_STD_THREADS)
+      if (NOT MSVC)
+        set (ENABLE_PTHREADS TRUE CACHE BOOL
+             "Use POSIX threads for SystemC processes instead of QuickThreads on Unix or Fiber on Windows."
          FORCE)
-  endif (NOT MSVC)
+      endif (NOT MSVC)
+  endif (NOT ENABLE_STD_THREADS)
 endif (QT_ARCH)
 
 
@@ -464,7 +494,7 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   elseif (UNIX)
     set (_CMAKE_INSTALL_PREFIX "/opt/systemc")
   elseif (WIN32)
-    file (TO_CMAKE_PATH $ENV{ProgramFiles} _WIN32_INSTALL_PREFIX)
+    file (TO_CMAKE_PATH "$ENV{ProgramFiles}" _WIN32_INSTALL_PREFIX)
     set (_CMAKE_INSTALL_PREFIX "${_WIN32_INSTALL_PREFIX}/SystemC")
     unset (_WIN32_INSTALL_PREFIX)
   else (EXISTS $ENV{SYSTEMC_ROOT_DIR})
@@ -595,11 +625,8 @@ endif()
 message (STATUS "DISABLE_COPYRIGHT_MESSAGE = ${DISABLE_COPYRIGHT_MESSAGE}")
 message (STATUS "DISABLE_VCD_SCOPES = ${DISABLE_VCD_SCOPES}")
 message (STATUS "ENABLE_ASSERTIONS = ${ENABLE_ASSERTIONS}")
-if (ENABLE_PTHREADS)
-  message ("ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-else (ENABLE_PTHREADS)
-  message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
-endif (ENABLE_PTHREADS)
+message (STATUS "ENABLE_PTHREADS = ${ENABLE_PTHREADS}")
+message (STATUS "ENABLE_STD_THREADS = ${ENABLE_STD_THREADS}")
 if (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
   message (STATUS "OVERRIDE_DEFAULT_STACK_SIZE = ${OVERRIDE_DEFAULT_STACK_SIZE}")
 endif (OVERRIDE_DEFAULT_STACK_SIZE GREATER 0)
@@ -659,7 +686,7 @@ install (FILES AUTHORS.md
 # Provide package of the SystemC library to other programs using CMake
 ###############################################################################
 
-# Export the systemc library target for usage by other programs to installation tree
+# Export the systemc library target for usage by other programs
 install (EXPORT SystemCLanguageTargets
          NAMESPACE SystemC::
          DESTINATION ${SystemCLanguage_INSTALL_CMAKEDIR}

@@ -41,6 +41,7 @@
 #include "sysc/kernel/sc_wait.h"
 #include "sysc/kernel/sc_wait_cthread.h"
 #include "sysc/utils/sc_list.h"
+#include "sysc/log/sc_log.h"
 
 #include <type_traits> // std::remove_reference
 
@@ -88,6 +89,8 @@ class SC_API sc_module
 	friend class sc_process_b;
     friend class sc_simcontext;
     friend class sc_initializer_function;
+protected:
+    SC_LOG_HANDLE();
 public:
 
     sc_simcontext* sc_get_curr_simcontext()
