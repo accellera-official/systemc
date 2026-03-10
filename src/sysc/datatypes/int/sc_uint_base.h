@@ -720,8 +720,8 @@ public:
 
     sc_uint_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_uint_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_uint_bitref> sc_uint_bitref_pool(9);
+        return sc_uint_bitref_pool.allocate();
     }
 
 
@@ -735,8 +735,8 @@ public:
 
     sc_uint_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_uint_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_uint_subref> sc_uint_subref_pool(9);
+        return sc_uint_subref_pool.allocate();
     }
 
 

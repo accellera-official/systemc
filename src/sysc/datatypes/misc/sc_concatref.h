@@ -621,8 +621,8 @@ class SC_API sc_concat_bool : public sc_value_base
 
     static inline sc_concat_bool* allocate( bool v )
     {
-        static sc_core::sc_vpool<sc_concat_bool> pool(9);
-        sc_concat_bool* result_p = pool.allocate();
+        thread_local sc_core::sc_vpool<sc_concat_bool> sc_concat_bool_pool(9);
+        sc_concat_bool* result_p = sc_concat_bool_pool.allocate();
         result_p->m_value = v;
         return result_p;
     }
@@ -749,8 +749,8 @@ SC_CONCAT_BOOL_OP(<)
 
 static inline sc_dt::sc_concatref* temporary_concatref()
 {
-    static sc_core::sc_vpool<sc_concatref> pool(9);
-    sc_dt::sc_concatref* result_p = pool.allocate();
+    thread_local sc_core::sc_vpool<sc_concatref> sc_concatref_pool(9);
+    sc_dt::sc_concatref* result_p = sc_concatref_pool.allocate();
     return result_p;
 }
 
