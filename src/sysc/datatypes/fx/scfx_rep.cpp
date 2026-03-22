@@ -81,7 +81,7 @@ namespace sc_dt
 //  some utilities
 // ----------------------------------------------------------------------------
 
-static scfx_pow10 pow10_fx;
+thread_local scfx_pow10 pow10_fx;
 
 static const int mantissa0_size = SCFX_IEEE_DOUBLE_M_SIZE - bits_in_int;
 
@@ -373,7 +373,7 @@ union scfx_rep_node
 };
 
 
-static scfx_rep_node* list = 0;
+thread_local scfx_rep_node* list = 0;
 
 
 void*
