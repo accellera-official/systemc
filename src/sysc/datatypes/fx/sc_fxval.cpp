@@ -484,7 +484,7 @@ const char*
 to_string( const scfx_ieee_double& id, sc_numrep numrep, int w_prefix,
 	   sc_fmt fmt, const scfx_params* params = 0 )
 {
-    static scfx_string s;
+    thread_local scfx_string s;
 
     s.clear();
 
