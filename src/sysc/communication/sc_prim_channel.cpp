@@ -63,6 +63,17 @@ sc_prim_channel::sc_prim_channel( const char* name_ )
     m_registry->insert( *this );
 }
 
+sc_prim_channel::sc_prim_channel( bool is_kernel )
+: sc_object( ),
+  m_registry( simcontext()->get_prim_channel_registry() ),
+  m_update_next_p( 0 )
+{
+    if (is_kernel) {
+        m_registry->insert_internal( *this );
+    } else {
+        m_registry->insert( *this );
+    }
+}
 
 // destructor
 
@@ -237,18 +248,8 @@ private:
 // ----------------------------------------------------------------------------
 
 void
-sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
+sc_prim_channel_registry::insert_internal( sc_prim_channel& prim_channel_ )
 {
-    if( sc_is_running() ) {
-       SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
-       return;
-    }
-
-    if( m_simc->elaboration_done() ) {
-       SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
-       return;
-    }
-
 #ifdef DEBUG_SYSTEMC
     // check if prim_channel_ is already inserted
     for( int i = 0; i < size(); ++ i ) {
@@ -262,6 +263,21 @@ sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
     // insert
     m_prim_channel_vec.push_back( &prim_channel_ );
 
+}
+
+void
+sc_prim_channel_registry::insert( sc_prim_channel& prim_channel_ )
+{
+    if( sc_is_running() ) {
+       SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "simulation running" );
+       return;
+    }
+
+    if( m_simc->elaboration_done() ) {
+       SC_REPORT_ERROR( SC_ID_INSERT_PRIM_CHANNEL_, "elaboration done" );
+       return;
+    }
+    insert_internal( prim_channel_ );
 }
 
 void
