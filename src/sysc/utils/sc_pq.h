@@ -64,6 +64,10 @@ public:
     bool empty() const
 	{ return (m_heap_size == 0); }
 
+    void* operator [](int index) {
+        return m_heap[index];
+    }
+
 protected:
 
     int parent( int i ) const
@@ -118,6 +122,9 @@ public:
 
     T extract_top()
 	{ return (T) sc_ppq_base::extract_top(); }
+
+    T operator [](int index)
+    { return (T) sc_ppq_base::operator[](index); }
 
     // insert a new element to the priority queue.
 
