@@ -1,0 +1,1151 @@
+diff --git examples/sysc/2.1/dpipe/main.cpp examples/sysc/2.1/dpipe/main.cpp
+--- examples/sysc/2.1/dpipe/main.cpp
++++ examples/sysc/2.1/dpipe/main.cpp
+@@ -38,7 +38,11 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ 
+ // This program implements a delay pipe which passes values through a fifo
+ // in a specified number of clocks. A value may be inserted at each clock
+diff --git examples/sysc/2.1/forkjoin/forkjoin.cpp examples/sysc/2.1/forkjoin/forkjoin.cpp
+--- examples/sysc/2.1/forkjoin/forkjoin.cpp
++++ examples/sysc/2.1/forkjoin/forkjoin.cpp
+@@ -37,7 +37,10 @@
+  *****************************************************************************/
+ 
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ 
+ 
+ int test_function(double d)
+diff --git examples/sysc/2.1/reset_signal_is/reset_signal_is.cpp examples/sysc/2.1/reset_signal_is/reset_signal_is.cpp
+--- examples/sysc/2.1/reset_signal_is/reset_signal_is.cpp
++++ examples/sysc/2.1/reset_signal_is/reset_signal_is.cpp
+@@ -38,7 +38,10 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h" 
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ SC_MODULE(CONSUMER)
+ {
+ 	SC_CTOR(CONSUMER)
+diff --git examples/sysc/2.1/sc_export/main.cpp examples/sysc/2.1/sc_export/main.cpp
+--- examples/sysc/2.1/sc_export/main.cpp
++++ examples/sysc/2.1/sc_export/main.cpp
+@@ -68,7 +68,10 @@ bound to ports P1 and P2 of module X.
+ 
+ */
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ 
+ // Interface
+ class C_if : virtual public sc_interface
+diff --git examples/sysc/2.1/sc_report/main.cpp examples/sysc/2.1/sc_report/main.cpp
+--- examples/sysc/2.1/sc_report/main.cpp
++++ examples/sysc/2.1/sc_report/main.cpp
+@@ -40,7 +40,10 @@
+ 
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ 
+ 
+ /*
+diff --git examples/sysc/2.1/scx_barrier/main.cpp examples/sysc/2.1/scx_barrier/main.cpp
+--- examples/sysc/2.1/scx_barrier/main.cpp
++++ examples/sysc/2.1/scx_barrier/main.cpp
+@@ -39,7 +39,11 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::printf;
+ #include "scx_barrier.h"
+ using sc_core::scx_barrier;
+ 
+diff --git examples/sysc/2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp examples/sysc/2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp
+--- examples/sysc/2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp
++++ examples/sysc/2.1/scx_mutex_w_policy/scx_mutex_w_policy.cpp
+@@ -56,7 +56,12 @@
+ // See section 7.4, page 120 of "System Design with SystemC" for
+ //  additional discussion
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::rand;
++using std::remove;
+ 
+ class scx_mutex_w_policy : public sc_mutex 
+ { 
+diff --git examples/sysc/2.3/sc_rvd/main.cpp examples/sysc/2.3/sc_rvd/main.cpp
+--- examples/sysc/2.3/sc_rvd/main.cpp
++++ examples/sysc/2.3/sc_rvd/main.cpp
+@@ -37,7 +37,11 @@
+ //  Andy Goodrich: new example using a ready-valid handshake for communication.
+ //
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include <iomanip>
+ #include "sc_rvd.h"
+ 
+diff --git examples/sysc/2.3/sc_ttd/main.cpp examples/sysc/2.3/sc_ttd/main.cpp
+--- examples/sysc/2.3/sc_ttd/main.cpp
++++ examples/sysc/2.3/sc_ttd/main.cpp
+@@ -37,7 +37,11 @@
+ //  Andy Goodrich: new example using a toggle-toggle handshake for communication.
+ //
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include <iomanip>
+ #include "sc_ttd.h"
+ 
+diff --git examples/sysc/2.3/simple_async/main.cpp examples/sysc/2.3/simple_async/main.cpp
+--- examples/sysc/2.3/simple_async/main.cpp
++++ examples/sysc/2.3/simple_async/main.cpp
+@@ -28,7 +28,10 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ #include "async_event.h"
+ 
+ #if SC_CPLUSPLUS >= 201103L
+diff --git examples/sysc/2.4/in_class_initialization/adder.h examples/sysc/2.4/in_class_initialization/adder.h
+--- examples/sysc/2.4/in_class_initialization/adder.h
++++ examples/sysc/2.4/in_class_initialization/adder.h
+@@ -30,7 +30,8 @@
+ #ifndef ADDER_H_
+ #define ADDER_H_
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
+ 
+ template <typename T, int N_INPUTS>
+ struct adder : sc_module {
+diff --git examples/sysc/2.4/in_class_initialization/adder_int_5_pimpl.h examples/sysc/2.4/in_class_initialization/adder_int_5_pimpl.h
+--- examples/sysc/2.4/in_class_initialization/adder_int_5_pimpl.h
++++ examples/sysc/2.4/in_class_initialization/adder_int_5_pimpl.h
+@@ -31,7 +31,8 @@
+ #ifndef ADDER_PIMPL_H_
+ #define ADDER_PIMPL_H_
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
+ 
+ // Demonstrates how to remove compile dependency on adder.h header using PImpl
+ class adder_int_5_pimpl {
+diff --git examples/sysc/2.4/in_class_initialization/in_class_initialization.cpp examples/sysc/2.4/in_class_initialization/in_class_initialization.cpp
+--- examples/sysc/2.4/in_class_initialization/in_class_initialization.cpp
++++ examples/sysc/2.4/in_class_initialization/in_class_initialization.cpp
+@@ -26,7 +26,9 @@
+ 
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
+ 
+ #ifdef USE_PIMPL_ADDER
+     #include "adder_int_5_pimpl.h"
+diff --git examples/sysc/async_suspend/async_suspend.cpp examples/sysc/async_suspend/async_suspend.cpp
+--- examples/sysc/async_suspend/async_suspend.cpp
++++ examples/sysc/async_suspend/async_suspend.cpp
+@@ -22,7 +22,11 @@
+ 
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::rand;
++using std::size_t;
++using std::srand;
+ #include "node.h"
+ #include <vector>
+ 
+diff --git examples/sysc/async_suspend/collector.h examples/sysc/async_suspend/collector.h
+--- examples/sysc/async_suspend/collector.h
++++ examples/sysc/async_suspend/collector.h
+@@ -31,6 +31,8 @@
+ namespace plt = matplotlibcpp;
+ #endif
+ 
++using std::cout;
++
+ /* thread-safe collector to enable pretty-printing the output of the
+  * simulation as a csv style output (import it into a spreadsheet and draw some
+  * nice graphs !*/
+diff --git examples/sysc/fft/fft_flpt/fft.cpp examples/sysc/fft/fft_flpt/fft.cpp
+--- examples/sysc/fft/fft_flpt/fft.cpp
++++ examples/sysc/fft/fft_flpt/fft.cpp
+@@ -36,7 +36,11 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include "fft.h"
+ 
+ void fft::entry()
+diff --git examples/sysc/fft/fft_flpt/main.cpp examples/sysc/fft/fft_flpt/main.cpp
+--- examples/sysc/fft/fft_flpt/main.cpp
++++ examples/sysc/fft/fft_flpt/main.cpp
+@@ -37,7 +37,10 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::fclose;
+ #include "fft.h"
+ #include "source.h"
+ #include "sink.h"
+diff --git examples/sysc/fft/fft_flpt/sink.cpp examples/sysc/fft/fft_flpt/sink.cpp
+--- examples/sysc/fft/fft_flpt/sink.cpp
++++ examples/sysc/fft/fft_flpt/sink.cpp
+@@ -37,7 +37,12 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::fclose;
++using std::fopen;
++using std::fprintf;
+ #include "sink.h"
+ 
+ void sink::entry()
+diff --git examples/sysc/fft/fft_flpt/source.cpp examples/sysc/fft/fft_flpt/source.cpp
+--- examples/sysc/fft/fft_flpt/source.cpp
++++ examples/sysc/fft/fft_flpt/source.cpp
+@@ -37,7 +37,13 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
+ #include "source.h"
+ void source::entry()
+ { FILE *fp_real, *fp_imag;
+diff --git examples/sysc/fft/fft_fxpt/fft.cpp examples/sysc/fft/fft_fxpt/fft.cpp
+--- examples/sysc/fft/fft_fxpt/fft.cpp
++++ examples/sysc/fft/fft_fxpt/fft.cpp
+@@ -37,7 +37,11 @@
+ 
+ 
+ /* This is the implementation file for the synchronous process "fft" */
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include "fft.h"
+ 
+ 
+diff --git examples/sysc/fft/fft_fxpt/main.cpp examples/sysc/fft/fft_fxpt/main.cpp
+--- examples/sysc/fft/fft_fxpt/main.cpp
++++ examples/sysc/fft/fft_fxpt/main.cpp
+@@ -37,7 +37,11 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::FILE;
++using std::fclose;
+ #include "fft.h"
+ #include "source.h"
+ #include "sink.h"
+diff --git examples/sysc/fft/fft_fxpt/sink.cpp examples/sysc/fft/fft_fxpt/sink.cpp
+--- examples/sysc/fft/fft_fxpt/sink.cpp
++++ examples/sysc/fft/fft_fxpt/sink.cpp
+@@ -37,7 +37,13 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::FILE;
++using std::fclose;
++using std::fopen;
++using std::fprintf;
+ #include "sink.h"
+ 
+ void sink::entry()
+diff --git examples/sysc/fft/fft_fxpt/source.cpp examples/sysc/fft/fft_fxpt/source.cpp
+--- examples/sysc/fft/fft_fxpt/source.cpp
++++ examples/sysc/fft/fft_fxpt/source.cpp
+@@ -37,7 +37,14 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
+ #include "source.h"
+ 
+ void source::entry()
+diff --git examples/sysc/fir/display.cpp examples/sysc/fir/display.cpp
+--- examples/sysc/fir/display.cpp
++++ examples/sysc/fir/display.cpp
+@@ -35,7 +35,10 @@
+  
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
+ #include "display.h"
+ 
+ void display::entry(){
+diff --git examples/sysc/fir/fir.cpp examples/sysc/fir/fir.cpp
+--- examples/sysc/fir/fir.cpp
++++ examples/sysc/fir/fir.cpp
+@@ -35,7 +35,9 @@
+     
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
+ #include "fir.h"
+ 
+ void fir::entry() {
+diff --git examples/sysc/fir/fir_data.cpp examples/sysc/fir/fir_data.cpp
+--- examples/sysc/fir/fir_data.cpp
++++ examples/sysc/fir/fir_data.cpp
+@@ -35,7 +35,11 @@
+     
+  *****************************************************************************/
+  
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include "fir_data.h"
+ 
+ void fir_data::entry()
+diff --git examples/sysc/fir/fir_fsm.cpp examples/sysc/fir/fir_fsm.cpp
+--- examples/sysc/fir/fir_fsm.cpp
++++ examples/sysc/fir/fir_fsm.cpp
+@@ -35,7 +35,11 @@
+     
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include "fir_fsm.h"
+ 
+ void fir_fsm::entry() {
+diff --git examples/sysc/fir/fir_top.h examples/sysc/fir/fir_top.h
+--- examples/sysc/fir/fir_top.h
++++ examples/sysc/fir/fir_top.h
+@@ -35,7 +35,9 @@
+     
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
+ #include "fir_fsm.h"
+ #include "fir_data.h"
+ 
+diff --git examples/sysc/fir/main.cpp examples/sysc/fir/main.cpp
+--- examples/sysc/fir/main.cpp
++++ examples/sysc/fir/main.cpp
+@@ -35,7 +35,9 @@
+     
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
+ #include "stimulus.h"
+ #include "display.h"
+ #include "fir.h"
+diff --git examples/sysc/fir/main_rtl.cpp examples/sysc/fir/main_rtl.cpp
+--- examples/sysc/fir/main_rtl.cpp
++++ examples/sysc/fir/main_rtl.cpp
+@@ -35,7 +35,9 @@
+     
+  *****************************************************************************/
+  
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
+ #include "stimulus.h"
+ #include "display.h"
+ #include "fir_top.h"
+diff --git examples/sysc/fir/stimulus.cpp examples/sysc/fir/stimulus.cpp
+--- examples/sysc/fir/stimulus.cpp
++++ examples/sysc/fir/stimulus.cpp
+@@ -35,7 +35,11 @@
+     
+  *****************************************************************************/
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
+ #include "stimulus.h"
+ 
+ void stimulus::entry() {
+diff --git examples/sysc/pipe/display.cpp examples/sysc/pipe/display.cpp
+--- examples/sysc/pipe/display.cpp
++++ examples/sysc/pipe/display.cpp
+@@ -35,7 +35,9 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::printf;
+ #include "display.h"
+ 
+ #include <stdio.h>
+diff --git examples/sysc/pipe/main.cpp examples/sysc/pipe/main.cpp
+--- examples/sysc/pipe/main.cpp
++++ examples/sysc/pipe/main.cpp
+@@ -36,7 +36,8 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "stage1.h"
+ #include "stage2.h"
+ #include "stage3.h"
+diff --git examples/sysc/pipe/numgen.cpp examples/sysc/pipe/numgen.cpp
+--- examples/sysc/pipe/numgen.cpp
++++ examples/sysc/pipe/numgen.cpp
+@@ -35,7 +35,8 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "numgen.h"
+ 
+ // definition of the `generate' method
+diff --git examples/sysc/pipe/stage1.cpp examples/sysc/pipe/stage1.cpp
+--- examples/sysc/pipe/stage1.cpp
++++ examples/sysc/pipe/stage1.cpp
+@@ -35,7 +35,8 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "stage1.h"
+ 
+ //Definition of addsub method
+diff --git examples/sysc/pipe/stage2.cpp examples/sysc/pipe/stage2.cpp
+--- examples/sysc/pipe/stage2.cpp
++++ examples/sysc/pipe/stage2.cpp
+@@ -35,7 +35,8 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "stage2.h"
+ 
+ //definition of multdiv method
+diff --git examples/sysc/pipe/stage3.cpp examples/sysc/pipe/stage3.cpp
+--- examples/sysc/pipe/stage3.cpp
++++ examples/sysc/pipe/stage3.cpp
+@@ -35,7 +35,8 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "stage3.h"
+ 
+ //Definition of power method
+diff --git examples/sysc/pkt_switch/fifo.h examples/sysc/pkt_switch/fifo.h
+--- examples/sysc/pkt_switch/fifo.h
++++ examples/sysc/pkt_switch/fifo.h
+@@ -38,7 +38,10 @@
+ #ifndef FIFO_H_INCLUDED
+ #define FIFO_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ #include "pkt.h"
+ 
+ struct fifo {
+diff --git examples/sysc/pkt_switch/main.cpp examples/sysc/pkt_switch/main.cpp
+--- examples/sysc/pkt_switch/main.cpp
++++ examples/sysc/pkt_switch/main.cpp
+@@ -36,7 +36,10 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ #include "pkt.h"
+ #include "switch_clk.h"
+ #include "sender.h"
+diff --git examples/sysc/pkt_switch/pkt.h examples/sysc/pkt_switch/pkt.h
+--- examples/sysc/pkt_switch/pkt.h
++++ examples/sysc/pkt_switch/pkt.h
+@@ -37,7 +37,10 @@
+ #ifndef PKT_H_INCLUDED
+ #define PKT_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ 
+ struct pkt {
+        sc_int<8> data;
+diff --git examples/sysc/pkt_switch/receiver.cpp examples/sysc/pkt_switch/receiver.cpp
+--- examples/sysc/pkt_switch/receiver.cpp
++++ examples/sysc/pkt_switch/receiver.cpp
+@@ -37,6 +37,8 @@
+  *****************************************************************************/
+ 
+ #include "receiver.h"
++using std::cout;
++using std::endl;
+ 
+ 
+ void receiver:: entry()
+diff --git examples/sysc/pkt_switch/receiver.h examples/sysc/pkt_switch/receiver.h
+--- examples/sysc/pkt_switch/receiver.h
++++ examples/sysc/pkt_switch/receiver.h
+@@ -39,7 +39,10 @@
+ #ifndef RECEIVER_H_INCLUDED
+ #define RECEIVER_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ #include "pkt.h"
+ 
+ struct receiver: sc_module {
+diff --git examples/sysc/pkt_switch/sender.cpp examples/sysc/pkt_switch/sender.cpp
+--- examples/sysc/pkt_switch/sender.cpp
++++ examples/sysc/pkt_switch/sender.cpp
+@@ -40,6 +40,8 @@
+ #include <stdlib.h>
+ #include <time.h>
+ #include "sender.h"
++using std::cout;
++using std::endl;
+ 
+ void sender:: entry()
+ {
+diff --git examples/sysc/pkt_switch/sender.h examples/sysc/pkt_switch/sender.h
+--- examples/sysc/pkt_switch/sender.h
++++ examples/sysc/pkt_switch/sender.h
+@@ -38,7 +38,10 @@
+ #ifndef SENDER_H_INCLUDED
+ #define SENDER_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ #include "pkt.h"
+ 
+ struct sender: sc_module {
+diff --git examples/sysc/pkt_switch/switch.cpp examples/sysc/pkt_switch/switch.cpp
+--- examples/sysc/pkt_switch/switch.cpp
++++ examples/sysc/pkt_switch/switch.cpp
+@@ -36,7 +36,13 @@
+ 
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::cout;
++using std::endl;
++using std::free;
++using std::ostream;
+ #include "pkt.h"
+ #include "switch.h"
+ #include "fifo.h"
+diff --git examples/sysc/pkt_switch/switch.h examples/sysc/pkt_switch/switch.h
+--- examples/sysc/pkt_switch/switch.h
++++ examples/sysc/pkt_switch/switch.h
+@@ -38,7 +38,10 @@
+ #ifndef SWITCH_H_INCLUDED
+ #define SWITCH_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::ostream;
+ #include "pkt.h"
+ 
+ struct mcast_pkt_switch : sc_module {
+diff --git examples/sysc/pkt_switch/switch_clk.h examples/sysc/pkt_switch/switch_clk.h
+--- examples/sysc/pkt_switch/switch_clk.h
++++ examples/sysc/pkt_switch/switch_clk.h
+@@ -39,7 +39,8 @@
+ #ifndef SWITCH_CLK_H_INCLUDED
+ #define SWITCH_CLK_H_INCLUDED
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ 
+ struct switch_clk: sc_module {
+       sc_out<bool>   switch_cntrl;
+diff --git examples/sysc/risc_cpu/bios.cpp examples/sysc/risc_cpu/bios.cpp
+--- examples/sysc/risc_cpu/bios.cpp
++++ examples/sysc/risc_cpu/bios.cpp
+@@ -36,7 +36,15 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
++using std::ios;
++using std::printf;
+ #include "bios.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/dcache.cpp examples/sysc/risc_cpu/dcache.cpp
+--- examples/sysc/risc_cpu/dcache.cpp
++++ examples/sysc/risc_cpu/dcache.cpp
+@@ -36,7 +36,14 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
++using std::printf;
+ #include "dcache.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/decode.cpp examples/sysc/risc_cpu/decode.cpp
+--- examples/sysc/risc_cpu/decode.cpp
++++ examples/sysc/risc_cpu/decode.cpp
+@@ -37,7 +37,12 @@
+  
+ 
+ #include <climits>	// for definition on value 's MAX
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::ios;
++using std::printf;
+ #include "decode.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/exec.cpp examples/sysc/risc_cpu/exec.cpp
+--- examples/sysc/risc_cpu/exec.cpp
++++ examples/sysc/risc_cpu/exec.cpp
+@@ -36,7 +36,11 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::printf;
+ #include "exec.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/fetch.cpp examples/sysc/risc_cpu/fetch.cpp
+--- examples/sysc/risc_cpu/fetch.cpp
++++ examples/sysc/risc_cpu/fetch.cpp
+@@ -36,7 +36,12 @@
+  *****************************************************************************/
+  
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::ios;
++using std::printf;
+ #include "fetch.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/floating.cpp examples/sysc/risc_cpu/floating.cpp
+--- examples/sysc/risc_cpu/floating.cpp
++++ examples/sysc/risc_cpu/floating.cpp
+@@ -36,7 +36,11 @@
+  *****************************************************************************/
+  
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::printf;
+ #include "floating.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/icache.cpp examples/sysc/risc_cpu/icache.cpp
+--- examples/sysc/risc_cpu/icache.cpp
++++ examples/sysc/risc_cpu/icache.cpp
+@@ -39,7 +39,15 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
++using std::ios;
++using std::printf;
+ #include "icache.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/main.cpp examples/sysc/risc_cpu/main.cpp
+--- examples/sysc/risc_cpu/main.cpp
++++ examples/sysc/risc_cpu/main.cpp
+@@ -40,7 +40,14 @@
+ 
+ 
+ #include "directive.h"
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
++using std::cout;
++using std::endl;
++using std::fopen;
++using std::fscanf;
++using std::printf;
+ #include "bios.h"
+ #include "paging.h"
+ #include "icache.h"
+diff --git examples/sysc/risc_cpu/mmxu.cpp examples/sysc/risc_cpu/mmxu.cpp
+--- examples/sysc/risc_cpu/mmxu.cpp
++++ examples/sysc/risc_cpu/mmxu.cpp
+@@ -36,7 +36,12 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::ios;
++using std::printf;
+ #include "mmxu.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/paging.cpp examples/sysc/risc_cpu/paging.cpp
+--- examples/sysc/risc_cpu/paging.cpp
++++ examples/sysc/risc_cpu/paging.cpp
+@@ -36,7 +36,11 @@
+  *****************************************************************************/
+  
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::printf;
+ #include "paging.h"
+ #include "directive.h"
+ 
+diff --git examples/sysc/risc_cpu/pic.cpp examples/sysc/risc_cpu/pic.cpp
+--- examples/sysc/risc_cpu/pic.cpp
++++ examples/sysc/risc_cpu/pic.cpp
+@@ -36,7 +36,8 @@
+  *****************************************************************************/
+ 
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "pic.h"
+ 
+ void pic::entry(){
+diff --git examples/sysc/rsa/rsa.cpp examples/sysc/rsa/rsa.cpp
+--- examples/sysc/rsa/rsa.cpp
++++ examples/sysc/rsa/rsa.cpp
+@@ -66,7 +66,15 @@
+ #include <sys/types.h>
+ #include <time.h>
+ #include <stdlib.h>    // drand48, srand48
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
++using namespace sc_dt;
++using std::atoi;
++using std::cout;
++using std::endl;
++using std::rand;
++using std::size_t;
++using std::srand;
+ 
+ #define DEBUG_SYSTEMC // #undef this to disable assertions.
+ 
+diff --git examples/sysc/simple_bus/simple_bus.h examples/sysc/simple_bus/simple_bus.h
+--- examples/sysc/simple_bus/simple_bus.h
++++ examples/sysc/simple_bus/simple_bus.h
+@@ -44,7 +44,9 @@
+ #ifndef __simple_bus_h
+ #define __simple_bus_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_request.h"
+diff --git examples/sysc/simple_bus/simple_bus_arbiter.h examples/sysc/simple_bus/simple_bus_arbiter.h
+--- examples/sysc/simple_bus/simple_bus_arbiter.h
++++ examples/sysc/simple_bus/simple_bus_arbiter.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_arbiter_h
+ #define __simple_bus_arbiter_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_request.h"
+diff --git examples/sysc/simple_bus/simple_bus_arbiter_if.h examples/sysc/simple_bus/simple_bus_arbiter_if.h
+--- examples/sysc/simple_bus/simple_bus_arbiter_if.h
++++ examples/sysc/simple_bus/simple_bus_arbiter_if.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_arbiter_if_h
+ #define __simple_bus_arbiter_if_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ 
+diff --git examples/sysc/simple_bus/simple_bus_blocking_if.h examples/sysc/simple_bus/simple_bus_blocking_if.h
+--- examples/sysc/simple_bus/simple_bus_blocking_if.h
++++ examples/sysc/simple_bus/simple_bus_blocking_if.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_blocking_if_h
+ #define __simple_bus_blocking_if_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ 
+diff --git examples/sysc/simple_bus/simple_bus_direct_if.h examples/sysc/simple_bus/simple_bus_direct_if.h
+--- examples/sysc/simple_bus/simple_bus_direct_if.h
++++ examples/sysc/simple_bus/simple_bus_direct_if.h
+@@ -38,7 +38,8 @@
+ #ifndef __simple_bus_direct_if_h
+ #define __simple_bus_direct_if_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
+ 
+ class simple_bus_direct_if
+   : public virtual sc_interface
+diff --git examples/sysc/simple_bus/simple_bus_fast_mem.h examples/sysc/simple_bus/simple_bus_fast_mem.h
+--- examples/sysc/simple_bus/simple_bus_fast_mem.h
++++ examples/sysc/simple_bus/simple_bus_fast_mem.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_fast_mem_h
+ #define __simple_bus_fast_mem_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_slave_if.h"
+diff --git examples/sysc/simple_bus/simple_bus_main.cpp examples/sysc/simple_bus/simple_bus_main.cpp
+--- examples/sysc/simple_bus/simple_bus_main.cpp
++++ examples/sysc/simple_bus/simple_bus_main.cpp
+@@ -35,7 +35,8 @@
+  
+  *****************************************************************************/
+ 
+-#include "systemc.h"
++#include <systemc>
++using namespace sc_core;
+ #include "simple_bus_test.h"
+ 
+ int sc_main(int, char **)
+diff --git examples/sysc/simple_bus/simple_bus_master_blocking.h examples/sysc/simple_bus/simple_bus_master_blocking.h
+--- examples/sysc/simple_bus/simple_bus_master_blocking.h
++++ examples/sysc/simple_bus/simple_bus_master_blocking.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_master_blocking_h
+ #define __simple_bus_master_blocking_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_blocking_if.h"
+diff --git examples/sysc/simple_bus/simple_bus_master_direct.h examples/sysc/simple_bus/simple_bus_master_direct.h
+--- examples/sysc/simple_bus/simple_bus_master_direct.h
++++ examples/sysc/simple_bus/simple_bus_master_direct.h
+@@ -39,7 +39,8 @@
+ #ifndef __simple_bus_master_direct_h
+ #define __simple_bus_master_direct_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
+ 
+ #include "simple_bus_direct_if.h"
+ 
+diff --git examples/sysc/simple_bus/simple_bus_master_non_blocking.h examples/sysc/simple_bus/simple_bus_master_non_blocking.h
+--- examples/sysc/simple_bus/simple_bus_master_non_blocking.h
++++ examples/sysc/simple_bus/simple_bus_master_non_blocking.h
+@@ -39,7 +39,9 @@
+ #ifndef __simple_bus_master_non_blocking_h
+ #define __simple_bus_master_non_blocking_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_non_blocking_if.h"
+diff --git examples/sysc/simple_bus/simple_bus_non_blocking_if.h examples/sysc/simple_bus/simple_bus_non_blocking_if.h
+--- examples/sysc/simple_bus/simple_bus_non_blocking_if.h
++++ examples/sysc/simple_bus/simple_bus_non_blocking_if.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_non_blocking_if_h
+ #define __simple_bus_non_blocking_if_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ 
+diff --git examples/sysc/simple_bus/simple_bus_slave_if.h examples/sysc/simple_bus/simple_bus_slave_if.h
+--- examples/sysc/simple_bus/simple_bus_slave_if.h
++++ examples/sysc/simple_bus/simple_bus_slave_if.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_slave_if_h
+ #define __simple_bus_slave_if_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_direct_if.h"
+diff --git examples/sysc/simple_bus/simple_bus_slow_mem.h examples/sysc/simple_bus/simple_bus_slow_mem.h
+--- examples/sysc/simple_bus/simple_bus_slow_mem.h
++++ examples/sysc/simple_bus/simple_bus_slow_mem.h
+@@ -38,7 +38,9 @@
+ #ifndef __simple_bus_slow_mem_h
+ #define __simple_bus_slow_mem_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ #include "simple_bus_types.h"
+ #include "simple_bus_slave_if.h"
+diff --git examples/sysc/simple_bus/simple_bus_test.h examples/sysc/simple_bus/simple_bus_test.h
+--- examples/sysc/simple_bus/simple_bus_test.h
++++ examples/sysc/simple_bus/simple_bus_test.h
+@@ -38,7 +38,8 @@
+ #ifndef __simple_bus_test_h
+ #define __simple_bus_test_h
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
+ 
+ #include "simple_bus_master_blocking.h"
+ #include "simple_bus_master_non_blocking.h"
+diff --git examples/sysc/simple_bus/simple_bus_types.h examples/sysc/simple_bus/simple_bus_types.h
+--- examples/sysc/simple_bus/simple_bus_types.h
++++ examples/sysc/simple_bus/simple_bus_types.h
+@@ -39,7 +39,9 @@
+ #define __simple_bus_types_h
+ 
+ #include <stdio.h>
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::FILE;
+ 
+ enum simple_bus_status { SIMPLE_BUS_OK = 0
+ 			 , SIMPLE_BUS_REQUEST
+diff --git examples/sysc/simple_fifo/simple_fifo.cpp examples/sysc/simple_fifo/simple_fifo.cpp
+--- examples/sysc/simple_fifo/simple_fifo.cpp
++++ examples/sysc/simple_fifo/simple_fifo.cpp
+@@ -40,7 +40,11 @@
+  *****************************************************************************/
+ 
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::cout;
++using std::endl;
++using std::flush;
+ 
+ class write_if : virtual public sc_interface
+ {
+diff --git examples/sysc/simple_perf/simple_perf.cpp examples/sysc/simple_perf/simple_perf.cpp
+--- examples/sysc/simple_perf/simple_perf.cpp
++++ examples/sysc/simple_perf/simple_perf.cpp
+@@ -84,7 +84,12 @@
+  *****************************************************************************/
+ 
+ 
+-#include <systemc.h>
++#include <systemc>
++using namespace sc_core;
++using std::atoi;
++using std::cout;
++using std::endl;
++using std::rand;
+ 
+ class write_if : virtual public sc_interface
+ {

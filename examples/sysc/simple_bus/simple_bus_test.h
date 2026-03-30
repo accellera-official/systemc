@@ -38,7 +38,8 @@
 #ifndef __simple_bus_test_h
 #define __simple_bus_test_h
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
 
 #include "simple_bus_master_blocking.h"
 #include "simple_bus_master_non_blocking.h"

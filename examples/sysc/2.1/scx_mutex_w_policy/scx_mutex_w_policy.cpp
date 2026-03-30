@@ -56,7 +56,12 @@
 // See section 7.4, page 120 of "System Design with SystemC" for
 //  additional discussion
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
+using std::rand;
+using std::remove;
 
 class scx_mutex_w_policy : public sc_mutex 
 { 

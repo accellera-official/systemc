@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "stage3.h"
 
 //Definition of power method
