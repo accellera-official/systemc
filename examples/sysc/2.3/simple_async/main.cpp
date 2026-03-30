@@ -28,7 +28,10 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
 #include "async_event.h"
 
 #if SC_CPLUSPLUS >= 201103L

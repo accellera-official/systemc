@@ -37,7 +37,13 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::FILE;
+using std::fclose;
+using std::fopen;
+using std::fprintf;
 #include "sink.h"
 
 void sink::entry()
