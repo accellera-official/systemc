@@ -37,7 +37,11 @@
 //  Andy Goodrich: new example using a toggle-toggle handshake for communication.
 //
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::cout;
+using std::endl;
 #include <iomanip>
 #include "sc_ttd.h"
 
