@@ -523,7 +523,7 @@ sc_unsigned::set_packed_rep(sc_digit *buf)
       digit[SC_DIGIT_INDEX(i)] &= ~(one_and_zeros(SC_BIT_INDEX(i)));  // Clear
 
   }
-
+  adjust_hod();
 }
 
 
@@ -920,21 +920,23 @@ sc_unsigned_subref::operator = ( double v )
 
     if (v < 0)
 	v = -v;
+    v = std::trunc(v);
 
     int i = 0;
 
-    while (std::floor(v) && (i < nd)) {
+    while (v > 0.0 && (i < nd)) {
 #ifndef WIN32
 	d[i++] = (sc_digit) std::floor(remainder(v, DIGIT_RADIX));
 #else
-	d[i++] = (sc_digit) std::floor(std::fmod(v, DIGIT_RADIX));
+	d[i++] = static_cast<sc_digit>(std::fmod(v, DIGIT_RADIX)) & DIGIT_MASK;
 #endif
-	v /= DIGIT_RADIX;
+	v = std::floor(v / DIGIT_RADIX);
     }
 
     vector_zero(i, nd, d);
 
     vector_insert_bits( nd,  d, m_obj_p->get_digits(), m_left, m_right );
+    m_obj_p->adjust_hod();
 
     return *this;
 }
