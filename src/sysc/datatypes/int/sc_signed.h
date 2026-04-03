@@ -839,6 +839,7 @@ public:
 
       digit[digit_num] |= one_and_zeros(bit_num);
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+      adjust_hod();
     }
 
 
@@ -855,6 +856,7 @@ public:
 
       digit[digit_num] &= ~(one_and_zeros(bit_num));
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+      adjust_hod();
     }
 
 
