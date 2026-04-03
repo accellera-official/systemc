@@ -1,0 +1,46 @@
+SystemC Simulation
+--- to_int64 sign extension ---
+sc_bigint<7>(-1).to_int64() = -1
+sc_bigint<16>(-1).to_int64() = -1
+sc_bigint<32>(-1).to_int64() = -1
+sc_bigint<33>(-1).to_int64() = -1
+sc_bigint<40>(-1).to_int64() = -1
+sc_bigint<48>(-1).to_int64() = -1
+sc_bigint<54>(-1).to_int64() = -1
+sc_bigint<63>(-1).to_int64() = -1
+sc_bigint<64>(-1).to_int64() = -1
+sc_bigint<100>(-1).to_int64() = -1
+sc_bigint<32>(-1048577).to_int64() = -1048577
+sc_bigint<33>(-1048577).to_int64() = -1048577
+sc_bigint<54>(-1048577).to_int64() = -1048577
+sc_bigint<64>(-1048577).to_int64() = -1048577
+sc_bigint<100>(-1048577).to_int64() = -1048577
+sc_bigint<32>(42).to_int64() = 42
+sc_bigint<54>(42).to_int64() = 42
+sc_bigint<64>(42).to_int64() = 42
+sc_bigint<32>(0).to_int64() = 0
+sc_bigint<54>(0).to_int64() = 0
+sc_bigint<64>(0).to_int64() = 0
+
+--- to_uint64 ---
+sc_bigint<16>(12345).to_uint64() = 12345
+sc_bigint<32>(12345).to_uint64() = 12345
+sc_bigint<54>(12345).to_uint64() = 12345
+sc_bigint<64>(12345).to_uint64() = 12345
+sc_bigint<16>(0).to_uint64() = 0
+sc_bigint<64>(0).to_uint64() = 0
+
+--- sc_signed to_int64 ---
+sc_signed(7)(-1).to_int64() = -1
+sc_signed(16)(-1).to_int64() = -1
+sc_signed(32)(-1).to_int64() = -1
+sc_signed(33)(-1).to_int64() = -1
+sc_signed(40)(-1).to_int64() = -1
+sc_signed(48)(-1).to_int64() = -1
+sc_signed(54)(-1).to_int64() = -1
+sc_signed(63)(-1).to_int64() = -1
+sc_signed(64)(-1).to_int64() = -1
+sc_signed(100)(-1).to_int64() = -1
+sc_signed(54)(-1048577).to_int64() = -1048577
+sc_signed(64)(-1048577).to_int64() = -1048577
+sc_signed(54)(42).to_int64() = 42
