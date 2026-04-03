@@ -1,0 +1,17 @@
+SystemC Simulation
+--- sc_bigint operator=(double) ---
+sc_bigint<6>(12.0).to_int() = 12
+sc_bigint<6>(-12.7).to_int() = -12
+sc_bigint<6>(0.0).to_int() = 0
+sc_bigint<40>(2^40).to_int64() = 0
+
+--- sc_biguint operator=(double) ---
+sc_biguint<6>(44.9).to_uint() = 44
+sc_biguint<6>(0.0).to_uint() = 0
+
+--- sc_signed operator=(double) ---
+sc_signed(6)(12.0).to_int() = 12
+sc_signed(6)(-12.7).to_int() = -12
+
+--- sc_unsigned operator=(double) ---
+sc_unsigned(6)(44.9).to_uint() = 44
