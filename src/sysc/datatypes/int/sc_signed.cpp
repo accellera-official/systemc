@@ -529,6 +529,7 @@ sc_signed::get_packed_rep(sc_digit *buf) const
   for (int digit_i =0; digit_i < ndigits; ++digit_i) {
       digit[digit_i] = *buf++;
   }
+  const_cast<sc_signed*>(this)->adjust_hod();
 }
 
 
