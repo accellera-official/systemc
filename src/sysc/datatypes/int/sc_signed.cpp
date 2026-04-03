@@ -359,16 +359,29 @@ const sc_signed&
 sc_signed::operator=(double v)
 {
   is_bad_double(v);
+
+  // Truncate toward zero (matches C++ double-to-integer semantics).
+  v = std::trunc(v);
+
+  bool negative = (v < 0.0);
+  if (negative) v = -v;
+
   int i = 0;
-  while (floor(v) && (i < ndigits)) {
+  while (v > 0.0 && i < ndigits) {
 #ifndef WIN32
     digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = static_cast<sc_digit>(std::fmod(v, DIGIT_RADIX)) & DIGIT_MASK;
 #endif
-    v /= DIGIT_RADIX;
+    v = std::floor(v / DIGIT_RADIX);
   }
   vector_zero(i, ndigits, digit);
+
+  if (negative) {
+    vector_twos_complement(ndigits, digit);
+  }
+
+  adjust_hod();
   return *this;
 }
 
