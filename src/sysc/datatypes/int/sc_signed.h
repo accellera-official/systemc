@@ -1532,6 +1532,10 @@ sc_signed::to_int64() const
     else {
         result = ( (int64)digit[1] << BITS_PER_DIGIT ) | digit[0];
     }
+    if ( nbits < 64 ) {
+        int shift = 64 - nbits;
+        result = (result << shift) >> shift;
+    }
     return result;
 }
 
