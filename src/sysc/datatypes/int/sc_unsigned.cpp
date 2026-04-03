@@ -356,16 +356,23 @@ const sc_unsigned&
 sc_unsigned::operator=(double v)
 {
   is_bad_double(v);
+
+  // Truncate toward zero (matches C++ double-to-integer semantics).
+  v = std::trunc(v);
+
+  if (v < 0.0) v = -v;
+
   int i = 0;
-  while (std::floor(v) && (i < ndigits)) {
+  while (v > 0.0 && i < ndigits) {
 #ifndef WIN32
-    digit[i++] = ((sc_digit)std::floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = ((sc_digit)std::floor(std::fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = static_cast<sc_digit>(std::fmod(v, DIGIT_RADIX)) & DIGIT_MASK;
 #endif
-    v /= DIGIT_RADIX;
+    v = std::floor(v / DIGIT_RADIX);
   }
   vector_zero(i, ndigits, digit);
+  adjust_hod();
   return *this;
 }
 
