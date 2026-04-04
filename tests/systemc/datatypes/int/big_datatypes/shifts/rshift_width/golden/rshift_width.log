@@ -1,0 +1,10 @@
+SystemC Simulation
+sc_bigint<54>(-1048577) >> 32: value=-1 width=54
+sc_bigint<128>(-1) >> 64: value=-1 width=128
+sc_bigint<54>(pos) >> 48: value=0 width=54
+sc_bigint<54>(-1048577) >> 100: value=-1 width=54
+sc_signed(54)(-1048577) >> 32: value=-1 width=54
+sc_biguint<54>(0x3FFFFFFFFF) >> 32: value=63 width=54
+sc_biguint<54>(0x3FFFFFFFFF) >> 100: value=0 width=54
+sc_unsigned(54)(0x3FFFFFFFFF) >> 32: value=63 width=54
+PASSED
