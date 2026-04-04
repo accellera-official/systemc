@@ -1068,33 +1068,11 @@ public:
       if (v <= 0) {
           return sc_unsigned(*this);
       }
-      int nb = nbits - v;
 
-      // If we shift off the end return the sign bit.
+      // Preserve full width in the result (IEEE 1666-2023 §7.2.8).
 
-      if ( 0 >= nb ) {
-          sc_unsigned result(1, true);
-          return result;
-      }
-
-      // Return a value that is the width of the shifted value:
-
-      sc_unsigned result(nb, false);
-      if ( nbits < 33 ) {
-          result.digit[0] = (int)digit[0] >> v;
-      }
-      else if ( nbits < 65 ) {
-          int64 tmp = digit[1];
-          tmp = (tmp << 32) | digit[0];
-          tmp = tmp >> v;
-          result.digit[0] = (sc_digit)tmp;
-          if ( nb > 32 ) {
-              result.digit[1] = (tmp >>32);
-          }
-      }
-      else {
-          vector_extract(digit, result.digit, nbits-1, v);
-      }
+      sc_unsigned result(*this);
+      vector_shift_right(result.ndigits, result.digit, v, 0);
       result.adjust_hod();
       return result;
   }
