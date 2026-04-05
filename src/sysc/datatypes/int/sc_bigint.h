@@ -433,10 +433,6 @@ to_int64() const
     else {
         result = ( (uint64)digit[1] << BITS_PER_DIGIT ) | digit[0]; 
     }
-    if ( W < 64 ) {
-        int shift = 64 - W;
-        result = (result << shift) >> shift;
-    }
     return result;
 }
 
