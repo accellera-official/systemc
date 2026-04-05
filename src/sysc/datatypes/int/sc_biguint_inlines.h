@@ -468,7 +468,7 @@ sc_biguint<W>::operator>>(int v) const
     // If we shift off the end return a single bit 0.
 
     if ( nb <= 0 ) {
-        sc_unsigned result(W, true);
+        sc_unsigned result(nbits, true);
 	return result;
     }
 
@@ -479,13 +479,13 @@ sc_biguint<W>::operator>>(int v) const
     // one bit, e.g., W < 32, not W < 33.
 
     if ( W < 32 ) {
-	sc_unsigned result(W, false); 
+	sc_unsigned result(nbits, false); 
 	result.digit[0] = digit[0] >> v;
 	return result;
     }
     else if ( W < 64 ) {
-	sc_unsigned result(W, false); 
-        uint64 tmp = digit[DIV_CEIL(W)-1];
+	sc_unsigned result(nbits, false); 
+        uint64 tmp = digit[1];
         tmp = (tmp << 32) | digit[0];
 	tmp = tmp >> v;
 	result.digit[0] = tmp;
@@ -493,8 +493,8 @@ sc_biguint<W>::operator>>(int v) const
 	return result;
     }
     else {
-	sc_unsigned result(W, true); 
-	vector_extract(digit, result.digit, W-1, v);  
+	sc_unsigned result(nbits, true); 
+	vector_extract(digit, result.digit, nbits-1, v);  
 	return result;
     }
 }

@@ -1073,13 +1073,12 @@ public:
       // If we shift off the end return the sign bit.
 
       if ( 0 >= nb ) {
-          sc_unsigned result(1, true);
+          sc_unsigned result(nbits, true);
           return result;
       }
 
       // Return a value that is the width of the shifted value:
 
-      sc_unsigned result(nb, false);
       if ( nbits < 33 ) {
 	  sc_unsigned result(nbits, false);
           result.digit[0] = (int)digit[0] >> v;
@@ -1091,9 +1090,7 @@ public:
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
           result.digit[0] = (sc_digit)tmp;
-          if ( nb > 32 ) {
-              result.digit[1] = (tmp >>32);
-          }
+	  result.digit[1] = (tmp>>32);
 	  return result;
       }
       else {
@@ -1101,8 +1098,6 @@ public:
           vector_extract(digit, result.digit, nbits-1, v);
 	  return result;
       }
-      result.adjust_hod();
-      return result;
   }
 
   sc_unsigned operator>>(const sc_signed&  v) const;
