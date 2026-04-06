@@ -1272,7 +1272,7 @@ const char*
 scfx_rep::to_string( sc_numrep numrep, int w_prefix,
 		     sc_fmt fmt, const scfx_params* params ) const
 {
-    static scfx_string s;
+    thread_local scfx_string s;
 
     s.clear();
 
