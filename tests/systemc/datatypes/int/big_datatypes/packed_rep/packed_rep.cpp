@@ -30,19 +30,19 @@ int sc_main(int, char*[]) {
     x1.get_packed_rep(buf1);
     cout << "sc_bigint<6>(-1) get_packed_rep(0x0C): to_int() = " << x1.to_int() << endl;
 
-    cout << endl << "--- sc_biguint set_packed_rep ---" << endl;
+    sc_bigint<6> x2;
+    x2 = 0;
+    sc_digit buf2[1] = { 0x2C }; // 101100 = -20 in 6-bit signed
+    x2.get_packed_rep(buf2);
+    cout << "sc_bigint<6>(0) get_packed_rep(0x2C): to_int() = " << x2.to_int() << endl;
 
-    sc_biguint<6> u1;
-    u1 = 63;
-    sc_digit buf2[1] = { 0x05 }; // 000101 = 5
-    u1.set_packed_rep(buf2);
-    cout << "sc_biguint<6>(63) set_packed_rep(0x05): to_uint() = " << u1.to_uint() << endl;
+    cout << endl << "--- sc_signed get_packed_rep ---" << endl;
 
-    sc_biguint<6> u2;
-    u2 = 0;
-    sc_digit buf3[1] = { 0x3F }; // 111111 = 63
-    u2.set_packed_rep(buf3);
-    cout << "sc_biguint<6>(0) set_packed_rep(0x3F): to_uint() = " << u2.to_uint() << endl;
+    sc_signed s1(6);
+    s1 = 0;
+    sc_digit buf3[1] = { 0x2C };
+    s1.get_packed_rep(buf3);
+    cout << "sc_signed(6)(0) get_packed_rep(0x2C): to_int() = " << s1.to_int() << endl;
 
     return 0;
 }

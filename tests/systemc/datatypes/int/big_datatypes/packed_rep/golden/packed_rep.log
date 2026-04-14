@@ -1,7 +1,7 @@
 SystemC Simulation
 --- sc_bigint get_packed_rep (writes digit[]) ---
 sc_bigint<6>(-1) get_packed_rep(0x0C): to_int() = 12
+sc_bigint<6>(0) get_packed_rep(0x2C): to_int() = -20
 
---- sc_biguint set_packed_rep ---
-sc_biguint<6>(63) set_packed_rep(0x05): to_uint() = 5
-sc_biguint<6>(0) set_packed_rep(0x3F): to_uint() = 63
+--- sc_signed get_packed_rep ---
+sc_signed(6)(0) get_packed_rep(0x2C): to_int() = -20

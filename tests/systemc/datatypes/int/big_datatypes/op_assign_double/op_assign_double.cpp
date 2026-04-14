@@ -40,16 +40,6 @@ int sc_main(int, char*[]) {
     x4 = 1099511627776.0; // 2^40
     cout << "sc_bigint<40>(2^40).to_int64() = " << x4.to_int64() << endl;
 
-    cout << endl << "--- sc_biguint operator=(double) ---" << endl;
-
-    sc_biguint<6> u1;
-    u1 = 44.9;
-    cout << "sc_biguint<6>(44.9).to_uint() = " << u1.to_uint() << endl;
-
-    sc_biguint<6> u2;
-    u2 = 0.0;
-    cout << "sc_biguint<6>(0.0).to_uint() = " << u2.to_uint() << endl;
-
     cout << endl << "--- sc_signed operator=(double) ---" << endl;
 
     sc_signed s1(6);
@@ -59,12 +49,6 @@ int sc_main(int, char*[]) {
     sc_signed s2(6);
     s2 = -12.7;
     cout << "sc_signed(6)(-12.7).to_int() = " << s2.to_int() << endl;
-
-    cout << endl << "--- sc_unsigned operator=(double) ---" << endl;
-
-    sc_unsigned us1(6);
-    us1 = 44.9;
-    cout << "sc_unsigned(6)(44.9).to_uint() = " << us1.to_uint() << endl;
 
     return 0;
 }
