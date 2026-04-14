@@ -1114,7 +1114,7 @@ public:
       if (v <= 0)
           return *this;
       vector_shift_right(ndigits, digit, v, 0);
-    return *this;
+      return *this;
   }
   const sc_unsigned& operator>>=(const sc_signed&    v);
   const sc_unsigned& operator>>=(const sc_unsigned&  v) { return operator>>=(v.to_int()); }
