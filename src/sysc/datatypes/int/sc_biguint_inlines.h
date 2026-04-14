@@ -479,23 +479,23 @@ sc_biguint<W>::operator>>(int v) const
     // one bit, e.g., W < 32, not W < 33.
 
     if ( W < 32 ) {
-	sc_unsigned result(nbits, false); 
-	result.digit[0] = digit[0] >> v;
-	return result;
+        sc_unsigned result(nbits, false); 
+        result.digit[0] = digit[0] >> v;
+        return result;
     }
     else if ( W < 64 ) {
-	sc_unsigned result(nbits, false); 
+        sc_unsigned result(nbits, false); 
         uint64 tmp = digit[1];
         tmp = (tmp << 32) | digit[0];
-	tmp = tmp >> v;
-	result.digit[0] = tmp;
-	result.digit[1] = (tmp >> 32);
-	return result;
+        tmp = tmp >> v;
+        result.digit[0] = tmp;
+        result.digit[1] = (tmp >> 32);
+        return result;
     }
     else {
-	sc_unsigned result(nbits, true); 
-	vector_extract(digit, result.digit, nbits-1, v);  
-	return result;
+        sc_unsigned result(nbits, true); 
+        vector_extract(digit, result.digit, nbits-1, v);  
+        return result;
     }
 }
 
@@ -503,14 +503,13 @@ template<int W>
 const sc_biguint<W>&
 sc_biguint<W>::operator>>=(int v)
 {
-
     if (v <= 0)
         return *this;
 
     int nd = DIV_CEIL(W+1);
     vector_shift_right(nd, digit, v, 0);
 
-  return *this;
+    return *this;
 }
 
 // sc_bv<W> and sc_lv<W> constructors and assignments using an sc_biguint<WO> value:
