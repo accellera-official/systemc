@@ -1082,31 +1082,33 @@ public:
       // If we shift off the end return the sign bit.
 
       if ( 0 >= nb ) {
-          sc_signed result(1, false);
-          result.digit[0] = 0 > (int)digit[ndigits-1] ? -1 : 0;
+          sc_signed result(nbits, false);
+          result = 0 > (int)digit[ndigits-1] ? -1 : 0;
           return result;
       }
 
       // Return a value that is the width of the shifted value:
 
-      sc_signed result(nb, false);
       if ( nbits < 33 ) {
+          sc_signed result(nbits, false);
           result.digit[0] = (int)digit[0] >> v;
+          return result;
       }
       else if ( nbits < 65 ) {
+          sc_signed result(nbits, false);
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
           result.digit[0] = (sc_digit)tmp;
-          if ( nb > 32 ) {
-              result.digit[1] = (tmp >>32);
-          }
+	  result.digit[1] = (tmp >>32);
+          return result;
       }
       else {
-          vector_extract(digit, result.digit, nbits-1, v);
+          int nd = DIV_CEIL(nbits);
+          sc_signed result(*this);
+          vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
+          return result;
       }
-      result.adjust_hod();
-      return result;
   }
 
   sc_signed operator>>(const sc_unsigned& v) const;
