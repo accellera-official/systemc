@@ -1104,10 +1104,10 @@ public:
           return result;
       }
       else {
-	  int nd = DIV_CEIL(nbits);
-	  sc_signed result(*this);
-	  vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
-	  return result;
+          int nd = DIV_CEIL(nbits);
+          sc_signed result(*this);
+          vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
+          return result;
       }
   }
 

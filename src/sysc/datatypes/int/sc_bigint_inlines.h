@@ -492,32 +492,32 @@ sc_bigint<W>::operator>>(int v) const
     // If we shift off the end return the sign bit.
 
     if ( 0 >= nb ) {
-	sc_signed result(W, false);
+        sc_signed result(W, false);
         result = (int)digit[HOD] ? -1 : 0;
-	return result;
+        return result;
     }
 
     // Return a value that is the width of the shifted value:
 
     if ( W < 33 ) {
-	sc_signed result(W, false);
-	result.digit[0] = (int)digit[0] >> v;
-	return result;
+        sc_signed result(W, false);
+        result.digit[0] = (int)digit[0] >> v;
+        return result;
     }
     else if ( W < 65 ) {
-	sc_signed result(W, false);
+        sc_signed result(W, false);
         int64 tmp = digit[DIV_CEIL(W)-1];
         tmp = (tmp << 32) | digit[0];
-	tmp = tmp >> v;
-	result.digit[0] = tmp;
-	result.digit[1] = (tmp >>32);
-	return result;
+        tmp = tmp >> v;
+        result.digit[0] = tmp;
+        result.digit[1] = (tmp >>32);
+        return result;
     }
     else {
-	int nd = DIV_CEIL(W);
-	sc_signed result(*this);
-	vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
-	return result;
+        int nd = DIV_CEIL(W);
+        sc_signed result(*this);
+        vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
+        return result;
     }
 }
 
