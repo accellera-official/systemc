@@ -1080,23 +1080,23 @@ public:
       // Return a value that is the width of the shifted value:
 
       if ( nbits < 33 ) {
-	  sc_unsigned result(nbits, false);
+          sc_unsigned result(nbits, false);
           result.digit[0] = (int)digit[0] >> v;
-	  return result;
+          return result;
       }
       else if ( nbits < 65 ) {
-	  sc_unsigned result(nbits, false);
+          sc_unsigned result(nbits, false);
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
           result.digit[0] = (sc_digit)tmp;
-	  result.digit[1] = (tmp>>32);
-	  return result;
+          result.digit[1] = (tmp>>32);
+          return result;
       }
       else {
-	  sc_unsigned result(nbits, true);
+          sc_unsigned result(nbits, true);
           vector_extract(digit, result.digit, nbits-1, v);
-	  return result;
+          return result;
       }
   }
 
