@@ -469,7 +469,7 @@ sc_biguint<W>::operator>>(int v) const
 
     if ( nb <= 0 ) {
         sc_unsigned result(nbits, true);
-	return result;
+        return result;
     }
 
 
