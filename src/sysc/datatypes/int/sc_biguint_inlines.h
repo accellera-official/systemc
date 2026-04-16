@@ -226,13 +226,14 @@ sc_biguint<W>::operator - ()
 }
 
 template<int W>
-inline const sc_bigint<W+1>
+inline const sc_biguint<W>
 sc_biguint<W>::operator ~ ()
 {
-    sc_bigint<W+1> result;
+    sc_biguint<W> result;
     for ( int digit_i = 0; digit_i <= HOD; ++digit_i ) {
         result.digit[digit_i] = ~digit[digit_i];
     }
+    result.adjust_hod();
     return result;
 }
 
