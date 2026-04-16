@@ -138,7 +138,7 @@ class sc_fxnum_fast;
 
   // Bitwise NOT operator (unary).
 
-  SC_API sc_signed operator ~ (const sc_unsigned& u);
+  SC_API sc_unsigned operator ~ (const sc_unsigned& u);
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_unsigned_bitref_r
@@ -1131,7 +1131,7 @@ public:
 
   // Bitwise NOT operator (unary).
 
-  friend SC_API sc_signed operator ~ (const sc_unsigned& u);
+  friend SC_API sc_unsigned operator ~ (const sc_unsigned& u);
 
 protected:
 
