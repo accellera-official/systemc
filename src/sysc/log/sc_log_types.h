@@ -166,8 +166,8 @@ struct sc_log_impl;
  */
 struct sc_log_logger_cache {
   sc_log_level level = sc_log_level::UNSET;
-  std::string_view tag{};      // Logger tag/identifier
-  std::string_view scname{};   // Captured sc_object name (from this->name())
+  std::string tag{};           // Logger tag/identifier (owns the string)
+  std::string scname{};        // Captured sc_object name (owns the string)
   const char* typename_str = nullptr; // Captured type name (from typeid(*this).name())
 
   /**
@@ -183,6 +183,27 @@ struct sc_log_logger_cache {
    */
   sc_log_level get_log_verbosity_cached(const char *file, int line,
                                         std::string_view local_tag = {});
+
+  /**
+   * @brief Set the tag to a runtime-computed string.
+   *
+   * The cached level is reset so the verbosity function re-evaluates
+   * with the new tag on the next log statement.
+   *
+   * @param new_tag the new tag string
+   */
+  void set_tag(std::string new_tag);
+
+  /// Get/set the logger cache that most recently performed a verbosity
+  /// check on this thread.  Used by the report handler to access
+  /// scname/tag/typename.
+  ///
+  /// Lifecycle: set by get_log_verbosity_cached() (called during the
+  /// SC_LOG verbosity check), cleared by ~sc_logger() (after the report
+  /// handler has run).  Accessor functions ensure correct linkage across
+  /// shared library boundaries.
+  static sc_log_logger_cache* get_current();
+  static void set_current(sc_log_logger_cache* p);
 };
 
 /**
@@ -193,8 +214,6 @@ struct sc_log_logger_cache {
  * default constructor, so the owning object pointer must be provided here (when
  * available).
  *
- * The factory returns string_view for tag and scname (which reference string
- * literals or existing strings), and const char* for typename_str (from typeid).
  */
 struct sc_log_handle_factory {
   template <class TYPE>
@@ -204,8 +223,8 @@ struct sc_log_handle_factory {
     const char *t = typeid(*p).name();
     return sc_log_logger_cache{
         lvl,
-        tag_str ? std::string_view(tag_str) : std::string_view(),
-        n ? std::string_view(n) : std::string_view(),
+        tag_str ? std::string(tag_str) : std::string(),
+        n ? std::string(n) : std::string(),
         t  // typeid().name() returns const char* with static storage
     };
   }
@@ -214,8 +233,8 @@ struct sc_log_handle_factory {
                                          const char *tag_str) {
     return sc_log_logger_cache{
         lvl,
-        tag_str ? std::string_view(tag_str) : std::string_view(),
-        std::string_view(),
+        tag_str ? std::string(tag_str) : std::string(),
+        std::string(),
         nullptr  // No type information for static loggers
     };
   }
@@ -250,6 +269,7 @@ struct sc_logger {
             sc_log_level verbosity = sc_core::sc_log_level::INFO)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
+
   sc_logger() = delete;
 
   sc_logger(const sc_logger &) = delete;
@@ -275,9 +295,10 @@ struct sc_logger {
                             sc_core::SC_STOP | sc_core::SC_ABORT));
     }
     ::sc_core::sc_report_handler::report(
-        SEVERITY, t ? t : "SystemC", os.str().c_str(),
+        SEVERITY, (t && *t) ? t : "SystemC", os.str().c_str(),
         static_cast<sc_core::sc_verbosity>(level), file, line);
     sc_core::sc_report_handler::set_actions(SEVERITY, old);
+    sc_log_logger_cache::set_current(nullptr);
   }
   /**
    * @fn sc_logger& type()
@@ -336,6 +357,7 @@ protected:
 // underscores are generally reserved, this pattern (_m_*) is safe as it doesn't
 // conflict with reserved patterns (__* or _Capital*).
 #define SC_LOG_LOG_LEVEL_CACHE _m_sc_log_log_level_cache_
+#define SC_LOG_LOG_LEVEL_CACHE_GLOBAL ::_m_sc_log_log_level_cache_
 
 /** @} */ // end of sc_log
 #endif    /* _SC_LOG_TYPES_H_ */
