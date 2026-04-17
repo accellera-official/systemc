@@ -46,14 +46,30 @@ cmake_minimum_required(VERSION 3.16...3.31)
 
 option(SYSTEMC_UNITY_BUILD "Enable unity build" OFF)
 
+# Detect format string support: prefer std::format (C++20), fall back to fmt.
+include(CheckCXXSourceCompiles)
+set(CMAKE_REQUIRED_FLAGS "")
+set(CMAKE_CXX_STANDARD 20)
+check_cxx_source_compiles("
+    #include <format>
+    int main() { auto s = std::format(\"{}\", 42); return 0; }
+" HAS_STD_FORMAT)
+unset(CMAKE_CXX_STANDARD)
+
+if(NOT HAS_STD_FORMAT)
+    find_package(fmt QUIET)
+endif()
+
 function(add_systemc_library libName scBuildDefine)
 
     add_library(${libName} ${ARGN})
 
-    target_compile_features(
-        ${libName}
-        PUBLIC
-        cxx_std_20)
+    target_compile_features(${libName} PUBLIC cxx_std_20)
+
+    if(NOT HAS_STD_FORMAT AND fmt_FOUND)
+        target_link_libraries(${libName} PUBLIC fmt::fmt)
+        target_compile_definitions(${libName} PUBLIC FMT_SHARED)
+    endif()
 
     target_compile_definitions (
         ${libName}

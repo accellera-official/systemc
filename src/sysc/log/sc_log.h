@@ -27,7 +27,11 @@
 
 #include <array>
 #include <cstring>
+#if __has_include(<format>)
 #include <format>
+#elif __has_include(<fmt/format.h>)
+#include <fmt/format.h>
+#endif
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -68,14 +72,13 @@ extern sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE;
   std::is_same_v<std::decay_t<decltype(x)>, sc_core::sc_log_logger_cache>
 
 // Note: SC_LOG_PRIV__FMT_EMPTY_STR is both a const char* and a function-like
-// macro When used without parentheses, it's the empty string; with parentheses,
-// it calls std::format
+// macro. Without parentheses it's the empty string; with parentheses it calls
+// std::format (C++20, preferred) or fmt::format (fallback).
 static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
-#if __has_include(<fmt/format.h>)
-#include <fmt/format.h>
-#define SC_LOG_PRIV__FMT_EMPTY_STR(...) fmt::format(__VA_ARGS__)
-#elif defined(__cpp_lib_format)
+#if defined(__cpp_lib_format)
 #define SC_LOG_PRIV__FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
+#elif defined(FMT_VERSION)
+#define SC_LOG_PRIV__FMT_EMPTY_STR(...) fmt::format(__VA_ARGS__)
 #else
 #define SC_LOG_PRIV__FMT_EMPTY_STR(...) ""
 #endif

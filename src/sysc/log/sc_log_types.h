@@ -26,9 +26,12 @@
 #include <array>
 #include <climits>
 #include <cstring>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <string>
+#include <string_view>
 #include <typeinfo>
 #include <vector>
 
