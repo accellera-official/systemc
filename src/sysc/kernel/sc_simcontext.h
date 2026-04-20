@@ -104,22 +104,23 @@ enum sc_starvation_policy
     SC_EXIT_ON_STARVATION,
     SC_RUN_TO_TIME
 };
-extern SC_API void sc_start();
-extern SC_API void sc_start( const sc_time& duration, 
+extern SC_API int sc_start();
+extern SC_API int sc_start( const sc_time& duration,
                       sc_starvation_policy p=SC_RUN_TO_TIME );
-inline void sc_start( int duration, sc_time_unit unit, 
+inline int sc_start( int duration, sc_time_unit unit,
                       sc_starvation_policy p=SC_RUN_TO_TIME )
 {
-    sc_start( sc_time((double)duration,unit), p );
+    return sc_start( sc_time((double)duration,unit), p );
 }
 
-inline void sc_start( double duration, sc_time_unit unit, 
+inline int sc_start( double duration, sc_time_unit unit, 
                       sc_starvation_policy p=SC_RUN_TO_TIME )
 {
-    sc_start( sc_time(duration,unit), p );
+    return sc_start( sc_time(duration,unit), p );
 }
 
 extern SC_API void sc_stop();
+extern SC_API void sc_stop( int exit_code );
 
 // friend function declarations
 
@@ -132,7 +133,7 @@ SC_API const std::vector<sc_object*>& sc_get_top_level_objects(
 SC_API bool    sc_is_running( const sc_simcontext* simc_p );
 SC_API void    sc_pause();
 SC_API bool    sc_end_of_simulation_invoked();
-SC_API void    sc_start( const sc_time&, sc_starvation_policy );
+SC_API int     sc_start( const sc_time&, sc_starvation_policy );
 SC_API bool    sc_start_of_simulation_invoked();
 SC_API void    sc_set_time_resolution( double, sc_time_unit );
 SC_API sc_time sc_get_time_resolution();
@@ -189,7 +190,7 @@ class SC_API sc_simcontext
     friend SC_API bool sc_is_running( const sc_simcontext* simc_p );
     friend SC_API void sc_pause();
     friend SC_API bool sc_end_of_simulation_invoked();
-    friend SC_API void sc_start( const sc_time&, sc_starvation_policy );
+    friend SC_API int sc_start( const sc_time&, sc_starvation_policy );
     friend SC_API bool sc_start_of_simulation_invoked();
     friend void sc_thread_cor_fn(void*);
     friend SC_API sc_time sc_time_to_pending_activity( const sc_simcontext* );
@@ -224,7 +225,7 @@ public:
     void initialize( bool = false );
     void cycle( const sc_time& );
     void simulate( const sc_time& duration );
-    void stop();
+    void stop(int exit_code = 0);
     void end();
     void reset();
 
@@ -427,6 +428,7 @@ private:
     sc_dt::uint64               m_delta_count;
     sc_dt::uint64               m_initial_delta_count_at_current_time;
     bool                        m_forced_stop;
+    int                         m_exit_code;
     bool                        m_paused;
     bool                        m_ready_to_simulate;
     bool                        m_elaboration_done;
