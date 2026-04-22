@@ -63,6 +63,17 @@ struct Top: sc_module
       c0[i] = c1[i] = c2[i] = c3[i] = c4[i] = c5[i] = 0;
     }
   }
+
+  virtual ~Top()
+  {
+    delete [] given_birth;
+    delete [] c0;
+    delete [] c1;
+    delete [] c2;
+    delete [] c3;
+    delete [] c4;
+    delete [] c5;
+  }
   
   int count;
   int f0, f1;

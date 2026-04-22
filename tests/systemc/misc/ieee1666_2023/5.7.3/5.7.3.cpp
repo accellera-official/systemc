@@ -43,9 +43,12 @@ class chan_class : public if_class, public sc_core::sc_prim_channel {
 template<int N=1>
 class port_class : public sc_core::sc_port<if_class,N> {
   public:
-    sc_core::sc_event_finder& event_finder() const {
-      return *new sc_core::sc_event_finder_t<if_class>(*this, &if_class::ev_func);
+    port_class() : m_event_finder(*this, &if_class::ev_func) {}
+    sc_core::sc_event_finder& event_finder() {
+      return m_event_finder;
     }
+  private:
+    sc_core::sc_event_finder_t<if_class> m_event_finder;
 };
 
 SC_MODULE(mod_class)

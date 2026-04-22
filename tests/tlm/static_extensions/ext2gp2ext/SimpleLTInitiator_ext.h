@@ -131,97 +131,98 @@ public:
 
   void run()
   {
-      transaction_type trans;
-      phase_type phase;
-      sc_core::sc_time t;
-      // make sure that our transaction has the proper extension:
-      my_extension* tmp_ext = new my_extension();
-      tmp_ext->m_data = 11;
-      
-      trans.set_extension(tmp_ext);
-      
-      while (initTransaction(trans))
+      // scope needed to free the memory of the local variables (co-routine stacks are not proper cleaned up at simulation end)
       {
-          // Create transaction and initialise phase and t
-          phase = tlm::BEGIN_REQ;
-          t = sc_core::SC_ZERO_TIME;
-          
-          logStartTransation(trans);
-          ///////////////////////////////////////////////////////////
-          // DMI handling:
-          // We use the DMI hint to check if it makes sense to ask for
-          // DMI pointers. The pattern is:
-          // - if the address is covered by a DMI region do a DMI access
-          // - otherwise do a normal transaction
-          //   -> check if we get a DMI hint and acquire the DMI pointers if it
-          //      is set
-          ///////////////////////////////////////////////////////////
-          
-          // Check if the address is covered by our DMI region
-          if ( (trans.get_address() >= mDMIData.get_start_address()) &&
-               (trans.get_address() <= mDMIData.get_end_address()) )
+          transaction_type trans;
+          phase_type phase;
+          sc_core::sc_time t;
+          // make sure that our transaction has the proper extension:
+          my_extension* tmp_ext = new my_extension();
+          tmp_ext->m_data = 11;
+
+          trans.set_extension(tmp_ext);
+
+          while (initTransaction(trans))
           {
-              // We can handle the data here. As the logEndTransaction is
-              // assuming something to happen in the data structure, we really
-              // need to do this:
-              trans.set_response_status(tlm::TLM_OK_RESPONSE);
-              sc_dt::uint64 tmp = trans.get_address() - mDMIData.get_start_address();
-              if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-                  *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp] = mData;
-                  
-              } else {
-                  mData = *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp];
-              }
-              
-              // Do the wait immediately. Note that doing the wait here eats
-              //  almost all the performance anyway, so we only gain something
-              // if we're using temporal decoupling.
-              if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-                  wait(mDMIData.get_write_latency());
-                  
-              } else {
-                  wait(mDMIData.get_read_latency());
-              }
+              // Create transaction and initialise phase and t
+              phase = tlm::BEGIN_REQ;
+              t = sc_core::SC_ZERO_TIME;
 
-              logEndTransaction(trans);
-              
-          } else { // we need a full transaction
-              switch (socket->nb_transport_fw(trans, phase, t)) {
-              case tlm::TLM_COMPLETED:
-                  // Transaction Finished, wait for the returned delay
-                  wait(t);
-                  break;
-                  
-              case tlm::TLM_ACCEPTED:
-              case tlm::TLM_UPDATED:
-                  // Transaction not yet finished, wait for the end of it
-                  wait(mEndEvent);
-                  break;
-                  
-              default:
-                  sc_assert(0); exit(1);
-              };
-    
-              logEndTransaction(trans);
+              logStartTransation(trans);
+              ///////////////////////////////////////////////////////////
+              // DMI handling:
+              // We use the DMI hint to check if it makes sense to ask for
+              // DMI pointers. The pattern is:
+              // - if the address is covered by a DMI region do a DMI access
+              // - otherwise do a normal transaction
+              //   -> check if we get a DMI hint and acquire the DMI pointers if it
+              //      is set
+              ///////////////////////////////////////////////////////////
 
-              // Acquire DMI pointer if one is available:
-              if (trans.is_dmi_allowed())
+              // Check if the address is covered by our DMI region
+              if ( (trans.get_address() >= mDMIData.get_start_address()) &&
+                   (trans.get_address() <= mDMIData.get_end_address()) )
               {
-                  trans.set_write();
-                  dmi_type tmp;
-                  if (socket->get_direct_mem_ptr(trans,
-                                                 tmp))
+                  // We can handle the data here. As the logEndTransaction is
+                  // assuming something to happen in the data structure, we really
+                  // need to do this:
+                  trans.set_response_status(tlm::TLM_OK_RESPONSE);
+                  sc_dt::uint64 tmp = trans.get_address() - mDMIData.get_start_address();
+                  if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+                      *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp] = mData;
+
+                  } else {
+                      mData = *(unsigned int*)&mDMIData.get_dmi_ptr()[tmp];
+                  }
+
+                  // Do the wait immediately. Note that doing the wait here eats
+                  //  almost all the performance anyway, so we only gain something
+                  // if we're using temporal decoupling.
+                  if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+                      wait(mDMIData.get_write_latency());
+
+                  } else {
+                      wait(mDMIData.get_read_latency());
+                  }
+
+                  logEndTransaction(trans);
+
+              } else { // we need a full transaction
+                  switch (socket->nb_transport_fw(trans, phase, t)) {
+                  case tlm::TLM_COMPLETED:
+                      // Transaction Finished, wait for the returned delay
+                      wait(t);
+                      break;
+
+                  case tlm::TLM_ACCEPTED:
+                  case tlm::TLM_UPDATED:
+                      // Transaction not yet finished, wait for the end of it
+                      wait(mEndEvent);
+                      break;
+
+                  default:
+                      sc_assert(0); exit(1);
+                  };
+
+                  logEndTransaction(trans);
+
+                  // Acquire DMI pointer if one is available:
+                  if (trans.is_dmi_allowed())
                   {
-                      // FIXME: No support for separate read/write ranges
-                      sc_assert(tmp.is_read_write_allowed());
-                      mDMIData = tmp;
+                      trans.set_write();
+                      dmi_type tmp;
+                      if (socket->get_direct_mem_ptr(trans,
+                                                     tmp))
+                      {
+                          // FIXME: No support for separate read/write ranges
+                          sc_assert(tmp.is_read_write_allowed());
+                          mDMIData = tmp;
+                      }
                   }
               }
           }
       }
-      delete tmp_ext;
       wait();
-      
   }
   
   sync_enum_type myNBTransport(transaction_type& trans,
