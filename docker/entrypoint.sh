@@ -11,6 +11,19 @@ fi
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
 
+# Don't build with -Werror on AlmaLinux 8 on arm64 hosts
+# GCC 8.5 does not ignore false positive -Wshift-negative-value warning
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+
+  ARCH=$(uname -m)
+
+  if [[ "$ID" == "almalinux" && "$VERSION_ID" == 8* ]] && \
+     [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+    CXX_FLAGS=""
+  fi
+fi
+
 case "$SYSTEMC_CI_TARGET" in
   gcc-shared)
     CC=gcc
