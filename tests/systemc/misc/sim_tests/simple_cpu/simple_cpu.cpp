@@ -66,10 +66,11 @@ SC_MODULE( exec_decode )
 
     // Initialize the data memory from file datamem
     FILE *fp = fopen("simple_cpu/datamem", "r");
-    if (fp == (FILE *) 0) return; // No data mem file to read
+    if (fp == (FILE *) 0) assert(); // No data mem file to read
     // First field in this file is the size of data memory desired
     int size;
-    fscanf(fp, "%d", &size);
+    int ret = fscanf(fp, "%d", &size);
+    (void) ret;
     data_mem = new unsigned[size];
     if (data_mem == (unsigned *) 0) {
       printf("Not enough memory left\n");
@@ -207,7 +208,8 @@ SC_MODULE( fetch )
     if (fp == (FILE *) 0) return; // No prog mem file to read
     // First field in this file is the size of program memory desired
     int size;
-    fscanf(fp, "%d", &size);
+    int ret = fscanf(fp, "%d", &size);
+    (void) ret;
     prog_mem = new unsigned[size];
     if (prog_mem == (unsigned *) 0) {
       printf("Not enough memory left\n");
