@@ -254,6 +254,11 @@ SC_MODULE(Top)
       sensitive << *pp;    //// Sensitivity separated from SC_METHOD DOULOS011
     }
 
+    virtual ~Nested()
+    {
+      delete pp;
+    }
+
   void action() { op = sc_min(3, (*pp).read() + 1); }
 
     sc_out<int> op;        //// Out-of-order declaration DOULOS052
@@ -306,6 +311,19 @@ SC_MODULE(Top)
     modb.p2(c2);
     modb.p3(c3);
     modb.p4(ms);
+  }
+
+  virtual ~Top()
+  {
+    delete link->link->m;
+    delete link->link->s;
+    delete link->link->p;
+    delete link->link;
+    delete link->p;
+    delete link->m;
+    delete link;
+
+    delete sig;
   }
 
 };

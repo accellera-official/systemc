@@ -132,22 +132,24 @@ public:
 
   void run()
   {
-    transaction_type trans;
+    {
+      transaction_type trans;
 
-    while (initTransaction(trans)) {
-      logStartTransation(trans);
-      
-      // exec instr
-      sc_core::sc_time t = mQuantumKeeper.get_local_time();
-      socket->b_transport(trans, t);
-      mQuantumKeeper.set(t);
-      // Target may have added a delay to the quantum -> sync if needed
-      if (mQuantumKeeper.need_sync()) {
-        std::cout << "Sync'ing..." << std::endl;
-        mQuantumKeeper.sync();
+      while (initTransaction(trans)) {
+        logStartTransation(trans);
+
+        // exec instr
+        sc_core::sc_time t = mQuantumKeeper.get_local_time();
+        socket->b_transport(trans, t);
+        mQuantumKeeper.set(t);
+        // Target may have added a delay to the quantum -> sync if needed
+        if (mQuantumKeeper.need_sync()) {
+          std::cout << "Sync'ing..." << std::endl;
+          mQuantumKeeper.sync();
+        }
+
+        logEndTransaction(trans);
       }
-
-      logEndTransaction(trans);
     }
     wait();
   }
