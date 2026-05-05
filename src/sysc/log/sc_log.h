@@ -27,7 +27,11 @@
 
 #include <array>
 #include <cstring>
+#if __has_include(<format>)
 #include <format>
+#elif __has_include(<fmt/format.h>)
+#include <fmt/format.h>
+#endif
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -68,10 +72,16 @@ extern sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE;
   std::is_same_v<std::decay_t<decltype(x)>, sc_core::sc_log_logger_cache>
 
 // Note: SC_LOG_PRIV__FMT_EMPTY_STR is both a const char* and a function-like
-// macro When used without parentheses, it's the empty string; with parentheses,
-// it calls std::format
+// macro. Without parentheses it's the empty string; with parentheses it calls
+// std::format (C++20, preferred) or fmt::format (fallback).
 static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
+#if defined(__cpp_lib_format)
 #define SC_LOG_PRIV__FMT_EMPTY_STR(...) std::format(__VA_ARGS__)
+#elif defined(FMT_VERSION)
+#define SC_LOG_PRIV__FMT_EMPTY_STR(...) fmt::format(__VA_ARGS__)
+#else
+#define SC_LOG_PRIV__FMT_EMPTY_STR(...) ""
+#endif
 
 // Internal verbosity check variants (used by public SC_LOG_AT macro)
 #define SC_LOG_PRIV__VBSTY_CHECK0(lvl)                                         \
@@ -85,7 +95,7 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
       return ((x.level >= (lvl)) &&                                            \
               (x.get_log_verbosity_cached(__FILE__, __LINE__) >= (lvl)));      \
     } else {                                                                   \
-      return SC_LOG_PRIV__VBSTY_CHECK2(lvl, SC_LOG_LOG_LEVEL_CACHE, x);        \
+      return SC_LOG_PRIV__VBSTY_CHECK2(lvl, SC_LOG_LOG_LEVEL_CACHE_GLOBAL, x);  \
     }                                                                          \
   }(arg1))
 
@@ -98,13 +108,13 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 
 // Internal tag extraction variants (used by public SC_LOG_MSG macro)
 #define SC_LOG_PRIV__GET_TAG0()                                                \
-  (SC_LOG_LOG_LEVEL_CACHE.tag.empty() ? SC_LOG_LOG_LEVEL_CACHE.scname.data()   \
-                                      : SC_LOG_LOG_LEVEL_CACHE.tag.data())
+  (SC_LOG_LOG_LEVEL_CACHE.tag.empty() ? SC_LOG_LOG_LEVEL_CACHE.scname.c_str()  \
+                                      : SC_LOG_LOG_LEVEL_CACHE.tag.c_str())
 
 #define SC_LOG_PRIV__GET_TAG1(arg1)                                            \
   ([&](auto &&x) -> const char * {                                             \
     if constexpr (SC_LOG_PRIV__IS_LOGGER_HANDLE(x)) {                          \
-      return (x.tag.empty() ? x.scname.data() : x.tag.data());                 \
+      return (x.tag.empty() ? x.scname.c_str() : x.tag.c_str());              \
     } else {                                                                   \
       return x;                                                                \
     }                                                                          \
@@ -184,7 +194,8 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
  */
 #define SC_LOG_HANDLE_VECTOR_PUSH_BACK(NAME, tag_str)                          \
   SC_LOG_PRIV__HANDLE_NAME(NAME).push_back(                                    \
-      {sc_core::sc_log_level::UNSET, "", tag_str})
+      sc_core::sc_log_handle_factory::make(                                    \
+          sc_core::sc_log_level::UNSET, tag_str, this))
 
 /**
  * SC_LOG_AT - Log a message at a specific level

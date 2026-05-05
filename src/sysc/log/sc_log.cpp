@@ -39,8 +39,14 @@ const std::map<sc_log_level, std::string> log_level_map = {
     {sc_log_level::TRACE, "TRACE"}
 };
 
+static thread_local sc_log_logger_cache* s_current = nullptr;
+
+sc_log_logger_cache* sc_log_logger_cache::get_current() { return s_current; }
+void sc_log_logger_cache::set_current(sc_log_logger_cache* p) { s_current = p; }
+
 sc_log_level sc_log_logger_cache::get_log_verbosity_cached(
     const char *file, int line, std::string_view local_tag) {
+  s_current = this;
   if (level != sc_log_level::UNSET) {
     return level;
   }
@@ -48,14 +54,18 @@ sc_log_level sc_log_logger_cache::get_log_verbosity_cached(
   return sc_log_impl::sc_get_log_verbosity(*this, file, line, local_tag);
 }
 
+void sc_log_logger_cache::set_tag(std::string new_tag) {
+  tag = std::move(new_tag);
+  level = sc_log_level::UNSET;
+}
+
 } // namespace sc_core
 
 // Global default logger with empty tag (in global namespace for proper name
 // shadowing). This logger is used when no specific logger handle is provided.
-// Note: Using string_view{} for empty views and nullptr for typename_str.
 sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE{
     sc_core::sc_log_level::UNSET,  // level
-    std::string_view{},             // tag (empty)
-    std::string_view{},             // scname (empty)
+    {},                             // tag (empty)
+    {},                             // scname (empty)
     nullptr                         // typename_str (no type info)
 };
