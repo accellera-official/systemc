@@ -86,6 +86,12 @@ struct dcache : sc_module {
 	}
   }
 
+  virtual ~dcache() {
+    delete [] dmemory;
+    delete [] dsmemory;
+    delete [] dtagmemory;
+  }
+
   // Process functionality in member function below
   void entry();
 };

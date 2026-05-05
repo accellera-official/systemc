@@ -82,6 +82,11 @@ struct bios : sc_module {
 	}
   }
 
+  virtual ~bios() {
+    delete [] imemory;
+    delete [] itagmemory;
+  }
+
   // Process functionality in member function below
   void entry();
 };

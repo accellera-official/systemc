@@ -21,11 +21,12 @@ SC_MODULE(Test_peq_with_cb)
   {
     section = 1;
 
-    tlm::tlm_generic_payload *trans;
+    std::vector<tlm::tlm_generic_payload*> trans_vec;
     tlm::tlm_phase phase;
     for (int i = 0; i < 50; i++)
     {
-      trans = new tlm::tlm_generic_payload;
+      tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload;
+      trans_vec.push_back(trans);
       trans->set_address(i);
       m_peq.notify( *trans, phase, sc_time(rand() % 100, SC_NS) );
     }
@@ -33,17 +34,29 @@ SC_MODULE(Test_peq_with_cb)
 
     m_peq.cancel_all();
     cout << "cancel_all\n";
+    while(!trans_vec.empty())
+    {
+      delete trans_vec.back();
+      trans_vec.pop_back();
+    }
+
     section = 2;
 
     for (int i = 100; i < 150; i++)
     {
-      trans = new tlm::tlm_generic_payload;
+      tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload;
+      trans_vec.push_back(trans);
       trans->set_address(i);
       m_peq.notify( *trans, phase, sc_time(rand() % 100, SC_NS) );
     }
     wait(50, SC_NS);
     m_peq.cancel_all();
     cout << "cancel_all\n";
+    while(!trans_vec.empty())
+    {
+      delete trans_vec.back();
+      trans_vec.pop_back();
+    }
 
     wait(50, SC_NS);
   }
@@ -91,10 +104,11 @@ SC_MODULE(Test_peq_with_get)
 
     section = 3;
 
-    tlm::tlm_generic_payload *trans;
+    std::vector<tlm::tlm_generic_payload*> trans_vec;
     for (int i = 0; i < 50; i++)
     {
-      trans = new tlm::tlm_generic_payload;
+      tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload;
+      trans_vec.push_back(trans);
       trans->set_address(i);
       m_peq.notify( *trans, sc_time(rand() % 100, SC_NS) );
     }
@@ -102,17 +116,28 @@ SC_MODULE(Test_peq_with_get)
 
     m_peq.cancel_all();
     cout << "cancel_all\n";
+    while(!trans_vec.empty())
+    {
+      delete trans_vec.back();
+      trans_vec.pop_back();
+    }
     section = 4;
 
     for (int i = 100; i < 150; i++)
     {
-      trans = new tlm::tlm_generic_payload;
+      tlm::tlm_generic_payload *trans = new tlm::tlm_generic_payload;
+      trans_vec.push_back(trans);
       trans->set_address(i);
       m_peq.notify( *trans, sc_time(rand() % 100, SC_NS) );
     }
     wait(50, SC_NS);
     m_peq.cancel_all();
     cout << "cancel_all\n";
+    while(!trans_vec.empty())
+    {
+      delete trans_vec.back();
+      trans_vec.pop_back();
+    }
 
     wait(50, SC_NS);
   }

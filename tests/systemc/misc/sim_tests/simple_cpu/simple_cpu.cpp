@@ -86,6 +86,10 @@ SC_MODULE( exec_decode )
     program_counter.write(pc);
   }
 
+  virtual ~exec_decode() {
+    delete[] data_mem;
+  }
+
   // Functionality
   void entry();
 };
@@ -221,6 +225,10 @@ SC_MODULE( fetch )
       prog_mem[size++] = mem_word;
     }
     instruction.write(0);
+  }
+
+  virtual ~fetch() {
+    delete[] prog_mem;
   }
 
   // Functionality
