@@ -1,0 +1,48 @@
+SystemC Simulation
+TEST REPORT: DEBUG : [sc_main] Global Warning from sc_main line:221
+TEST REPORT: WARN : [quiet] Global Warning from sc_main line:222
+TEST REPORT: WARN : [GlobalLogger] My Global Warn from sc_main line:224
+0 is log_level CRITICAL
+50 is log_level WARN
+100 is log_level WARN
+150 is log_level INFO
+200 is log_level INFO
+250 is log_level DEBUG
+300 is log_level DEBUG
+350 is log_level TRACE
+400 is log_level TRACE
+450 is log_level TRACE
+Test string based handler
+TEST REPORT: CRITICAL : [sc_log_test] CRITICAL line:233
+TEST REPORT: WARN : [sc_log_test] WARN line:233
+test FMT string
+TEST REPORT: WARN : [SystemC] Testing FMT Hello world line:237
+construct module
+TEST REPORT: WARN : [MyMod] HERE line:49
+TEST REPORT: WARN : [GlobalLogger] Global Warning line:50
+TEST REPORT: CRITICAL : [MyMod]  Log to name() (at level CRITICAL) line:53
+TEST REPORT: CRITICAL : [My Tag]  Log to My Tag (at level CRITICAL) line:54
+TEST REPORT: CRITICAL : [MyMod]  Log to default () (at level CRITICAL) line:55
+TEST REPORT: CRITICAL : [test_handler]  Log to test_handler (at level CRITICAL) line:56
+TEST REPORT: CRITICAL : [My TST Tag]  Log using () to My TH Tag (at level CRITICAL) line:57
+TEST REPORT: WARN : [MyMod]  Log to name() (at level WARN) line:53
+TEST REPORT: WARN : [My Tag]  Log to My Tag (at level WARN) line:54
+TEST REPORT: WARN : [MyMod]  Log to default () (at level WARN) line:55
+TEST REPORT: WARN : [test_handler]  Log to test_handler (at level WARN) line:56
+TEST REPORT: WARN : [My TST Tag]  Log using () to My TH Tag (at level WARN) line:57
+TEST REPORT: INFO : [MyMod]  Log to name() (at level INFO) line:53
+TEST REPORT: INFO : [My Tag]  Log to My Tag (at level INFO) line:54
+TEST REPORT: INFO : [MyMod]  Log to default () (at level INFO) line:55
+TEST REPORT: INFO : [test_handler]  Log to test_handler (at level INFO) line:56
+TEST REPORT: INFO : [My TST Tag]  Log using () to My TH Tag (at level INFO) line:57
+TEST REPORT: DEBUG : [MyMod]  Log to name() (at level DEBUG) line:53
+TEST REPORT: DEBUG : [My Tag]  Log to My Tag (at level DEBUG) line:54
+TEST REPORT: DEBUG : [MyMod]  Log to default () (at level DEBUG) line:55
+TEST REPORT: TRACE : [MyMod]  Log to name() (at level TRACE) line:53
+TEST REPORT: TRACE : [My Tag]  Log to My Tag (at level TRACE) line:54
+TEST REPORT: TRACE : [MyMod]  Log to default () (at level TRACE) line:55
+TEST REPORT: CRITICAL : [MyMod] SC_CRITICAL line:61
+TEST REPORT: WARN : [MyMod] SC_WARN line:62
+TEST REPORT: INFO : [MyMod] SC_INFO line:63
+TEST REPORT: DEBUG : [MyMod] SC_DEBUG line:64
+TEST REPORT: TRACE : [MyMod] SC_TRACE line:65
