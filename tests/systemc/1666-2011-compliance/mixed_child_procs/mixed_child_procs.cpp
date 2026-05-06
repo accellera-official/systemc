@@ -77,6 +77,17 @@ struct Top: sc_module
     m = sc_spawn(sc_bind(&Top::child_method, this, index++, 3), "m", &opt);
   }
 
+  virtual ~Top()
+  {
+    delete [] given_birth;
+    delete [] f0;
+    delete [] f1;
+    delete [] f2;
+    delete [] f3;
+    delete [] f4;
+    delete [] f5;
+  }
+
   sc_spawn_options opt;
   sc_process_handle t, m;  
   std::exception ex;

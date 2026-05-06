@@ -60,13 +60,17 @@ SC_MODULE(DUT)
 	{
 		cout << sc_time_stamp() << " callback" << endl;
 	}
+
 	void thread()
 	{
-		sc_spawn_options options;
-		options.spawn_method();
-		options.set_sensitivity( &m_port );
-		options.dont_initialize();
-		sc_spawn( sc_bind(&DUT::method,this), "method", &options );
+  		// scope to free `options` memory (co-routine stacks are not proper cleaned up at simulation end)
+		{
+			sc_spawn_options options;
+			options.spawn_method();
+			options.set_sensitivity( &m_port );
+			options.dont_initialize();
+			sc_spawn( sc_bind(&DUT::method,this), "method", &options );
+		}
 		for ( bool value=true;; value = !value)
 		{
 			wait();

@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [20.04, 22.04, 24.04]
+        version: [22.04, 24.04]
         platform: [linux/amd64]
         target: [clang-shared-regression-asan]
     steps:
@@ -40,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [20.04, 22.04, 24.04]
+        version: [22.04, 24.04]
         platform: [linux/arm64]
         target: [clang-shared-regression-asan]
     steps:

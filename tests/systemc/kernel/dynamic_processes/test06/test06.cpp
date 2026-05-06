@@ -49,21 +49,21 @@ void p3() {
 
 void p2() {
   cerr << sc_time_stamp() << ":entering p2, spawning p3" << endl;
-  sc_spawn(sc_bind(&p3));
+  sc_spawn(&p3);
   wait(20, SC_NS);
   cerr << sc_time_stamp() << ":exiting p2" << endl;
 }
 
 void p1() {
   cerr << sc_time_stamp() << ":entering p1, spawning p2" << endl;
-  sc_spawn(sc_bind(&p2));
+  sc_spawn(&p2);
   wait(10, SC_NS);
   cerr << sc_time_stamp() << ":exiting p1" << endl;
 }
 
 void p0() {
   cerr << sc_time_stamp() << ":entering p0, spawning p1" << endl;
-  sc_spawn(sc_bind(&p1));
+  sc_spawn(&p1);
   cerr << sc_time_stamp() << ":exiting p0" << endl;
 }
 
