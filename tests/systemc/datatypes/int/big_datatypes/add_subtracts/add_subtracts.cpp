@@ -294,7 +294,7 @@ class AddSubtract : public AddSubtract<W-D,D>
 		assert( v_difference == v_sc_biguint_a );
 	    }
 
-	    if ( -v_sc_biguint_a != ( ~v_sc_biguint_a + 1 ) ) {
+	    if ( -v_sc_biguint_a != ( ~(sc_signed)v_sc_biguint_a + 1 ) ) {
 		cout << "ERROR: -a != ~a+1 in " << __FILE__ << " at line " << __LINE__ << endl;
 		cout << "  W                 " << W << endl;
 		cout << "  -v_sc_biguint_a   " << -v_sc_biguint_a << endl;

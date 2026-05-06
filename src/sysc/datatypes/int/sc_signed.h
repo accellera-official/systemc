@@ -667,8 +667,8 @@ public:
 
     sc_signed_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_signed_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_signed_bitref> sc_signed_bitref_pool(9);
+        return sc_signed_bitref_pool.allocate();
     }
 
     sc_signed_bitref& operator [] ( int i )
@@ -729,14 +729,14 @@ public:
 
     sc_signed_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_signed_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_signed_subref> sc_signed_subref_pool(9);
+        return sc_signed_subref_pool.allocate();
     }
 
     sc_signed_subref& range( int i, int j )
         {
 	    check_range( i, j );
-            sc_signed_subref* result_p = temporary_subref();
+	    sc_signed_subref* result_p = temporary_subref();
 	    result_p->initialize( this, i, j );
 	    return *result_p;
 	}
@@ -839,6 +839,7 @@ public:
 
       digit[digit_num] |= one_and_zeros(bit_num);
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+      adjust_hod();
     }
 
 
@@ -855,6 +856,7 @@ public:
 
       digit[digit_num] &= ~(one_and_zeros(bit_num));
       digit[digit_num] = SC_MASK_DIGIT(digit[digit_num]);
+      adjust_hod();
     }
 
 
@@ -1080,31 +1082,33 @@ public:
       // If we shift off the end return the sign bit.
 
       if ( 0 >= nb ) {
-          sc_signed result(1, false);
-          result.digit[0] = 0 > (int)digit[ndigits-1] ? -1 : 0;
+          sc_signed result(nbits, false);
+          result = 0 > (int)digit[ndigits-1] ? -1 : 0;
           return result;
       }
 
       // Return a value that is the width of the shifted value:
 
-      sc_signed result(nb, false);
       if ( nbits < 33 ) {
+          sc_signed result(nbits, false);
           result.digit[0] = (int)digit[0] >> v;
+          return result;
       }
       else if ( nbits < 65 ) {
+          sc_signed result(nbits, false);
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
           result.digit[0] = (sc_digit)tmp;
-          if ( nb > 32 ) {
-              result.digit[1] = (tmp >>32);
-          }
+	  result.digit[1] = (tmp >>32);
+          return result;
       }
       else {
-          vector_extract(digit, result.digit, nbits-1, v);
+          int nd = DIV_CEIL(nbits);
+          sc_signed result(*this);
+          vector_shift_right(nd, result.digit, v, (int)result.digit[nd-1]<0 ? DIGIT_MASK:0);
+          return result;
       }
-      result.adjust_hod();
-      return result;
   }
 
   sc_signed operator>>(const sc_unsigned& v) const;
@@ -1165,8 +1169,6 @@ public:
 #define SC_SIGNED_TEMPS_N (1 << 15) // SC_SIGNED_TEMPS_N must be a power of 2.
 
 public: // Temporary object support:
-  static sc_signed  m_temporaries[SC_SIGNED_TEMPS_N];
-  static size_t     m_temporaries_i;
 
     // +--------------------------------------------------------------------------------------------
     // |"allocate_temporary"
@@ -1182,9 +1184,8 @@ public: // Temporary object support:
     // +--------------------------------------------------------------------------------------------
   static inline sc_signed& allocate_temporary( int nb, sc_digit* digits_p )
   {
-
-      sc_signed* result_p = &m_temporaries[m_temporaries_i];
-      m_temporaries_i = (m_temporaries_i + 1) & (SC_SIGNED_TEMPS_N-1);
+      thread_local sc_core::sc_vpool<sc_signed> sc_signed_temporary_pool(SC_SIGNED_TEMPS_N);
+      sc_signed* result_p = sc_signed_temporary_pool.allocate();
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);

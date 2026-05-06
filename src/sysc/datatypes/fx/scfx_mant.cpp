@@ -77,7 +77,7 @@ next_pow2_index( std::size_t size )
     return index;
 }
 
-static word_list* free_words[32] = { 0 };
+thread_local word_list* free_words[32] = { 0 };
     
 word*
 scfx_mant::alloc_word( std::size_t size )

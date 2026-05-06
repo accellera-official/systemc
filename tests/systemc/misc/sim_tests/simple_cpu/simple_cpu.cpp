@@ -66,10 +66,11 @@ SC_MODULE( exec_decode )
 
     // Initialize the data memory from file datamem
     FILE *fp = fopen("simple_cpu/datamem", "r");
-    if (fp == (FILE *) 0) return; // No data mem file to read
+    if (fp == (FILE *) 0) assert(); // No data mem file to read
     // First field in this file is the size of data memory desired
     int size;
-    fscanf(fp, "%d", &size);
+    int ret = fscanf(fp, "%d", &size);
+    (void) ret;
     data_mem = new unsigned[size];
     if (data_mem == (unsigned *) 0) {
       printf("Not enough memory left\n");
@@ -83,6 +84,10 @@ SC_MODULE( exec_decode )
 
     // Start off simulation by writing program_counter
     program_counter.write(pc);
+  }
+
+  virtual ~exec_decode() {
+    delete[] data_mem;
   }
 
   // Functionality
@@ -207,7 +212,8 @@ SC_MODULE( fetch )
     if (fp == (FILE *) 0) return; // No prog mem file to read
     // First field in this file is the size of program memory desired
     int size;
-    fscanf(fp, "%d", &size);
+    int ret = fscanf(fp, "%d", &size);
+    (void) ret;
     prog_mem = new unsigned[size];
     if (prog_mem == (unsigned *) 0) {
       printf("Not enough memory left\n");
@@ -219,6 +225,10 @@ SC_MODULE( fetch )
       prog_mem[size++] = mem_word;
     }
     instruction.write(0);
+  }
+
+  virtual ~fetch() {
+    delete[] prog_mem;
   }
 
   // Functionality

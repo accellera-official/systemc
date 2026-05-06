@@ -69,6 +69,10 @@ SC_MODULE( op_queue )
     queue = new float[queue_size];
   }
 
+  virtual ~op_queue() {
+    delete[] queue;
+  }
+
   // Process functionality in member function below
   void entry();
 };

@@ -85,6 +85,11 @@ struct icache : sc_module {
 	}
   }
 
+  virtual ~icache() {
+    delete [] icmemory;
+    delete [] ictagmemory;
+  }
+
   // Process functionality in member function below
   void entry();
 };

@@ -138,7 +138,7 @@ class sc_fxnum_fast;
 
   // Bitwise NOT operator (unary).
 
-  SC_API sc_signed operator ~ (const sc_unsigned& u);
+  SC_API sc_unsigned operator ~ (const sc_unsigned& u);
 
 // ----------------------------------------------------------------------------
 //  CLASS : sc_unsigned_bitref_r
@@ -662,8 +662,8 @@ public:
 
     sc_unsigned_bitref* temporary_bitref() const
     {
-        static sc_core::sc_vpool<sc_unsigned_bitref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned_bitref> sc_unsigned_bitref_pool(9);
+        return sc_unsigned_bitref_pool.allocate();
     }
 
     sc_unsigned_bitref& operator [] ( int i )
@@ -724,8 +724,8 @@ public:
 
     sc_unsigned_subref* temporary_subref() const
     {
-        static sc_core::sc_vpool<sc_unsigned_subref> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned_subref> sc_unsigned_subref_pool(9);
+        return sc_unsigned_subref_pool.allocate();
     }
 
     sc_unsigned_subref& range( int i, int j )
@@ -764,8 +764,8 @@ public:
 
     static sc_unsigned* temporary()
     {
-        static sc_core::sc_vpool<sc_unsigned> pool(9);
-        return pool.allocate();
+        thread_local sc_core::sc_vpool<sc_unsigned> sc_unsigned_temporary_pool(9);
+        return sc_unsigned_temporary_pool.allocate();
     }
 
     // explicit conversions
@@ -1073,30 +1073,31 @@ public:
       // If we shift off the end return the sign bit.
 
       if ( 0 >= nb ) {
-          sc_unsigned result(1, true);
+          sc_unsigned result(nbits, true);
           return result;
       }
 
       // Return a value that is the width of the shifted value:
 
-      sc_unsigned result(nb, false);
       if ( nbits < 33 ) {
+          sc_unsigned result(nbits, false);
           result.digit[0] = (int)digit[0] >> v;
+          return result;
       }
       else if ( nbits < 65 ) {
+          sc_unsigned result(nbits, false);
           int64 tmp = digit[1];
           tmp = (tmp << 32) | digit[0];
           tmp = tmp >> v;
           result.digit[0] = (sc_digit)tmp;
-          if ( nb > 32 ) {
-              result.digit[1] = (tmp >>32);
-          }
+          result.digit[1] = (tmp>>32);
+          return result;
       }
       else {
+          sc_unsigned result(nbits, true);
           vector_extract(digit, result.digit, nbits-1, v);
+          return result;
       }
-      result.adjust_hod();
-      return result;
   }
 
   sc_unsigned operator>>(const sc_signed&  v) const;
@@ -1113,7 +1114,7 @@ public:
       if (v <= 0)
           return *this;
       vector_shift_right(ndigits, digit, v, 0);
-    return *this;
+      return *this;
   }
   const sc_unsigned& operator>>=(const sc_signed&    v);
   const sc_unsigned& operator>>=(const sc_unsigned&  v) { return operator>>=(v.to_int()); }
@@ -1130,7 +1131,7 @@ public:
 
   // Bitwise NOT operator (unary).
 
-  friend SC_API sc_signed operator ~ (const sc_unsigned& u);
+  friend SC_API sc_unsigned operator ~ (const sc_unsigned& u);
 
 protected:
 
@@ -1152,11 +1153,6 @@ public:
 
 public: // Temporary object support:
 
-  #define SC_UNSIGNED_TEMPS_N (1 << 15) // SC_UNSIGNED_TEMPS_N must be a power of 2.
-
-  static sc_unsigned  m_temporaries[SC_UNSIGNED_TEMPS_N];
-  static size_t       m_temporaries_i;
-
     // +--------------------------------------------------------------------------------------------
     // |"allocate_temporary"
     // | 
@@ -1171,8 +1167,7 @@ public: // Temporary object support:
     // +--------------------------------------------------------------------------------------------
   static inline sc_unsigned& allocate_temporary( int nb, sc_digit* digits_p )
   {
-      sc_unsigned* result_p = &m_temporaries[m_temporaries_i];
-      m_temporaries_i = (m_temporaries_i + 1) & (SC_UNSIGNED_TEMPS_N-1);
+      sc_unsigned* result_p = temporary();
       result_p->digit = digits_p;
       result_p->nbits = num_bits(nb);
       result_p->ndigits = DIV_CEIL(result_p->nbits);
