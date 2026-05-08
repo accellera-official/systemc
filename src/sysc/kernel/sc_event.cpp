@@ -59,6 +59,28 @@ sc_event::basename() const
 }
 
 void
+sc_event::cancel_timed() {
+    auto head = m_timed->m_event;
+    if( head == this) {
+        m_timed->m_event = head->m_event_with_the_same_stamp;
+        if (m_timed->m_event == nullptr) {
+            m_timed->m_event_tail = 0;
+        }
+    } else {
+        while( head != nullptr) {
+            if( head->m_event_with_the_same_stamp == this) {
+                m_timed->m_event_tail = head;
+                head->m_event_with_the_same_stamp = this->m_event_with_the_same_stamp;
+                break;
+            }
+            head = head->m_event_with_the_same_stamp;
+        }
+    }
+    this->m_event_with_the_same_stamp = {};
+    m_timed = 0;
+}
+
+void
 sc_event::cancel()
 {
     // cancel a delta or timed notification
@@ -72,8 +94,7 @@ sc_event::cancel()
     case TIMED: {
         // remove this event from the timed events set
         sc_assert( m_timed != 0 );
-        m_timed->m_event = 0;
-        m_timed = 0;
+        this->cancel_timed();
         m_notify_type = NONE;
         break;
     }
@@ -120,8 +141,7 @@ sc_event::notify( const sc_time& t )
         if( m_notify_type == TIMED ) {
             // remove this event from the timed events set
             sc_assert( m_timed != 0 );
-            m_timed->m_event = 0;
-            m_timed = 0;
+            this->cancel_timed();
         }
         // add this event to the delta events set
         m_delta_event_index = m_simc->add_delta_event( this );
@@ -144,14 +164,10 @@ sc_event::notify( const sc_time& t )
             return;
         }
         // remove this event from the timed events set
-        m_timed->m_event = 0;
-        m_timed = 0;
+        this->cancel_timed();
     }
     // add this event to the timed events set
-    sc_event_timed* et = new sc_event_timed( this, m_simc->time_stamp() + t );
-    m_simc->add_timed_event( et );
-    m_timed = et;
-    m_notify_type = TIMED;
+    m_simc->add_timed_event(this, m_simc->time_stamp() + t);
 }
 
 static void sc_warn_notify_delayed()
@@ -190,11 +206,7 @@ sc_event::notify_delayed( const sc_time& t )
         m_notify_type = DELTA;
     } else {
         // add this event to the timed events set
-        sc_event_timed* et = new sc_event_timed( this,
-                                                 m_simc->time_stamp() + t );
-        m_simc->add_timed_event( et );
-        m_timed = et;
-        m_notify_type = TIMED;
+        m_simc->add_timed_event(this, m_simc->time_stamp() + t);
     }
 }
 

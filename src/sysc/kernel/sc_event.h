@@ -280,7 +280,7 @@ public:
     ~sc_event();
 
     void cancel();
-
+    void cancel_timed();
     const char* basename() const;
     const char* name() const
       { return m_name.c_str(); }
@@ -327,6 +327,9 @@ private:
     void reset();
 
     void trigger();
+
+public:
+    sc_event*       m_event_with_the_same_stamp{};
 
 private:
 
@@ -375,8 +378,18 @@ private:
         : m_event( e ), m_notify_time( t )
         {}
 
-    ~sc_event_timed()
-        { if( m_event != 0 ) { m_event->m_timed = 0; } }
+    ~sc_event_timed() {
+        auto event = m_event;
+        sc_event* tmp{};
+        while( event != nullptr ) {
+            event->m_timed = 0;
+            tmp = event;
+            event = event->m_event_with_the_same_stamp;
+            tmp->m_event_with_the_same_stamp = {};
+        }
+
+        m_event = {};
+    }
 
     sc_event* event() const
         { return m_event; }
@@ -400,6 +413,7 @@ private:
 
     sc_event* m_event;
     sc_time   m_notify_time;
+    sc_event* m_event_tail;
 
 private:
 
@@ -429,11 +443,7 @@ sc_event::notify_internal( const sc_time& t )
         m_delta_event_index = m_simc->add_delta_event( this );
         m_notify_type = DELTA;
     } else {
-        sc_event_timed* et =
-		new sc_event_timed( this, m_simc->time_stamp() + t );
-        m_simc->add_timed_event( et );
-        m_timed = et;
-        m_notify_type = TIMED;
+        m_simc->add_timed_event(this, m_simc->time_stamp() + t);
     }
 }
 
