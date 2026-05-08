@@ -35,7 +35,11 @@
     
  *****************************************************************************/
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::cout;
+using std::endl;
 #include "fir_fsm.h"
 
 void fir_fsm::entry() {

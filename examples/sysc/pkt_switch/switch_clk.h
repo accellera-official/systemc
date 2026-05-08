@@ -39,7 +39,8 @@
 #ifndef SWITCH_CLK_H_INCLUDED
 #define SWITCH_CLK_H_INCLUDED
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 
 struct switch_clk: sc_module {
       sc_out<bool>   switch_cntrl;

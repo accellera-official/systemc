@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "stage1.h"
 
 //Definition of addsub method

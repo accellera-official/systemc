@@ -37,6 +37,8 @@
  *****************************************************************************/
 
 #include "receiver.h"
+using std::cout;
+using std::endl;
 
 
 void receiver:: entry()

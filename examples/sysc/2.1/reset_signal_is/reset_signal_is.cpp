@@ -38,7 +38,10 @@
  *****************************************************************************/
 
 
-#include "systemc.h" 
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
 SC_MODULE(CONSUMER)
 {
 	SC_CTOR(CONSUMER)

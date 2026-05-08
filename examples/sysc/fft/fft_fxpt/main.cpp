@@ -37,7 +37,11 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::FILE;
+using std::fclose;
 #include "fft.h"
 #include "source.h"
 #include "sink.h"

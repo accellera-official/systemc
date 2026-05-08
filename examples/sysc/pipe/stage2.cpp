@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "stage2.h"
 
 //definition of multdiv method

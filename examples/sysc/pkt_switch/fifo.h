@@ -38,7 +38,10 @@
 #ifndef FIFO_H_INCLUDED
 #define FIFO_H_INCLUDED
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::ostream;
 #include "pkt.h"
 
 struct fifo {

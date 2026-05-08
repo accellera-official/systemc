@@ -40,7 +40,11 @@
  *****************************************************************************/
 
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
+using std::flush;
 
 class write_if : virtual public sc_interface
 {

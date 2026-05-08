@@ -35,7 +35,9 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::printf;
 #include "display.h"
 
 #include <stdio.h>

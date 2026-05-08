@@ -36,7 +36,15 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::FILE;
+using std::cout;
+using std::endl;
+using std::fopen;
+using std::fscanf;
+using std::ios;
+using std::printf;
 #include "bios.h"
 #include "directive.h"
 

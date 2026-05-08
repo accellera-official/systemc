@@ -35,7 +35,9 @@
     
  *****************************************************************************/
  
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
 #include "stimulus.h"
 #include "display.h"
 #include "fir_top.h"
