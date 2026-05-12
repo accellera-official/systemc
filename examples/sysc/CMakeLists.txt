@@ -65,4 +65,5 @@ add_subdirectory (simple_bus)
 add_subdirectory (simple_fifo)
 add_subdirectory (simple_perf)
 add_subdirectory (async_suspend)
+add_subdirectory (concurrent)
 
