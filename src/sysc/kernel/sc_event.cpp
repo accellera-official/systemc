@@ -540,7 +540,7 @@ union sc_event_timed_u
     char              dummy[sizeof( sc_event_timed )];
 };
 
-static
+thread_local static
 sc_event_timed_u* free_list = 0;
 
 void*

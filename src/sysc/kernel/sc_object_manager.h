@@ -31,6 +31,7 @@
 #define SC_OBJECT_MANAGER_H
 
 #include <map>
+#include <mutex>
 #include <vector>
 
 namespace sc_core {
@@ -110,6 +111,7 @@ private:
     bool                       m_event_walk_ok;     // true if can walk events.
     instance_table_t           m_instance_table;    // table of instances.
     sc_module_name*            m_module_name_stack; // sc_module_name stack.
+    std::mutex                 m_mutex;             // Mutex to ensure thread safety.
     instance_table_t::iterator m_object_it;         // object instance iterator.
     object_vector_t            m_object_stack;      // sc_object stack.
     bool                       m_object_walk_ok;    // true if can walk objects.

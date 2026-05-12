@@ -1705,7 +1705,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         exit_time = context_p->m_curr_time + duration;
 
     // called with duration = SC_ZERO_TIME for the first time
-    static bool init_delta_or_pending_updates =
+    thread_local static bool init_delta_or_pending_updates =
          ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
 
     // If the simulation status is bad issue the appropriate message:
