@@ -110,10 +110,17 @@ private:
     instance_table_t::iterator m_event_it;          // event instance iterator.
     bool                       m_event_walk_ok;     // true if can walk events.
     instance_table_t           m_instance_table;    // table of instances.
-    sc_module_name*            m_module_name_stack; // sc_module_name stack.
-    std::mutex                 m_mutex;             // Mutex to ensure thread safety.
+    // m_module_name_stack and m_object_stack are per-thread construction
+    // context: each thread that constructs sc_objects has its own nesting
+    // of modules and of sc_module_names.  Making them thread_local avoids
+    // cross-thread interference when multiple sibling simcontexts (running
+    // on their own std::threads) share this object_manager.
+    static thread_local sc_module_name* m_module_name_stack; // sc_module_name stack (per thread).
+    // Recursive because public methods that take the lock (e.g. create_name)
+    // call back into other public methods (name_exists) that also take the lock.
+    mutable std::recursive_mutex m_mutex;           // Mutex to ensure thread safety.
     instance_table_t::iterator m_object_it;         // object instance iterator.
-    object_vector_t            m_object_stack;      // sc_object stack.
+    static thread_local object_vector_t m_object_stack; // sc_object stack (per thread).
     bool                       m_object_walk_ok;    // true if can walk objects.
 };
 

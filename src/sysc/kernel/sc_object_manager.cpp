@@ -55,13 +55,15 @@ namespace sc_core {
 //  Manager of objects.
 // ----------------------------------------------------------------------------
 
+// Per-thread construction-context storage.  See comment in the header.
+thread_local sc_module_name* sc_object_manager::m_module_name_stack = 0;
+thread_local sc_object_manager::object_vector_t sc_object_manager::m_object_stack;
+
 sc_object_manager::sc_object_manager() :
     m_event_it(),
     m_event_walk_ok(0),
     m_instance_table(),
-    m_module_name_stack(0),
     m_object_it(),
-    m_object_stack(),
     m_object_walk_ok()
 {
 }
@@ -99,7 +101,7 @@ sc_object_manager::~sc_object_manager()
 // +----------------------------------------------------------------------------
 std::string sc_object_manager::create_name(const char* leaf_name) 
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     bool        clash;                  // true if path name exists in obj table
     std::string leafname_string;        // string containing the leaf name.
@@ -171,6 +173,7 @@ std::string sc_object_manager::create_name(const char* leaf_name)
 bool
 sc_object_manager::name_exists(const std::string& name)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     instance_table_t::const_iterator it = m_instance_table.find(name);
     return (it != m_instance_table.end()) &&
            (it->second.m_name_origin != SC_NAME_NONE);
@@ -189,6 +192,7 @@ sc_object_manager::name_exists(const std::string& name)
 const char*
 sc_object_manager::get_name(const std::string& name)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     instance_table_t::iterator it = m_instance_table.find(name);
     if (it != m_instance_table.end() &&
         it->second.m_name_origin != SC_NAME_NONE) {
@@ -211,6 +215,7 @@ sc_object_manager::get_name(const std::string& name)
 sc_event*
 sc_object_manager::find_event(const char* name)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()
@@ -235,6 +240,7 @@ sc_object_manager::find_event(const char* name)
 sc_object*
 sc_object_manager::find_object(const char* name)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     instance_table_t::iterator it;
     it = m_instance_table.find(name);
     if(it != m_instance_table.end()
@@ -257,12 +263,13 @@ sc_object_manager::find_object(const char* name)
 sc_object*
 sc_object_manager::first_object()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     sc_object* result_p; // result to return.
 
     m_object_walk_ok = true;
     result_p = NULL;
-    for ( m_object_it = m_instance_table.begin(); 
-          m_object_it != m_instance_table.end(); 
+    for ( m_object_it = m_instance_table.begin();
+          m_object_it != m_instance_table.end();
 	  m_object_it++ )
     {
         if(m_object_it->second.m_name_origin == SC_NAME_OBJECT) {
@@ -339,7 +346,7 @@ sc_object_manager::hierarchy_size()
 bool
 sc_object_manager::insert_external_name(const std::string& name)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     if(!name_exists(name)) {
         m_instance_table[name].m_element_p = NULL;
@@ -372,7 +379,7 @@ sc_object_manager::insert_external_name(const std::string& name)
 void
 sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     m_instance_table[name].m_element_p = static_cast<void*>(event_p);
     m_instance_table[name].m_name_origin = SC_NAME_EVENT;
@@ -391,7 +398,7 @@ sc_object_manager::insert_event(const std::string& name, sc_event* event_p)
 void
 sc_object_manager::insert_object(const std::string& name, sc_object* object_p)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     m_instance_table[name].m_element_p = static_cast<void*>(object_p);
     m_instance_table[name].m_name_origin = SC_NAME_OBJECT;
@@ -405,6 +412,7 @@ sc_object_manager::insert_object(const std::string& name, sc_object* object_p)
 sc_object*
 sc_object_manager::next_object()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
     sc_object* result_p; // result to return.
 
     sc_assert( m_object_walk_ok );
@@ -487,7 +495,7 @@ sc_object_manager::top_of_module_name_stack_name() const
 void
 sc_object_manager::remove_event(const std::string& name)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
@@ -511,7 +519,7 @@ sc_object_manager::remove_event(const std::string& name)
 void
 sc_object_manager::remove_object(const std::string& name)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);
@@ -535,7 +543,7 @@ sc_object_manager::remove_object(const std::string& name)
 bool
 sc_object_manager::remove_external_name(const std::string& name)
 {
-    std::unique_lock<std::mutex> lock(m_mutex);
+    std::lock_guard<std::recursive_mutex> lock(m_mutex);
 
     instance_table_t::iterator it;     // instance table iterator.
     it = m_instance_table.find(name);

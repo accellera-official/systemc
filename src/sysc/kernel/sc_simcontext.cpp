@@ -1335,6 +1335,31 @@ sc_simcontext::add_reset_finder( sc_reset_finder* reset_finder )
     m_reset_finder_q = reset_finder;
 }
 
+sc_object_host*
+sc_simcontext::first_top_level_host() const
+{
+    // Find the first top-level sc_module child.  We skip non-module
+    // children (sc_signal, sc_async_runnable_helper, etc.) so the
+    // result reflects user intent rather than whichever helper happens
+    // to be constructed first.  Children are appended, never reordered,
+    // so the result is stable for the simcontext's lifetime.
+    for ( sc_object* o : m_child_objects ) {
+        if ( sc_module* mod = dynamic_cast<sc_module*>( o ) )
+            return mod;
+    }
+    return NULL;
+}
+
+const char*
+sc_simcontext::name() const
+{
+    // Use the basename of the first top-level sc_module child as the
+    // simcontext's logical name.  Falls back to a kernel-internal
+    // sentinel name before any module is registered.
+    sc_object_host* top = first_top_level_host();
+    return top ? top->basename() : SC_DEFAULT_SIMCONTEXT_NAME_;
+}
+
 const ::std::vector<sc_object*>&
 sc_simcontext::get_child_objects() const
 {

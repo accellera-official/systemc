@@ -74,6 +74,12 @@ class sc_prim_channel_registry;
 class sc_process_table;
 class sc_signal_bool_deval;
 class sc_trace_file;
+
+// Kernel-internal fallback name used for an sc_simcontext that has
+// not yet acquired a name from a top-level child object.  Using the
+// class name keeps the style in line with other kernel-generated
+// basenames ("object", "method_p", "thread_p", "invoker").
+#define SC_DEFAULT_SIMCONTEXT_NAME_ "sc_simcontext"
 class sc_runnable;
 class sc_process_host;
 class sc_method_process;
@@ -272,6 +278,24 @@ public:
     inline sc_stage get_stage() const;
 
     sc_object_host* active_object();
+
+    // A logical name for this simcontext.  Today there is no field that
+    // holds an explicit simcontext name; we derive one from the basename
+    // of the first top-level sc_module child, falling back to
+    // SC_DEFAULT_SIMCONTEXT_NAME_ (a clearly kernel-internal token) when
+    // no module has been registered yet.  Used to qualify kernel-
+    // internal names (e.g. sc_runnable's list-head sentinels) so that
+    // simcontexts sharing an sc_object_manager do not collide on those
+    // names.  Returns a pointer that is stable for the simcontext's
+    // lifetime (basename storage is owned by the child object).
+    const char* name() const;
+
+    // Returns the sc_object_host* backing name() above, or NULL if no
+    // top-level sc_module has been registered yet.  Exposed so that
+    // kernel-internal code (e.g. sc_runnable::init, which anchors its
+    // list-head sentinels under this module for hierarchical naming)
+    // does not have to walk the deprecated get_child_objects() list.
+    sc_object_host* first_top_level_host() const;
 
     sc_object* first_object();
     sc_object* next_object();

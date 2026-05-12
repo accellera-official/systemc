@@ -36,6 +36,8 @@
 #include "sysc/kernel/sc_runnable.h"
 #include "sysc/kernel/sc_method_process.h"
 #include "sysc/kernel/sc_thread_process.h"
+#include "sysc/kernel/sc_simcontext.h"
+#include "sysc/kernel/sc_object_manager.h"
 
 // DEBUGGING MACROS:
 //
@@ -145,24 +147,63 @@ inline void sc_runnable::execute_thread_next( sc_thread_handle thread_h )
 //------------------------------------------------------------------------------
 inline void sc_runnable::init()
 {
-    if ( !m_methods_push_head )
+    // These list-head sentinels are kernel-internal dummies, one pair
+    // per sc_runnable (i.e. one pair per sc_simcontext).  When two
+    // simcontexts share an sc_object_manager (the parallel-sim case),
+    // a hardcoded name like "methods_push_head" would collide between
+    // them; the second thread to register would race the first on the
+    // shared instance_table.
+    //
+    // To give each simcontext's sentinels a distinct and readable name,
+    // we temporarily push the simcontext's first top-level module onto
+    // the hierarchy so the sentinel is constructed as its child.  The
+    // sentinel's full name then naturally becomes
+    //   "<first_module_basename>.methods_push_head"
+    // e.g. "prod.methods_push_head" in the child simcontext of an
+    // SC_ALLOW_CONCURRENCY(prod, ...) wrapper.  detach() immediately
+    // after construction removes it from the parent's child list and
+    // the shared name table; only the already-unique full name lives on.
+    //
+    // Called from prepare_to_simulate, so sc_main has finished and the
+    // simcontext's child list is already populated.
+    if ( !m_methods_push_head || !m_threads_push_head )
     {
-        m_methods_push_head = new sc_method_process("methods_push_head", true, 
-                                                    sc_entry_func(), 0, 0);
-        m_methods_push_head->dont_initialize(true);
-	m_methods_push_head->detach();
+        sc_simcontext*  sim    = sc_get_curr_simcontext();
+        sc_object_host* parent = sim->first_top_level_host();
+
+        // Push `parent` on the hierarchy stack so the sentinels'
+        // sc_object_init picks it up via active_object() as their
+        // parent.  Their full names then naturally become e.g.
+        // "prod.methods_push_head".  Pop again before detach() runs
+        // (detach unhooks them from parent's child list and the
+        // shared name table; only the unique full name lives on).
+        sc_object_manager* om = sim->get_object_manager();
+        if ( parent ) om->hierarchy_push( parent );
+
+        if ( !m_methods_push_head )
+        {
+            m_methods_push_head = new sc_method_process("methods_push_head",
+                                                        true, sc_entry_func(),
+                                                        0, 0);
+            m_methods_push_head->dont_initialize(true);
+            m_methods_push_head->detach();
+        }
+        if ( !m_threads_push_head )
+        {
+            m_threads_push_head = new sc_thread_process("threads_push_head",
+                                                        true, sc_entry_func(),
+                                                        0, 0);
+            m_threads_push_head->dont_initialize(true);
+            m_threads_push_head->detach();
+        }
+
+        if ( parent ) om->hierarchy_pop();
     }
+
     m_methods_pop = SC_NO_METHODS;
     m_methods_push_tail = m_methods_push_head;
     m_methods_push_head->set_next_runnable(SC_NO_METHODS);
 
-    if ( !m_threads_push_head )
-    {
-        m_threads_push_head = new sc_thread_process("threads_push_head", true, 
-                                                    sc_entry_func(), 0, 0);
-        m_threads_push_head->dont_initialize(true);
-	m_threads_push_head->detach();
-    }
     m_threads_pop = SC_NO_THREADS;
     m_threads_push_head->set_next_runnable(SC_NO_THREADS);
     m_threads_push_tail = m_threads_push_head;
