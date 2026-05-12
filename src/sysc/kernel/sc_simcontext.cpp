@@ -296,6 +296,38 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_async_runnable_helper
+//
+//  Drain queued foreign runnable-push requests onto the local runnable
+//  lists during this simcontext's update phase.
+// ----------------------------------------------------------------------------
+
+void
+sc_async_runnable_helper::update()
+{
+    std::vector<sc_method_process*>    ms;
+    std::vector<sc_thread_process*>    ts;
+    std::vector<std::function<void()>> cbs;
+    {
+        std::lock_guard<std::mutex> lg( m_mutex );
+        ms.swap( m_pending_methods );
+        ts.swap( m_pending_threads );
+        cbs.swap( m_pending_callbacks );
+    }
+    // Callbacks first: they may themselves enqueue runnables that we
+    // then process locally below.
+    for ( auto& cb : cbs )
+        cb();
+    sc_simcontext* simc = simcontext();
+    for ( auto* m : ms )
+        if ( !m->is_runnable() )
+            simc->push_runnable_method( m );
+    for ( auto* t : ts )
+        if ( !t->is_runnable() )
+            simc->push_runnable_thread( t );
+}
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
 //  The simulation context.
@@ -325,6 +357,16 @@ sc_simcontext::init()
     m_stub_registry = new sc_stub_registry( *this );
     m_process_table = new sc_process_table;
     m_current_writer = 0;
+
+    // Construct the async runnable helper in *this* simcontext's registry.
+    // sc_prim_channel's base sc_object captures sc_curr_simcontext, which
+    // during a child sim's init() still points at the parent — so swap.
+    {
+        sc_simcontext* saved = sc_curr_simcontext;
+        sc_curr_simcontext = this;
+        m_async_runnable_helper = new sc_async_runnable_helper();
+        sc_curr_simcontext = saved;
+    }
 
 
     // CHECK FOR ENVIRONMENT VARIABLES THAT MODIFY SIMULATOR EXECUTION:
@@ -374,11 +416,13 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
+    if (m_parent_context) return;           // assume the parent will delete us
     // remove remaining zombie processes
     do_collect_processes();
 
     delete m_stub_registry;
     delete m_method_invoker_p;
+    delete m_async_runnable_helper;     // must precede m_prim_channel_registry
     delete m_error;
     delete m_cor_pkg;
     delete m_time_params;
@@ -387,13 +431,15 @@ sc_simcontext::clean()
     delete m_null_event_p;
     delete m_timed_events;
     delete m_process_table;
-    delete m_name_gen;
     delete m_stage_cb_registry;
     delete m_prim_channel_registry;
     delete m_export_registry;
     delete m_port_registry;
     delete m_module_registry;
-    delete m_object_manager;
+    if (!m_parent_context) {
+        delete m_name_gen;
+        delete m_object_manager;
+    }
 
     m_delta_events.clear();
     m_child_objects.clear();

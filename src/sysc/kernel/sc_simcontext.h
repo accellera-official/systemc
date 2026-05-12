@@ -30,6 +30,8 @@
 #ifndef SC_SIMCONTEXT_H
 #define SC_SIMCONTEXT_H
 
+#include <functional>
+
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_status.h"
@@ -79,6 +81,7 @@ class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
 class sc_stub_registry;
+class sc_async_runnable_helper;
 
 extern sc_simcontext* sc_get_curr_simcontext();
 
@@ -197,6 +200,7 @@ class SC_API sc_simcontext
     friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
+    friend class sc_async_runnable_helper;
     friend class sc_stage_callback_registry;
     friend class sc_port_registry;
     friend class sc_process_b;
@@ -396,6 +400,18 @@ private:
     void push_runnable_method( sc_method_handle );
     void push_runnable_thread( sc_thread_handle );
 
+    // Cross-simcontext-safe variants: if the caller's sc_curr_simcontext
+    // differs from this, route via the async runnable helper so the
+    // runnable list is only ever mutated on its owning thread.
+    void push_runnable_method_async( sc_method_handle );
+    void push_runnable_thread_async( sc_thread_handle );
+
+    // Run fn() on this simcontext's thread. If foreign, posts via the
+    // async helper and returns immediately; the callback fires in the
+    // owning sim's next update phase. If local, runs synchronously.
+    // Kernel-internal; channels reach it via sc_prim_channel's forwarder.
+    void run_update_async( std::function<void()> fn );
+
     void push_runnable_method_front( sc_method_handle );
     void push_runnable_thread_front( sc_thread_handle );
 
@@ -462,6 +478,7 @@ private:
     sc_time                     m_curr_time;
 
     sc_invoke_method*           m_method_invoker_p;
+    sc_async_runnable_helper*   m_async_runnable_helper;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
     sc_dt::uint64               m_initial_delta_count_at_current_time;

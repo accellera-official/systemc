@@ -32,6 +32,11 @@
 #ifndef SC_SIMCONTEXT_INT_H
 #define SC_SIMCONTEXT_INT_H
 
+#include <functional>
+#include <mutex>
+#include <vector>
+
+#include "sysc/communication/sc_prim_channel.h"
 #include "sysc/kernel/sc_simcontext.h"
 #include "sysc/kernel/sc_runnable.h"
 #include "sysc/kernel/sc_runnable_int.h"
@@ -60,6 +65,57 @@
 
 
 namespace sc_core {
+
+// ----------------------------------------------------------------------------
+//  CLASS : sc_async_runnable_helper
+//
+//  Kernel prim_channel owned by each sc_simcontext that accepts
+//  cross-simcontext work requests and drains them during the owning
+//  simcontext's update phase. Three entry points:
+//    post_method / post_thread - fast path, used by trigger fan-out to
+//      enqueue a single runnable for the foreign sim's next delta.
+//    post_callback             - general path for whole-function calls
+//      that must happen on the owning sim's thread (e.g. enable/resume
+//      which read-modify-write m_state).
+//  Intentionally private to kernel (internal header).
+// ----------------------------------------------------------------------------
+
+class sc_async_runnable_helper : public sc_prim_channel
+{
+public:
+    sc_async_runnable_helper() : sc_prim_channel() {}
+
+    void post_method( sc_method_process* m )
+    {
+        std::lock_guard<std::mutex> lg( m_mutex );
+        m_pending_methods.push_back( m );
+        async_request_update();
+    }
+
+    void post_thread( sc_thread_process* t )
+    {
+        std::lock_guard<std::mutex> lg( m_mutex );
+        m_pending_threads.push_back( t );
+        async_request_update();
+    }
+
+    void post_callback( std::function<void()> fn )
+    {
+        std::lock_guard<std::mutex> lg( m_mutex );
+        m_pending_callbacks.push_back( std::move( fn ) );
+        async_request_update();
+    }
+
+protected:
+    // defined in sc_simcontext.cpp (needs full sc_method_process etc. definitions)
+    virtual void update();
+
+private:
+    std::mutex                          m_mutex;
+    std::vector<sc_method_process*>     m_pending_methods;
+    std::vector<sc_thread_process*>     m_pending_threads;
+    std::vector<std::function<void()>>  m_pending_callbacks;
+};
 
 // We use m_current_writer rather than m_curr_proc_info.process_handle to
 // return the active process for sc_signal<T>::check_write since that lets
@@ -203,6 +259,40 @@ void
 sc_simcontext::push_runnable_method( sc_method_handle method_h )
 {
     m_runnable->push_back_method( method_h );
+}
+
+inline
+void
+sc_simcontext::push_runnable_method_async( sc_method_handle method_h )
+{
+    if ( this != sc_get_curr_simcontext() )
+        m_async_runnable_helper->post_method( method_h );
+    else
+        push_runnable_method( method_h );
+}
+
+inline
+void
+sc_simcontext::push_runnable_thread_async( sc_thread_handle thread_h )
+{
+    if ( this != sc_get_curr_simcontext() )
+        m_async_runnable_helper->post_thread( thread_h );
+    else
+        push_runnable_thread( thread_h );
+}
+
+// Run fn() on this simcontext's thread. If we're already on it, run
+// synchronously; otherwise post via the async helper to drain in the
+// owning sim's next update phase. Used to safely route whole-function
+// calls (e.g. enable/resume) that read-modify-write process state.
+inline
+void
+sc_simcontext::run_update_async( std::function<void()> fn )
+{
+    if ( this != sc_get_curr_simcontext() )
+        m_async_runnable_helper->post_callback( std::move( fn ) );
+    else
+        fn();
 }
 
 inline
