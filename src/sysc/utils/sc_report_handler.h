@@ -30,6 +30,8 @@
 #ifndef SC_REPORT_HANDLER_H
 #define SC_REPORT_HANDLER_H
 
+#include <string>
+
 namespace sc_core {
 
 // ----------------------------------------------------------------------------
@@ -118,6 +120,26 @@ public:
     static bool set_log_file_name(const char* filename);
     static const char* get_log_file_name();
 
+    // Snapshot of this thread's report-handler configuration, used to
+    // inherit settings onto a freshly-spawned thread (sc_concurrent's
+    // child simcontext).  Call snapshot_config() on the parent thread
+    // before the child starts; call apply_config() first thing on the
+    // child thread.  Counters (sev_call_count) are deliberately NOT
+    // in the snapshot — a new thread starts with fresh counters.
+    struct config_snapshot {
+        sc_report_handler_proc handler;
+        int                    verbosity;
+        sc_actions             suppress;
+        sc_actions             force;
+        sc_actions             catch_;
+        sc_actions             available;
+        sc_actions             actions_per_sev[SC_MAX_SEVERITY];
+        unsigned               limit_per_sev[SC_MAX_SEVERITY];
+        std::string            log_file_name; // empty == none
+    };
+    static config_snapshot snapshot_config();
+    static void            apply_config(const config_snapshot&);
+
     // how the implementation should handle caught (sc_report) exceptions
     static sc_actions set_catch_actions(sc_actions);
     static sc_actions get_catch_actions();
@@ -140,21 +162,31 @@ protected:
     static void cache_report(const sc_report&);
     static sc_actions execute(sc_msg_def*, sc_severity);
 
-    static sc_actions   suppress_mask;
-    static sc_actions   force_mask;
-    static sc_actions   sev_actions[SC_MAX_SEVERITY];
-    static unsigned     sev_limit[SC_MAX_SEVERITY];
-    static unsigned     sev_call_count[SC_MAX_SEVERITY];
-    static sc_report*   last_global_report;
-    static sc_actions   available_actions;
-    static sc_actions   catch_actions;
-    static char*        log_file_name;
-    static int          verbosity_level;
+    // Report-handler state is thread_local so that concurrent calls from
+    // parallel simcontexts do not race on counters, masks, or the handler
+    // pointer.  Consequence: set_handler / set_verbosity_level / set_actions
+    // only affect the thread they are called from.  A user that wants
+    // cross-thread policy (unified counters, ordered log output, one handler
+    // everywhere) should install a thread-safe handler from each thread;
+    // the back-end is where that coordination belongs.
+    //
+    // msg_terminator is read-only shared (compile-time initialised, never
+    // written), so it does NOT need to be thread_local.
+    static thread_local sc_actions   suppress_mask;
+    static thread_local sc_actions   force_mask;
+    static thread_local sc_actions   sev_actions[SC_MAX_SEVERITY];
+    static thread_local unsigned     sev_limit[SC_MAX_SEVERITY];
+    static thread_local unsigned     sev_call_count[SC_MAX_SEVERITY];
+    static thread_local sc_report*   last_global_report;
+    static thread_local sc_actions   available_actions;
+    static thread_local sc_actions   catch_actions;
+    static thread_local char*        log_file_name;
+    static thread_local int          verbosity_level;
 
-    static msg_def_items*  messages;
-    static msg_def_items   msg_terminator;
+    static thread_local msg_def_items*  messages;
+    static              msg_def_items   msg_terminator;
 
-    static sc_report_handler_proc  handler;
+    static thread_local sc_report_handler_proc  handler;
 
     static sc_msg_def* mdlookup(const char* msg_type);
 
