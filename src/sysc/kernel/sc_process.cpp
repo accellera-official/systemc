@@ -47,13 +47,16 @@ namespace sc_core {
 // Note the special name for 'non_event' - this makes sure it does not
 // appear as a named event.
 
+// These two are immutable empty fallbacks returned by sc_process_handle::
+// get_child_events() / get_child_objects() when the handle is empty.
+// Read-only after default construction, so no thread_local is needed.
 std::vector<sc_event*>  sc_process_handle::empty_event_vector;
 std::vector<sc_object*> sc_process_handle::empty_object_vector;
 sc_event&               sc_process_handle::non_event() { return sc_get_curr_simcontext()->null_event(); }
 
 // Last process that was created:
 
-sc_process_b* sc_process_b::m_last_created_process_p = 0;
+thread_local sc_process_b* sc_process_b::m_last_created_process_p = 0;
 
 //------------------------------------------------------------------------------
 //"sc_process_b::add_static_event"
