@@ -1,0 +1,8 @@
+SystemC Simulation
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+a:count=4 last=104 mono=yes  b:count=4 last=204 mono=yes  result=PASS
