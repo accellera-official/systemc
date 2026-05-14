@@ -83,6 +83,7 @@ _UpgradeReport_Files/
 .vscode/
 
 .clang-format
+/.cache
 
 # ignore Doxygen documentation
 /docs/*/doxygen/html/
