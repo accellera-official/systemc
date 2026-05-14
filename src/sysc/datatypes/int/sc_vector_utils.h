@@ -1536,11 +1536,18 @@ vector_or( const int       longer_hod,
 
     int       digit_i;
 
-    // And the two operands to the length of the shorter operand:
+    #if __GNUC__ == 13
+    #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+    #endif // __GNUC__ == 13
 
+    // And the two operands to the length of the shorter operand:
     for ( digit_i = 0; digit_i <= shorter_hod; ++digit_i ) {
 	*result_p++ = *longer_p++ | shorter_p[digit_i];
     }
+
+    #if __GNUC__ == 13
+    #pragma GCC diagnostic pop "-Wmaybe-uninitialized"
+    #endif // __GNUC__ == 13
 
     // If the shorter operand is negative fill out the remaining entries
     // with ones, otherwise with the longer operand.
