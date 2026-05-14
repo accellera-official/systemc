@@ -42,7 +42,7 @@ namespace std {}
 
 namespace sc_core {
 
-int sc_report_handler::verbosity_level = SC_MEDIUM;
+thread_local int sc_report_handler::verbosity_level = SC_MEDIUM;
 
 // not documented, but available
 const std::string sc_report_compose_message(const sc_report& rep)
@@ -178,7 +178,7 @@ sc_log_file_handle::release()
 sc_log_file_handle::operator*()
 { return log_stream;	}
 
-static sc_log_file_handle log_stream;
+static thread_local sc_log_file_handle log_stream;
 
 
 //
@@ -689,6 +689,48 @@ const char * sc_report_handler::get_log_file_name()
     return log_file_name;
 }
 
+// Snapshot of the current thread's report-handler configuration, for
+// hand-off to a freshly-spawned thread (sc_concurrent's child simcontext).
+sc_report_handler::config_snapshot
+sc_report_handler::snapshot_config()
+{
+    config_snapshot s;
+    s.handler   = handler;
+    s.verbosity = verbosity_level;
+    s.suppress  = suppress_mask;
+    s.force     = force_mask;
+    s.catch_    = catch_actions;
+    s.available = available_actions;
+    for (int i = 0; i < SC_MAX_SEVERITY; ++i) {
+        s.actions_per_sev[i] = sev_actions[i];
+        s.limit_per_sev[i]   = sev_limit[i];
+    }
+    if (log_file_name) s.log_file_name = log_file_name;
+    return s;
+}
+
+void
+sc_report_handler::apply_config(const config_snapshot& s)
+{
+    handler           = s.handler;
+    verbosity_level   = s.verbosity;
+    suppress_mask     = s.suppress;
+    force_mask        = s.force;
+    catch_actions     = s.catch_;
+    available_actions = s.available;
+    for (int i = 0; i < SC_MAX_SEVERITY; ++i) {
+        sev_actions[i] = s.actions_per_sev[i];
+        sev_limit[i]   = s.limit_per_sev[i];
+    }
+    if (!s.log_file_name.empty()) {
+        // set_log_file_name allocates via malloc.  Free any previous
+        // (default thread_local) value first to avoid the "already set"
+        // refusal in set_log_file_name.
+        if (log_file_name) { free(log_file_name); log_file_name = 0; }
+        set_log_file_name(s.log_file_name.c_str());
+    }
+}
+
 void sc_report_handler::cache_report(const sc_report& rep)
 {
     sc_process_b * proc = sc_get_current_process_b();
@@ -730,10 +772,10 @@ int sc_report_handler::set_verbosity_level( int level )
 // static variables
 //
 
-sc_actions sc_report_handler::suppress_mask = 0;
-sc_actions sc_report_handler::force_mask = 0;
+thread_local sc_actions sc_report_handler::suppress_mask = 0;
+thread_local sc_actions sc_report_handler::force_mask = 0;
 
-sc_actions sc_report_handler::sev_actions[SC_MAX_SEVERITY] =
+thread_local sc_actions sc_report_handler::sev_actions[SC_MAX_SEVERITY] =
 {
     /* info  */ SC_DEFAULT_INFO_ACTIONS,
     /* warn  */ SC_DEFAULT_WARNING_ACTIONS,
@@ -743,14 +785,14 @@ sc_actions sc_report_handler::sev_actions[SC_MAX_SEVERITY] =
 
 // Note that SC_FATAL has a limit of 1 by default
 
-sc_actions sc_report_handler::sev_limit[SC_MAX_SEVERITY] =
+thread_local sc_actions sc_report_handler::sev_limit[SC_MAX_SEVERITY] =
 {
     UINT_MAX, UINT_MAX, UINT_MAX, UINT_MAX
 };
-sc_actions sc_report_handler::sev_call_count[SC_MAX_SEVERITY] = { 0, 0, 0, 0 };
+thread_local sc_actions sc_report_handler::sev_call_count[SC_MAX_SEVERITY] = { 0, 0, 0, 0 };
 
-sc_report* sc_report_handler::last_global_report = NULL;
-sc_actions sc_report_handler::available_actions =
+thread_local sc_report* sc_report_handler::last_global_report = NULL;
+thread_local sc_actions sc_report_handler::available_actions =
     SC_DO_NOTHING |
     SC_THROW |
     SC_LOG |
@@ -760,16 +802,16 @@ sc_actions sc_report_handler::available_actions =
     SC_STOP |
     SC_ABORT;
 
-sc_report_handler_proc sc_report_handler::handler =
+thread_local sc_report_handler_proc sc_report_handler::handler =
     &sc_report_handler::default_handler;
 
-char * sc_report_handler::log_file_name = 0;
+thread_local char * sc_report_handler::log_file_name = 0;
 
-sc_report_handler::msg_def_items * sc_report_handler::messages =
+thread_local sc_report_handler::msg_def_items * sc_report_handler::messages =
     &sc_report_handler::msg_terminator;
 
 
-sc_actions sc_report_handler::catch_actions = SC_DEFAULT_CATCH_ACTIONS;
+thread_local sc_actions sc_report_handler::catch_actions = SC_DEFAULT_CATCH_ACTIONS;
 
 sc_actions sc_report_handler::set_catch_actions(sc_actions act)
 {

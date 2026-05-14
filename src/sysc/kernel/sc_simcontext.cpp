@@ -62,6 +62,7 @@
 #include <algorithm>
 #include <cstring>
 #include <sstream>
+#include <functional>
 
 // DEBUGGING MACROS:
 //
@@ -295,6 +296,38 @@ public:
 };
 
 // ----------------------------------------------------------------------------
+//  CLASS : sc_async_runnable_helper
+//
+//  Drain queued foreign runnable-push requests onto the local runnable
+//  lists during this simcontext's update phase.
+// ----------------------------------------------------------------------------
+
+void
+sc_async_runnable_helper::update()
+{
+    std::vector<sc_method_process*>    ms;
+    std::vector<sc_thread_process*>    ts;
+    std::vector<std::function<void()>> cbs;
+    {
+        std::lock_guard<std::mutex> lg( m_mutex );
+        ms.swap( m_pending_methods );
+        ts.swap( m_pending_threads );
+        cbs.swap( m_pending_callbacks );
+    }
+    // Callbacks first: they may themselves enqueue runnables that we
+    // then process locally below.
+    for ( auto& cb : cbs )
+        cb();
+    sc_simcontext* simc = simcontext();
+    for ( auto* m : ms )
+        if ( !m->is_runnable() )
+            simc->push_runnable_method( m );
+    for ( auto* t : ts )
+        if ( !t->is_runnable() )
+            simc->push_runnable_thread( t );
+}
+
+// ----------------------------------------------------------------------------
 //  CLASS : sc_simcontext
 //
 //  The simulation context.
@@ -306,16 +339,34 @@ sc_simcontext::init()
 
     // ALLOCATE VARIOUS MANAGERS AND REGISTRIES:
 
-    m_object_manager = new sc_object_manager;
+    if (sc_curr_simcontext && this!=sc_curr_simcontext) {            // Requesting a 'parallel' simcontext
+        m_object_manager = sc_curr_simcontext->get_object_manager(); // share with parent
+        m_name_gen = sc_curr_simcontext->m_name_gen;
+        dynamic_log_verbosity = sc_curr_simcontext->dynamic_log_verbosity;
+        m_parent_context = sc_curr_simcontext;
+    } else {
+        m_object_manager = new sc_object_manager;
+        m_name_gen = new sc_name_gen;
+        m_parent_context=nullptr;
+    }
     m_module_registry = new sc_module_registry( *this );
     m_port_registry = new sc_port_registry( *this );
     m_export_registry = new sc_export_registry( *this );
     m_prim_channel_registry = new sc_prim_channel_registry( *this );
     m_stage_cb_registry = new sc_stage_callback_registry( *this );
     m_stub_registry = new sc_stub_registry( *this );
-    m_name_gen = new sc_name_gen;
     m_process_table = new sc_process_table;
     m_current_writer = 0;
+
+    // Construct the async runnable helper in *this* simcontext's registry.
+    // sc_prim_channel's base sc_object captures sc_curr_simcontext, which
+    // during a child sim's init() still points at the parent — so swap.
+    {
+        sc_simcontext* saved = sc_curr_simcontext;
+        sc_curr_simcontext = this;
+        m_async_runnable_helper = new sc_async_runnable_helper();
+        sc_curr_simcontext = saved;
+    }
 
 
     // CHECK FOR ENVIRONMENT VARIABLES THAT MODIFY SIMULATOR EXECUTION:
@@ -365,11 +416,13 @@ sc_simcontext::init()
 void
 sc_simcontext::clean()
 {
+    if (m_parent_context) return;           // assume the parent will delete us
     // remove remaining zombie processes
     do_collect_processes();
 
     delete m_stub_registry;
     delete m_method_invoker_p;
+    delete m_async_runnable_helper;     // must precede m_prim_channel_registry
     delete m_error;
     delete m_cor_pkg;
     delete m_time_params;
@@ -378,13 +431,15 @@ sc_simcontext::clean()
     delete m_null_event_p;
     delete m_timed_events;
     delete m_process_table;
-    delete m_name_gen;
     delete m_stage_cb_registry;
     delete m_prim_channel_registry;
     delete m_export_registry;
     delete m_port_registry;
     delete m_module_registry;
-    delete m_object_manager;
+    if (!m_parent_context) {
+        delete m_name_gen;
+        delete m_object_manager;
+    }
 
     m_delta_events.clear();
     m_child_objects.clear();
@@ -662,7 +717,7 @@ sc_simcontext::elaborate()
     // (not added to public object hierarchy)
 
     m_method_invoker_p =
-      new sc_invoke_method("$$$$kernel_module$$$$_invoke_method" );
+        new sc_invoke_method(("$$$$kernel_module$$$$_invoke_method$" + std::to_string((uint64_t)((void*)this))).c_str());
 
     set_simulation_status(SC_BEFORE_END_OF_ELABORATION);
     for( int cd = 0; cd != 4; /* empty */ )
@@ -1280,6 +1335,31 @@ sc_simcontext::add_reset_finder( sc_reset_finder* reset_finder )
     m_reset_finder_q = reset_finder;
 }
 
+sc_object_host*
+sc_simcontext::first_top_level_host() const
+{
+    // Find the first top-level sc_module child.  We skip non-module
+    // children (sc_signal, sc_async_runnable_helper, etc.) so the
+    // result reflects user intent rather than whichever helper happens
+    // to be constructed first.  Children are appended, never reordered,
+    // so the result is stable for the simcontext's lifetime.
+    for ( sc_object* o : m_child_objects ) {
+        if ( sc_module* mod = dynamic_cast<sc_module*>( o ) )
+            return mod;
+    }
+    return NULL;
+}
+
+const char*
+sc_simcontext::name() const
+{
+    // Use the basename of the first top-level sc_module child as the
+    // simcontext's logical name.  Falls back to a kernel-internal
+    // sentinel name before any module is registered.
+    sc_object_host* top = first_top_level_host();
+    return top ? top->basename() : SC_DEFAULT_SIMCONTEXT_NAME_;
+}
+
 const ::std::vector<sc_object*>&
 sc_simcontext::get_child_objects() const
 {
@@ -1554,8 +1634,8 @@ void sc_simcontext::post_suspend() const
 	static sc_simcontext sc_default_global_context;
 	sc_simcontext* sc_curr_simcontext = &sc_default_global_context;
 #else
-	SC_API sc_simcontext* sc_curr_simcontext = 0;
-	SC_API sc_simcontext* sc_default_global_context = 0;
+	thread_local SC_API sc_simcontext* sc_curr_simcontext = 0;
+	thread_local SC_API sc_simcontext* sc_default_global_context = 0;
 #endif
 #else
 // Not MT-safe!
@@ -1696,7 +1776,7 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
         exit_time = context_p->m_curr_time + duration;
 
     // called with duration = SC_ZERO_TIME for the first time
-    static bool init_delta_or_pending_updates =
+    thread_local static bool init_delta_or_pending_updates =
          ( starting_delta == 0 && exit_time == SC_ZERO_TIME );
 
     // If the simulation status is bad issue the appropriate message:
@@ -2069,6 +2149,41 @@ SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
 {
   sc_get_curr_simcontext()->get_stage_cb_registry()
                           ->unregister_callback(cb, mask);
+}
+
+//
+// Implementation defined Dynamic log verbosity dispatch
+//
+void sc_simcontext::set_log_verbosity_fn(
+    std::function<sc_core::sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+{
+  if (dynamic_log_verbosity) {
+    SC_REPORT_WARNING(SC_LOG_OVERWRITE_VERBOSITY_FN_, 0);
+  } else {
+    dynamic_log_verbosity = std::move(fn);
+  }
+}
+
+sc_log_level sc_simcontext::get_log_verbosity(sc_log_logger_cache &logger,
+                                              const char *file,
+                                              int line,
+                                              std::string_view local_tag) {
+  if (dynamic_log_verbosity)
+    return dynamic_log_verbosity(logger, file, line, local_tag);
+  else
+    return as_log(sc_report_handler::get_verbosity_level());
+}
+
+// NB these functions are NOT a standard API, but are
+// exposed to provide access to the (implementation defined) dynamic logging configuration
+void sc_log_impl::sc_set_log_verbosity_fn(
+    std::function<sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+{
+  sc_get_curr_simcontext()->set_log_verbosity_fn(std::move(fn));
+}
+sc_log_level sc_log_impl::sc_get_log_verbosity(sc_log_logger_cache &logger, const char *file,
+                                  int line, std::string_view local_tag) {
+  return sc_get_curr_simcontext()->get_log_verbosity(logger, file, line, local_tag);
 }
 
 } // namespace sc_core

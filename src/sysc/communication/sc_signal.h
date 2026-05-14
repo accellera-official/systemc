@@ -288,6 +288,18 @@ inline
 void
 sc_signal_t<T,POL>::write( const T& value_ )
 {
+    // Cross-simcontext write: m_new_val and request_update both touch
+    // state that belongs to the signal's owning sim, so route the whole
+    // write onto that sim's update phase via run_update_async.  The
+    // foreign caller returns immediately; the write lands at the next
+    // update on the owner thread.  Reader-side wake-up is already
+    // handled by the cross-context fan-out path on the value-changed
+    // event.
+    if ( sc_get_curr_simcontext() != this->simcontext() ) {
+        this->run_update_async( [this, value_]{ this->write(value_); } );
+        return;
+    }
+
     // first write per eval phase: m_new_val == m_cur_val
     bool value_changed = !( m_new_val == value_ );
     if ( !policy_type::check_write(this, value_changed) )

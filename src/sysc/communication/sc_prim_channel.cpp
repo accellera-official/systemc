@@ -63,7 +63,6 @@ sc_prim_channel::sc_prim_channel( const char* name_ )
     m_registry->insert( *this );
 }
 
-
 // destructor
 
 sc_prim_channel::~sc_prim_channel()
@@ -194,6 +193,11 @@ public:
 	m_pop_queue.clear();
     }
 
+    // attach/detach_suspending and suspend() all touch m_suspending_channels
+    // and m_has_suspending_channels.  By construction every caller is on the
+    // owning simcontext's thread (sync_window's step_helper and ctor, and
+    // sc_simcontext's main loop calling async_suspend), so no lock is
+    // needed.  Do NOT call these from a foreign thread.
     void attach_suspending( sc_prim_channel& p )
     {
         std::vector<sc_prim_channel*>::iterator it =
@@ -202,7 +206,6 @@ public:
             m_suspending_channels.push_back(&p);
             m_has_suspending_channels = true;
         }
-        // return releases the mutex
     }
 
     void detach_suspending( sc_prim_channel& p )
@@ -214,7 +217,6 @@ public:
             m_suspending_channels.pop_back();
             m_has_suspending_channels = (m_suspending_channels.size() > 0);
         }
-        // return releases the mutex
     }
 
     async_update_list() : m_has_suspending_channels() {}

@@ -362,7 +362,7 @@ sc_method_process::trigger_static()
     }
     else
     {
-        simcontext()->push_runnable_method(this);
+        simcontext()->push_runnable_method_async(this);
     }
 }
 

@@ -214,6 +214,7 @@ class SC_API sc_process_b : public sc_object_host {
     friend class sc_object;
     friend class sc_port_base;
     friend class sc_runnable;
+    friend class sc_async_runnable_helper;
     friend class sc_sensitive;
     friend class sc_sensitive_pos;
     friend class sc_sensitive_neg;
@@ -401,7 +402,7 @@ class SC_API sc_process_b : public sc_object_host {
                                                     // requesting global suspension.
 
   protected:
-    static sc_process_b* m_last_created_process_p; // Last process created.
+    thread_local static sc_process_b* m_last_created_process_p; // Last process created.
 };
 
 

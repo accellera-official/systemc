@@ -424,6 +424,10 @@ inline
 void
 sc_event::notify_internal( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this, t]{ notify_internal(t); } );
+        return;
+    }
     if( t == SC_ZERO_TIME ) {
         // add this event to the delta events set
         m_delta_event_index = m_simc->add_delta_event( this );
@@ -441,6 +445,10 @@ inline
 void
 sc_event::notify_next_delta()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this]{ notify_next_delta(); } );
+        return;
+    }
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
     }

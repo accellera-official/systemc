@@ -30,6 +30,8 @@
 #ifndef SC_SIMCONTEXT_H
 #define SC_SIMCONTEXT_H
 
+#include <functional>
+
 #include "sysc/kernel/sc_cmnhdr.h"
 #include "sysc/kernel/sc_process.h"
 #include "sysc/kernel/sc_status.h"
@@ -37,6 +39,8 @@
 #include "sysc/kernel/sc_stage_callback_if.h"
 #include "sysc/utils/sc_hash.h"
 #include "sysc/utils/sc_pq.h"
+#include "sysc/log/sc_log_types.h"
+#include "sysc/utils/sc_utils_ids.h"
 
 #include "sysc/communication/sc_host_mutex.h"
 
@@ -70,6 +74,12 @@ class sc_prim_channel_registry;
 class sc_process_table;
 class sc_signal_bool_deval;
 class sc_trace_file;
+
+// Kernel-internal fallback name used for an sc_simcontext that has
+// not yet acquired a name from a top-level child object.  Using the
+// class name keeps the style in line with other kernel-generated
+// basenames ("object", "method_p", "thread_p", "invoker").
+#define SC_DEFAULT_SIMCONTEXT_NAME_ "sc_simcontext"
 class sc_runnable;
 class sc_process_host;
 class sc_method_process;
@@ -77,6 +87,7 @@ class sc_cthread_process;
 class sc_thread_process;
 class sc_reset_finder;
 class sc_stub_registry;
+class sc_async_runnable_helper;
 
 extern sc_simcontext* sc_get_curr_simcontext();
 
@@ -147,6 +158,27 @@ SC_API void sc_register_stage_callback(sc_stage_callback_if & cb,
 SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
                                          unsigned int mask);
 
+struct sc_log_impl {
+// +------------------------------------------------------------------------------------------------
+// | Non standard API: Install a callback used to determine the effective log level for a given
+// | logger cache and local_tag. The cache parameter may be used to remember
+// | a computed level, once set the function will not be re-called.
+// +------------------------------------------------------------------------------------------------
+static void sc_set_log_verbosity_fn(std::function<sc_core::sc_log_level(
+                                 sc_core::sc_log_logger_cache &, const char *,
+                                 int, std::string_view)>
+                                 fn);
+
+// +------------------------------------------------------------------------------------------------
+// | Non standard API: Query the current log verbosity for the given handle cache and local_tag.
+// | If no callback has been installed, the implementation falls back to
+// | the global report verbosity.
+// +------------------------------------------------------------------------------------------------
+static sc_core::sc_log_level sc_get_log_verbosity(sc_core::sc_log_logger_cache &logger,
+                                           const char *file, int line,
+                                           std::string_view local_tag = {});
+};
+
 class sc_invoke_method;
 
 SC_API void    sc_suspend_all();
@@ -174,6 +206,7 @@ class SC_API sc_simcontext
     friend class sc_time_tuple;
     friend class sc_clock;
     friend class sc_method_process;
+    friend class sc_async_runnable_helper;
     friend class sc_stage_callback_registry;
     friend class sc_port_registry;
     friend class sc_process_b;
@@ -181,6 +214,7 @@ class SC_API sc_simcontext
     friend class sc_prim_channel;
     friend class sc_cthread_process;
     friend class sc_thread_process;
+    friend struct sc_core::sc_log_logger_cache;
     friend SC_API sc_dt::uint64 sc_delta_count();
     friend SC_API const std::vector<sc_event*>& sc_get_top_level_events(
         const sc_simcontext* simc_p);
@@ -204,6 +238,8 @@ class SC_API sc_simcontext
                                                   unsigned int mask);
     friend SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
                                                     unsigned int mask);
+
+    friend struct sc_log_impl;
 
     enum sc_signal_write_check
     {
@@ -242,6 +278,24 @@ public:
     inline sc_stage get_stage() const;
 
     sc_object_host* active_object();
+
+    // A logical name for this simcontext.  Today there is no field that
+    // holds an explicit simcontext name; we derive one from the basename
+    // of the first top-level sc_module child, falling back to
+    // SC_DEFAULT_SIMCONTEXT_NAME_ (a clearly kernel-internal token) when
+    // no module has been registered yet.  Used to qualify kernel-
+    // internal names (e.g. sc_runnable's list-head sentinels) so that
+    // simcontexts sharing an sc_object_manager do not collide on those
+    // names.  Returns a pointer that is stable for the simcontext's
+    // lifetime (basename storage is owned by the child object).
+    const char* name() const;
+
+    // Returns the sc_object_host* backing name() above, or NULL if no
+    // top-level sc_module has been registered yet.  Exposed so that
+    // kernel-internal code (e.g. sc_runnable::init, which anchors its
+    // list-head sentinels under this module for hierarchical naming)
+    // does not have to walk the deprecated get_child_objects() list.
+    sc_object_host* first_top_level_host() const;
 
     sc_object* first_object();
     sc_object* next_object();
@@ -330,6 +384,17 @@ public:
     void post_suspend() const;
 
 private:
+    void set_log_verbosity_fn(std::function<sc_core::sc_log_level(
+                                  sc_core::sc_log_logger_cache &, const char *,
+                                  int, std::string_view)>
+                                  fn);
+    sc_core::sc_log_level get_log_verbosity(
+        sc_core::sc_log_logger_cache &,
+        const char *file,
+        int line,
+        std::string_view local_tag = {});
+
+private:
     void hierarchy_push(sc_object_host*);
     sc_object_host* hierarchy_pop();
     sc_object_host* hierarchy_curr() const;
@@ -359,6 +424,18 @@ private:
     void push_runnable_method( sc_method_handle );
     void push_runnable_thread( sc_thread_handle );
 
+    // Cross-simcontext-safe variants: if the caller's sc_curr_simcontext
+    // differs from this, route via the async runnable helper so the
+    // runnable list is only ever mutated on its owning thread.
+    void push_runnable_method_async( sc_method_handle );
+    void push_runnable_thread_async( sc_thread_handle );
+
+    // Run fn() on this simcontext's thread. If foreign, posts via the
+    // async helper and returns immediately; the callback fires in the
+    // owning sim's next update phase. If local, runs synchronously.
+    // Kernel-internal; channels reach it via sc_prim_channel's forwarder.
+    void run_update_async( std::function<void()> fn );
+
     void push_runnable_method_front( sc_method_handle );
     void push_runnable_thread_front( sc_thread_handle );
 
@@ -377,6 +454,8 @@ private:
     sc_thread_handle remove_process( sc_thread_handle );
 
     inline void set_simulation_status(sc_status status);
+
+    std::function<sc_log_level(sc_log_logger_cache &, const char* , int, std::string_view)> dynamic_log_verbosity;
 
 private:
 
@@ -423,6 +502,7 @@ private:
     sc_time                     m_curr_time;
 
     sc_invoke_method*           m_method_invoker_p;
+    sc_async_runnable_helper*   m_async_runnable_helper;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
     sc_dt::uint64               m_delta_count;
     sc_dt::uint64               m_initial_delta_count_at_current_time;
@@ -447,6 +527,8 @@ private:
     int                         m_suspend;
     int                         m_unsuspendable;
 
+    sc_simcontext*              m_parent_context;
+
 private:
 
     // disabled
@@ -459,8 +541,8 @@ private:
 // Not MT safe.
 
 #if 1
-extern SC_API sc_simcontext* sc_curr_simcontext;
-extern SC_API sc_simcontext* sc_default_global_context;
+extern thread_local SC_API sc_simcontext* sc_curr_simcontext;
+extern thread_local SC_API sc_simcontext* sc_default_global_context;
 
 inline sc_simcontext*
 sc_get_curr_simcontext()

@@ -195,6 +195,11 @@ void sc_method_process::disable_process(
 void sc_method_process::enable_process(
     sc_descendant_inclusion_info descendants )
 {
+    // m_state read-modify-write must happen on the owning sim's thread.
+    if ( simcontext() != sc_get_curr_simcontext() ) {
+        simcontext()->run_update_async( [this, descendants]{ enable_process(descendants); } );
+        return;
+    }
 
     // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
 
@@ -426,6 +431,11 @@ void sc_method_process::suspend_process(
 void sc_method_process::resume_process(
     sc_descendant_inclusion_info descendants )
 {
+    // m_state read-modify-write must happen on the owning sim's thread.
+    if ( simcontext() != sc_get_curr_simcontext() ) {
+        simcontext()->run_update_async( [this, descendants]{ resume_process(descendants); } );
+        return;
+    }
 
     // IF NEEDED PROPOGATE THE RESUME REQUEST THROUGH OUR DESCENDANTS:
 
@@ -771,7 +781,7 @@ bool sc_method_process::trigger_dynamic( sc_event* e )
     }
     else
     {
-        simcontext()->push_runnable_method(this);
+        simcontext()->push_runnable_method_async(this);
     }
 
     return true;

@@ -505,7 +505,7 @@ sc_thread_process::trigger_static()
         return;
     }
 
-    simcontext()->push_runnable_thread(this);
+    simcontext()->push_runnable_thread_async(this);
 }
 
 #undef DEBUG_MSG

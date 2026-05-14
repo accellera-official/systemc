@@ -91,6 +91,14 @@ protected:
     void async_attach_suspending();
     void async_detach_suspending();
 
+    // Run fn() on this channel's owning simcontext's thread. If the caller
+    // is already on that thread, fn runs synchronously; otherwise the call
+    // is posted via the kernel's async runnable helper and returns
+    // immediately, with the callback firing in the owning sim's next
+    // update phase.  Forwards to sc_simcontext::run_update_async, which is
+    // accessible here because sc_prim_channel is a friend of sc_simcontext.
+    inline void run_update_async( std::function<void()> fn );
+
 protected:
 
     // to avoid calling sc_get_curr_simcontext()
@@ -359,6 +367,13 @@ void
 sc_prim_channel::async_detach_suspending()
 {
     m_registry->async_detach_suspending(*this);
+}
+
+inline
+void
+sc_prim_channel::run_update_async( std::function<void()> fn )
+{
+    simcontext()->run_update_async( std::move(fn) );
 }
 
 

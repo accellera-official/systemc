@@ -37,6 +37,7 @@
 #include <tlm>
 #include "tlm_utils/convenience_socket_bases.h"
 #include "tlm_utils/peq_with_get.h"
+#include "sysc/utils/sc_on_context.h"
 
 namespace tlm_utils {
 
@@ -174,6 +175,7 @@ private:
   class fw_process : public tlm::tlm_fw_transport_if<TYPES>,
                     public tlm::tlm_mm_interface
   {
+    sc_core::sc_on_context m_on_ctx;
   public:
     typedef sync_enum_type (MODULE::*NBTransportPtr)(transaction_type&,
                                                      phase_type&,
@@ -257,7 +259,14 @@ private:
       if (m_nb_transport_ptr) {
         // forward call
         sc_assert(m_mod);
-        return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
+        if (!m_on_ctx.on_owning_ctx())
+        {
+          sync_enum_type tmp;
+          m_on_ctx.run([this, &tmp, &trans, &phase, &t](){ tmp=(m_mod->*m_nb_transport_ptr)(trans, phase, t);});
+          return tmp;
+        } else {
+          return (m_mod->*m_nb_transport_ptr)(trans, phase, t);
+        }
       }
 
       // nb->b conversion
@@ -300,7 +309,15 @@ private:
       if (m_b_transport_ptr) {
         // forward call
         sc_assert(m_mod);
-        (m_mod->*m_b_transport_ptr)(trans, t);
+        if (!m_on_ctx.on_owning_ctx()) {
+          sc_core::sc_time our_time=sc_core::sc_time_stamp();
+          sc_core::sc_time their_time;
+          m_on_ctx.run(
+              [this, &trans, &t, &our_time, &their_time]() { if (our_time>sc_core::sc_time_stamp()) wait(our_time-sc_core::sc_time_stamp()); (m_mod->*m_b_transport_ptr)(trans, t); their_time=sc_core::sc_time_stamp(); });
+          if (their_time>sc_core::sc_time_stamp()) wait(their_time-sc_core::sc_time_stamp());
+        } else {
+          (m_mod->*m_b_transport_ptr)(trans, t);
+        }
         return;
       }
 

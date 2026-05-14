@@ -30,6 +30,7 @@
 #include <cstring>
 
 #include "sysc/kernel/sc_event.h"
+#include "sc_simcontext.h"
 #include "sysc/kernel/sc_kernel_ids.h"
 #include "sysc/kernel/sc_stage_callback_registry.h"
 #include "sysc/kernel/sc_process.h"
@@ -61,6 +62,10 @@ sc_event::basename() const
 void
 sc_event::cancel()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this]{ cancel(); } );
+        return;
+    }
     // cancel a delta or timed notification
     switch( m_notify_type ) {
     case DELTA: {
@@ -86,6 +91,10 @@ sc_event::cancel()
 void
 sc_event::notify()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this]{ notify(); } );
+        return;
+    }
     // immediate notification
     if( !m_simc->evaluation_phase() )
         // coming from
@@ -103,6 +112,10 @@ sc_event::notify()
 void
 sc_event::notify( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this, t]{ notify(t); } );
+        return;
+    }
     if( m_notify_type == DELTA ) {
         return;
     }
@@ -168,6 +181,10 @@ static void sc_warn_notify_delayed()
 void
 sc_event::notify_delayed()
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this]{ notify_delayed(); } );
+        return;
+    }
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -180,6 +197,11 @@ sc_event::notify_delayed()
 void
 sc_event::notify_delayed( const sc_time& t )
 {
+    if (m_simc != sc_get_curr_simcontext()) {
+        m_simc->run_update_async( [this, t]{ notify_delayed(t); } );
+        return;
+    }
+
     sc_warn_notify_delayed();
     if( m_notify_type != NONE ) {
         SC_REPORT_ERROR( SC_ID_NOTIFY_DELAYED_, 0 );
@@ -540,7 +562,7 @@ union sc_event_timed_u
     char              dummy[sizeof( sc_event_timed )];
 };
 
-static
+thread_local static
 sc_event_timed_u* free_list = 0;
 
 void*
