@@ -325,7 +325,7 @@ class ScNativeDigits<unsigned int>
 // |"vector_skip_leading_ones"
 // |
 // | This function returns the index of the highest order sc_digit in the
-// | supplied vector that is not all ones, or zero if all sc_digits are all 
+// | supplied vector that is not all ones, or zero if all sc_digits are all
 // | ones.
 // |
 // | Arguments:
@@ -371,7 +371,7 @@ vector_skip_leading_zeros( const int hod, const sc_digit* digits_p )
 
 // +------------------------------------------------------------------------------------------------
 // |"vector_find_significant_hod"
-// | 
+// |
 // | This function finds the "significant" high order digit of the supplied vector. For a
 // | positive number leading zero digits are skipped, however, if the resultant high order
 // | digit would be negative one digit of zeroes is added back in.
@@ -397,7 +397,7 @@ inline int vector_find_significant_hod( int hod, const sc_digit* digits )
     }
     return result_hod;
 }
-    
+
 // +----------------------------------------------------------------------------
 // |"vector_add"
 // |
@@ -844,7 +844,7 @@ vector_copy( int             digits_n,
 // +----------------------------------------------------------------------------
 // |"vector_extract"
 // |
-// | This inline function extracts the specified bits. 
+// | This inline function extracts the specified bits.
 // |   (1) high_bit must be greater than or equal to low_bit.
 // |   (2) any high order bits in the high order digit of destination_p that are not part
 // |       of the the value from source_p will be zeroed.
@@ -1234,13 +1234,13 @@ vector_insert_bits( const int       from_digits_n,
 // |
 // | (1) Each product is the multiplication of two 32-bit numbers.
 // | (2) Each product is accumulated in a pair of 64-bit numbers, m_low_bits and m_high_bits.
-// | (3) m_low_bits contains the addition of the low order 32 bits of each product. 
-// | (4) m_high_bits contains the addition of the high order 32 bits of each product. 
+// | (3) m_low_bits contains the addition of the low order 32 bits of each product.
+// | (4) m_high_bits contains the addition of the high order 32 bits of each product.
 // | (5) After a series of calls to add_product():
 // |      (a) m_low_bits will be a 64-bit value consisting of additions of the lower order 32 bits
 // |          of each product calculated. Its low order 32 bits are the current "digit" for the
 // |          additions, its high order 32 bits are the carry from those additions.
-// |      (b) Similarly m_high_bits will be a 64-bit value consisting of the additions of the high 
+// |      (b) Similarly m_high_bits will be a 64-bit value consisting of the additions of the high
 // |          order 32 bits of each product calculated by add_product. Its two 32-bit halves
 // |          are 'next digit' value and carry.
 // |
@@ -1251,15 +1251,15 @@ vector_insert_bits( const int       from_digits_n,
 // |
 // | (6) The shift down operation yields the current digit and adjusts for the next digit:
 // |      (a) Returns the lower order 32 bits of m_low_bits, 'digit'.
-// |      (b) Calculates the current value of the next digit and carry by adding the high order 
+// |      (b) Calculates the current value of the next digit and carry by adding the high order
 // |          32 bits(carry) of m_low_bits to m_high_bits.
 // |      (c) Sets m_low_bits to low order 32 bits of m_high_bits (this is the new 'digit'
 // |          value, awaiting additional low order adds.)
-// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits, (this is the accumulated 
+// |      (d) sets m_high_bits to the upper 32 bits of m_high_bits, (this is the accumulated
 // |          high carry awaiting the addition of high-order adds.)
 // |
 // |     X = (m_low_order >> 32) + m_high_order_bits
-// |     
+// |
 // |            m_high_order_bits              m_low_order_bits
 // |     +-------------+-------------+   +-------------+-------------+
 // |     |     0       | high 32 of X|   |     0       | low 32 of X |
@@ -1340,7 +1340,7 @@ class vector_mac
 // |       Let BPD represent the number of bits per digit.
 // |
 // |       The high-order digit variables for this example:
-// |           * shorter_hod is 4 
+// |           * shorter_hod is 4
 // |           * longer_hod is 6
 // |
 // |       Long multiplication consists of calculating R from A and B:
@@ -1398,28 +1398,28 @@ vector_multiply( int             left_hod,
     int             shorter_hod;
     const sc_digit* shorter_p;
 
-    // Trim leading zeros and all ones sc_digits to speed up the operation, and use the 
+    // Trim leading zeros and all ones sc_digits to speed up the operation, and use the
     // shorter result operand is as the multiplier
 
     if ( true ) {
-	left_hod = vector_find_significant_hod( left_hod, left_p ); 
-	right_hod = vector_find_significant_hod( right_hod, right_p ); 
+	left_hod = vector_find_significant_hod( left_hod, left_p );
+	right_hod = vector_find_significant_hod( right_hod, right_p );
     }
-    if ( left_hod >= right_hod ) { 
-	longer_hod = left_hod; 
-	longer_p = left_p; 
-	shorter_hod = right_hod; 
-	shorter_p = right_p; 
-    } 
-    else { 
-	longer_hod = right_hod; 
-	longer_p = right_p; 
-	shorter_hod = left_hod; 
-	shorter_p = left_p; 
-    } 
+    if ( left_hod >= right_hod ) {
+	longer_hod = left_hod;
+	longer_p = left_p;
+	shorter_hod = right_hod;
+	shorter_p = right_p;
+    }
+    else {
+	longer_hod = right_hod;
+	longer_p = right_p;
+	shorter_hod = left_hod;
+	shorter_p = left_p;
+    }
 
 
-    // Set the low order digits in the result that are the product of unsigned digits from both 
+    // Set the low order digits in the result that are the product of unsigned digits from both
     // operands. For the example in note (1) this is:
     //    raw1 = a1 * b1
     //    r1 = raw1 % BPD
@@ -1702,7 +1702,7 @@ vector_shift_left( const int       from_digits_n,
     int      to_i;          // digit in to_p now accessing.
     int      to_start_hod;  // first digit in to_p to receive a from_p digit.
     int      to_end_hod;    // last digit in to_p to recieve a from_p digit.
-    
+
     from_hod = from_digits_n-1;
     from_shift_n = SC_BIT_INDEX(shift_n);
     carry_shift_n = 32-from_shift_n;
@@ -1736,7 +1736,7 @@ vector_shift_left( const int       from_digits_n,
         return;
     }
 
-    // Shift point is on an sc_digit boundary. 
+    // Shift point is on an sc_digit boundary.
 
     if ( 0 == from_shift_n ) {
         for ( from_i=0; to_i <= to_end_hod; ++from_i, ++to_i ) {
@@ -1754,7 +1754,7 @@ vector_shift_left( const int       from_digits_n,
 
     else {
         from_i = 0;
-        sc_digit carry = 0; 
+        sc_digit carry = 0;
         for ( ; to_i <= to_end_hod; ++from_i, ++to_i ) {
 	    sc_digit from_digit = from_p[from_i];
             to_p[to_i] = (from_digit << from_shift_n) | carry;
@@ -1774,7 +1774,7 @@ vector_shift_left( const int       from_digits_n,
 // | bits.
 // | This function shifts left the supplied vector by the supplied number of
 // | bits. Because the order of the digits in the array have the low order bits
-// | at index 0 and the high order bits at index N, the actual shifting is to 
+// | at index 0 and the high order bits at index N, the actual shifting is to
 // | the right from lower index to higher index.
 // |
 // |
@@ -1854,7 +1854,7 @@ vector_shift_left( const int target_n,
 // |
 // | This function shifts right the supplied vector by the supplied number of
 // | bits. Because the order of the digits in the array have the low order bits
-// | at index 0 and the high order bits at index N, the actual shifting is to 
+// | at index 0 and the high order bits at index N, the actual shifting is to
 // | the left from higher index to lower index.
 // |
 // | Arguments:
@@ -1876,8 +1876,8 @@ vector_shift_right( const int       target_n,
 
     // PERFORM INTER-DIGIT SHIFTING:
     //
-    // (1) If the low order digit (target_p[0]) does not contain the intra-digit shift point move 
-    //     all the digits in target_p down so that it does contain the shift point. 
+    // (1) If the low order digit (target_p[0]) does not contain the intra-digit shift point move
+    //     all the digits in target_p down so that it does contain the shift point.
     // (2) In the degenerate case, where the shift is a multiple of the number of bits in a
     //     digit we are done.
 
@@ -2352,7 +2352,7 @@ vector_divide( const int       numerator_n,
     // Copy the numerator into the remainder to start off the division process
     // and zero the extra high order radix32 digit of the remainder:
 
-    sc_digit* remain_work_p = sc_temporary_digits.allocate( numerator_n+10 ); 
+    sc_digit* remain_work_p = sc_temporary_digits.allocate( numerator_n+10 );
 
     for (int remain_32_i = 0; remain_32_i <= numer_32_hod; ++remain_32_i ) {
 	remain_work_p[remain_32_i] = numerator_p[remain_32_i];
@@ -2480,7 +2480,7 @@ vector_divide( const int       numerator_n,
 
 	// Assign the next quotient digit, if we are returning it:
 
-	if( quotient_n && quot_32_i < quotient_n ) { 
+	if( quotient_n && quot_32_i < quotient_n ) {
 	    if(quot_16_odd) {
 		quotient_p[quot_32_i] = quot_guess << 16;
 	    }
@@ -2495,7 +2495,7 @@ vector_divide( const int       numerator_n,
     // (1) If the result is negative complement the quotient.
     // (2) If the numerator was negative complement the remainder.
 
-    if ( (SN || SD) && negative && quotient_n ) { 
+    if ( (SN || SD) && negative && quotient_n ) {
         vector_twos_complement( quotient_n, quotient_p );
     }
 
