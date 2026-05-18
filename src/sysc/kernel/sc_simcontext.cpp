@@ -344,6 +344,7 @@ sc_simcontext::init()
     m_delta_count = 0;
     m_initial_delta_count_at_current_time = 0;
     m_forced_stop = false;
+    m_exit_code = 0;
     m_paused = false;
     m_ready_to_simulate = false;
     m_elaboration_done = false;
@@ -408,7 +409,7 @@ sc_simcontext::sc_simcontext() :
     m_trace_files(), m_something_to_trace(false), m_runnable(0), m_collectable(0),
     m_time_params(), m_change_stamp(0),
     m_delta_count(0), m_initial_delta_count_at_current_time(0),
-    m_forced_stop(false), m_paused(false),
+    m_forced_stop(false), m_exit_code(0), m_paused(false),
     m_ready_to_simulate(false), m_elaboration_done(false),
     m_execution_phase(phase_initialize), m_error(0),
     m_in_simulator_control(false), m_end_of_simulation_called(false),
@@ -1032,7 +1033,7 @@ void sc_simcontext::do_collect_processes()
 //------------------------------------------------------------------------------
 
 void
-sc_simcontext::stop()
+sc_simcontext::stop(int exit_code)
 {
     static bool stop_warning_issued = false;
     if (m_forced_stop)
@@ -1045,6 +1046,7 @@ sc_simcontext::stop()
         return;
     }
     if ( stop_mode == SC_STOP_IMMEDIATE ) m_runnable->init();
+    m_exit_code = exit_code;
     m_forced_stop = true;
     if ( !m_in_simulator_control  )
     {
@@ -1677,7 +1679,7 @@ sc_set_random_seed( unsigned int )
 // |     duration = the amount of time the simulator should execute.
 // |     p        = event starvation policy.
 // +----------------------------------------------------------------------------
-SC_API void
+SC_API int
 sc_start( const sc_time& duration, sc_starvation_policy p )
 {
     sc_simcontext* context_p;      // current simulation context.
@@ -1708,13 +1710,13 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_STOP_, "");
         if ( sim_status == SC_SIM_ERROR )
             SC_REPORT_ERROR(SC_ID_SIMULATION_START_AFTER_ERROR_, "");
-        return;
+        return context_p->m_exit_code;
     }
     status = context_p->get_status();
     if( !(status == SC_PAUSED || status == SC_ELABORATION) )
     {
         SC_REPORT_ERROR(SC_ID_SIMULATION_START_UNEXPECTED_, "");
-        return;
+        return context_p->m_exit_code;
     }
 
     if ( context_p->m_prim_channel_registry->pending_updates()
@@ -1752,12 +1754,13 @@ sc_start( const sc_time& duration, sc_starvation_policy p )
 
     // reset init/update flag for subsequent calls
     init_delta_or_pending_updates = false;
+    return context_p->m_exit_code;
 }
 
-SC_API void
+SC_API int
 sc_start()
 {
-    sc_start( sc_time::max() - sc_time_stamp(),
+    return sc_start( sc_time::max() - sc_time_stamp(),
               SC_EXIT_ON_STARVATION );
 }
 
@@ -1766,6 +1769,12 @@ SC_API void
 sc_stop()
 {
     sc_get_curr_simcontext()->stop();
+}
+
+SC_API void
+sc_stop( int exit_code )
+{
+    sc_get_curr_simcontext()->stop(exit_code);
 }
 
 
