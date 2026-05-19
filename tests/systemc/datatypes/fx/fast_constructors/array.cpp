@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  array.cpp -- 
+  array.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,14 +35,16 @@
 
  *****************************************************************************/
 
-// array.cxx -- 
+// array.cxx --
 // Copyright Synopsys 1998
 // Author          : Ric Hilderink
 // Created On      : Wed Dec 30 11:55:50 1998
 // Status          : none
-// 
+//
 
 #include <limits.h>
+#include <typeinfo>
+#include <type_traits>
 #define SC_INCLUDE_FX
 #include "systemc.h"
 #include "fx_precision_double.h"
@@ -79,6 +81,10 @@ void show(char const *const name, int i, T val) {
 template <typename T, typename U>
 void test_fx(U a_mul, U b_init, U b_mul, char const *t_name, char const *u_name)
 {
+  // Get a type large enough such that the code below will never overflow a
+  // signed int type. (See the cautionary comment there.)
+  using A = typename std::conditional<std::is_floating_point<U>::value, U, unsigned long>::type;
+
   cerr << "--array-Inf-Inf-Inf-Inf-Inf- test_fx_" << t_name << "_" << u_name << "\n";
 
   T a(static_cast<U>(0));
@@ -93,7 +99,7 @@ void test_fx(U a_mul, U b_init, U b_mul, char const *t_name, char const *u_name)
     // of the values of type U, but if U is smaller than int it can still be
     // implicitly upcast, ergo the outer cast.
     a = static_cast<U>(i * i * a_mul);
-    b = static_cast<U>(convert<U>(b) * i * b_mul);
+    b = static_cast<U>(convert<A>(b) * i * b_mul);
     show("a", i, a);
     show("b", i, b);
   }

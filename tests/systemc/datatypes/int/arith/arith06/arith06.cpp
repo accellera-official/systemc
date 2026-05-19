@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  arith06.cpp -- 
+  arith06.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdint>
 #include "systemc.h"
 #include "isaac.h"
 
@@ -43,24 +44,24 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 
 // sign_bit = number of sign bit from 1 to 32
 
-signed int  sign_extend(signed int target, unsigned int sign_bit)
-{                   
-    signed int result;
-    unsigned int bit_mask = (1u << (sign_bit-1));
+int64_t sign_extend(int64_t target, int64_t sign_bit)
+{
+    int64_t result;
+    int64_t bit_mask = (((int64_t) 1) << (sign_bit - 1));
     if ( target & bit_mask ) {
-        result = target | (~0u << (sign_bit-1));
-    }               
-    else {          
-        result = target & ~(~0u << (sign_bit-1));
-    }                   
-    return result;  
+        result = target | (UINT64_MAX << (sign_bit - 1));
+    }
+    else {
+        result = target & ~(UINT64_MAX << (sign_bit - 1));
+    }
+    return result;
 }
 
 int
 sc_main( int argc, char* argv[] )
 {
-    signed int vali[5] = { 0, 1, -1, 7, -8 };
-    signed int valj[5] = { 0, 1, -1, 7, -8 };
+    int64_t vali[5] = { 0, 1, -1, 7, -8 };
+    int64_t valj[5] = { 0, 1, -1, 7, -8 };
 
     for (int i = 3; i < 32; ++i) {
         for (int j = 3; j < 32; ++j) {
@@ -78,11 +79,11 @@ sc_main( int argc, char* argv[] )
 
             for (int ii = 0; ii < 100; ++ii) {
                 for (int jj = 0; jj < 100; ++jj) {
-                    signed int qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
-                    signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
+                    int64_t qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1u << i) - 1));
+                    int64_t qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1u << j) - 1));
 
-		    qi = sign_extend(qi,i);
-		    qj = sign_extend(qj,j);
+          		    qi = sign_extend(qi,i);
+          		    qj = sign_extend(qj,j);
 
                     x = qi;
                     sc_assert( x == qi );
@@ -101,55 +102,44 @@ sc_main( int argc, char* argv[] )
                     sc_assert((x >= qj) == (qi >= qj));
                     sc_assert((x >= qj) == (qj <= x));
                     z = x + qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi + qj) );
+                    sc_assert(z == (qi + qj) );
                     z = qi + y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi + qj) );
+                    sc_assert(z == (qi + qj) );
                     z = x - qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi - qj) );
+                    sc_assert(z == (qi - qj) );
                     z = qi - y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi - qj) );
+                    sc_assert(z == (qi - qj) );
                     z = x * qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi * qj) );
+
+                    // Cast here and below as necessary to perform the
+                    // operations in an unsigned context for safe overflow, but
+                    // compare the result as a signed integer.
+                    sc_assert(z == static_cast<int64_t>(static_cast<uint64_t>(qi) * static_cast<uint64_t>(qj)));
+
                     z = qi * y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi * qj) );
+                    sc_assert(z == static_cast<int64_t>(static_cast<uint64_t>(qi) * static_cast<uint64_t>(qj)));
                     if (qj != 0) {
                         z = x / qj;
-                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-				(qi / qj) );
+                        sc_assert(z == (qi / qj));
                         z = qi / y;
-                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-				(qi / qj) );
+                        sc_assert(z == (qi / qj));
                         z = x % qj;
-                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-				(qi % qj) );
+                        sc_assert(z == (qi % qj));
                         z = qi % y;
-                        sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-				(qi % qj) );
+                        sc_assert(z == (qi % qj));
                     }
                     z = x & qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi & qj) );
+                    sc_assert(z == (qi & qj) );
                     z = qi & y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi & qj) );
+                    sc_assert(z == (qi & qj) );
                     z = x | qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi | qj) );
+                    sc_assert(z == (qi | qj) );
                     z = qi | y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi | qj) );
+                    sc_assert(z == (qi | qj) );
                     z = x ^ qj;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi ^ qj) );
+                    sc_assert(z == (qi ^ qj) );
                     z = qi ^ y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-			    (qi ^ qj) );
+                    sc_assert(z == (qi ^ qj) );
                 }
             }
         }

@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  arith01.cpp -- 
+  arith01.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,8 +35,9 @@
 
  *****************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdint>
 #include "systemc.h"
 
 /*
@@ -47,10 +48,10 @@
 
  x.q is equal to 256 in Sun's CC, and -256 in gcc. The standard leaves
  this issue as implementation dependent unless the definition is
- qualified explicitly by signed or unsigned.  
+ qualified explicitly by signed or unsigned.
 
  In order to force consistent behavior, I've qualified every int
- definition accordingly in all the arith files.  
+ definition accordingly in all the arith files.
 
 */
 
@@ -68,8 +69,10 @@ crunch(sc_signed& z, int31 v31, int u, int v)
     for (int i = 0; i < 100000; ++i) {
         z *= u;
         z += v;
-        v31.q *= u;
-        v31.q += v;
+
+        // Be careful to avoid signed overflow here.
+        v31.q = static_cast<unsigned int>(v31.q) * static_cast<unsigned int>(u);
+        v31.q = static_cast<unsigned int>(v31.q) + static_cast<unsigned int>(v);
         sc_assert(z == v31.q);
     }
 }
@@ -136,6 +139,6 @@ sc_main( int argc, char* argv[] )
     x = -1;
     v31.q = -1;
     crunch(x, v31, 30941, -1188);
-    
+
     return 0;
 }
