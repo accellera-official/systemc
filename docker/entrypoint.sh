@@ -7,6 +7,7 @@ if [[ -z "${SYSTEMC_CI_TARGET}" ]]; then
 fi
 
 : ${SYSTEMC_SRC_PATH:="/app"}
+: ${SYSTEMC_COVERAGE_OUTPUT_PATH:="/coverage/coverage"}
 
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
@@ -94,7 +95,18 @@ case "$SYSTEMC_CI_TARGET" in
     BUILD_REGRESSIONS=true
     CXX_FLAGS="$CXX_FLAGS -fsanitize=thread"
     ;;
-   *)
+  coverage)
+    CC=gcc
+    CXX=g++
+    BUILD_REGRESSIONS=true
+    BUILD_SHARED_LIBRARY=true
+
+    # On Ubuntu 24.04 as of 2026-06-01, there's a spurious maybe-uninit warning
+    # that prevents compilation, but only while using --coverage. We therefore
+    # disable it here.
+    CXX_FLAGS="$CXX_FLAGS --coverage -O0 -Wno-maybe-uninitialized"
+    ;;
+  *)
     echo "Error: Unknown SYSTEMC_CI_TARGET '$SYSTEMC_CI_TARGET'"
     exit 1
     ;;
@@ -114,6 +126,14 @@ cmake --install "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
 
 if [[ "$BUILD_REGRESSIONS" == "true" ]]; then
   cmake --build "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/" --parallel "$(getconf _NPROCESSORS_ONLN)" --target check
+fi
+
+if [[ "$SYSTEMC_CI_TARGET" == "coverage" ]]; then
+  mkdir -p /coverage
+  gcovr -f 'src/*' \
+	--gcov-ignore-parse-errors=negative_hits.warn --merge-mode-functions=separate \
+        --html-nested -o /coverage/coverage \
+	"BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
 fi
 
 exit 0
