@@ -1,0 +1,19 @@
+SystemC Simulation
+--- sc_bigint set/clear via bitref ---
+sc_bigint<6>(0x2c) clear bit 5: to_int() = 12
+sc_bigint<6>(12) set bit 5: to_int() = -20
+sc_bigint<8>(0x55) clear bit 0: to_int() = 84
+sc_bigint<8>(0x54) set bit 0: to_int() = 85
+
+--- sc_biguint set/clear via bitref ---
+sc_biguint<6>(12) set bit 5: to_uint() = 44
+sc_biguint<6>(44) clear bit 5: to_uint() = 12
+sc_biguint<8>(0x55) clear bit 0: to_uint() = 84
+
+--- sc_signed set/clear via bitref ---
+sc_signed(6)(0x2c) clear bit 5: to_int() = 12
+sc_signed(6)(12) set bit 5: to_int() = -20
+
+--- sc_unsigned set/clear via bitref ---
+sc_unsigned(6)(12) set bit 5: to_uint() = 44
+sc_unsigned(6)(44) clear bit 5: to_uint() = 12
