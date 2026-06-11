@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  arith04.cpp -- 
+  arith04.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdint>
 #include "systemc.h"
 #include "isaac.h"
 
@@ -43,35 +44,25 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 
 // sign_bit = number of sign bit from 1 to 32
 
-signed int  sign_extend(signed int target, unsigned int sign_bit)
-{                   
-    signed int result;
-    unsigned int bit_mask = (1u << (sign_bit-1));
+int64_t sign_extend(int64_t target, int64_t sign_bit)
+{
+    int64_t result;
+    int64_t bit_mask = (((int64_t) 1) << (sign_bit - 1));
     if ( target & bit_mask ) {
-        result = target | (~0u << (sign_bit-1));
-    }               
-    else {          
-        result = target & ~(~0u << (sign_bit-1));
-    }                   
-    return result;  
+        result = target | (UINT64_MAX << (sign_bit - 1));
+    }
+    else {
+        result = target & ~(UINT64_MAX << (sign_bit - 1));
+    }
+    return result;
 }
 
-void
-check_string( const sc_signed& z, int v )
-{
-    std::string buf( z.to_string( SC_BIN ) );
-    if (z < 0) {
-        sc_assert(buf[2] == '1');
-    } else {
-        sc_assert(buf[2] == '0');
-    }
-}
 
 int
 sc_main( int argc, char* argv[] )
 {
-    signed int vali[5] = { 0, 1, -1, 7, -8 };
-    signed int valj[5] = { 0, 1, -1, 7, -8 };
+    int64_t vali[5] = { 0, 1, -1, 7, -8 };
+    int64_t valj[5] = { 0, 1, -1, 7, -8 };
 
     for (int i = 3; i < 32; ++i) {
         for (int j = 3; j < 32; ++j) {
@@ -89,12 +80,12 @@ sc_main( int argc, char* argv[] )
 
             for (int ii = 0; ii < 100; ++ii) {
                 for (int jj = 0; jj < 100; ++jj) {
-                    signed int qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
-                    signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
-                    signed int tqi;
+                    int64_t qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1u << i) - 1));
+                    int64_t qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1u << j) - 1));
+                    int64_t tqi;
 
-		    qi = sign_extend(qi,i);
-		    qj = sign_extend(qj,j);
+          		    qi = sign_extend(qi,i);
+          		    qj = sign_extend(qj,j);
 
                     x = qi;
                     tqi = qi;
@@ -121,6 +112,7 @@ sc_main( int argc, char* argv[] )
 
                     x = qi;
                     tqi = qi;
+
                     x -= y;
                     tqi -= qj;
                     tqi = sign_extend(tqi,i);
@@ -129,9 +121,11 @@ sc_main( int argc, char* argv[] )
                     x = qi;
                     tqi = qi;
                     x *= y;
-                    tqi *= qj;
-                    tqi = sign_extend(tqi,i);
-                    sc_assert( x == tqi );
+
+                    // Cast to unsigned so that overflow wraps instead of being UB.
+                    tqi = static_cast<uint64_t>(tqi) * static_cast<uint64_t>(qj);
+                    tqi = sign_extend(tqi, i);
+                    sc_assert(x == tqi);
 
                     if (y != 0) {
                         x = qi;
@@ -174,7 +168,7 @@ sc_main( int argc, char* argv[] )
                         x = qi;
                         tqi = qi;
                         x <<= jj;
-                        tqi = ((unsigned int)tqi) << jj;
+                        tqi = static_cast<uint64_t>(tqi) << jj;
                         tqi = sign_extend(tqi,i);
                         sc_assert( x == tqi );
 

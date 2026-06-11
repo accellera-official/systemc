@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 if [[ -z "${SYSTEMC_CI_TARGET}" ]]; then
