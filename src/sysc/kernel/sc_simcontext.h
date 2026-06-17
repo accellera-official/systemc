@@ -155,7 +155,7 @@ struct sc_log_impl {
 // | logger cache and local_tag. The cache parameter may be used to remember
 // | a computed level, once set the function will not be re-called.
 // +------------------------------------------------------------------------------------------------
-static void sc_set_log_verbosity_fn(std::function<sc_core::sc_log_level(
+static void sc_set_log_verbosity_fn(std::function<sc_core::sc_verbosity(
                                  sc_core::sc_log_logger_cache &, const char *,
                                  int, std::string_view)>
                                  fn);
@@ -165,7 +165,7 @@ static void sc_set_log_verbosity_fn(std::function<sc_core::sc_log_level(
 // | If no callback has been installed, the implementation falls back to
 // | the global report verbosity.
 // +------------------------------------------------------------------------------------------------
-static sc_core::sc_log_level sc_get_log_verbosity(sc_core::sc_log_logger_cache &logger,
+static sc_core::sc_verbosity sc_get_log_verbosity(sc_core::sc_log_logger_cache &logger,
                                            const char *file, int line,
                                            std::string_view local_tag = {});
 };
@@ -356,11 +356,11 @@ public:
     void post_suspend() const;
 
 private:
-    void set_log_verbosity_fn(std::function<sc_core::sc_log_level(
+    void set_log_verbosity_fn(std::function<sc_core::sc_verbosity(
                                   sc_core::sc_log_logger_cache &, const char *,
                                   int, std::string_view)>
                                   fn);
-    sc_core::sc_log_level get_log_verbosity(
+    sc_core::sc_verbosity get_log_verbosity(
         sc_core::sc_log_logger_cache &,
         const char *file,
         int line,
@@ -415,7 +415,7 @@ private:
 
     inline void set_simulation_status(sc_status status);
 
-    std::function<sc_log_level(sc_log_logger_cache &, const char* , int, std::string_view)> dynamic_log_verbosity;
+    std::function<sc_verbosity(sc_log_logger_cache &, const char* , int, std::string_view)> dynamic_log_verbosity;
 
 private:
 

@@ -2076,7 +2076,7 @@ SC_API void sc_unregister_stage_callback(sc_stage_callback_if & cb,
 // Implementation defined Dynamic log verbosity dispatch
 //
 void sc_simcontext::set_log_verbosity_fn(
-    std::function<sc_core::sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+    std::function<sc_core::sc_verbosity(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
 {
   if (dynamic_log_verbosity) {
     SC_REPORT_WARNING(SC_LOG_OVERWRITE_VERBOSITY_FN_, 0);
@@ -2085,7 +2085,7 @@ void sc_simcontext::set_log_verbosity_fn(
   }
 }
 
-sc_log_level sc_simcontext::get_log_verbosity(sc_log_logger_cache &logger,
+sc_verbosity sc_simcontext::get_log_verbosity(sc_log_logger_cache &logger,
                                               const char *file,
                                               int line,
                                               std::string_view local_tag) {
@@ -2098,11 +2098,11 @@ sc_log_level sc_simcontext::get_log_verbosity(sc_log_logger_cache &logger,
 // NB these functions are NOT a standard API, but are
 // exposed to provide access to the (implementation defined) dynamic logging configuration
 void sc_log_impl::sc_set_log_verbosity_fn(
-    std::function<sc_log_level(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
+    std::function<sc_verbosity(sc_log_logger_cache &, const char *, int, std::string_view)> fn)
 {
   sc_get_curr_simcontext()->set_log_verbosity_fn(std::move(fn));
 }
-sc_log_level sc_log_impl::sc_get_log_verbosity(sc_log_logger_cache &logger, const char *file,
+sc_verbosity sc_log_impl::sc_get_log_verbosity(sc_log_logger_cache &logger, const char *file,
                                   int line, std::string_view local_tag) {
   return sc_get_curr_simcontext()->get_log_verbosity(logger, file, line, local_tag);
 }

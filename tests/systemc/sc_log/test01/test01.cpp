@@ -38,17 +38,30 @@
 #include "systemc.h"
 #include <functional>
 #include <iostream>
+#include <map>
+#include <string>
 #include <string_view>
 #include <unordered_set>
+
+// Core no longer ships a level<->name map (textual names are an SCP
+// convenience).  Tests that print level names keep their own local map.
+static const std::map<sc_core::sc_verbosity, std::string> k_level_names = {
+    {sc_core::SC_LOW, "CRITICAL"}, {sc_core::SC_MEDIUM, "ALERT"},
+    {sc_core::SC_HIGH, "NOTE"},    {sc_core::SC_FULL, "DETAIL"},
+    {sc_core::SC_DEBUG, "INTERNAL"}};
+static std::string level_name(sc_core::sc_verbosity v) {
+  auto it = k_level_names.find(v);
+  return it == k_level_names.end() ? std::string("NONE") : it->second;
+}
 
 SC_LOG_HANDLE_STATIC(MY_GLOBAL_LOGGER, "GlobalLogger");
 
 SC_MODULE(mod_a) {
   SC_LOG_HANDLE(TST, "test_handler");
   SC_CTOR(mod_a) {
-    SC_WARN() << "HERE";
-    SC_WARN(MY_GLOBAL_LOGGER)("Global Warning");
-    for (auto l : sc_core::log_level_map) {
+    SC_ALERT() << "HERE";
+    SC_ALERT(MY_GLOBAL_LOGGER)("Global Warning");
+    for (auto l : k_level_names) {
       auto i = l.first;
       SC_LOG_AT(i, name()) << " Log to name()" << " (at level " << i << ")";
       SC_LOG_AT(i, "My Tag") << " Log to My Tag" << " (at level " << i << ")";
@@ -59,10 +72,10 @@ SC_MODULE(mod_a) {
     }
 
     SC_CRITICAL() << "SC_CRITICAL";
-    SC_WARN() << "SC_WARN";
-    SC_INFO() << "SC_INFO";
-    SC_DEBUG() << "SC_DEBUG";
-    SC_TRACE() << "SC_TRACE";
+    SC_ALERT() << "SC_ALERT";
+    SC_NOTE() << "SC_NOTE";
+    SC_DETAIL() << "SC_DETAIL";
+    SC_INTERNAL() << "SC_INTERNAL";
   }
 };
 
@@ -85,7 +98,7 @@ SC_MODULE(mod_a) {
  *
  * void sc_set_log_verbosity_fn(
  *     std::function<
- *         sc_core::sc_log_level(
+ *         sc_core::sc_verbosity(
  *            sc_core::sc_log_logger_cache &logger,
  *            const char *file,
  *            int line,
@@ -104,7 +117,7 @@ SC_MODULE(mod_a) {
  * will fall back to the global report verbosity.
  * --------------------------------------------------------
  *
- * sc_core::sc_log_level sc_log_impl::sc_get_log_verbosity(
+ * sc_core::sc_verbosity sc_log_impl::sc_get_log_verbosity(
  *     sc_core::sc_log_logger_cache &logger,
  *     const char *file,
  *     int line,
@@ -129,7 +142,7 @@ SC_MODULE(mod_a) {
 
 class scp_logger_test {
 
-  std::unordered_map<uint64_t, sc_core::sc_log_level> lut;
+  std::unordered_map<uint64_t, sc_core::sc_verbosity> lut;
 
   // BKDR hash algorithm
   auto char_hash(std::string_view str) -> uint64_t {
@@ -142,7 +155,7 @@ class scp_logger_test {
   }
 
   std::unordered_set<sc_core::sc_log_logger_cache *> loggers;
-  sc_core::sc_log_level operator()(struct sc_core::sc_log_logger_cache &logger,
+  sc_core::sc_verbosity operator()(struct sc_core::sc_log_logger_cache &logger,
                                    const char *file, int line,
                                    std::string_view local_tag) {
     loggers.insert(&logger);
@@ -159,36 +172,36 @@ class scp_logger_test {
         return it->second;
       }
 
-      sc_core::sc_log_level lvl = sc_core::sc_log_level::TRACE;
+      sc_core::sc_verbosity lvl = sc_core::SC_DEBUG;
       if (local_tag == "quiet")
-        lvl = sc_core::sc_log_level::WARN;
+        lvl = sc_core::SC_MEDIUM;
       if (local_tag == "sc_main")
-        lvl = sc_core::sc_log_level::DEBUG;
+        lvl = sc_core::SC_FULL;
       if (local_tag == "sc_log_test")
-        lvl = sc_core::sc_log_level::WARN;
+        lvl = sc_core::SC_MEDIUM;
 
       lut[k] = lvl;
       return lvl;
     }
 
     if (logger.tag == "test_handler") {
-      return sc_core::sc_log_level::INFO;
+      return sc_core::SC_HIGH;
     }
     if (logger.tag == "GlobalLogger") {
-      return sc_core::sc_log_level::WARN;
+      return sc_core::SC_MEDIUM;
     }
     /* Cache this one which will catch the normal SCMOD case for mod_a */
-    logger.level = sc_core::sc_log_level::TRACE;
-    return sc_core::sc_log_level::TRACE;
+    logger.level = sc_core::SC_DEBUG;
+    return sc_core::SC_DEBUG;
   }
 
 public:
   scp_logger_test() {
-    std::function<sc_core::sc_log_level(sc_core::sc_log_logger_cache &,
+    std::function<sc_core::sc_verbosity(sc_core::sc_log_logger_cache &,
                                         const char *, int, std::string_view)>
         fn = [&](sc_core::sc_log_logger_cache &logger, const char *file,
                  int line,
-                 std::string_view local_tag) -> sc_core::sc_log_level {
+                 std::string_view local_tag) -> sc_core::sc_verbosity {
       return operator()(logger, file, line, local_tag);
     };
     ::sc_core::sc_log_impl::sc_set_log_verbosity_fn(fn);
@@ -199,7 +212,7 @@ public:
   void reset() {
     for (auto *logger : loggers) {
       if (logger) {
-        logger->level = sc_core::sc_log_level::UNSET;
+        logger->level = sc_core::SC_UNSET;
       }
     }
   }
@@ -209,7 +222,7 @@ static scp_logger_test test_logger_handler;
 
 void report_handler(const sc_core::sc_report &rep,
                     const sc_core::sc_actions &actions) {
-  cout << "TEST REPORT: " << sc_core::as_log(rep.get_verbosity()) << " : ["
+  cout << "TEST REPORT: " << level_name(sc_core::as_log(rep.get_verbosity())) << " : ["
        << rep.get_msg_type() << "] " << rep.get_msg()
        << " line:" << rep.get_line_number() << std::endl;
 }
@@ -218,23 +231,23 @@ int sc_main(int, char *[]) {
   ::sc_core::sc_report_handler::set_verbosity_level(sc_core::SC_DEBUG);
   ::sc_core::sc_report_handler::set_handler(report_handler);
 
-  SC_DEBUG("sc_main")("Global Warning from sc_main");
-  SC_WARN("quiet")("Global Warning from sc_main");
-  SC_INFO("quiet")("Global Warning from sc_main (** filtered out **)");
-  SC_WARN(MY_GLOBAL_LOGGER)("My Global Warn from sc_main");
-  SC_DEBUG(MY_GLOBAL_LOGGER,
+  SC_DETAIL("sc_main")("Global Warning from sc_main");
+  SC_ALERT("quiet")("Global Warning from sc_main");
+  SC_NOTE("quiet")("Global Warning from sc_main (** filtered out **)");
+  SC_ALERT(MY_GLOBAL_LOGGER)("My Global Warn from sc_main");
+  SC_DETAIL(MY_GLOBAL_LOGGER,
            "sc_main")("Global Debug from sc_main (** filtered out **)");
 
   for (int i = 0; i < 500; i += 50) {
-    cout << i << " is log_level " << sc_core::as_log(i) << endl;
+    cout << i << " is log_level " << level_name(sc_core::as_log(i)) << endl;
   }
   cout << "Test string based handler" << std::endl;
-  for (auto l : sc_core::log_level_map) {
+  for (auto l : k_level_names) {
     SC_LOG_AT(l.first, "sc_log_test") << l.second;
   }
 
   cout << "test FMT string" << std::endl;
-  SC_WARN()("Testing FMT Hello {}", "world");
+  SC_ALERT()("Testing FMT Hello {}", "world");
 
   cout << "construct module" << std::endl;
 
