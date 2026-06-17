@@ -34,6 +34,7 @@
 #ifndef SC_REPORT_H
 #define SC_REPORT_H 1
 
+#include <climits>
 #include <exception>
 #include <string>
 #include "sysc/kernel/sc_cmnhdr.h"
@@ -65,7 +66,10 @@ enum sc_severity {
 //  Enumeration of message verbosity.
 // ----------------------------------------------------------------------------
 
- enum sc_verbosity {
+ // The underlying type is fixed to int so that an arbitrary integer logging
+ // level (SC_LOG_AT accepts any user-defined level) converts to/from
+ // sc_verbosity with a well-defined value, even outside the named range.
+ enum sc_verbosity : int {
      SC_NONE = 0,
      SC_LOW = 100,
      SC_MEDIUM = 200,

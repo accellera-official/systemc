@@ -45,82 +45,37 @@
 namespace sc_core {
 
 /************************
- * Provide a set of names and conversions that are suitable for logging levels
- *based on SystemC "verbosity's"
+ * Logging levels are expressed directly as sc_core::sc_verbosity values:
+ *   SC_LOW (100)=CRITICAL  SC_MEDIUM (200)=ALERT  SC_HIGH (300)=NOTE
+ *   SC_FULL (400)=DETAIL   SC_DEBUG (500)=INTERNAL.  SC_NONE (0) is "off".
+ *
+ * A logging level is carried as a plain int (SC_LOG_AT accepts any
+ * user-defined level), so the logger cache stores an int and uses the
+ * sentinel below for "not yet resolved / inherit from context".
  ************************/
 
-enum class sc_log_level {
-  NONE = sc_core::SC_NONE,
-  CRITICAL = sc_core::SC_NONE,
-  WARN = sc_core::SC_LOW,
-  INFO = sc_core::SC_MEDIUM,
-  DEBUG = sc_core::SC_HIGH,
-  TRACE = sc_core::SC_DEBUG,
-
-  UNSET = INT_MAX
-};
-
-// Map of log levels to their string representations (defined in sc_log.cpp)
-extern const std::map<sc_log_level, std::string> log_level_map;
+// "Level not yet resolved" sentinel for the logger cache.  This is an
+// internal implementation marker (NOT part of the IEEE 1666 standard) and a
+// plain int — deliberately NOT an sc_verbosity enumerator — so it never
+// appears in the standardized sc_verbosity enum.
+inline constexpr int SC_UNSET = INT_MAX;
 
 /**
- * @fn log as_log(int)
- * @brief safely convert an integer into a log level
+ * @fn sc_verbosity as_log(int)
+ * @brief bucket a raw verbosity to the nearest level at or above it
  *
- * @param logLevel the logging level
- * @return the log level
- */
-inline sc_log_level as_log(int logLevel) {
-  auto m = log_level_map;
-  for (auto l : m) {
-    if (logLevel <= static_cast<int>(l.first)) {
-      return l.first;
-    }
-  }
-  return sc_log_level::TRACE;
-}
-
-/**
- * @fn log as_log(std::string)
- * @brief safely convert a string into a log level
+ * v <= 100 -> CRITICAL, <= 200 -> ALERT, <= 300 -> NOTE,
+ * <= 400 -> DETAIL, otherwise INTERNAL.
  *
- * @param logName the string name for the log level
- * @return the log level
+ * @param logLevel the raw verbosity
+ * @return the bucketed log level
  */
-inline sc_log_level as_log(std::string logName) {
-  auto m = log_level_map;
-  for (auto l : m) {
-    if (logName == l.second)
-      return l.first;
-  }
-  return sc_log_level::TRACE;
-}
-/**
- * @fn std::istream& operator >>(std::istream&, log&)
- * @brief read a log level from input stream e.g. used by boost::lexical_cast
- *
- * @param is input stream holding the string representation
- * @param val the value holding the resulting value
- * @return the input stream
- */
-inline std::istream &operator>>(std::istream &is, sc_log_level &val) {
-  std::string buf;
-  is >> buf;
-  val = as_log(buf);
-  return is;
-}
-/**
- * @fn std::ostream& operator <<(std::ostream&, const log&)
- * @brief output the textual representation of the log level
- *
- * @param os output stream
- * @param val logging level
- * @return reference to the stream for chaining
- */
-inline std::ostream &operator<<(std::ostream &os, sc_log_level const &val) {
-  auto m = log_level_map;
-  os << m[val];
-  return os;
+inline sc_verbosity as_log(int logLevel) {
+  if (logLevel <= sc_core::SC_LOW)    return sc_core::SC_LOW;
+  if (logLevel <= sc_core::SC_MEDIUM) return sc_core::SC_MEDIUM;
+  if (logLevel <= sc_core::SC_HIGH)   return sc_core::SC_HIGH;
+  if (logLevel <= sc_core::SC_FULL)   return sc_core::SC_FULL;
+  return sc_core::SC_DEBUG;
 }
 
 /* Convenience helper to detect if a type has a name() method.
@@ -168,7 +123,7 @@ struct sc_log_impl;
  * since all referenced strings have appropriate lifetimes.
  */
 struct sc_log_logger_cache {
-  sc_log_level level = sc_log_level::UNSET;
+  int level = SC_UNSET;
   std::string tag{};           // Logger tag/identifier (owns the string)
   std::string scname{};        // Captured sc_object name (owns the string)
   const char* typename_str = nullptr; // Captured type name (from typeid(*this).name())
@@ -184,7 +139,7 @@ struct sc_log_logger_cache {
    * @param local_tag optional local tag that overrides the effective name
    * @return log level for this logger
    */
-  sc_log_level get_log_verbosity_cached(const char *file, int line,
+  int get_log_verbosity_cached(const char *file, int line,
                                         std::string_view local_tag = {});
 
   /**
@@ -220,7 +175,7 @@ struct sc_log_logger_cache {
  */
 struct sc_log_handle_factory {
   template <class TYPE>
-  static sc_log_logger_cache make(sc_log_level lvl, const char *tag_str,
+  static sc_log_logger_cache make(int lvl, const char *tag_str,
                                   TYPE *p) {
     const char *n = sc_log_priv__call_sc_name_fn{}(p);
     const char *t = typeid(*p).name();
@@ -232,7 +187,7 @@ struct sc_log_handle_factory {
     };
   }
 
-  static sc_log_logger_cache make_static(sc_log_level lvl,
+  static sc_log_logger_cache make_static(int lvl,
                                          const char *tag_str) {
     return sc_log_logger_cache{
         lvl,
@@ -269,7 +224,7 @@ struct sc_logger {
    * @param verbosity the log level
    */
   sc_logger(const char *file, int line,
-            sc_log_level verbosity = sc_core::sc_log_level::INFO)
+            int verbosity = sc_core::SC_MEDIUM)
       : t(nullptr), file(file), line(line), level(verbosity) {}
 
 
@@ -348,7 +303,7 @@ protected:
   char *t{nullptr};
   const char *file;
   const int line;
-  const sc_log_level level;
+  const int level;
 };
 
 } // namespace sc_core

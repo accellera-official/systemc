@@ -125,29 +125,29 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 // Internal handle variants (used by public SC_LOG_HANDLE macro)
 #define SC_LOG_PRIV__HANDLE0()                                                 \
   sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE =                        \
-      sc_core::sc_log_handle_factory::make(sc_core::sc_log_level::UNSET, "",   \
+      sc_core::sc_log_handle_factory::make(sc_core::SC_UNSET, "",   \
                                            this)
 
 #define SC_LOG_PRIV__HANDLE1(tag_str)                                          \
   sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE =                        \
-      sc_core::sc_log_handle_factory::make(sc_core::sc_log_level::UNSET,       \
+      sc_core::sc_log_handle_factory::make(sc_core::SC_UNSET,       \
                                            tag_str, this)
 
 #define SC_LOG_PRIV__HANDLE2(logger_name, tag_str)                             \
   sc_core::sc_log_logger_cache SC_LOG_PRIV__HANDLE_NAME(logger_name) =         \
-      sc_core::sc_log_handle_factory::make(sc_core::sc_log_level::UNSET,       \
+      sc_core::sc_log_handle_factory::make(sc_core::SC_UNSET,       \
                                            tag_str, this)
 
 // Internal static handle variants (used by public SC_LOG_HANDLE_STATIC macro)
 #define SC_LOG_PRIV__HANDLE_STATIC1(tag_str)                                   \
   static sc_core::sc_log_logger_cache SC_LOG_LOG_LEVEL_CACHE =                 \
       sc_core::sc_log_handle_factory::make_static(                             \
-          sc_core::sc_log_level::UNSET, tag_str)
+          sc_core::SC_UNSET, tag_str)
 
 #define SC_LOG_PRIV__HANDLE_STATIC2(logger_name, tag_str)                      \
   static sc_core::sc_log_logger_cache SC_LOG_PRIV__HANDLE_NAME(logger_name) =  \
       sc_core::sc_log_handle_factory::make_static(                             \
-          sc_core::sc_log_level::UNSET, tag_str)
+          sc_core::SC_UNSET, tag_str)
 
 // Helper to get logger handle name
 #define SC_LOG_PRIV__HANDLE_NAME(x) x
@@ -195,15 +195,15 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
 #define SC_LOG_HANDLE_VECTOR_PUSH_BACK(NAME, tag_str)                          \
   SC_LOG_PRIV__HANDLE_NAME(NAME).push_back(                                    \
       sc_core::sc_log_handle_factory::make(                                    \
-          sc_core::sc_log_level::UNSET, tag_str, this))
+          sc_core::SC_UNSET, tag_str, this))
 
 /**
  * SC_LOG_AT - Log a message at a specific level
  *
  * Usage:
- *   SC_LOG_AT(sc_core::sc_log_level::INFO) << "message";
- *   SC_LOG_AT(sc_core::sc_log_level::INFO, my_logger) << "message";
- *   SC_LOG_AT(sc_core::sc_log_level::INFO, "tag") << "message";
+ *   SC_LOG_AT(sc_core::SC_HIGH) << "message";
+ *   SC_LOG_AT(sc_core::SC_HIGH, my_logger) << "message";
+ *   SC_LOG_AT(sc_core::SC_HIGH, "tag") << "message";
  */
 #define SC_LOG_AT(lvl, ...)                                                    \
   if (SC_LOG_PRIV__VBSTY_CHECK_IMPL(SC_LOG_PRIV__NARG(__VA_ARGS__), lvl,       \
@@ -214,18 +214,31 @@ static const char *SC_LOG_PRIV__FMT_EMPTY_STR = "";
       << SC_LOG_PRIV__FMT_EMPTY_STR
 
 /**
- * Convenience macros for common log levels
+ * Convenience logging macros, one per logging level.
+ *
+ * The level names describe the *significance* (importance) of a message to a
+ * reader, deliberately chosen to be distinct from SystemC's existing
+ * vocabularies — they are NOT sc_severity (SC_INFO/SC_WARNING/SC_ERROR/
+ * SC_FATAL) and NOT the raw sc_verbosity names. Ordered from most significant
+ * to least, mapping onto increasing verbosity: the more verbose the level, the
+ * less significant (more incidental) the message.
+ *
+ *   SC_CRITICAL  most significant   -> SC_LOW    (emitted even at low verbosity)
+ *   SC_ALERT                        -> SC_MEDIUM
+ *   SC_NOTE                         -> SC_HIGH
+ *   SC_DETAIL                       -> SC_FULL
+ *   SC_INTERNAL  least significant  -> SC_DEBUG  (only at the highest verbosity)
  *
  * Usage:
  *   SC_CRITICAL() << "message";
- *   SC_WARN(my_logger) << "message";
- *   SC_INFO("tag") << "message";
+ *   SC_ALERT(my_logger) << "message";
+ *   SC_NOTE("tag") << "message";
  */
 #define SC_CRITICAL(...)                                                       \
-  SC_LOG_AT(sc_core::sc_log_level::CRITICAL, ##__VA_ARGS__)
-#define SC_WARN(...) SC_LOG_AT(sc_core::sc_log_level::WARN, ##__VA_ARGS__)
-#define SC_INFO(...) SC_LOG_AT(sc_core::sc_log_level::INFO, ##__VA_ARGS__)
-#define SC_DEBUG(...) SC_LOG_AT(sc_core::sc_log_level::DEBUG, ##__VA_ARGS__)
-#define SC_TRACE(...) SC_LOG_AT(sc_core::sc_log_level::TRACE, ##__VA_ARGS__)
+  SC_LOG_AT(sc_core::SC_LOW, ##__VA_ARGS__)
+#define SC_ALERT(...) SC_LOG_AT(sc_core::SC_MEDIUM, ##__VA_ARGS__)
+#define SC_NOTE(...) SC_LOG_AT(sc_core::SC_HIGH, ##__VA_ARGS__)
+#define SC_DETAIL(...) SC_LOG_AT(sc_core::SC_FULL, ##__VA_ARGS__)
+#define SC_INTERNAL(...) SC_LOG_AT(sc_core::SC_DEBUG, ##__VA_ARGS__)
 
 #endif /* _SC_LOG_H_ */
