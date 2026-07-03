@@ -139,7 +139,7 @@ if [[ "$SYSTEMC_CI_TARGET" == "coverage" ]]; then
   mkdir -p /coverage
   gcovr -f 'src/*' \
         --gcov-ignore-parse-errors=negative_hits.warn --merge-mode-functions=separate \
-        --html-nested -o /coverage/coverage \
+        --html-nested -o /coverage/index.html \
         "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
 fi
 
