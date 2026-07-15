@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  disaproc2.cpp -- 
+  disaproc2.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -109,7 +109,7 @@ aproc2::entry()
     int loops = 0;
     while (true) {
         wait();
-        d = a.read().to_int() * b.read().to_int();
+        d = a.read().to_uint() * b.read().to_uint();
         cout << "d is (a * b)" << endl;
         wait();
         if (b.read().to_int() == 0) {
@@ -153,7 +153,7 @@ SC_MODULE( sync1 )
            sc_signal_bool_vector& B,
            const sc_signal_bool_vector& C,
            const sc_signal_bool_vector& D )
-        : 
+        :
           a(A), b(B), c(C), d(D)
 
     {
@@ -189,7 +189,7 @@ sc_main(int argc, char** argv)
     sc_signal_bool_vector b("b");
     sc_signal_bool_vector c("c");
     sc_signal_bool_vector d("d");
-   
+
     a = 0;
     b = 0;
     c = 0;

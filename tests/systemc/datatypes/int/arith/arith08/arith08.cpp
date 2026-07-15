@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  arith08.cpp -- 
+  arith08.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -42,30 +42,31 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 
 #define TEST(A,B) \
 { \
-    if ( A != B ) \
-        cout << #A << " (" << A << ") != " << #B << "(" << B << ")" << endl; \
+    if ( (A) != (B) ) \
+        cout << #A << " (" << (A) << ") != " << #B << "(" << (B) << ")" << endl; \
 }
 
 // sign_bit = number of sign bit from 1 to 32
 
-inline signed int  sign_extend(signed int target, unsigned int sign_bit)
-{                   
-    signed int result;
-    unsigned int bit_mask = (1u << (sign_bit-1));
+int64_t sign_extend(int64_t target, int64_t sign_bit)
+{
+    int64_t result;
+    int64_t bit_mask = (((int64_t) 1) << (sign_bit - 1));
     if ( target & bit_mask ) {
-        result = target | (~0u << (sign_bit-1));
-    }               
-    else {          
-        result = target & ~(~0u << (sign_bit-1));
-    }                   
-    return result;  
+        result = target | (UINT64_MAX << (sign_bit - 1));
+    }
+    else {
+        result = target & ~(UINT64_MAX << (sign_bit - 1));
+    }
+    return result;
 }
+
 
 int
 sc_main(int, char**)
 {
-    unsigned vali[5] = { 0, 1, (unsigned)-1, 7, (unsigned)-8 };
-    signed int valj[5] = { 0, 1, -1, 7, -8 };
+    uint64_t vali[5] = { 0, 1, UINT64_MAX, 7, UINT64_MAX - 7 };
+    int64_t valj[5] = { 0, 1, -1, 7, -8 };
 
     for (int i = 3; i < 30; ++i) {
         for (int j = 3; j < 30; ++j) {
@@ -79,19 +80,19 @@ sc_main(int, char**)
 
             valj[3] = (1 << (j - 1)) - 1;
             valj[4] = - (1 << (j - 1));
-            
+
             for (int ii = 0; ii < 100; ++ii) {
                 for (int jj = 0; jj < 100; ++jj) {
-                    unsigned qi = (ii < 5) ? vali[ii] :
-		                             (rng.rand() & ((1 << i) - 1));
-                    signed int qj = (jj < 5) ? valj[jj] :
-		                               (rng.rand() & ((1 << j) - 1));
+                    uint64_t qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1 << i) - 1));
+                    int64_t qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1 << j) - 1));
 
-		    qi = (qi << (32 - i)) >> (32 - i);
-		    qj = sign_extend(qj,j);
+          		    qi = (qi << (64 - i)) >> (64 - i);
+          		    qj = sign_extend(qj, j);
 
                     x = qi;
                     y = qj;
+                    sc_assert(x == (int64_t) qi);
+                    sc_assert(y == qj);
 
                     sc_signed ty(x);
                     TEST(x,ty );
@@ -99,14 +100,16 @@ sc_main(int, char**)
                     sc_assert((! x[i-1]) || (ty.length() == i+1) );
 
                     z = x + y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
-			    int(int(qi) + qj) );
+                    // The result on the RHS of the comparison will be promoted
+                    // to an unsigned type, so we cast it for comparison
+                    // purposes.
+                    TEST(z, static_cast<int64_t>(qi + qj));
                     z = x - y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
-			    int(int(qi) - qj) );
+                    TEST(z, static_cast<int64_t>(qi - qj));
                     z = x * y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ),
-			    int(int(qi) * qj) );
+
+                    // Cast the operands to be sure to avoid to signed overflow.
+                    TEST(z, static_cast<int64_t>(qi * static_cast<uint64_t>(qj)));
                     sc_unsigned xx(i);
                     xx = x;
                     xx *= y;
@@ -116,16 +119,17 @@ sc_main(int, char**)
 
                     if (y != 0) {
                         z = x / y;
-                        TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) / qj) );
+                        // A cast here makes sures that our division signed.
+                        TEST(z, static_cast<int64_t>(qi) / qj);
                         z = x % y;
-                        TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) % qj) );
+                        TEST(z, static_cast<int64_t>(qi) % qj);
                     }
                     z = x & y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) & qj) );
+                    TEST(z, static_cast<int64_t>(qi & qj));
                     z = x | y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) | qj) );
+                    TEST(z, static_cast<int64_t>(qi | qj));
                     z = x ^ y;
-                    TEST(static_cast<sc_bigint<32> >( z.range(31,0) ), int(int(qi) ^ qj) );
+                    TEST(z, static_cast<int64_t>(qi ^ qj));
                 }
             }
         }
