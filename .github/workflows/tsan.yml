@@ -47,9 +47,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
     - name: Build
+      # seccomp=unconfined is required to allow the personality(2) syscall,
+      # which the version of tsan packaged in Ubuntu 22.04 requires to
+      # disable ASLR. Once support is dropped for this version, I expect that
+      # it will be possible to remove this flag without incurring any new CI
+      # failures.
       run: |
         docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
-        docker run -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+        docker run --security-opt seccomp=unconfined -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
   almalinux-arm:
     runs-on: ubuntu-24.04-arm
     strategy:
