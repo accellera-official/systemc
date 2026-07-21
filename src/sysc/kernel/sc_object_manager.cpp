@@ -129,29 +129,25 @@ std::string sc_object_manager::create_name(const char* leaf_name)
     // 
     // If not use unique name generator to make it unique. 
 
-    clash = false; 
-    for (;;)
+    clash = false;
+    while (name_exists(result_string))
     {
-	    if ( !name_exists(result_string) )
-	    {
-	        break;
+        clash = true;
+        leafname_string = sc_gen_unique_name(leafname_string.c_str(), false);
+	    if (parent_p) {
+	        result_string = parentname_string;
+	        result_string += SC_HIERARCHY_CHAR;
+	        result_string += leafname_string;
+	    } else {
+	        result_string = leafname_string;
 	    }
-        clash = true; 
-        leafname_string = sc_gen_unique_name(leafname_string.c_str(), false); 
-	if (parent_p) {
-	    result_string = parentname_string;
-	    result_string += SC_HIERARCHY_CHAR;
-	    result_string += leafname_string;
-	} else { 
-	    result_string = leafname_string;
-	} 
-    } 
-    if (clash) { 
-	std::string message = result_orig_string;
-	message += ". Latter declaration will be renamed to ";
-	message += result_string;
-        SC_REPORT_WARNING( SC_ID_INSTANCE_EXISTS_, message.c_str());
-    } 
+    }
+    if (clash) {
+	    std::string message = result_orig_string;
+	    message += ". Latter declaration will be renamed to ";
+	    message += result_string;
+            SC_REPORT_WARNING( SC_ID_INSTANCE_EXISTS_, message.c_str());
+    }
 
     return result_string;
 }
