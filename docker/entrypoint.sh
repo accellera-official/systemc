@@ -12,6 +12,12 @@ fi
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
 
+# Use Ninja instead of the default Unix Makefiles generator on macOS.
+GENERATOR_ARGS=()
+if [[ "$(uname)" == "Darwin" ]]; then
+  GENERATOR_ARGS=(-G Ninja)
+fi
+
 # Don't build with -Werror on AlmaLinux 8 on arm64 hosts
 # GCC 8.5 does not ignore false positive -Wshift-negative-value warning
 if [[ -f /etc/os-release ]]; then
@@ -115,6 +121,7 @@ esac
 
 cd "$SYSTEMC_SRC_PATH"
 cmake -B "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD" \
+      "${GENERATOR_ARGS[@]}" \
       -DCMAKE_INSTALL_PREFIX="${SYSTEMC_SRC_PATH}/BUILD/${SYSTEMC_CI_TARGET}" \
       -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
       -DCMAKE_C_COMPILER="$CC" \
