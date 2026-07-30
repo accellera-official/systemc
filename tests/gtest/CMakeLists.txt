@@ -16,3 +16,4 @@ endfunction(add_systemc_test_suite)
 
 add_systemc_test_suite(sc_event_cons.cpp)
 add_systemc_test_suite(sc_event_cons_setup.cpp)
+add_systemc_test_suite(sc_event_notify.cpp)
