@@ -14,6 +14,7 @@ function(add_systemc_test_suite PATH)
   gtest_discover_tests(${TEST_NAME})
 endfunction(add_systemc_test_suite)
 
+add_systemc_test_suite(sc_clock_setup.cpp)
 add_systemc_test_suite(sc_event_cons.cpp)
 add_systemc_test_suite(sc_event_cons_setup.cpp)
 add_systemc_test_suite(sc_event_notify.cpp)
