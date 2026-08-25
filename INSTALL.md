@@ -95,7 +95,7 @@ obtain from the following sources:
   * Ninja   https://ninja-build.org/
   * CMake   https://cmake.org/
 
-The CMake build scripts are compatible with CMake >=3.5 and have been
+The CMake build scripts are compatible with CMake >=3.16 and have been
 tested on the following OS/processor/compiler platforms:
 
   * macOS >= 13.6 until 15.4 (Xcode/AppleClang): x86_64, Apple Silicon, universal binary
