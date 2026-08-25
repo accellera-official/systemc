@@ -12,6 +12,12 @@ fi
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
 
+# Use Ninja instead of the default Unix Makefiles generator on macOS.
+GENERATOR_ARGS=()
+if [[ "$(uname)" == "Darwin" ]]; then
+  GENERATOR_ARGS=(-G Ninja)
+fi
+
 # Don't build with -Werror on AlmaLinux 8 on arm64 hosts
 # GCC 8.5 does not ignore false positive -Wshift-negative-value warning
 if [[ -f /etc/os-release ]]; then
@@ -115,13 +121,14 @@ esac
 
 cd "$SYSTEMC_SRC_PATH"
 cmake -B "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD" \
+      "${GENERATOR_ARGS[@]}" \
       -DCMAKE_INSTALL_PREFIX="${SYSTEMC_SRC_PATH}/BUILD/${SYSTEMC_CI_TARGET}" \
       -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
       -DCMAKE_C_COMPILER="$CC" \
       -DCMAKE_CXX_COMPILER="$CXX" \
       -DENABLE_REGRESSION="$BUILD_REGRESSIONS" \
       -DBUILD_SHARED_LIBS="$BUILD_SHARED_LIBRARY" .
-cmake --build "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/" --parallel
+cmake --build "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/" --parallel "$(getconf _NPROCESSORS_ONLN)"
 cmake --install "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
 
 if [[ "$BUILD_REGRESSIONS" == "true" ]]; then
@@ -131,9 +138,9 @@ fi
 if [[ "$SYSTEMC_CI_TARGET" == "coverage" ]]; then
   mkdir -p /coverage
   gcovr -f 'src/*' \
-	--gcov-ignore-parse-errors=negative_hits.warn --merge-mode-functions=separate \
+        --gcov-ignore-parse-errors=negative_hits.warn --merge-mode-functions=separate \
         --html-nested -o /coverage/coverage \
-	"BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
+        "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
 fi
 
 exit 0
