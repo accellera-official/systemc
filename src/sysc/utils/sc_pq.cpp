@@ -75,7 +75,7 @@ sc_ppq_base::insert( void* elem )
     int i = m_heap_size;
 
     // resize the heap in case there's not enough memory
-    if( m_heap_size > m_size_alloc ) {
+    if( SC_UNLIKELY_( m_heap_size > m_size_alloc )) {
         m_size_alloc += m_size_alloc / 2;
         void** new_heap = new void*[m_size_alloc + 1];
         for( int j = 1; j < m_heap_size; ++ j ) {

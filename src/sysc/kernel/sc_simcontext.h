@@ -343,7 +343,7 @@ private:
 
     int add_delta_event( sc_event* );
     void remove_delta_event( sc_event* );
-    void add_timed_event( sc_event_timed* );
+    void add_timed_event( sc_event*, const sc_time& );
 
     void trace_cycle( bool delta_cycle );
 
@@ -421,6 +421,7 @@ private:
 
     sc_time_params*             m_time_params;
     sc_time                     m_curr_time;
+    sc_time                     m_max_event_time{};
 
     sc_invoke_method*           m_method_invoker_p;
     sc_dt::uint64               m_change_stamp; // "time" change occurred.
@@ -676,12 +677,6 @@ sc_simcontext::add_delta_event( sc_event* e )
     return static_cast<int>( m_delta_events.size() - 1 );
 }
 
-inline
-void
-sc_simcontext::add_timed_event( sc_event_timed* et )
-{
-    m_timed_events->insert( et );
-}
 
 // ----------------------------------------------------------------------------
 
