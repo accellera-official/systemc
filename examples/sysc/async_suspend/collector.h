@@ -31,6 +31,8 @@
 namespace plt = matplotlibcpp;
 #endif
 
+using std::cout;
+
 /* thread-safe collector to enable pretty-printing the output of the
  * simulation as a csv style output (import it into a spreadsheet and draw some
  * nice graphs !*/

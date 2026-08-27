@@ -39,7 +39,8 @@
 #ifndef __simple_bus_master_direct_h
 #define __simple_bus_master_direct_h
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
 
 #include "simple_bus_direct_if.h"
 

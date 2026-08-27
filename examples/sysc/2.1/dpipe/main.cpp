@@ -38,7 +38,11 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::cout;
+using std::endl;
 
 // This program implements a delay pipe which passes values through a fifo
 // in a specified number of clocks. A value may be inserted at each clock

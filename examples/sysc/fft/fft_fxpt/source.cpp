@@ -37,7 +37,14 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::FILE;
+using std::cout;
+using std::endl;
+using std::fopen;
+using std::fscanf;
 #include "source.h"
 
 void source::entry()

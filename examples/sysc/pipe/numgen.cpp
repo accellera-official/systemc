@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "numgen.h"
 
 // definition of the `generate' method

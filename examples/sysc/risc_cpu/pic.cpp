@@ -36,7 +36,8 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "pic.h"
 
 void pic::entry(){

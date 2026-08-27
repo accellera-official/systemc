@@ -37,7 +37,10 @@
 #ifndef PKT_H_INCLUDED
 #define PKT_H_INCLUDED
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::ostream;
 
 struct pkt {
        sc_int<8> data;

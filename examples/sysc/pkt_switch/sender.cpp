@@ -40,6 +40,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "sender.h"
+using std::cout;
+using std::endl;
 
 void sender:: entry()
 {

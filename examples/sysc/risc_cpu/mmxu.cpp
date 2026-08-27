@@ -36,7 +36,12 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
+using std::ios;
+using std::printf;
 #include "mmxu.h"
 #include "directive.h"
 

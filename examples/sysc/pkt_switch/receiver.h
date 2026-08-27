@@ -39,7 +39,10 @@
 #ifndef RECEIVER_H_INCLUDED
 #define RECEIVER_H_INCLUDED
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::ostream;
 #include "pkt.h"
 
 struct receiver: sc_module {

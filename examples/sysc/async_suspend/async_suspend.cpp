@@ -22,7 +22,11 @@
 
  *****************************************************************************/
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::rand;
+using std::size_t;
+using std::srand;
 #include "node.h"
 #include <vector>
 
