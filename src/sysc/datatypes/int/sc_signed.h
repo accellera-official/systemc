@@ -1079,7 +1079,7 @@ public:
       }
       int nb = nbits - v;
 
-      // If we shift off the end return the sign bit.
+      // If we shift off the end return the sign bit extended.
 
       if ( 0 >= nb ) {
           sc_signed result(nbits, false);
