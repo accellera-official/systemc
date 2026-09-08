@@ -224,7 +224,10 @@ sc_event::register_event( const char* leaf_name, bool is_kernel_event /* = false
 
     if( !leaf_name || !leaf_name[0] )
     {
-        if ( sc_is_running( m_simc ) ) return;
+        if ( sc_is_running( m_simc ) ) {
+            m_name = "$$unnamed$$";
+            return;
+        }
         leaf_name = sc_gen_unique_name
             ( is_kernel_event ? SC_KERNEL_EVENT_PREFIX : "event" );
     }
