@@ -489,7 +489,7 @@ sc_bigint<W>::operator>>(int v) const
     }
     int nb = W - v;
 
-    // If we shift off the end return the sign bit.
+    // If we shift off the end return the sign bit extended.
 
     if ( 0 >= nb ) {
         sc_signed result(W, false);
