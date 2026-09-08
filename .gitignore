@@ -93,3 +93,4 @@ _UpgradeReport_Files/
 run*/
 /tests/scripts/systemc/
 /tests/scripts/tlm/
+/.cache
