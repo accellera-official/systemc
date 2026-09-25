@@ -31,7 +31,8 @@
 #ifndef ADDER_PIMPL_H_
 #define ADDER_PIMPL_H_
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
 
 // Demonstrates how to remove compile dependency on adder.h header using PImpl
 class adder_int_5_pimpl {

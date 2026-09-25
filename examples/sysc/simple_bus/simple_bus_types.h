@@ -39,7 +39,9 @@
 #define __simple_bus_types_h
 
 #include <stdio.h>
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::FILE;
 
 enum simple_bus_status { SIMPLE_BUS_OK = 0
 			 , SIMPLE_BUS_REQUEST

@@ -36,7 +36,13 @@
 
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::cout;
+using std::endl;
+using std::free;
+using std::ostream;
 #include "pkt.h"
 #include "switch.h"
 #include "fifo.h"

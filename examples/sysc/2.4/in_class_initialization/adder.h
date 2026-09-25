@@ -30,7 +30,8 @@
 #ifndef ADDER_H_
 #define ADDER_H_
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
 
 template <typename T, int N_INPUTS>
 struct adder : sc_module {

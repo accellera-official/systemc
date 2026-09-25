@@ -37,7 +37,12 @@
  
 
 #include <climits>	// for definition on value 's MAX
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
+using std::ios;
+using std::printf;
 #include "decode.h"
 #include "directive.h"
 

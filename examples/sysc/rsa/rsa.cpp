@@ -66,7 +66,15 @@
 #include <sys/types.h>
 #include <time.h>
 #include <stdlib.h>    // drand48, srand48
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::atoi;
+using std::cout;
+using std::endl;
+using std::rand;
+using std::size_t;
+using std::srand;
 
 #define DEBUG_SYSTEMC // #undef this to disable assertions.
 

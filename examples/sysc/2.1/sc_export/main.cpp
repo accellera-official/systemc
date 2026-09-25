@@ -68,7 +68,10 @@ bound to ports P1 and P2 of module X.
 
 */
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
 
 // Interface
 class C_if : virtual public sc_interface
