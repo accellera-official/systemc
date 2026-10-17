@@ -977,11 +977,11 @@ void sc_unsigned_subref::concat_set( int64 src, int low_i )
 		m_obj_p->set( i, src & 1 );
 		src = src >> 1;
 	}
-	for ( ; i <= m_left; i++ ) m_obj_p->set(sign);
+	for ( ; i <= m_left; i++ ) m_obj_p->set(i, sign);
     }
     else
     {
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(sign);
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, sign);
     }
 }
 
@@ -1041,11 +1041,11 @@ void sc_unsigned_subref::concat_set( uint64 src, int low_i )
 		m_obj_p->set( i, src & 1 );
 		src = src >> 1;
 	}
-	for ( ; i <= m_left; i++ ) m_obj_p->set(false);
+	for ( ; i <= m_left; i++ ) m_obj_p->set(i, false);
     }
     else
     {
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, false);
     }
 }
 // other methods
