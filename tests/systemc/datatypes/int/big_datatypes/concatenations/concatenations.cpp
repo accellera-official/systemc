@@ -182,6 +182,43 @@ void test_concat( size_t widths_n, int* widths )
     }
 }
 
+void test_concat_assignments()
+{
+    sc_dt::sc_biguint<65> ux = 0;
+
+    (ux.range(64, 64), ux.range(63, 0)) = 0;
+    if ( ux != 0 ) std::cout << __LINE__ << " Error:euxpeced 0 actual " << ux << std::endl;
+
+    for ( unsigned long long y = 1; y < (1ull << 63);  y = y << 1 ) {
+	(ux.range(64, 64), ux.range(63, 0)) = y;
+        if ( ux != y ) 
+	    std::cout << __LINE__ << " Error:euxpeced " << y << " actual " << ux << std::endl;
+    }
+
+    for ( long long z = 1ull; z < (1ull << 63);  z = z << 1 ) {
+	(ux.range(64, 64), ux.range(63, 0)) = z;
+        if ( ux != z ) 
+	    std::cout << __LINE__ << " Error:euxpeced " << z << " actual " << ux << std::endl;
+    }
+
+    sc_dt::sc_biguint<66> sx = 0;
+
+    (sx.range(65, 64), sx.range(63, 0)) = 0;
+    if ( sx != 0 ) std::cout << __LINE__ << " Error: especed 0 actual " << sx << std::endl;
+
+    for ( unsigned long long y = 1; y <= (1ull << 62);  y = y << 1 ) {
+	(sx.range(65, 64), sx.range(63, 0)) = y;
+        if ( sx != y ) 
+	    std::cout << __LINE__ << " Error:expeced " << y << " actual " << sx << std::endl;
+    }
+
+    for ( long long z = -1ll; z < (-1ll << 63);  z = z << 1 ) {
+	(sx.range(65, 64), sx.range(63, 0)) = z;
+        if ( sx != z ) 
+	    std::cout << __LINE__ << " Error:expeced " << z << " actual " << sx << std::endl;
+    }
+}
+
 int sc_main(int argc, char* argv[])
 {
 
@@ -215,6 +252,8 @@ int sc_main(int argc, char* argv[])
     test_concat( sizeof(test3)/sizeof(int), test3 );
     test_concat( sizeof(test4)/sizeof(int), test4 );
     test_concat( sizeof(test5)/sizeof(int), test5 );
+
+    test_concat_assignments();
 
     cout << "Concatenation test complete" << endl;
     return 0;
