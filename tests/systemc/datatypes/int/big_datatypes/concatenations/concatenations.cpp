@@ -198,7 +198,7 @@ void test_concat_assignments()
     for ( long long z = 1ull; z < (1ull << 63);  z = z << 1 ) {
 	(ux.range(64, 64), ux.range(63, 0)) = z;
         if ( ux != z ) 
-	    std::cout << __LINE__ << " Error:expeced " << z << " actual " << ux << std::endl;
+	    std::cout << __LINE__ << " Error:expected " << z << " actual " << ux << std::endl;
     }
 
     sc_dt::sc_biguint<66> sx = 0;
@@ -209,13 +209,13 @@ void test_concat_assignments()
     for ( unsigned long long y = 1; y <= (1ull << 62);  y = y << 1 ) {
 	(sx.range(65, 64), sx.range(63, 0)) = y;
         if ( sx != y ) 
-	    std::cout << __LINE__ << " Error:expeced " << y << " actual " << sx << std::endl;
+	    std::cout << __LINE__ << " Error:expected " << y << " actual " << sx << std::endl;
     }
 
     for ( long long z = -1ll; z < (-1ll << 63);  z = z << 1 ) {
 	(sx.range(65, 64), sx.range(63, 0)) = z;
         if ( sx != z ) 
-	    std::cout << __LINE__ << " Error:expeced " << z << " actual " << sx << std::endl;
+	    std::cout << __LINE__ << " Error:expected " << z << " actual " << sx << std::endl;
     }
 }
 
