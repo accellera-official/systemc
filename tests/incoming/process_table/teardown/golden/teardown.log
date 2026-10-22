@@ -1,0 +1,5 @@
+SystemC Simulation
+495 of 1000 threads returned, 481 of 1000 methods killed
+after simulation: victims deleted once, others alive
+after teardown: every process deleted once
+before simulation teardown: every process deleted once
