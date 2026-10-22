@@ -62,6 +62,7 @@
 #include <algorithm>
 #include <cstring>
 #include <sstream>
+#include <unordered_map>
 
 // DEBUGGING MACROS:
 //
@@ -114,7 +115,11 @@ class sc_process_table
       void          push_front(ProcessHandle h);
       ProcessHandle remove(ProcessHandle h);
     private:
+      using predecessor_map =
+          std::unordered_map<ProcessHandle, ProcessHandle>;
+
       ProcessHandle m_head;
+      predecessor_map m_predecessors;
     };
 
     void push_front( sc_method_handle handle )
@@ -143,6 +148,10 @@ sc_process_table::queue<ProcessHandle>::~queue()
     while( m_head ) {
         ProcessHandle now_p = m_head;
         m_head = m_head->next_exist();
+        // Process destruction re-enters remove(), so update the index first.
+        m_predecessors.erase(now_p);
+        if ( m_head )
+            m_predecessors[m_head] = ProcessHandle();
         now_p->reference_decrement();
     }
 }
@@ -151,7 +160,10 @@ template<typename ProcessHandle>
 void
 sc_process_table::queue<ProcessHandle>::push_front( ProcessHandle handle )
 {
+    m_predecessors.emplace(handle, ProcessHandle());
     handle->set_next_exist(m_head);
+    if ( m_head )
+        m_predecessors[m_head] = handle;
     m_head = handle;
 }
 
@@ -159,23 +171,23 @@ template<typename ProcessHandle>
 ProcessHandle
 sc_process_table::queue<ProcessHandle>::remove( ProcessHandle handle )
 {
-    ProcessHandle now_p   = m_head; // Entry now examining.
-    ProcessHandle prior_p = NULL;   // Entry prior to one now examining.
+    const auto position = m_predecessors.find(handle);
+    if ( position == m_predecessors.end() )
+        return ProcessHandle();
 
-    while( now_p )
-    {
-        if ( now_p == handle )
-        {
-            if ( prior_p )
-                prior_p->set_next_exist( now_p->next_exist() );
-            else
-                m_head = now_p->next_exist();
-            return handle;
-        }
-        prior_p = now_p;
-        now_p   = now_p->next_exist();
-    }
-    return NULL;
+    ProcessHandle prior_p = position->second;
+    ProcessHandle next_p = handle->next_exist();
+
+    if ( prior_p )
+        prior_p->set_next_exist(next_p);
+    else
+        m_head = next_p;
+
+    if ( next_p )
+        m_predecessors[next_p] = prior_p;
+
+    m_predecessors.erase(position);
+    return handle;
 }
 
 // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
