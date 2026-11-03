@@ -57,7 +57,7 @@ public:
     { return buf_read( m_buf, (m_ri + i) % size() ); }
 
   T & poke_data( int i )
-    { return buf_read( m_buf , (m_wi + i) % size() ); }
+    { return buf_read( m_buf , (m_ri + i) % size() ); }
 
   void debug() const;
 
