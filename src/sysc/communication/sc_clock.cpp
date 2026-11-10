@@ -51,6 +51,7 @@
 #include "sysc/utils/sc_utils_ids.h"
 
 #include <sstream>
+#include <cmath>
 
 namespace sc_core {
 
@@ -62,7 +63,7 @@ namespace sc_core {
 
 // constructors
 
-sc_clock::sc_clock() : 
+sc_clock::sc_clock() :
     base_type( sc_gen_unique_name( "clock" ) ),
     m_period(), m_duty_cycle(), m_start_time(), m_posedge_first(),
     m_posedge_time(), m_negedge_time(),
@@ -278,7 +279,7 @@ sc_clock::init( const sc_time& period_,
     m_period = period_;
     m_posedge_first = posedge_first_;
 
-    if( duty_cycle_ <= 0.0 || duty_cycle_ >= 1.0 ) {
+    if( std::isnan(duty_cycle_) || duty_cycle_ <= 0.0 || duty_cycle_ >= 1.0 ) {
 	m_duty_cycle = 0.5;
     } else {
 	m_duty_cycle = duty_cycle_;

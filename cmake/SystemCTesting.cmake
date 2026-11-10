@@ -26,7 +26,7 @@
 # Only built under {examples,tests} / check-{examples,tests} target
 #  - see https://cmake.org/Wiki/CMakeEmulateMakeCheck
 add_custom_target(check-${TEST_CATEGORY}
-  COMMAND ${CMAKE_CTEST_COMMAND} -C "$<CONFIG>"
+  COMMAND ${CMAKE_CTEST_COMMAND} -C "$<CONFIG>" --output-on-failure
   DEPENDS all-${TEST_CATEGORY}
 )
 add_custom_target(all-${TEST_CATEGORY})

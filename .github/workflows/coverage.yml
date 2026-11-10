@@ -1,0 +1,27 @@
+name: coverage
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [24.04]
+        platform: [linux/amd64]
+        target: [coverage]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build
+        run: |
+          mkdir /tmp/coverage
+          docker buildx build --platform ${{ matrix.platform }} -t systemc_test --build-arg UBUNTU_VERSION=${{ matrix.version }} -f docker/ubuntu.dockerfile .
+          docker run --mount type=bind,src=/tmp/coverage,dst=/coverage -e SYSTEMC_CI_TARGET=${{ matrix.target }} systemc_test
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Coverage
+          path: /tmp/coverage/
