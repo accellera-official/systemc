@@ -39,7 +39,7 @@ dnl
 dnl Initialization.
 dnl
 
-AC_INIT([SystemC],[3.0.2],[http://forums.accellera.org/forum/9-systemc/],[systemc],[http://accellera.org/],[])
+AC_INIT([SystemC],[3.0.3],[http://forums.accellera.org/forum/9-systemc/],[systemc],[http://accellera.org/],[])
 
 dnl version of the included TLM library
 TLM_PACKAGE_VERSION=2.0.6
