@@ -44,5 +44,7 @@ int sc_main(int, char **)
 
   sc_start(10000, SC_NS);
 
+  fflush(stdout);
+
   return 0;
 }

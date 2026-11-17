@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  arith10.cpp -- 
+  arith10.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -35,7 +35,8 @@
 
  *****************************************************************************/
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdint>
 #include "systemc.h"
 #include "isaac.h"
 
@@ -43,24 +44,25 @@ QTIsaac<8> rng;		// Platform independent random number generator.
 
 // sign_bit = number of sign bit from 1 to 32
 
-inline signed int  sign_extend(signed int target, unsigned int sign_bit)
-{                   
-    signed int result;
-    unsigned int bit_mask = (1u << (sign_bit-1));
+int64_t sign_extend(int64_t target, int64_t sign_bit)
+{
+    int64_t result;
+    int64_t bit_mask = (((int64_t) 1) << (sign_bit - 1));
     if ( target & bit_mask ) {
-        result = target | (~0u << (sign_bit-1));
-    }               
-    else {          
-        result = target & ~(~0u << (sign_bit-1));
-    }                   
-    return result;  
+        result = target | (UINT64_MAX << (sign_bit - 1));
+    }
+    else {
+        result = target & ~(UINT64_MAX << (sign_bit - 1));
+    }
+    return result;
 }
+
 
 int
 sc_main( int argc, char* argv[] )
 {
-    signed int vali[5] = { 0, 1, -1, 7, -8 };
-    signed int valj[5] = { 0, 1, -1, 7, -8 };
+    int64_t vali[5] = { 0, 1, -1, 7, -8 };
+    int64_t valj[5] = { 0, 1, -1, 7, -8 };
 
     for (int i = 3; i < 32; ++i) {
         for (int j = 3; j < 32; ++j) {
@@ -81,14 +83,15 @@ sc_main( int argc, char* argv[] )
                     signed int qi = (ii < 5) ? vali[ii] : (rng.rand() & ((1u << i) - 1));
                     signed int qj = (jj < 5) ? valj[jj] : (rng.rand() & ((1u << j) - 1));
 
-		    qi = sign_extend(qi,i);
-		    qj = sign_extend(qj,j);
+          		    qi = sign_extend(qi,i);
+          		    qj = sign_extend(qj,j);
 
                     x = qi;
                     y = qj;
                     z = x * y;
-                    sc_assert( static_cast<sc_bigint<32> >( z.range(31,0) ) ==
-                            (qi * qj) );
+
+                    // Cast operands to avoid signed overflow, but keep result signed for comparison.
+                    sc_assert(z == static_cast<int64_t>(static_cast<uint64_t>(qi) * static_cast<uint64_t>(qj)));
                     bool s;
                     s = ((x < 0) != (y < 0));
                     sc_signed x2(i+1);
@@ -104,8 +107,8 @@ sc_main( int argc, char* argv[] )
 
                     sc_unsigned xhi(16), xlo(16);
                     sc_unsigned yhi(16), ylo(16);
-		    sc_unsigned zero(16);
-		    zero = 0;
+          		    sc_unsigned zero(16);
+          		    zero = 0;
                     xlo = i > 14 ? x2.range(15,0) : x2.range(i,0);
                     xhi = i > 15 ? x2.range(i,16) : zero;
                     ylo = j > 14 ? y2.range(15,0) : y2.range(j,0);

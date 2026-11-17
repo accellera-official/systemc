@@ -319,7 +319,7 @@ public:
     // unary operators:
 
     inline const sc_bigint<W+1> operator - ();
-    inline const sc_bigint<W+1> operator ~ ();
+    inline const sc_biguint<W> operator ~ ();
 
 
     // assignment operators

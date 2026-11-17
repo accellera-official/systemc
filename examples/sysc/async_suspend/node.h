@@ -118,6 +118,7 @@ public:
         init_socket("output"),
         target_socket("input"),
         txnSent_c(0),
+        txn(nullptr),
         suspendReq(false),
         col(c),
         running(true),
@@ -136,12 +137,22 @@ public:
         sensitive << txnSentEvent;
     }
 
-    ~asynctestnode()
+    virtual ~asynctestnode()
     {
         running = false;
         while (!finished)
             txnSentMethod();
         if (m_thread.joinable()) m_thread.join();
+
+        delete txn;
+        txn = nullptr;
+
+        while (!queue.empty())
+        {
+            delete queue.front();
+            queue.pop();
+        }
+
     }
 
     // This will cause SystemC time to be driven forwards. But, if we're not
@@ -239,6 +250,7 @@ public:
 
                 // Send transaction to a random place
                 init_socket[rand() % init_socket.size()]->b_transport(*txn, myTime);
+                txn = nullptr;
 
 #ifdef DEBUG
                 std::stringstream msg;

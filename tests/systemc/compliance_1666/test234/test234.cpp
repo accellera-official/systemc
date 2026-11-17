@@ -19,10 +19,17 @@ struct Chan: i_f, sc_object
 
 struct Port: sc_port<i_f,0>
 {
-  sc_event_finder& find_event() const
+  Port() : m_event_finder(*this, &i_f::event)
   {
-    return *new sc_event_finder_t<i_f>( *this, &i_f::event );
   }
+
+  sc_event_finder& find_event()
+  {
+    return m_event_finder;
+  }
+
+  private:
+  sc_event_finder_t<i_f> m_event_finder;
 };
 
 SC_MODULE(M)
@@ -75,14 +82,13 @@ SC_MODULE(M)
 
 SC_MODULE(Top)
 {
-  M *m;
+  M m;
   Chan chan1, chan2, chan3;
-  SC_CTOR(Top)
+  SC_CTOR(Top): m("m")
   {
-    m = new M("m");
-    m->mp(chan1);
-    m->mp(chan2);
-    m->mp(chan3);
+    m.mp(chan1);
+    m.mp(chan2);
+    m.mp(chan3);
     SC_THREAD(T);
   }
   void T()

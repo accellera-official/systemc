@@ -359,16 +359,29 @@ const sc_signed&
 sc_signed::operator=(double v)
 {
   is_bad_double(v);
+
+  // Truncate toward zero (matches C++ double-to-integer semantics).
+  v = std::trunc(v);
+
+  bool negative = (v < 0.0);
+  if (negative) v = -v;
+
   int i = 0;
-  while (floor(v) && (i < ndigits)) {
+  while (v > 0.0 && i < ndigits) {
 #ifndef WIN32
     digit[i++] = ((sc_digit)floor(remainder(v, DIGIT_RADIX))) & DIGIT_MASK;
 #else
-    digit[i++] = ((sc_digit)floor(fmod(v, DIGIT_RADIX))) & DIGIT_MASK;
+    digit[i++] = static_cast<sc_digit>(std::fmod(v, DIGIT_RADIX)) & DIGIT_MASK;
 #endif
-    v /= DIGIT_RADIX;
+    v = std::floor(v / DIGIT_RADIX);
   }
   vector_zero(i, ndigits, digit);
+
+  if (negative) {
+    vector_twos_complement(ndigits, digit);
+  }
+
+  adjust_hod();
   return *this;
 }
 
@@ -516,6 +529,7 @@ sc_signed::get_packed_rep(sc_digit *buf) const
   for (int digit_i =0; digit_i < ndigits; ++digit_i) {
       digit[digit_i] = *buf++;
   }
+  const_cast<sc_signed*>(this)->adjust_hod();
 }
 
 
@@ -1041,11 +1055,11 @@ void sc_signed_subref::concat_set( const sc_unsigned& src, int low_i )
 	for( i = m_right; i <= l; ++ i, src_i++ ) {
 	    m_obj_p->set( i, src.test( src_i ) );
 	}
-	for ( ; i <= m_left; i++ ) m_obj_p->set(false);
+	for ( ; i <= m_left; i++ ) m_obj_p->set(i, false);
     }
     else
     {
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, false);
     }
 }
 
@@ -1062,11 +1076,11 @@ void sc_signed_subref::concat_set( uint64 src, int low_i )
 		m_obj_p->set( i, src & 1 );
 		src = src >> 1;
 	}
-	for ( ; i <= m_left; i++ ) m_obj_p->set(false);
+	for ( ; i <= m_left; i++ ) m_obj_p->set(i, false);
     }
     else
     {
-	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(false);
+	for( i = m_right; i <= m_left; ++ i ) m_obj_p->set(i, false);
     }
 }
 // other methods
@@ -1078,13 +1092,6 @@ sc_signed_subref::scan( ::std::istream& is )
     is >> s;
     *this = s.c_str();
 }
-
-#if defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
-// Temporary values:
-
-sc_signed sc_signed::m_temporaries[SC_SIGNED_TEMPS_N];
-size_t    sc_signed::m_temporaries_i = 0;
-#endif // defined(SC_BIGINT_CONFIG_TEMPLATE_CLASS_HAS_NO_BASE_CLASS)
 
 } // namespace sc_dt
 

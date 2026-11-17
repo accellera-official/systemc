@@ -47,7 +47,8 @@ void stimgen::entry()
   file = fopen("./chpt3.1/testcase", "r");
   
   while (true) {
-    fscanf(file, "%c", &c);
+    int ret = fscanf(file, "%c", &c);
+    (void) ret;
     data_ready.write(true);
     stream.write(c);
     wait();

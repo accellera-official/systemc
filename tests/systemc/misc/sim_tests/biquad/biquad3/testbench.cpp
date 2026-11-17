@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  testbench.cpp -- 
+  testbench.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -63,12 +63,6 @@ void testbench::entry()
     sample_val = gen_sample(time);
     sample.write(sample_val);
     wait();
-    result_val = result.read();
-    fprintf(data1, "%f\t%f\n", time, sample_val);
-    fprintf(data2, "%f\t%f\n", time, result_val);
-    char buf[BUFSIZ];
-    snprintf( buf, sizeof(buf), "Input = %f\tOutput = %f", sample_val, result_val );
-    cout << buf << endl;
     time += 1.0;
   }
 } // end of entry function
@@ -79,7 +73,7 @@ gen_step(float t)
 {
   if (t < 10.0)
     return (0.0);
-  else 
+  else
     return (1.0);
 }
 
@@ -88,7 +82,7 @@ gen_impulse(float t)
 {
   if (t == 20.00)
     return (1.00);
-  else 
+  else
     return (0.00);
 }
 

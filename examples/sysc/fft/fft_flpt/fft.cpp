@@ -52,7 +52,7 @@ void fft::entry()
       while( index < 16 )
       {
        data_req.write(true);
-       do { wait(); } while (data_valid == true);
+       do { wait(); } while (data_valid != true);
        sample[index][0] = in_real.read();
        sample[index][1] = in_imag.read();
        index++;

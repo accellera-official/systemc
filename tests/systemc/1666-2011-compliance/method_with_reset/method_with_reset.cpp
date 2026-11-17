@@ -356,10 +356,12 @@ struct Top: sc_module
     event_list = m3.reset_event() | m3.terminated_event();
     next_trigger(event_list);
   }
+
+  // outside the SC_THREAD to make the leak sanitizer happy (co-routine stacks are not proper cleaned up)
+  sc_event_or_list or_list;
   
   void multiple_reset_handler()
   {
-    sc_event_or_list or_list;
     or_list |= m1.reset_event();
     or_list |= m2.reset_event();
     or_list |= m3.reset_event();

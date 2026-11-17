@@ -1,0 +1,176 @@
+SystemC Simulation
+
+*** test_bit() --------------------------
+
+testing: sc_bv<8> a( "10101010" )
+
+   to_int()   = 170
+   to_uint()  = 170
+   to_long()  = 170
+   to_ulong() = 170
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+
+testing: sc_lv<8> b( "11001100" )
+
+   to_int()   = 204
+   to_uint()  = 204
+   to_long()  = 204
+   to_ulong() = 204
+
+   to_int()   = 12
+   to_uint()  = 12
+   to_long()  = 12
+   to_ulong() = 12
+
+   to_int()   = 172
+   to_uint()  = 172
+   to_long()  = 172
+   to_ulong() = 172
+
+*** test_fx() ---------------------------
+
+testing: sc_fixed<8,4> a( "0b1010.1010" )
+
+   to_int()   = -5
+   to_uint()  = 4294967291
+   to_long()  = -5
+   to_ulong() = 4294967291
+   to_double  = -5.375
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+
+testing: sc_fixed_fast<8,4> b( "0b1010.1010" )
+
+   to_int()   = -5
+   to_uint()  = 4294967291
+   to_long()  = -5
+   to_ulong() = 4294967291
+   to_double  = -5.375
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+
+testing: sc_ufixed<8,4> c( "0b1010.1010" )
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10.625
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+
+testing: sc_ufixed_fast<8,4> d( "0b1010.1010" )
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10.625
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+
+*** test_int() --------------------------
+
+testing: sc_bigint<8> a( "0b10101010" )
+
+   to_int()   = -86
+   to_uint()  = 4294967210
+   to_long()  = -86
+   to_ulong() = 4294967210
+   to_double  = -86
+   to_int64   = -86
+   to_uint64  = 18446744073709551530
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10
+   to_int64   = 10
+   to_uint64  = 10
+
+testing: sc_biguint<8> b( "0b10101010" )
+
+   to_int()   = 170
+   to_uint()  = 170
+   to_long()  = 170
+   to_ulong() = 170
+   to_double  = 170
+   to_int64   = 170
+   to_uint64  = 170
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10
+   to_int64   = 10
+   to_uint64  = 10
+
+testing: sc_int<8> c( -86 )
+
+   to_int()   = -86
+   to_uint()  = 4294967210
+   to_long()  = -86
+   to_ulong() = 4294967210
+   to_double  = -86
+   to_int64   = -86
+   to_uint64  = 18446744073709551530
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10
+   to_int64   = 10
+   to_uint64  = 10
+
+   to_int()   = 170
+   to_uint()  = 170
+   to_long()  = 170
+   to_ulong() = 170
+   to_double  = 170
+   to_int64   = 170
+   to_uint64  = 170
+
+testing: sc_uint<8> d( 170 )
+
+   to_int()   = 170
+   to_uint()  = 170
+   to_long()  = 170
+   to_ulong() = 170
+   to_double  = 170
+   to_int64   = 170
+   to_uint64  = 170
+
+   to_int()   = 10
+   to_uint()  = 10
+   to_long()  = 10
+   to_ulong() = 10
+   to_double  = 10
+   to_int64   = 10
+   to_uint64  = 10
+
+   to_int()   = 170
+   to_uint()  = 170
+   to_long()  = 170
+   to_ulong() = 170
+   to_double  = 170
+   to_int64   = 170
+   to_uint64  = 170

@@ -119,20 +119,22 @@ public:
 
   void run()
   {
-    transaction_type trans;
-    sc_core::sc_time t;
+    {
+      transaction_type trans;
+      sc_core::sc_time t;
     
-    while (initTransaction(trans)) {
-      // Create transaction and initialise t
-      t = sc_core::SC_ZERO_TIME;
+      while (initTransaction(trans)) {
+        // Create transaction and initialise t
+        t = sc_core::SC_ZERO_TIME;
 
-      logStartTransation(trans);
+        logStartTransation(trans);
 
-      socket->b_transport(trans, t);
-      // Transaction Finished, wait for the returned delay
-      wait(t);
+        socket->b_transport(trans, t);
+        // Transaction Finished, wait for the returned delay
+        wait(t);
 
-      logEndTransaction(trans);
+        logEndTransaction(trans);
+      }
     }
     wait();
 

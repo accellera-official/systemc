@@ -65,6 +65,10 @@ SC_MODULE( delay_line )
     sensitive << in;
   }
 
+  virtual ~delay_line() {
+    delete[] line;
+  }
+
   // Process functionality in member function below
   void entry();
 };

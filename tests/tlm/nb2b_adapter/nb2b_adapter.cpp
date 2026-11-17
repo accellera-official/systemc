@@ -235,8 +235,12 @@ struct Interconnect: sc_module
 
     if (status == tlm::TLM_COMPLETED)
     {
-      accessor(trans).clear_extension(ext);
-      delete ext;
+      accessor(trans).get_extension(ext);
+      if (ext)
+      {
+        accessor(trans).clear_extension(ext);
+        delete ext;
+      }
     }
 
     return status;
@@ -341,24 +345,23 @@ struct Target: sc_module
 
 SC_MODULE(Top)
 {
-  Initiator    *initiator1;
-  Initiator    *initiator2;
-  Interconnect *interconnect;
-  Target       *target1;
-  Target       *target2;
+  Initiator    initiator1;
+  Initiator    initiator2;
+  Interconnect interconnect;
+  Target       target1;
+  Target       target2;
 
   SC_CTOR(Top)
+    : initiator1("initiator1")
+    , initiator2("initiator2")
+    , interconnect("interconnect", 1)
+    , target1("target1")
+    , target2("target2")
   {
-    initiator1   = new Initiator   ("initiator1");
-    initiator2   = new Initiator   ("initiator2");
-    interconnect = new Interconnect("interconnect", 1);
-    target1      = new Target      ("target1");
-    target2      = new Target      ("target2");
-
-    initiator1->socket.bind(interconnect->targ_socket);
-    initiator2->socket.bind(interconnect->targ_socket);
-    interconnect->init_socket.bind(target1->socket);
-    interconnect->init_socket.bind(target2->socket);
+    initiator1.socket.bind(interconnect.targ_socket);
+    initiator2.socket.bind(interconnect.targ_socket);
+    interconnect.init_socket.bind(target1.socket);
+    interconnect.init_socket.bind(target2.socket);
   }
 };
 

@@ -141,75 +141,77 @@ public:
 
   void run()
   {
-    transaction_type trans;
-    sc_core::sc_time t;
-    
-    while (initTransaction(trans)) {
-      // Create transaction and initialise t
-      t = sc_core::SC_ZERO_TIME;
+    // scope needed to free the memory of the local variables (co-routine stacks are not proper cleaned up at simulation end)
+    {
+      transaction_type trans;
+      sc_core::sc_time t;
 
-      logStartTransation(trans);
+      while (initTransaction(trans)) {
+        // Create transaction and initialise t
+        t = sc_core::SC_ZERO_TIME;
 
-      ///////////////////////////////////////////////////////////
-      // DMI handling:
-      // We do *not* use the DMI hint to check if it makes sense to ask for
-      // DMI pointers. So the pattern is:
-      // - if the address is not covered by a DMI region try to acquire DMI
-      //   pointers
-      // - if we have a DMI pointer, do the DMI "transaction"
-      // - otherwise fall back to a normal transaction
-      ///////////////////////////////////////////////////////////
+        logStartTransation(trans);
 
-      std::pair<dmi_type, bool>& dmi_data = getDMIData(trans);
+        ///////////////////////////////////////////////////////////
+        // DMI handling:
+        // We do *not* use the DMI hint to check if it makes sense to ask for
+        // DMI pointers. So the pattern is:
+        // - if the address is not covered by a DMI region try to acquire DMI
+        //   pointers
+        // - if we have a DMI pointer, do the DMI "transaction"
+        // - otherwise fall back to a normal transaction
+        ///////////////////////////////////////////////////////////
 
-      // Check if we need to acquire a DMI pointer
-      if((trans.get_address() < dmi_data.first.get_start_address()) ||
-         (trans.get_address() > dmi_data.first.get_end_address()) )
-      {
-          sc_dt::uint64 address = trans.get_address(); //save original address
-          dmi_data.second =
-            socket->get_direct_mem_ptr(trans,
-                                       dmi_data.first);
-          trans.set_address(address);
+        std::pair<dmi_type, bool>& dmi_data = getDMIData(trans);
+
+        // Check if we need to acquire a DMI pointer
+        if((trans.get_address() < dmi_data.first.get_start_address()) ||
+          (trans.get_address() > dmi_data.first.get_end_address()) )
+        {
+            sc_dt::uint64 address = trans.get_address(); //save original address
+            dmi_data.second =
+              socket->get_direct_mem_ptr(trans,
+                                        dmi_data.first);
+            trans.set_address(address);
+        }
+        // Do DMI "transaction" if we have a valid region
+        if (dmi_data.second &&
+            (trans.get_address() >= dmi_data.first.get_start_address()) &&
+            (trans.get_address() <= dmi_data.first.get_end_address()) )
+        {
+            // We can handle the data here. As the logEndTransaction is assuming
+            // something to happen in the data structure, we really need to
+            // do this:
+            trans.set_response_status(tlm::TLM_OK_RESPONSE);
+            sc_dt::uint64 tmp = trans.get_address() - dmi_data.first.get_start_address();
+            if (trans.get_command() == tlm::TLM_WRITE_COMMAND)
+            {
+                *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp] = mData;
+            }
+            else
+            {
+                mData = *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp];
+            }
+
+            // Do the wait immediately. Note that doing the wait here eats almost
+            // all the performance anyway, so we only gain something if we're
+            // using temporal decoupling.
+            if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
+              wait(dmi_data.first.get_write_latency());
+
+            } else {
+              wait(dmi_data.first.get_read_latency());
+            }
+        }
+        else // we need a full transaction
+        {
+            socket->b_transport(trans, t);
+            wait(t);
+        }
+        logEndTransaction(trans);
       }
-      // Do DMI "transaction" if we have a valid region
-      if (dmi_data.second &&
-          (trans.get_address() >= dmi_data.first.get_start_address()) &&
-          (trans.get_address() <= dmi_data.first.get_end_address()) )
-      {
-          // We can handle the data here. As the logEndTransaction is assuming
-          // something to happen in the data structure, we really need to
-          // do this:
-          trans.set_response_status(tlm::TLM_OK_RESPONSE);
-          sc_dt::uint64 tmp = trans.get_address() - dmi_data.first.get_start_address();
-          if (trans.get_command() == tlm::TLM_WRITE_COMMAND)
-          {
-              *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp] = mData;
-          }
-          else
-          {
-              mData = *(unsigned int*)&dmi_data.first.get_dmi_ptr()[tmp];
-          }
-          
-          // Do the wait immediately. Note that doing the wait here eats almost
-          // all the performance anyway, so we only gain something if we're
-          // using temporal decoupling.
-          if (trans.get_command() == tlm::TLM_WRITE_COMMAND) {
-            wait(dmi_data.first.get_write_latency());
-
-          } else {
-            wait(dmi_data.first.get_read_latency());
-          }
-      }
-      else // we need a full transaction
-      {
-          socket->b_transport(trans, t);
-          wait(t);
-      }
-      logEndTransaction(trans);
     }
     wait();
-
   }
 
   // Invalidate DMI pointer(s)

@@ -484,11 +484,13 @@ endforeach()
         add_custom_command(
                 TARGET systemc
                 POST_BUILD
-                COMMAND ar x $<TARGET_FILE:systemc>
-                COMMAND ar x $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>
-                COMMAND del *.a
-                COMMAND ar qc $<TARGET_FILE:systemc>  *.o *.obj
-                COMMAND del *.o *.obj
+                COMMAND ${CMAKE_COMMAND} -E echo "CREATE $<TARGET_FILE:systemc>" > merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_FILE:systemc>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "ADDLIB $<TARGET_LINKER_FILE:${SYSTEMC_DLL_TARGET}>" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "SAVE" >> merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E echo "END" >> merge_script.mri
+                COMMAND ar -M < merge_script.mri
+                COMMAND ${CMAKE_COMMAND} -E remove merge_script.mri
                 COMMENT "Combining SystemC libs..."
         )
 

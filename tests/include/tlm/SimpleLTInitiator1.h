@@ -124,14 +124,17 @@ public:
 
   void run()
   {
-    transaction_type trans;
-    sc_core::sc_time t(sc_core::SC_ZERO_TIME);
-    while (initTransaction(trans)) {
-      logStartTransation(trans);
-      socket->b_transport(trans, t);
-      wait(t);
-      logEndTransaction(trans);
-      t = sc_core::SC_ZERO_TIME;
+    // scope needed to free the memory of the local variables (co-routine stacks are not proper cleaned up at simulation end)
+    {
+      transaction_type trans;
+      sc_core::sc_time t(sc_core::SC_ZERO_TIME);
+      while (initTransaction(trans)) {
+        logStartTransation(trans);
+        socket->b_transport(trans, t);
+        wait(t);
+        logEndTransaction(trans);
+        t = sc_core::SC_ZERO_TIME;
+      }
     }
     wait();
 

@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  module_name.cpp -- 
+  module_name.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -43,12 +43,12 @@ int numbers_index = 0;
 
 struct example : sc_module {
     sc_in_clk  clk;
-    sc_in<int> a;
-    sc_in<int> b;
-    sc_out<int> c;
+    sc_in<uint32_t> a;
+    sc_in<uint32_t> b;
+    sc_out<uint32_t> c;
 
-    sc_signal<int> d;
-    sc_signal<int> e;
+    sc_signal<uint32_t> d;
+    sc_signal<uint32_t> e;
 
     void block_a();
     void block_b();
@@ -130,7 +130,7 @@ example::block_f()
 
 struct tb : sc_module {
     sc_in_clk   clk;
-    sc_out<int> a;
+    sc_out<uint32_t> a;
 
     void tb_proc();
 
@@ -153,7 +153,7 @@ tb::tb_proc()
 
 struct tb2 : sc_module {
     sc_in_clk   clk;
-    sc_out<int> b;
+    sc_out<uint32_t> b;
 
     void tb2_proc();
 
@@ -177,14 +177,14 @@ tb2::tb2_proc()
 SC_MODULE( monitor )
 {
 
-    const sc_signal<int>& a;
-    const sc_signal<int>& b;
-    const sc_signal<int>& c;
+    const sc_signal<uint32_t>& a;
+    const sc_signal<uint32_t>& b;
+    const sc_signal<uint32_t>& c;
 
     monitor( sc_module_name,
-             const sc_signal<int>& A,
-             const sc_signal<int>& B,
-             const sc_signal<int>& C ) :
+             const sc_signal<uint32_t>& A,
+             const sc_signal<uint32_t>& B,
+             const sc_signal<uint32_t>& C ) :
         a(A), b(B), c(C)
     {
 	SC_METHOD( entry );
@@ -198,17 +198,17 @@ SC_MODULE( monitor )
 void
 monitor::entry()
 {
-    if (a.event()) cout << "a = " << a << endl;
-    if (b.event()) cout << "b = " << b << endl;
-    if (c.event()) cout << "c = " << c << endl;
+    if (a.event()) cout << "a = " << static_cast<int32_t>(a) << endl;
+    if (b.event()) cout << "b = " << static_cast<int32_t>(b) << endl;
+    if (c.event()) cout << "c = " << static_cast<int32_t>(c) << endl;
 }
 
 int
 sc_main( int argc, char* argv[] )
 {
-    sc_signal<int> a("a");
-    sc_signal<int> b("b");
-    sc_signal<int> c("c");
+    sc_signal<uint32_t> a("a");
+    sc_signal<uint32_t> b("b");
+    sc_signal<uint32_t> c("c");
     sc_clock clk("clk", 10, SC_NS);
 
     example ex1("ex1");

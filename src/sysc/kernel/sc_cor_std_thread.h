@@ -35,6 +35,8 @@
 
 #include "sysc/kernel/sc_cor.h"
 #include "sysc/kernel/sc_cmnhdr.h"
+#include <condition_variable>
+#include <mutex>
 #include <thread>
 
 namespace sc_core {

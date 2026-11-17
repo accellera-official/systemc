@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  accumulator.cpp -- 
+  accumulator.cpp --
 
   Original Author: Martin Janssen, Synopsys, Inc., 2002-02-15
 
@@ -42,7 +42,7 @@
 
 void accumulator::entry()
 {
-  int a = 1;
+  unsigned int a = 1;
 
   sum_acc = 1234; // some random number
   mult_acc = 3; // some random number
@@ -56,4 +56,3 @@ void accumulator::entry()
     a = number.read();
   }
 } // end of entry function
-

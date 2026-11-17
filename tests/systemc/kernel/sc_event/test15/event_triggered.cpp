@@ -117,9 +117,11 @@ private:
     CHECK( event_return.triggered() );
   }
 
+  // outside the SC_THREAD to make the leak sanitizer happy (co-routine stacks are not proper cleaned up)
+  sc_event_or_list events_or; // even events only
+
   void consumer_dynamic()
   {
-    sc_event_or_list events_or; // even events only
     for(unsigned i = 0; i < events.size(); i+=2)
       events_or |= events[i];
 

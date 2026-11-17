@@ -64,6 +64,10 @@ SC_MODULE( delay_line )
     line = new float[delay];
   }
 
+  virtual ~delay_line() {
+    delete[] line;
+  }
+
   // Process functionality in member function below
   void entry();
 };

@@ -1531,19 +1531,17 @@ operator~(const sc_signed& u)
 }
 
 inline
-sc_signed
+sc_unsigned
 operator~(const sc_unsigned& u)
 {
-    sc_signed result( u.length()+1 );   
+    sc_unsigned result( u.length() );   
     sc_digit* result_p = result.get_digits();
     sc_digit* source_p = u.get_digits();
     int       hod      = u.get_hod();  
     for ( int digit_i = 0; digit_i <= hod; ++digit_i ) {
         result_p[digit_i] = ~source_p[digit_i];
     }
-    if ( result.get_hod() > hod ) {
-        result_p[hod] = (sc_digit)-1;
-    }
+    result.adjust_hod();
     return result;
 }
 

@@ -18,6 +18,7 @@ public:
 
     while (free_list)
     {
+      access* node = free_list;
       ptr = free_list->trans;
 
       // Delete generic payload and all extensions
@@ -25,6 +26,7 @@ public:
       delete ptr;
 
       free_list = free_list->next;
+      delete node;
     }
 
     while (empties)

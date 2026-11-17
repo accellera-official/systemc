@@ -323,9 +323,10 @@ struct Top: sc_module
     SC_THREAD(T2);
   }
   
+  // outside the SC_THREAD to make the leak sanitizer happy (co-routine stacks are not proper cleaned up)
+  sc_event_or_list list;
   void T()
   {
-    sc_event_or_list list;
     for (int i = 0; i < 4; i++)
       list |= sigs[i].default_event();
     for (;;)

@@ -42,6 +42,7 @@ using std::endl;
 struct Mod: sc_module
 {
   sc_port<sc_signal_in_if<int>, 0> p; // Multiport
+  sc_event_or_list all_events;
   
   Mod(sc_module_name _name)
   {
@@ -53,7 +54,7 @@ struct Mod: sc_module
   {
     for (;;)
     {
-      wait(all_events());
+      wait(all_events);
       cout << "M::T1 awoke with " << p[0]->read() << p[1]->read() << p[2]->read() 
            << " at " << sc_time_stamp() << " on list" << endl;
     }
@@ -67,30 +68,29 @@ struct Mod: sc_module
            << " at " << sc_time_stamp() << " on list" << endl;
     }
   }
-  sc_event_or_list all_events() const
+
+  void end_of_elaboration() override
   {
     sc_assert( p.size() == 3 );
     
-    sc_event_or_list or_list;
     for (int i = 0; i < p.size(); i++)
-      or_list |= p[i]->default_event();
+      all_events |= p[i]->default_event();
       
-    sc_assert( or_list.size() == 3 );
-    return or_list;
-  }  
+    sc_assert( all_events.size() == 3 );
+  }
  
 };
 
 struct Top: sc_module
 {
   Top(sc_module_name _name)
-  : finished(false)
+  : m("m")
+  , finished(false)
   , count(0)
   {
-    m = new Mod("m");
-    m->p.bind(sig1);
-    m->p.bind(sig2);
-    m->p.bind(sig3);
+    m.p.bind(sig1);
+    m.p.bind(sig2);
+    m.p.bind(sig3);
     SC_THREAD(T);
     SC_METHOD(M);
   }
@@ -105,7 +105,7 @@ struct Top: sc_module
   }
   
   sc_signal<int> sig1, sig2, sig3;
-  Mod* m;
+  Mod m;
   
   sc_event e1, e2, e3, e4;
   bool finished;

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euxo pipefail
 
 if [[ -z "${SYSTEMC_CI_TARGET}" ]]; then
@@ -7,9 +7,29 @@ if [[ -z "${SYSTEMC_CI_TARGET}" ]]; then
 fi
 
 : ${SYSTEMC_SRC_PATH:="/app"}
+: ${SYSTEMC_COVERAGE_OUTPUT_PATH:="/coverage/coverage"}
 
 # Build with -Werror by default
 CXX_FLAGS="-Werror"
+
+# Use Ninja instead of the default Unix Makefiles generator on macOS.
+GENERATOR_ARGS=()
+if [[ "$(uname)" == "Darwin" ]]; then
+  GENERATOR_ARGS=(-G Ninja)
+fi
+
+# Don't build with -Werror on AlmaLinux 8 on arm64 hosts
+# GCC 8.5 does not ignore false positive -Wshift-negative-value warning
+if [[ -f /etc/os-release ]]; then
+  . /etc/os-release
+
+  ARCH=$(uname -m)
+
+  if [[ "$ID" == "almalinux" && "$VERSION_ID" == 8* ]] && \
+     [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+    CXX_FLAGS=""
+  fi
+fi
 
 case "$SYSTEMC_CI_TARGET" in
   gcc-shared)
@@ -30,6 +50,12 @@ case "$SYSTEMC_CI_TARGET" in
     BUILD_SHARED_LIBRARY=true
     BUILD_REGRESSIONS=true
     ;;
+  gcc-static-regression)
+    CC=gcc
+    CXX=g++
+    BUILD_SHARED_LIBRARY=false
+    BUILD_REGRESSIONS=true
+    ;;
   clang-shared)
     CC=clang
     CXX=clang++
@@ -46,6 +72,12 @@ case "$SYSTEMC_CI_TARGET" in
     CC=clang
     CXX=clang++
     BUILD_SHARED_LIBRARY=true
+    BUILD_REGRESSIONS=true
+    ;;
+  clang-static-regression)
+    CC=clang
+    CXX=clang++
+    BUILD_SHARED_LIBRARY=false
     BUILD_REGRESSIONS=true
     ;;
   clang-shared-regression-asan)
@@ -69,22 +101,46 @@ case "$SYSTEMC_CI_TARGET" in
     BUILD_REGRESSIONS=true
     CXX_FLAGS="$CXX_FLAGS -fsanitize=thread"
     ;;
-   *)
+  coverage)
+    CC=gcc
+    CXX=g++
+    BUILD_REGRESSIONS=true
+    BUILD_SHARED_LIBRARY=true
+
+    # On Ubuntu 24.04 as of 2026-06-01, there's a spurious maybe-uninit warning
+    # that prevents compilation, but only while using --coverage. We therefore
+    # disable it here.
+    CXX_FLAGS="$CXX_FLAGS --coverage -O0 -Wno-maybe-uninitialized"
+    ;;
+  *)
     echo "Error: Unknown SYSTEMC_CI_TARGET '$SYSTEMC_CI_TARGET'"
     exit 1
     ;;
 esac
 
-cd $SYSTEMC_SRC_PATH
-cmake -B BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD \
-      -DCMAKE_INSTALL_PREFIX=${SYSTEMC_SRC_PATH}/BUILD/${SYSTEMC_CI_TARGET} \
+
+cd "$SYSTEMC_SRC_PATH"
+cmake -B "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD" \
+      "${GENERATOR_ARGS[@]}" \
+      -DCMAKE_INSTALL_PREFIX="${SYSTEMC_SRC_PATH}/BUILD/${SYSTEMC_CI_TARGET}" \
       -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
-      -DCMAKE_C_COMPILER=$CC \
-      -DCMAKE_CXX_COMPILER=$CXX \
-      -DENABLE_REGRESSION=$BUILD_REGRESSIONS \
-      -DBUILD_SHARED_LIBS=$BUILD_SHARED_LIBRARY .
-cmake --build BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/ --parallel
-cmake --install BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/
-make -j `getconf _NPROCESSORS_ONLN` -C BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/ check
+      -DCMAKE_C_COMPILER="$CC" \
+      -DCMAKE_CXX_COMPILER="$CXX" \
+      -DENABLE_REGRESSION="$BUILD_REGRESSIONS" \
+      -DBUILD_SHARED_LIBS="$BUILD_SHARED_LIBRARY" .
+cmake --build "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/" --parallel "$(getconf _NPROCESSORS_ONLN)"
+cmake --install "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
+
+if [[ "$BUILD_REGRESSIONS" == "true" ]]; then
+  cmake --build "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/" --parallel "$(getconf _NPROCESSORS_ONLN)" --target check
+fi
+
+if [[ "$SYSTEMC_CI_TARGET" == "coverage" ]]; then
+  mkdir -p /coverage
+  gcovr -f 'src/*' \
+        --gcov-ignore-parse-errors=negative_hits.warn --merge-mode-functions=separate \
+        --html-nested -o /coverage/index.html \
+        "BUILD/RELEASE-${SYSTEMC_CI_TARGET}/BUILD/"
+fi
 
 exit 0
