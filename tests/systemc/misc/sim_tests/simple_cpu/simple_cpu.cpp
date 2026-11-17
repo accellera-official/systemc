@@ -66,7 +66,10 @@ SC_MODULE( exec_decode )
 
     // Initialize the data memory from file datamem
     FILE *fp = fopen("simple_cpu/datamem", "r");
-    if (fp == (FILE *) 0) assert(); // No data mem file to read
+    if (fp == (FILE *) 0) { // No data mem file to read
+      SC_REPORT_FATAL( "simple_cpu", "cannot open simple_cpu/datamem" );
+      return;
+    }
     // First field in this file is the size of data memory desired
     int size;
     int ret = fscanf(fp, "%d", &size);
