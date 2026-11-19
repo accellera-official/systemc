@@ -26,7 +26,9 @@
 
  *****************************************************************************/
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::cout;
 
 #ifdef USE_PIMPL_ADDER
     #include "adder_int_5_pimpl.h"

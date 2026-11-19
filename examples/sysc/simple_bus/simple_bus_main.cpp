@@ -35,7 +35,8 @@
  
  *****************************************************************************/
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
 #include "simple_bus_test.h"
 
 int sc_main(int, char **)

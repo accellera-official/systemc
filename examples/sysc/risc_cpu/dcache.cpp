@@ -36,7 +36,14 @@
  *****************************************************************************/
 
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::FILE;
+using std::cout;
+using std::endl;
+using std::fopen;
+using std::fscanf;
+using std::printf;
 #include "dcache.h"
 #include "directive.h"
 

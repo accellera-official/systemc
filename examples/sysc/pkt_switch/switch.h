@@ -38,7 +38,10 @@
 #ifndef SWITCH_H_INCLUDED
 #define SWITCH_H_INCLUDED
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using namespace sc_dt;
+using std::ostream;
 #include "pkt.h"
 
 struct mcast_pkt_switch : sc_module {

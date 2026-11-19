@@ -38,7 +38,9 @@
 #ifndef __simple_bus_blocking_if_h
 #define __simple_bus_blocking_if_h
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
+using std::FILE;
 
 #include "simple_bus_types.h"
 

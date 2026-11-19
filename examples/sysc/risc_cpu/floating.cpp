@@ -36,7 +36,11 @@
  *****************************************************************************/
  
 
-#include "systemc.h"
+#include <systemc>
+using namespace sc_core;
+using std::cout;
+using std::endl;
+using std::printf;
 #include "floating.h"
 #include "directive.h"
 

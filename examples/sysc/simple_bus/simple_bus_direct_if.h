@@ -38,7 +38,8 @@
 #ifndef __simple_bus_direct_if_h
 #define __simple_bus_direct_if_h
 
-#include <systemc.h>
+#include <systemc>
+using namespace sc_core;
 
 class simple_bus_direct_if
   : public virtual sc_interface
