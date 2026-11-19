@@ -45,17 +45,7 @@ add_executable (lt_mixed_endian src/lt.cpp
                                 include/initiator_top.h
                                 src/initiator_top.cpp
                                 include/me_traffic_generator.h
-                                src/me_traffic_generator.cpp
-                                ../common/include/lt_initiator.h
-                                ../common/src/lt_initiator.cpp
-                                ../common/include/at_target_1_phase.h
-                                ../common/src/at_target_1_phase.cpp
-                                ../common/include/at_target_4_phase.h
-                                ../common/src/at_target_4_phase.cpp
-                                ../common/include/memory.h
-                                ../common/src/memory.cpp
-                                ../common/include/reporting.h
-                                ../common/src/report.cpp)
-target_include_directories (lt_mixed_endian PRIVATE include ../common/include)
-target_link_libraries (lt_mixed_endian SystemC::systemc)
+                                src/me_traffic_generator.cpp)
+target_include_directories (lt_mixed_endian PRIVATE include)
+target_link_libraries (lt_mixed_endian tlm_common SystemC::systemc)
 configure_and_add_test (lt_mixed_endian INPUT results/input.txt FILTER "::")

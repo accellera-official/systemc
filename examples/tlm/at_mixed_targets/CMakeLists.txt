@@ -43,21 +43,7 @@ add_executable (at_mixed_targets src/at_mixed_targets.cpp
                                  include/at_mixed_targets_top.h
                                  src/at_mixed_targets_top.cpp
                                  include/initiator_top.h
-                                 src/initiator_top.cpp
-                                 ../common/include/traffic_generator.h
-                                 ../common/src/traffic_generator.cpp
-                                 ../common/include/memory.h
-                                 ../common/src/memory.cpp
-                                 ../common/include/reporting.h
-                                 ../common/src/report.cpp
-                                 ../common/include/at_target_1_phase.h
-                                 ../common/src/at_target_1_phase.cpp
-                                 ../common/include/at_target_2_phase.h
-                                 ../common/src/at_target_2_phase.cpp
-                                 ../common/include/at_target_4_phase.h
-                                 ../common/src/at_target_4_phase.cpp
-                                 ../common/include/select_initiator.h
-                                 ../common/src/select_initiator.cpp)
-target_include_directories (at_mixed_targets PRIVATE include ../common/include)
-target_link_libraries (at_mixed_targets SystemC::systemc)
+                                 src/initiator_top.cpp)
+target_include_directories (at_mixed_targets PRIVATE include)
+target_link_libraries (at_mixed_targets tlm_common SystemC::systemc)
 configure_and_add_test (at_mixed_targets)
