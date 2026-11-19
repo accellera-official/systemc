@@ -87,6 +87,7 @@ jobs:
         cmake -B BUILD/RELEASE/BUILD -DENABLE_REGRESSION=true .
         cmake --build BUILD/RELEASE/BUILD --config RELEASE --parallel
         cmake --install BUILD/RELEASE/BUILD --config RELEASE
+        cmake --build BUILD/RELEASE/BUILD --config RELEASE --target examples\check
   msys2-ucrt64:
     runs-on: windows-latest
     strategy:

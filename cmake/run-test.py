@@ -166,6 +166,13 @@ def lookup_golden(golden_dir: Path, output_file: str) -> Path:
 
     suffixes = [SYSTEMC_ARCH]
 
+    if SYSTEMC_ARCH == "msvc64":
+        suffixes.extend([
+            "msvc17-x64",
+            "msvc16-x64",
+            "ucrt64",
+        ])
+
     for suffix in suffixes:
         specialized_golden = golden_dir / f"{output_file}.{suffix}"
         logger.debug("checking golden log file '%s'", specialized_golden)
