@@ -47,8 +47,9 @@ public:
   // non blocking peek and poke - no notification
   //
   // n is index of data :
-  // 0 <= n < size(), where 0 is most recently written, and size() - 1
-  // is oldest ie the one about to be read.
+  // 0 <= n < used(), where 0 is the oldest item, that is the one that will
+  // be returned by the next call to get or nb_get, and used() - 1 is the
+  // most recently written item.  See IEEE Std 1666-2023, 17.3.3.
   //
 
   virtual bool nb_peek( T & , int n ) const = 0;
