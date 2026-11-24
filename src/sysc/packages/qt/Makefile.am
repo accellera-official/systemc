@@ -40,6 +40,7 @@ NO_H_FILES = \
 	qtmd.h \
 	\
 	md/aarch64.h \
+	md/loongarch64.h \
 	md/axp.h \
 	md/hppa.h \
 	md/i386.h \
@@ -66,6 +67,7 @@ NO_C_FILES = \
 
 NO_S_FILES = \
 	md/aarch64.s \
+	md/loongarch64.s \
 	md/axp_b.s \
 	md/axp.s \
 	md/hppa_b.s \
@@ -158,6 +160,9 @@ QT_ARCH_FILES += md/i386.s
 endif
 if QT_ARCH_X86_64
 QT_ARCH_FILES += md/iX86_64.s
+endif
+if QT_ARCH_LOONGARCH64
+QT_ARCH_FILES += md/loongarch64.s
 endif
 
 endif #  WANT_QT_THREADS

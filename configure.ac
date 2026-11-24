@@ -161,6 +161,10 @@ AS_CASE([${TARGET_ARCH}],
          [TARGET_ARCH="linuxaarch64"
           QT_ARCH="aarch64"
           CPU_ARCH=""],
+       [loongarch64], dnl
+         [TARGET_ARCH="linuxloongarch64"
+          QT_ARCH="loongarch64"
+          CPU_ARCH=""],
        [AC_MSG_ERROR("sorry...architecture not supported")])
 
      # check compiler
@@ -430,6 +434,7 @@ dnl
 AM_CONDITIONAL([QT_ARCH_X86], [ test "${QT_ARCH}" = "iX86" ])
 AM_CONDITIONAL([QT_ARCH_AARCH64], [ test "${QT_ARCH}" = "aarch64" ])
 AM_CONDITIONAL([QT_ARCH_X86_64], [ test "${QT_ARCH}" = "x86_64" ])
+AM_CONDITIONAL([QT_ARCH_LOONGARCH64], [ test "${QT_ARCH}" = "loongarch64" ])
 
 dnl
 dnl pkg-config setup

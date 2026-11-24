@@ -411,8 +411,10 @@ set(SYSTEMC_CORE_SRC
           $<$<STREQUAL:${QT_ARCH},i386>:sysc/packages/qt/md/i386.s>
           $<$<STREQUAL:${QT_ARCH},aarch64>:sysc/packages/qt/md/aarch64.s>
           $<$<STREQUAL:${QT_ARCH},riscv64>:sysc/packages/qt/md/riscv64.s>
+          $<$<STREQUAL:${QT_ARCH},loongarch64>:sysc/packages/qt/md/loongarch64.s>
           $<$<STREQUAL:${QT_ARCH},multi>:sysc/packages/qt/md/multi.s>
           sysc/packages/qt/md/aarch64.h
+          sysc/packages/qt/md/loongarch64.h
           sysc/packages/qt/md/i386.h
           sysc/packages/qt/md/iX86_64.h
           sysc/packages/qt/qt.h

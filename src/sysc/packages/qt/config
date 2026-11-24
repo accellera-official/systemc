@@ -173,6 +173,12 @@ case $1 in
         ;;
 
 
+    loongarch64*)
+        : "LoongArch 64-bit processors"
+        ${LN_S} md/loongarch64.s qtmds.s
+        ;;
+
+
 	m68k)
 		: "Motorola 68000 family -- incomplete!"
 #		${LN_S} md/default.Makefile Makefile.md
